@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Text } from 'react-native';
 
-export default class Account extends Component {
+class Account extends Component {
 	render(){
 		return (
-			<Text>Account</Text>
+			<Text>{this.props.toString()}</Text>
 		);
 	}
 }
+
+export default connect()(Account);

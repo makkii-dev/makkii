@@ -31,6 +31,21 @@ const store = createStore(combineReducers({
 	user: reducer_user,
 }));
 
+// temp load some demo data
+import Account from './types/account.js';
+let _accounts = [];
+for(let i = 0; i < 10; i++){
+	_accounts.push(new Account(i + '0000000000000000000000000000000', '0000000000000000000000000000000000000000000000000000000000000000'));
+}
+store.dispatch(accounts(_accounts));
+import Dapp from './types/dapp.js';
+let _dapps = [];
+for(let i = 0; i < 10; i++){
+	_dapps.push(new Dapp('dapp_' + i, 'http://dapps.chaion.net/abcdef/logo_' + i + '.png'));
+}
+store.dispatch(dapps(_dapps));
+// end temp
+
 const Routes = createBottomTabNavigator({
   vault: {screen: Vault},
   dapps: {screen: Dapps}, 
