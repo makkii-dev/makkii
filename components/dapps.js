@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text } from 'react-native';
+import { ScrollView, Text } from 'react-native';
 
 class Dapps extends Component {
 	render(){
 		return (
-			<Text style={{marginTop:50}}>{JSON.stringify(this.props.dapps)}</Text>
+			<ScrollView style={{
+				width: '100%',
+				height: '90%',
+				padding: 10,
+				paddingBottom: '10%'
+			}}>
+				<Text>{JSON.stringify(this.props.dapps)}</Text>
+			</ScrollView>
 		);
 	}
 }

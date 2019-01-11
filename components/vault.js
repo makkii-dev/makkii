@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text } from 'react-native';
+import { ScrollView, Text, FlatList, View } from 'react-native';
 
 class Vault extends Component {
 	constructor(props){
@@ -8,7 +8,28 @@ class Vault extends Component {
 	}
 	render(){
 		return (
-			<Text style={{marginTop:50}}>{JSON.stringify(this.props.accounts)}</Text>
+			<ScrollView style={{
+				width: '100%',
+				height: '100%',
+				padding: 10
+			}}>
+				<FlatList
+				    style={{
+				    	flex: 1, 
+				    	flexDirection: 'row'
+				    }}
+				  	data={this.props.accounts}
+				  	keyExtractor={(item, index) => index.toString()}
+				  	renderItem={({item}) =>
+				  		<View> 
+					  		<Text style={{
+					    		alignItems: 'center',
+					    		height: 40
+					  		}}>{item.address}</Text>
+				  		</View>
+				  	}
+				/>
+			</ScrollView>
 		);
 	}
 }
