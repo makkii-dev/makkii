@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { ScrollView, View, Text, TextInput } from 'react-native';
 
 class Setting extends Component {
+	constructor(props){
+		super(props)
+	}
 	render(){
+		let self = this;
 		return (
 			<ScrollView style={{
 				width: '100%',
@@ -11,73 +15,27 @@ class Setting extends Component {
 				padding: 10
 			}}>
 				<Text>
-					{JSON.stringify(this.props.setting)}
+					{JSON.stringify(this.props.setting.keys)}
 				</Text>
 				<TextInput
 			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
 			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_kernel}
+			        value={this.props.setting.advance.tx_fee + ''}
 		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_dapps}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_odex}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.tx_fee + ''}
-		      	/>
-		      	<Text>
-					{JSON.stringify(this.props.setting)}
-				</Text>
 				<TextInput
 			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
 			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_kernel}
+			        value={this.props.setting.advance.remote_kernel}
 		      	/>
 		      	<TextInput
 			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
 			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_dapps}
+			        value={this.props.setting.advance.remote_dapps}
 		      	/>
 		      	<TextInput
 			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
 			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_odex}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.tx_fee + ''}
-		      	/>
-		      	<Text>
-					{JSON.stringify(this.props.setting)}
-				</Text>
-				<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_kernel}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_dapps}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.remote_odex}
-		      	/>
-		      	<TextInput
-			        style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-			        onChangeText={(text) => this.setState({text})}
-			        value={this.props.setting.tx_fee + ''}
+			        value={this.props.setting.advance.remote_odex}
 		      	/>
 			</ScrollView>
 		);
