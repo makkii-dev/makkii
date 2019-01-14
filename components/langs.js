@@ -12,7 +12,7 @@ export default langs = {
 		cn: '创建',
 	},
 	view_enter_password: {
-		en: 'Enter password',
+		en: 'Enter Password',
 		cn: '输入密码'
 	}
 };

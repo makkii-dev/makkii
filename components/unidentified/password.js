@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Button } from 'react-native';
 import langs from '../langs.js';
 import style from '../style.js';
 
@@ -17,22 +17,24 @@ class Password extends Component {
 	}
 	render(){ 
 		return (
-			<View style={{
-		        flex: 1,
-        		flexDirection: 'column',
-        		justifyContent: 'center',
-        		alignItems: 'center',
-			}}>
+			<View style={style.container}>
 				<View style={style.form}>
-					<Text style={style.form.label}>{langs.view_enter_password.cn}</Text>
+					<Text style={style.form_header}>{langs.view_enter_password.en}</Text>
 					<TextInput
-						style={style.form.input}
+						style={style.form_input}
 				        onChangeText={(password) => this.setState({
 				        	password
 				        })}
 				        secureTextEntry={true}
 				        value={this.state.password}
 				    />
+				    <View style={style.form_label}>
+						<Button
+						  	onPress={(e)=>{
+						  	}}
+						  	title="Login"
+						/>
+					</View>
 			    </View>
 			</View>
 		);

@@ -2,9 +2,6 @@ export default style = {
 	container: {
 		padding: 20,
 	},
-	form: {
-		width: '100%',
-	},
 	form_header: {
 		fontSize: 24,
 		marginBottom: 20
