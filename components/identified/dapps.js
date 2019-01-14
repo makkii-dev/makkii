@@ -4,6 +4,8 @@ import { ScrollView, Text } from 'react-native';
 
 class Dapps extends Component {
 	render(){
+		console.log('[route] ' + this.props.navigation.state.key);
+		console.log(this.props.dapps);
 		return (
 			<ScrollView style={{
 				width: '100%',

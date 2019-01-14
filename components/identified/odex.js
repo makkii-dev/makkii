@@ -3,6 +3,7 @@ import { ScrollView, Text } from 'react-native';
 
 export default class Odex extends Component {
 	render(){
+		console.log('[route] ' + this.props.navigation.key);
 		return (
 			<ScrollView style={{
 				width: '100%',

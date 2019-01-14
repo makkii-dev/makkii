@@ -7,6 +7,8 @@ class Setting extends Component {
 		super(props)
 	}
 	render(){
+		console.log('[route] ' + this.props.navigation.state.key);
+		console.log(this.props.setting);
 		let self = this;
 		return (
 			<ScrollView style={{

@@ -7,6 +7,8 @@ class Vault extends Component {
 		super(props);
 	}
 	render(){
+		console.log('[route] ' + this.props.navigation.state.key);
+		console.log(this.props.accounts);
 		return (
 			<ScrollView style={{
 				width: '100%',
@@ -34,10 +36,8 @@ class Vault extends Component {
 	}
 }
 
-const mapStateToProps = function(state){
-	return ({
+export default connect(state => {
+	return {
 		accounts: state.accounts
-	});
-}
-
-export default connect(mapStateToProps)(Vault);
+	};
+})(Vault);
