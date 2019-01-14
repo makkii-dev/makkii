@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput } from 'react-native';
-import langs from '../../langs.js';
+import langs from '../langs.js';
+import style from '../style.js';
 
 class Password extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			password: ''
+			password: '' 
 		}
 	}
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.key);
 		console.log(this.props.user);
 	}
-	render(){
+	render(){ 
 		return (
 			<View style={{
 		        flex: 1,
@@ -22,21 +23,17 @@ class Password extends Component {
         		justifyContent: 'center',
         		alignItems: 'center',
 			}}>
-				<Text>{langs.enter_password.cn}</Text>
-				<TextInput
-			        style={{
-			        	width: 240,
-			        	height: 40,
-			        	borderBottomWidth: 1, 
-			        	borderColor: '#adb0b5',
-			        	alignSelf: 'center',
-			        }}
-			        onChangeText={(password) => this.setState({
-			        	password
-			        })}
-			        secureTextEntry={true}
-			        value={this.state.password}
-			    />
+				<View style={style.form}>
+					<Text style={style.form.label}>{langs.view_enter_password.cn}</Text>
+					<TextInput
+						style={style.form.input}
+				        onChangeText={(password) => this.setState({
+				        	password
+				        })}
+				        secureTextEntry={true}
+				        value={this.state.password}
+				    />
+			    </View>
 			</View>
 		);
 	}

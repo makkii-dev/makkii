@@ -1,6 +1,7 @@
 export default class Setting {
 	constructor() {
 		this.basic = {
+			lang: 'cn',
 			version: '0.1.0-rc0',
 			theme: 'white'			
 		};

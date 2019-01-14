@@ -2,14 +2,15 @@ import { createBottomTabNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import New      from './new.js';
 import Password from './password.js';
-import Recovery from './recovery.js';
+import Mnemonic from './mnemonic.js';
 
 const Unidentified = createBottomTabNavigator({
   	PASSWORD: {screen: Password}, 
-  	RECOVERY: {screen: Recovery},
+  	MNEMONIC: {screen: Mnemonic},
   	NEW: {screen: New}
 }, {
-	initialRouteName: 'PASSWORD',
+	lazy: true,
+	initialRouteName: 'MNEMONIC',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',

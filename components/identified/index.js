@@ -10,6 +10,7 @@ const Identified = createBottomTabNavigator({
 	ODEX: {screen: Odex},
 	SETTING: {screen: Setting}
 }, {
+	lazy: true,
 	initialRouteName: 'VAULT',
 	tabBarOptions: {
 		activeTintColor: '#333333',

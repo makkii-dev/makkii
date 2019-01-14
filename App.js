@@ -1,7 +1,7 @@
 // libs
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createSwitchNavigator, createAppContainer } from 'react-navigation';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -29,13 +29,13 @@ const store = createStore(combineReducers({
 	user: reducer_user,
 }));
 
-const Container = createAppContainer(createStackNavigator({
-	IDENTIFIED:  Identified,
-	UNIDENTIFIED: Unidentified
+const Container = createAppContainer(createSwitchNavigator({
+	IDENTIFIED:  { screen: Identified },
+	UNIDENTIFIED: { screen: Unidentified }
 }, {
 	initialRouteName: store.getState().user.signed ? "IDENTIFIED" : "UNIDENTIFIED",
-	headerMode: 'none',
-	mode: 'card'
+	resetOnBlur: true,
+	backBehavior: 'none',
 }));
 
 export default class App extends Component {
