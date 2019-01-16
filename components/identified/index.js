@@ -5,13 +5,13 @@ import Odex     from './odex.js';
 import Setting  from './setting.js';
 
 const Identified = createBottomTabNavigator({
-	VAULT: {screen: Vault},
-	DAPPS: {screen: Dapps}, 
-	ODEX: {screen: Odex},
-	SETTING: {screen: Setting}
+	Vault: {screen: Vault},
+	Dapps: {screen: Dapps}, 
+	Odex: {screen: Odex},
+	Setting: {screen: Setting}
 }, {
 	lazy: true,
-	initialRouteName: 'VAULT',
+	initialRouteName: 'Vault',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',

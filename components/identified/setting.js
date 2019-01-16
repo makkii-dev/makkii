@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { ScrollView, View, Text, TextInput } from 'react-native';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {Button} from '../common.js';
+import {ScrollView,View,Text,TextInput} from 'react-native';
 
 class Setting extends Component {
 	constructor(props){
@@ -39,6 +40,12 @@ class Setting extends Component {
 			        onChangeText={(text) => this.setState({text})}
 			        value={this.props.setting.advance.remote_odex}
 		      	/>
+		      	<Button 
+					text="Sign out" 
+					onPress={()=>{
+						this.props.navigation.navigate('Login')
+					}}
+				/>
 			</ScrollView>
 		);
 	}

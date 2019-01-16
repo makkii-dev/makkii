@@ -1,6 +1,8 @@
 export default style = {
 	container: {
-		padding: 20,
+	},
+	header_stack: {
+		height: 40
 	},
 	header: {
 		fontSize: 20,
@@ -9,28 +11,31 @@ export default style = {
 	},
 	label: {
 		fontSize:14,
-		color:'#919396',
+		color:'#000000',
 		textAlign: 'left',
 		width: '100%',
 		marginBottom: 10,
 	},
 	input: {
-		borderBottomColor: '#919396',
-		borderBottomWidth: 1, 
-		color:'#6c6e70',
-		width: '100%',
+		borderBottomColor: '#000000',
+		borderBottomWidth: 2,
+		borderRadius: 1, 
+		color:'#000000',
 		marginBottom: 10,
+		width: '100%',
+		height: 40
 	},
     button: {
 	    backgroundColor: '#ffffff',
-	    borderColor: '#919396',
-	    borderWidth: 1,
+	    borderColor: '#000000',
+	    borderWidth: 2,
 	    borderRadius: 5,
-	    color: '#919396',
-	    fontSize: 14,
+	    color: '#000000',
+	    fontSize: 16,
 	    fontWeight: 'normal',
 	    overflow: 'hidden',
 	    padding: 8,
+	    width:'100%',
 	    textAlign:'center',
   	},
 };

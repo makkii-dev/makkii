@@ -1,14 +1,10 @@
 export default class User {
-	constructor(
-		signed,
-
-		
-
-
-	) {
-        this.signed = signed;
+	constructor() {
+		// latest login timestamp
+        this.login = Date.now();
+		// hashed password
         this.hashed_password = '';
-        this.crypted_passphase = '';
-        this.latest_login = Date.now();
+        // raw mnemonic
+        this.mnemonic = '';
     }
 } 

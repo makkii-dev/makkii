@@ -1,16 +1,22 @@
-import { createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import New      from './new.js';
-import Password from './password.js';
-import Mnemonic from './mnemonic.js';
+import Register from './register.js';
+import RegisterMnemonic from './register_mnemonic.js';
+import Login from './login.js';
+import Recovery from './recovery.js';
+import RecoveryScan from './recovery_scan.js';
+import RecoveryPassword from './recovery_password.js';
 
-const Unidentified = createBottomTabNavigator({
-  	PASSWORD: {screen: Password}, 
-  	MNEMONIC: {screen: Mnemonic},
-  	NEW: {screen: New}
+const Unidentified = createStackNavigator({
+  	Login: {screen: Login}, 
+  	Recovery: {screen: Recovery},
+  	RecoveryScan: {screen: RecoveryScan},
+  	RecoveryPassword: {screen: RecoveryPassword},
+  	Register: {screen: Register},
+  	RegisterMnemonic: {screen: RegisterMnemonic}
 }, {
 	lazy: true,
-	initialRouteName: 'MNEMONIC',
+	initialRouteName: 'Login',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',
