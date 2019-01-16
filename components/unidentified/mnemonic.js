@@ -13,6 +13,9 @@ class Mnemonic extends Component {
 			mnemonic: '',
 		}
 	}
+	async componentDidMount(){
+		console.log('[route] ' + this.props.navigation.state.key);
+	}
 	render(){
 		console.log('[route] ' + this.props.navigation.state.key);
 		const { dispatch } = this.props;

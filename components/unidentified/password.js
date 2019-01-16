@@ -11,7 +11,7 @@ class Password extends Component {
 			password: '' 
 		}
 	}
-	componentDidMount(){
+	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.key);
 		console.log(this.props.user);
 	}

@@ -4,6 +4,12 @@ import langs from '../langs.js';
 import style from '../style.js';
 
 export default class New extends Component {
+	constructor(props){
+		super(props);
+	}
+	async componentDidMount(){
+		console.log('[route] ' + this.props.navigation.state.key);
+	}
 	render(){
 		console.log('[route] ' + this.props.navigation.state.key);
 		return (
