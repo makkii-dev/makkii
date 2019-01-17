@@ -1,13 +1,62 @@
-import React,{Component} from 'react';
-import {View,TextInput,Text,TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/AntDesign';
+import React,{ Component } from 'react';
+import { View, TextInput, Text, Image } from 'react-native';
+import styles from './styles.js'
 
 class Button extends Component{
 	render(){
 		return (
-			<TouchableOpacity onPress={this.props.onPress}>
-	          	<Text style={this.props.style}>{this.props.text}</Text>
-	        </TouchableOpacity>
+			<View style={ styles._button._view }>
+	          	<Text 
+	          		style={ styles._button._text }
+	          		onPress={ this.props.onPress }
+	      		>
+	          		{ this.props.text }
+	      		</Text>
+      		</View>
+		);
+	}
+}
+
+class Input extends Component{
+	constructor(props){
+		super(props);
+	}
+	render(){
+		return (
+			<View style={ styles._input._view }>
+				<TextInput
+					style={ styles._input._text_input }
+			        onChangeText={ val => { 
+			        	this.props.onChange(val); 
+			        }}
+			        value={ this.props.value }
+			    />
+			    <Text
+			    	style={ styles._input._text }
+			    	onPress={ e => { 
+			    		this.props.onClear(e); 
+			    	}}
+			    >CLR</Text>
+		    </View>
+		);
+	}
+}
+
+class InputMultiLines extends Component{
+	constructor(props){
+		super(props);
+	}
+	render(){
+		return (
+			<View style={ styles._input._view }>
+				<TextInput
+					style={ styles._input._text_input }
+			        onChangeText={ val => { 
+			        	this.props.onChange(val); 
+			        }}
+			        value={ this.props.value }
+			    />
+		    </View>
 		);
 	}
 }
@@ -21,34 +70,28 @@ class Password extends Component {
 	}
 	render(){
 		return (
-			<View style={{
-				flex: 1,
-				justifyContent:'center',
-				alignItems: 'center',
-			}}>
+			<View style={ styles._password._view }>
 				<TextInput
-					style={style.input}
-			        onChangeText={(password) => this.setState({
-			        	password
-			        })}
-			        ref={x => this.input = x}
-			        secureTextEntry={this.state.secure}
-			        value={this.state.password}
+					style={ styles._password._text_input }
+			        onChangeText={ val => { 
+			        	this.props.onChange(val); 
+			        }}
+			        secureTextEntry={ this.state.secure }
+			        value={ this.props.value }
 			    />
-			    <Icon  
-			    	type={this.state.secure ? 'eye': 'eye-invisible'} 
-			    	size={30}
-			    	style={{
-			    		position: 'absolute',
-					    top: -20,
-					    right: 0,
-			    	}} 
-			    	onPress={()=>{
+			    <Text
+			    	style={ styles._password._text }
+			    	onPress={ e =>{
 			    		this.setState({
 			    			secure: !this.state.secure
-			    		})
+			    		});
 			    	}}
-			    	/>
+			    >
+			    	{
+			    		this.state.secure ? 
+			    		'SHOW' : 'HIDE'
+			    	}
+			    </Text>
 		    </View>
 		);
 	}
@@ -56,5 +99,7 @@ class Password extends Component {
 
 module.exports = {
 	Button,
+	Input,
+	InputMultiLines,
 	Password
 }

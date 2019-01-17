@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View,TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import { user } from '../../actions/user.js';
 

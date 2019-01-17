@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
-import {View,Text} from 'react-native';
-import {Button} from '../common.js';
-import {connect} from 'react-redux';
-
-import {user} from '../../actions/user.js';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { Button, Password } from '../common.js';
+import { connect } from 'react-redux';
+import { user } from '../../actions/user.js';
+import langs from '../langs.js';
+import styles from '../styles.js';
 
 class RecoveryPassword extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -19,38 +20,22 @@ class RecoveryPassword extends Component {
 	}
 	render(){
 		return (
-			<View>
-				<View style={{
-					flex: 1,
-					marginTop:30,
-					flexDirection: 'row',
-        			justifyContent: 'space-between',
-				}}>
-					<Text>Enter password</Text>
-					<Text 
-						style={{width:50,height:20}}
-						onPress={(e)=>{
-							this.props.navigation.navigate('Recovery');
-						}}
-					>Recover</Text>
+			<View style={ styles.container }>
+				<View style={ styles.form }>
+					<Text style={ styles.label }>Enter password</Text>
 				</View>
-				<View style={{
-					flex: 1,
-					marginTop:30,
-					flexDirection: 'row',
-        			justifyContent: 'space-between',
-				}}>
-					<Text>Confirm your password</Text>
-					<Text 
-						style={{width:50,height:20}}
-						onPress={(e)=>{
-							this.props.navigation.navigate('Recovery');
-						}}
-					>Recover</Text>
+				<View style={ styles.form }>
+					<Password />
 				</View>
-				<View>
-					<Button text="Reset" style={style.button} onPress={()=>{
-						this.props.navigation.navigate('VAULT');
+				<View style={ styles.form }>
+					<Text style={ styles.label }>Confirm your password</Text>
+				</View>
+				<View style={ styles.form }>
+					<Password />
+				</View>
+				<View style={styles.form}>
+					<Button text="Reset" style={styles.button} onPress={(e)=>{
+						this.props.navigation.navigate('Vault');
 					}} />
 				</View>
 			</View>
@@ -58,8 +43,4 @@ class RecoveryPassword extends Component {
 	}
 }
 
-export default connect(state => {
-	return {
-		user: state.user
-	};
-})(RecoveryPassword);
+export default connect(state => { return { user: state.user };})(RecoveryPassword);

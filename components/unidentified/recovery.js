@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { Button, InputMultiLines } from '../common.js';
 import langs from '../langs.js';
-import style from '../style.js';
-import Icon from 'react-native-vector-icons/AntDesign';
-import {Button} from '../common.js';
+import styles from '../styles.js';
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: 'Recovery',
-	       	headerStyle: style.header_stack
+	       	headerStyle: styles.header_stack
 	    };
     };
 	constructor(props){
@@ -22,24 +21,26 @@ class Recovery extends Component {
 	render(){
 		const { dispatch } = this.props;
 		return (
-			<View style={style.container}>
-				<View style={style.label}>
-					<Icon type="scan" size={30} />
-					<Button text="Scan" style={style.button} onPress={()=>{
+			<View style={styles.container}>
+				<View style={styles.form}>
+					<Button text="Scan" style={styles.button} onPress={()=>{
 						this.props.navigation.navigate('RecoveryScan');
 					}} />
 				</View>
-				<Text style={style.label}>Enter 24 characters mnemonic</Text>
-				<TextInput
-					style={style.input}
-					value={this.props.user.mnemonic}
-			    	multiline = {true}   
-			    	editable = {true} 
-			        numberOfLines = {4}
-		        />
-		        <Button text="Confirm" style={style.button} onPress={()=>{
-					this.props.navigation.navigate('RecoveryPassword');
-				}} />		        
+				<View style={styles.form}>
+					<Text style={styles.label}>Enter 24 characters mnemonic</Text>
+				</View>
+				<View style={styles.form}>
+					<InputMultiLines
+						style={styles._input}
+						value={this.props.user.mnemonic}
+			        />
+		        </View>
+		        <View style={styles.form}>
+			        <Button text="Confirm" style={styles._button} onPress={()=>{
+						this.props.navigation.navigate('RecoveryPassword');
+					}} />		        
+				</View>
 			</View>
 		);
 	}

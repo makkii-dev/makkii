@@ -1,7 +1,7 @@
-import React,{Component} from 'react';
-import {connect} from 'react-redux';
-import {Button} from '../common.js';
-import {ScrollView,View,Text,TextInput} from 'react-native';
+import React,{ Component} from 'react';
+import { connect } from 'react-redux';
+import { Button } from '../common.js';
+import { ScrollView, View, Text, TextInput } from 'react-native';
 
 class Setting extends Component {
 	constructor(props){

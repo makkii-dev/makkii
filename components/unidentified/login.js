@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { Password, Button } from '../common.js';
 import langs from '../langs.js';
-import style from '../style.js';
-import Icon from 'react-native-vector-icons/AntDesign';
+import styles from '../styles.js';
 
 class Login extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -21,19 +21,19 @@ class Login extends Component {
 		}
 	}
 	async componentDidMount(){
-		console.log(this.props.navigation.state);
+		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.user);
 		//this.input.focus();
 	}
 	render(){ 
 		return (
-			<View style={style.container}>
+			<View style={styles.container}>		
 				<View style={{
 					flex:1,
 					justifyContent:'center',
 					alignItems: 'center',
-					marginTop:90,
-					marginBottom: 120,
+					marginTop: 180,
+					marginBottom: 100,
 				}}>
 					<Image
 						style={{
@@ -42,47 +42,26 @@ class Login extends Component {
 						}}
 						source={require('../../assets/wallet.png')} />
 				</View>
-				<View style={{
-					flex: 1,
-					justifyContent:'center',
-					alignItems: 'center',
-				}}>
-					<TextInput
-						style={style.input}
-				        onChangeText={(password) => this.setState({
-				        	password
-				        })}
-				        ref={x => this.input = x}
-				        secureTextEntry={this.state.secure}
-				        value={this.state.password}
-				    />
-				    <Icon  
-				    	type={this.state.secure ? 'eye': 'eye-invisible'} 
-				    	size={30}
-				    	style={{
-				    		position: 'absolute',
-						    top: -20,
-						    right: 0,
-				    	}} 
-				    	onPress={()=>{
-				    		this.setState({
-				    			secure: !this.state.secure
-				    		})
-				    	}}
-				    	/>
-			    </View>
-			    <View style={{marginTop:40}}>
-					<TouchableOpacity 
+				<View style={styles.form}>
+					<Password 
+						value={ this.state.value_password }
+						onChange={ val =>{
+							this.setState({
+								value_password: val
+							});
+						}}
+					/>
+				</View>
+				<View style={styles.form}>
+				    <Button
+						text="Login"  
 						onPress={(e)=>{
-					  
-					  	}}
-				  	>
-			          	<Text style={style.button}>Login</Text>
-			        </TouchableOpacity>
+							console.log('pressed');
+						}}
+					/>
 				</View>
 				<View style={{
 					flex: 1,
-					marginTop:30,
 					flexDirection: 'row',
         			justifyContent: 'space-between',
 				}}>
@@ -99,13 +78,10 @@ class Login extends Component {
 						}}
 					>Recover</Text>
 				</View>
+				
 			</View>
 		);
 	}
 }
 
-export default connect(state => {
-	return {
-		user: state.user
-	};
-})(Login);
+export default connect(state => { return { user: state.user }; })(Login);

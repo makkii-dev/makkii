@@ -18,6 +18,7 @@ import reducer_setting  from './reducers/setting';
 import reducer_user     from './reducers/user'; 
 
 // screens
+import Test from './components/test.js';
 import Identified from './components/identified/index.js';
 import Unidentified from './components/unidentified/index.js';
 
@@ -30,10 +31,12 @@ const store = createStore(combineReducers({
 }));
 
 const Container = createAppContainer(createSwitchNavigator({
+	Test: { screen: Test },
 	IDENTIFIED:  { screen: Identified },
 	UNIDENTIFIED: { screen: Unidentified }
 }, {
-	initialRouteName: store.getState().user.signed ? "IDENTIFIED" : "UNIDENTIFIED",
+	//initialRouteName: "Test", 
+	initialRouteName: store.getState().user.hashed_password !== '' ? "IDENTIFIED" : "UNIDENTIFIED",
 	resetOnBlur: true,
 	backBehavior: 'none',
 }));
@@ -42,12 +45,7 @@ export default class App extends Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<View style={{
-					paddingTop:20,
-					height: '100%'
-				}}>
-					<Container />
-				</View>
+				<Container />
 			</Provider>
 		);
 	}

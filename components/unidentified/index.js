@@ -7,31 +7,17 @@ import Recovery from './recovery.js';
 import RecoveryScan from './recovery_scan.js';
 import RecoveryPassword from './recovery_password.js';
 
+import styles from '../styles.js';
+
 const Unidentified = createStackNavigator({
   	Login: {screen: Login}, 
   	Recovery: {screen: Recovery},
   	RecoveryScan: {screen: RecoveryScan},
   	RecoveryPassword: {screen: RecoveryPassword},
   	Register: {screen: Register},
-  	RegisterMnemonic: {screen: RegisterMnemonic}
+  	RegisterMnemonic: {screen: RegisterMnemonic},
 }, {
-	lazy: true,
-	initialRouteName: 'Login',
-	tabBarOptions: {
-		activeTintColor: '#333333',
-		inactiveTintColor: '#adb0b5',
-		borderTopColor: '#adb0b5',
-	  	labelStyle: {
-	    	fontSize: 12
-	  	},
-	  	tabStyle: {
-	  		textAlign: 'center',
-	  		paddingBottom: 14,
-	    	backgroundColor: '#ffffff',
-	  	},
-	},
+	initialRouteName: 'RecoveryPassword',
 });
 
-export default connect(state => {
-	return state;
-})(Unidentified);
+export default connect(state => { return state; })(Unidentified);

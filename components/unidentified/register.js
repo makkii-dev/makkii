@@ -1,14 +1,16 @@
-import React,{Component} from 'react';
-import {connect} from 'react-redux';
-import {View,Text} from 'react-native';
-import {Password,Button} from '../common.js';
+import React,{ Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text } from 'react-native';
+import { Password, Button } from '../common.js';
 import langs from '../langs.js';
-import style from '../style.js';
+import styles from '../styles.js';
 
 class Register extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       title: navigation.getParam('otherParam', 'Register'),
+	       	title: navigation.getParam('otherParam', 'Register'),
+	       	headerStyle: styles.stack_header,
+	       	headerTitleStyle: styles.stack_header_title,
 	    };
     };
 	constructor(props){
@@ -19,17 +21,23 @@ class Register extends Component {
 	}
 	render(){
 		return (
-			<View style={style.container}>
-				<Text style={style.label}>Enter password</Text>
-				<Password />
-				<Text style={style.label}>Confirm password</Text>
-				<Password />
-				<Button 
-					text="Register"  
-					onPress={()=>{
-						this.props.navigation.navigate('RegisterMnemonic');
-					}}
-				/>
+			<View style={styles.container}>
+				<View style={ styles.form }>
+					<Text style={styles.label}>Enter password</Text>
+					<Password />
+				</View>
+				<View style={ styles.form }>
+					<Text style={styles.label}>Confirm password</Text>
+					<Password />
+				</View>
+				<View style={ styles.form }>
+					<Button 
+						text="Register"  
+						onPress={()=>{
+							this.props.navigation.navigate('RegisterMnemonic');
+						}}
+					/>
+				</View>
 			</View>
 		);
 	}
