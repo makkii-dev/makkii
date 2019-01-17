@@ -8,7 +8,7 @@ const Identified = createBottomTabNavigator({
 	Vault: {screen: Vault, navigationOptions:{ tabBarVisible: false }},
 	Dapps: {screen: Dapps, navigationOptions:{ tabBarVisible: false }}, 
 	Odex: {screen: Odex, navigationOptions:{ tabBarVisible: false }},
-	Setting: {screen: Setting, navigationOptions:{ tabBarVisible: false } }
+	Setting: {screen: Setting }
 }, {
 	lazy: true,
 	initialRouteName: 'Setting',

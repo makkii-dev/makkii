@@ -13,7 +13,7 @@ export default createStackNavigator({
 	SettingConfig: { screen: Config },
 	SettingRecovery: { screen: Recovery },
 }, {
-	initialRouteName: "SettingHome",
+	initialRouteName: "SettingPassword",
 	resetOnBlur: true,
 	backBehavior: 'none',
 });

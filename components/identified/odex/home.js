@@ -5,19 +5,7 @@ import { Logo, Button } from '../../common.js';
 import styles from '../../styles.js';
 import constants from '../../constants.js';
 
-class Password extends Component {
-	static navigationOptions = ({ navigation }) => {
-	    // return {
-	    //    	tabBarStyle: {
-	    //    		display: 'none'
-	    //    	}
-	   	// };
-	   	console.log('wocao');
-	   	console.log(navigation);
-	   	return {
-	   		tabBarVisible: false
-	   	};
-    };
+class Home extends Component {
 	constructor(props){
 		super(props);
 	}
@@ -28,10 +16,10 @@ class Password extends Component {
 	render(){
 		return (
 			<View style={styles.container}>	
-				<Text>Setting Password</Text>
+
 			</View>
 		)
 	}
 }
 
-export default connect(state => { return ({ setting: state.setting }); })(Password);
+export default connect(state => { return ({ setting: state.setting }); })(Home);
