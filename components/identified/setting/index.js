@@ -6,7 +6,7 @@ import Password from './password.js';
 import Config from './config.js';
 import Recovery from './recovery.js';
 
-export default createStackNavigator({
+const navigator = createStackNavigator({
 	SettingHome: { screen: Home  },
 	SettingPassword: { screen: Password },
 	SettingAbout: { screen: About  },
@@ -17,3 +17,20 @@ export default createStackNavigator({
 	resetOnBlur: true,
 	backBehavior: 'none',
 });
+
+navigator.navigationOptions = ({ navigation }) => {
+  	let { routeName } = navigation.state.routes[navigation.state.index];
+  	let navigationOptions = {};
+  	console.log('routeName !!! ' + routeName);
+  	switch(routeName) {
+  		case 'SettingPassword':
+  		case 'SettingAbout':
+  		case 'SettingConfig':
+  		case 'SettingRecovery':
+  			navigationOptions.tabBarVisible = false;
+  		break;
+  	}
+  	return navigationOptions;
+};
+
+export default navigator;
