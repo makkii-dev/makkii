@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { ScrollView, Text } from 'react-native';
 
 class Dapps extends Component {
-	render(){
-		console.log('[route] ' + this.props.navigation.state.key);
+	async componentDidMount(){
+		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.dapps);
+	}
+	render(){
 		return (
 			<ScrollView style={{
 				width: '100%',

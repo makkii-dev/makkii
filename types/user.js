@@ -8,7 +8,7 @@ export default class User {
 		// latest login timestamp
         this.login = Date.now();
 		// hashed password
-        this.hashed_password = '';
+        this.hashed_password = '123';
         // raw mnemonic
         this.mnemonic = '';
     }

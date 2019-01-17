@@ -6,9 +6,11 @@ class Vault extends Component {
 	constructor(props){
 		super(props);
 	}
-	render(){
-		console.log('[route] ' + this.props.navigation.state.key);
+	async componentDidMount(){
+		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.accounts);
+	}
+	render(){
 		return (
 			<ScrollView style={{
 				width: '100%',
@@ -36,8 +38,4 @@ class Vault extends Component {
 	}
 }
 
-export default connect(state => {
-	return {
-		accounts: state.accounts
-	};
-})(Vault);
+export default connect(state => { return { accounts: state.accounts }; })(Vault);

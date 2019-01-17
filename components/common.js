@@ -2,6 +2,20 @@ import React,{ Component } from 'react';
 import { View, TextInput, Text, Image } from 'react-native';
 import styles from './styles.js'
 
+class Logo extends Component{
+	render(){
+		return(
+			<Image
+				style={{
+					width:120,
+					height:120
+				}}
+				source={require('../assets/wallet.png')} 
+			/>
+		);
+	}
+}
+
 class Button extends Component{
 	render(){
 		return (
@@ -98,6 +112,7 @@ class Password extends Component {
 }
 
 module.exports = {
+	Logo,
 	Button,
 	Input,
 	InputMultiLines,

@@ -15,10 +15,20 @@ export default styles = {
     	marginTop: 0,
   	},
   	container: {
-  		padding: 20,
+  		paddingLeft: 20,
+  		paddingRight: 20,
+  		paddingTop: 40,
+  		paddingBottom: 160,
+  		width: '100%',
+  		height: '100%',
+  	},
+  	center: {
+  		flex: 1,
+  		justifyContent:'center',
+		alignItems: 'center',
   	},
   	form: {
-  		marginBottom: 20,
+  		marginBottom: 15,
   	},
   	label: {
   		fontSize: 14,

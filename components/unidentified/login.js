@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Password, Button } from '../common.js';
+import { Logo, Password, Button } from '../common.js';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -35,12 +35,7 @@ class Login extends Component {
 					marginTop: 180,
 					marginBottom: 100,
 				}}>
-					<Image
-						style={{
-							width:120,
-							height:120
-						}}
-						source={require('../../assets/wallet.png')} />
+					<Logo />
 				</View>
 				<View style={styles.form}>
 					<Password 
@@ -56,7 +51,7 @@ class Login extends Component {
 				    <Button
 						text="Login"  
 						onPress={(e)=>{
-							console.log('pressed');
+							this.props.navigation.navigate('Vault');
 						}}
 					/>
 				</View>

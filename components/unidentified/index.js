@@ -18,6 +18,17 @@ const Unidentified = createStackNavigator({
   	RegisterMnemonic: {screen: RegisterMnemonic},
 }, {
 	initialRouteName: 'RecoveryPassword',
+	header: {
+		style: {
+			shadowOpacity: 0,
+			shadowOffset: {
+				height: 0,
+			},
+			shadowRadius: 0,
+			elevation: 0,
+        }
+	},
+	headerMode: {}
 });
 
 export default connect(state => { return state; })(Unidentified);

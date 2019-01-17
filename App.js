@@ -1,7 +1,7 @@
 // libs
 import React, { Component } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 import { createSwitchNavigator, createAppContainer } from 'react-navigation';
+import { StyleSheet, Text, View } from 'react-native';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
@@ -32,11 +32,11 @@ const store = createStore(combineReducers({
 
 const Container = createAppContainer(createSwitchNavigator({
 	Test: { screen: Test },
-	IDENTIFIED:  { screen: Identified },
-	UNIDENTIFIED: { screen: Unidentified }
+	Identified:  { screen: Identified },
+	Unidentified: { screen: Unidentified }
 }, {
 	//initialRouteName: "Test", 
-	initialRouteName: store.getState().user.hashed_password !== '' ? "IDENTIFIED" : "UNIDENTIFIED",
+	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "Unidentified",
 	resetOnBlur: true,
 	backBehavior: 'none',
 }));
