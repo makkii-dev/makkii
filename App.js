@@ -7,12 +7,14 @@ import { Provider } from 'react-redux';
 
 // actions
 import { accounts } from './actions/accounts';
+import { account }  from './actions/account';
 import { dapps }    from './actions/dapps';
 import { setting }  from './actions/setting';
 import { user }     from './actions/user';
 
 // reducers
-import reducer_accounts from './reducers/accounts'; 
+import reducer_accounts from './reducers/accounts';
+import reducer_account  from './reducers/account'; 
 import reducer_dapps    from './reducers/dapps';
 import reducer_setting  from './reducers/setting';
 import reducer_user     from './reducers/user'; 
@@ -25,22 +27,25 @@ import Unidentified from './components/unidentified/index.js';
 // init
 const store = createStore(combineReducers({
 	accounts: reducer_accounts,
-	dapps: reducer_dapps,
-	setting: reducer_setting,
-	user: reducer_user,
+	account:  reducer_account,
+	dapps:    reducer_dapps,
+	setting:  reducer_setting,
+	user:     reducer_user,
 }));
 
 // temp load some demo data
 import Account from './types/account.js';
-let _accounts = [];
-for(let i = 0; i < 10; i++){
-	let length = 30;
+let _accounts = {};
+let length = 30;
+for(let i = 0; i < 20; i++){
 	let hex = Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
-	_accounts.push(new Account(
-		'a0' + hex, 
-		'0000000000000000000000000000000000000000000000000000000000000000',
-		'account ' + i
-	));
+	let acc = new Account();
+	acc.address = 'a0' + hex;
+	acc.private_key = '0000000000000000000000000000000000000000000000000000000000000000';
+	acc.balance = Math.random().toFixed(6);
+	acc.name = 'account ' + i;
+	acc.type = '[local]'; 
+	_accounts[acc.address] = acc;
 }
 store.dispatch(accounts(_accounts));
 import Dapp from './types/dapp.js';
