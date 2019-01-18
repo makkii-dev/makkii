@@ -17,7 +17,7 @@ const navigator = createStackNavigator({
     VaultSend: { screen: Send },
     VaultTransaction: { screen: Transaction },
 }, {
-  	initialRouteName: "VaultAccount",
+  	initialRouteName: "VaultHome",
   	resetOnBlur: true,
     navigationOptions: ({ navigation }) => ({
         header: <AppBar title={ navigation.getParam('appBar', {title: ''}).title } />,

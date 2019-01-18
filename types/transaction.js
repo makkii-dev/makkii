@@ -1,9 +1,9 @@
 export default class Transaction {
 	constructor() {
+		hash = '';
         from = '';
         to = '';
         value = 0;
-        hash = '';
         block = 0;
         timestamp = Date.now();
     }
