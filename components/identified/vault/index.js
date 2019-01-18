@@ -9,18 +9,18 @@ import Send from './send.js';
 import Transaction from './transaction.js';
 
 const navigator = createStackNavigator({
-    SettingAcount: { screen: Account  },
-    SettingHome: { screen: Home  },
-    SettingImportLedger: { screen: ImportLedger },
-    SettingImportPrivateKey: { screen: ImportPrivateKey  },
-    SettingReceive: { screen: Receive },
-    SettingSend: { screen: Send },
-    SettingTransaction: { screen: Transaction },
+    VaultAccount: { screen: Account  },
+    VaultHome: { screen: Home  },
+    VaultImportLedger: { screen: ImportLedger },
+    VaultImportPrivateKey: { screen: ImportPrivateKey  },
+    VaultReceive: { screen: Receive },
+    VaultSend: { screen: Send },
+    VaultTransaction: { screen: Transaction },
 }, {
-  	initialRouteName: "SettingHome",
+  	initialRouteName: "VaultAccount",
   	resetOnBlur: true,
     navigationOptions: ({ navigation }) => ({
-          header: <AppBar title={navigation.getParam('appBar', {title: ''}).title} />
+        header: <AppBar title={ navigation.getParam('appBar', {title: ''}).title } />,
     }),
     cardStyle: {
         backgroundColor: '#EFF4F8'
@@ -30,14 +30,13 @@ const navigator = createStackNavigator({
 navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
   	let navigationOptions = {};
-  	console.log('routeName !!! ' + routeName);
   	switch(routeName) {
-        case 'SettingAcount':
-    		case 'SettingImportLedger':
-    		case 'SettingImportPrivateKey':
-    		case 'SettingReceive':
-        case 'SettingSend':
-        case 'SettingTransaction':
+        case 'VaultAccount':
+    		case 'VaultImportLedger':
+    		case 'VaultImportPrivateKey':
+    		case 'VaultReceive':
+        case 'VaultSend':
+        case 'VaultTransaction':
             navigationOptions.tabBarVisible = false;
   		  break;
   	}
