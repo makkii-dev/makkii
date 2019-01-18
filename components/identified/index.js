@@ -1,6 +1,6 @@
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation';
 import Vault    from './vault/index.js';
-import Dapps    from './dapps.js';
+import Dapps    from './dapps/index.js';
 import Odex     from './odex.js';
 import Setting  from './setting/index.js';
 
@@ -11,7 +11,7 @@ const Identified = createBottomTabNavigator({
 	Setting: { screen: Setting }
 }, {
 	lazy: true,
-	initialRouteName: 'Vault',
+	initialRouteName: 'Dapps',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',

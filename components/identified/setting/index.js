@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import Home from './home.js';
 import About from './about.js';
@@ -13,7 +12,7 @@ const navigator = createStackNavigator({
 	  SettingConfig: { screen: Config },
 	  SettingRecovery: { screen: Recovery },
 }, {
-	  initialRouteName: "SettingPassword",
+	  initialRouteName: "SettingHome",
 	  resetOnBlur: true,
 	  backBehavior: 'none',
 });

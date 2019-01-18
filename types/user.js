@@ -12,4 +12,4 @@ export default class User {
         // raw mnemonic
         this.mnemonic = '';
     }
-} 
+}
