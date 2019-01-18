@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { createStackNavigator } from 'react-navigation';
-import Acount from './acount.js';
+import { createStackNavigator, AppBar } from 'react-navigation';
+import Account from './account.js';
 import Home from './home.js';
 import ImportLedger from './import_ledger.js';
 import ImportPrivateKey from './import_private_key.js';
@@ -9,7 +9,7 @@ import Send from './send.js';
 import Transaction from './transaction.js';
 
 const navigator = createStackNavigator({
-    SettingAcount: { screen: Acount  },
+    SettingAcount: { screen: Account  },
     SettingHome: { screen: Home  },
     SettingImportLedger: { screen: ImportLedger },
     SettingImportPrivateKey: { screen: ImportPrivateKey  },
@@ -19,7 +19,12 @@ const navigator = createStackNavigator({
 }, {
   	initialRouteName: "SettingHome",
   	resetOnBlur: true,
-  	backBehavior: 'none',
+    navigationOptions: ({ navigation }) => ({
+          header: <AppBar title={navigation.getParam('appBar', {title: ''}).title} />
+    }),
+    cardStyle: {
+        backgroundColor: '#EFF4F8'
+    }
 });
 
 navigator.navigationOptions = ({ navigation }) => {
@@ -27,7 +32,7 @@ navigator.navigationOptions = ({ navigation }) => {
   	let navigationOptions = {};
   	console.log('routeName !!! ' + routeName);
   	switch(routeName) {
-    		case 'SettingAcount':
+        case 'SettingAcount':
     		case 'SettingImportLedger':
     		case 'SettingImportPrivateKey':
     		case 'SettingReceive':

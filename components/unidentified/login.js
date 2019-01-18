@@ -9,7 +9,7 @@ class Login extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	headerStyle: {
-	       		display:'none'
+	       		visibility:'none'
 	       	}
 	    };
     };
