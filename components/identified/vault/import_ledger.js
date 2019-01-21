@@ -16,10 +16,10 @@ class ImportLedger extends Component {
 	render(){
 		return (
 			<View style={styles.container}>	
-
+				<Text>Import from ledger</Text>
 			</View>
 		)
 	}
 }
 
-export default connect(state => { return ({ setting: state.setting }); })(ImportLedger);
+export default connect(state => { return ({ accounts: state.accounts }); })(ImportLedger);

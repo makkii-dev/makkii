@@ -11,7 +11,7 @@ const Identified = createBottomTabNavigator({
 	Setting: { screen: Setting }
 }, {
 	lazy: true,
-	initialRouteName: 'Dapps',
+	initialRouteName: 'Vault',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',
@@ -23,7 +23,8 @@ const Identified = createBottomTabNavigator({
 	  		paddingBottom: 14,
 	    	backgroundColor: '#ffffff',
 	  	},
-	}
+	},
+	
 });
 
 export default Identified;
