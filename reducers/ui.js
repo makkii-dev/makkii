@@ -1,7 +1,7 @@
 import { UI } from '../actions/ui.js';
 
 let ui = {
-	show: true,
+	vault_home_sub_navi: false,
 }
 
 export default function accounts(state = ui, action){

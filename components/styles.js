@@ -2,18 +2,6 @@ const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
 
 export default styles = {
-	stack_header: {
-		height: 40,
-		fontSize: 20,
-		elevation: 1,       // android shadow
-		shadowOpacity: 1,   // ios shadow
-		paddingTop:0,
-	},
-	stack_header_title: {
-    	fontSize: 18,
-    	alignSelf: 'center',
-    	marginTop: 0,
-  	},
   	container: {
   		paddingLeft: 20,
   		paddingRight: 20,
