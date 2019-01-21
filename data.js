@@ -28,7 +28,6 @@ for(let i = 0; i < 20; i++){
 	accounts[acc.address] = acc;
 }
 
-
 let dapps = [];
 dapps.push(new Dapp('dapp1', 'https://i0.wp.com/www.blockchaindk.com/wp-content/uploads/2017/11/Aion-Logo.png?fit=400%2C400&ssl=1', 'desc1'));
 dapps.push(new Dapp('dapp2', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDHgU12UjzCm0m-96M-nsY3gpNuwCl9-dLlmmzlEvsEdHEtJt9', 'desc2'));
