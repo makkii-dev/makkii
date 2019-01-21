@@ -11,7 +11,7 @@ const Identified = createBottomTabNavigator({
 	Setting: { screen: Setting }
 }, {
 	lazy: true,
-	initialRouteName: 'Dapps',
+	initialRouteName: 'Setting',
 	tabBarOptions: {
 		activeTintColor: '#333333',
 		inactiveTintColor: '#adb0b5',

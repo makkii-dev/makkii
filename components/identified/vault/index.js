@@ -31,8 +31,8 @@ const navigator = createStackNavigator({
     VaultSend: { screen: Send, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultTransaction: { screen: Transaction, navigationOptions: { headerStyle: styles.headerStyle } },
 }, {
-    initialRouteName: "VaultImportLedger",
-    //initialRouteName: "VaultHome",
+    //initialRouteName: "VaultImportLedger",
+    initialRouteName: "VaultHome",
   	resetOnBlur: true,
     navigationOptions: ({ navigation }) => ({
         header: <AppBar title={ navigation.getParam('appBar', {title: ''}).title } />,
@@ -54,6 +54,7 @@ navigator.navigationOptions = ({ navigation }) => {
             return {
               tabBarVisible: false
             };
-  	}};
+  	}
+};
 
 export default navigator;
