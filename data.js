@@ -3,6 +3,7 @@ import Transaction from './types/transaction.js';
 import Dapp from './types/dapp.js';
 
 let accounts = {};
+let accounts_ledger = {};
 let length = 30;
 for(let i = 0; i < 20; i++){
 	let acc = new Account();
@@ -26,6 +27,14 @@ for(let i = 0; i < 20; i++){
 	tx.block = Math.random();
 	acc.transactions[tx.hash] = tx;
 	accounts[acc.address] = acc;
+
+	acc = new Account();
+	acc.address = 'a0' + Math.round((Math.pow(36, length + 1) - Math.random() * Math.pow(36, length))).toString(36).slice(1);
+	acc.private_key = '';
+	acc.balance = 0;
+	acc.name = 'ledger ' + i;
+	acc.type = '[ledger]';
+	accounts_ledger[acc.address] = acc; 	
 }
 
 let dapps = [];
@@ -34,5 +43,6 @@ dapps.push(new Dapp('dapp2', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:AN
 
 export default data = {
 	accounts,
+	accounts_ledger,
 	dapps,
 }

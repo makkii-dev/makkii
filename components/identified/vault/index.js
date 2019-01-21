@@ -31,7 +31,7 @@ const navigator = createStackNavigator({
     VaultSend: { screen: Send, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultTransaction: { screen: Transaction, navigationOptions: { headerStyle: styles.headerStyle } },
 }, {
-    initialRouteName: "VaultImportPrivateKey",
+    initialRouteName: "VaultImportLedger",
     //initialRouteName: "VaultHome",
   	resetOnBlur: true,
     navigationOptions: ({ navigation }) => ({

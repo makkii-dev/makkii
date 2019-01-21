@@ -15,19 +15,7 @@ class Home extends Component {
 	        			state.params.toggle();
 	        		}}
 	        	>
-					<Text style={{
-						fontSize: 20,
-						lineHeight: 22,
-						textAlign: 'center',
-						color: 'grey',
-						top: 0,
-						right: 10,
-						borderWidth: 1,
-						borderColor: 'grey',
-						width: 20,
-						height: 20,
-						borderRadius: 30,
-					}}>+</Text>
+					<Text style={ styles.headerRight }>+</Text>
 				</TouchableOpacity>
 	    };
     };
@@ -113,6 +101,19 @@ class Home extends Component {
 export default connect(state => { return ({ accounts: state.accounts, ui: state.ui }); })(Home);
 
 const styles = StyleSheet.create({
+	headerRight: {
+		fontSize: 20,
+		lineHeight: 22,
+		textAlign: 'center',
+		color: 'grey',
+		top: 0,
+		right: 10,
+		borderWidth: 1,
+		borderColor: 'grey',
+		width: 20,
+		height: 20,
+		borderRadius: 30,
+	},
 	listItem: {
 		flex: 1,
         flexDirection: 'row',
