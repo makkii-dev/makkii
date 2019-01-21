@@ -35,7 +35,7 @@ class ImportLedger extends Component {
 		return (
 			<ScrollView 
 				onScrollBeginDrag={e => {
-					console.log('here');
+					console.log('on scrolling');
 				}}
 			>
 				{
@@ -43,7 +43,7 @@ class ImportLedger extends Component {
 					    return (
 					  		<View key={key} style={styles.listItem}>	
 						  		<View style={styles.listItemLeft}> 
-						  			<Text>{ this.props.accounts_ledger[key].address.substring(0, 16) + ' ...' }</Text>
+						  			<Text style={styles.listItemText}>{ this.props.accounts_ledger[key].address.substring(0, 32) }</Text>
 						  		</View>
 						  		<View style={styles.listItemRight}> 
 						  			<Switch />
@@ -76,5 +76,6 @@ const styles = StyleSheet.create({
 	},
 	listItemText: {
 		color: 'grey',
+		lineHeight: 25,
 	},
 });
