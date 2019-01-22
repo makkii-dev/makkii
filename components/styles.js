@@ -15,10 +15,13 @@ export default styles = {
   		justifyContent:'center',
 		alignItems: 'center',
   	},
-  	form: {
-  		marginBottom: 15,
+  	marginBottom10: {   // in use
+		marginBottom: 10, 
+	},
+  	marginBottom20: {   // in use
+  		marginBottom: 20, 
   	},
-  	label: {
+  	label: {            // in use
   		fontSize: 14,
   		lineHeight: 14,
   		color: FONT_COLOR,
@@ -64,11 +67,11 @@ export default styles = {
 			top: 9,
 		}
 	},
-	_password: {
-		_view: {
+	password: {
+		view: {
 			width: '100%'
 		},
-		_text_input: {
+		text_input: {
 			fontSize: 16,
 			color: FONT_COLOR,
 			fontWeight: 'normal',
@@ -81,12 +84,12 @@ export default styles = {
 			borderBottomWidth: 1,
 			width: '100%',
 		},
-		_text: {
-			fontSize: 16,
+		text: {
+			fontSize: 12,
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
-			width: 50,
+			width: 40,
 			position: 'absolute',
 			right: 0,
 			top: 9,

@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View, TextInput, Text, Image } from 'react-native';
+import { View, TextInput, Text, Image, StyleSheet } from 'react-native';
 import styles from './styles.js'
 
 class Logo extends Component{
@@ -84,9 +84,9 @@ class Password extends Component {
 	}
 	render(){
 		return (
-			<View style={ styles._password._view }>
+			<View style={ styles.password.view }>
 				<TextInput
-					style={ styles._password._text_input }
+					style={ styles.password.text_input }
 			        onChangeText={ val => { 
 			        	this.props.onChange(val); 
 			        }}
@@ -94,7 +94,7 @@ class Password extends Component {
 			        value={ this.props.value }
 			    />
 			    <Text
-			    	style={ styles._password._text }
+			    	style={ styles.password.text }
 			    	onPress={ e =>{
 			    		this.setState({
 			    			secure: !this.state.secure
