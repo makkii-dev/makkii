@@ -2,10 +2,12 @@ export default class Dapp {
 	constructor(
 		name, 
 		logo,
-		description
+		description,
+		uri,
 	) {
         this.name = name;
         this.logo = logo;
-        this.desciption = description;
+        this.description = description;
+        this.uri = uri;
     }
 } 

@@ -1,13 +1,15 @@
 import { createStackNavigator } from 'react-navigation';
 import Home from './home';
 import Launch from './launch';
+import Dapp from './dapp';
 const navigator = createStackNavigator(
     {
-        SettingHome: {screen: Home},
-        SettingLaunch: {screen: Launch}
+        DappsHome: {screen: Home},
+        DappsLaunch: {screen: Launch},
+        DappsSingle: {screen: Dapp},
     },
     {
-        initialRouteName: 'SettingHome',
+        initialRouteName: 'DappsHome',
     }
 );
 
@@ -16,7 +18,8 @@ navigator.navigationOptions = ({ navigation }) => {
     let navigationOptions = {};
     console.log('routeName !!!' + routeName);
     switch(routeName) {
-        case 'SettingLaunch':
+        case 'DappsLaunch':
+        case 'DappsSingle':
             navigationOptions.tabBarVisible=false;
             break;
     }

@@ -9,6 +9,7 @@ class Home extends Component {
 		headerTitleStyle:{
 			alignSelf: 'center',
 			textAlign: 'center',
+			flex: 1,
 		}
 	});
 	constructor(props){
@@ -37,10 +38,9 @@ class Home extends Component {
 			<View>
 				<TouchableOpacity
 					onPress={()=>{
-						this.props.navigation.navigate('SettingLaunch',{
-							'name': data.item.name,
-							'logo': data.item.logo,
-							'description': data.item.desciption,
+						this.props.navigation.navigate('DappsLaunch',{
+							'title': data.item.name,
+							'dapp': data.item,
 						})
 					}}
 				>
