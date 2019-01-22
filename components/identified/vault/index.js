@@ -46,13 +46,13 @@ navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
   	switch(routeName) {
         case 'VaultAccount':
-    		case 'VaultImportLedger':
-    		case 'VaultImportPrivateKey':
-    		case 'VaultReceive':
+		case 'VaultImportLedger':
+		case 'VaultImportPrivateKey':
+		case 'VaultReceive':
         case 'VaultSend':
         case 'VaultTransaction':
             return {
-              tabBarVisible: false
+                tabBarVisible: false
             };
   	}
 };

@@ -2,8 +2,8 @@ import { createStackNavigator } from 'react-navigation';
 import { StyleSheet } from 'react-native';
 import Home from './home.js';
 import About from './about.js';
-import Password from './password.js';
-import Config from './config.js';
+import UpdatePassword from './update_password.js';
+import Services from './services.js';
 import Recovery from './recovery.js';
 
 const styles = StyleSheet.create({
@@ -16,32 +16,42 @@ const styles = StyleSheet.create({
         shadowRadius: 0, 
         borderBottomWidth:0,
         elevation: 1,
+    },
+    headerTitleStyle: {
+        color: 'red',
+        fontSize: 16,
     }
 });
 
 const navigator = createStackNavigator({
 	  SettingHome: { screen: Home, navigationOptions: { headerStyle: styles.headerStyle } },
-    SettingPassword: { screen: Password, navigationOptions: { headerStyle: styles.headerStyle } },
-	  SettingAbout: { screen: About, navigationOptions: { headerStyle: styles.headerStyle }  },
-	  SettingConfig: { screen: Config, navigationOptions: { headerStyle: styles.headerStyle } },
+    SettingUpdatePassword: { screen: UpdatePassword, navigationOptions: { headerStyle: styles.headerStyle } },
+	  SettingAbout: { screen: About, navigationOptions: { headerStyle: styles.headerStyle } },
+	  SettingServices: { screen: Services, navigationOptions: { headerStyle: styles.headerStyle } },
 	  SettingRecovery: { screen: Recovery, navigationOptions: { headerStyle: styles.headerStyle } },
 }, {
-	  initialRouteName: "SettingHome",
+	  initialRouteName: "SettingRecovery",
+    //initialRouteName: "SettingHome",
 	  resetOnBlur: true,
 	  backBehavior: 'none',
 });
 
 navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
+    let navigationOptions = {}; 
+    navigationOptions.headerStyle = styles.headerStyle;
   	switch(routeName) {
-  		  case 'SettingPassword':
+  		  case 'SettingUpdatePassword':
   		  case 'SettingAbout':
-  		  case 'SettingConfig':
+  		  case 'SettingServices':
   		  case 'SettingRecovery':
-            return {
-                tabBarVisible: false,  
-            };
+            navigationOptions.tabBarVisible = false;
+            break;
   	}
+    return navigationOptions;
 };
+
+console.log('here');
+console.log(navigator.navigationOptions);
 
 export default navigator;

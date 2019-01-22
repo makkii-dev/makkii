@@ -23,7 +23,7 @@ class UpdatePassword extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 		this.props.navigation.setParams({
-			title: 'Update Password',
+			title: 'UPDATE PASSWORD',
 		});
 	}
 	render(){
