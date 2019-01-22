@@ -1,46 +1,70 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
-import { Logo, Button } from '../../common.js';
+import { View, Text, Button } from 'react-native';
+import { Logo } from '../../common.js';
 import styles from '../../styles.js';
 import constants from '../../constants.js';
 
 class About extends Component {
+	static navigationOptions = ({ navigation }) => {
+	    const { state } = navigation;
+	    return {
+	        title: state.params ? state.params.title : 'ABOUT',
+	    };
+    };
 	constructor(props){
 		super(props);
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
+		this.props.navigation.setParams({
+			title: 'ABOUT',
+		});
 	}
 	render(){
 		return (
 			<View style={styles.container}>		
 				<View style={{
-					flex:1,
-					justifyContent:'center',
-					alignItems: 'center',
-					marginTop: 80,
-					marginBottom: 40,
+					justifyContent: 'center',
+    				alignItems: 'center',					
+					marginBottom: 20,
 				}}>
 					<Logo />
 				</View>
-				<View style={ styles.center }>
-					<Text>Version: {  }</Text>
+				<View style={ styles.marginBottom10 }>
+					<Text style={ styles.center_text }>{ constants.BRAND }</Text>
 				</View>
-				<View style={ styles.center }>
-					<Text>{ constants.BRAND }</Text>
+				<View style={ styles.marginBottom20 }>
+					<Text style={ styles.center_text }>Version: 0.1.0</Text>
 				</View>
-				<View style={styles.form}>
+				<View style={ styles.marginBottom80 }>
 					<Button 
-						text="Check New Version"
+						title="Check New Version"
+						onPress={e => {
+							console.log('check new version');
+						}}
 					/>
 				</View>
-				<View style={ styles.center }>
-					<Text>license</Text>
+				<View style={ styles.marginBottom10 }>
+					<Text 
+						style={ styles.center_text }
+						onPress={e => {
+							console.log('license');
+						}}
+					>
+						license
+					</Text>
 				</View>
-				<View style={ styles.center }>
-					<Text>copyright</Text>
+				<View>
+					<Text 
+						style={ styles.center_text }
+						onPress={e => {
+							console.log('copyright');
+						}}
+					>
+						copyright
+					</Text>
 				</View>
 			</View>
 		);

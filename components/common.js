@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { View, TextInput, Text, Image } from 'react-native';
+import { View, TextInput, Text, Image, StyleSheet } from 'react-native';
 import styles from './styles.js'
 
 class Logo extends Component{
@@ -8,25 +8,10 @@ class Logo extends Component{
 			<Image
 				style={{
 					width:120,
-					height:120
+					height:120,
 				}}
 				source={require('../assets/wallet.png')} 
 			/>
-		);
-	}
-}
-
-class Button extends Component{
-	render(){
-		return (
-			<View style={ styles._button._view }>
-	          	<Text 
-	          		style={ styles._button._text }
-	          		onPress={ this.props.onPress }
-	      		>
-	          		{ this.props.text }
-	      		</Text>
-      		</View>
 		);
 	}
 }
@@ -37,16 +22,16 @@ class Input extends Component{
 	}
 	render(){
 		return (
-			<View style={ styles._input._view }>
+			<View>
 				<TextInput
-					style={ styles._input._text_input }
+					style={ styles.input.text_input }
 			        onChangeText={ val => { 
 			        	this.props.onChange(val); 
 			        }}
 			        value={ this.props.value }
 			    />
 			    <Text
-			    	style={ styles._input._text }
+			    	style={ styles.input.text }
 			    	onPress={ e => { 
 			    		this.props.onClear(e); 
 			    	}}
@@ -62,9 +47,17 @@ class InputMultiLines extends Component{
 	}
 	render(){
 		return (
-			<View style={ styles._input._view }>
+			<View style={ styles.input.view }>
 				<TextInput
-					style={ styles._input._text_input }
+					style={{
+						borderWidth: 1,
+
+
+
+					}}
+					editable={false}
+					numberOfLines={4}
+					multiline={true}
 			        onChangeText={ val => { 
 			        	this.props.onChange(val); 
 			        }}
@@ -84,9 +77,9 @@ class Password extends Component {
 	}
 	render(){
 		return (
-			<View style={ styles._password._view }>
+			<View style={ styles.password.view }>
 				<TextInput
-					style={ styles._password._text_input }
+					style={ styles.password.text_input }
 			        onChangeText={ val => { 
 			        	this.props.onChange(val); 
 			        }}
@@ -94,7 +87,7 @@ class Password extends Component {
 			        value={ this.props.value }
 			    />
 			    <Text
-			    	style={ styles._password._text }
+			    	style={ styles.password.text }
 			    	onPress={ e =>{
 			    		this.setState({
 			    			secure: !this.state.secure
@@ -113,7 +106,6 @@ class Password extends Component {
 
 module.exports = {
 	Logo,
-	Button,
 	Input,
 	InputMultiLines,
 	Password

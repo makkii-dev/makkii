@@ -16,7 +16,6 @@ const navigator = createStackNavigator(
 navigator.navigationOptions = ({ navigation }) => {
     let { routeName } = navigation.state.routes[navigation.state.index];
     let navigationOptions = {};
-    console.log('routeName !!!' + routeName);
     switch(routeName) {
         case 'DappsLaunch':
         case 'DappsSingle':

@@ -1,7 +1,7 @@
-import * as React from 'react';
-import {View, Text, Image, StyleSheet, Button} from 'react-native'
-import {connect} from "react-redux";
-class Launch extends React.Component{
+import React, { Component } from 'react';
+import { View, Text, Image, StyleSheet, Button } from 'react-native'
+import { connect } from "react-redux";
+class Launch extends Component{
     static navigationOptions = ({ navigation }) => ({
         title: navigation.getParam('title', 'Dapps'),
         headerTitleStyle: {
