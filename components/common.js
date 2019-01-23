@@ -55,11 +55,10 @@ class InputMultiLines extends Component{
 
 
 					}}
-					editable={false}
 					numberOfLines={4}
 					multiline={true}
 			        onChangeText={ val => { 
-			        	this.props.onChange(val); 
+			        	this.props.onChangeText(val);
 			        }}
 			        value={ this.props.value }
 			    />

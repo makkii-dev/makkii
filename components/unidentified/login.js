@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Logo, Password, Button } from '../common.js';
+import { View, Text, Button, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native';
+import { Logo, Password } from '../common.js';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -17,7 +17,7 @@ class Login extends Component {
 		super(props);
 		this.state = {
 			password: '',
-			secure: true, 
+			secure: true,
 		}
 	}
 	async componentDidMount(){
@@ -25,9 +25,9 @@ class Login extends Component {
 		console.log(this.props.user);
 		//this.input.focus();
 	}
-	render(){ 
+	render(){
 		return (
-			<View style={styles.container}>		
+			<KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={200}>
 				<View style={{
 					flex:1,
 					justifyContent:'center',
@@ -37,8 +37,8 @@ class Login extends Component {
 				}}>
 					<Logo />
 				</View>
-				<View style={styles.form}>
-					<Password 
+				<View style={{padding:5}}>
+					<Password
 						value={ this.state.value_password }
 						onChange={ val =>{
 							this.setState({
@@ -47,9 +47,9 @@ class Login extends Component {
 						}}
 					/>
 				</View>
-				<View style={styles.form}>
+				<View style={{padding:5}}>
 				    <Button
-						text="Login"  
+						title="Login"
 						onPress={(e)=>{
 							this.props.navigation.navigate('Vault');
 						}}
@@ -59,22 +59,26 @@ class Login extends Component {
 					flex: 1,
 					flexDirection: 'row',
         			justifyContent: 'space-between',
+					height: 50,
+					padding: 10
 				}}>
-					<Text 
-						style={{width:70,height:20}}
-						onPress={(e)=>{
-							this.props.navigation.navigate('Register');
+					<TouchableOpacity
+						onPress={()=>{
+							this.props.navigation.navigate('Register')
 						}}
-					>Register</Text>
-					<Text 
-						style={{width:50,height:20}}
-						onPress={(e)=>{
-							this.props.navigation.navigate('Recovery');
+					>
+						<Text>Register</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={()=>{
+							this.props.navigation.navigate('Recovery')
 						}}
-					>Recover</Text>
+					>
+						<Text>Recovery</Text>
+					</TouchableOpacity>
 				</View>
-				
-			</View>
+
+			</KeyboardAvoidingView>
 		);
 	}
 }

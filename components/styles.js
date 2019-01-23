@@ -7,8 +7,8 @@ export default styles = {
   		paddingRight: 20,
   		paddingTop: 40,
   		paddingBottom: 160,
-  		width: '100%',
-  		height: '100%',
+		justifyContent:'center',
+  		flex:1,
   	},
   	center: {
   		flex: 1,
@@ -71,7 +71,9 @@ export default styles = {
 	},
 	password: {
 		view: {
-			width: '100%'
+			flexDirection: 'row',
+			height: 50,
+			alignItems: 'center'
 		},
 		text_input: {
 			fontSize: 16,
@@ -84,14 +86,14 @@ export default styles = {
 			paddingRight: 60,
 			borderColor: BORDER_COLOR,
 			borderBottomWidth: 1,
-			width: '100%',
+			flex: 1,
 		},
 		text: {
 			fontSize: 12,
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
-			width: 40,
+			flex: 1,
 			position: 'absolute',
 			right: 0,
 			top: 9,

@@ -17,7 +17,7 @@ const Unidentified = createStackNavigator({
   	Register: {screen: Register},
   	RegisterMnemonic: {screen: RegisterMnemonic},
 }, {
-	initialRouteName: 'RecoveryPassword',
+	initialRouteName: 'Login',
 	header: {
 		style: {
 			shadowOpacity: 0,
