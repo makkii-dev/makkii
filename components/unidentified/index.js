@@ -17,7 +17,7 @@ const Unidentified = createStackNavigator({
   	Register: {screen: Register},
   	RegisterMnemonic: {screen: RegisterMnemonic},
 }, {
-	initialRouteName: 'Login',
+	initialRouteName: 'RegisterMnemonic',
 	header: {
 		style: {
 			shadowOpacity: 0,

@@ -1,5 +1,4 @@
 import sodium from 'sodium-javascript';
-import {Buffer} from 'buffer';
 import blake2b from'blake2b';
 
 const A0_IDENTIFIER = [0xA0];
