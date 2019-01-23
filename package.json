@@ -1,25 +1,30 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
+  "name": "wallet",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "eject": "expo eject"
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "test": "jest"
   },
   "dependencies": {
     "aion-hd-wallet": "file:libs/aion-hd-wallet",
     "bip39": "^2.5.0",
-    "expo": "^32.0.0",
-    "react": "16.5.0",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react": "16.6.3",
+    "react-native": "0.57.8",
     "react-native-camera": "git+https://git@github.com/react-native-community/react-native-camera",
+    "react-native-gesture-handler": "^1.0.12",
     "react-native-qrcode": "^0.2.7",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-jest": "23.6.0",
+    "jest": "23.6.0",
+    "metro-react-native-babel-preset": "0.51.1",
+    "react-test-renderer": "16.6.3"
   },
-  "private": true
+  "jest": {
+    "preset": "react-native"
+  }
 }

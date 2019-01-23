@@ -44,7 +44,7 @@ class Recovery extends Component {
 				<View style={styles.center}>
 					<QRCode
 						value={ this.props.account ? this.props.account.address : '0x00000000000000000000000000000000' }
-						size={200}
+						size={100}
 						bgColor='black'
 						fgColor='white'
 					/>

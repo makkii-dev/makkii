@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity } from 'react-native';
-import { Camera, Permissions } from 'expo';
+//import { Camera, Permissions } from 'expo';
 import { user } from '../../actions/user.js';
 
 class RecoveryScan extends Component {
@@ -33,6 +33,7 @@ class RecoveryScan extends Component {
 	        			console.log()
 	        		}}
 		  		>
+		  	{/*
 				<Camera type={Camera.Constants.Type.back}
 	        	    style={{
 	        	    	flex: 1,
@@ -48,7 +49,8 @@ class RecoveryScan extends Component {
 	        			this.props.navigation.navigate('Recovery');	
 	        		}}
 	        	>
-	        	</Camera></View>
+	        	</Camera>*/}
+	        	</View>
         	</TouchableOpacity>	
 		);
 	}

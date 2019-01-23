@@ -13,7 +13,7 @@ import { account }         from './actions/account.js';
 import { dapps }           from './actions/dapps.js';
 import { setting }         from './actions/setting.js';
 import { user }            from './actions/user.js';
-
+ 
 // reducers
 import reducer_ui              from './reducers/ui';
 import reducer_accounts        from './reducers/accounts.js';
@@ -51,12 +51,13 @@ const Container = createAppContainer(createSwitchNavigator({
 	Unidentified: { screen: Unidentified }
 }, {
 	//initialRouteName: "Test", 
-	initialRouteName: store.getState().user.hashed_password == '' ? "Identified" : "Unidentified",
+	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "Unidentified",
 	resetOnBlur: true,
 	backBehavior: 'none',
 }));
 
-export default class App extends Component {
+type Props = {};
+export default class App extends Component<Props> {
 	render() {
 		return (
 			<Provider store={store}>
