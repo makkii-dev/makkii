@@ -1,28 +1,15 @@
 import { createStackNavigator } from 'react-navigation';
-import { StyleSheet } from 'react-native';
 import Home from './home';
 import Launch from './launch';
-
-const styles = StyleSheet.create({
-    headerStyle: {
-        shadowOpacity: 0,
-        shadowOffset: { 
-            height: 0, 
-            width:0, 
-        }, 
-        shadowRadius: 0, 
-        borderBottomWidth:0,
-        elevation: 1,
-    }
-});
-
+import Dapp from './dapp';
 const navigator = createStackNavigator(
     {
-        SettingHome: {screen: Home, navigationOptions: { headerStyle: styles.headerStyle }},
-        SettingLaunch: {screen: Launch, navigationOptions: { headerStyle: styles.headerStyle }}
+        DappsHome: {screen: Home},
+        DappsLaunch: {screen: Launch},
+        DappsSingle: {screen: Dapp},
     },
     {
-        initialRouteName: 'SettingHome',
+        initialRouteName: 'DappsHome',
     }
 );
 
@@ -30,7 +17,8 @@ navigator.navigationOptions = ({ navigation }) => {
     let { routeName } = navigation.state.routes[navigation.state.index];
     let navigationOptions = {};
     switch(routeName) {
-        case 'SettingLaunch':
+        case 'DappsLaunch':
+        case 'DappsSingle':
             navigationOptions.tabBarVisible=false;
             break;
     }
