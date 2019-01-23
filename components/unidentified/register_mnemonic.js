@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import { View, Text } from 'react-native';
-import { Button } from '../common.js';
+import { View, Text, Button } from 'react-native';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -27,23 +26,23 @@ class RegisterMnemonic extends Component {
 					<Text style={styles.label}>please keep it safely</Text>
 				</View>
 				<View style={styles.form}>
-					<Button 
-						text="COPY" 
+					<Button
+						title="COPY"
 						onPress={()=>{
 						}}
 					/>
 				</View>
 				<View style={styles.form}>
-					<Button 
-						text="QR" 
+					<Button
+						title="QR"
 						onPress={()=>{
 
 						}}
 					/>
 				</View>
 				<View style={styles.form}>
-					<Button 
-						text="I'M DONE"  
+					<Button
+						title="I'M DONE"
 						onPress={()=>{
 							this.props.navigation.navigate('Vault');
 						}}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { Button, InputMultiLines } from '../common.js';
+import { View, Text, TextInput, TouchableOpacity,Button } from 'react-native';
+import { InputMultiLines } from '../common.js';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -14,6 +14,9 @@ class Recovery extends Component {
     };
 	constructor(props){
 		super(props);
+		this.state ={
+			mnemonic: this.props.user.mnemonic,
+		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -23,7 +26,7 @@ class Recovery extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.form}>
-					<Button text="Scan" style={styles.button} onPress={()=>{
+					<Button title="Scan" style={styles.button} onPress={()=>{
 						this.props.navigation.navigate('RecoveryScan');
 					}} />
 				</View>
@@ -32,14 +35,19 @@ class Recovery extends Component {
 				</View>
 				<View style={styles.form}>
 					<InputMultiLines
-						style={styles._input}
+						style={styles.input}
 						value={this.props.user.mnemonic}
+						onChangeText={(e)=>{
+							this.setState({
+
+							})
+						}}
 			        />
 		        </View>
 		        <View style={styles.form}>
-			        <Button text="Confirm" style={styles._button} onPress={()=>{
+			        <Button title="Confirm" style={styles._button} onPress={()=>{
 						this.props.navigation.navigate('RecoveryPassword');
-					}} />		        
+					}} />
 				</View>
 			</View>
 		);
