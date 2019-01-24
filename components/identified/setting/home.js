@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Button, StyleSheet } from 'react-native';
+import { Dimensions, View, Button, StyleSheet } from 'react-native';
 import styles from '../../styles.js';
+import AionCell from '../../cell.js';
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-	        title: state.params ? state.params.title : 'SETTINGS',
+	        title: state.params ? state.params.title : 'Settings',
+			headerTitleStyle: {
+	        	alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1
+			},
 	    };
     };
 	constructor(props){
@@ -17,56 +23,77 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 		this.props.navigation.setParams({
-			title: 'SETTINGS',
+			title: 'Settings',
 		});
 	}
 	render(){
 		return (
 			<View style={{
-				paddingTop: 40,
-				paddingLeft: 20,
-				paddingRight: 20,
-			}}>	
-				<View style={styles.marginBottom10}>
-					<Button 
-						title="Update Password" 
-						onPress={e => {
-							this.props.navigation.navigate('SettingUpdatePassword');
-						}}
-					/>
-				</View>
-				<View style={styles.marginBottom10}>
-					<Button 
-						title="About" 
-						onPress={e => {
-							this.props.navigation.navigate('SettingAbout');
-						}}
-					/>
-				</View>
-				<View style={styles.marginBottom10}>
-					<Button 
-						title="Display Recovery Info" 
-						onPress={e => {
-							this.props.navigation.navigate('SettingRecovery');
-						}}
-					/>
-				</View>
-				<View style={styles.marginBottom40}>
-					<Button 
-						title="Service Configuration" 
-						onPress={e => {
-							this.props.navigation.navigate('SettingConfig');
-						}}
-					/>
-				</View>
+				backgroundColor: '#eeeeee',
+				height: Dimensions.get('window').height,
+				paddingTop: 10
+			}}>
 				<View>
-					<Button 
-						title="Sign Out" 
-						onPress={e => {
-							this.props.navigation.navigate('Unidentified');
-						}}
-					/>
+				<AionCell
+					title='Password'
+				/>
+				<AionCell
+					title='Recovery Info'
+				/>
+				<AionCell
+					title='Service Configuration'
+				/>				
+				<AionCell
+					title='About'
+				/>
 				</View>
+				<View style={{
+					marginTop: 10
+				}
+				}>
+				<AionCell title='Sign Out' />
+				</View>
+
+				{/*<View style={styles.marginBottom10}>*/}
+					{/*<Button */}
+						{/*title="Update Password" */}
+						{/*onPress={e => {*/}
+							{/*this.props.navigation.navigate('SettingUpdatePassword');*/}
+						{/*}}*/}
+					{/*/>*/}
+				{/*</View>*/}
+				{/*<View style={styles.marginBottom10}>*/}
+					{/*<Button */}
+						{/*title="About" */}
+						{/*onPress={e => {*/}
+							{/*this.props.navigation.navigate('SettingAbout');*/}
+						{/*}}*/}
+					{/*/>*/}
+				{/*</View>*/}
+				{/*<View style={styles.marginBottom10}>*/}
+					{/*<Button */}
+						{/*title="Display Recovery Info" */}
+						{/*onPress={e => {*/}
+							{/*this.props.navigation.navigate('SettingRecovery');*/}
+						{/*}}*/}
+					{/*/>*/}
+				{/*</View>*/}
+				{/*<View style={styles.marginBottom40}>*/}
+					{/*<Button */}
+						{/*title="Service Configuration" */}
+						{/*onPress={e => {*/}
+							{/*this.props.navigation.navigate('SettingConfig');*/}
+						{/*}}*/}
+					{/*/>*/}
+				{/*</View>*/}
+				{/*<View>*/}
+					{/*<Button */}
+						{/*title="Sign Out" */}
+						{/*onPress={e => {*/}
+							{/*this.props.navigation.navigate('Unidentified');*/}
+						{/*}}*/}
+					{/*/>*/}
+				{/*</View>*/}
 			</View>
 		)
 	}

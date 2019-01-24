@@ -36,6 +36,7 @@ class Home extends Component {
 	_renderItem = (data)=>{
 		return (
 			<View>
+				<View style={styles.divider}/>
 				<TouchableOpacity
 					onPress={()=>{
 						this.props.navigation.navigate('DappsLaunch',{

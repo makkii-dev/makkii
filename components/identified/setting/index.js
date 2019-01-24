@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
         shadowRadius: 0, 
         borderBottomWidth:0,
         elevation: 1,
+        backgroundColor: '#eeeeee'
     },
     headerTitleStyle: {
         color: 'red',
@@ -30,8 +31,8 @@ const navigator = createStackNavigator({
 	  SettingServices: { screen: Services, navigationOptions: { headerStyle: styles.headerStyle } },
 	  SettingRecovery: { screen: Recovery, navigationOptions: { headerStyle: styles.headerStyle } },
 }, {
-	  initialRouteName: "SettingRecovery",
-    //initialRouteName: "SettingHome",
+	  // initialRouteName: "SettingRecovery",
+    initialRouteName: "SettingHome",
 	  resetOnBlur: true,
 	  backBehavior: 'none',
 });
