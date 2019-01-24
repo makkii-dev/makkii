@@ -1,5 +1,4 @@
 import bip39 from 'bip39';
-import {Buffer} from 'buffer';
 import {Crypto} from '../utils/crypto';
 import {Ed25519Key} from './Ed25519Key';
 const ED25519_KEY = "ed25519 seed";
