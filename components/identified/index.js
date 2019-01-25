@@ -28,7 +28,7 @@ const Identified = createBottomTabNavigator({
 	}
 }, {
 	lazy: true,
-	initialRouteName: 'Settings',
+	initialRouteName: 'Vault',
 	tabBarOptions: {
 		activeTintColor: '#3366ff',
 		inactiveTintColor: '#adb0b5',

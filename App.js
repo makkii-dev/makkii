@@ -51,7 +51,7 @@ const Container = createAppContainer(createSwitchNavigator({
 	Unidentified: { screen: Unidentified }
 }, {
 	//initialRouteName: "Test", 
-	initialRouteName: store.getState().user.hashed_password !== '123' ? "Identified" : "Unidentified",
+	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "Unidentified",
 	resetOnBlur: true,
 	backBehavior: 'none',
 }));
