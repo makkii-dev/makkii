@@ -12,6 +12,7 @@ import {
 	Image,
 	FlatList, PixelRatio
 } from 'react-native';
+import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
 import { Header} from 'react-navigation';
 const {width, height} = Dimensions.get('window');
@@ -30,7 +31,10 @@ class Home extends Component {
 		this.state={
 			showPop: false,
 			title: 'Total: 0',
-		}
+			openRowKey: null,
+			scrollEnabled:true,
+		};
+
 	}
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -62,6 +66,7 @@ class Home extends Component {
 		}
 		return modalItem;
 	};
+
 	_renderHeader() {
 		const menuItems = [
 			{title:'123',onPress:()=>console.log('123')},
@@ -102,38 +107,101 @@ class Home extends Component {
 	}
 
 
-	render(){
+	_onOpen (Key: any) {
+		console.log('[onOpen]');
+		this.setState({
+			openRowKey: Key,
+		})
+	}
+
+	_onClose(Key: any) {
+		console.log('[onClose]');
+		this.setState({
+			openRowKey: null,
+		})
+	}
+
+	_setListViewScrollableTo(value: boolean) {
+		console.log('[_setListViewScrollableTo] ' + value);
+		this.setState({
+				scrollEnabled: value,
+		})
+	}
+	_renderListItem=(item) => {
 		const { dispatch } = this.props;
+		const Key = item.key;
+		return (
+			<SwipeableRow
+				isOpen={ Key === this.state.openRowKey }
+				maxSwipeDistance={200}
+				onOpen={()=> this._onOpen(Key)}
+				onClose={() => this._onClose(Key)}
+				shouldBounceOnMount={true}
+				onSwipeEnd={()=>this._setListViewScrollableTo(true)}
+				onSwipeStart={()=>this._setListViewScrollableTo(false)}
+				slideoutView={
+					<View style={styles.listBtnContainer}>
+						<View style={{...styles.listBtn, backgroundColor: 'gray'}}>
+							<Text>HIDE</Text>
+						</View>
+						<View style={{...styles.listBtn, backgroundColor: 'red'}}>
+							<Text>DELETE</Text>
+						</View>
+					</View>
+				}
+			>
+				<TouchableOpacity
+					activeOpacity={1}
+					onPress={e => {
+						if (this.state.openRowKey) {
+							// if one of key is open, close it first
+							this.setState({
+								openRowKey: null,
+							});
+							return;
+						}
+						dispatch(account(this.props.accounts[item.key]));
+						this.props.navigation.navigate('VaultAccount');
+					}}
+				>
+					<View style={ styles.listItem }>
+						<View style={styles.listItemLeft}>
+							<Text style={styles.listItemText}>{ item.name }</Text>
+							<Text style={styles.listItemText}>{ item.address.substring(0, 16) + ' ...' }</Text>
+						</View>
+						<View style={styles.listItemRight}>
+							<Text style={styles.listItemText}>{ item.balance }</Text>
+							<Text style={styles.listItemText}>{ item.type }</Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+
+			</SwipeableRow>
+
+		)
+	};
+
+	render(){
+		let dataArray = Object.keys(this.props.accounts).map(key => {
+			return {...this.props.accounts[key], key: key}
+		});
+
 		return (
 			<View>
 				{this._renderHeader()}
-				<ScrollView>
-					{
-						Object.keys(this.props.accounts).map(key => {
-						    return (
-					    		<TouchableOpacity	
-					    			key={ key } 						    		
-						  			onPress={e => {
-						  				dispatch(account(this.props.accounts[key]));
-						  				this.props.navigation.navigate('VaultAccount');
-						  			}}
-					  			>
-							  		<View style={ styles.listItem }>	
-								  		<View style={styles.listItemLeft}> 
-								  			<Text style={styles.listItemText}>{ this.props.accounts[key].name }</Text>
-									  		<Text style={styles.listItemText}>{ this.props.accounts[key].address.substring(0, 16) + ' ...' }</Text>
-								  		</View>
-								  		<View style={styles.listItemRight}> 
-								  			<Text style={styles.listItemText}>{ this.props.accounts[key].balance }</Text>
-								  			<Text style={styles.listItemText}>{ this.props.accounts[key].type }</Text>
-								  		</View>
-							  		</View>
-						  		</TouchableOpacity>
-							  		
-					    	);
-						})					
-					}
-				</ScrollView>
+				<FlatList
+					style={{marginBottom: 50}}
+					renderItem={({item})=>this._renderListItem(item)}
+					scrollEnabled={this.state.scrollEnabled}
+					data={dataArray}
+					keyExtractor={(item)=>item.key}
+					onScroll={(e)=>{
+						this.setState({
+							openRowKey: null,
+						});
+					}}
+				/>
+
 			</View>
 		)
 	}
@@ -202,8 +270,19 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 5,
 	},
+	listBtnContainer:{
+		flex:1,
+		flexDirection: 'row',
+		margin:0,
+		justifyContent: 'center',
+	},
+	listBtn:{
+		flex:1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
 	listItem: {
-		flex: 1,
+		height: 80,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 1,
