@@ -8,17 +8,27 @@ class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-	        title: state.params ? state.params.title : 'SERVICE CONFIGURATION',
+	        title: 'Service Configuration',
+			headerStyle: {
+				backgroundColor: '#eeeeee'
+			},
+			headerTitleStyle: {
+				alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1
+			},
+			headerRight: (<View></View>),
 	    };
     };
+
 	constructor(props){
 		super(props);
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
-		this.props.navigation.setParams({
-			title: 'SERVICES',
-		});
+		this.state = {
+			kernel_server: this.props.setting.remote_kernel,
+			dapps_server: this.props.setting.remote_dapps,
+		}
 	}
+
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
@@ -26,31 +36,23 @@ class Services extends Component {
 	render(){
 		return (
 			<View style={styles.container}>	
-				<View style={styles.marginBottom10}>
-					<Text style={styles.label}>Wallet Server</Text>
+				<View>
+					<Text style={styles.title_label}>Wallet Server</Text>
 				</View>
-				<View style={styles.marginBottom10}>
+				<View style={styles.marginBottom20}>
 					<Input
+                        value={this.state.kernel_server}
 						onClear={e => {
 
 						}}
 					/>
 				</View>
-				<View style={styles.marginBottom10}>
-					<Text style={styles.label}>Dapps Server</Text>
-				</View>
-				<View style={styles.marginBottom10}>
-					<Input
-						onClear={e => {
-
-						}}
-					/>
-				</View>
-				<View style={styles.marginBottom10}>
-					<Text style={styles.label}>Odex Server</Text>
+				<View>
+					<Text style={styles.title_label}>DApps Server</Text>
 				</View>
 				<View style={styles.marginBottom40}>
 					<Input
+						value={this.state.dapps_server}
 						onClear={e => {
 
 						}}
@@ -58,15 +60,21 @@ class Services extends Component {
 				</View>
 				<View>
 					<Button 
-						title="save"
-						onPress={e => {
-							console.log('on save');
-						}}
+						title="Save"
+						onPress={ () => this.saveConfigurations() }
 					/>
 				</View>
 			</View>
 		)
 	}
+
+	saveConfigurations=() => {
+		// const { dispatch } = this.props;
+		// let newSettings = this.props.setting;
+		// newSettings.remote_kernel = this.state.kernel_server;
+		// newSettings.remote_dapps = tihs.state.dapps_server;
+	}
+
 }
 
 export default connect(state => { return ({ setting: state.setting }); })(Services);

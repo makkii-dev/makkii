@@ -1,5 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 import { StyleSheet } from 'react-native';
+import * as React from 'react';
 import Home from './home.js';
 import About from './about.js';
 import UpdatePassword from './update_password.js';
@@ -19,14 +20,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#eeeeee'
     },
     headerTitleStyle: {
-        color: 'red',
-        fontSize: 16,
+        alignSelf: 'center',
+        textAlign: 'center',
+        flex: 1
     }
 });
 
 const navigator = createStackNavigator({
 	  SettingHome: { screen: Home, navigationOptions: { headerStyle: styles.headerStyle } },
-    SettingUpdatePassword: { screen: UpdatePassword, navigationOptions: { headerStyle: styles.headerStyle } },
+      SettingUpdatePassword: { screen: UpdatePassword },
 	  SettingAbout: { screen: About, navigationOptions: { headerStyle: styles.headerStyle } },
 	  SettingServices: { screen: Services, navigationOptions: { headerStyle: styles.headerStyle } },
 	  SettingRecovery: { screen: Recovery, navigationOptions: { headerStyle: styles.headerStyle } },
@@ -40,7 +42,7 @@ const navigator = createStackNavigator({
 navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
     let navigationOptions = {}; 
-    navigationOptions.headerStyle = styles.headerStyle;
+    // navigationOptions.headerStyle = styles.headerStyle;
   	switch(routeName) {
   		  case 'SettingUpdatePassword':
   		  case 'SettingAbout':

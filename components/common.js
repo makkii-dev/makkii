@@ -68,6 +68,10 @@ class InputMultiLines extends Component{
 }
 
 class Password extends Component {
+	static defaultProps = {
+		supportVisibility: true
+	};
+
 	constructor(props){
 		super(props);
 		this.state = {
@@ -79,25 +83,28 @@ class Password extends Component {
 			<View style={ styles.password.view }>
 				<TextInput
 					style={ styles.password.text_input }
+					placeholder={this.props.placeholder}
 			        onChangeText={ val => { 
 			        	this.props.onChange(val); 
 			        }}
 			        secureTextEntry={ this.state.secure }
 			        value={ this.props.value }
 			    />
-			    <Text
-			    	style={ styles.password.text }
-			    	onPress={ e =>{
-			    		this.setState({
-			    			secure: !this.state.secure
-			    		});
-			    	}}
-			    >
-			    	{
-			    		this.state.secure ? 
-			    		'SHOW' : 'HIDE'
-			    	}
-			    </Text>
+			    {this.props.supportVisibility &&
+				    <Text
+				    	style={ styles.password.text }
+				    	onPress={ e =>{
+				    		this.setState({
+				    			secure: !this.state.secure
+				    		});
+				    	}}
+				    >
+				    	{
+				    		this.state.secure ? 
+				    		'SHOW' : 'HIDE'
+				    	}
+				    </Text>
+				}
 		    </View>
 		);
 	}
