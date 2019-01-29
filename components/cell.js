@@ -4,7 +4,7 @@ import {
     View,
     Image,
     Text,
-    TouchableNativeFeedback,
+    TouchableOpacity,
     Dimensions
 } from 'react-native';
 
@@ -21,26 +21,17 @@ export default class AionCell extends Component {
                 width: Dimensions.get('window').width,
             }}>
                 <View style={styles.cellSeparator} />
-                <TouchableNativeFeedback>
-                    <View style={{
-                        height: 50,
-                        width: Dimensions.get('window').width,
-                        backgroundColor: 'white',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        paddingLeft: 10,
-                        paddingRight: 10
-                    }} >
-                        <View style={styles.cellView}>
+                <TouchableOpacity onPress={this.props.onClick}>
+                    <View style={styles.cellContainer} >
+                        <View style={styles.cellItem}>
                             <Text style={styles.titleText}>{this.props.title}</Text>
                         </View>
-                        <View style={styles.cellView}>
-                            <Image style={{width: 24, height: 24}}
+                        <View style={styles.cellItem}>
+                            <Image style={styles.icon}
                                    source={require('../assets/arrow_right.png')} />
                         </View>
                     </View>
-                </TouchableNativeFeedback>
+                </TouchableOpacity>
                 <View style={styles.cellSeparator} />
             </View>
         )
@@ -52,7 +43,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black'
     },
-    cellView: {
+    cellItem: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center'
@@ -62,5 +53,19 @@ const styles = StyleSheet.create({
         height: StyleSheet.hairlineWidth,
         left: 0,
         backgroundColor: 'lightgray',
+    },
+    icon: {
+        width: 24,
+        height: 24
+    },
+    cellContainer: {
+        height: 50,
+        width: Dimensions.get('window').width,
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingLeft: 10,
+        paddingRight: 10
     }
 });

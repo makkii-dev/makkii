@@ -10,7 +10,6 @@ class Launch extends Component{
             flex:1
         },
         headerRight: (<View></View>)
-
     });
     constructor(props) {
         super(props);

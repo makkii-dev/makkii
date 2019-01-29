@@ -19,7 +19,7 @@ const Identified = createBottomTabNavigator({
 			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_app.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
 		})
 	}, 
-	Odex: { screen: Odex },
+	// Odex: { screen: Odex },
 	Settings: { 
 		screen: Setting,
 		navigationOptions:({navigation}) => ({

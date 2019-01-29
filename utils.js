@@ -1,4 +1,5 @@
 const bip39 = require('bip39');
+import blake2b from'blake2b';
 
 function test(){
 	// // defaults to BIP39 English word list
@@ -14,6 +15,20 @@ function test(){
 	console.log('utils');
 }
 
-module.exports = {
-    test: test
+function validatePassword(password) {
+    let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
+    return reg.test(password);
 }
+
+function hashPassword(password) {
+    let passwordHash = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex');
+    console.log("hash:" + passwordHash);
+    return passwordHash;
+}
+
+module.exports = {
+    test: test,
+    validatePassword: validatePassword,
+    hashPassword: hashPassword,
+}
+

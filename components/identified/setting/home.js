@@ -9,6 +9,9 @@ class Home extends Component {
 	    const { state } = navigation;
 	    return {
 	        title: state.params ? state.params.title : 'Settings',
+			headerStyle: {
+				backgroundColor: '#eeeeee'
+			},
 			headerTitleStyle: {
 	        	alignSelf: 'center',
 				textAlign: 'center',
@@ -36,12 +39,18 @@ class Home extends Component {
 				<View>
 				<AionCell
 					title='Password'
+					onClick={() => {
+						this.props.navigation.navigate('SettingUpdatePassword');	
+					}}
 				/>
 				<AionCell
 					title='Recovery Info'
 				/>
 				<AionCell
 					title='Service Configuration'
+					onClick={() => {
+						this.props.navigation.navigate('SettingServices');
+					}}
 				/>				
 				<AionCell
 					title='About'
