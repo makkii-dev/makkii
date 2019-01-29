@@ -9,6 +9,6 @@ export default class User {
 		// hashed password
         this.hashed_password = '123'; // local
         // raw mnemonic
-        this.hashed_mnemonic = '';    // local
+        this.hashed_mnemonic = 'belt dismiss dirt wash solution swallow exercise acquire motion shine round boost';    // local
     }
 }

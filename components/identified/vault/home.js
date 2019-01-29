@@ -14,11 +14,10 @@ import {
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
-import { Header} from 'react-navigation';
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
-const top = 60;
+const top = 100;
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -30,7 +29,7 @@ class Home extends Component {
 		super(props);
 		this.state={
 			showPop: false,
-			title: 'Total: 0',
+			title: 'Total: XXX RMB',
 			openRowKey: null,
 			scrollEnabled:true,
 		};
@@ -45,34 +44,38 @@ class Home extends Component {
 
 	_closeModal=()=>{this.setState({showPop:false})};
 
-	_renderModalItem=(items)=>{
-		let modalItem=[];
-		let keyIndex = 0;
-		for (let i = 0; i<items.length;i++){
-			modalItem.push(
-				<View key={keyIndex} style={styles.modalItemView}>
-					<TouchableOpacity activeOpacity={0.3} onPress={()=>{items[i].onPress();this._closeModal()}} style={styles.modalItemView}>
-						<Text numberOfLines={1} style={styles.modalText}>{items[i].title}</Text>
-					</TouchableOpacity>
-				</View>
-			);
-			if (i !==items.length-1){
-				modalItem.push(
-					<View key={keyIndex+1} style={styles.divider}/>
-				);
-				keyIndex = keyIndex + 1;
-			}
-			keyIndex = keyIndex + 1;
-		}
-		return modalItem;
+	_renderModalItem=(item)=>{
+		return (
+			<View style={styles.modalItemView}>
+				<TouchableOpacity activeOpacity={0.3} onPress={()=>{item.onPress();this._closeModal()}} style={styles.modalItemView}>
+					<Image source={item.image} style={styles.modalImage}/>
+					<Text numberOfLines={1} style={styles.modalText}>{item.title}</Text>
+				</TouchableOpacity>
+			</View>
+		);
 	};
 
 	_renderHeader() {
+		const {navigation} = this.props;
 		const menuItems = [
-			{title:'123',onPress:()=>console.log('123')},
-			{title:'234',onPress:()=>console.log('123')},
-			{title:'666',onPress:()=>console.log('123')},
-
+			{
+				title:'Master key',
+				onPress:()=>{
+					console.log('New Account');
+					navigation.navigate('VaultImportHdWallet');
+				},
+				image:require('../../../assets/aion_logo.png'),
+			},
+			{
+				title:'Private Key',
+				onPress:()=>console.log('123'),
+				image:require('../../../assets/key.png'),
+			},
+			{
+				title:'Ledger',
+				onPress:()=>console.log('123'),
+				image:require('../../../assets/ledger_logo.png'),
+			},
 		];
 		return (
 			<View style={styles.header}>
@@ -87,17 +90,25 @@ class Home extends Component {
 							style={styles.titleBarImg}
 						/>
 					</TouchableOpacity>
-					<View style={{position: 'absolute', top: Header.HEIGHT, left: 0, width: width, height: height}}>
+					<View style={{position: 'absolute', top: 10, left: 0, width: width, height: height}}>
 						<Modal
 							transparent={true}
 							visible={this.state.showPop}
 							animationType={'none'}
 							onRequestClose={()=>{}}>
 							<TouchableOpacity activeOpacity={1} style={{width,height}} onPress={this._closeModal}>
-								<View style={styles.modal}>
-									{this._renderModalItem(menuItems)}
-								</View>
-
+								<FlatList
+									style={styles.modalContainer}
+									data={menuItems}
+									renderItem={({item})=>this._renderModalItem(item)}
+									keyExtractor={(item,index)=>index.toString()}
+									ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}
+									ListHeaderComponent={()=>(
+										<View style={{flex:1, height:50, justifyContent:'space-between', paddingTop: 10}}>
+											<Text style={{...styles.modalText}}>Import from:</Text>
+											<View style={{...styles.divider, marginLeft: 0}}/>
+										</View>)}
+								/>
 							</TouchableOpacity>
 						</Modal>
 					</View>
@@ -132,20 +143,24 @@ class Home extends Component {
 		const Key = item.key;
 		return (
 			<SwipeableRow
+				style={{padding:10}}
 				isOpen={ Key === this.state.openRowKey }
-				maxSwipeDistance={200}
-				onOpen={()=> this._onOpen(Key)}
-				onClose={() => this._onClose(Key)}
+				swipeEnabled={ this.state.openRowKey === null }
+				preventSwipeRight={true}
+				maxSwipeDistance={100}
+				onOpen={()=> {
+					this._onOpen(Key);
+					this._setListViewScrollableTo(false)
+				}}
+				onClose={() => {
+					this._onClose(Key);
+					this._setListViewScrollableTo(true)
+				}}
 				shouldBounceOnMount={true}
-				onSwipeEnd={()=>this._setListViewScrollableTo(true)}
-				onSwipeStart={()=>this._setListViewScrollableTo(false)}
 				slideoutView={
 					<View style={styles.listBtnContainer}>
 						<View style={{...styles.listBtn, backgroundColor: 'gray'}}>
 							<Text>HIDE</Text>
-						</View>
-						<View style={{...styles.listBtn, backgroundColor: 'red'}}>
-							<Text>DELETE</Text>
 						</View>
 					</View>
 				}
@@ -211,12 +226,12 @@ export default connect(state => { return ({ accounts: state.accounts, ui: state.
 
 const styles = StyleSheet.create({
 	divider: {
-		width: mWidth,
+		marginLeft: 50,
 		height: 1 / PixelRatio.get(),
 		backgroundColor: '#fff'
 	},
 	header: {
-		height: Header.HEIGHT,
+		height: top,
 		width: width,
 		backgroundColor: '#eeeeee',
 		elevation: 5,
@@ -225,7 +240,7 @@ const styles = StyleSheet.create({
 	},
 	headerEnds:{
 		width: 50,
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		alignItems: 'center'
 	},
 	headerTitle:{
@@ -240,24 +255,20 @@ const styles = StyleSheet.create({
 	titleBarImg: {
 		width: 25,
 		height: 25,
-		marginLeft: 15,
-		marginRight: 15,
+		margin: 15,
 	},
-	modal: {
+	modalContainer: {
 		backgroundColor: 'black',
 		width: mWidth,
-		height: mHeight,
 		position: 'absolute',
 		left: width - mWidth - 10,
-		top: top,
+		top: 50,
 		padding: 5,
-		justifyContent: 'center',
-		alignItems: 'center',
 	},
 	modalItemView: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'center',
+		justifyContent: 'flex-start',
 		flex:1,
 		width: mWidth,
 		paddingLeft: 10,
@@ -270,14 +281,19 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 5,
 	},
+	modalImage:{
+		width: 20,
+		height:20,
+		marginRight: 10,
+	},
 	listBtnContainer:{
 		flex:1,
 		flexDirection: 'row',
 		margin:0,
-		justifyContent: 'center',
+		justifyContent: 'flex-end',
 	},
 	listBtn:{
-		flex:1,
+		width: 100,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
@@ -286,14 +302,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 1,
-        padding: 10,
-        paddingBottom: 15,
-        backgroundColor: '#ffffff',
+		backgroundColor: '#fff'
 	},
 	listItemLeft: {
+		justifyContent: 'space-between'
 	},
 	listItemRight: {
-	    width: 60,
+	    width: 80,
 	},
 	listItemText: {
 		color: 'grey',
