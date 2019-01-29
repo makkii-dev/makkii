@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, View, TouchableOpacity, Text } from 'react-native';
-import { Button } from '../../common.js';
+import { ScrollView, View, TouchableOpacity, Text, Button} from 'react-native';
 import QRCode from 'react-native-qrcode';
 import styles from '../../styles.js';
 
@@ -39,7 +38,7 @@ class Account extends Component {
 	}
 	render(){
 		return (
-			<View>	
+			<View style={{flex:1, justifyContent: 'space-between'}}>
 				<View style={{
 					flex: 1,
 			        flexDirection: 'row',
@@ -66,13 +65,16 @@ class Account extends Component {
 					flex: 1,
 			        flexDirection: 'row',
 			        justifyContent: 'space-between',
+					alignItems: 'center',
 			        padding: 20,
 				}}>
-					<Button 
-						text="SEND"
+					<Button
+						title="SEND"
+						onPress={()=>console.log('SEND')}
 					/>
-					<Button 
-						text="RECEIVE"
+					<Button
+						title="RECEIVE"
+						onPress={()=>console.log('RECEIVE')}
 					/>
 				</View>
 				<ScrollView>
