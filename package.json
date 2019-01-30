@@ -18,7 +18,7 @@
     "events": "^1.0.0",
     "react": "16.6.3",
     "react-native": "0.57.8",
-    "react-native-aion-hw-wallet": "/home/lren/Workspace/aion/dapps/react-native-aion-hw-wallet",
+    "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
     "react-native-camera": "git+https://git@github.com/react-native-community/react-native-camera",
     "react-native-crypto": "^2.1.0",
     "react-native-gesture-handler": "^1.0.12",

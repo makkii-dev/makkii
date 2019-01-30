@@ -15,6 +15,7 @@ import {
 import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
 import Loading from '../../loading.js';
+import wallet from 'react-native-aion-hw-wallet';
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
