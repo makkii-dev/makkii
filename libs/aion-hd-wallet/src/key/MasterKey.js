@@ -23,27 +23,19 @@ export class MasterKey {
     }
 
     deriveHardened = (arg) => {
-        return new Promise((resolve, reject) => {
-            try{
-                let derivationPath;
-                arg = !arg? 0 : arg;
-                if (!(arg instanceof Array)) {
-                    derivationPath = this.Path.concat(arg);
-                } else {
-                    derivationPath = arg;
-                }
-                let key = this.Key;
-                for (let element of derivationPath) {
-                    key = this.getChild(element, key);
-                }
-                let keypair = Ed25519Key.fromSeed(key.subarray(0, 32));
-                resolve(
-                    Object.assign(keypair,{address: Crypto.toHex(keypair.address)})
-                )
-            } catch (e) {
-                reject(e)
-            }
-        })
+        let derivationPath;
+        arg = !arg? 0 : arg;
+        if (!(arg instanceof Array)) {
+            derivationPath = this.Path.concat(arg);
+        } else {
+            derivationPath = arg;
+        }
+        let key = this.Key;
+        for (let element of derivationPath) {
+            key = this.getChild(element, key);
+        }
+        let keyPair = Ed25519Key.fromSeed(key.subarray(0, 32));
+        return {private_key: Crypto.toHex(keyPair.secretKey), address: Crypto.toHex(keyPair.address)};
 
 
     };
