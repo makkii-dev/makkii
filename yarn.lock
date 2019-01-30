@@ -5187,8 +5187,9 @@ react-lifecycles-compat@^3.0.4:
   resolved "http://registry.npm.taobao.org/react-lifecycles-compat/download/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha1-TxonOv38jzSIqMUWv9p4+HI1I2I=
 
-react-native-aion-hw-wallet@/home/lren/Workspace/aion/dapps/react-native-aion-hw-wallet:
+"react-native-aion-hw-wallet@https://github.com/chaion/lib-react-native-aion-hw.git":
   version "1.0.0"
+  resolved "https://github.com/chaion/lib-react-native-aion-hw.git#4a32e8d77d7663ea9f6f843b697e2d4bf888a4a7"
 
 "react-native-camera@git+https://git@github.com/react-native-community/react-native-camera":
   version "1.9.2"
