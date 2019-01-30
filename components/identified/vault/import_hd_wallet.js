@@ -11,56 +11,121 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import data from '../../../data';
-import {MasterKey} from "../../../libs/aion-hd-wallet/src/key/MasterKey";
-
+import {AionAccount} from "../../../libs/aion-hd-wallet";
+import Account from "../../../types/account";
+import {add_accounts} from "../../../actions/accounts";
 const {width} = Dimensions.get('window');
 
-const generateSelectList = (accounts) =>{
-    let acc = {};
-    Object.values(accounts).map(value => {
-        acc[value.address]={'account': value, 'selected': false};
-    });
-    return acc;
-};
 
 class ImportHdWallet extends React.Component {
-    static navigationOptions = ({navigation})=>({
-        title: 'SELECT ACCOUNTS',
-        headerTitleStyle:{
-            fontSize: 14,
-            alignSelf: 'center',
-            textAlign: 'center',
-            flex:1,
-        },
-        headerRight:(
-            <TouchableOpacity>
-                <View style={{marginRight: 10}}>
-                    <Text style={{color:'blue'}}>IMPORT</Text>
-                </View>
-            </TouchableOpacity>
-        )
-    });
+    static navigationOptions = ({navigation})=> {
+        return ({
+            title: 'SELECT ACCOUNTS',
+            headerTitleStyle: {
+                fontSize: 14,
+                alignSelf: 'center',
+                textAlign: 'center',
+                flex: 1,
+            },
+            headerRight: (
+                <TouchableOpacity onPress={() => {
+                    let acc = navigation.state.params.ImportAccount();
+                    navigation.state.params.dispatch(add_accounts(acc));
+                    navigation.navigate('VaultHome');
+                }}>
+                    <View style={{marginRight: 10}}>
+                        <Text style={{color: 'blue'}}>IMPORT</Text>
+                    </View>
+                </TouchableOpacity>
+            )
+        });
+    };
 
     constructor(props){
         super(props);
         this.state={
             isLoading: true,
+            hardenedIndex: 0,
             error: false,
-            accountsList: generateSelectList(data.accounts),
+            errInfo: '',
+            accountsList: {},
             footerState: 1,
         };
     }
 
+
+    ImportAccount= () => {
+        let acc = {};
+        Object.entries(this.state.accountsList).map(([key, value])=>{
+            if( value.selected ){
+                acc[key] = value.account;
+            }
+        });
+        return acc;
+    };
+
     componentDidMount(): void {
         this.fetchAccount(10);
     }
+    componentWillMount(): void {
+        const {dispatch} = this.props;
+        this.props.navigation.setParams({
+            ImportAccount : this.ImportAccount,
+            dispatch: dispatch
+        });
+    }
 
+    isAccountIsAlreadyImport(address){
+        return typeof this.props.accounts[address] !== 'undefined';
+    }
     fetchAccount(n){
         //fetch n Accounts from MasterKey;
+        console.log('fetch account');
+        AionAccount.recoverAccount(this.props.user.mnemonic).then(
+            masterKey =>{
+                let accounts = {};
+                let i = this.state.hardenedIndex;
+                let sum = 0;
+                while(sum < n){
+                    let getAcc = masterKey.deriveHardened(i);
+                    let acc = new Account();
+                    acc.address = getAcc.address;
+                    acc.private_key = getAcc.private_key;
+                    acc.balance = 0;
+                    acc.name = this.props.user.default_account_name;
+                    acc.type = '[local]';
+                    if (!this.isAccountIsAlreadyImport(acc.address)) {
+                        sum = sum + 1;
+                        accounts[acc.address]={'account': acc, 'selected': false};
+                    }
+                    i = i + 1;
+                }
+                this.setState({
+                    isLoading: false,
+                    accountsList: Object.assign({}, this.state.accountsList, accounts),
+                    hardenedIndex: this.state.hardenedIndex + n,
+                    footerState: 0,
+                });
+            },err=>{
+                this.setState({
+                    error: true,
+                    errInfo: err.toString(),
+                })
+            }
+        )
 
+    }
+    _onEndReached(){
+        // if not in fetching account
+        if (this.state.footerState !== 0){
+            return;
+        }
+        // set footer state
         this.setState({
-            isLoading: false,
-        })
+            footerState: 2,
+        },()=>{
+                this.fetchAccount(5);
+        });
     }
 
     _handleSelectBox(item){
@@ -91,7 +156,7 @@ class ImportHdWallet extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>
-                    Fail
+                    {this.state.errInfo}
                 </Text>
             </View>
         );
@@ -125,7 +190,7 @@ class ImportHdWallet extends React.Component {
         } else if(this.state.footerState === 2) {
             return (
                 <View style={styles.footer}>
-                    <ActivityIndicator />
+                    <ActivityIndicator style={{paddingRight: 10}}/>
                     <Text>Fetching accounts</Text>
                 </View>
             );
@@ -140,9 +205,7 @@ class ImportHdWallet extends React.Component {
 
     renderData(){
         let renderLists = Object.values(this.state.accountsList).map(value => value);
-        console.log('[accounts len] = '+ renderLists.length);
-        console.log('[accounts] = '+ JSON.stringify(this.state.accountsList));
-
+        console.log('[accounts] '+ JSON.stringify(this.state.accountsList));
         return (
             <View style={styles.container}>
                 <FlatList
@@ -153,6 +216,8 @@ class ImportHdWallet extends React.Component {
                         <View style={styles.divider}/>
                     )}
                     ListFooterComponent={this._renderFooter}
+                    onEndReached={()=>{this._onEndReached()}}
+                    onEndReachedThreshold={1}
                 />
             </View>
         )
@@ -180,7 +245,7 @@ export default connect( state => {
 
 const styles=StyleSheet.create({
     divider: {
-        marginLeft: 50,
+        marginLeft: 80,
         height: 1 / PixelRatio.get(),
         backgroundColor: '#000'
     },
@@ -196,13 +261,14 @@ const styles=StyleSheet.create({
         flex:1,
         flexDirection: 'row',
         justifyContent: 'flex-start',
-        paddingLeft: 10,
-        paddingTop: 10,
-        paddingBottom: 10,
+        alignItems: 'center',
+        padding: 10,
         backgroundColor:'#fff'
     },
     itemImage:{
-        marginRight: 10,
+        marginRight: 20,
+        width: 50,
+        height: 50,
     },
     itemText:{
         textAlign: 'right',
@@ -213,6 +279,7 @@ const styles=StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         marginBottom:10,
+        marginTop: 10,
     }
 
 });

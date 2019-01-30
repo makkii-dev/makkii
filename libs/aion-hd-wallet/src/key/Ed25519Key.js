@@ -61,7 +61,8 @@ export class Ed25519Key {
 
 
     static computeA0Address = (publicKey) => {
-        let addressHash = blake2b(32).update(Uint8Array.from(publicKey)).digest();
+        console.log('[Uint8Array] ' + Uint8Array );
+        let addressHash = blake2b(32).update(publicKey).digest();
         addressHash.set(A0_IDENTIFIER, 0);
         return addressHash;
     };

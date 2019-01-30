@@ -12,9 +12,13 @@ export class MasterKey {
     Key;
     Path;
     static fromMnemonic = (mnemonic) => {
-        let seed = bip39.mnemonicToSeed(mnemonic,DEFAULT_PASSPHRASE);
-        let key = Crypto.hmacSha512(ED25519_KEY, seed);
-        return new MasterKey(key);
+        if (!bip39.validateMnemonic(mnemonic)){
+            throw new Error('mnemonic is invalid')
+        }else {
+            let seed = bip39.mnemonicToSeed(mnemonic,DEFAULT_PASSPHRASE);
+            let key = Crypto.hmacSha512(ED25519_KEY, seed);
+            return new MasterKey(key);
+        }
     };
 
     constructor(key, path=[44, 425, 0, 0 ]){

@@ -748,9 +748,9 @@ ansi-cyan@^0.1.1:
     ansi-wrap "0.1.0"
 
 ansi-escapes@^3.0.0:
-  version "3.1.0"
-  resolved "http://registry.npm.taobao.org/ansi-escapes/download/ansi-escapes-3.1.0.tgz#f73207bb81207d75fd6c83f125af26eea378ca30"
-  integrity sha1-9zIHu4EgfXX9bIPxJa8m7qN4yjA=
+  version "3.2.0"
+  resolved "http://registry.npm.taobao.org/ansi-escapes/download/ansi-escapes-3.2.0.tgz#8780b98ff9dbf5638152d1f1fe5c1d7b4442976b"
+  integrity sha1-h4C5j/nb9WOBUtHx/lwde0RCl2s=
 
 ansi-gray@^0.1.1:
   version "0.1.1"
@@ -1078,9 +1078,9 @@ babel-plugin-syntax-trailing-function-commas@^7.0.0-beta.0:
   integrity sha1-qiE8FDXiv/62/KhCKH71NK0F1c8=
 
 babel-preset-fbjs@^3.0.0, babel-preset-fbjs@^3.0.1:
-  version "3.1.2"
-  resolved "http://registry.npm.taobao.org/babel-preset-fbjs/download/babel-preset-fbjs-3.1.2.tgz#3a067309fed19dd435aeaea56cbf59fdd672bc15"
-  integrity sha1-OgZzCf7RndQ1rq6lbL9Z/dZyvBU=
+  version "3.2.0"
+  resolved "http://registry.npm.taobao.org/babel-preset-fbjs/download/babel-preset-fbjs-3.2.0.tgz#c0e6347d3e0379ed84b3c2434d3467567aa05297"
+  integrity sha1-wOY0fT4Dee2Es8JDTTRnVnqgUpc=
   dependencies:
     "@babel/plugin-proposal-class-properties" "^7.0.0"
     "@babel/plugin-proposal-object-rest-spread" "^7.0.0"
@@ -1258,6 +1258,11 @@ blake2b@^2.1.1, blake2b@^2.1.3:
     blake2b-wasm "^1.1.0"
     nanoassert "^1.0.0"
 
+blakejs@^1.1.0:
+  version "1.1.0"
+  resolved "http://registry.npm.taobao.org/blakejs/download/blakejs-1.1.0.tgz#69df92ef953aa88ca51a32df6ab1c54a155fc7a5"
+  integrity sha1-ad+S75U6qIylGjLfarHFShVfx6U=
+
 bn.js@^4.0.0, bn.js@^4.1.0, bn.js@^4.1.1, bn.js@^4.11.1, bn.js@^4.4.0:
   version "4.11.8"
   resolved "http://registry.npm.taobao.org/bn.js/download/bn.js-4.11.8.tgz#2cde09eb5ee341f484746bb0309b3253b1b1442f"
@@ -1405,10 +1410,10 @@ buffer@^4.9.1:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-builtin-modules@^1.0.0:
-  version "1.1.1"
-  resolved "http://registry.npm.taobao.org/builtin-modules/download/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
-  integrity sha1-Jw8HbFpywC9bZaR9+Uxf46J4iS8=
+builtin-modules@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/builtin-modules/download/builtin-modules-3.0.0.tgz#1e587d44b006620d90286cc7a9238bbc6129cab1"
+  integrity sha1-Hlh9RLAGYg2QKGzHqSOLvGEpyrE=
 
 bytes@3.0.0:
   version "3.0.0"
@@ -2986,12 +2991,12 @@ is-buffer@^1.1.5:
   resolved "http://registry.npm.taobao.org/is-buffer/download/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha1-76ouqdqg16suoTqXsritUf776L4=
 
-is-builtin-module@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/is-builtin-module/download/is-builtin-module-1.0.0.tgz#540572d34f7ac3119f8f76c30cbc1b1e037affbe"
-  integrity sha1-VAVy0096wxGfj3bDDLwbHgN6/74=
+is-builtin-module@^3.0.0:
+  version "3.0.0"
+  resolved "http://registry.npm.taobao.org/is-builtin-module/download/is-builtin-module-3.0.0.tgz#137d3d2425023a19a660fb9dd6ddfabe52c03466"
+  integrity sha1-E309JCUCOhmmYPud1t36vlLANGY=
   dependencies:
-    builtin-modules "^1.0.0"
+    builtin-modules "^3.0.0"
 
 is-callable@^1.1.4:
   version "1.1.4"
@@ -4504,12 +4509,12 @@ nopt@^4.0.1:
     osenv "^0.1.4"
 
 normalize-package-data@^2.3.2:
-  version "2.4.0"
-  resolved "http://registry.npm.taobao.org/normalize-package-data/download/normalize-package-data-2.4.0.tgz#12f95a307d58352075a04907b84ac8be98ac012f"
-  integrity sha1-EvlaMH1YNSB1oEkHuErIvpisAS8=
+  version "2.4.1"
+  resolved "http://registry.npm.taobao.org/normalize-package-data/download/normalize-package-data-2.4.1.tgz#ca948bac9af17c3c91e49fadd011fd7cb2be5c09"
+  integrity sha1-ypSLrJrxfDyR5J+t0BH9fLK+XAk=
   dependencies:
     hosted-git-info "^2.1.4"
-    is-builtin-module "^1.0.0"
+    is-builtin-module "^3.0.0"
     semver "2 || 3 || 4 || 5"
     validate-npm-package-license "^3.0.1"
 
@@ -4813,9 +4818,9 @@ parse-json@^4.0.0:
     json-parse-better-errors "^1.0.1"
 
 parse-node-version@^1.0.0:
-  version "1.0.0"
-  resolved "http://registry.npm.taobao.org/parse-node-version/download/parse-node-version-1.0.0.tgz#33d9aa8920dcc3c0d33658ec18ce237009a56d53"
-  integrity sha1-M9mqiSDcw8DTNljsGM4jcAmlbVM=
+  version "1.0.1"
+  resolved "http://registry.npm.taobao.org/parse-node-version/download/parse-node-version-1.0.1.tgz#e2b5dbede00e7fa9bc363607f53327e8b073189b"
+  integrity sha1-4rXb7eAOf6m8NjYH9TMn6LBzGJs=
 
 parse5@4.0.0:
   version "4.0.0"
@@ -5183,8 +5188,8 @@ react-lifecycles-compat@^3.0.4:
   integrity sha1-TxonOv38jzSIqMUWv9p4+HI1I2I=
 
 "react-native-camera@git+https://git@github.com/react-native-community/react-native-camera":
-  version "1.9.1"
-  resolved "git+https://git@github.com/react-native-community/react-native-camera#406641f25919d00879a99f592a5c0fdc4b72907f"
+  version "1.9.2"
+  resolved "git+https://git@github.com/react-native-community/react-native-camera#57bc327d847ccb7ea90ded51a5a82168388b1349"
   dependencies:
     prop-types "^15.6.2"
 
@@ -5204,9 +5209,9 @@ react-native-crypto@^2.1.0:
     public-encrypt "^4.0.0"
 
 react-native-gesture-handler@^1.0.0, react-native-gesture-handler@^1.0.12:
-  version "1.0.14"
-  resolved "http://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.0.14.tgz#0e79fcc7175c9bb2e550917a35488100eec8738b"
-  integrity sha1-Dnn8xxdcm7LlUJF6NUiBAO7Ic4s=
+  version "1.0.15"
+  resolved "http://registry.npm.taobao.org/react-native-gesture-handler/download/react-native-gesture-handler-1.0.15.tgz#7e0d0a457820a3c9325a3d492daaed14400508a6"
+  integrity sha1-fg0KRXggo8kyWj1JLartFEAFCKY=
   dependencies:
     hoist-non-react-statics "^2.3.1"
     invariant "^2.2.2"
