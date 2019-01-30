@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Dimensions, View, Button, StyleSheet } from 'react-native';
 import styles from '../../styles.js';
 import AionCell from '../../cell.js';
-import { signout } from '../../../actions/user.js';
+import { user_signout } from '../../../actions/user.js';
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -69,7 +69,7 @@ class Home extends Component {
 						title='Sign Out'
 						onClick={() => {
 							const { dispatch } = this.props;
-							dispatch(signout());
+							dispatch(user_signout());
 							this.props.navigation.navigate('Unidentified');
 						}}/>
 				</View>
