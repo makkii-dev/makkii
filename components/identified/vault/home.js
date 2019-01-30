@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
+import Loading from '../../loading.js';
+
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
@@ -38,6 +40,11 @@ class Home extends Component {
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
+	}
+
+	onImportLedger=()=> {
+		console.log("click import ledger.");
+		this.loadingView.show('Connecting to Ledger...');
 	}
 
 	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};
@@ -73,7 +80,7 @@ class Home extends Component {
 			},
 			{
 				title:'Ledger',
-				onPress:()=>console.log('123'),
+				onPress:()=>this.onImportLedger(),
 				image:require('../../../assets/ledger_logo.png'),
 			},
 		];
@@ -216,7 +223,9 @@ class Home extends Component {
 						});
 					}}
 				/>
-
+				<Loading ref={(element) => {
+					this.loadingView = element;
+				}}/>
 			</View>
 		)
 	}

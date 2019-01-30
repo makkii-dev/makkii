@@ -74,7 +74,7 @@ class InputMultiLines extends Component{
 	}
 }
 
-class Password extends Component {
+class ComponentPassword extends Component {
 	static defaultProps = {
 		supportVisibility: true
 	};
@@ -121,5 +121,5 @@ module.exports = {
 	Logo,
 	Input,
 	InputMultiLines,
-	Password
+	ComponentPassword
 }

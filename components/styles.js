@@ -2,6 +2,18 @@ const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
 
 export default styles = {
+	headerStyle: {
+        shadowOpacity: 0,
+        shadowOffset: { height: 0, width:0 }, 
+        shadowRadius: 0, 
+        borderBottomWidth:0,
+        elevation: 1,
+        fontWeight: 'normal',
+    },
+    headerTitleStyle: {
+      	fontWeight: 'normal',
+      	fontSize: 18,
+    },
   	container: {
   		paddingLeft: 20,
   		paddingRight: 20,

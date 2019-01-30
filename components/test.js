@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { Button, Input, Password } from './common.js';
+import { Button, Input, ComponentPassword } from './common.js';
 import styles from './styles.js';
 
 class Test extends Component {
@@ -38,8 +38,7 @@ class Test extends Component {
 					}}
 				/>
 				<Text>password</Text>
-				<Password 
-				
+				<ComponentPassword 	
 					value={ this.state.value_password }
 					onChange={ val =>{
 						this.setState({
