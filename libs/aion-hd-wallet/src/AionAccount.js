@@ -5,15 +5,12 @@ import {Crypto} from "./utils/crypto";
 export class AionAccount {
 
     static recoverAccount = (mnemonic) => {
-        return new Promise((resolve, reject)=> {
-            try{
-                let masterKey = new MasterKey.fromMnemonic(mnemonic);
-                resolve(masterKey);
-            } catch (e) {
-                reject(e);
-
-            }
-        })
+        try{
+            let masterKey = new MasterKey.fromMnemonic(mnemonic);
+            return masterKey;
+        } catch (e) {
+            throw e;
+        }
     };
 
     static importAccount = (secretKey) => {

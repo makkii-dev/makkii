@@ -15,7 +15,10 @@ export default styles = {
       	fontSize: 18,
     },
   	container: {
-  		padding: 20,
+  		paddingLeft: 20,
+  		paddingRight: 20,
+  		paddingTop: 40,
+  		paddingBottom: 40,
 		justifyContent:'flex-start',
   		flex:1,
   	},
@@ -28,25 +31,25 @@ export default styles = {
   		textAlign: 'center',
   	},
   	marginTop10: {   // in use
-		marginTop: 10, 
+		marginTop: 10,
 	},
 	marginTop20: {   // in use
-		marginTop: 10, 
+		marginTop: 10,
 	},
 	marginTop40: {   // in use
-		marginTop: 10, 
+		marginTop: 10,
 	},
   	marginBottom10: {   // in use
-		marginBottom: 10, 
+		marginBottom: 10,
 	},
   	marginBottom20: {   // in use
-  		marginBottom: 20, 
+  		marginBottom: 20,
   	},
   	marginBottom40: {   // in use
-  		marginBottom: 40, 
+  		marginBottom: 40,
   	},
   	marginBottom80: {   // in use
-  		marginBottom: 80, 
+  		marginBottom: 80,
   	},
   	label: {            // in use
   		fontSize: 14,
@@ -63,14 +66,6 @@ export default styles = {
         lineHeight: 18,
         color: 'black',
     },
-    input_multi_lines: {
-		borderWidth: 1,
-		borderRadius: 5,
-		color: FONT_COLOR,
-		borderColor: BORDER_COLOR,
-		fontSize: 16,
-		textAlignVertical: 'top'
-	},
 	input: {
 		text_input: {
 			fontSize: 16,
@@ -129,6 +124,32 @@ export default styles = {
 			position: 'absolute',
 			right: 0,
 			top: 9,
+		}
+	},
+	ImportList:{
+		container:{
+			flex:1,
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+			alignItems: 'center',
+			padding: 10,
+			backgroundColor:'#fff'
+		},
+		itemImage:{
+			marginRight: 20,
+			width: 50,
+			height: 50,
+		},
+		ItemText:{
+			textAlign: 'right',
+		},
+		footer:{
+			flexDirection:'row',
+			height:24,
+			justifyContent:'center',
+			alignItems:'center',
+			marginBottom:10,
+			marginTop: 10,
 		}
 	}
 };
