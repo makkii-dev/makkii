@@ -20,6 +20,12 @@ function validatePassword(password) {
     return reg.test(password);
 }
 
+function validateUrl(url) {
+    // TODO: validate format http(s)://<host>(:<port>)/
+    // TODO: validate port range
+    return true;
+}
+
 function hashPassword(password) {
     let passwordHash = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex');
     console.log("hash:" + passwordHash);
@@ -29,6 +35,7 @@ function hashPassword(password) {
 module.exports = {
     test: test,
     validatePassword: validatePassword,
+    validateUrl: validateUrl,
     hashPassword: hashPassword,
 }
 

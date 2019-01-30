@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, Alert } from 'react-native';
 import { Input } from '../../common.js';
 import styles from '../../styles.js';
+import { setting } from '../../../actions/setting.js';
+import Toast from '../../toast.js';
+import { validateUrl } from '../../../utils.js';
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -24,8 +27,8 @@ class Services extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			kernel_server: this.props.setting.remote_kernel,
-			dapps_server: this.props.setting.remote_dapps,
+			kernel_server: this.props.setting.advance.remote_kernel,
+			dapps_server: this.props.setting.advance.remote_dapps,
 		}
 	}
 
@@ -42,8 +45,14 @@ class Services extends Component {
 				<View style={styles.marginBottom20}>
 					<Input
                         value={this.state.kernel_server}
+						supportVisibility={false}
 						onClear={e => {
 
+						}}
+						onChange={e => {
+							this.setState({
+								kernel_server: e,
+							})
 						}}
 					/>
 				</View>
@@ -53,8 +62,14 @@ class Services extends Component {
 				<View style={styles.marginBottom40}>
 					<Input
 						value={this.state.dapps_server}
+						supportVisibility={false}
 						onClear={e => {
 
+						}}
+						onChange={e => {
+							this.setState({
+								dapps_server: e,
+							})
 						}}
 					/>
 				</View>
@@ -64,15 +79,36 @@ class Services extends Component {
 						onPress={ () => this.saveConfigurations() }
 					/>
 				</View>
+				<Toast
+					ref={"toast"}
+					duration={Toast.Duration.short}
+					onDismiss={() => this.props.navigation.goBack()}
+				/>
 			</View>
 		)
 	}
 
 	saveConfigurations=() => {
-		// const { dispatch } = this.props;
-		// let newSettings = this.props.setting;
-		// newSettings.remote_kernel = this.state.kernel_server;
-		// newSettings.remote_dapps = tihs.state.dapps_server;
+		if (!validateUrl(this.state.kernel_server)) {
+			Alert.alert('Error', 'Wallet server url is invalid');
+			return;
+		}
+
+		if (!validateUrl(this.state.dapps_server)) {
+			Alert.alert('Error', 'DApps server url is invalid');
+			return;
+		}
+
+		// TODO: connectivity test
+
+		const { dispatch } = this.props;
+		let newSettings = this.props.setting;
+		newSettings.advance.remote_kernel = this.state.kernel_server;
+		newSettings.advance.remote_dapps = this.state.dapps_server;
+		dispatch(setting(newSettings));
+
+		console.log("update service configuration successfully.");
+		this.refs.toast.show("Update configuration successfully");
 	}
 
 }

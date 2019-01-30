@@ -1,10 +1,22 @@
-import { USER } from '../actions/user.js';
-import User from '../types/user.js';
+import { USER, USER_SIGNOUT } from '../actions/user.js';
 
-export default function user(state = new User(false), action){
+const init = {
+	timestamp: 0,
+	hashed_password: '',
+    mnemonic: 'word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1',
+    hashed_mnemonic: 'belt dismiss dirt wash solution swallow exercise acquire motion shine round boost'
+	default_account_name: 'account',
+};
+ 
+export default function user(state = init, action){
 	switch(action.type){
 		case USER:
 			return Object.assign({}, action.user);
+		case USER_SIGNOUT:
+			return Object.assign({}, state, {
+	        	timestamp: 0,
+	        	hashed_password: 'hello',
+	      	});
 		default: 
 			return state;
 	}

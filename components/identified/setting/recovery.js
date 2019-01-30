@@ -1,57 +1,76 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Button } from 'react-native';
+import {View, Button, TextInput, Clipboard} from 'react-native';
 import { InputMultiLines } from '../../common.js';
-import QRCode from 'react-native-qrcode';
 import styles from '../../styles.js';
+import QRCode from 'react-native-qrcode-svg';
+import Toast from '../../toast.js';
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-	        title: state.params ? state.params.title : 'RECOVERY INFO',
+			headerStyle: {
+				backgroundColor: '#eeeeee'
+			},
+			headerTitleStyle: {
+				alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1
+			},
+			headerRight: (<View></View>),
+			title: 'Recovery Phrase'
 	    };
     };
 	constructor(props){
 		super(props);
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
-		this.props.navigation.setParams({
-			title: 'RECOVERY INFO',
-		});
-	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
 	}
 	render(){
 		return (
-			<View style={styles.container}>	
-				<View>
-					<InputMultiLines 
-
-
+			<View style={styles.container}>
+				<View style={styles.marginBottom40}>
+                    <InputMultiLines
+						style={{
+							color: 'black',
+							borderWidth: 1,
+							borderColor: 'black',
+							borderRadius: 5,
+							fontSize: 18,
+						}}
+						editable={false}
+						borderRadius={5}
+						numberOfLines={3}
+						value={ this.props.user.mnemonic }
 					/>
 				</View>
-				<View>
-					<Button 
+				<View style={styles.marginBottom80}>
+					<Button
 						title="copy"
 						onPress={e => {
-
+							Clipboard.setString(this.props.user.mnemonic);
+							this.refs.toast.show('Copied to clipboard successfully');
 						}}
 					/>
 				</View>
-				<View style={styles.center}>
-					<QRCode
-						value={ this.props.account ? this.props.account.address : '0x00000000000000000000000000000000' }
-						size={100}
-						bgColor='black'
-						fgColor='white'
-					/>
+                <View style={{
+                	justifyContent: 'center',
+					alignItems: 'center',
+				}}>
+                    <QRCode
+                        value={ this.props.user.mnemonic }
+                        size={200}
+                    />
 				</View>
+				<Toast
+					ref={"toast"}
+					duration={Toast.Duration.short}
+                    onDismiss={() => {}}
+				/>
+
 			</View>
 		)
 	}
 }
 
-export default connect(state => { return ({ setting: state.setting }); })(Recovery);
+export default connect(state => { return ({ user: state.user }); })(Recovery);
