@@ -1,4 +1,4 @@
-import blake2b from'blake2b';
+import {blake2bHex} from'blakejs';
 
 function validatePassword(password) {
     let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
@@ -12,9 +12,8 @@ function validateUrl(url) {
 }
 
 function hashPassword(password) {
-    // let hashed_password = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex');
-    // console.log(hashed_password);
-    return '';
+    let passwordHash = blake2bHex(Buffer.from(password, 'utf8'), null, 32);
+    return passwordHash;
 }
 
 module.exports = {
@@ -22,4 +21,3 @@ module.exports = {
     validateUrl: validateUrl,
     hashPassword: hashPassword,
 }
-

@@ -37,9 +37,7 @@ const navigator = createStackNavigator({
     //initialRouteName: "VaultImportLedger",
     initialRouteName: "VaultHome",
   	resetOnBlur: true,
-    navigationOptions: ({ navigation }) => ({
-        header: <AppBar title={ navigation.getParam('appBar', {title: ''}).title } />,
-    }),
+
     cardStyle: {
         backgroundColor: '#EFF4F8'
     }
