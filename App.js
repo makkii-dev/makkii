@@ -12,7 +12,7 @@ import { accounts_ledger } from './actions/accounts_ledger.js';
 import { account }         from './actions/account.js';
 import { dapps }           from './actions/dapps.js';
 import { setting }         from './actions/setting.js';
-import { user }            from './actions/user.js';
+import { user, user_signout } from './actions/user.js';
  
 // reducers
 import reducer_ui              from './reducers/ui';

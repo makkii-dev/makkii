@@ -77,7 +77,6 @@ class Login extends Component {
 						<Text>Recovery</Text>
 					</TouchableOpacity>
 				</View>
-
 			</KeyboardAvoidingView>
 		);
 	}
