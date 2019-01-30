@@ -25,12 +25,6 @@ class Home extends Component {
 			title: 'Register',
 		});
 	}
-	async componentWillUnmount(){
-		this.state({
-			password: '',
-			password_confirm: '',
-		})
-	}
 	render(){
 		const { dispatch } = this.props;
 		return (
@@ -73,6 +67,10 @@ class Home extends Component {
 								alert('Confirm password does not match password!') 
 							else {
 								dispatch(user_register(hashPassword(this.state.password)));
+								this.setState({
+									password: '',
+									password_confirm: '',
+								});
 								this.props.navigation.navigate('RegisterMnemonic');
 							}
 						}}
