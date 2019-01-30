@@ -6,7 +6,7 @@ import styles from '../../styles.js';
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       title: navigation.getParam('otherParam', 'Mnemonic'),
+	       title: navigation.getParam('title', ''),
 	    };
     };
 	constructor(props){
@@ -14,15 +14,15 @@ class Mnemonic extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-
+		console.log(this.props.user);
 	}
 	render(){
 		return (
 			<View style={styles.container}>
-				<View style={styles.form}>
+				<View>
 					<Text style={styles.label}>Your wallet mnemonic is, {this.props.user.hashed_mnemonic}</Text>
 				</View>
-				<View style={styles.form}>
+				<View style={styles.marginBottom20}>
 					<Text style={styles.label}>please keep it safely</Text>
 				</View>
 				<View style={styles.form}>

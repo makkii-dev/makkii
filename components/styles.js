@@ -15,10 +15,7 @@ export default styles = {
       	fontSize: 18,
     },
   	container: {
-  		paddingLeft: 20,
-  		paddingRight: 20,
-  		paddingTop: 40,
-  		paddingBottom: 40,
+  		padding: 20,
 		justifyContent:'flex-start',
   		flex:1,
   	},
