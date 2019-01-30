@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, View, Text } from 'react-native';
-import { Password } from '../common.js';
+import { ComponentPassword } from '../common.js';
 import { connect } from 'react-redux';
 import { user } from '../../actions/user.js';
 import langs from '../langs.js';
@@ -25,7 +25,7 @@ class RecoveryPassword extends Component {
 					<Text style={ styles.label }>Enter password</Text>
 				</View>
 				<View style={ styles.form }>
-					<Password onChange={e=>{
+					<ComponentPassword onChange={e=>{
 						console.log();
 					}} />
 				</View>
@@ -33,7 +33,7 @@ class RecoveryPassword extends Component {
 					<Text style={ styles.label }>Confirm your password</Text>
 				</View>
 				<View style={ styles.form }>
-					<Password onChange={e=>{
+					<ComponentPassword onChange={e=>{
 						console.log();
 					}} />
 				</View>

@@ -1,17 +1,16 @@
 import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button } from 'react-native';
-import { Password } from '../../common.js';
+import { ComponentPassword } from '../../common.js';
+
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: navigation.getParam('otherParam', 'Register'),
-	       	headerStyle: styles.stack_header,
-	       	headerTitleStyle: styles.stack_header_title,
 	    }; 
     };
-	constructor(props){
+	constructor(props){ 
 		super(props);
 	}
 	async componentDidMount(){
@@ -22,7 +21,7 @@ class Home extends Component {
 			<View>
 				<View style={ styles.form }>
 					<Text style={styles.label}>Enter password</Text>
-					<Password 
+					<ComponentPassword 
 						onChange={e=>{
 
 						}}
@@ -30,7 +29,7 @@ class Home extends Component {
 				</View>
 				<View style={ styles.form }>
 					<Text style={styles.label}>Confirm password</Text>
-					<Password 
+					<ComponentPassword 
 						onChange={e=>{
 
 						}}

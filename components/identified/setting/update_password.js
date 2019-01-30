@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, Alert, AsyncStorage } from 'react-native';
-import { Password } from '../../common.js';
+import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user } from '../../../actions/user.js';
@@ -48,7 +48,7 @@ class UpdatePassword extends Component {
 					<Text style={styles.title_label}>Current Password</Text>
 				</View>
 				<View style={styles.marginBottom10}>
-					<Password 
+					<ComponentPassword 
 						value={this.state.password_current} 
 						placeholder='Enter old password'
 						supportVisibility={false}
@@ -63,7 +63,7 @@ class UpdatePassword extends Component {
 					<Text style={styles.title_label}>New Password</Text>
 				</View>
 				<View style={styles.marginBottom10}>
-					<Password
+					<ComponentPassword
 						value={this.state.password_new} 
 						placeholder='Enter new password'
 						supportVisibility={false}
@@ -78,7 +78,7 @@ class UpdatePassword extends Component {
 					<Text style={styles.title_label}>Confirm Password</Text>
 				</View>
 				<View style={styles.marginBottom40}>
-					<Password 
+					<ComponentPassword 
 						value={this.state.password_confirm}
 						placeholder='Enter new password again'
 						supportVisibility={false}
