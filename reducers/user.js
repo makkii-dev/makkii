@@ -3,8 +3,7 @@ import { USER, USER_SIGNOUT } from '../actions/user.js';
 const init = {
 	timestamp: 0,
 	hashed_password: '',
-    mnemonic: 'word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1',
-    hashed_mnemonic: 'belt dismiss dirt wash solution swallow exercise acquire motion shine round boost'   
+    mnemonic: 'word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1' 
 };
  
 export default function user(state = init, action){

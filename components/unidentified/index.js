@@ -1,6 +1,6 @@
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
-import Register from './register.js';
+import Register from './register/index.js';
 import RegisterMnemonic from './register_mnemonic.js';
 import Login from './login.js';
 import Recovery from './recovery.js';
@@ -17,7 +17,8 @@ const Unidentified = createStackNavigator({
   	Register: {screen: Register},
   	RegisterMnemonic: {screen: RegisterMnemonic},
 }, {
-	initialRouteName: 'Login',
+	//initialRouteName: 'Login',
+	initialRouteName: 'Register',  
 	header: {
 		style: {
 			shadowOpacity: 0,
