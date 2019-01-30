@@ -9,6 +9,7 @@ const navigator = createStackNavigator({
     RegisterMnemonic: { screen: Mnemonic, navigationOptions: { headerStyle:styles.headerStyle, headerTitleStyle:styles.headerTitleStyle } },
 }, {
     initialRouteName: "RegisterHome",
+    //initialRouteName: "RegisterMnemonic",
   	navigationOptions: ({ navigation }) => ({
         header: <AppBar title={ navigation.getParam('appBar', {title: ''}).title } />,
     })
@@ -18,7 +19,7 @@ navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
   	switch(routeName) {
         case 'RegisterHome':
-		case 'RegisterMnemonic':
+		    case 'RegisterMnemonic':
             return {
                 tabBarVisible: false
             };

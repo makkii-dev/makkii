@@ -24,7 +24,6 @@ class Home extends Component {
 		this.props.navigation.setParams({
 			title: 'Register',
 		});
-		console.log(hashPassword.toString());
 	}
 	async componentWillUnmount(){
 		this.state({
