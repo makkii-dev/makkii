@@ -1,10 +1,9 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import { View, Text, Button } from 'react-native';
-import langs from '../langs.js';
-import styles from '../styles.js';
-
-class RegisterMnemonic extends Component {
+import styles from '../../styles.js';
+ 
+class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       title: navigation.getParam('otherParam', 'Mnemonic'),
@@ -54,4 +53,4 @@ class RegisterMnemonic extends Component {
 	}
 }
 
-export default connect(state => {return {user: state.user};})(RegisterMnemonic);
+export default connect(state=>{return {user: state.user};})(Mnemonic);

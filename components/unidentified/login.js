@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native';
-import { Logo, Password } from '../common.js';
+import { Logo, ComponentPassword } from '../common.js';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -38,7 +38,7 @@ class Login extends Component {
 					<Logo />
 				</View>
 				<View style={{padding:5}}>
-					<Password
+					<ComponentPassword
 						value={ this.state.value_password }
 						onChange={ val =>{
 							this.setState({

@@ -1,37 +1,39 @@
 import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button } from 'react-native';
-import { Password } from '../common.js';
-import langs from '../langs.js';
-import styles from '../styles.js';
+import { ComponentPassword } from '../../common.js';
 
-class Register extends Component {
+
+class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: navigation.getParam('otherParam', 'Register'),
-	       	headerStyle: styles.stack_header,
-	       	headerTitleStyle: styles.stack_header_title,
-	    };
+	    }; 
     };
-	constructor(props){
+	constructor(props){ 
 		super(props);
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 	}
-	_onChange= (val)=>{
-
-	};
 	render(){
 		return (
-			<View style={styles.container}>
+			<View>
 				<View style={ styles.form }>
 					<Text style={styles.label}>Enter password</Text>
-					<Password onChange={this._onChange.bind(this)}/>
+					<ComponentPassword 
+						onChange={e=>{
+
+						}}
+					/>
 				</View>
 				<View style={ styles.form }>
 					<Text style={styles.label}>Confirm password</Text>
-					<Password onChange={this._onChange.bind(this)}/>
+					<ComponentPassword 
+						onChange={e=>{
+
+						}}
+					/>
 				</View>
 				<View style={ styles.form }>
 					<Button
@@ -46,6 +48,4 @@ class Register extends Component {
 	}
 }
 
-export default connect(state => {
-	return {user: state.user};
-})(Register);
+export default connect(state=>{return {user: state.user};})(Home);
