@@ -17,6 +17,9 @@ class Logo extends Component{
 }
 
 class Input extends Component{
+	static defaultProps = {
+		supportVisibility: true
+	};
 	constructor(props){
 		super(props);
 	}
@@ -30,39 +33,43 @@ class Input extends Component{
 			        }}
 			        value={ this.props.value }
 			    />
-			    <Text
-			    	style={ styles.input.text }
-			    	onPress={ e => { 
-			    		this.props.onClear(e); 
-			    	}}
-			    >CLR</Text>
+				{this.props.supportVisibility &&
+				<Text
+					style={styles.input.text}
+					onPress={e => {
+						this.props.onClear(e);
+					}}
+				>CLR</Text>
+				}
 		    </View>
 		);
 	}
 }
 
 class InputMultiLines extends Component{
+    static defaultProps = {
+		numberOfLines: 4,
+        borderRadius: 0,
+		value: '',
+		editable: true,
+    };
 	constructor(props){
 		super(props);
 	}
 	render(){
 		return (
-			<View style={ styles.input.view }>
 				<TextInput
 					style={{
-						borderWidth: 1,
-
-
-
+					    ...this.props.style,
 					}}
-					numberOfLines={4}
+                    editable={this.props.editable}
+					numberOfLines={this.props.numberOfLines}
 					multiline={true}
-			        onChangeText={ val => { 
+					value={this.props.value}
+			        onChangeText={ val => {
 			        	this.props.onChangeText(val);
 			        }}
-			        value={ this.props.value }
 			    />
-		    </View>
 		);
 	}
 }

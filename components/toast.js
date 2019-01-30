@@ -21,7 +21,7 @@ export const Position = {
 };
 export const Duration = {
     /**显示短周期**/
-    short: 1500,
+    short: 1000,
     /**显示长周期**/
     long: 2500,
     /**一直显示**/

@@ -6,8 +6,8 @@ export default styles = {
   		paddingLeft: 20,
   		paddingRight: 20,
   		paddingTop: 40,
-  		paddingBottom: 160,
-		justifyContent:'center',
+  		paddingBottom: 40,
+		justifyContent:'flex-start',
   		flex:1,
   	},
   	center: {
@@ -77,6 +77,11 @@ export default styles = {
 			position: 'absolute',
 			right: 0,
 			top: 9,
+		},
+		textAreaContainer: {
+			borderWidth: 1,
+			borderColor: 'gray',
+			padding: 5
 		}
 	},
 	password: {
