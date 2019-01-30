@@ -17,7 +17,7 @@ export default function user(state = init, action){
 			return Object.assign({}, action.user);
 		case USER_REGISTER:
 			return Object.assign({}, state, {
-	        	timestamp: Date().now,
+	        	timestamp: Date.now(),
 	        	hashed_password: action.hashed_password,
 	      	});
 		case USER_SIGNOUT:

@@ -33,7 +33,7 @@ class Home extends Component {
 		})
 	}
 	render(){
-		const dispatch = this.props.dispatch;
+		const { dispatch } = this.props;
 		return (
 			<View style={styles.container}>
 				<View>
@@ -73,8 +73,8 @@ class Home extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								alert(hashPassword(this.state.password));
-								
+								dispatch(user_register(hashPassword(this.state.password)));
+								this.props.navigation.navigate('RegisterMnemonic');
 							}
 						}}
 					/>
