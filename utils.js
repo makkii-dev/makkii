@@ -1,5 +1,5 @@
 const bip39 = require('bip39');
-import blake2b from'blake2b';
+import {blake2bHex} from'blakejs';
 
 function test(){
 	// // defaults to BIP39 English word list
@@ -27,7 +27,7 @@ function validateUrl(url) {
 }
 
 function hashPassword(password) {
-    let passwordHash = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex');
+    let passwordHash = blake2bHex(Buffer.from(password, 'utf8'), null, 32);
     console.log("hash:" + passwordHash);
     return passwordHash;
 }

@@ -7,10 +7,10 @@ import {
     StyleSheet,
     Dimensions,
     Image, PixelRatio,
-    ActivityIndicator
+    ActivityIndicator,
+    InteractionManager
 } from 'react-native';
 import {connect} from 'react-redux';
-import data from '../../../data';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import Account from "../../../types/account";
 import {add_accounts} from "../../../actions/accounts";
@@ -53,7 +53,6 @@ class ImportHdWallet extends React.Component {
         };
     }
 
-
     ImportAccount= () => {
         let acc = {};
         Object.entries(this.state.accountsList).map(([key, value])=>{
@@ -64,9 +63,14 @@ class ImportHdWallet extends React.Component {
         return acc;
     };
 
-    componentDidMount(): void {
-        this.fetchAccount(10);
+    componentDidMount() {
+        //setTimeout(()=>{this.fetchAccount(10)},500);
+        InteractionManager.runAfterInteractions(()=>{
+            this.fetchAccount(10)
+        });
     }
+
+
     componentWillMount(): void {
         const {dispatch} = this.props;
         this.props.navigation.setParams({
@@ -80,13 +84,12 @@ class ImportHdWallet extends React.Component {
     }
     fetchAccount(n){
         //fetch n Accounts from MasterKey;
-        console.log('fetch account');
         AionAccount.recoverAccount(this.props.user.mnemonic).then(
-            masterKey =>{
+            masterKey => {
                 let accounts = {};
                 let i = this.state.hardenedIndex;
                 let sum = 0;
-                while(sum < n){
+                while (sum < n) {
                     let getAcc = masterKey.deriveHardened(i);
                     let acc = new Account();
                     acc.address = getAcc.address;
@@ -96,7 +99,7 @@ class ImportHdWallet extends React.Component {
                     acc.type = '[local]';
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
                         sum = sum + 1;
-                        accounts[acc.address]={'account': acc, 'selected': false};
+                        accounts[acc.address] = {'account': acc, 'selected': false};
                     }
                     i = i + 1;
                 }
@@ -106,14 +109,13 @@ class ImportHdWallet extends React.Component {
                     hardenedIndex: this.state.hardenedIndex + n,
                     footerState: 0,
                 });
-            },err=>{
+            }, err => {
                 this.setState({
                     error: true,
                     errInfo: err.toString(),
-                })
+                });
             }
         )
-
     }
     _onEndReached(){
         // if not in fetching account
@@ -124,7 +126,7 @@ class ImportHdWallet extends React.Component {
         this.setState({
             footerState: 2,
         },()=>{
-                this.fetchAccount(5);
+            this.fetchAccount(5);
         });
     }
 
@@ -215,9 +217,11 @@ class ImportHdWallet extends React.Component {
                     ItemSeparatorComponent={()=>(
                         <View style={styles.divider}/>
                     )}
-                    ListFooterComponent={this._renderFooter}
+                    ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={()=>{this._onEndReached()}}
-                    onEndReachedThreshold={1}
+                    onEndReachedThreshold={0.1}
+                    extraData={this.state}
+                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                 />
             </View>
         )
