@@ -202,10 +202,10 @@ class Home extends Component {
 		});
 
 		return (
-			<View>
+			<View style={{flex:1}}>
 				{this._renderHeader()}
 				<FlatList
-					style={{marginBottom: 50}}
+					style={{flex:1}}
 					renderItem={({item})=>this._renderListItem(item)}
 					scrollEnabled={this.state.scrollEnabled}
 					data={dataArray}
