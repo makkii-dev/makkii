@@ -47,29 +47,22 @@ class Input extends Component{
 }
 
 class InputMultiLines extends Component{
-    static defaultProps = {
-		numberOfLines: 4,
-        borderRadius: 0,
-		value: '',
-		editable: true,
-    };
 	constructor(props){
 		super(props);
 	}
 	render(){
 		return (
-				<TextInput
-					style={{
-					    ...this.props.style,
-					}}
-                    editable={this.props.editable}
-					numberOfLines={this.props.numberOfLines}
-					multiline={true}
-					value={this.props.value}
-			        onChangeText={ val => {
-			        	this.props.onChangeText(val);
-			        }}
-			    />
+			<TextInput
+				style={this.props.style || {}}
+                editable={typeof(this.props.editable) !== 'undefined' ? this.props.editable : true}
+				numberOfLines={this.props.numberOfLines || 4}
+				multiline={true}
+				value={this.props.value}
+		        onChangeText={e=>{
+		        	if (this.props.onChangeText)
+		        		this.props.onChangeText(val);
+		        }}
+		    />
 		);
 	}
 }

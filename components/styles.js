@@ -63,6 +63,14 @@ export default styles = {
         lineHeight: 18,
         color: 'black',
     },
+    input_multi_lines: {
+		borderWidth: 1,
+		borderRadius: 5,
+		color: FONT_COLOR,
+		borderColor: BORDER_COLOR,
+		fontSize: 16,
+		textAlignVertical: 'top'
+	},
 	input: {
 		text_input: {
 			fontSize: 16,
