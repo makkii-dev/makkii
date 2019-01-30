@@ -61,7 +61,8 @@ export default  class SwipeableRow extends React.Component{
         this._previousLeft = CLOSED_LEFT_POSITION;
         this.state={
             currentLeft: new Animated.Value(this._previousLeft),
-
+            isSwipeableViewRendered: false,
+            rowHeight: (null: ?number),
         };
         this._panResponder = {};
 
@@ -70,6 +71,7 @@ export default  class SwipeableRow extends React.Component{
     static propTypes = {
         children: PropTypes.any,
         isOpen: PropTypes.bool,
+        swipeEnabled: PropTypes.bool,
         preventSwipeRight: PropTypes.bool,
         maxSwipeDistance: PropTypes.number.isRequired,
         onOpen: PropTypes.func.isRequired,
@@ -94,6 +96,7 @@ export default  class SwipeableRow extends React.Component{
     static defaultProps  = {
         isOpen: false,
         preventSwipeRight: false,
+        swipeEnabled: true,
         maxSwipeDistance: 0,
         onOpen: emptyFunction,
         onClose: emptyFunction,
@@ -133,7 +136,7 @@ export default  class SwipeableRow extends React.Component{
          * handled internally by this component.
          */
         if (this.props.isOpen && !nextProps.isOpen) {
-            this._animateToClosedPosition();
+            this.close();
         }
     }
     
@@ -143,10 +146,14 @@ export default  class SwipeableRow extends React.Component{
         this._animateToClosedPosition();
     }
 
-
     _handleMoveShouldSetPanResponderCapture(evt, gestureState) {
         // Decides whether a swipe is responded to by this component or its child
-        return gestureState.dy < 10 && this._isValidSwipe(gestureState);
+        console.log('[swipeEnabled]' + this.props.swipeEnabled);
+        console.log('[isOpen]' + this.props.isOpen);
+        if(!this.props.swipeEnabled && !this.props.isOpen){
+            return false;
+        }
+        return this._isValidSwipe(gestureState);
     }
 
     _handlePanResponderGrant(evt, gestureState) {}
@@ -171,13 +178,21 @@ export default  class SwipeableRow extends React.Component{
     }
 
     _swipeFullSpeed(gestureState) {
-        this.state.currentLeft.setValue(this._previousLeft + gestureState.dx);
+        let newLeft = this._previousLeft + gestureState.dx;
+        const leftBorder = - this.props.maxSwipeDistance;
+        const rightBorder = this.props.preventSwipeRight? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        newLeft = newLeft > rightBorder? rightBorder : newLeft;
+        newLeft = newLeft < leftBorder? leftBorder : newLeft;
+        this.state.currentLeft.setValue(newLeft);
     }
 
     _swipeSlowSpeed(gestureState) {
-        this.state.currentLeft.setValue(
-            this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR,
-        );
+        let newLeft = this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR;
+        const leftBorder = - this.props.maxSwipeDistance;
+        const rightBorder = this.props.preventSwipeRight? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        newLeft = newLeft > rightBorder? rightBorder : newLeft;
+        newLeft = newLeft < leftBorder? leftBorder : newLeft;
+        this.state.currentLeft.setValue(newLeft);
     }
 
     _isSwipingExcessivelyRightFromClosedPosition(gestureState) {
@@ -280,10 +295,7 @@ export default  class SwipeableRow extends React.Component{
 
     _handlePanResponderEnd(evt, gestureState) {
         const horizontalDistance = gestureState.dx;
-        if (this._isSwipingRightFromClosed(gestureState)) {
-            this.props.onOpen();
-            this._animateBounceBack(RIGHT_SWIPE_BOUNCE_BACK_DURATION);
-        } else if (this._shouldAnimateRemainder(gestureState)) {
+        if (this._shouldAnimateRemainder(gestureState)) {
             if (horizontalDistance < 0) {
                 // Swiped left
                 this.props.onOpen();
@@ -303,38 +315,48 @@ export default  class SwipeableRow extends React.Component{
 
         this.props.onSwipeEnd();
     }
-    
+
+    _onSwipeableViewLayout(evt) {
+        this.setState({
+            isSwipeableViewRendered: true,
+            rowHeight: evt.nativeEvent.layout.height,
+        });
+    }
     render(){
+        let slideOutView;
+        if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
+            slideOutView = (
+                <View
+                    style={{...styles.slideOutContainer, ...this.props.style}}>
+                    {this.props.slideoutView}
+                </View>
+            );
+        }
+
+        // The swipeable item
+        const swipeableView = (
+            <Animated.View
+                onLayout={this._onSwipeableViewLayout.bind(this)}
+                style={{transform: [{translateX: this.state.currentLeft}]}}>
+                {this.props.children}
+            </Animated.View>
+        );
+
         return (
-            <View style={{...styles.listItem, marginRight: -this.props.maxSwipeDistance}}>
-                <Animated.View
-                    style={{transform: [{translateX: this.state.currentLeft}]}}
-                    {...this._panResponder.panHandlers}>
-                    <View style={{...styles.absoluteCell, width: this.props.maxSwipeDistance}}>
-                        {this.props.slideoutView}
-                    </View>
-                    <View style={{...styles.innerCell, marginRight: this.props.maxSwipeDistance}}>
-                        {this.props.children}
-                    </View>
-                </Animated.View>
+            <View style={this.props.style} {...this._panResponder.panHandlers}>
+                {slideOutView}
+                {swipeableView}
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    listItem: {
-        marginRight: -100,
-    },
-    absoluteCell: {
-        position: 'absolute',
-        top: 0,
+    slideOutContainer: {
         bottom: 0,
+        left: 0,
+        position: 'absolute',
         right: 0,
-        width: 100,
-        flexDirection: 'row',
-    },
-    innerCell: {
-        marginRight: 100,
+        top: 0,
     },
 });

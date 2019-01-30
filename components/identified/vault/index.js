@@ -5,6 +5,7 @@ import Account from './account.js';
 import Home from './home.js';
 import ImportLedger from './import_ledger.js';
 import ImportPrivateKey from './import_private_key.js';
+import ImportHdWallet from './import_hd_wallet';
 import Receive from './receive.js';
 import Send from './send.js';
 import Transaction from './transaction.js';
@@ -27,9 +28,11 @@ const navigator = createStackNavigator({
     VaultHome: { screen: Home, navigationOptions: { headerStyle: styles.headerStyle }  },
     VaultImportLedger: { screen: ImportLedger, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultImportPrivateKey: { screen: ImportPrivateKey, navigationOptions: { headerStyle: styles.headerStyle }  },
+    VaultImportHdWallet:{screen: ImportHdWallet},
     VaultReceive: { screen: Receive, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultSend: { screen: Send, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultTransaction: { screen: Transaction, navigationOptions: { headerStyle: styles.headerStyle } },
+
 }, {
     //initialRouteName: "VaultImportLedger",
     initialRouteName: "VaultHome",
@@ -51,6 +54,7 @@ navigator.navigationOptions = ({ navigation }) => {
 		case 'VaultReceive':
         case 'VaultSend':
         case 'VaultTransaction':
+        case 'VaultImportHdWallet':
             return {
                 tabBarVisible: false
             };

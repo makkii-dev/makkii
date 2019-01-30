@@ -1,4 +1,4 @@
 export default constants = {
-	BRAND: 'kiwwa',
+	BRAND: 'MAKKI',
 	ACCOUNT_TYPES: ['local', 'import', 'ledger']
 };
