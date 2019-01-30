@@ -2,9 +2,8 @@ import { USER, USER_SIGNOUT } from '../actions/user.js';
 
 const init = {
 	timestamp: 0,
-	hashed_password: '',
-    mnemonic: 'word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1 word1',
-    hashed_mnemonic: 'belt dismiss dirt wash solution swallow exercise acquire motion shine round boost'
+	hashed_password: '123',
+	mnemonic: 'belt dismiss dirt wash solution swallow exercise acquire motion shine round boost',
 	default_account_name: 'account',
 };
  
