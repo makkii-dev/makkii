@@ -30,10 +30,10 @@ class Recovery extends Component {
 						this.props.navigation.navigate('RecoveryScan');
 					}} />
 				</View>
-				<View style={styles.form}>
-					<Text style={styles.label}>Enter 24 characters mnemonic</Text>
+				<View>
+					<Text>Enter 24 characters mnemonic</Text>
 				</View>
-				<View style={styles.form}>
+				<View>
 					<InputMultiLines
 						style={styles.input}
 						value={this.props.user.mnemonic}
