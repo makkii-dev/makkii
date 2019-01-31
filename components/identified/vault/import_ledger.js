@@ -35,7 +35,7 @@ class ImportLedger extends React.Component {
                     navigation.state.params.dispatch(add_accounts(acc));
                     navigation.navigate('VaultHome');
                 }}>
-                    <View style={{marginRight: 10}}>
+                    <View style={{marginRight: 20}}>
                         <Text style={{color: 'blue'}}>IMPORT</Text>
                     </View>
                 </TouchableOpacity>

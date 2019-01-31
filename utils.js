@@ -12,6 +12,12 @@ function validateUrl(url) {
     return true;
 }
 
+function validatePrivateKey(privateKey) {
+    privateKey = privateKey.startsWith('0x')? privateKey.substring(2): privateKey;
+    let reg = /^[0-9a-fA-F]{128}$/;
+    return reg.test(privateKey);
+}
+
 function hashPassword(password) {
     let passwordHash = blake2bHex(Buffer.from(password, 'utf8'), null, 32);
     return passwordHash;
@@ -38,5 +44,6 @@ module.exports = {
     validateUrl: validateUrl,
     hashPassword: hashPassword,
     getLedgerMessage: getLedgerMessage,
+    validatePrivateKey: validatePrivateKey,
 }
 

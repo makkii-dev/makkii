@@ -92,7 +92,9 @@ class Home extends Component {
 			},
 			{
 				title:'Private Key',
-				onPress:()=>console.log('123'),
+				onPress:()=>{
+					navigation.navigate('VaultImportPrivateKey');
+				},
 				image:require('../../../assets/key.png'),
 			},
 			{
