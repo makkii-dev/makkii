@@ -51,21 +51,19 @@ export default styles = {
   	marginBottom80: {   // in use
   		marginBottom: 80,
   	},
-  	label: {            // in use
-  		fontSize: 14,
-  		lineHeight: 14,
-  		color: FONT_COLOR,
-  	},
     instruction: {
         fontSize: 16,
         lineHeight: 16,
         color: FONT_COLOR,
     },
-    title_label: {
-        fontSize: 18,
-        lineHeight: 18,
-        color: 'black',
-    },
+    input_multi_lines: {
+		borderWidth: 1,
+		borderRadius: 5,
+		color: FONT_COLOR,
+		borderColor: BORDER_COLOR,
+		fontSize: 16,
+		textAlignVertical: 'top'
+	},
 	input: {
 		text_input: {
 			fontSize: 16,

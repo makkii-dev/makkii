@@ -1,21 +1,77 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { validatePrivateKey } from '../../../utils';
+import Account from '../../../types/account';
+import {add_accounts} from "../../../actions/accounts";
+import {AionAccount} from "../../../libs/aion-hd-wallet";
 
 class ImportPrivateKey extends Component {
+
+	static navigationOptions = ({navigation})=> {
+		return ({
+			title: 'Private Key',
+			headerStyle: {
+				backgroundColor: '#eeeeee'
+			},
+			headerTitleStyle: {
+				alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1,
+			},
+			headerRight: (
+				<TouchableOpacity onPress={() => {
+					navigation.state.params.ImportAccount();
+				}}>
+					<View style={{marginRight: 20}}>
+						<Text style={{color: 'blue'}}>IMPORT</Text>
+					</View>
+				</TouchableOpacity>
+			)
+        });
+	};
+
+	ImportAccount= () => {
+	    if (validatePrivateKey(this.state.private_key)) {
+    		AionAccount.importAccount(this.state.private_key).then(address => {
+				let acc = {};
+				let account = new Account();
+				account.address = address.address;
+				account.private_key = this.state.private_key;
+				account.name = this.props.user.default_account_name;
+				account.type = '[pk]';
+				acc[account.address] = account;
+				console.log('add account:');
+				console.log(acc);
+
+				this.props.navigation.state.params.dispatch(add_accounts(acc));
+				this.props.navigation.navigate('VaultHome');
+			}, error=> {
+    			console.log("error: " + error);
+				Alert.alert('Error', 'Invalid private key');
+			});
+		} else {
+	    	Alert.alert('Error', 'Invalid private key.')
+		}
+	};
+
 	constructor(props){
 		super(props);
 		this.state = {
 			private_key: ''
 		};
 	}
-	import(){
-    	console.log(this.state.private_key);
-    }
-	async componentDidMount(){
+	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
+
+		const {dispatch} = this.props;
+		this.props.navigation.setParams({
+			ImportAccount: this.ImportAccount,
+			dispatch: dispatch,
+		});
 	}
+
 	render(){
 		return (
 			<View style={{
@@ -23,55 +79,18 @@ class ImportPrivateKey extends Component {
 				backgroundColor: '#ffffff',
 				padding: 20,
 			}}>	
-				<View
-					style={{
-						marginBottom: 20,
-					}}
-				>
-					<Button
-						style={{
-							marginBottom: 20,
-						}}
-						title="SCAN PRIVATE KEY"
-						onPress={e => {
-
-						}}
-					/>
-				</View>
-				<View
-					style={{
-						marginBottom: 20,
-					}}
-				>
-					<Text 
-						style={{
-							textAlign: 'center',
-							color: 'grey',
-						}}
-					> 
-						───────   or   ───────
-					</Text>
-				</View>
-				<View>
-					<Text
-						style={{
-							marginBottom: 10,
-							textAlign: 'center',
-							color: 'grey',
-						}}
-					>
-						Enter private key
-					</Text>
-				</View>
-				<View
-					style={{
-						marginBottom: 20,
-					}}
-				>
-					<TextInput 
+                <Text style={styles.instruction}>Enter private key</Text>
+				<View style={ styles.marginTop20 }>
+					<TextInput
+                        value={this.state.private_key}
 						multiline = {true}
-						numberOfLines = {4}
+						numberOfLines = {5}
 						textAlignVertical = 'top'
+						onChangeText={ val => {
+						    this.setState({
+								private_key: val,
+							});
+						}}
 						style = {{
 							marginBottom: 20,
 							borderColor: 'grey',
@@ -79,14 +98,7 @@ class ImportPrivateKey extends Component {
 							borderWidth: 1,
 							padding: 10,
 							backgroundColor: '#E9F8FF',
-						}}
-					/>
-				</View>
-				<View>
-					<Button
-						title="IMPORT"
-						onPress={e => {
-
+                            fontSize: 16
 						}}
 					/>
 				</View>
@@ -95,8 +107,4 @@ class ImportPrivateKey extends Component {
 	}
 }
 
-export default connect(state => { return ({ accounts: state.accounts }); })(ImportPrivateKey);
-
-const styles = StyleSheet.create({
-
-});
+export default connect(state => { return ({ accounts: state.accounts, user: state.user, }); })(ImportPrivateKey);

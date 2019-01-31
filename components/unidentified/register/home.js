@@ -30,7 +30,7 @@ class Home extends Component {
 		return (
 			<View style={styles.container}>
 				<View>
-					<Text style={styles.label}>Enter password</Text>
+					<Text>Enter password</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword 
@@ -66,7 +66,11 @@ class Home extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								dispatch(user_register(hashPassword(this.state.password)));
+								dispatch(
+									user_register(
+										hashPassword(this.state.password)
+									)
+								);
 								this.setState({
 									password: '',
 									password_confirm: '',

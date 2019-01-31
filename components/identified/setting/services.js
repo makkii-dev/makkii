@@ -40,7 +40,7 @@ class Services extends Component {
 		return (
 			<View style={styles.container}>	
 				<View>
-					<Text style={styles.title_label}>Wallet Server</Text>
+					<Text>Wallet Server</Text>
 				</View>
 				<View style={styles.marginBottom20}>
 					<Input
@@ -57,7 +57,7 @@ class Services extends Component {
 					/>
 				</View>
 				<View>
-					<Text style={styles.title_label}>DApps Server</Text>
+					<Text>DApps Server</Text>
 				</View>
 				<View style={styles.marginBottom40}>
 					<Input
