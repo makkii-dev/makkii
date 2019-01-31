@@ -45,7 +45,7 @@ class UpdatePassword extends Component {
 					<Text style={styles.instruction}>Password must be 8-16 characters and contains both numbers and letters/special characters.</Text>
 				</View>
 				<View>
-					<Text style={styles.title_label}>Current Password</Text>
+					<Text>Current Password</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword 
@@ -60,7 +60,7 @@ class UpdatePassword extends Component {
 					/>
 				</View>
 				<View>
-					<Text style={styles.title_label}>New Password</Text>
+					<Text>New Password</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword
@@ -75,7 +75,7 @@ class UpdatePassword extends Component {
 					/>
 				</View>
 				<View>
-					<Text style={styles.title_label}>Confirm Password</Text>
+					<Text>Confirm Password</Text>
 				</View>
 				<View style={styles.marginBottom40}>
 					<ComponentPassword 

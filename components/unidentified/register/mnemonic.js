@@ -1,12 +1,13 @@
-import React,{Component} from 'react';
-import {connect} from 'react-redux';
-import { View, Text, Button } from 'react-native';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, Button, Clipboard } from 'react-native';
+import { InputMultiLines } from '../../common.js';
 import styles from '../../styles.js';
  
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       title: navigation.getParam('otherParam', 'Mnemonic'),
+	       title: navigation.getParam('title', ''),
 	    };
     };
 	constructor(props){
@@ -14,33 +15,33 @@ class Mnemonic extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-
+		console.log(this.props.user);
+		this.props.navigation.setParams({
+			title: 'Mnemonic',
+		});
 	}
 	render(){
 		return (
 			<View style={styles.container}>
-				<View style={styles.form}>
-					<Text style={styles.label}>Your wallet mnemonic is, {this.props.user.hashed_mnemonic}</Text>
+				<View style={styles.marginBottom10}>
+					<Text>Please keep your mnemonic safely !</Text>
 				</View>
-				<View style={styles.form}>
-					<Text style={styles.label}>please keep it safely</Text>
+				<View style={styles.marginBottom10}>
+					<InputMultiLines
+						editable={false}
+						value={this.props.user.mnemonic}
+						style={styles.input_multi_lines} 
+					/>
 				</View>
-				<View style={styles.form}>
+				<View style={styles.marginBottom80}>
 					<Button
-						title="COPY"
-						onPress={()=>{
+						title="COPY" 
+						onPress={e=>{
+							Clipboard.setString(this.props.user.mnemonic);
 						}}
 					/>
 				</View>
-				<View style={styles.form}>
-					<Button
-						title="QR"
-						onPress={()=>{
-
-						}}
-					/>
-				</View>
-				<View style={styles.form}>
+				<View>
 					<Button
 						title="I'M DONE"
 						onPress={()=>{

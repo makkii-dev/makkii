@@ -53,12 +53,9 @@ class Home extends Component {
 				this.loadingView.hide();
 				Alert.alert('Error', 'No connected Ledger device!');
 			} else {
-				wallet.getAccounts(0, 10).then(accounts => {
-					console.log(JSON.stringify(accounts));
+				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
-					this.props.navigation.navigate('VaultImportLedger', {
-						"accounts": accounts,
-					});
+					this.props.navigation.navigate('VaultImportLedger');
 				}, error => {
 					this.loadingView.hide();
 					Alert.alert('Error', getLedgerMessage(error.code));
