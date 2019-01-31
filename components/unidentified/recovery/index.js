@@ -1,19 +1,67 @@
-import React from 'react'; 
-import { createStackNavigator, AppBar } from 'react-navigation';
-import Home from './home.js';
-import Password from './password.js';
-import Scan from './scan.js';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
+import { InputMultiLines } from '../../common.js';
 import styles from '../../styles.js';
 
-//TODO: figure out why general style setting not working on createStackNavigator
-const navigator = createStackNavigator({
-    RecoveryHome: {screen: Home, navigationOptions: {headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle}},
-    RecoveryPassword: {screen: Password, navigationOptions: {headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle}},
-    RecoveryScan: {screen: Scan, navigationOptions: {header:null}}, 
-}, {
-    initialRouteName: "RecoveryHome",
-    //initialRouteName: "RecoveryPassword",
-    //initialRouteName: "RecoveryScan"
-});
+class Index extends Component {
+	static navigationOptions = ({ navigation }) => {
+	    return {
+	       	title: navigation.getParam('title', 'Recovery'),
+	    }; 
+    }
+	constructor(props){
+		super(props);
+	}
+	async componentDidMount(){
+		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
+		this.props.navigation.setParams({
+			title: 'Recovery',
+		});
+	}
+	render(){
+		const { dispatch } = this.props;
+		return (
+			<View style={styles.container}>
+				<View style={styles.marginBottom20}>
+					<Button 
+						title="Scan"  
+						onPress={e=>{
+							this.props.navigation.navigate('RecoveryScan');
+						}} 
+					/>
+				</View>
+				<View style={styles.marginBottom10}>
+					<Text>Enter 24 characters mnemonic</Text>
+				</View>
+				<View style={styles.marginBottom20}>
+					<InputMultiLines
+						editable={true}
+						style={styles.input_multi_lines} 
+						value={this.props.user.mnemonic}
+						onChangeText={e=>{
+							this.setState({
 
-export default navigator;
+							})
+						}} 
+			        />
+		        </View>
+		        <View>
+			        <Button 
+			        	title="Confirm" 
+			        	onPress={e=>{
+							this.props.navigation.navigate('RecoveryPassword');
+						}} 
+					/>
+				</View>
+			</View>
+		);
+	}
+}
+
+export default connect(state => {
+	return {
+		user: state.user
+	};
+})(Index);

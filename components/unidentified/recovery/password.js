@@ -8,7 +8,7 @@ import styles from '../../styles.js';
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       	title: 'Reset Password'
+	       	title: navigation.getParam('title', 'Recovery/Password'),
 	    };
     };
 	constructor(props){
