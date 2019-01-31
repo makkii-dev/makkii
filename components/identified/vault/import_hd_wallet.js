@@ -14,6 +14,7 @@ import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import Account from "../../../types/account";
 import {add_accounts} from "../../../actions/accounts";
+import {ImportListItem, ImportListfooter} from "../../common";
 const {width} = Dimensions.get('window');
 
 
@@ -48,23 +49,23 @@ class ImportHdWallet extends React.Component {
             hardenedIndex: 0,
             error: false,
             errInfo: '',
-            accountsList: {},
-            footerState: 1,
+            accountsList: [],
+            footerState: 0,
         };
     }
 
     ImportAccount= () => {
         let acc = {};
-        Object.entries(this.state.accountsList).map(([key, value])=>{
+        Object.values(this.state.accountsList).map(value =>{
             if( value.selected ){
-                acc[key] = value.account;
+                acc[value.account.address] = value.account;
             }
         });
         return acc;
     };
 
     componentDidMount() {
-        //setTimeout(()=>{this.fetchAccount(10)},500);
+        // setTimeout(()=>{this.fetchAccount(10)},500);
         InteractionManager.runAfterInteractions(()=>{
             this.fetchAccount(10)
         });
@@ -84,8 +85,9 @@ class ImportHdWallet extends React.Component {
     }
     fetchAccount(n){
         //fetch n Accounts from MasterKey;
-        AionAccount.recoverAccount(this.props.user.mnemonic).then(
-            masterKey => {
+        return new Promise((resolve, reject) => {
+            try{
+                let masterKey = AionAccount.recoverAccount(this.props.user.mnemonic)
                 let accounts = {};
                 let i = this.state.hardenedIndex;
                 let sum = 0;
@@ -99,24 +101,29 @@ class ImportHdWallet extends React.Component {
                     acc.type = '[local]';
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
                         sum = sum + 1;
-                        accounts[acc.address] = {'account': acc, 'selected': false};
+                        accounts[acc.address] = {'account': acc, 'selected': false}
                     }
                     i = i + 1;
                 }
-                this.setState({
-                    isLoading: false,
-                    accountsList: Object.assign({}, this.state.accountsList, accounts),
-                    hardenedIndex: this.state.hardenedIndex + n,
-                    footerState: 0,
-                });
-            }, err => {
-                this.setState({
-                    error: true,
-                    errInfo: err.toString(),
-                });
+                resolve({'accountsList': accounts, 'hardenedIndex':this.state.hardenedIndex + n })
+            }catch (e) {
+                reject(e)
             }
-        )
+        }).then(value => {
+            this.setState({
+                isLoading: false,
+                accountsList: Object.assign(this.state.accountsList, value.accountsList),
+                hardenedIndex: value.hardenedIndex,
+                footerState: 0,
+            });
+        },err=>{
+            this.setState({
+                error: true,
+                errInfo: err.toString(),
+            });
+        });
     }
+
     _onEndReached(){
         // if not in fetching account
         if (this.state.footerState !== 0){
@@ -125,18 +132,17 @@ class ImportHdWallet extends React.Component {
         // set footer state
         this.setState({
             footerState: 2,
-        },()=>{
-            this.fetchAccount(5);
-        });
+        },()=>{setTimeout(()=>this.fetchAccount(5),500)});
+        console.log('after')
     }
 
-    _handleSelectBox(item){
-        let newItem = {...item, 'selected': !item.selected};
+    changeSelect(item){
+        console.log('changeSelect');
         let {accountsList} = this.state;
-        let tmpList = {};
-        tmpList[newItem.account.address] = newItem;
+        item.selected = !item.selected;
+        accountsList[item.account.address] = item;
         this.setState({
-            accountsList: Object.assign({}, accountsList, tmpList)
+            accountsList
         });
     }
 
@@ -165,63 +171,32 @@ class ImportHdWallet extends React.Component {
     }
 
 
-    _renderItem=({item, index}) => {
-        let cbImage = item.selected? require('../../../assets/cb_enabled.png') : require('../../../assets/cb_disabled.png');
-        let address = item.account.address;
-        return (
-            <View style={styles.itemContainer}>
-                <TouchableOpacity onPress={e=>{
-                    this._handleSelectBox(item);
-                }} style={styles.itemContainer}>
-                    <Image source={cbImage} style={styles.itemImage}/>
-                    <Text style={styles.itemText}>{address.substring(0, 10) + '...'+ address.substring(address.length-10)}</Text>
-                </TouchableOpacity>
-            </View>
-        )
-    };
-
-    _renderFooter=()=>{
-        if (this.state.footerState === 1) {
-            return (
-                <View style={{height:30,alignItems:'center',justifyContent:'flex-start',}}>
-                    <Text style={{color:'#999999',fontSize:14,marginTop:5,marginBottom:5,}}>
-                        No More Accounts
-                    </Text>
-                </View>
-            );
-        } else if(this.state.footerState === 2) {
-            return (
-                <View style={styles.footer}>
-                    <ActivityIndicator style={{paddingRight: 10}}/>
-                    <Text>Fetching accounts</Text>
-                </View>
-            );
-        } else if(this.state.footerState === 0){
-            return (
-                <View style={styles.footer}>
-                    <Text></Text>
-                </View>
-            );
-        }
-    };
-
     renderData(){
-        let renderLists = Object.values(this.state.accountsList).map(value => value);
-        console.log('[accounts] '+ JSON.stringify(this.state.accountsList));
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={renderLists}
-                    renderItem={this._renderItem}
+                    style={{height: Dimensions.get('window').height-80}}
+                    data={Object.values(this.state.accountsList)}
                     keyExtractor={(item,index)=>index.toString()}
                     ItemSeparatorComponent={()=>(
                         <View style={styles.divider}/>
                     )}
-                    ListFooterComponent={this._renderFooter.bind(this)}
+                    ListFooterComponent={()=>
+                        <ImportListfooter
+                            footerState={this.state.footerState}
+                        />
+                    }
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
-                    extraData={this.state}
+                    extraData={this.state.footerState}
                     getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
+                    renderItem={({item})=>(
+                        <ImportListItem
+                            item={item}
+                            selected={item.selected}
+                            onPress={()=>this.changeSelect(item)}
+                        />
+                    )}
                 />
             </View>
         )
