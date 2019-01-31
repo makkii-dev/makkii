@@ -1,10 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ScrollView, View, TouchableOpacity, Text, Button} from 'react-native';
-import QRCode from 'react-native-qrcode';
+import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio} from 'react-native';
+import QRCode from 'react-native-qrcode-svg';
 import styles from '../../styles.js';
+import {EditableView} from "../../common";
+import {parseDate} from "../../../utils";
+import {update_account_name} from "../../../actions/accounts";
+import {account as action_account} from "../../../actions/account";
+
+Date.prototype.Format = function (fmt) {
+	let o = {
+		"M+": this.getMonth() + 1, //month 
+		"d+": this.getDate(), //day 
+		"h+": this.getHours() % 12, //hour 
+		"m+": this.getMinutes(), //minute 
+		"s+": this.getSeconds(), //seconds 
+		"q+": Math.floor((this.getMonth() + 3) / 3), //quarter 
+		"S": this.getMilliseconds() //milliseconds 
+	};
+	if (/(y+)/.test(fmt))
+		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substring(4 - RegExp.$1.length));
+	for (let k in o){
+		if (new RegExp("(" + k + ")").test(fmt)) {
+			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substring(("" + o[k]).length)));
+		}
+	}
+	fmt = this.getHours() > 12 ? fmt + 'PM' : fmt + 'AM';
+	return fmt;
+};
 
 class Account extends Component {
+
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
@@ -24,42 +50,85 @@ class Account extends Component {
 	        	borderBottomWidth:0,
 	        	elevation: 1,
 	        },
+			headerRight: <View></View>
 	    };
     };
 	constructor(props){
 		super(props);
 	}
 	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.account);
-		this.props.navigation.setParams({
-            title: this.props.account.name
-        });
+
 	}
+	componentWillMount(): void {
+		console.log('[route] ' + this.props.navigation.state.routeName);
+		this.props.navigation.setParams({
+			title: this.props.account.name
+		});
+	}
+
+	_renderTransaction(transaction){
+		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
+		return (
+			<TouchableOpacity
+				onPress={e => {
+					//dispatch(account(this.props.accounts[key]));
+					this.props.navigation.navigate('VaultTransaction');
+				}}
+			>
+				<View style={styles.Transaction.container}>
+					<View style={styles.Transaction.subContainer}>
+						<Text style={{
+							color: 'grey',
+						}}>{ timestamp }</Text>
+						<Text style={{
+							color: 'grey',
+						}}>{ transaction.status }</Text>
+					</View>
+					<View style={styles.Transaction.subContainer}>
+						<Text style={{
+							color: 'grey',
+						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
+						<Text style={{
+							color: 'grey',
+						}}>{ transaction.value.toFixed(2) } Aion</Text>
+					</View>
+				</View>
+			</TouchableOpacity>
+		)
+	}
+	onChangeName = (newName) =>{
+		const {dispatch} = this.props;
+		const key = this.props.account.address;
+		dispatch(update_account_name(key,newName));
+		this.props.navigation.setParams({
+			title: newName
+		});
+	};
+
 	render(){
+
 		return (
 			<View style={{flex:1, justifyContent: 'space-between'}}>
-				<View style={{
-					flex: 1,
-			        flexDirection: 'row',
-			        justifyContent: 'space-between',
-			        padding: 20,
-				}}>
-					<View style={{
-					}}>
-						<View><Text>{ this.props.account.name }</Text></View>
-						<View><Text>{ this.props.account.balance }</Text></View>
+				<View style={styles.Account.summaryContainer}>
+					<View style={styles.Account.summaryLeftContainer}>
+						<EditableView
+							value={this.props.account.name}
+							endInput={this.onChangeName.bind(this)}
+						/>
+						<Text>{ this.props.account.balance } AION</Text>
 					</View>
 					<View>
 						<QRCode
-							value={ this.props.account ? this.props.account.address : '0x00000000000000000000000000000000' }
+							value={this.props.account.address}
 							size={100}
-							bgColor='purple'
-							fgColor='white'
+							color='purple'
+							backgroundColor='white'
 						/>
 					</View>
 				</View>
-				<View><Text>{ this.props.account.address }</Text></View>
+				<View style={styles.Account.addressView}>
+					<Text style={{fontSize:10, textAlign:'auto'}}>{ this.props.account.address }</Text>
+				</View>
 				<View><Text>{ this.props.account.type }</Text></View>
 				<View style={{
 					flex: 1,
@@ -77,58 +146,23 @@ class Account extends Component {
 						onPress={()=>console.log('RECEIVE')}
 					/>
 				</View>
-				<ScrollView>
-					{
-						Object.keys(this.props.account.transactions).map(key => {
-						    return (
-						    	<TouchableOpacity
-						    		key={ key }
-						  			onPress={e => {
-						  				//dispatch(account(this.props.accounts[key]));
-						  				this.props.navigation.navigate('VaultTransaction');
-						  			}}
-					  			>
-							  		<View 
-							  			style={{
-								  			backgroundColor: '#ffffff',
-								  			padding: 20,
-								  			marginBottom: 1,
-								  		}}
-							  		>
-								  		<View style={{
-								  			flex: 1,
-									        flexDirection: 'row',
-									        justifyContent: 'space-between',
-								  		}}> 
-								  			<Text style={{
-								  				color: 'grey',
-								  			}}>{ this.props.account.transactions[key].timestamp }</Text>
-									  		<Text style={{
-								  				color: 'grey',
-								  			}}>{ this.props.account.transactions[key].status }</Text>
-								  		</View>
-								  		<View style={{
-								  			flex: 1,
-									        flexDirection: 'row',
-									        justifyContent: 'space-between',
-									        color: 'grey',
-								  		}}> 
-								  			<Text style={{
-								  				color: 'grey',
-								  			}}>{ this.props.account.transactions[key].hash.substring(0, 16) + ' ...' }</Text>
-									  		<Text style={{
-								  				color: 'grey',
-								  			}}>{ this.props.account.transactions[key].value.toFixed(2) }</Text>
-								  		</View>
-							  		</View>
-							  	</TouchableOpacity>	
-					    	);
-						})					
-					}
-				</ScrollView>
+				<FlatList
+					data={Object.values(this.props.account.transactions)}
+					keyExtractor={(item,index)=>index + ''}
+					renderItem={({item})=>this._renderTransaction(item)}
+                    ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
+					ListEmptyComponent={()=>
+						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
+						<Text>No Transaction</Text>
+						</View>}
+				/>
 			</View>
 		)
 	}
 }
 
-export default connect(state => { return ({ account: state.account }); })(Account);
+export default connect(state => {
+	return ({
+		account: state.account,
+	});
+})(Account);

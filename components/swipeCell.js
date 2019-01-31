@@ -148,8 +148,6 @@ export default  class SwipeableRow extends React.Component{
 
     _handleMoveShouldSetPanResponderCapture(evt, gestureState) {
         // Decides whether a swipe is responded to by this component or its child
-        console.log('[swipeEnabled]' + this.props.swipeEnabled);
-        console.log('[isOpen]' + this.props.isOpen);
         if(!this.props.swipeEnabled && !this.props.isOpen){
             return false;
         }

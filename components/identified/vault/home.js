@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
+	Alert,
 	ScrollView,
 	View,
 	Modal,
@@ -16,6 +17,7 @@ import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
+import { getLedgerMessage } from '../../../utils.js';
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
@@ -23,6 +25,7 @@ const mHeight = 220;
 const top = 100;
 
 class Home extends Component {
+
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	        header: null
@@ -38,6 +41,10 @@ class Home extends Component {
 		};
 
 	}
+
+	shouldComponentUpdate(nextProps, nextState): boolean {
+		return this.props !== nextProps || this.state !== nextState;
+	}
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
@@ -46,6 +53,21 @@ class Home extends Component {
 	onImportLedger=()=> {
 		console.log("click import ledger.");
 		this.loadingView.show('Connecting to Ledger...');
+
+		wallet.listDevice().then((deviceList) => {
+			if (deviceList.length <= 0) {
+				this.loadingView.hide();
+				Alert.alert('Error', 'No connected Ledger device!');
+			} else {
+				wallet.getAccount(0).then(account => {
+					this.loadingView.hide();
+					this.props.navigation.navigate('VaultImportLedger');
+				}, error => {
+					this.loadingView.hide();
+					Alert.alert('Error', getLedgerMessage(error.code));
+				});
+			}
+		});
 	}
 
 	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};
@@ -76,7 +98,9 @@ class Home extends Component {
 			},
 			{
 				title:'Private Key',
-				onPress:()=>console.log('123'),
+				onPress:()=>{
+					navigation.navigate('VaultImportPrivateKey');
+				},
 				image:require('../../../assets/key.png'),
 			},
 			{
@@ -183,7 +207,7 @@ class Home extends Component {
 							});
 							return;
 						}
-						dispatch(account(this.props.accounts[item.key]));
+						dispatch(account(this.props.accounts[item.address]));
 						this.props.navigation.navigate('VaultAccount');
 					}}
 				>
@@ -205,10 +229,7 @@ class Home extends Component {
 	};
 
 	render(){
-		let dataArray = Object.keys(this.props.accounts).map(key => {
-			return {...this.props.accounts[key], key: key}
-		});
-
+		console.log('[store accounts]',this.props.accounts);
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
@@ -216,8 +237,8 @@ class Home extends Component {
 					style={{flex:1}}
 					renderItem={({item})=>this._renderListItem(item)}
 					scrollEnabled={this.state.scrollEnabled}
-					data={dataArray}
-					keyExtractor={(item)=>item.key}
+					data={Object.values(this.props.accounts)}
+					keyExtractor={(item, index)=>index + ''}
 					onScroll={(e)=>{
 						this.setState({
 							openRowKey: null,

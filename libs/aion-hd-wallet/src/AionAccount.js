@@ -22,9 +22,7 @@ export class AionAccount {
             }
             try {
                 const keyPair = Ed25519Key.fromSecretKey(secretKey);
-                resolve(
-                    Object.assign(keyPair, {address: Crypto.toHex(keyPair.address)})
-                );
+                resolve( {address: Crypto.toHex(keyPair.address)} );
             }catch (e) {
                 reject(e)
             }

@@ -147,5 +147,37 @@ export default styles = {
 			marginBottom:10,
 			marginTop: 10,
 		}
+	},
+	Account:{
+		summaryContainer:{
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			padding: 20,
+		},
+		summaryLeftContainer:{
+			justifyContent: 'space-between',
+			padding: 10,
+			alignItems: 'flex-start'
+		},
+		addressView: {
+			margin: 30,
+			justifyContent: 'flex-start',
+		}
+	},
+	Transaction:{
+		container:{
+			flexDirection: 'column',
+			flex:1,
+			padding: 10,
+			backgroundColor: "#fff",
+			height: 80,
+			justifyContent: 'space-between',
+		},
+		subContainer:{
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems:'center',
+			flex:1,
+		}
 	}
 };

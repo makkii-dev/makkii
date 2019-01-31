@@ -1,10 +1,11 @@
 export default class Transaction {
 	constructor() {
-		hash = '';
-        from = '';
-        to = '';
-        value = 0;
-        block = 0;
-        timestamp = Date.now();
+		this.hash = '';
+        this.from = '';
+        this.to = '';
+        this.value = 0;
+        this.block = 0;
+        this.timestamp = Date.now();
+        this.status = 'PENDING';
     }
 } 
