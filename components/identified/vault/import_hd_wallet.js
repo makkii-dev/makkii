@@ -50,13 +50,13 @@ class ImportHdWallet extends React.Component {
             error: false,
             errInfo: '',
             accountsList: [],
-            footerState: 1,
+            footerState: 0,
         };
     }
 
     ImportAccount= () => {
         let acc = {};
-        this.state.accountsList.forEach(value =>{
+        Object.values(this.state.accountsList).map(value =>{
             if( value.selected ){
                 acc[value.account.address] = value.account;
             }
@@ -83,12 +83,12 @@ class ImportHdWallet extends React.Component {
     isAccountIsAlreadyImport(address){
         return typeof this.props.accounts[address] !== 'undefined';
     }
-    async fetchAccount(n){
+    fetchAccount(n){
         //fetch n Accounts from MasterKey;
-        return  new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try{
                 let masterKey = AionAccount.recoverAccount(this.props.user.mnemonic)
-                let accounts = [];
+                let accounts = {};
                 let i = this.state.hardenedIndex;
                 let sum = 0;
                 while (sum < n) {
@@ -101,26 +101,29 @@ class ImportHdWallet extends React.Component {
                     acc.type = '[local]';
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
                         sum = sum + 1;
-                        accounts.push({'account': acc, 'selected': false});
+                        accounts[acc.address] = {'account': acc, 'selected': false}
                     }
                     i = i + 1;
                 }
-                this.setState({
-                    isLoading: false,
-                    accountsList: this.state.accountsList.concat(accounts),
-                    hardenedIndex: this.state.hardenedIndex + n,
-                    footerState: 0,
-                });
-                resolve()
+                resolve({'accountsList': accounts, 'hardenedIndex':this.state.hardenedIndex + n })
             }catch (e) {
-                this.setState({
-                    error: true,
-                    errInfo: e.toString(),
-                });
                 reject(e)
             }
+        }).then(value => {
+            this.setState({
+                isLoading: false,
+                accountsList: Object.assign(this.state.accountsList, value.accountsList),
+                hardenedIndex: value.hardenedIndex,
+                footerState: 0,
+            });
+        },err=>{
+            this.setState({
+                error: true,
+                errInfo: err.toString(),
+            });
         });
     }
+
     _onEndReached(){
         // if not in fetching account
         if (this.state.footerState !== 0){
@@ -129,14 +132,15 @@ class ImportHdWallet extends React.Component {
         // set footer state
         this.setState({
             footerState: 2,
-        });
-        this.fetchAccount(5);
+        },()=>{setTimeout(()=>this.fetchAccount(5),500)});
         console.log('after')
     }
 
-    changeSelect(index){
+    changeSelect(item){
+        console.log('changeSelect');
         let {accountsList} = this.state;
-        accountsList[index].selected = !accountsList[index].selected
+        item.selected = !item.selected;
+        accountsList[item.account.address] = item;
         this.setState({
             accountsList
         });
@@ -171,7 +175,8 @@ class ImportHdWallet extends React.Component {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={this.state.accountsList}
+                    style={{height: Dimensions.get('window').height-80}}
+                    data={Object.values(this.state.accountsList)}
                     keyExtractor={(item,index)=>index.toString()}
                     ItemSeparatorComponent={()=>(
                         <View style={styles.divider}/>
@@ -183,13 +188,13 @@ class ImportHdWallet extends React.Component {
                     }
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
-                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                     extraData={this.state.footerState}
-                    renderItem={({item,index})=>(
+                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
+                    renderItem={({item})=>(
                         <ImportListItem
                             item={item}
                             selected={item.selected}
-                            onPress={()=>this.changeSelect(index)}
+                            onPress={()=>this.changeSelect(item)}
                         />
                     )}
                 />

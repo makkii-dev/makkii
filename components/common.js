@@ -117,11 +117,14 @@ class ComponentPassword extends Component {
 	}
 }
 
-class ImportListItem extends Component {
-	shouldComponentUpdate(nextProps,nextState): boolean {
-		return this.props.item !== nextProps.item || this.props.selected !== nextProps.selected;
+class ImportListItem extends React.Component {
+
+	shouldComponentUpdate(nextProps, nextState, nextContext): boolean {
+		return this.props.selected !== nextProps.selected;
 	}
+
 	render(){
+		console.log('render Item')
 		const {item} = this.props;
 		const cbImage =  this.props.selected? require('../assets/cb_enabled.png') : require('../assets/cb_disabled.png');
 		const address = item.account.address;

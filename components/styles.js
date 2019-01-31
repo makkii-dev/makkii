@@ -129,6 +129,7 @@ export default styles = {
 	ImportList:{
 		container:{
 			flex:1,
+			height: 80,
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
 			alignItems: 'center',
