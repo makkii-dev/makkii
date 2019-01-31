@@ -24,7 +24,6 @@ import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js'; 
 
 // screens
-import Test from './components/test.js';
 import Identified from './components/identified/index.js';
 import Unidentified from './components/unidentified/index.js';
 
@@ -46,11 +45,9 @@ store.dispatch(accounts_ledger(data.accounts_ledger));
 store.dispatch(dapps(data.dapps));
 
 const Container = createAppContainer(createSwitchNavigator({
-	Test: { screen: Test },
 	Identified:  { screen: Identified },
 	Unidentified: { screen: Unidentified }
 }, {
-	//initialRouteName: "Test", 
 	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "Unidentified",
 	resetOnBlur: true,
 	backBehavior: 'none',

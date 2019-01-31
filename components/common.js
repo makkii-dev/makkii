@@ -2,13 +2,13 @@ import React,{ Component } from 'react';
 import { View, TextInput, Text, Image, StyleSheet } from 'react-native';
 import styles from './styles.js'
 
-class Logo extends Component{
+class ComponentLogo extends Component{
 	render(){
 		return(
 			<Image
 				style={{
-					width:120,
-					height:120,
+					width:60,
+					height:60,
 				}}
 				source={require('../assets/wallet.png')} 
 			/>
@@ -111,7 +111,7 @@ class ComponentPassword extends Component {
 }
 
 module.exports = {
-	Logo,
+	ComponentLogo,
 	Input,
 	InputMultiLines,
 	ComponentPassword

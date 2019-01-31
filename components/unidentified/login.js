@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native';
-import { Logo, ComponentPassword } from '../common.js';
+import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { ComponentLogo, ComponentPassword } from '../common.js';
 import langs from '../langs.js';
 import styles from '../styles.js';
 
@@ -17,37 +17,33 @@ class Login extends Component {
 		super(props);
 		this.state = {
 			password: '',
-			secure: true,
 		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.user);
-		//this.input.focus();
 	}
 	render(){
 		return (
-			<KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={200}>
+			<View style={styles.container}>
 				<View style={{
-					flex:1,
-					justifyContent:'center',
-					alignItems: 'center',
-					marginTop: 180,
-					marginBottom: 100,
+					padding: 40,
+					justifyContent: 'center',
+    				alignItems: 'center',
 				}}>
-					<Logo />
+					<ComponentLogo />
 				</View>
-				<View style={{padding:5}}>
+				<View style={styles.marginBottom10}>
 					<ComponentPassword
 						value={ this.state.value_password }
-						onChange={ val =>{
+						onChange={e=>{
 							this.setState({
-								value_password: val
+								password: e
 							});
 						}}
 					/>
 				</View>
-				<View style={{padding:5}}>
+				<View style={styles.marginBottom20}>
 				    <Button
 						title="Login"
 						onPress={(e)=>{
@@ -59,8 +55,7 @@ class Login extends Component {
 					flex: 1,
 					flexDirection: 'row',
         			justifyContent: 'space-between',
-					height: 50,
-					padding: 10
+					height: 40,
 				}}>
 					<TouchableOpacity
 						onPress={()=>{
@@ -77,7 +72,7 @@ class Login extends Component {
 						<Text>Recovery</Text>
 					</TouchableOpacity>
 				</View>
-			</KeyboardAvoidingView>
+			</View>
 		);
 	}
 }
