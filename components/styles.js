@@ -163,7 +163,9 @@ export default styles = {
 			alignItems: 'flex-start'
 		},
 		addressView: {
-			margin: 30,
+			paddingLeft: 30,
+			paddingRight: 40,
+			flexDirection: 'row',
 			justifyContent: 'flex-start',
 		}
 	},
