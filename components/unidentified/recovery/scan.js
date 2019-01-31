@@ -10,6 +10,7 @@ class RecoveryScan extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
 	}
 	render(){
 		const { dispatch } = this.props;

@@ -16,6 +16,7 @@ class Password extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
 		this.props.navigation.setParams({
 			title: 'Recovery/Password',
 		});

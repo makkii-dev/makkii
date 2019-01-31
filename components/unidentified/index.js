@@ -12,8 +12,8 @@ const Unidentified = createStackNavigator({
   	Recovery: {screen: Recovery, navigationOptions: {header: null}}
 }, {
 	  //initialRouteName: 'Login', 
-	  initialRouteName: 'Register', 
-	  //initialRouteName: 'Recovery',
+	  //initialRouteName: 'Register', 
+	  initialRouteName: 'Recovery',
 });
 
 export default connect(state => { return state; })(Unidentified);

@@ -15,6 +15,7 @@ class Home extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
 		this.props.navigation.setParams({
 			title: 'Recovery/Home',
 		});
@@ -25,7 +26,7 @@ class Home extends Component {
 			<View style={styles.container}>
 				<View style={styles.marginBottom20}>
 					<Button 
-						title="Scan" 
+						title="Scan"  
 						onPress={e=>{
 							this.props.navigation.navigate('RecoveryScan');
 						}} 
@@ -36,8 +37,8 @@ class Home extends Component {
 				</View>
 				<View style={styles.marginBottom20}>
 					<InputMultiLines
-						editable={false}
-						style={styles.input_multi_lines}
+						editable={true}
+						style={styles.input_multi_lines} 
 						value={this.props.user.mnemonic}
 						onChangeText={e=>{
 							this.setState({

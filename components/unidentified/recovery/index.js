@@ -9,7 +9,7 @@ import styles from '../../styles.js';
 const navigator = createStackNavigator({
     RecoveryHome: {screen: Home, navigationOptions: {headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle}},
     RecoveryPassword: {screen: Password, navigationOptions: {headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle}},
-    RecoveryScan: {screen: Scan, navigationOptions: {headerStyle: styles.headerStyle, headerTitleStyle: styles.headerTitleStyle}},
+    RecoveryScan: {screen: Scan, navigationOptions: {header:null}}, 
 }, {
     initialRouteName: "RecoveryHome",
     //initialRouteName: "RecoveryPassword",
