@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import { Button, View, Text } from 'react-native';
-import { ComponentPassword } from '../common.js';
+import { ComponentPassword } from '../../common.js';
 import { connect } from 'react-redux';
-import { user } from '../../actions/user.js';
-import langs from '../langs.js';
-import styles from '../styles.js';
+import { user } from '../../../actions/user.js';
+import styles from '../../styles.js';
 
-class RecoveryPassword extends Component {
+class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: 'Reset Password'
@@ -17,6 +16,10 @@ class RecoveryPassword extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
+		this.props.navigation.setParams({
+			title: 'Recovery/Password',
+		});
 	}
 	render(){
 		return (
@@ -47,4 +50,4 @@ class RecoveryPassword extends Component {
 	}
 }
 
-export default connect(state => { return { user: state.user };})(RecoveryPassword);
+export default connect(state => { return { user: state.user };})(Password);

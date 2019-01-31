@@ -2,22 +2,15 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity } from 'react-native';
 //import { Camera, Permissions } from 'expo';
-import { user } from '../../actions/user.js';
+import { user } from '../../../actions/user.js';
 
 class RecoveryScan extends Component {
-	static navigationOptions = ({ navigation }) => {
-	    return {
-	       	title: 'Recovery',
-	       	headerStyle: {
-	       		display: 'none'
-	       	}
-	    };
-    };
 	constructor(props){
 		super(props);
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		console.log(this.props.user);
 	}
 	render(){
 		const { dispatch } = this.props;
