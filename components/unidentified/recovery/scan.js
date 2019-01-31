@@ -2,17 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity } from 'react-native';
 //import { Camera, Permissions } from 'expo';
-import { user } from '../../actions/user.js';
+import { user } from '../../../actions/user.js';
 
 class RecoveryScan extends Component {
-	static navigationOptions = ({ navigation }) => {
-	    return {
-	       	title: 'Recovery',
-	       	headerStyle: {
-	       		display: 'none'
-	       	}
-	    };
-    };
 	constructor(props){
 		super(props);
 	}

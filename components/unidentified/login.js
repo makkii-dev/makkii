@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, TouchableOpacity } from 'react-native';
 import { ComponentLogo, ComponentPassword } from '../common.js';
-import langs from '../langs.js';
 import styles from '../styles.js';
 
 class Login extends Component {

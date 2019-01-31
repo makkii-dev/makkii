@@ -37,7 +37,7 @@ const store = createStore(combineReducers({
 	setting:         reducer_setting,
 	user:            reducer_user,
 }));
-
+ 
 // dummy data
 import data from './data.js';
 store.dispatch(accounts(data.accounts));
@@ -49,12 +49,11 @@ const Container = createAppContainer(createSwitchNavigator({
 	Unidentified: { screen: Unidentified }
 }, {
 	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "Unidentified",
-	resetOnBlur: true,
-	backBehavior: 'none',
+	//resetOnBlur: true,
+	//backBehavior: 'none',
 }));
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 	render() {
 		return (
 			<Provider store={store}>
