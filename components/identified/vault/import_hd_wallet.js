@@ -49,7 +49,7 @@ class ImportHdWallet extends React.Component {
             hardenedIndex: 0,
             error: false,
             errInfo: '',
-            accountsList: [],
+            accountsList: {},
             footerState: 0,
         };
     }

@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio} from 'react-native';
 import styles from './styles.js'
 
 class Logo extends Component{
@@ -167,11 +167,67 @@ class ImportListfooter extends React.PureComponent {
 	}
 }
 
+class EditableView extends  React.PureComponent {
+
+	static defaultProps={
+		value: 'Account Name',
+		color: 'black',
+		endInput: ()=>{},
+	};
+	constructor(props){
+		super(props);
+		this.state={
+			value:this.props.value,
+			editable:false,
+		};
+		this.textInputRef=null;
+	}
+	_onPress(){
+		const {editable} = this.state;
+		this.setState({
+			editable: !editable,
+		},()=>{
+			if (this.state.editable){
+				this.textInputRef.focus();
+			}else {
+				this.textInputRef.blur();
+				this.props.endInput(this.state.value);
+			}
+		})
+	}
+
+	render(){
+		return(
+			<View style={{flexDirection: 'row',alignItems: 'center'}}>
+				<View style={{marginRight: 30}}>
+					<TextInput
+						ref={ref=>this.textInputRef=ref}
+						numberOfLines={1}
+						value={this.state.value}
+						editable={this.state.editable}
+						style={{color:this.props.color, padding:0}}
+						onChangeText={value=>this.setState({value})}
+					/>
+					{
+						this.state.editable?<View style={{backgroundColor:'#000',height:1/ PixelRatio.get()}}/>:null
+					}
+				</View>
+				<TouchableOpacity onPress={()=>this._onPress()} style={{right: 0, position:'absolute'}}>
+					<Image source={require('../assets/edit.png')} style={{width:20,height:20}}/>
+				</TouchableOpacity>
+			</View>
+		)
+	}
+}
+
+
+
 module.exports = {
 	Logo,
 	Input,
 	InputMultiLines,
 	ComponentPassword,
 	ImportListItem,
-	ImportListfooter
+	ImportListfooter,
+	EditableView
 };

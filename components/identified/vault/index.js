@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 const navigator = createStackNavigator({
-    VaultAccount: { screen: Account, navigationOptions: { headerStyle: styles.headerStyle }  },
+    VaultAccount: { screen: Account },
     VaultHome: { screen: Home, navigationOptions: { headerStyle: styles.headerStyle }  },
     VaultImportLedger: { screen: ImportLedger, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultImportPrivateKey: { screen: ImportPrivateKey, navigationOptions: { headerStyle: styles.headerStyle }  },

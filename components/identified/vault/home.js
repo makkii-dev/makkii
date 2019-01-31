@@ -23,6 +23,7 @@ const mHeight = 220;
 const top = 100;
 
 class Home extends Component {
+
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	        header: null
@@ -38,6 +39,10 @@ class Home extends Component {
 		};
 
 	}
+
+	shouldComponentUpdate(nextProps, nextState): boolean {
+		return this.props !== nextProps || this.state !== nextState;
+	}
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
@@ -46,7 +51,7 @@ class Home extends Component {
 	onImportLedger=()=> {
 		console.log("click import ledger.");
 		this.loadingView.show('Connecting to Ledger...');
-	}
+	};
 
 	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};
 
@@ -183,7 +188,7 @@ class Home extends Component {
 							});
 							return;
 						}
-						dispatch(account(this.props.accounts[item.key]));
+						dispatch(account(this.props.accounts[item.address]));
 						this.props.navigation.navigate('VaultAccount');
 					}}
 				>
@@ -205,10 +210,7 @@ class Home extends Component {
 	};
 
 	render(){
-		let dataArray = Object.keys(this.props.accounts).map(key => {
-			return {...this.props.accounts[key], key: key}
-		});
-
+		console.log('[store accounts]',this.props.accounts);
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
@@ -216,8 +218,8 @@ class Home extends Component {
 					style={{flex:1}}
 					renderItem={({item})=>this._renderListItem(item)}
 					scrollEnabled={this.state.scrollEnabled}
-					data={dataArray}
-					keyExtractor={(item)=>item.key}
+					data={Object.values(this.props.accounts)}
+					keyExtractor={(item, index)=>index + ''}
 					onScroll={(e)=>{
 						this.setState({
 							openRowKey: null,
