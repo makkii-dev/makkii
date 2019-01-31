@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
+	Alert,
 	ScrollView,
 	View,
 	Modal,
@@ -16,6 +17,7 @@ import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
+import { getLedgerMessage } from '../../../utils.js';
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
@@ -46,6 +48,23 @@ class Home extends Component {
 	onImportLedger=()=> {
 		console.log("click import ledger.");
 		this.loadingView.show('Connecting to Ledger...');
+		wallet.listDevice().then((deviceList) => {
+			if (deviceList.length <= 0) {
+				this.loadingView.hide();
+				Alert.alert('Error', 'No connected Ledger device!');
+			} else {
+				wallet.getAccounts(0, 10).then(accounts => {
+					console.log(JSON.stringify(accounts));
+					this.loadingView.hide();
+					this.props.navigation.navigate('VaultImportLedger', {
+						"accounts": accounts,
+					});
+				}, error => {
+					this.loadingView.hide();
+					Alert.alert('Error', getLedgerMessage(error.code));
+				});
+			}
+		});
 	}
 
 	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};

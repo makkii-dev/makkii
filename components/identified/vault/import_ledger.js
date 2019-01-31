@@ -19,6 +19,9 @@ class ImportLedger extends Component {
     };
 	constructor(props){
 		super(props);
+
+		const { navigation } = this.props;
+		console.log(navigation.state.params.accounts);
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
