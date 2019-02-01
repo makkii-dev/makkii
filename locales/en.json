@@ -1,0 +1,39 @@
+{
+    "about": {
+        "title": "About",
+        "version_label": "Version",
+        "version_update_button": "Version Update",
+        "terms_label": "Chiaon Terms of Service",
+        "policy_label": "Privacy Policy",
+        "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
+        "version_latest": "Your version is already up to date."
+    },
+    "password": {
+        "title": "Password",
+        "current_password_label": "Current Password",
+        "new_password_label" : "New Password",
+        "confirm_password_label": "Confirm Password",
+        "password_format": "Password must be 8-16 characters and contains numbers, letters and sepcial characters.",
+        "hint_old_password": "Enter old password",
+        "hint_new_password": "Enter new password",
+        "hint_confirm_password": "Enter new password again"
+    },
+    "service_configuration": {
+        "title": "Service Configuration",
+        "label_api_server": "Wallet Api Server",
+        "label_dapp_server": "DApps Server",
+        "hint_api_server": "Enter wallet api server uri",
+        "hint_dapp_server": "Enter dapps server uri",
+        "invalid_wallet_server_url": "Invalid wallet server url",
+        "invalid_dapp_server_url": "Invalid dapp server url"
+    },
+    "app_name": "MAKKI",
+    "logout": "Sign Out",
+    "update_button": "Update",
+    "save_button": "Save",
+    "toast_update_success": "Update successfully",
+    "alert_title_error": "Error",
+    "invalid_old_password": "Old password is incorrect",
+    "invalid_new_password": "New password is invalid",
+    "inconsistent_passwords": "Confirmed password and new password are different"
+}
