@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-i18n')
     compile project(':react-native-aion-hw-wallet')
     compile project(':react-native-svg')
     compile project(':react-native-randombytes')

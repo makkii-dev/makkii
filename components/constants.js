@@ -1,4 +1,4 @@
-export default constants = {
+module.exports = {
 	BRAND: 'MAKKI',
-	ACCOUNT_TYPES: ['local', 'import', 'ledger']
-};
+	DEFAULT_ACCOUNT_NAME: 'Account',
+}

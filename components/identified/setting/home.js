@@ -4,6 +4,7 @@ import { Dimensions, View, Button, StyleSheet } from 'react-native';
 import styles from '../../styles.js';
 import AionCell from '../../cell.js';
 import { user_signout } from '../../../actions/user.js';
+import { strings } from '../../../locales/i18n';
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -39,7 +40,7 @@ class Home extends Component {
 			}}>
 				<View>
                     <AionCell
-                        title='Password'
+                        title={strings('password.title')}
                         onClick={() => {
                             this.props.navigation.navigate('SettingUpdatePassword');
                         }}
@@ -57,7 +58,7 @@ class Home extends Component {
                         }}
                     />
                     <AionCell
-                        title='About'
+                        title={strings('about.title')}
                         onClick={() => {
                             this.props.navigation.navigate('SettingAbout');
                         }}
@@ -66,7 +67,7 @@ class Home extends Component {
 						marginTop: 20
 					}}/>
                     <AionCell
-						title='Sign Out'
+						title={strings('logout')}
 						onClick={() => {
 							const { dispatch } = this.props;
 							dispatch(user_signout());

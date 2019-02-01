@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button } from 'react-native';
-import { Logo } from '../../common.js';
+import { ComponentLogo } from '../../common.js';
 import styles from '../../styles.js';
 import constants from '../../constants.js';
 import AionCell from '../../cell.js';
 import Toast from '../../toast.js';
+import { strings } from '../../../locales/i18n';
 
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -20,7 +21,7 @@ class About extends Component {
 				flex: 1
 			},
 			headerRight: (<View></View>),
-			title: 'About'
+			title: strings('about.title')
 	    };
     };
 	constructor(props){
@@ -29,9 +30,6 @@ class About extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
-		this.props.navigation.setParams({
-			title: 'ABOUT',
-		});
 	}
 	render(){
 		return (
@@ -47,23 +45,23 @@ class About extends Component {
     				alignItems: 'center',					
 					marginBottom: 20,
 				}}>
-					<Logo />
+					<ComponentLogo />
 					<Text style={{
 						marginTop: 10,
 						fontWeight: 'bold',
 						fontSize: 26,
                         color: 'black',
-					}}>{ constants.BRAND }</Text>
+					}}>{ strings('app_name') }</Text>
 					<Text style={{
 						fontSize: 20,
 						color: 'black',
-					}}>Version 0.1.0</Text>
+					}}>{strings('about.version_label')} 0.1.0</Text>
 				</View>
 				<View style={ styles.marginBottom80 }>
 					<AionCell
-						title='Version Update'
+						title={strings('about.version_update_button')}
 						onClick={() => {
-							this.refs.toast.show('Your version is already the latest.');
+							this.refs.toast.show(strings('about.version_latest'));
 						}}
 					/>
 				</View>
@@ -72,13 +70,13 @@ class About extends Component {
                     alignItems: 'center'
 				}}>
 					<Text style={{ color: 'blue', }}>
-                        Chaion Terms of Service
+						{strings('about.terms_label')}
 					</Text>
 					<Text style={{ color: 'blue', }}>
-						Privacy Policy
+						{strings('about.policy_label')}
 					</Text>
 					<Text style={styles.center_text}>
-						Copyright ©2019 Chaion. All Rights Reserved.
+						{strings('about.copyright_label')}
 					</Text>
 				</View>
                 <Toast

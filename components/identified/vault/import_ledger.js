@@ -12,12 +12,12 @@ import {
     Alert
 } from 'react-native';
 import {connect} from 'react-redux';
-import Account from "../../../types/account";
 import {add_accounts} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
-const {width} = Dimensions.get('window');
 import wallet from 'react-native-aion-hw-wallet';
-import { getLedgerMessage } from '../../../utils.js';
+import {getLedgerMessage} from '../../../utils.js';
+import {DEFAULT_ACCOUNT_NAME} from '../../constants.js'; 
+const {width} = Dimensions.get('window');
 
 class ImportLedger extends React.Component {
     static navigationOptions = ({navigation})=> {
@@ -90,11 +90,12 @@ class ImportLedger extends React.Component {
             return;
         }
         wallet.getAccount(i).then(account => {
-            let acc = new Account();
+            let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = this.props.user.default_account_name;
+            acc.name = DEFAULT_ACCOUNT_NAME;
             acc.type = '[ledger]';
+            acc.transactions = {};
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
                 accounts[acc.address] = {'account': acc, 'selected': false}

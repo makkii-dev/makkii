@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { validatePrivateKey } from '../../../utils';
-import Account from '../../../types/account';
 import {add_accounts} from "../../../actions/accounts";
 import {AionAccount} from "../../../libs/aion-hd-wallet";
+import {DEFAULT_ACCOUNT_NAME} from '../../constants.js'; 
 
 class ImportPrivateKey extends Component {
 
@@ -35,11 +35,12 @@ class ImportPrivateKey extends Component {
 	    if (validatePrivateKey(this.state.private_key)) {
     		AionAccount.importAccount(this.state.private_key).then(address => {
 				let acc = {};
-				let account = new Account();
+				let account = {};
 				account.address = address.address;
 				account.private_key = this.state.private_key;
-				account.name = this.props.user.default_account_name;
+				account.name = DEFAULT_ACCOUNT_NAME;
 				account.type = '[pk]';
+				account.transactions = {};
 				acc[account.address] = account;
 				console.log('add account:');
 				console.log(acc);

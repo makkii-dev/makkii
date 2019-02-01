@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio} from 'react-native';
 import styles from './styles.js';
 import PropTypes from 'prop-types';
+
 class ComponentLogo extends Component{
 	render(){
 		return(
@@ -87,31 +88,34 @@ class ComponentPassword extends Component {
 	}
 	render(){
 		return (
-			<View style={ styles.password.view }>
+			<View style={styles.password.view}>
 				<TextInput
-					style={ styles.password.text_input }
+					style={styles.password.text_input}
 					placeholder={this.props.placeholder}
-			        onChangeText={ val => {
-			        	this.props.onChange(val);
+			        onChangeText={e=>{
+			        	this.props.onChange(e);
 			        }}
-			        secureTextEntry={ this.state.secure }
-			        value={ this.props.value }
+			    	onBlur={e=>{
+			    		this.setState({
+			    			secure: true
+			    		});	
+			    	}}
+			        secureTextEntry={this.state.secure}
+			        value={this.props.value}
 			    />
-			    {this.props.supportVisibility &&
-				    <Text
-				    	style={ styles.password.text }
-				    	onPress={ e =>{
-				    		this.setState({
-				    			secure: !this.state.secure
-				    		});
-				    	}}
-				    >
-				    	{
-				    		this.state.secure ?
-				    		'SHOW' : 'HIDE'
-				    	}
-				    </Text>
-				}
+			    <Text
+			    	style={styles.password.text}
+			    	onPress={e=>{
+			    		this.setState({
+			    			secure: !this.state.secure
+			    		});
+			    	}}
+			    >
+			    	{
+			    		this.state.secure ?
+			    		'SHOW' : 'HIDE'
+			    	}
+			    </Text> 
 		    </View>
 		);
 	}
