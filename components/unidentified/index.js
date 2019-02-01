@@ -16,12 +16,20 @@ const Unidentified = createStackNavigator({
   	RecoveryPassword: {screen: RecoveryPassword, navigationOptions: {headerStyle:styles.headerStyle, headerTitleStyle:styles.headerTitleStyle}},
   	RecoveryScan: {screen: RecoveryScan, navigationOptions: {header: null}},
 }, {
-	  //initialRouteName: 'Login', 
-	  initialRouteName: 'Register',
-	  //initialRouteName: 'RegisterMnemonic', 
-	  //initialRouteName: 'Recovery',
-	  //initialRouteName: 'RecoveryPassword',
-	  //initialRouteName: 'RecoveryScan',
+    	initialRouteName: 'Login',  
+	    //initialRouteName: 'Register',
+	    //initialRouteName: 'RegisterMnemonic', 
+	    //initialRouteName: 'Recovery',
+	    //initialRouteName: 'RecoveryPassword',
+	    //initialRouteName: 'RecoveryScan',
+	    swipeEnabled: false,
+    	animationEnabled: false,
+    	lazy: true,
+    	transitionConfig: () => ({
+			transitionSpec: {
+				duration: 0,
+			},
+    	}),
 });
 
 export default connect(state => { return state; })(Unidentified);
