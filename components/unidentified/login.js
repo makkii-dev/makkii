@@ -34,7 +34,7 @@ class Login extends Component {
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword
-						value={ this.state.value_password }
+						value={this.state.value_password}
 						onChange={e=>{
 							this.setState({
 								password: e
@@ -45,7 +45,7 @@ class Login extends Component {
 				<View style={styles.marginBottom20}>
 				    <Button
 						title="Login"
-						onPress={(e)=>{
+						onPress={e=>{
 							this.props.navigation.navigate('Vault');
 						}}
 					/>
@@ -57,14 +57,14 @@ class Login extends Component {
 					height: 40,
 				}}>
 					<TouchableOpacity
-						onPress={()=>{
+						onPress={e=>{ 
 							this.props.navigation.navigate('Register')
 						}}
 					>
 						<Text>Register</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
-						onPress={()=>{
+						onPress={e=>{
 							this.props.navigation.navigate('Recovery')
 						}}
 					>

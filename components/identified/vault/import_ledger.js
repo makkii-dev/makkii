@@ -12,7 +12,6 @@ import {
     Alert
 } from 'react-native';
 import {connect} from 'react-redux';
-import Account from "../../../types/account";
 import {add_accounts} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
 const {width} = Dimensions.get('window');
@@ -90,11 +89,12 @@ class ImportLedger extends React.Component {
             return;
         }
         wallet.getAccount(i).then(account => {
-            let acc = new Account();
+            let acc = {};
             acc.address = account.address;
             acc.balance = 0;
             acc.name = this.props.user.default_account_name;
             acc.type = '[ledger]';
+            acc.transactions = {};
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
                 accounts[acc.address] = {'account': acc, 'selected': false}

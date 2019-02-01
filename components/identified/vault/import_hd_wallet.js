@@ -12,7 +12,6 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
-import Account from "../../../types/account";
 import {add_accounts} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
 const {width} = Dimensions.get('window');
@@ -93,12 +92,13 @@ class ImportHdWallet extends React.Component {
                 let sum = 0;
                 while (sum < n) {
                     let getAcc = masterKey.deriveHardened(i);
-                    let acc = new Account();
+                    let acc = {};
                     acc.address = getAcc.address;
                     acc.private_key = getAcc.private_key;
                     acc.balance = 0;
                     acc.name = this.props.user.default_account_name;
                     acc.type = '[local]';
+                    acc.transactions = {};
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
                         sum = sum + 1;
                         accounts[acc.address] = {'account': acc, 'selected': false}

@@ -18,10 +18,7 @@ class Index extends Component {
 		this.state = { 
 			password: '',            
 			password_confirm: '',
-		};
-		let mnemonic = generateMnemonic();
-		console.log(JSON.stringify(AionAccount.recoverAccount(mnemonic)));
-		console.log('---------------------------------');
+		}; 
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
