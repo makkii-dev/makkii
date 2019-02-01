@@ -6,7 +6,6 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 
 // actions
-import { ui }              from './actions/ui.js';
 import { accounts }        from './actions/accounts.js';
 import { accounts_ledger } from './actions/accounts_ledger.js';
 import { account }         from './actions/account.js';
@@ -15,7 +14,6 @@ import { setting }         from './actions/setting.js';
 import { user, user_signout } from './actions/user.js';
  
 // reducers
-import reducer_ui              from './reducers/ui';
 import reducer_accounts        from './reducers/accounts.js';
 import reducer_accounts_ledger from './reducers/accounts_ledger.js';
 import reducer_account         from './reducers/account.js'; 
@@ -29,7 +27,6 @@ import Unidentified from './components/unidentified/index.js';
 
 // init
 const store = createStore(combineReducers({
-	ui:              reducer_ui,
 	accounts:        reducer_accounts,
 	accounts_ledger: reducer_accounts_ledger,
 	account:         reducer_account,
