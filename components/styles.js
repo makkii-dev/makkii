@@ -102,7 +102,6 @@ export default styles = {
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
-			paddingTop: 5,
 			paddingRight: 45,
 			borderColor: BORDER_COLOR,
 			borderBottomWidth: 1,

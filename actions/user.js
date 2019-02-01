@@ -2,7 +2,7 @@ const USER = 'USER';
 function user(user){ return { type: USER, user }; }
 
 const USER_REGISTER = 'USER_REGISTER';
-function user_register(password){ return { type: USER_REGISTER, password }; }
+function user_register(hashed_password, mnemonic){ return { type: USER_REGISTER, hashed_password, mnemonic }; }
 
 const USER_SIGNOUT = 'USER_SIGNOUT';
 function user_signout(){ return { type: USER_SIGNOUT }; } 

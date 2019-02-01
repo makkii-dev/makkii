@@ -1,6 +1,3 @@
-import bip39 from 'bip39'
-import {hashPassword} from '../utils.js';
-
 import { 
 	USER,  
 	USER_REGISTER, 
@@ -21,8 +18,8 @@ export default function user(state = init, action){
 		case USER_REGISTER:
 			return Object.assign({}, state, {
 	        	timestamp: Date.now(),
-	        	hashed_password: hashPassword(action.password),
-	        	mnemonic: bip39.generateMnemonic() 
+	        	hashed_password: action.hashed_password,
+	        	mnemonic: action.mnemonic 
 	      	});
 		case USER_SIGNOUT:
 			return Object.assign({}, state, {

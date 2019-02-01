@@ -40,8 +40,8 @@ const store = createStore(combineReducers({
  
 // dummy data
 import data from './data.js';
-store.dispatch(accounts(data.accounts));
-store.dispatch(accounts_ledger(data.accounts_ledger));
+//store.dispatch(accounts(data.accounts));
+//store.dispatch(accounts_ledger(data.accounts_ledger));
 store.dispatch(dapps(data.dapps));
 
 const Container = createAppContainer(createSwitchNavigator({
