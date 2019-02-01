@@ -2,25 +2,26 @@ import React,{ Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button } from 'react-native';
 import { ComponentPassword } from '../../common.js';
-import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user_register } from '../../../actions/user.js';
-import bip39 from 'bip39'
-
-bip39.generateMnemonic() 
+import { generateMnemonic, validateMnemonic, AionAccount } from '../../../libs/aion-hd-wallet/index.js';
+import styles from '../../styles.js';
 
 class Index extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       	title: navigation.getParam('title', 'Register'),
+	       	title: navigation.getParam('title', 'Register'), 
 	    };  
     };
 	constructor(props){ 
-		super(props);
-		this.state = {
-			password: '',
+		super(props); 
+		this.state = { 
+			password: '',            
 			password_confirm: '',
 		};
+		let mnemonic = generateMnemonic();
+		console.log(JSON.stringify(AionAccount.recoverAccount(mnemonic)));
+		console.log('---------------------------------');
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -70,7 +71,7 @@ class Index extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								dispatch(user_register(hashPassword(this.state.password), bip39.generateMnemonic()));
+								dispatch(user_register(hashPassword(this.state.password), generateMnemonic()));
 								this.setState({
 									password: '',
 									password_confirm: '',

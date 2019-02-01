@@ -25,6 +25,7 @@ if (typeof localStorage !== 'undefined') {
 // crypto is loaded first, so it can populate global.crypto
 // require('crypto')
 
+// fix randomBytes
 if (require('./package.json').dependencies['react-native-crypto']) {
     // important that this comes before require('crypto')
     const algos = require('browserify-sign/algos')

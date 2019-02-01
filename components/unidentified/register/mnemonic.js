@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, Clipboard } from 'react-native';
 import { InputMultiLines } from '../../common.js';
+import {  } from '../../../libs/aion-hd-wallet/index.js';
 import styles from '../../styles.js';
  
 class Mnemonic extends Component {
@@ -18,7 +19,10 @@ class Mnemonic extends Component {
 		console.log(this.props.user);
 		this.props.navigation.setParams({
 			title: 'Register/Mnemonic',
-		}); 
+		});
+		if(this.props.user.mnemonic !== ''){
+
+		} 
 	}
 	render(){
 		return (
@@ -45,6 +49,7 @@ class Mnemonic extends Component {
 					<Button
 						title="I'M DONE"
 						onPress={e=>{
+
 							this.props.navigation.navigate('Vault');
 						}}
 					/>

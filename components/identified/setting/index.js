@@ -54,7 +54,4 @@ navigator.navigationOptions = ({ navigation }) => {
     return navigationOptions;
 };
 
-console.log('here');
-console.log(navigator.navigationOptions);
-
 export default navigator;
