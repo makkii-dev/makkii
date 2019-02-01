@@ -17,7 +17,7 @@ const Unidentified = createStackNavigator({
   	RecoveryScan: {screen: RecoveryScan, navigationOptions: {header: null}},
 }, {
 	  //initialRouteName: 'Login', 
-	  //initialRouteName: 'Register',
+	  initialRouteName: 'Register',
 	  //initialRouteName: 'RegisterMnemonic', 
 	  //initialRouteName: 'Recovery',
 	  //initialRouteName: 'RecoveryPassword',

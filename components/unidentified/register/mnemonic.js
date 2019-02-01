@@ -44,7 +44,7 @@ class Mnemonic extends Component {
 				<View>
 					<Button
 						title="I'M DONE"
-						onPress={()=>{
+						onPress={e=>{
 							this.props.navigation.navigate('Vault');
 						}}
 					/>

@@ -103,8 +103,6 @@ export default styles = {
 			fontWeight: 'normal',
 			lineHeight: 20,
 			paddingTop: 5,
-			paddingBottom: 5,
-			paddingLeft: 5,
 			paddingRight: 45,
 			borderColor: BORDER_COLOR,
 			borderBottomWidth: 1,

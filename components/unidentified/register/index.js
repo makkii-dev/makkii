@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { View, Text, Button } from 'react-native';
 import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
-import { validatePassword, hashPassword } from '../../../utils.js';
+import { validatePassword } from '../../../utils.js';
 import { user_register } from '../../../actions/user.js';
 
 class Index extends Component {
@@ -67,11 +67,7 @@ class Index extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								dispatch(
-									user_register(
-										hashPassword(this.state.password)
-									)
-								);
+								dispatch(user_register(this.state.password));
 								this.setState({
 									password: '',
 									password_confirm: '',
