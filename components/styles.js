@@ -15,12 +15,9 @@ export default styles = {
       	fontSize: 18,
     },
   	container: {
-  		paddingLeft: 20,
-  		paddingRight: 20,
-  		paddingTop: 40,
-  		paddingBottom: 40,
-		justifyContent:'flex-start',
   		flex:1,
+  		// backgroundColor: '#F1F3F4',
+  		padding: 20,
   	},
   	center: {
   		flex: 1,
@@ -163,7 +160,9 @@ export default styles = {
 			alignItems: 'flex-start'
 		},
 		addressView: {
-			margin: 30,
+			paddingLeft: 30,
+			paddingRight: 40,
+			flexDirection: 'row',
 			justifyContent: 'flex-start',
 		}
 	},

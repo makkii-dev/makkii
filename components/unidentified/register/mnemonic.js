@@ -7,7 +7,7 @@ import styles from '../../styles.js';
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       title: navigation.getParam('title', ''),
+	       title: navigation.getParam('title', 'Register/Mnemonic'),
 	    };
     };
 	constructor(props){
@@ -17,8 +17,8 @@ class Mnemonic extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.user);
 		this.props.navigation.setParams({
-			title: 'Mnemonic',
-		});
+			title: 'Register/Mnemonic',
+		}); 
 	}
 	render(){
 		return (

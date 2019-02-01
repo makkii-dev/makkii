@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import styles from '../../styles.js';
 import {EditableView} from "../../common";
 import {parseDate} from "../../../utils";
 import {update_account_name} from "../../../actions/accounts";
-import {account as action_account} from "../../../actions/account";
+import Toast from '../../toast.js';
 
 Date.prototype.Format = function (fmt) {
 	let o = {
@@ -114,6 +114,7 @@ class Account extends Component {
 						<EditableView
 							value={this.props.account.name}
 							endInput={this.onChangeName.bind(this)}
+							type={this.props.account.type}
 						/>
 						<Text>{ this.props.account.balance } AION</Text>
 					</View>
@@ -127,9 +128,15 @@ class Account extends Component {
 					</View>
 				</View>
 				<View style={styles.Account.addressView}>
-					<Text style={{fontSize:10, textAlign:'auto'}}>{ this.props.account.address }</Text>
+					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.props.account.address }</Text>
+					<TouchableOpacity onPress={()=>{
+						Clipboard.setString(this.props.account.address);
+						this.refs.toast.show('Copied to clipboard successfully');
+					}}>
+						<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
+					</TouchableOpacity>
 				</View>
-				<View><Text>{ this.props.account.type }</Text></View>
+
 				<View style={{
 					flex: 1,
 			        flexDirection: 'row',
@@ -155,6 +162,11 @@ class Account extends Component {
 						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
 						<Text>No Transaction</Text>
 						</View>}
+				/>
+				<Toast
+					ref={"toast"}
+					duration={Toast.Duration.short}
+					onDismiss={() => {}}
 				/>
 			</View>
 		)

@@ -172,6 +172,7 @@ class EditableView extends  React.PureComponent {
 	static defaultProps={
 		value: 'Account Name',
 		color: 'black',
+		type: 0,
 		endInput: ()=>{},
 	};
 	constructor(props){
@@ -197,8 +198,20 @@ class EditableView extends  React.PureComponent {
 	}
 
 	render(){
+		let typeImage ='';
+		switch (this.props.type) {
+			case '[ledger]':
+				typeImage = require('../assets/ledger_logo.png');
+				break;
+			case '[pk]':
+				typeImage = require('../assets/key.png');
+				break;
+			default:
+				typeImage = require('../assets/aion_logo.png')
+		}
 		return(
 			<View style={{flexDirection: 'row',alignItems: 'center'}}>
+				<Image source={typeImage} style={{width:20, height:20, marginRight:10}}/>
 				<View style={{marginRight: 30}}>
 					<TextInput
 						ref={ref=>this.textInputRef=ref}
@@ -213,7 +226,10 @@ class EditableView extends  React.PureComponent {
 					}
 				</View>
 				<TouchableOpacity onPress={()=>this._onPress()} style={{right: 0, position:'absolute'}}>
-					<Image source={require('../assets/edit.png')} style={{width:20,height:20}}/>
+					{
+						this.state.editable?<Image source={require('../assets/ok-s.png')} style={{width:20,height:20}}/>
+						:<Image source={require('../assets/edit.png')} style={{width:20,height:20}}/>
+					}
 				</TouchableOpacity>
 			</View>
 		)
