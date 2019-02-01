@@ -6,12 +6,13 @@ import styles from '../../styles.js';
 import { setting } from '../../../actions/setting.js';
 import Toast from '../../toast.js';
 import { validateUrl } from '../../../utils.js';
+import {strings} from "../../../locales/i18n";
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-	        title: 'Service Configuration',
+	        title: strings('service_configuration.title'),
 			headerStyle: {
 				backgroundColor: '#eeeeee'
 			},
@@ -40,7 +41,7 @@ class Services extends Component {
 		return (
 			<View style={styles.container}>	
 				<View>
-					<Text>Wallet Server</Text>
+					<Text>{strings('service_configuration.label_api_server')}</Text>
 				</View>
 				<View style={styles.marginBottom20}>
 					<Input
@@ -57,7 +58,7 @@ class Services extends Component {
 					/>
 				</View>
 				<View>
-					<Text>DApps Server</Text>
+					<Text>{strings('service_configuration.label_dapp_server')}</Text>
 				</View>
 				<View style={styles.marginBottom40}>
 					<Input
@@ -75,7 +76,7 @@ class Services extends Component {
 				</View>
 				<View>
 					<Button 
-						title="Save"
+						title={strings('save_button')}
 						onPress={ () => this.saveConfigurations() }
 					/>
 				</View>
@@ -90,12 +91,12 @@ class Services extends Component {
 
 	saveConfigurations=() => {
 		if (!validateUrl(this.state.kernel_server)) {
-			Alert.alert('Error', 'Wallet server url is invalid');
+			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_wallet_server_url'));
 			return;
 		}
 
 		if (!validateUrl(this.state.dapps_server)) {
-			Alert.alert('Error', 'DApps server url is invalid');
+			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
 			return;
 		}
 
@@ -108,7 +109,7 @@ class Services extends Component {
 		dispatch(setting(newSettings));
 
 		console.log("update service configuration successfully.");
-		this.refs.toast.show("Update configuration successfully");
+		this.refs.toast.show(strings('toast_update_success'));
 	}
 
 }

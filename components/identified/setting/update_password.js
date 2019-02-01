@@ -6,6 +6,7 @@ import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user } from '../../../actions/user.js';
 import Toast from '../../toast.js';
+import { strings } from '../../../locales/i18n';
 
 class UpdatePassword extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -20,7 +21,7 @@ class UpdatePassword extends Component {
 		        flex: 1
 		    },
 		    headerRight: (<View></View>),
-		    title: 'Password'
+		    title: strings('password.title')
 	    }
     }
 
@@ -42,15 +43,15 @@ class UpdatePassword extends Component {
 		return (
 			<View style={styles.container}>	
 				<View style={styles.marginBottom40}>
-					<Text style={styles.instruction}>Password must be 8-16 characters and contains both numbers and letters/special characters.</Text>
+					<Text style={styles.instruction}>{strings('password.password_format')}</Text>
 				</View>
 				<View>
-					<Text>Current Password</Text>
+					<Text>{strings('password.current_password_label')}</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword 
 						value={this.state.password_current} 
-						placeholder='Enter old password'
+						placeholder={strings('password.hint_old_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
@@ -60,12 +61,12 @@ class UpdatePassword extends Component {
 					/>
 				</View>
 				<View>
-					<Text>New Password</Text>
+					<Text>{strings('password.new_password_label')}</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword
 						value={this.state.password_new} 
-						placeholder='Enter new password'
+						placeholder={strings('password.hint_new_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
@@ -75,12 +76,12 @@ class UpdatePassword extends Component {
 					/>
 				</View>
 				<View>
-					<Text>Confirm Password</Text>
+					<Text>{strings('password.confirm_password_label')}</Text>
 				</View>
 				<View style={styles.marginBottom40}>
 					<ComponentPassword 
 						value={this.state.password_confirm}
-						placeholder='Enter new password again'
+						placeholder={strings('password.hint_confirm_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
@@ -91,7 +92,7 @@ class UpdatePassword extends Component {
 				</View>
 				<View>
 					<Button 
-						title="update"
+						title={strings('update_button')}
 						onPress={() => this.updatePassword()}
 					/>
 				</View>
@@ -109,19 +110,19 @@ class UpdatePassword extends Component {
 		// validate old password correctness
 		let hashedPassword = hashPassword(this.state.password_current);
 		if (hashedPassword != this.props.user.hashed_password) {
-			Alert.alert('Error', 'Old password is incorrect');
+			Alert.alert(strings('alert_title_error'), strings('invalid_old_password'));
 			return;
 		}
 
 		// validate new password format
 		if (!validatePassword(this.state.password_new)) {
-			Alert.alert('Error', 'New password is invalid.');
+			Alert.alert(strings('alert_title_error'), strings('invalid_new_password'));
 			return;
 		}
 
 		// validate new password and confirmed password consistency
 		if (this.state.password_new != this.state.password_confirm) {
-			Alert.alert('Error', 'Confirmed password and new password are different.');
+			Alert.alert(strings('alert_title_error'), strings('inconsistent_passwords'));
 			return;
 		}
 
@@ -133,7 +134,7 @@ class UpdatePassword extends Component {
 		dispatch(user(updateUser));
 
         console.log("update password successfully.");
-        this.refs.toast.show('Update password successfully');
+        this.refs.toast.show(strings('toast_update_successfully'));
 	}
 
 }

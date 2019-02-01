@@ -1,0 +1,38 @@
+{
+  "about": {
+    "title": "关于",
+    "version_label": "版本号",
+    "version_update_button": "版本更新",
+    "terms_label": "骂起软件许可及服务协议",
+    "policy_label": "骂起隐私保护指引",
+    "version_latest": "当前已是最新版"
+  },
+  "password": {
+    "title": "密码",
+    "current_password_label": "原密码",
+    "new_password_label": "新密码",
+    "confirm_password_label": "确认密码",
+    "password_format": "密码必须是8-16位的数字、字母、特殊字符组合",
+    "hint_old_password": "请输入原密码",
+    "hint_new_password": "请输入新密码",
+    "hint_confirm_password": "请再次输入新密码"
+  },
+  "service_configuration": {
+    "title": "服务器配置",
+    "label_api_server": "钱包服务器地址",
+    "label_dapp_server": "DApp服务器地址",
+    "hint_api_server": "请输入钱包服务器地址",
+    "hint_dapp_server": "请输入DApp服务器地址",
+    "invalid_wallet_server_url": "钱包服务器地址不正确",
+    "invalid_dapp_server_url": "DApp服务器地址不正确"
+  },
+  "app_name": "骂起",
+  "logout": "退出",
+  "update_button": "提交",
+  "save_button": "保存",
+  "toast_update_success": "提交成功",
+  "alert_title_error": "错误",
+  "invalid_old_password": "旧密码不正确",
+  "invalid_new_password": "新密码格式不正确",
+  "inconsistent_passwords": "确认密码不一致"
+}

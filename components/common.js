@@ -2,7 +2,7 @@ import React,{ Component } from 'react';
 import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio} from 'react-native';
 import styles from './styles.js'
 
-class ComponentLogo extends Component{
+class ComponentLogo extends Component {
 	render(){
 		return(
 			<Image
