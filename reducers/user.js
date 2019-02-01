@@ -8,7 +8,6 @@ const init = {
 	timestamp: 0,  
 	hashed_password: '',    
 	mnemonic: '',
-	default_account_name: 'account',
 };
 
 export default function user(state = init, action){
