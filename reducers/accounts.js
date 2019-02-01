@@ -1,4 +1,4 @@
-import { ACCOUNTS, ADD_ACCOUNTS, UPDATE_ACCOUNT_NAME } from '../actions/accounts.js';
+import { ACCOUNTS, ADD_ACCOUNTS, UPDATE_ACCOUNT_NAME, DEL_ACCOUNT } from '../actions/accounts.js';
 
 export default function accounts(state = {}, action){
 	switch(action.type){
@@ -12,6 +12,14 @@ export default function accounts(state = {}, action){
 				state[action.key].name = action.newName;
 			}
 			return Object.assign({}, state);
+		case DEL_ACCOUNT:
+			let newState = {};
+			Object.keys(state).map(key=>{
+				if (key!==action.key){
+					newState = {...newState, [key]: state[key]}
+				}
+			});
+			return Object.assign({}, newState);
 		default:
 			return state;
 	}

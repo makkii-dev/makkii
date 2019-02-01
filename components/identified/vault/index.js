@@ -29,8 +29,8 @@ const navigator = createStackNavigator({
     VaultImportLedger: { screen: ImportLedger, navigationOptions: { headerStyle: styles.headerStyle } },
     VaultImportPrivateKey: { screen: ImportPrivateKey, navigationOptions: { headerStyle: styles.headerStyle }  },
     VaultImportHdWallet:{screen: ImportHdWallet},
-    VaultReceive: { screen: Receive, navigationOptions: { headerStyle: styles.headerStyle } },
-    VaultSend: { screen: Send, navigationOptions: { headerStyle: styles.headerStyle } },
+    VaultReceive: { screen: Receive },
+    VaultSend: { screen: Send },
     VaultTransaction: { screen: Transaction, navigationOptions: { headerStyle: styles.headerStyle } },
 
 }, {

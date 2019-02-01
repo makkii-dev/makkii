@@ -5,7 +5,6 @@ export default class Account {
         this.balance = '';
         this.name = '';
         this.type = '';
-
         this.transactions = {};
     }
 } 
