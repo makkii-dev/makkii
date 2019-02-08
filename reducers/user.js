@@ -1,4 +1,3 @@
-import {AsyncStorage} from 'react-native';
 import { 
 	USER_REGISTER, 
 	USER_SIGNOUT 
@@ -10,20 +9,12 @@ const init = {
 	mnemonic: '',
 };
 
-function save(user){
-	try { 
-		AsyncStorage.setItem('user', JSON.stringify(user));	
-	} catch (error) {   
-		console.log(error);  
-	}
-} 
-
 export default function user(state = init, action){
 	let new_state;
 	switch(action.type){
 		case USER_REGISTER:
 			new_state = Object.assign({}, state, {
-	        	timestamp: Date.now(),
+	        	timestamp: Date.now(), 
 	        	hashed_password: action.hashed_password,
 	        	mnemonic: action.mnemonic 
 	      	});
@@ -38,6 +29,5 @@ export default function user(state = init, action){
 			new_state = state;
 			break;
 	}
-	save(new_state);
 	return new_state;
 };

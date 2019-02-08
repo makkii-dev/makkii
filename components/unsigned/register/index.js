@@ -1,10 +1,10 @@
-import React,{ Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
-import { ComponentPassword } from '../../common.js';
-import { validatePassword, hashPassword } from '../../../utils.js';
-import { user_register } from '../../../actions/user.js';
-import { generateMnemonic, validateMnemonic, AionAccount } from '../../../libs/aion-hd-wallet/index.js';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,Button,AsyncStorage} from 'react-native';
+import {ComponentPassword} from '../../common.js';
+import {validatePassword, hashPassword} from '../../../utils.js';
+import {user_register} from '../../../actions/user.js';
+import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
 import styles from '../../styles.js';
 
 class Index extends Component {
@@ -57,7 +57,7 @@ class Index extends Component {
 						}}
 					/>
 				</View>
-				<View>
+				<View> 
 					<Button
 						title="Register"
 						onPress={e=>{
@@ -68,12 +68,22 @@ class Index extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								dispatch(user_register(hashPassword(this.state.password), generateMnemonic()));
+								let hashed_password = hashPassword(this.state.password);
+								let mnemonic = generateMnemonic();
+								dispatch(user_register(hashed_password, mnemonic));
 								this.setState({
 									password: '',
 									password_confirm: '',
 								});
-								this.props.navigation.navigate('RegisterMnemonic');
+								AsyncStorage.setItem(
+									'user',
+									JSON.stringify({
+										timestamp: Date.now(),
+										hashed_password,
+										mnemonic,
+									})
+								)
+								this.props.navigation.navigate('unsigned_register_mnemonic'); 
 							}
 						}}
 					/>
@@ -83,4 +93,8 @@ class Index extends Component {
 	}
 }
 
-export default connect(state=>{return {user: state.user};})(Index);
+export default connect(state=>{
+	return {
+		user: state.user
+	};
+})(Index);

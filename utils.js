@@ -46,4 +46,3 @@ module.exports = {
     getLedgerMessage: getLedgerMessage,
     validatePrivateKey: validatePrivateKey,
 }
-

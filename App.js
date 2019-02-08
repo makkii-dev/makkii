@@ -1,7 +1,6 @@
 // libs
 import React, {Component} from 'react';
 import {createSwitchNavigator, createAppContainer} from 'react-navigation';
-import {AsyncStorage} from 'react-native';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 
@@ -21,7 +20,7 @@ import reducer_dapps           from './reducers/dapps.js';
 import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js'; 
 
-// stores
+// store
 const store = createStore(combineReducers({
 	accounts:        reducer_accounts,
 	accounts_ledger: reducer_accounts_ledger,
@@ -31,36 +30,22 @@ const store = createStore(combineReducers({
 	user:            reducer_user,
 }));
 
-// load db
-let db_user = AsyncStorage.getItem('user');
-db_user.then(user=>{
-	console.log('[init]');
-	console.log('[store-user] ' + user);  
-}, err=>{  
-	console.log('there'); 
-});   
- 
-// dummy data
-import data from './data.js';
-//store.dispatch(accounts(data.accounts));
-//store.dispatch(accounts_ledger(data.accounts_ledger));
-store.dispatch(dapps(data.dapps));  
-
 // ui 
-import Identified from './components/identified/index.js';
+import splash   from './components/splash.js';
+import signed   from './components/identified/index.js';
 import unsigned from './components/unsigned/index.js';
-const Container = createAppContainer(createSwitchNavigator({
-	Identified:  { screen: Identified },
-	"unsigned": { screen: unsigned }
+const Routes = createAppContainer(createSwitchNavigator({
+	'splash':   { screen: splash }, 
+	'signed':   { screen: signed },  
+	'unsigned': { screen: unsigned },  
 }, {
-	initialRouteName: store.getState().user.hashed_password !== '' ? "Identified" : "unsigned", 
+	initialRouteName: 'splash', 
 }));
-
 export default class App extends Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<Container />
+				<Routes />
 			</Provider>
 		);
 	}
