@@ -58,14 +58,14 @@ class Login extends Component {
 				}}>
 					<TouchableOpacity
 						onPress={e=>{ 
-							this.props.navigation.navigate('Register')
+							this.props.navigation.navigate('unsigned_register')
 						}}
 					>
 						<Text>Register</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={e=>{
-							this.props.navigation.navigate('Recovery')
+							this.props.navigation.navigate('unsigned_recovery')
 						}}
 					>
 						<Text>Recovery</Text>
