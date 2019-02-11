@@ -18,6 +18,9 @@ class Index extends Component {
 		this.state = { 
 			password: '',            
 			password_confirm: '',
+			// alert once if there is data loaded from db when user wanna register new account
+			// user will lose data if register new one
+			alerted: false,
 		}; 
 	}
 	async componentDidMount(){
@@ -57,7 +60,7 @@ class Index extends Component {
 						}}
 					/>
 				</View>
-				<View> 
+				<View>  
 					<Button
 						title="Register"
 						onPress={e=>{
@@ -82,8 +85,10 @@ class Index extends Component {
 										hashed_password,
 										mnemonic,
 									})
-								)
-								this.props.navigation.navigate('unsigned_register_mnemonic'); 
+								);
+								setTimeout(()=>{
+									this.props.navigation.navigate('unsigned_register_mnemonic');	
+								},100); 
 							}
 						}}
 					/>

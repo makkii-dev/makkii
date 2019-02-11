@@ -4,15 +4,16 @@ import {
 } from '../actions/user.js'; 
 
 const init = {
-	timestamp: 0,     
-	hashed_password: '',    
-	mnemonic: '',
+	timestamp: 0, 
+	hashed_password: '',     
+	mnemonic: '',  
 };
 
 export default function user(state = init, action){
 	let new_state;
 	switch(action.type){
 		case USER_REGISTER:
+			console.log('[action] USER_REGISTER ' + JSON.stringify(action));
 			new_state = Object.assign({}, state, {
 	        	timestamp: Date.now(), 
 	        	hashed_password: action.hashed_password,

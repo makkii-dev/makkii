@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Image, AsyncStorage} from 'react-native';
+import {View,Image,AsyncStorage} from 'react-native';
 
 class Splash extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -16,30 +16,27 @@ class Splash extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const { navigate } = this.props.navigation;
+		console.log(this.props.user);
 		AsyncStorage
 			.getItem('user')
-			.then(json_user=>{
-				let user = JSON.parse(json_user);   
-				// TODO: move 60000 to setting;
-				console.log('hashed_password ' + user.hashed_password);
-				console.log('user.timestamp ' + user.timestamp);
-				console.log('now            ' + Date.now());
-				console.log('time diff      ' + (Date.now() - user.timestamp));
-				let keep_signed = user.hashed_password !== '' && (Date.now() - user.timestamp) < 60000; 
-				console.log('[keep_signed] ' + keep_signed);
-				if(keep_signed) {
-					setTimeout(()=>{
-						navigate('Vault');	 
-					}, 1000);   
+			.then(json_user=>{ 
+				if(json_user){
+					let user = JSON.parse(json_user);					
+					// TODO: move 60000 to setting; 
+					if((Date.now() - user.timestamp) < 60000) {
+						setTimeout(()=>{navigate('Vault');}, 1000); 
+						console.log('[db-user] '); 
+					} else {
+						setTimeout(()=>{navigate('unsigned_login');}, 1000);
+						console.log('[db-user] timeout');	
+					}
 				} else {
-					setTimeout(()=>{
-						navigate('unsigned_login');	
-					}, 1000);
+					setTimeout(()=>{navigate('unsigned_login');}, 1000); 
+					console.log('[db-user] new user');
 				} 
-		}, err=>{  
-			console.log('[db-err] ' + err);  
-		});   
-		 
+			}, err=>{  
+				alert(err);  
+			});   		 
 		// // dummy
 		// import data from './data.js'; 
 		// store.dispatch(dapps(data.dapps));
