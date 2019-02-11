@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
-import { ComponentLogo, ComponentPassword } from '../common.js';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,Button,TouchableOpacity,AsyncStorage} from 'react-native';
+import {ComponentLogo,ComponentPassword} from '../common.js';
+import {hashPassword} from '../../utils.js';
+import {user_login} from '../../actions/user.js';
 import styles from '../styles.js';
 
 class Login extends Component {
@@ -23,6 +25,7 @@ class Login extends Component {
 		console.log(this.props.user);
 	}
 	render(){
+		const {dispatch} = this.props;
 		return (
 			<View style={styles.container}>
 				<View style={{
@@ -46,7 +49,22 @@ class Login extends Component {
 				    <Button
 						title="Login"
 						onPress={e=>{
-							this.props.navigation.navigate('Vault');
+							AsyncStorage.getItem('user')
+							.then(json_user=>{
+								if(json_user){
+									let user  = JSON.parse(json_user);
+									if(user.hashed_password === hashPassword(this.state.password)){
+										dispatch(user_login(user.hashed_password, user.mnemonic));
+										this.props.navigation.navigate('Vault');	
+									} else {
+										alert('Invalid password');
+									}
+								} else {
+									alert('user not found');
+								}
+							},err=>{
+								alert(err);
+							});
 						}}
 					/>
 				</View>
