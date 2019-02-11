@@ -18,26 +18,28 @@ class Splash extends Component {
 		const { navigate } = this.props.navigation;
 		AsyncStorage
 			.getItem('user') 
-			.then(json_user=>{ 
-				if(json_user){ 
-					let user = JSON.parse(json_user);		 			
-					// TODO: move max_keep_signed to setting;
-					let max_keep_signed = 60000 * 30;  
-					let time_diff = Date.now() - user.timestamp; 
-					console.log('user.timestamp ' + user.timestamp);
-					console.log('Date.now()     ' + Date.now());
-					console.log('time diff      ' + time_diff);
-					if(time_diff < max_keep_signed) {  
-						setTimeout(()=>{navigate('Vault');}, 1000); 
-						console.log('[db-user] keep alive');    
+			.then(json_user=>{
+				setTimeout(()=>{
+					if(json_user){ 
+						let user = JSON.parse(json_user);		 			
+						// TODO: move max_keep_signed to setting;
+						let max_keep_signed = 60000 * 30;  
+						let time_diff = Date.now() - user.timestamp; 
+						console.log('user.timestamp ' + user.timestamp);
+						console.log('Date.now()     ' + Date.now());
+						console.log('time diff      ' + time_diff);
+						if(time_diff < max_keep_signed) {  
+							navigate('Settings');
+							console.log('[db-user] keep alive');    
+						} else {
+							navigate('unsigned_login'); 
+							console.log('[db-user] timeout');	
+						}
 					} else {
-						setTimeout(()=>{navigate('unsigned_login');}, 1000);
-						console.log('[db-user] timeout');	
-					}
-				} else {
-					setTimeout(()=>{navigate('unsigned_register');}, 1000); 
-					console.log('[db-user] new user');
-				} 
+						navigate('unsigned_register');
+						console.log('[db-user] new user');
+					} 
+				}, 1000); 				
 			}, err=>{  
 				alert(err);  
 			}); 
