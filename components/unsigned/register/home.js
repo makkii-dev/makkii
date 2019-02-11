@@ -78,10 +78,8 @@ class Home extends Component {
 									password: '',
 									password_confirm: '',
 								});
-								setTimeout(()=>{
-									this.props.navigation.navigate('unsigned_register_mnemonic');	
-								},100); 
-							}
+								this.props.navigation.navigate('unsigned_register_mnemonic');
+							}   
 						}}
 					/>
 				</View>

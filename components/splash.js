@@ -21,8 +21,8 @@ class Splash extends Component {
 			.then(json_user=>{ 
 				if(json_user){ 
 					let user = JSON.parse(json_user);		 			
-					// TODO: move 60000000 to setting;
-					let max_keep_signed = 60000; 
+					// TODO: move max_keep_signed to setting;
+					let max_keep_signed = 60000 * 30;  
 					let time_diff = Date.now() - user.timestamp; 
 					console.log('user.timestamp ' + user.timestamp);
 					console.log('Date.now()     ' + Date.now());

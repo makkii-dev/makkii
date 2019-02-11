@@ -6,7 +6,7 @@ import RegisterMnemonic from './register/mnemonic.js';
 import Recovery         from './recovery/home.js';
 import RecoveryPassword from './recovery/password.js';
 import RecoveryScan     from './recovery/scan.js';
-import styles from '../styles.js';
+import styles from '../styles.js'; 
 
 const unsigned = createStackNavigator({  
   	"unsigned_login": {screen: Login, navigationOptions: {header: null}}, 
