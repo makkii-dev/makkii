@@ -1,17 +1,17 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,AsyncStorage} from 'react-native';
+import {View,Text,Button} from 'react-native';
 import {ComponentPassword} from '../../common.js';
 import {validatePassword, hashPassword} from '../../../utils.js';
 import {user_register} from '../../../actions/user.js';
 import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
-import styles from '../../styles.js';
+import styles from '../../styles.js';   
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    return {
+	    return {   
 	       	title: navigation.getParam('title', 'Register'), 
-	    };  
+	    };   
     };
 	constructor(props){ 
 		super(props); 
@@ -78,14 +78,6 @@ class Home extends Component {
 									password: '',
 									password_confirm: '',
 								});
-								AsyncStorage.setItem(
-									'user',
-									JSON.stringify({
-										timestamp: Date.now(),
-										hashed_password,
-										mnemonic,
-									})
-								);
 								setTimeout(()=>{
 									this.props.navigation.navigate('unsigned_register_mnemonic');	
 								},100); 

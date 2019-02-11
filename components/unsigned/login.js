@@ -54,8 +54,10 @@ class Login extends Component {
 								if(json_user){
 									let user  = JSON.parse(json_user);
 									if(user.hashed_password === hashPassword(this.state.password)){
-										dispatch(user_login(user.hashed_password, user.mnemonic));
-										this.props.navigation.navigate('Vault');	
+										dispatch(user_login(user.hashed_password, user.mnemonic)); 
+										setTimeout(()=>{
+											this.props.navigation.navigate('Vault');	
+										}, 200); 
 									} else {
 										alert('Invalid password');
 									}

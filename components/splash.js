@@ -12,22 +12,22 @@ class Splash extends Component {
     };
 	constructor(props){
 		super(props); 
-	}
+	} 
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const { navigate } = this.props.navigation;
-		console.log(this.props.user);
 		AsyncStorage
 			.getItem('user') 
 			.then(json_user=>{ 
 				if(json_user){ 
 					let user = JSON.parse(json_user);		 			
-					// TODO: move 60000 to setting;
+					// TODO: move 60000000 to setting;
+					let max_keep_signed = 60000; 
 					let time_diff = Date.now() - user.timestamp; 
 					console.log('user.timestamp ' + user.timestamp);
 					console.log('Date.now()     ' + Date.now());
 					console.log('time diff      ' + time_diff);
-					if(time_diff < 60000) {
+					if(time_diff < max_keep_signed) {  
 						setTimeout(()=>{navigate('Vault');}, 1000); 
 						console.log('[db-user] keep alive');    
 					} else {

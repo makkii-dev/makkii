@@ -8,7 +8,7 @@ import RecoveryPassword from './recovery/password.js';
 import RecoveryScan     from './recovery/scan.js';
 import styles from '../styles.js';
 
-const unsigned = createStackNavigator({ 
+const unsigned = createStackNavigator({  
   	"unsigned_login": {screen: Login, navigationOptions: {header: null}}, 
   	"unsigned_register": {screen: Register, navigationOptions: {headerStyle:styles.headerStyle, headerTitleStyle:styles.headerTitleStyle}},
   	"unsigned_register_mnemonic": {screen: RegisterMnemonic, navigationOptions: {headerStyle:styles.headerStyle, headerTitleStyle:styles.headerTitleStyle}}, 
