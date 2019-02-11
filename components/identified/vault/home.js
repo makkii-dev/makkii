@@ -15,10 +15,11 @@ import {
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
+import { delete_account } from '../../../actions/accounts.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
 import { getLedgerMessage } from '../../../utils.js';
-
+import otherStyles from  '../../styles';
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
@@ -68,7 +69,7 @@ class Home extends Component {
 				});
 			}
 		});
-	}
+	};
 
 	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};
 
@@ -170,9 +171,39 @@ class Home extends Component {
 				scrollEnabled: value,
 		})
 	}
+
+	onDeleteAccount(key){
+		const { dispatch } = this.props;
+		Alert.alert(
+			'WARNING',
+			'Are you sure you want to delete this account?',
+			[
+				{text:'CANCEL',onPress:()=>{}},
+				{text: 'DELETE', onPress:()=>{
+						dispatch(delete_account(key));
+						console.log('delete account: ', key );
+					}}
+				],
+			{cancelable:false}
+		)
+	}
+
 	_renderListItem=(item) => {
 		const { dispatch } = this.props;
-		const Key = item.key;
+		const Key = item.address;
+		let backgroundColor = '';
+		let accountImage = '';
+		switch (item.type) {
+			case '[ledger]':
+				backgroundColor = '#000';
+				accountImage = require('../../../assets/ledger_logo.png');break;
+			case '[pk]':
+				backgroundColor = '#6600ff';
+				accountImage = require('../../../assets/key.png');break;
+			default:
+				backgroundColor = '#3399ff';
+				accountImage = require('../../../assets/aion_logo.png');
+		}
 		return (
 			<SwipeableRow
 				style={{padding:10}}
@@ -190,16 +221,20 @@ class Home extends Component {
 				}}
 				shouldBounceOnMount={true}
 				slideoutView={
-					<View style={styles.listBtnContainer}>
-						<View style={{...styles.listBtn, backgroundColor: 'gray'}}>
-							<Text>HIDE</Text>
+					<TouchableOpacity style={otherStyles.VaultHome.slideOutContainer} onPress={()=>{
+						this.onDeleteAccount(Key);
+					}}>
+						<View style={otherStyles.VaultHome.slideOutContainer}>
+							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'orange'}}>
+								<Text>DELETE</Text>
+							</View>
 						</View>
-					</View>
+					</TouchableOpacity>
 				}
 			>
 				<TouchableOpacity
 					activeOpacity={1}
-					onPress={e => {
+					onPress={() => {
 						if (this.state.openRowKey) {
 							// if one of key is open, close it first
 							this.setState({
@@ -211,14 +246,16 @@ class Home extends Component {
 						this.props.navigation.navigate('VaultAccount');
 					}}
 				>
-					<View style={ styles.listItem }>
-						<View style={styles.listItemLeft}>
-							<Text style={styles.listItemText}>{ item.name }</Text>
-							<Text style={styles.listItemText}>{ item.address.substring(0, 16) + ' ...' }</Text>
+					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
+						<View style={otherStyles.VaultHome.accountLeftView}>
+							<View style={otherStyles.VaultHome.accountNameView}>
+								<Image source={accountImage} style={{width:15, height:15, tintColor:'#fff', marginRight:10}}/>
+								<Text style={styles.listItemText}>{ item.name }</Text>
+							</View>
+							<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 						</View>
-						<View style={styles.listItemRight}>
-							<Text style={styles.listItemText}>{ item.balance }</Text>
-							<Text style={styles.listItemText}>{ item.type }</Text>
+						<View style={otherStyles.VaultHome.accountRightView}>
+							<Text style={styles.listItemText}>{ (item.balance-0).toFixed(4) } AION</Text>
 						</View>
 					</View>
 				</TouchableOpacity>
@@ -229,7 +266,6 @@ class Home extends Component {
 	};
 
 	render(){
-		console.log('[store accounts]',this.props.accounts);
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
@@ -253,7 +289,11 @@ class Home extends Component {
 	}
 }
 
-export default connect(state => { return ({ accounts: state.accounts, ui: state.ui }); })(Home);
+export default connect(state => {
+	return ({
+		accounts: state.accounts,
+		ui: state.ui
+	}); })(Home);
 
 const styles = StyleSheet.create({
 	divider: {
@@ -316,6 +356,7 @@ const styles = StyleSheet.create({
 		width: 20,
 		height:20,
 		marginRight: 10,
+		tintColor: '#fff'
 	},
 	listBtnContainer:{
 		flex:1,
@@ -342,6 +383,6 @@ const styles = StyleSheet.create({
 	    width: 80,
 	},
 	listItemText: {
-		color: 'grey',
+		color: '#fff',
 	}
 });

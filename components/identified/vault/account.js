@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard, Dimensions} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import styles from '../../styles.js';
 import {EditableView} from "../../common";
 import {parseDate} from "../../../utils";
 import {update_account_name} from "../../../actions/accounts";
 import Toast from '../../toast.js';
-
+const {width} = Dimensions.get('window');
 Date.prototype.Format = function (fmt) {
 	let o = {
 		"M+": this.getMonth() + 1, //month 
@@ -90,7 +90,7 @@ class Account extends Component {
 						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
 						<Text style={{
 							color: 'grey',
-						}}>{ transaction.value.toFixed(2) } Aion</Text>
+						}}>{ transaction.value.toFixed(2) } AION</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -106,7 +106,7 @@ class Account extends Component {
 	};
 
 	render(){
-
+		const {navigation} = this.props;
 		return (
 			<View style={{flex:1, justifyContent: 'space-between'}}>
 				<View style={styles.Account.summaryContainer}>
@@ -137,23 +137,22 @@ class Account extends Component {
 					</TouchableOpacity>
 				</View>
 
-				<View style={{
-					flex: 1,
-			        flexDirection: 'row',
-			        justifyContent: 'space-between',
-					alignItems: 'center',
-			        padding: 20,
-				}}>
+				<View style={{...styles.Account.buttonContainer, width:width}}>
 					<Button
 						title="SEND"
-						onPress={()=>console.log('SEND')}
+						onPress={()=>{
+							navigation.navigate('VaultSend');
+						}}
 					/>
 					<Button
 						title="RECEIVE"
-						onPress={()=>console.log('RECEIVE')}
+						onPress={()=>{
+							navigation.navigate('VaultReceive');
+						}}
 					/>
 				</View>
 				<FlatList
+					style={{margin:10}}
 					data={Object.values(this.props.account.transactions)}
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=>this._renderTransaction(item)}

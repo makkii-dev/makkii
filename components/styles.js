@@ -161,6 +161,12 @@ export default styles = {
 			paddingRight: 40,
 			flexDirection: 'row',
 			justifyContent: 'flex-start',
+		},
+		buttonContainer: {
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			padding: 20,
 		}
 	},
 	Transaction:{
@@ -177,6 +183,90 @@ export default styles = {
 			justifyContent: 'space-between',
 			alignItems:'center',
 			flex:1,
+		}
+	},
+	VaultHome:{
+		slideOutContainer:{
+			flex:1,
+			flexDirection: 'row',
+			margin:0,
+			justifyContent: 'flex-end',
+		},
+		slideBtn:{
+			width: 100,
+			justifyContent: 'center',
+			alignItems: 'center',
+			borderRadius: 10
+		},
+		accountContainer:{
+			height: 100,
+			justifyContent: 'space-between',
+			flexDirection: 'row',
+			padding: 10,
+			borderRadius: 10
+		},
+		accountLeftView:{
+			alignItems: 'flex-start',
+			justifyContent: 'space-between',
+			padding: 10,
+			flex:2
+		},
+		accountRightView:{
+			flex:1,
+			justifyContent: 'center',
+			alignItems: 'flex-start'
+		},
+		accountNameView:{
+			flexDirection: 'row',
+			alignItems: 'center'
+		},
+		addressFontStyle:{
+			color:'#fff',
+			fontSize: 10,
+			textAlign: 'auto',
+		}
+	},
+	SendView:{
+		container: {
+			flex:1,
+			justifyContent: 'flex-start',
+			alignItems: 'center'
+		},
+		labelView:{
+			margin: 10,
+			borderColor: '#000',
+			borderWidth: 0.1,
+		},
+		qrcode:{
+			height: 20,
+			width: 20,
+			justifyContent: 'center',
+			alignItems: 'center',
+			margin: 10,
+		},
+		AdvancedBtn:{
+			height:50,
+			paddingLeft: 10,
+			paddingRight: 10,
+			marginRight: 90,
+			marginLeft: 90,
+			backgroundColor:'#6600ff',
+			borderRadius:10,
+			flexDirection: 'row',
+			justifyContent: 'space-between',
+			alignItems: 'center'
+		},
+		SendBtn:{
+			marginBottom: 10,
+			marginRight: 20,
+			marginLeft: 20,
+			marginTop: 20,
+			flexDirection:'row',
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor:'#6600ff',
+			borderRadius:10,
+			height:50,
 		}
 	}
 };

@@ -54,7 +54,7 @@ const RIGHT_SWIPE_THRESHOLD = 30 * SLOW_SPEED_SWIPE_FACTOR;
  * used in a normal ListView. See the renderRow for SwipeableListView to see how
  * to use this component separately.
  */
-export default  class SwipeableRow extends React.Component{
+export default  class SwipeableRow extends React.PureComponent{
 
     constructor(props){
         super(props);
@@ -300,8 +300,9 @@ export default  class SwipeableRow extends React.Component{
                 this._animateToOpenPositionWith(gestureState.vx, horizontalDistance);
             } else {
                 // Swiped right
-                this.props.onClose();
                 this._animateToClosedPosition();
+                this.props.onClose();
+
             }
         } else {
             if (this._previousLeft === CLOSED_LEFT_POSITION) {

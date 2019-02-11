@@ -1,6 +1,7 @@
 export const ACCOUNTS = 'ACCOUNTS';
 export const ADD_ACCOUNTS = 'ADD_ACCOUNTS';
 export const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
+export const DEL_ACCOUNT = 'DEL_ACCOUNT';
 export function accounts(accounts){
 	return {
 		type: ACCOUNTS,
@@ -21,4 +22,12 @@ export function update_account_name(key, newName){
 		key,
 		newName
 	}
+}
+
+export function delete_account(key) {
+	return {
+		type: DEL_ACCOUNT,
+		key,
+	}
+
 }
