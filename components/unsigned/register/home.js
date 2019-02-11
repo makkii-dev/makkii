@@ -7,7 +7,7 @@ import {user_register} from '../../../actions/user.js';
 import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
 import styles from '../../styles.js';
 
-class Index extends Component {
+class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: navigation.getParam('title', 'Register'), 
@@ -102,4 +102,4 @@ export default connect(state=>{
 	return {
 		user: state.user
 	};
-})(Index);
+})(Home);

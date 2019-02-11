@@ -10,7 +10,7 @@ import {accounts_ledger}    from './actions/accounts_ledger.js';
 import {account}            from './actions/account.js';
 import {dapps}              from './actions/dapps.js';
 import {setting}            from './actions/setting.js';
-import {user, user_signout} from './actions/user.js';
+import {user,user_signout} from './actions/user.js';
  
 // reducers
 import reducer_accounts        from './reducers/accounts.js';
@@ -20,7 +20,7 @@ import reducer_dapps           from './reducers/dapps.js';
 import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js'; 
 
-// store
+// store 
 const store = createStore(combineReducers({
 	accounts:        reducer_accounts,
 	accounts_ledger: reducer_accounts_ledger,
@@ -41,6 +41,11 @@ const Routes = createAppContainer(createSwitchNavigator({
 }, {
 	initialRouteName: 'splash', 
 }));
+
+// dummy
+import data from './data.js'; 
+store.dispatch(dapps(data.dapps));
+
 export default class App extends Component {
 	render() {
 		return (

@@ -1,9 +1,9 @@
 import { createStackNavigator } from 'react-navigation';
 import { connect } from 'react-redux';
 import Login            from './login.js';
-import Register         from './register/index.js';
-import RegisterMnemonic from './register/mnemonic.js';
-import Recovery         from './recovery/index.js';
+import Register         from './register/home.js';
+import RegisterMnemonic from './register/mnemonic.js'; 
+import Recovery         from './recovery/home.js';
 import RecoveryPassword from './recovery/password.js';
 import RecoveryScan     from './recovery/scan.js';
 import styles from '../styles.js';
