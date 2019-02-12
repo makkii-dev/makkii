@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, View, Button, StyleSheet } from 'react-native';
 import styles from '../../styles.js';
-import AionCell from '../../cell.js';
+import AionCell from '../../cell.js'; 
 import { user_signout } from '../../../actions/user.js';
 import { strings } from '../../../locales/i18n';
 
@@ -71,7 +71,7 @@ class Home extends Component {
 						onClick={() => {
 							const { dispatch } = this.props;
 							dispatch(user_signout());
-							this.props.navigation.navigate('Unidentified');
+							this.props.navigation.navigate('unsigned_login');
 						}}/>
 				</View>
 			</View>

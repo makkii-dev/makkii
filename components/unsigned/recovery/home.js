@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
 import { InputMultiLines } from '../../common.js';
 import styles from '../../styles.js';
 
-class Index extends Component {
+class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	       	title: navigation.getParam('title', 'Recovery'),
@@ -64,4 +64,4 @@ export default connect(state => {
 	return {
 		user: state.user
 	};
-})(Index);
+})(Home);

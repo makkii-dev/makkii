@@ -1,23 +1,26 @@
-import React,{ Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
-import { ComponentPassword } from '../../common.js';
-import { validatePassword, hashPassword } from '../../../utils.js';
-import { user_register } from '../../../actions/user.js';
-import { generateMnemonic, validateMnemonic, AionAccount } from '../../../libs/aion-hd-wallet/index.js';
-import styles from '../../styles.js';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,Button} from 'react-native';
+import {ComponentPassword} from '../../common.js';
+import {validatePassword, hashPassword} from '../../../utils.js';
+import {user_register} from '../../../actions/user.js';
+import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
+import styles from '../../styles.js';   
 
-class Index extends Component {
+class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    return {
+	    return {   
 	       	title: navigation.getParam('title', 'Register'), 
-	    };  
+	    };   
     };
 	constructor(props){ 
 		super(props); 
 		this.state = { 
 			password: '',            
 			password_confirm: '',
+			// alert once if there is data loaded from db when user wanna register new account
+			// user will lose data if register new one
+			alerted: false,
 		}; 
 	}
 	async componentDidMount(){
@@ -57,7 +60,7 @@ class Index extends Component {
 						}}
 					/>
 				</View>
-				<View>
+				<View>  
 					<Button
 						title="Register"
 						onPress={e=>{
@@ -68,13 +71,15 @@ class Index extends Component {
 							else if (this.state.password !== this.state.password_confirm)
 								alert('Confirm password does not match password!') 
 							else {
-								dispatch(user_register(hashPassword(this.state.password), generateMnemonic()));
+								let hashed_password = hashPassword(this.state.password);
+								let mnemonic = generateMnemonic();
+								dispatch(user_register(hashed_password, mnemonic));
 								this.setState({
 									password: '',
 									password_confirm: '',
 								});
-								this.props.navigation.navigate('RegisterMnemonic');
-							}
+								this.props.navigation.navigate('unsigned_register_mnemonic');
+							}   
 						}}
 					/>
 				</View>
@@ -83,4 +88,8 @@ class Index extends Component {
 	}
 }
 
-export default connect(state=>{return {user: state.user};})(Index);
+export default connect(state=>{
+	return {
+		user: state.user
+	};
+})(Home);

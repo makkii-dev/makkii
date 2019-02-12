@@ -3,6 +3,24 @@ import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndi
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 
+class ComponentTabBar extends Component{
+	render(){
+		return (
+			<View>
+				<View>
+					<Image source={require('../assets/tab_wallet.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
+				</View>
+				<View>
+					<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
+				</View>
+				<View>
+					<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
+				</View>
+			</View>
+		);
+	}
+} 
+
 class ComponentLogo extends Component{
 	render(){
 		return(
@@ -35,12 +53,12 @@ class Input extends Component{
 			        value={ this.props.value }
 			    />
 				{this.props.supportVisibility &&
-				<Text
-					style={styles.input.text}
-					onPress={e => {
-						this.props.onClear(e);
-					}}
-				>CLR</Text>
+					<Text
+						style={styles.input.text}
+						onPress={e => {
+							this.props.onClear(e);
+						}}
+					>CLR</Text>
 				}
 		    </View>
 		);
@@ -122,11 +140,9 @@ class ComponentPassword extends Component {
 }
 
 class ImportListItem extends React.Component {
-
 	shouldComponentUpdate(nextProps, nextState, nextContext): boolean {
 		return this.props.selected !== nextProps.selected;
 	}
-
 	render(){
 		console.log('render Item')
 		const {item} = this.props;

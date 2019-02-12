@@ -76,4 +76,3 @@ module.exports = {
     validateAmount: validateAmount,
     saveImage: saveImage,
 }
-

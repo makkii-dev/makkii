@@ -1,31 +1,52 @@
+import {AsyncStorage} from 'react-native';
+
 import { 
-	USER,  
 	USER_REGISTER, 
+	USER_LOGIN,
 	USER_SIGNOUT 
 } from '../actions/user.js'; 
 
 const init = {
-	timestamp: 0,  
-	hashed_password: '',    
-	mnemonic: 'month million tell whisper damp calm twelve stove sibling tissue brain again',
+	timestamp: 0, 
+	hashed_password: '',     
+	mnemonic: '',  
 };
-
+ 
 export default function user(state = init, action){
+	let new_state;
+	console.log('[action-type] ' + action.type); 
 	switch(action.type){
-		case USER: 
-			return Object.assign({}, action.user);
 		case USER_REGISTER:
-			return Object.assign({}, state, {
-	        	timestamp: Date.now(),
+			new_state = Object.assign({}, state, {
+	        	timestamp: Date.now('milli'), 
 	        	hashed_password: action.hashed_password,
 	        	mnemonic: action.mnemonic 
 	      	});
+	      	AsyncStorage.setItem(
+				'user',
+				JSON.stringify(new_state)
+			);
+	      	break;
+	    case USER_LOGIN:
+			new_state = Object.assign({}, state, {
+	        	timestamp: Date.now('milli'), 
+	        	hashed_password: action.hashed_password,
+	        	mnemonic: action.mnemonic 
+	      	});
+	      	AsyncStorage.setItem(
+				'user',
+				JSON.stringify(new_state)
+			);
+	      	break;  	
 		case USER_SIGNOUT:
-			return Object.assign({}, state, {
+			new_state = Object.assign({}, state, {
 	        	timestamp: 0,
 	        	hashed_password: '',
 	      	});
+	      	break;
 		default: 
-			return state;
+			new_state = state;
+			break;
 	}
+	return new_state;
 };
