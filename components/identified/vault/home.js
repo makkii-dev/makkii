@@ -58,7 +58,7 @@ class Home extends Component {
 					buttonNegative: strings('cancel_button'),
 				}
 			);
-			if (granted == PermissionsAndroid.RESULTS.GRANTED) {
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
 				console.log('storage permission is granted');
 			} else {
 				console.log('storage permission is denied.');
@@ -71,9 +71,9 @@ class Home extends Component {
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
-
 		this.requestStoragePermission();
 	}
+	
 	componentWillMount(): void {
 		InteractionManager.runAfterInteractions(()=> {
 			this.fetchAccountsBalance();
