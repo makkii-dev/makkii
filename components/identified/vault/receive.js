@@ -1,16 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, Text, TouchableOpacity,TextInput, Clipboard} from 'react-native';
-import { TextInputWithLabel } from '../../common.js';
+import {
+	View,
+	Text,
+	Button,
+	Alert,
+	TouchableWithoutFeedback,
+	TouchableOpacity,
+	PermissionsAndroid
+} from 'react-native';
+import { Input } from '../../common.js';
 import styles from '../../styles.js';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from '../../toast.js';
+import {strings} from "../../../locales/i18n";
+import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
+import ContextMenu from '../../contextMenu';
+
 
 class Receive extends Component {
 
 	static navigationOptions=({navigation})=>{
 		return {
-			title: 'RECEIVE',
+			title: strings('receive.title'),
 			headerTitleStyle: {
 				alignItems: 'center',
 				textAlign: 'center',
@@ -22,23 +34,52 @@ class Receive extends Component {
 
 	constructor(props){
 		super(props);
+		this.qrcodeRef = null;
 		this.state={
 			amount: '0',
-			qrCodeValue: this.props.account.address,
+			qrCodeValue: generateQRCode('0', this.props.account.address),
 		}
 	}
-	onChangeAmount(amount){
+
+	onRefresh(){
+	    // validate
+		if (!validateAmount(this.state.amount)) {
+			Alert.alert(strings('alert_title_error'), strings('invalid_amount'));
+			return;
+		}
+
+		// refresh
 		this.setState({
-			amount
+			qrCodeValue: generateQRCode(this.state.amount, this.props.account.address),
 		})
 	}
-	onRefresh(){
-		let obj ={};
-		obj['receiver'] = this.props.account.address;
-		obj['amount'] = this.state.amount;
-		this.setState({
-			qrCodeValue: JSON.stringify(obj),
-		})
+	longPressCode() {
+		if (this.contextMenu) {
+			this.contextMenu.show();
+		}
+	}
+
+	async saveQRCode() {
+		if (this.qrcodeRef) {
+		    // check storage permission first.
+			const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+			console.log("storagePermission: " + storagePermission);
+			if (!storagePermission) {
+				Alert.alert(strings('alert_title_error'), strings('receive.no_permission_save_file'));
+				return;
+			}
+
+			// save image
+			this.qrcodeRef.toDataURL(base64 => {
+                saveImage(base64, 'receive_qrcode_' + Date.now() + ".png").then(imagePath => {
+                    console.log("image path:" + imagePath);
+                    this.refs.toast.show(strings('toast_save_image_success', { path: imagePath}));
+                }, error => {
+                    console.log(error);
+                    Alert.alert(strings('alert_title_error'), strings('error_save_qrcode_image'));
+                });
+			});
+		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -47,47 +88,62 @@ class Receive extends Component {
 	render(){
 		return (
 			<View style={styles.container}>
-				<TextInputWithLabel
-					style={styles.SendView.labelView}
-					leftView={<Text>Amount</Text>}
-					placeholder={'0'}
-					onChangeText={value=>this.onChangeAmount(value)}
-					value={this.state.amount}
-				/>
-				<TouchableOpacity activeOption={1} onPress={()=>this.onRefresh()}>
-					<View style={styles.SendView.SendBtn}>
-						<Text style={{color:'#fff'}}>REFRESH</Text>
-					</View>
-				</TouchableOpacity>
-				<View style={{alignItems: 'center', margin: 10}}>
-					<QRCode
-						value={this.state.qrCodeValue}
-						size={150}
-						color='purple'
-						backgroundColor='white'
-					/>
+				<View style={{marginTop: 40}}>
+					<Text>{strings('receive.label_modify_amount')}</Text>
 				</View>
 				<View>
-					<TextInput
-						style={{borderWidth: 1, borderColor: '#000'}}
-						numberOfLines={3}
-						multiline={true}
-						value={this.props.account.address}
-						editable={false}
+					<Input
+						value={ this.state.amount}
+						supportVisibility={false}
+						onClear={e => {
+
+						}}
+						onChange={e => {
+							this.setState({
+								amount: e,
+							})
+						}}
 					/>
 				</View>
-				<TouchableOpacity activeOption={1} onPress={()=>{
-					Clipboard.setString(this.props.account.address);
-					this.refs.toast.show('Copied to clipboard successfully');
-				}}>
-					<View style={styles.SendView.SendBtn}>
-						<Text style={{color:'#fff'}}>COPY TO CLIPBOARD</Text>
-					</View>
-				</TouchableOpacity>
-				<Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-					onDismiss={() => {}}
+				<View style={styles.marginTop20}>
+					<Button
+						title={strings('refresh_button')}
+						onPress={ () => this.onRefresh() }
+					/>
+				</View>
+                <View style={{alignItems: 'center', marginTop: 80, marginBottom: 20}}>
+                    <Text style={styles.instruction}>{strings('receive.instruction')}</Text>
+                </View>
+				<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
+                    <View style={{alignItems: 'center', margin: 10}} >
+                        <QRCode
+                            value={this.state.qrCodeValue}
+                            size={200}
+                            getRef={ref => {
+                            	this.qrcodeRef = ref;
+                            }}
+                        />
+                    </View>
+                </TouchableWithoutFeedback>
+				<View style={{alignItems: 'center', margin: 10}}>
+					<Text style={{ color: 'blue', }} onPress={() => this.saveQRCode()}>
+						{strings('receive.button_save_receive_code')}
+					</Text>
+				</View>
+                <Toast
+                    ref={"toast"}
+                    duration={Toast.Duration.short}
+                    onDismiss={() => {}}
+                />
+				<ContextMenu
+					message={strings('save_file_button')}
+					onClick={() => {
+						this.contextMenu.hide();
+						this.saveQRCode();
+					}}
+                    ref={(element) => {
+                        this.contextMenu = element;
+					}}
 				/>
 			</View>
 		)

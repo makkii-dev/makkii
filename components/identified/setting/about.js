@@ -11,17 +11,14 @@ import { strings } from '../../../locales/i18n';
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
-	    return {
-			headerStyle: {
-				backgroundColor: '#eeeeee'
-			},
+	    return {			
 			headerTitleStyle: {
 				alignSelf: 'center',
 				textAlign: 'center',
 				flex: 1
 			},
 			headerRight: (<View></View>),
-			title: strings('about.title')
+			title: strings('about.title') 
 	    };
     };
 	constructor(props){
@@ -89,4 +86,4 @@ class About extends Component {
 	}
 }
 
-export default connect(state => { console.log(state); return ({ setting: state.setting }); })(About);
+export default connect(state => { return ({ setting: state.setting }); })(About);

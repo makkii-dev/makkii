@@ -5,6 +5,7 @@ import { InputMultiLines } from '../../common.js';
 import styles from '../../styles.js';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from '../../toast.js';
+import { strings } from '../../../locales/i18n';
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -19,7 +20,7 @@ class Recovery extends Component {
 				flex: 1
 			},
 			headerRight: (<View></View>),
-			title: 'Recovery Phrase'
+			title: strings('recovery_phrase.title'),
 	    };
     };
 	constructor(props){
@@ -46,10 +47,10 @@ class Recovery extends Component {
 				</View>
 				<View style={styles.marginBottom80}>
 					<Button
-						title="copy"
+						title={strings('copy_button')}
 						onPress={e => {
 							Clipboard.setString(this.props.user.mnemonic);
-							this.refs.toast.show('Copied to clipboard successfully');
+							this.refs.toast.show(strings('toast_copy_success'));
 						}}
 					/>
 				</View>

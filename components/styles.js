@@ -13,6 +13,9 @@ export default styles = {
     headerTitleStyle: {
       	fontWeight: 'normal',
       	fontSize: 18,
+      	alignSelf: 'center',
+        textAlign: 'center',
+        flex: 1
     },
   	container: {
   		flex:1,
