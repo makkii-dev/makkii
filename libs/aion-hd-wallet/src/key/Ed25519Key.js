@@ -1,5 +1,5 @@
 import sodium from 'sodium-javascript';
-import {blake2b} from 'blakejs';
+import blake2b from 'blake2b';
 
 const A0_IDENTIFIER = [0xA0];
 
@@ -61,7 +61,7 @@ export class Ed25519Key {
 
 
     static computeA0Address = (publicKey) => {
-        let addressHash = blake2b(publicKey, null,  32);
+        let addressHash = blake2b(32).update(publicKey).digest();
         addressHash.set(A0_IDENTIFIER, 0);
         return addressHash;
     };

@@ -151,7 +151,6 @@ class ImportLedger extends React.Component {
     }
 
     changeSelect(item){
-        console.log('changeSelect');
         let {accountsList} = this.state;
         item.selected = !item.selected;
         accountsList[item.account.address] = item;

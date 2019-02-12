@@ -138,7 +138,6 @@ class ImportHdWallet extends React.Component {
     }
 
     changeSelect(item){
-        console.log('changeSelect');
         let {accountsList} = this.state;
         item.selected = !item.selected;
         accountsList[item.account.address] = item;
@@ -164,7 +163,7 @@ class ImportHdWallet extends React.Component {
     renderErrorView() {
         return (
             <View style={styles.container}>
-                <Text>
+                <Text style={{alignSelf: 'center', textAlign:'center'}}>
                     {this.state.errInfo}
                 </Text>
             </View>

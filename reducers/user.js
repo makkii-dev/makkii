@@ -7,7 +7,7 @@ import {
 const init = {
 	timestamp: 0,  
 	hashed_password: '',    
-	mnemonic: '',
+	mnemonic: 'high eight oval elephant ghost blanket during small able swift oak actress',
 };
 
 export default function user(state = init, action){

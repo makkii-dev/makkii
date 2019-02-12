@@ -209,10 +209,8 @@ export default styles = {
 			alignItems: 'flex-start',
 			justifyContent: 'space-between',
 			padding: 10,
-			flex:2
 		},
 		accountRightView:{
-			flex:1,
 			justifyContent: 'center',
 			alignItems: 'flex-start'
 		},
