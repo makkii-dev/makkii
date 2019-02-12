@@ -3,6 +3,8 @@ package com.wallet;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
+import com.RNFetchBlob.RNFetchBlobPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.reactlibrary.RNAionHwWalletPackage;
 import com.horcrux.svg.SvgPackage;
@@ -28,6 +30,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
+            new RNFetchBlobPackage(),
             new RNI18nPackage(),
             new RNAionHwWalletPackage(),
             new SvgPackage(),

@@ -46,13 +46,13 @@ class Home extends Component {
                         }}
                     />
                     <AionCell
-                        title='Recovery Phrase'
+                        title={strings('recovery_phrase.title')}
                         onClick={() => {
                             this.props.navigation.navigate('SettingRecovery');
                         }}
                     />
                     <AionCell
-                        title='Service Configuration'
+                        title={strings('service_configuration.title')}
                         onClick={() => {
                             this.props.navigation.navigate('SettingServices');
                         }}

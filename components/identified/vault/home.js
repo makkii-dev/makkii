@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
 	Alert,
-	ScrollView,
+	PermissionsAndroid,
 	View,
 	Modal,
 	Text,
@@ -20,6 +20,8 @@ import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
 import { getLedgerMessage } from '../../../utils.js';
 import otherStyles from  '../../styles';
+import {strings} from "../../../locales/i18n";
+
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
@@ -46,9 +48,33 @@ class Home extends Component {
 	shouldComponentUpdate(nextProps, nextState): boolean {
 		return this.props !== nextProps || this.state !== nextState;
 	}
+
+	async requestStoragePermission() {
+		try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+				{
+					title: strings('permission_storage_title'),
+					message: strings('permission_storage_message'),
+					buttonPositive: strings('ok_button'),
+					buttonNegative: strings('cancel_button'),
+				}
+			);
+			if (granted == PermissionsAndroid.RESULTS.GRANTED) {
+				console.log('storage permission is granted');
+			} else {
+				console.log('storage permission is denied.');
+			}
+		} catch (err) {
+			console.error("request permission error: ", err);
+		}
+	}
+
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
+
+		this.requestStoragePermission();
 	}
 
 	onImportLedger=()=> {
