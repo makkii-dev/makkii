@@ -1,53 +1,41 @@
 import { createStackNavigator } from 'react-navigation';
-import { StyleSheet } from 'react-native';
-import * as React from 'react';
 import Home from './home.js';
 import About from './about.js';
 import UpdatePassword from './update_password.js';
 import Services from './services.js';
 import Recovery from './recovery.js';
-
-const styles = StyleSheet.create({
-    headerStyle: {
-        shadowOpacity: 0,
-        shadowOffset: { 
-            height: 0, 
-            width:0, 
-        }, 
-        shadowRadius: 0, 
-        borderBottomWidth:0,
-        elevation: 1,
-        backgroundColor: '#eeeeee'
-    },
-    headerTitleStyle: {
-        alignSelf: 'center',
-        textAlign: 'center',
-        flex: 1
-    }
-});
+import styles from '../../styles.js';
 
 const navigator = createStackNavigator({
-	  SettingHome: { screen: Home, navigationOptions: { headerStyle: styles.headerStyle } },
-      SettingUpdatePassword: { screen: UpdatePassword },
-	  SettingAbout: { screen: About, navigationOptions: { headerStyle: styles.headerStyle } },
-	  SettingServices: { screen: Services, navigationOptions: { headerStyle: styles.headerStyle } },
-	  SettingRecovery: { screen: Recovery, navigationOptions: { headerStyle: styles.headerStyle } },
+	  'signed_setting': {screen:Home, navigationOptions:{headerStyle:styles.headerStyle,headerTitleStyle:styles.headerTitleStyle}},
+    'signed_setting_password': {screen:UpdatePassword, navigationOptions:{headerStyle:styles.headerStyle,headerTitleStyle:styles.headerTitleStyle}},
+	  'signed_setting_about': {screen:About, navigationOptions:{headerStyle:styles.headerStyle,headerTitleStyle:styles.headerTitleStyle}},
+	  'signed_setting_services': {screen:Services, navigationOptions:{headerStyle:styles.headerStyle,headerTitleStyle:styles.headerTitleStyle}},
+	  'signed_setting_recovery': {screen:Recovery, navigationOptions:{headerStyle:styles.headerStyle,headerTitleStyle:styles.headerTitleStyle}},
 }, {
-	  // initialRouteName: "SettingRecovery",
-    initialRouteName: "SettingHome",
-	  resetOnBlur: true,
-	  backBehavior: 'none',
+    //initialRouteName: "signed_setting",
+    //initialRouteName: "signed_setting_password",
+    initialRouteName: "signed_setting_about",
+    //initialRouteName: "signed_setting_services",
+    //initialRouteName: "signed_setting_recovery",
+    swipeEnabled: false,
+    animationEnabled: false,
+    lazy: true, 
+    transitionConfig: () => ({
+        transitionSpec: {
+            duration: 0,
+        }, 
+    }),
 });
 
 navigator.navigationOptions = ({ navigation }) => {
   	let { routeName } = navigation.state.routes[navigation.state.index];
     let navigationOptions = {}; 
-    // navigationOptions.headerStyle = styles.headerStyle;
   	switch(routeName) {
-  		  case 'SettingUpdatePassword':
-  		  case 'SettingAbout':
-  		  case 'SettingServices':
-  		  case 'SettingRecovery':
+  		  case 'signed_setting_password':
+  		  case 'signed_setting_about':
+  		  case 'signed_setting_services':
+  		  case 'signed_setting_recovery':
             navigationOptions.tabBarVisible = false;
             break;
   	}

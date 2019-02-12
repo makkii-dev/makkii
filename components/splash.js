@@ -26,18 +26,18 @@ class Splash extends Component {
 						let max_keep_signed = 60000 * 30;  
 						let time_diff = Date.now() - user.timestamp; 
 						console.log('user.timestamp ' + user.timestamp);
-						console.log('Date.now()     ' + Date.now());
+						console.log('Date.now()     ' + Date.now()); 
 						console.log('time diff      ' + time_diff);
 						if(time_diff < max_keep_signed) {  
-							navigate('Settings');
-							console.log('[db-user] keep alive');    
+							navigate('signed_setting');  	 
+							console.log('[db-user] signed');     
 						} else {
 							navigate('unsigned_login'); 
 							console.log('[db-user] timeout');	
 						}
 					} else {
-						navigate('unsigned_register');
-						console.log('[db-user] new user');
+						navigate('unsigned_register');    
+						console.log('[db-user] new');
 					} 
 				}, 1000); 				
 			}, err=>{  

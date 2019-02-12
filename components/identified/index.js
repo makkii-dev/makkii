@@ -1,18 +1,19 @@
 import { createBottomTabNavigator, BottomTabBar } from 'react-navigation';
-import * as React from 'react';
+import React from 'react';
 import {Image} from 'react-native';
-import Vault    from './vault/index.js';
-import Dapps    from './dapps/index.js';
-import Odex     from './odex/index.js';
-import Setting  from './setting/index.js';
-
+import styles from '../styles.js'; 
+import Vault   from './vault/index.js';
+import Dapps   from './dapps/index.js';
+import Odex    from './odex/index.js';
+import Setting from './setting/index.js';
+ 
 const Identified = createBottomTabNavigator({
 	Vault: { 
-		screen: Vault,
+		screen: Vault,  
 		navigationOptions:({navigation}) => ({
 			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_wallet.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
 		})
-	},
+	}, 
 	DApps: { 
 		screen: Dapps,
 		navigationOptions:({navigation}) => ({
@@ -20,7 +21,7 @@ const Identified = createBottomTabNavigator({
 		})
 	}, 
 	// Odex: { screen: Odex },
-	Settings: { 
+	'signed_setting': { 
 		screen: Setting,
 		navigationOptions:({navigation}) => ({
 			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_settings.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
@@ -28,7 +29,7 @@ const Identified = createBottomTabNavigator({
 	}
 }, {
 	lazy: true,
-	initialRouteName: 'Settings', 
+	initialRouteName: 'signed_setting',  
 	tabBarOptions: {
 		activeTintColor: '#3366ff',
 		inactiveTintColor: '#adb0b5',
