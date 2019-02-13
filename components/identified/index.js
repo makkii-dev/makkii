@@ -1,48 +1,169 @@
-import { createBottomTabNavigator, BottomTabBar } from 'react-navigation';
-import React from 'react';
-import {Image} from 'react-native';
-import styles from '../styles.js'; 
-import Vault   from './vault/index.js';
-import Dapps   from './dapps/index.js';
-import Odex    from './odex/index.js';
-import Setting from './setting/index.js';
- 
-const Identified = createBottomTabNavigator({
-	Vault: { 
-		screen: Vault,  
-		navigationOptions:({navigation}) => ({
-			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_wallet.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
-		})
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View} from 'react-native';
+import {createStackNavigator} from 'react-navigation';
+import Vault                 from './vault/home.js';
+import VaultAccount          from './vault/account.js';
+import VaultImportHdWallet   from './vault/import_hd_wallet';
+import VaultImportLedger     from './vault/import_ledger.js';
+import VaultImportPrivateKey from './vault/import_private_key.js';
+import VaultReceive          from './vault/receive.js';
+import VaultSend             from './vault/send.js';
+import VaultTransaction      from './vault/transaction.js';
+import Dapps                 from './dapps/home.js';
+import DappsDapp             from './dapps/dapp.js';
+import DappsLaunch           from './dapps/launch.js';
+import Setting               from './setting/home.js';
+import SettingAbout          from './setting/about.js';
+import SettingPassword       from './setting/password.js';
+import SettingRecovery       from './setting/recovery.js';
+import SettingServices       from './setting/services.js'; 
+import styles from '../styles.js';  
+
+const signed = createStackNavigator({
+	'signed_vault': { 
+		screen: Vault,
+		navigationOptions: {
+            header: null
+        }  
 	}, 
-	DApps: { 
+	'signed_vault_account': { 
+		screen: VaultAccount,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_import_hdwallet': { 
+		screen: VaultImportHdWallet,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_import_ledger': { 
+		screen: VaultImportLedger,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_import_private_key': { 
+		screen: VaultImportPrivateKey,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_receive': { 
+		screen: VaultReceive,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_send': { 
+		screen: VaultSend,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_vault_transaction': { 
+		screen: VaultTransaction,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }  
+	}, 
+	'signed_dapps': { 
 		screen: Dapps,
-		navigationOptions:({navigation}) => ({
-			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_app.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
-		})
+		navigationOptions: {
+            headerLeft: null,
+            headerRight: null,
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        } 
 	}, 
-	// Odex: { screen: Odex },
-	'signed_setting': { 
+	'signed_dapps_dapp': { 
+		screen: DappsDapp,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        } 
+	}, 
+	'signed_dapps_launch': { 
+		screen: DappsLaunch,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        } 
+	}, 
+	'signed_setting': {  
 		screen: Setting,
-		navigationOptions:({navigation}) => ({
-			tabBarIcon: ({tintColor})=>(<Image source={require('../../assets/tab_settings.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}}/>)
-		})
-	}
-}, {
-	lazy: true,
-	initialRouteName: 'signed_setting',  
-	tabBarOptions: {
-		activeTintColor: '#3366ff',
-		inactiveTintColor: '#adb0b5',
-		borderTopColor: '#adb0b5',
-	  	labelStyle: {
-	    	fontSize: 14,
-	    	marginBottom: 5,
-	  	},
-	  	style: {
-	  		height: 60
-	  	}
-	},
-	
+		navigationOptions: {
+			headerLeft: null,
+            headerRight: null,
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
+	},  
+	'signed_setting_about': {  
+		screen: SettingAbout,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
+	},  
+	'signed_setting_password': {  
+		screen: SettingPassword,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
+	},  
+	'signed_setting_recovery': {  
+		screen: SettingRecovery,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        } 
+	},  
+	'signed_setting_services': {  
+		screen: SettingServices,
+		navigationOptions: {
+            headerRight: (<View></View>),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        } 
+	},  
+}, {    
+	//initialRouteName: 'signed_vault', 
+	//initialRouteName: 'signed_dapps',
+	//initialRouteName: 'signed_odex',  
+	//initialRouteName: 'signed_setting', 
+	swipeEnabled: false, 
+  	animationEnabled: false,
+  	lazy: true,
+  	transitionConfig: () => ({
+		transitionSpec: {
+			duration: 0,
+		},
+  	}),
 });
 
-export default Identified;
+export default connect(state => { 
+    return state; 
+})(signed);

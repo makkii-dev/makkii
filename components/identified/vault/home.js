@@ -21,6 +21,7 @@ import wallet from 'react-native-aion-hw-wallet';
 import { getLedgerMessage } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
+import {ComponentTabBar} from '../../common.js';
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
@@ -373,6 +374,24 @@ class Home extends Component {
 				<Loading ref={(element) => {
 					this.loadingView = element;
 				}}/>
+				<ComponentTabBar
+					style={{
+						position: 'absolute',
+						bottom: 0,  
+						backgroundColor: 'white', 
+						width: '100%',  
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'space-around',  
+						borderTopWidth: 0.3,
+						borderTopColor: '#8c8a8a'  
+					}} 
+					onPress={[
+						()=>{this.props.navigation.navigate('signed_vault');},
+						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_setting');},
+					]}
+				/>
 			</View>
 		)
 	}

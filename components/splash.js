@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Image,AsyncStorage} from 'react-native';
+import {user_signin} from '../actions/user.js';
 
 class Splash extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -15,7 +16,8 @@ class Splash extends Component {
 	} 
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		const { navigate } = this.props.navigation;
+		const {navigate} = this.props.navigation;
+		const {dispatch} = this.props;
 		AsyncStorage
 			.getItem('user') 
 			.then(json_user=>{
@@ -29,7 +31,8 @@ class Splash extends Component {
 						console.log('Date.now()     ' + Date.now()); 
 						console.log('time diff      ' + time_diff);
 						if(time_diff < max_keep_signed) {  
-							navigate('signed_setting');  	 
+							dispatch(user_signin(user.hashed_password, user.mnemonic));
+							navigate('signed');  
 							console.log('[db-user] signed');     
 						} else {
 							navigate('unsigned_login'); 

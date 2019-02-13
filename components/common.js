@@ -6,16 +6,31 @@ import PropTypes from 'prop-types';
 class ComponentTabBar extends Component{
 	render(){
 		return (
-			<View>
-				<View>
-					<Image source={require('../assets/tab_wallet.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
-				<View>
-					<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
-				<View>
-					<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
+			<View style={this.props.style}>  
+				<TouchableOpacity 
+					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
+					onPress={e=>{
+						this.props.onPress[0]()
+					}}
+				> 
+					<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6}} />
+				</TouchableOpacity> 
+				<TouchableOpacity
+					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
+					onPress={e=>{
+						this.props.onPress[1]()
+					}}
+				>
+					<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6}} /> 
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
+					onPress={e=>{
+						this.props.onPress[2]()
+					}}
+				>
+					<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6}} />
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -304,6 +319,7 @@ class TextInputWithLabel extends React.PureComponent{
 }
 
 module.exports = {
+	ComponentTabBar,
 	ComponentLogo,
 	Input,
 	InputMultiLines,

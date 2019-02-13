@@ -1,9 +1,9 @@
 {
-    "about": {
+    "about": {   
         "title": "About",
         "version_label": "Version",
         "version_update_button": "Version Update",
-        "terms_label": "Chiaon Terms of Service",
+        "terms_label": "Terms of Service",
         "policy_label": "Privacy Policy",
         "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
         "version_latest": "Your version is already up to date."
@@ -20,8 +20,9 @@
     },
     "service_configuration": {
         "title": "Service Configuration",
-        "label_api_server": "Wallet Api Server",
-        "label_dapp_server": "DApps Server",
+        "endpoint_wallet": "Rpc Server",
+        "endpoint_dapps": "Dapps Server",
+        "endpoint_odex": "Odex Server",
         "hint_api_server": "Enter wallet api server uri",
         "hint_dapp_server": "Enter dapps server uri",
         "invalid_wallet_server_url": "Invalid wallet server url",
