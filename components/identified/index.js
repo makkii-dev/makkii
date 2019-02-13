@@ -37,27 +37,24 @@ const signed = createStackNavigator({
 	}, 
 	'signed_vault_import_hdwallet': { 
 		screen: VaultImportHdWallet,
-		// navigationOptions: {
-        //     headerRight: (<View></View>),
-        //     headerStyle: styles.headerStyle,
-        //     headerTitleStyle: styles.headerTitleStyle,
-        // }
+		navigationOptions: {
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
 	}, 
 	'signed_vault_import_ledger': { 
 		screen: VaultImportLedger,
-		// navigationOptions: {
-        //     headerRight: (<View></View>),
-        //     headerStyle: styles.headerStyle,
-        //     headerTitleStyle: styles.headerTitleStyle,
-        // }
+		navigationOptions: {
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
 	}, 
 	'signed_vault_import_private_key': { 
 		screen: VaultImportPrivateKey,
-		// navigationOptions: {
-        //     headerRight: (<View></View>),
-        //     headerStyle: styles.headerStyle,
-        //     headerTitleStyle: styles.headerTitleStyle,
-        // }
+		navigationOptions: {
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+        }
 	}, 
 	'signed_vault_receive': { 
 		screen: VaultReceive,
