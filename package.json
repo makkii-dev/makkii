@@ -28,8 +28,7 @@
     "rlp": "^2.2.2",
     "rn-fetch-blob": "^0.10.15",
     "sodium-javascript": "^0.5.5",
-    "vm-browserify": "0.0.4",
-    "xhr2": "^0.1.4"
+    "vm-browserify": "0.0.4"
   },
   "devDependencies": {
     "babel-jest": "23.6.0",

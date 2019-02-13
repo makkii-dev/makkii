@@ -237,14 +237,12 @@ class Home extends Component {
 	}
 
 	_onClose(Key: any) {
-		console.log('[onClose]');
 		this.setState({
 			openRowKey: null,
 		})
 	}
 
 	_setListViewScrollableTo(value: boolean) {
-		console.log('[_setListViewScrollableTo] ' + value);
 		this.setState({
 				scrollEnabled: value,
 		})
@@ -321,7 +319,7 @@ class Home extends Component {
 							return;
 						}
 						dispatch(account(this.props.accounts[item.address]));
-						this.props.navigation.navigate('VaultAccount');
+						this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
 					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>

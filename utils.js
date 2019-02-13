@@ -2,7 +2,7 @@ import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
-
+import BigNumber from 'bignumber.js';
 function validatePassword(password) {
     let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
     return reg.test(password);
@@ -65,6 +65,22 @@ function saveImage(base64, imageFileName) {
         });
     })
 }
+function fetchRequest(url, method='GET', headers={}) {
+    return new Promise((resolve, reject) => {
+        fetch(url,{
+            method,
+            headers,
+        }).then((response)=>response.json())
+            .then((responseJson)=>{
+                resolve(responseJson)
+            })
+            .catch(err=>{
+                console.log('[fetch request error] ', err);
+                reject(err);
+            })
+    })
+
+}
 
 module.exports = {
     validatePassword: validatePassword,
@@ -75,4 +91,5 @@ module.exports = {
     generateQRCode: generateQRCode,
     validateAmount: validateAmount,
     saveImage: saveImage,
+    fetchRequest: fetchRequest,
 }

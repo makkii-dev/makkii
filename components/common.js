@@ -254,7 +254,6 @@ class EditableView extends  React.PureComponent {
 						editable={this.state.editable}
 						style={{color:this.props.color, padding:0}}
 						onChangeText={value=>this.setState({value})}
-						onEndEditing={()=>this._onPress()}
 					/>
 					{
 						this.state.editable?<View style={{backgroundColor:'#000',height:1/ PixelRatio.get()}}/>:null
