@@ -1,86 +1,97 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet, Dimensions, PixelRatio} from 'react-native';
+import {ComponentTabBar} from '../../common.js';
 
 const {width} = Dimensions.get('window');
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.getParam('title', 'Dapps'),
-		headerTitleStyle:{
-			alignSelf: 'center',
-			textAlign: 'center',
-			flex: 1,
-		}
 	});
 	constructor(props){
 		super(props);
 	}
-
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.dapps);
 	}
 	render(){
 		return (
-			<View style={{flex:1}}>
-				<FlatList
-					data={this.props.dapps}
-					renderItem={this._renderItem}
-					keyExtractor={this._keyExtractor}
-				/>
-
+			<View style={{
+				backgroundColor: '#eeeeee',
+				height: Dimensions.get('window').height,
+			}}>
+				<View style={{
+					flex:1,
+					flexDirection:'column',
+					alignItems: 'stretch',
+					paddingTop: 8,
+				}}>
+					{
+						this.props.dapps.map((v,k)=>{
+							return (
+								<TouchableOpacity
+									key={k} 
+									onPress={()=>{
+										this.props.navigation.navigate('signed_dapps_dapp',{
+											'title': v.name,
+											'dapp': v, 
+										})
+									}}
+								>
+									<View
+										style={{
+											height: 50,
+											backgroundColor: 'white',
+											position: 'relative',
+											marginTop: 3,
+											paddingLeft: 60,
+										}}>
+										<Image 
+											source={{uri: v.logo}} 
+											style={{
+												width: 30, 
+												height: 30, 
+												position: 'absolute',
+												left: 10,
+												top: 10,
+											}}
+										/>
+										<Text 
+											style={{
+												lineHeight: 50,
+												fontSize: 16,		
+											}} 
+											numberOfLines={1}  
+										>{v.name}</Text> 
+									</View>
+								</TouchableOpacity>
+							)
+						})
+					}
+				</View>
+				<ComponentTabBar
+					// TODO
+					style={{ 
+						position: 'absolute',
+						bottom: 80, 
+						backgroundColor: 'white', 
+						width: '100%',  
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'space-around',  
+						borderTopWidth: 0.3,
+						borderTopColor: '#8c8a8a'  
+					}}  
+					onPress={[
+						()=>{this.props.navigation.navigate('signed_vault');},
+						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_setting');},
+					]}
+				/> 
 			</View>
 		);
 	}
-
-	_renderItem = (data)=>{
-		return (
-			<View>
-				<View style={styles.divider}/>
-				<TouchableOpacity
-					onPress={()=>{
-						this.props.navigation.navigate('DappsLaunch',{
-							'title': data.item.name,
-							'dapp': data.item,
-						})
-					}}
-				>
-					<View style={styles.listItemContainer}>
-						<Image source={{uri: data.item.logo}} style={{width: 40, height: 40}}/>
-						<View style={styles.listItemTextContainer}>
-							<Text numberOfLines={1}>{data.item.name}</Text>
-						</View>
-					</View>
-				</TouchableOpacity>
-				<View style={styles.divider}/>
-			</View>
-		)
-	};
-	_keyExtractor=(item,index)=> index.toString();
 }
 
-
 export default connect(state => { return ({ dapps: state.dapps }); })(Home);
-
-const styles = StyleSheet.create({
-	divider: {
-		width: width,
-		height: 1 / PixelRatio.get(),
-		backgroundColor: '#000000'
-	},
-	listItemContainer: {
-		flexDirection: 'row',
-		width: width,
-		paddingLeft: 15,
-		paddingRight: 15,
-		paddingTop: 10,
-		paddingBottom: 10,
-		alignItems: 'center',
-		backgroundColor: '#FFFFFF',
-	},
-	listItemTextContainer: {
-		flexDirection: 'column',
-		flex: 1,
-		paddingLeft: 15,
-	}
-});

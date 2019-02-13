@@ -1,8 +1,10 @@
+import {Dimensions} from 'react-native'; 
+
 const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
 
 export default styles = {
-	headerStyle: {
+	headerStyle: {  
         shadowOpacity: 0,
         shadowOffset: { height: 0, width:0 }, 
         shadowRadius: 0, 
@@ -17,10 +19,9 @@ export default styles = {
         textAlign: 'center',
         flex: 1
     },
-  	container: {
-  		flex:1,
-  		// backgroundColor: '#F1F3F4',
+  	container: { 
   		padding: 20,
+  		height: Dimensions.get('window').height, 
   	},
   	center: {
   		flex: 1,
@@ -30,25 +31,31 @@ export default styles = {
   	center_text: {
   		textAlign: 'center',
   	},
-  	marginTop10: {   // in use
+  	marginTop10: {   
 		marginTop: 10,
 	},
-	marginTop20: {   // in use
+	marginTop20: {  
 		marginTop: 10,
 	},
-	marginTop40: {   // in use
+	marginTop40: {  
 		marginTop: 10,
 	},
-  	marginBottom10: {   // in use
+	marginTop60: {   
+		marginTop: 10,
+	},
+	marginTop80: {   
+		marginTop: 10,
+	},
+  	marginBottom10: {  
 		marginBottom: 10,
 	},
-  	marginBottom20: {   // in use
+  	marginBottom20: { 
   		marginBottom: 20,
   	},
-  	marginBottom40: {   // in use
+  	marginBottom40: {   
   		marginBottom: 40,
   	},
-  	marginBottom80: {   // in use
+  	marginBottom80: {  
   		marginBottom: 80,
   	},
     instruction: {

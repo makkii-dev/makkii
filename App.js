@@ -32,12 +32,12 @@ const store = createStore(combineReducers({
 
 // ui 
 import splash   from './components/splash.js';
-import signed   from './components/identified/index.js';
 import unsigned from './components/unsigned/index.js';
+import signed   from './components/identified/index.js';
 const Routes = createAppContainer(createSwitchNavigator({
-	'splash':   { screen: splash }, 
-	'signed':   { screen: signed },  
-	'unsigned': { screen: unsigned },  
+	'splash':   {screen:splash}, 
+	'unsigned': {screen:unsigned},
+	'signed':   {screen:signed},  
 }, {
 	initialRouteName: 'splash', 
 }));

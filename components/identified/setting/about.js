@@ -1,23 +1,16 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Button } from 'react-native';
-import { ComponentLogo } from '../../common.js';
-import styles from '../../styles.js';
-import constants from '../../constants.js';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,Dimensions} from 'react-native';
+import {ComponentLogo} from '../../common.js';
 import AionCell from '../../cell.js';
 import Toast from '../../toast.js';
-import { strings } from '../../../locales/i18n';
+import {strings} from '../../../locales/i18n';
+import styles from '../../styles.js';
 
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
-	    return {			
-			headerTitleStyle: {
-				alignSelf: 'center',
-				textAlign: 'center',
-				flex: 1
-			},
-			headerRight: (<View></View>),
+	    return {
 			title: strings('about.title') 
 	    };
     };
@@ -31,28 +24,25 @@ class About extends Component {
 	render(){
 		return (
 			<View style={{
-				paddingTop: 40,
-				paddingBottom: 40,
-				justifyContent:'space-between',
-				flex:1,
 				backgroundColor: '#eeeeee',
+				height: Dimensions.get('window').height, 
 			}}>
 				<View style={{
-					justifyContent: 'center',
-    				alignItems: 'center',					
-					marginBottom: 20,
+					justifyContent:'center',
+    				alignItems:'center',					
+					marginBottom:60,
+					marginTop:80,
 				}}>
 					<ComponentLogo />
 					<Text style={{
 						marginTop: 10,
-						fontWeight: 'bold',
-						fontSize: 26,
+						fontSize: 22,
                         color: 'black',
 					}}>{ strings('app_name') }</Text>
 					<Text style={{
-						fontSize: 20,
+						fontSize: 14,
 						color: 'black',
-					}}>{strings('about.version_label')} 0.1.0</Text>
+					}}>{strings('about.version_label')} {this.props.setting.version}</Text>
 				</View>
 				<View style={ styles.marginBottom80 }>
 					<AionCell
@@ -62,24 +52,23 @@ class About extends Component {
 						}}
 					/>
 				</View>
-				<View style={{
-					marginBottom: 10,
-                    alignItems: 'center'
-				}}>
-					<Text style={{ color: 'blue', }}>
-						{strings('about.terms_label')}
+				<View style={styles.marginBottom40}>
+					<Text style={styles.center_text}>
+						Power by Chaion
 					</Text>
-					<Text style={{ color: 'blue', }}>
-						{strings('about.policy_label')}
+				</View>
+				<View>
+					<Text style={styles.center_text}>
+						{strings('about.terms_label')} & {strings('about.policy_label')}
 					</Text>
 					<Text style={styles.center_text}>
 						{strings('about.copyright_label')}
-					</Text>
+					</Text>	
 				</View>
                 <Toast
 					ref={"toast"}
 					duration={Toast.Duration.short}
-					onDismiss={() => {}}
+					onDismiss={e=> {}}
 				/>
 			</View>
 		);

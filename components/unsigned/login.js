@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View,Text,Button,TouchableOpacity,AsyncStorage} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
-import {user_login} from '../../actions/user.js';
+import {user_signin} from '../../actions/user.js';
 import styles from '../styles.js';
 
 class Login extends Component {
@@ -54,8 +54,8 @@ class Login extends Component {
 								if(json_user){
 									let user  = JSON.parse(json_user);
 									if(user.hashed_password === hashPassword(this.state.password)){
-										dispatch(user_login(user.hashed_password, user.mnemonic)); 
-										this.props.navigation.navigate('Vault'); 
+										dispatch(user_signin(user.hashed_password, user.mnemonic)); 
+										this.props.navigation.navigate('signed_setting'); 
 									} else {
 										alert('Invalid password');
 									}
@@ -94,4 +94,8 @@ class Login extends Component {
 	}
 }
 
-export default connect(state => { return { user: state.user }; })(Login);
+export default connect(state => { 
+	return { 
+		user: state.user 
+	}; 
+})(Login);

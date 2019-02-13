@@ -1,38 +1,29 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, Button, Alert } from 'react-native';
-import { Input } from '../../common.js';
-import styles from '../../styles.js';
-import { setting } from '../../../actions/setting.js';
-import Toast from '../../toast.js';
-import { validateUrl } from '../../../utils.js';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,Button,Alert} from 'react-native';
+import {Input} from '../../common.js';
+import {setting} from '../../../actions/setting.js';
+import {validateUrl} from '../../../utils.js';
 import {strings} from "../../../locales/i18n";
+import Toast from '../../toast.js';
+import styles from '../../styles.js';
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    const { state } = navigation;
 	    return {
 	        title: strings('service_configuration.title'),
-			headerStyle: {
-				backgroundColor: '#eeeeee'
-			},
-			headerTitleStyle: {
-				alignSelf: 'center',
-				textAlign: 'center',
-				flex: 1
-			},
-			headerRight: (<View></View>),
 	    };
     };
 
 	constructor(props){
 		super(props);
+		console.log(props);
 		this.state = {
-			kernel_server: this.props.setting.advance.remote_kernel,
-			dapps_server: this.props.setting.advance.remote_dapps,
+			endpoint_wallet: props.setting.endpoint_wallet,
+			endpoint_dapps: props.setting.endpoint_dapps,
+			endpoint_odex: props.setting.endpoint_odex,
 		}
 	}
-
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
@@ -41,43 +32,66 @@ class Services extends Component {
 		return (
 			<View style={styles.container}>	
 				<View>
-					<Text>{strings('service_configuration.label_api_server')}</Text>
+					<Text>{strings('service_configuration.endpoint_wallet')}</Text>
 				</View>
 				<View style={styles.marginBottom20}>
 					<Input
-                        value={this.state.kernel_server}
 						supportVisibility={false}
+                        value={this.state.endpoint_wallet}
 						onClear={e => {
-
+							this.setState({
+								endpoint_wallet:''
+							});
 						}}
 						onChange={e => {
 							this.setState({
-								kernel_server: e,
-							})
+								endpoint_wallet:e
+							});
 						}}
 					/>
 				</View>
 				<View>
-					<Text>{strings('service_configuration.label_dapp_server')}</Text>
+					<Text>{strings('service_configuration.endpoint_dapps')}</Text>
 				</View>
-				<View style={styles.marginBottom40}>
+				<View style={styles.marginBottom20}>
 					<Input
-						value={this.state.dapps_server}
 						supportVisibility={false}
+                        value={this.state.endpoint_dapps}
 						onClear={e => {
-
+							this.setState({
+								endpoint_dapps: ''
+							});
 						}}
 						onChange={e => {
 							this.setState({
-								dapps_server: e,
-							})
+								endpoint_dapps: e
+							});
+						}}
+					/>
+				</View>
+				<View>
+					<Text>{strings('service_configuration.endpoint_odex')}</Text>
+				</View>
+				<View style={styles.marginBottom40}>
+					<Input
+						supportVisibility={false}
+                        value={this.state.endpoint_odex}
+						onClear={e => {
+							this.setState({
+								endpoint_odex: ''
+							});
+						}}
+						onChange={e => {
+							this.setState({
+								endpoint_odex: e
+							});
 						}}
 					/>
 				</View>
 				<View>
 					<Button 
 						title={strings('save_button')}
-						onPress={ () => this.saveConfigurations() }
+						onPress={e => this.update() }
 					/>
 				</View>
 				<Toast
@@ -89,26 +103,29 @@ class Services extends Component {
 		)
 	}
 
-	saveConfigurations=() => {
-		if (!validateUrl(this.state.kernel_server)) {
+	update(){
+		if (!validateUrl(this.state.endpoint_wallet)) {
 			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_wallet_server_url'));
 			return;
 		}
 
-		if (!validateUrl(this.state.dapps_server)) {
+		if (!validateUrl(this.state.endpoint_dapps)) {
+			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
+			return;
+		}
+
+		if (!validateUrl(this.state.endpoint_odex)) {
 			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
 			return;
 		}
 
 		// TODO: connectivity test
-
 		const { dispatch } = this.props;
-		let newSettings = this.props.setting;
-		newSettings.advance.remote_kernel = this.state.kernel_server;
-		newSettings.advance.remote_dapps = this.state.dapps_server;
-		dispatch(setting(newSettings));
-
-		console.log("update service configuration successfully.");
+		let _setting = this.props.setting;
+		_setting.endpoint_wallet = this.state.endpoint_wallet;
+		_setting.endpoint_dapps = this.state.endpoint_dapps;
+		_setting.endpoint_odex = this.state.endpoint_odex;
+		dispatch(setting(_setting));
 		this.refs.toast.show(strings('toast_update_success'));
 	}
 

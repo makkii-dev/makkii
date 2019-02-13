@@ -1,24 +1,15 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {View, Button, TextInput, Clipboard} from 'react-native';
-import { InputMultiLines } from '../../common.js';
-import styles from '../../styles.js';
+import React,{Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Button,TextInput,Clipboard} from 'react-native';
+import {InputMultiLines} from '../../common.js';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from '../../toast.js';
+import styles from '../../styles.js';
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-			headerStyle: {
-				backgroundColor: '#eeeeee'
-			},
-			headerTitleStyle: {
-				alignSelf: 'center',
-				textAlign: 'center',
-				flex: 1
-			},
-			headerRight: (<View></View>),
 			title: 'Recovery Phrase'
 	    };
     };
@@ -41,7 +32,7 @@ class Recovery extends Component {
 						editable={false}
 						borderRadius={5}
 						numberOfLines={3}
-						value={ this.props.user.mnemonic }
+						value={this.props.user.mnemonic}
 					/>
 				</View>
 				<View style={styles.marginBottom80}>
@@ -57,20 +48,23 @@ class Recovery extends Component {
                 	justifyContent: 'center',
 					alignItems: 'center',
 				}}>
-                    <QRCode
-                        value={ this.props.user.mnemonic }
-                        size={200}
-                    />
+                	<QRCode
+                		size={200}
+				      	value={this.props.user.mnemonic}
+				    />	   
 				</View>
 				<Toast
 					ref={"toast"}
 					duration={Toast.Duration.short}
                     onDismiss={() => {}}
 				/>
-
 			</View>
 		)
 	}
 }
 
-export default connect(state => { return ({ user: state.user }); })(Recovery);
+export default connect(state => { 
+	return ({ 
+		user: state.user 
+	}); 
+})(Recovery);

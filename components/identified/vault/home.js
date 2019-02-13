@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
 	Alert,
-	ScrollView,
+	PermissionsAndroid,
 	View,
 	Modal,
 	Text,
@@ -11,15 +11,18 @@ import {
 	Dimensions,
 	Platform,
 	Image,
-	FlatList, PixelRatio
+	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { account } from '../../../actions/account.js';
-import { delete_account } from '../../../actions/accounts.js';
+import { delete_account, accounts as action_accounts} from '../../../actions/accounts.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
 import { getLedgerMessage } from '../../../utils.js';
 import otherStyles from  '../../styles';
+import {strings} from "../../../locales/i18n";
+import {ComponentTabBar} from '../../common.js';
+
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
@@ -39,18 +42,93 @@ class Home extends Component {
 			title: 'Total: XXX RMB',
 			openRowKey: null,
 			scrollEnabled:true,
+			refreshing: false,
 		};
 
 	}
 
-	shouldComponentUpdate(nextProps, nextState): boolean {
-		return this.props !== nextProps || this.state !== nextState;
+
+	async requestStoragePermission() {
+		try {
+			const granted = await PermissionsAndroid.request(
+				PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+				{
+					title: strings('permission_storage_title'),
+					message: strings('permission_storage_message'),
+					buttonPositive: strings('ok_button'),
+					buttonNegative: strings('cancel_button'),
+				}
+			);
+			if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+				console.log('storage permission is granted');
+			} else {
+				console.log('storage permission is denied.');
+			}
+		} catch (err) {
+			console.error("request permission error: ", err);
+		}
 	}
+
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length);
+		this.requestStoragePermission();
+	}
+	
+	componentWillMount(): void {
+		InteractionManager.runAfterInteractions(()=> {
+			this.fetchAccountsBalance();
+		})
 	}
 
+	fetchAccountsBalance = ()=> {
+		const {dispatch,accounts} = this.props;
+		if (Object.keys(accounts).length === 0) {
+			this.setState({
+				refreshing: false,
+			});
+			return;
+		}
+		let executors=[];
+		Object.values(accounts).map(value => {
+			executors.push(
+				new Promise((resolve, reject) => {
+					web3.eth.getBalance(value.address).then(balance=>{
+						value.balance = balance / Math.pow(10,18);
+						resolve(value)
+					},error => {
+						console.log('[error] account: ', value.address);
+						reject(error)
+					})
+				}));
+		});
+		Promise.all(executors).then(
+			accounts=>{
+				let newAccounts={};
+				accounts.forEach(account=>{
+					newAccounts[account.address] = account;
+				});
+				dispatch(action_accounts(newAccounts));
+				this.setState({
+					refreshing: false,
+				})
+			},errors=>{
+				this.setState({
+					refreshing: false,
+				},()=>{
+					Alert.alert('Error', 'get Balance error');
+				})
+			}
+		)
+	};
+	onRefresh = () => {
+		this.setState({
+			refreshing: true
+		});
+		setTimeout(()=>{
+			this.fetchAccountsBalance();
+		}, 1000);
+	};
 	onImportLedger=()=> {
 		console.log("click import ledger.");
 		this.loadingView.show('Connecting to Ledger...');
@@ -255,7 +333,7 @@ class Home extends Component {
 							<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 						</View>
 						<View style={otherStyles.VaultHome.accountRightView}>
-							<Text style={styles.listItemText}>{ (item.balance-0).toFixed(4) } AION</Text>
+							<Text style={styles.listItemText} numberOfLines={1}>{ (item.balance-0).toFixed(4) } AION</Text>
 						</View>
 					</View>
 				</TouchableOpacity>
@@ -280,10 +358,42 @@ class Home extends Component {
 							openRowKey: null,
 						});
 					}}
+					ListEmptyComponent={()=>
+						<View>
+							<Text style={{alignSelf: 'center', textAlign:'center'}}>
+								Please Import a account
+							</Text>
+						</View>
+					}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={this.onRefresh}
+							title={'Loading'}
+						/>
+					}
 				/>
 				<Loading ref={(element) => {
 					this.loadingView = element;
 				}}/>
+				<ComponentTabBar
+					style={{
+						position: 'absolute',
+						bottom: 25, 
+						backgroundColor: 'white', 
+						width: '100%',  
+						flex: 1,
+						flexDirection: 'row',
+						justifyContent: 'space-around',  
+						borderTopWidth: 0.3,
+						borderTopColor: '#8c8a8a'  
+					}} 
+					onPress={[
+						()=>{this.props.navigation.navigate('signed_vault');},
+						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_setting');},
+					]}
+				/>
 			</View>
 		)
 	}
@@ -383,6 +493,7 @@ const styles = StyleSheet.create({
 	    width: 80,
 	},
 	listItemText: {
+		textAlign:'left',
 		color: '#fff',
 	}
 });

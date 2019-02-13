@@ -40,7 +40,7 @@ for(let i = 0; i < 20; i++){
  
 let dapps = [];
 dapps.push(new Dapp('dapp1', 'https://i0.wp.com/www.blockchaindk.com/wp-content/uploads/2017/11/Aion-Logo.png?fit=400%2C400&ssl=1', 'desc1','http://192.168.50.83:8888'));
-dapps.push(new Dapp('dapp2', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDHgU12UjzCm0m-96M-nsY3gpNuwCl9-dLlmmzlEvsEdHEtJt9', 'desc2','http://192.168.50.83:8888'));;
+dapps.push(new Dapp('dapp2', 'https://www.macupdate.com/images/icons256/59967.png', 'desc2','http://192.168.50.83:8888'));;
 
 export default data = {
 	accounts,
