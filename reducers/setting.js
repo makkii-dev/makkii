@@ -6,7 +6,7 @@ const init = {
 	theme: 'white',
 
 	tx_fee: 10000,
-    tx_confirm: 6, // 6 blocks
+    tx_confirm: 6,  
     endpoint_wallet: 'http://127.0.0.1:8545',
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net'	 

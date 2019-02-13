@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import { Logo, Button } from '../../common.js';
 import styles from '../../styles.js';
-import constants from '../../constants.js';
 
 class Transaction extends Component {
 	constructor(props){

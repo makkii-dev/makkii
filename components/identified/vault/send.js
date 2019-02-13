@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import {View, Text, Image, TouchableOpacity, ScrollView, Dimensions} from 'react-native';
 import styles from '../../styles.js';
 import {TextInputWithLabel} from "../../common";
-import constants from '../../constants.js';
 
 const {width, height} = Dimensions.get('window')
 class Send extends Component {

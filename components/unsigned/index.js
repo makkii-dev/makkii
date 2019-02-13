@@ -27,7 +27,7 @@ const unsigned = createStackNavigator({
     },
   	'unsigned_register_mnemonic': {
         screen: RegisterMnemonic, 
-        navigationOptions: {
+        navigationOptions: { 
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle
