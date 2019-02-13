@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard, Dimensions} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard, Dimensions, RefreshControl} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import styles from '../../styles.js';
 import {EditableView} from "../../common";
-import {parseDate} from "../../../utils";
-import {update_account_name} from "../../../actions/accounts";
+import {fetchRequest} from "../../../utils";
+import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from '../../toast.js';
+import BigNumber from 'bignumber.js';
 const {width} = Dimensions.get('window');
 Date.prototype.Format = function (fmt) {
 	let o = {
@@ -55,6 +56,10 @@ class Account extends Component {
     };
 	constructor(props){
 		super(props);
+		this.state={
+			refreshing: false,
+		};
+		this.addr=this.props.navigation.state.params.address;
 	}
 	async componentDidMount(){
 
@@ -62,16 +67,17 @@ class Account extends Component {
 	componentWillMount(): void {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		this.props.navigation.setParams({
-			title: this.props.account.name
+			title: this.props.accounts[this.addr].name
 		});
 	}
 
 	_renderTransaction(transaction){
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
+		const value = transaction.from === this.addr? -transaction.value: transaction.value;
 		return (
 			<TouchableOpacity
 				onPress={e => {
-					//dispatch(account(this.props.accounts[key]));
+					//dispatch(account(this.props.accounts[this.addr][key]));
 					this.props.navigation.navigate('VaultTransaction');
 				}}
 			>
@@ -90,7 +96,7 @@ class Account extends Component {
 						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
 						<Text style={{
 							color: 'grey',
-						}}>{ transaction.value.toFixed(2) } AION</Text>
+						}}>{ value.toFixed(2) } AION</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -98,13 +104,49 @@ class Account extends Component {
 	}
 	onChangeName = (newName) =>{
 		const {dispatch} = this.props;
-		const key = this.props.account.address;
+		const key = this.props.accounts[this.addr].address;
 		dispatch(update_account_name(key,newName));
 		this.props.navigation.setParams({
 			title: newName
 		});
 	};
 
+	onRefresh =(address)=>{
+		this.setState({
+			refreshing: true,
+		});
+		this.fetchAccountTransacions(address);
+	};
+
+	fetchAccountTransacions = (address, page=0, size=25)=>{
+		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+		fetchRequest(url).then(res=>{
+			console.log('[fetch result]', res);
+			let txs = {};
+			const {content} = res;
+			content.forEach(value=>{
+				let tx={};
+				tx.hash = '0x'+value.transactionHash;
+				tx.timestamp = value.transactionTimestamp/1000;
+				tx.from = '0x'+value.fromAddr;
+				tx.to = '0x'+value.toAddr;
+				tx.value = new BigNumber(value.value,16).shiftedBy(-18);
+				tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
+				txs[tx.hash]=tx;
+			});
+			const {dispatch} = this.props;
+			console.log('[txs] ', JSON.stringify(txs));
+			dispatch(update_account_txs(address,txs));
+			this.setState({
+				refreshing: false,
+			})
+		},error => {
+			console.log(error);
+			this.setState({
+				refreshing: false,
+			})
+		})
+	};
 	render(){
 		const {navigation} = this.props;
 		return (
@@ -112,15 +154,15 @@ class Account extends Component {
 				<View style={styles.Account.summaryContainer}>
 					<View style={styles.Account.summaryLeftContainer}>
 						<EditableView
-							value={this.props.account.name}
+							value={this.props.accounts[this.addr].name}
 							endInput={this.onChangeName.bind(this)}
-							type={this.props.account.type}
+							type={this.props.accounts[this.addr].type}
 						/>
-						<Text>{ this.props.account.balance } AION</Text>
+						<Text>{ this.props.accounts[this.addr].balance } AION</Text>
 					</View>
 					<View>
 						<QRCode
-							value={this.props.account.address}
+							value={this.props.accounts[this.addr].address}
 							size={100}
 							color='purple'
 							backgroundColor='white'
@@ -128,9 +170,9 @@ class Account extends Component {
 					</View>
 				</View>
 				<View style={styles.Account.addressView}>
-					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.props.account.address }</Text>
+					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.props.accounts[this.addr].address }</Text>
 					<TouchableOpacity onPress={()=>{
-						Clipboard.setString(this.props.account.address);
+						Clipboard.setString(this.props.accounts[this.addr].address);
 						this.refs.toast.show('Copied to clipboard successfully');
 					}}>
 						<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
@@ -153,7 +195,7 @@ class Account extends Component {
 				</View>
 				<FlatList
 					style={{margin:10}}
-					data={Object.values(this.props.account.transactions)}
+					data={Object.values(this.props.accounts[this.addr].transactions)}
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=>this._renderTransaction(item)}
                     ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
@@ -161,6 +203,13 @@ class Account extends Component {
 						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
 						<Text>No Transaction</Text>
 						</View>}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={()=>this.onRefresh(this.props.accounts[this.addr].address)}
+							title={'loading'}
+						/>
+					}
 				/>
 				<Toast
 					ref={"toast"}
@@ -174,6 +223,6 @@ class Account extends Component {
 
 export default connect(state => {
 	return ({
-		account: state.account,
+		accounts: state.accounts,
 	});
 })(Account);
