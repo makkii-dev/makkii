@@ -4,32 +4,56 @@ import styles from './styles.js';
 import PropTypes from 'prop-types';
 
 class ComponentTabBar extends Component{
+	static defaultProps={
+		activeTintColor: '#3366ff',
+		inactiveTintColor: '#adb0b5',
+	};
+	static propTypes= {
+		activeTintColor: PropTypes.string,
+		inactiveTintColor: PropTypes.string,
+		active: PropTypes.string.isRequired,
+	}
 	render(){
+		const wallet_tint_color =  this.props.active === 'wallet'?  this.props.activeTintColor:this.props.inactiveTintColor;
+		const dapp_tint_color =  this.props.active === 'dapp'?  this.props.activeTintColor:this.props.inactiveTintColor;
+		const settings_tint_color =  this.props.active === 'settings'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		return (
 			<View style={this.props.style}>  
 				<TouchableOpacity 
-					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
 					onPress={e=>{
 						this.props.onPress[0]()
 					}}
-				> 
-					<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6}} />
-				</TouchableOpacity> 
+				>
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} />
+						<Text style={{fontSize: 12, color:wallet_tint_color }}>Wallet</Text>
+					</View>
+				</TouchableOpacity>
 				<TouchableOpacity
-					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
 					onPress={e=>{
 						this.props.onPress[1]()
 					}}
 				>
-					<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6}} /> 
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} />
+						<Text style={{fontSize: 12, color:dapp_tint_color }}>DApps</Text>
+					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
-					style={{width:50,height:50,justifyContent:'center',alignItems:'center'}}
 					onPress={e=>{
 						this.props.onPress[2]()
 					}}
 				>
-					<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6}} />
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} />
+						<Text style={{fontSize: 12, color:settings_tint_color }}>Settings</Text>
+					</View>
 				</TouchableOpacity>
 			</View>
 		);
@@ -316,6 +340,20 @@ class TextInputWithLabel extends React.PureComponent{
 		);
 	}
 
+}
+
+class TransactionItemCell extends React.PureComponent {
+	render(){
+		return(
+			<View>
+				<View style={styles.cellSeparator} />
+				<View>
+
+				</View>
+				<View style={styles.cellSeparator} />
+			</View>
+		)
+	}
 }
 
 module.exports = {

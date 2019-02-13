@@ -34,7 +34,7 @@ class Home extends Component {
 								<TouchableOpacity
 									key={k} 
 									onPress={()=>{
-										this.props.navigation.navigate('signed_dapps_dapp',{
+										this.props.navigation.navigate('signed_dapps_launch',{
 											'title': v.name,
 											'dapp': v, 
 										})
@@ -77,13 +77,14 @@ class Home extends Component {
 						position: 'absolute',
 						bottom: 0,
 						backgroundColor: 'white', 
-						width: '100%',  
+						width,
 						flex: 1,
 						flexDirection: 'row',
 						justifyContent: 'space-around',  
 						borderTopWidth: 0.3,
 						borderTopColor: '#8c8a8a'  
-					}}  
+					}}
+					active={'dapp'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
 						()=>{this.props.navigation.navigate('signed_dapps');},

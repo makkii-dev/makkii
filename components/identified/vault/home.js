@@ -379,13 +379,14 @@ class Home extends Component {
 						position: 'absolute',
 						bottom: 0,  
 						backgroundColor: 'white', 
-						width: '100%',  
 						flex: 1,
+						width,
 						flexDirection: 'row',
 						justifyContent: 'space-around',  
 						borderTopWidth: 0.3,
 						borderTopColor: '#8c8a8a'  
-					}} 
+					}}
+					active={'wallet'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
 						()=>{this.props.navigation.navigate('signed_dapps');},
