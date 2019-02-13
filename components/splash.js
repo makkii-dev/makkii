@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Image,AsyncStorage} from 'react-native';
 import {user_signin} from '../actions/user.js';
+import {add_accounts} from '../actions/accounts.js';
 
 class Splash extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -18,34 +19,55 @@ class Splash extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
+		
+		// load db user
 		AsyncStorage
 			.getItem('user') 
 			.then(json_user=>{
-				setTimeout(()=>{
-					if(json_user){ 
+				if(json_user){ 
+					try{
 						let user = JSON.parse(json_user);		 			
 						// TODO: move max_keep_signed to setting;
 						let max_keep_signed = 60000 * 30;  
 						let time_diff = Date.now() - user.timestamp; 
-						console.log('user.timestamp ' + user.timestamp);
-						console.log('Date.now()     ' + Date.now()); 
-						console.log('time diff      ' + time_diff);
 						if(time_diff < max_keep_signed) {  
+
+							// load db accounts
+							AsyncStorage
+								.getItem('accounts') 
+								.then(json_accounts=>{
+									if(json_accounts){
+										try{
+											let accounts = JSON.parse(json_accounts);
+											dispatch(add_accounts(accounts));
+										}catch(e){
+											alert(e);
+										} 
+									}
+								}); 
+
 							dispatch(user_signin(user.hashed_password, user.mnemonic));
-							navigate('signed');  
-							console.log('[db-user] signed');     
+							setTimeout(()=>{   
+								navigate('signed');
+							}, 1000);      
 						} else {
-							navigate('unsigned_login'); 
-							console.log('[db-user] timeout');	
+							setTimeout(()=>{
+								navigate('unsigned_login'); 
+							}, 500);
 						}
-					} else {
-						navigate('unsigned_register');    
-						console.log('[db-user] new');
-					} 
-				}, 1000); 				
-			}, err=>{  
-				alert(err);  
-			}); 
+					} catch(e){
+						setTimeout(()=>{
+							navigate('unsigned_register');  
+						}, 500);
+					}
+				} else {
+					setTimeout(()=>{
+						navigate('unsigned_register');  
+					}, 500);    
+				} 				
+		}, err=>{  
+			alert(err);  
+		});	 
 	}
 	render(){
 		return (
@@ -68,7 +90,7 @@ class Splash extends Component {
 }
 
 export default connect(state => {
-	return {
-		user: state.user
+	return {   
+		user: state.user,
 	};
 })(Splash);

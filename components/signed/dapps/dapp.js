@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View, WebView} from 'react-native';
-class Dapp extends React.Component {
+class Dapp extends Component {
     constructor(props) {
         super(props);
         this.uri = this.props.navigation.state.params.uri;
