@@ -12,6 +12,7 @@ import {setting}            from './actions/setting.js';
 import {user,user_signout} from './actions/user.js';
  
 // reducers
+import reducer_account        from './reducers/account.js';
 import reducer_accounts        from './reducers/accounts.js';
 import reducer_accounts_ledger from './reducers/accounts_ledger.js';
 import reducer_dapps           from './reducers/dapps.js';
@@ -20,6 +21,7 @@ import reducer_user            from './reducers/user.js';
 
 // store 
 const store = createStore(combineReducers({
+	account:         reducer_account,
 	accounts:        reducer_accounts,
 	accounts_ledger: reducer_accounts_ledger,
 	dapps:           reducer_dapps,
