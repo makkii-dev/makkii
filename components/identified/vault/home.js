@@ -379,7 +379,7 @@ class Home extends Component {
 				<ComponentTabBar
 					style={{
 						position: 'absolute',
-						bottom: 25, 
+						bottom: 0,  
 						backgroundColor: 'white', 
 						width: '100%',  
 						flex: 1,

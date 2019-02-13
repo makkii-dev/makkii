@@ -44,7 +44,7 @@ class Home extends Component {
 											height: 50,
 											backgroundColor: 'white',
 											position: 'relative',
-											marginTop: 3,
+											marginTop: 1,
 											paddingLeft: 60,
 										}}>
 										<Image 

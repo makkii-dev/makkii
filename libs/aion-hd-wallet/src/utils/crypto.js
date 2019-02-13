@@ -1,6 +1,4 @@
-import crypto from 'crypto-browserify';
-import {Buffer} from 'buffer';
-import BigNumber from "bignumber.js";
+import crypto from 'react-native-crypto';
 
 /**
  *

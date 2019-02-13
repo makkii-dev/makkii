@@ -7,7 +7,7 @@ import {
 } from '../actions/user.js'; 
 
 const init = {
-	timestamp: 0, 
+	timestamp: 0,
 	hashed_password: '',     
 	mnemonic: '',  
 };

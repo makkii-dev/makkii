@@ -28,13 +28,35 @@
         "invalid_wallet_server_url": "Invalid wallet server url",
         "invalid_dapp_server_url": "Invalid dapp server url"
     },
+    "recovery_phrase": {
+        "title": "Recovery Phrase"
+    },
+    "receive": {
+        "title": "Receive",
+        "receive_help_message": "Please ask sender to scan below QRCode.",
+        "label_modify_amount": "Amount",
+        "instruction": "Pay me by scanning this QRCode",
+        "button_save_receive_code": "Download QRCode",
+        "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
+    },
     "app_name": "MAKKI",
     "logout": "Sign Out",
     "update_button": "Update",
     "save_button": "Save",
+    "copy_button": "Copy",
+    "refresh_button": "Refresh",
     "toast_update_success": "Update successfully",
     "alert_title_error": "Error",
     "invalid_old_password": "Old password is incorrect",
     "invalid_new_password": "New password is invalid",
-    "inconsistent_passwords": "Confirmed password and new password are different"
+    "inconsistent_passwords": "Confirmed password and new password are different",
+    "toast_copy_success": "Copied to clipboard successfully",
+    "invalid_amount": "Invalid amount",
+    "error_save_qrcode_image": "Failed to save qrcode image.",
+    "toast_save_image_success": "Image was saved to {{path}}",
+    "permission_storage_title": "Makki Storage Permission",
+    "permission_storage_message": "Makki App needs access to your external storage to save some data.",
+    "ok_button": "Ok",
+    "cancel_button": "Cancel",
+    "save_file_button": "Save to Phone"
 }

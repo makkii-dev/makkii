@@ -38,13 +38,13 @@ class Home extends Component {
                     }}
                 />
                 <AionCell
-                    title='Recovery Phrase'
+                    title={strings('recovery_phrase.title')}
                     onClick={() => {
                         this.props.navigation.navigate('signed_setting_recovery');
                     }}
                 />
                 <AionCell
-                    title='Service Configuration'
+                    title={strings('service_configuration.title')}
                     onClick={() => {
                         this.props.navigation.navigate('signed_setting_services');
                     }}
@@ -59,7 +59,7 @@ class Home extends Component {
                 <AionCell
 					title={strings('logout')}
 					onClick={() => {
-						const { dispatch } = this.props;
+						const { dispatch } = this.props; 
 						dispatch(user_signout());
 						this.props.navigation.navigate('unsigned_login');
 					}}/>
@@ -69,8 +69,8 @@ class Home extends Component {
 						position: 'absolute',
 						bottom: 80, 
 						backgroundColor: 'white', 
-						width: '100%',  
-						flex: 1,
+						width: '100%',   
+						flex: 1,  
 						flexDirection: 'row',
 						justifyContent: 'space-around',  
 						borderTopWidth: 0.3,

@@ -27,13 +27,35 @@
     "invalid_wallet_server_url": "钱包服务器地址不正确",
     "invalid_dapp_server_url": "DApp服务器地址不正确"
   },
+  "recovery_phrase": {
+    "title": "助记词"
+  },
+  "receive": {
+    "title": "收款",
+    "receive_help_message": "请将下面收款码",
+    "label_modify_amount": "修改金额",
+    "instruction": "扫二维码向我付钱",
+    "button_save_receive_code": "保存收款码",
+    "no_permission_save_file": "保存失败，请在系统设置中授予外部存储权限"
+  },
   "app_name": "骂起",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",
+  "copy_button": "复制",
+  "refresh_button": "刷新",
   "toast_update_success": "提交成功",
   "alert_title_error": "错误",
   "invalid_old_password": "旧密码不正确",
   "invalid_new_password": "新密码格式不正确",
-  "inconsistent_passwords": "确认密码不一致"
+  "inconsistent_passwords": "确认密码不一致",
+  "toast_copy_success": "已复制到剪切板",
+  "invalid_amount": "无效的金额",
+  "error_save_qrcode_image": "保存二维码图片失败",
+  "toast_save_image_success": "图片已保存至{{path}}",
+  "permission_storage_title": "Makki应用存储权限",
+  "permission_storage_message": "Makki App需要得到您授权来保存部分数据文件",
+  "ok_button": "同意",
+  "cancel_button": "拒绝",
+  "save_file_button": "保存到手机"
 }
