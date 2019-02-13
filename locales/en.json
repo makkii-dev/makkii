@@ -40,6 +40,7 @@
         "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
     },
     "app_name": "MAKKI",
+    "default_account_name": "Account",
     "logout": "Sign Out",
     "update_button": "Update",
     "save_button": "Save",

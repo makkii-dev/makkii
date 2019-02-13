@@ -147,7 +147,7 @@ const signed = createStackNavigator({
         } 
 	},  
 }, {    
-	//initialRouteName: 'signed_vault', 
+	initialRouteName: 'signed_vault', 
 	//initialRouteName: 'signed_dapps',
 	//initialRouteName: 'signed_odex',  
 	//initialRouteName: 'signed_setting', 

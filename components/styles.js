@@ -9,7 +9,7 @@ export default styles = {
         shadowOffset: { height: 0, width:0 }, 
         shadowRadius: 0, 
         borderBottomWidth:0,
-        elevation: 1,
+        elevation: 0.5, 
         fontWeight: 'normal',
     },
     headerTitleStyle: {

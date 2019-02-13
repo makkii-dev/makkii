@@ -54,8 +54,24 @@ class Login extends Component {
 								if(json_user){
 									let user  = JSON.parse(json_user);
 									if(user.hashed_password === hashPassword(this.state.password)){
-										dispatch(user_signin(user.hashed_password, user.mnemonic)); 
-										this.props.navigation.navigate('signed_setting'); 
+										dispatch(user_signin(user.hashed_password, user.mnemonic));
+
+										// load db accounts
+										AsyncStorage
+											.getItem('accounts') 
+											.then(json_accounts=>{
+												if(json_accounts){
+													try{
+														let accounts = JSON.parse(json_accounts);
+														dispatch(add_accounts(accounts));
+													}catch(e){
+													} 
+												}
+											}); 
+
+										setTimeout(()=>{
+											this.props.navigation.navigate('signed_vault');
+										}, 200);
 									} else {
 										alert('Invalid password');
 									}
@@ -64,7 +80,7 @@ class Login extends Component {
 								}
 							},err=>{
 								alert(err);
-							});
+							}); 
 						}}
 					/>
 				</View>

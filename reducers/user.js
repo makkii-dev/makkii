@@ -13,8 +13,7 @@ const init = {
 };
  
 export default function user(state = init, action){
-	let new_state;
-	console.log('[action-type] ' + action.type); 
+	let new_state; 
 	switch(action.type){
 		case USER_REGISTER:
 			new_state = Object.assign({}, state, {

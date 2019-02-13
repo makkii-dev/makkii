@@ -1,14 +1,7 @@
-export const ACCOUNTS = 'ACCOUNTS';
 export const ADD_ACCOUNTS = 'ADD_ACCOUNTS';
 export const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
 export const UPDATE_ACCOUNT_TRANSACTIONS = 'UPDATE_ACCOUNT_TRANSACTIONS';
 export const DEL_ACCOUNT = 'DEL_ACCOUNT';
-export function accounts(accounts){
-	return {
-		type: ACCOUNTS,
-		accounts
-	};
-}
 
 export function add_accounts(accounts){
 	return {

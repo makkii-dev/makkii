@@ -38,7 +38,8 @@
     "button_save_receive_code": "保存收款码",
     "no_permission_save_file": "保存失败，请在系统设置中授予外部存储权限"
   },
-  "app_name": "骂起",
+  "app_name": "码奇",
+  "default_account_name": "账户",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",
