@@ -6,7 +6,7 @@ import styles from '../../styles.js';
 import {EditableView} from "../../common";
 import {fetchRequest} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
-import Toast from '../../toast.js';
+import Toast from '../../toast.js'; 
 import BigNumber from 'bignumber.js';
 const {width} = Dimensions.get('window');
 Date.prototype.Format = function (fmt) {

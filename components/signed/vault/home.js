@@ -14,7 +14,6 @@ import {
 	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import { account } from '../../../actions/account.js';
 import { delete_account, accounts as action_accounts} from '../../../actions/accounts.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
