@@ -28,7 +28,7 @@ class Home extends Component {
 		return ( 
 			<View style={{
 				backgroundColor: '#eeeeee',
-				height: Dimensions.get('window').height,
+				flex:1,
 			}}>
 				<View style={styles.marginTop60} />
                 <AionCell
@@ -67,7 +67,7 @@ class Home extends Component {
 					// TODO
 					style={{
 						position: 'absolute',
-						bottom: 80, 
+						bottom: 0,
 						backgroundColor: 'white', 
 						width: '100%',   
 						flex: 1,  

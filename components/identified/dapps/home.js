@@ -20,6 +20,7 @@ class Home extends Component {
 			<View style={{
 				backgroundColor: '#eeeeee',
 				height: Dimensions.get('window').height,
+				flex:1
 			}}>
 				<View style={{
 					flex:1,
@@ -74,7 +75,7 @@ class Home extends Component {
 					// TODO
 					style={{ 
 						position: 'absolute',
-						bottom: 80, 
+						bottom: 0,
 						backgroundColor: 'white', 
 						width: '100%',  
 						flex: 1,

@@ -78,7 +78,7 @@ class Account extends Component {
 			<TouchableOpacity
 				onPress={e => {
 					//dispatch(account(this.props.accounts[this.addr][key]));
-					this.props.navigation.navigate('VaultTransaction');
+					this.props.navigation.navigate('signed_vault_transaction');
 				}}
 			>
 				<View style={styles.Transaction.container}>
@@ -123,17 +123,20 @@ class Account extends Component {
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
-			const {content} = res;
-			content.forEach(value=>{
-				let tx={};
-				tx.hash = '0x'+value.transactionHash;
-				tx.timestamp = value.transactionTimestamp/1000;
-				tx.from = '0x'+value.fromAddr;
-				tx.to = '0x'+value.toAddr;
-				tx.value = new BigNumber(value.value,16).shiftedBy(-18);
-				tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
-				txs[tx.hash]=tx;
-			});
+			if(res&&res.content){
+				res.content.forEach(value=>{
+					let tx={};
+					tx.hash = '0x'+value.transactionHash;
+					tx.timestamp = value.transactionTimestamp/1000;
+					tx.from = '0x'+value.fromAddr;
+					tx.to = '0x'+value.toAddr;
+					tx.value = new BigNumber(value.value,16).shiftedBy(-18);
+					tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
+					txs[tx.hash]=tx;
+				});
+			}else{
+				this.refs.toast.show('No More data');
+			}
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
 			dispatch(update_account_txs(address,txs));
@@ -183,13 +186,13 @@ class Account extends Component {
 					<Button
 						title="SEND"
 						onPress={()=>{
-							navigation.navigate('VaultSend');
+							navigation.navigate('signed_vault_send');
 						}}
 					/>
 					<Button
 						title="RECEIVE"
 						onPress={()=>{
-							navigation.navigate('VaultReceive');
+							navigation.navigate('signed_vault_receive');
 						}}
 					/>
 				</View>

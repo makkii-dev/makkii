@@ -32,7 +32,7 @@ class ImportHdWallet extends React.Component {
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(add_accounts(acc));
-                    navigation.navigate('VaultHome');
+                    navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 10}}>
                         <Text style={{color: 'blue'}}>IMPORT</Text>

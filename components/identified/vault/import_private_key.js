@@ -46,7 +46,7 @@ class ImportPrivateKey extends Component {
 				console.log(acc);
 
 				this.props.navigation.state.params.dispatch(add_accounts(acc));
-				this.props.navigation.navigate('VaultHome');
+				this.props.navigation.navigate('signed_vault');
 			}, error=> {
     			console.log("error: " + error);
 				Alert.alert('Error', 'Invalid private key');

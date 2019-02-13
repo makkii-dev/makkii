@@ -140,7 +140,7 @@ class Home extends Component {
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
-					this.props.navigation.navigate('VaultImportLedger');
+					this.props.navigation.navigate('signed_vault_import_ledger');
 				}, error => {
 					this.loadingView.hide();
 					Alert.alert('Error', getLedgerMessage(error.code));
@@ -171,14 +171,14 @@ class Home extends Component {
 				title:'Master key',
 				onPress:()=>{
 					console.log('New Account');
-					navigation.navigate('VaultImportHdWallet');
+					navigation.navigate('signed_vault_import_hdwallet');
 				},
 				image:require('../../../assets/aion_logo.png'),
 			},
 			{
 				title:'Private Key',
 				onPress:()=>{
-					navigation.navigate('VaultImportPrivateKey');
+					navigation.navigate('signed_vault_import_private_key');
 				},
 				image:require('../../../assets/key.png'),
 			},
@@ -319,7 +319,7 @@ class Home extends Component {
 							return;
 						}
 						dispatch(account(this.props.accounts[item.address]));
-						this.props.navigation.navigate('VaultAccount',{address: item.address});
+						this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
 					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
