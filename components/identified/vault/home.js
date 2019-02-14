@@ -92,11 +92,14 @@ class Home extends Component {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
+					console.log(value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
 						value.balance = balance / Math.pow(10,18);
 						resolve(value)
 					},error => {
 						console.log('[error] account: ', value.address);
+						console.log(error);
+						console.log(web3);
 						reject(error)
 					})
 				}));

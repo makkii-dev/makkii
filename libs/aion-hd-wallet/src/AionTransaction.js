@@ -30,7 +30,7 @@ export class AionTransaction {
      * @param params - example {
           nonce: '0x00',
           gasPrice: '0x09184e72a000',
-          gasLimit: '0x2710',
+          gas: '0x2710',
           to: '0x0000000000000000000000000000000000000000',
           value: '0x00',
           data: '0x7f7465737432000000000000000000000000000000000000000000000000000000600057',
@@ -44,11 +44,12 @@ export class AionTransaction {
         }
 
         this.setHexFieldOrNull('nonce', params.nonce);
-        this.setHexFieldOrNull('type', params.type);
+        this['type'] = params.type;
 
         if (!params.timestamp) {
-            params.timestamp = new BigNumber(new Date().getTime());
+            params.timestamp = new BigNumber(new Date().getTime() * 1000);
         }
+        console.log("timestamp:", params.timestamp);
 
         this.setHexField('data', params.data);
         this.setHexField('timestamp', params.timestamp);
@@ -116,7 +117,7 @@ export class AionTransaction {
         encodedTx.type = AionRlp.encode(this.type);
         encodedTx.fullSignature = AionRlp.encode(new Buffer(this.fullSignature));
 
-        return AionRlp.encodeList([
+        let encoded = AionRlp.encodeList([
             encodedTx.nonce,
             encodedTx.to,
             encodedTx.value,
@@ -127,14 +128,20 @@ export class AionTransaction {
             encodedTx.type,
             encodedTx.fullSignature,
         ]);
+        return Crypto.toHex(encoded);
     };
 
     getRawHash = () => {
+        console.log(Crypto.toHex(this.getEncodedRaw()));
+        console.log("testblake2b:" + blake2b(32).update(Buffer.from([1,2])).digest('hex'));
         return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
     sign = (ecKey) => {
-        this.signature = ecKey.sign(this.getRawHash());
+        let rawHash = this.getRawHash();
+        console.log("rawHash:", rawHash);
+        console.log("rawHash:", Crypto.toHex(rawHash));
+        this.signature = ecKey.sign(rawHash);
         this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
     }
 }
