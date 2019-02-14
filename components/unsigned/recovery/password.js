@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { Button, View, Text } from 'react-native';
-import { ComponentPassword } from '../../common.js';
-import { connect } from 'react-redux';
-import { user } from '../../../actions/user.js';
+import React, {Component} from 'react';
+import {Button,View,Text} from 'react-native';
+import {ComponentPassword} from '../../common.js';
+import {connect} from 'react-redux';
+import {hashPassword,validatePassword} from '../../../utils.js';
+import {user_update_password} from '../../../actions/user.js';
 import styles from '../../styles.js';
 
 class Password extends Component {
@@ -13,6 +14,10 @@ class Password extends Component {
     };
 	constructor(props){
 		super(props);
+		this.state = {
+			password: '',            
+			password_confirm: '',
+		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -22,29 +27,51 @@ class Password extends Component {
 		});
 	}
 	render(){
+		const {dispatch} = this.props; 
 		return (
 			<View style={ styles.container }>
-				<View style={ styles.form }>
-					<Text style={ styles.label }>Enter password</Text>
+				<Text>Enter password</Text>
+				<View style={styles.marginBottom20}>
+					<ComponentPassword  
+						value={this.state.password}
+						onChange={e=>{
+							this.setState({
+								password: e
+							});
+						}}
+					/>
 				</View>
-				<View style={ styles.form }>
-					<ComponentPassword onChange={e=>{
-						console.log();
-					}} />
+				<Text>Confirm your password</Text>
+				<View style={styles.marginBottom20}>
+					<ComponentPassword 
+						value={this.state.password_confirm} 
+						onChange={e=>{
+							this.setState({
+								password_confirm: e
+							});
+						}}
+					/>
 				</View>
-				<View style={ styles.form }>
-					<Text style={ styles.label }>Confirm your password</Text>
-				</View>
-				<View style={ styles.form }>
-					<ComponentPassword onChange={e=>{
-						console.log();
-					}} />
-				</View>
-				<View style={styles.form}>
-					<Button title="Reset" onPress={(e)=>{
-						this.props.navigation.navigate('Vault');
-					}} />
-				</View>
+				<Button 
+					title="Reset" 
+					onPress={e=>{
+						if (!validatePassword(this.state.password))
+							alert("Invalid password!");
+						else if (!validatePassword(this.state.password_confirm))
+							alert('Invalid confirm password!');
+						else if (this.state.password !== this.state.password_confirm)
+							alert('Confirm password does not match password!') 
+						else {
+							let hashed_password = hashPassword(this.state.password);
+							dispatch(user_update_password(hashed_password));
+							this.setState({
+								password: '',
+								password_confirm: '',
+							});
+							this.props.navigation.navigate('signed');
+						}   
+					}}
+				/>
 			</View>
 		);
 	}

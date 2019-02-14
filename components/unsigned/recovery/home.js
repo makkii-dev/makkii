@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
-import { InputMultiLines } from '../../common.js';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {View,Text,TouchableOpacity,Button} from 'react-native';
+import {dbGet} from '../../../utils.js';
+import {user_signin} from '../../../actions/user.js';
+import {InputMultiLines} from '../../common.js';
 import styles from '../../styles.js';
 
 class Home extends Component {
@@ -12,6 +14,9 @@ class Home extends Component {
     }
 	constructor(props){
 		super(props);
+		this.state = {
+			mnemonic: ''
+		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -39,11 +44,11 @@ class Home extends Component {
 					<InputMultiLines
 						editable={true}
 						style={styles.input_multi_lines} 
-						value={this.props.user.mnemonic}
+						value={this.state.mnemonic}
 						onChangeText={e=>{
 							this.setState({
-
-							})
+								mnemonic: e
+							});
 						}} 
 			        />
 		        </View>
@@ -51,7 +56,16 @@ class Home extends Component {
 			        <Button 
 			        	title="Confirm" 
 			        	onPress={e=>{
-							this.props.navigation.navigate('RecoveryPassword');
+			        		dbGet('user').then(data=>{
+			        			if(data.mnemonic === this.state.mnemonic){ 
+			        				dispatch(user_signin(data.hashed_password, data.mnemonic));
+			        				this.props.navigation.navigate('unsigned_recovery_password');
+			        			} else {
+			        				alert('Mnemonic not matched');
+			        			}
+			        		},err=>{
+			        			alert(e);
+			        		});
 						}} 
 					/>
 				</View>

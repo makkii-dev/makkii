@@ -61,6 +61,7 @@ class Home extends Component {
 					onClick={() => {
 						const { dispatch } = this.props; 
 						dispatch(user_signout());
+						
 						this.props.navigation.navigate('unsigned_login');
 					}}/>
 				<ComponentTabBar 

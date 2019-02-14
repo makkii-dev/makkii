@@ -1,8 +1,30 @@
+import {AsyncStorage} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
+import BigNumber from 'bignumber.js';
+
+function dbGet(key){
+    return new Promise((resolve, reject)=>{
+        AsyncStorage 
+        .getItem(key) 
+        .then(json=>{
+            if(json){
+                try{
+                    let data = JSON.parse(json);
+                    resolve(data);
+                }catch(e){
+                    reject(e);
+                } 
+            } else {
+                reject();
+            }
+        });    
+    });
+}
+
 function validatePassword(password) {
     let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
     return reg.test(password);
@@ -97,6 +119,7 @@ function fetchRequest(url, method='GET', headers={}) {
 }
 
 module.exports = {
+    dbGet: dbGet,
     validatePassword: validatePassword,
     validateUrl: validateUrl,
     hashPassword: hashPassword,
