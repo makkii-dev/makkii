@@ -96,6 +96,7 @@ class ImportLedger extends React.Component {
             acc.name = strings('default_account_name');
             acc.type = '[ledger]';
             acc.transactions = {};
+            acc.derivationIndex = i;
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
                 accounts[acc.address] = {'account': acc, 'selected': false}

@@ -6,7 +6,7 @@ import {
     FlatList,
     StyleSheet,
     Dimensions,
-    Image, PixelRatio,
+    PixelRatio,
     ActivityIndicator,
     InteractionManager
 } from 'react-native';
