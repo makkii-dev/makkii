@@ -18,7 +18,7 @@ class ComponentTabBar extends Component{
 		const dapp_tint_color =  this.props.active === 'dapp'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		const settings_tint_color =  this.props.active === 'settings'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		return (
-			<View style={this.props.style}>  
+			<View style={{...this.props.style}}>
 				<TouchableOpacity 
 					onPress={e=>{
 						this.props.onPress[0]()
@@ -343,14 +343,14 @@ class TextInputWithLabel extends React.PureComponent{
 }
 
 class TransactionItemCell extends React.PureComponent {
+	static defaultProps={
+		valueTextAlign: 'right',
+	};
 	render(){
 		return(
-			<View>
-				<View style={styles.cellSeparator} />
-				<View>
-
-				</View>
-				<View style={styles.cellSeparator} />
+			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,flexDirection:'row',width:'100%',justifyContent:'space-around',alignItems:'flex-start'}}>
+				<Text style={{flex:3}}>{this.props.title}</Text>
+				<Text style={{flex:5,borderBottomColor:'#000',borderBottomWidth: 1,textAlign:this.props.valueTextAlign}}>{this.props.value}</Text>
 			</View>
 		)
 	}
@@ -365,5 +365,6 @@ module.exports = {
 	ImportListItem,
 	ImportListfooter,
 	EditableView,
-	TextInputWithLabel
+	TextInputWithLabel,
+	TransactionItemCell,
 };

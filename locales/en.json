@@ -39,6 +39,18 @@
         "button_save_receive_code": "Download QRCode",
         "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
     },
+    "transaction_detail": {
+        "title": "TRANSACTION DETAIL",
+        "receiver_label": "Receiver",
+        "sender_label": "Sender",
+        "timestamp_label": "Time",
+        "transactionHash_label": "Transaction ID",
+        "blockNumber_label": "Block#",
+        "amount_label": "Amount",
+        "status_label": "Status",
+        "sendAgain_button": "SEND AGAIN",
+        "viewInExplorer_button": "VIEW IN EXPLORER"
+    },
     "app_name": "MAKKI",
     "default_account_name": "Account",
     "logout": "Sign Out",

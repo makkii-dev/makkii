@@ -1,4 +1,4 @@
-import {Dimensions} from 'react-native'; 
+import {Dimensions,PixelRatio} from 'react-native';
 
 const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
@@ -31,7 +31,12 @@ export default styles = {
   	center_text: {
   		textAlign: 'center',
   	},
-  	marginTop10: {   
+  	cellSeparator:{
+		width: Dimensions.get('window').width,
+		height: 1,
+		backgroundColor: 'lightgray',
+	},
+	marginTop10: {
 		marginTop: 10,
 	},
 	marginTop20: {  

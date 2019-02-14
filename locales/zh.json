@@ -38,6 +38,18 @@
     "button_save_receive_code": "保存收款码",
     "no_permission_save_file": "保存失败，请在系统设置中授予外部存储权限"
   },
+  "transaction_detail": {
+    "title": "交易详情",
+    "receiver_label": "接收方",
+    "sender_label": "发送方",
+    "timestamp_label": "时间戳",
+    "transactionHash_label": "交易哈希",
+    "blockNumber_label": "块号#",
+    "amount_label": "金额",
+    "status_label": "状态",
+    "sendAgain_button": "重新发送",
+    "viewInExplorer_button": "在Explorer中查看更多"
+  },
   "app_name": "码奇",
   "default_account_name": "账户",
   "logout": "退出",

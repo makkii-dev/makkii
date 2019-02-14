@@ -379,10 +379,10 @@ class Home extends Component {
 						position: 'absolute',
 						bottom: 0,  
 						backgroundColor: 'white', 
-						flex: 1,
-						width,
 						flexDirection: 'row',
-						justifyContent: 'space-around',  
+						justifyContent: 'space-around',
+						right: 0,
+						left: 0,
 						borderTopWidth: 0.3,
 						borderTopColor: '#8c8a8a'  
 					}}
@@ -412,7 +412,6 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		height: top,
-		width: width,
 		backgroundColor: '#eeeeee',
 		elevation: 5,
 		flexDirection: 'row',

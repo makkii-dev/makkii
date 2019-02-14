@@ -16,7 +16,6 @@ export default class AionCell extends Component {
         return (
             <View style={{
                 height: 50,
-                width: Dimensions.get('window').width,
             }}>
                 <View style={styles.cellSeparator} />
                 <TouchableOpacity onPress={this.props.onClick}>
@@ -48,7 +47,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     cellSeparator: {
-        width: Dimensions.get('window').width,
         height: StyleSheet.hairlineWidth,
         left: 0,
         backgroundColor: 'lightgray',
@@ -59,7 +57,6 @@ const styles = StyleSheet.create({
     },
     cellContainer: {
         height: 50,
-        width: Dimensions.get('window').width,
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',

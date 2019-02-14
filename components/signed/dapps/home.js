@@ -76,9 +76,9 @@ class Home extends Component {
 					style={{ 
 						position: 'absolute',
 						bottom: 0,
+						right: 0,
+						left: 0,
 						backgroundColor: 'white', 
-						width,
-						flex: 1,
 						flexDirection: 'row',
 						justifyContent: 'space-around',  
 						borderTopWidth: 0.3,

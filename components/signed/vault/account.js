@@ -54,6 +54,7 @@ class Account extends Component {
 	_renderTransaction(transaction){
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
 		const value = transaction.from === this.addr? -transaction.value: transaction.value;
+		console.log('[transaction 11] ' ,transaction);
 		return (
 			<TouchableOpacity
 				onPress={e => {
@@ -79,7 +80,7 @@ class Account extends Component {
 						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
 						<Text style={{
 							color: 'grey',
-						}}>{ value.toFixed(2) } AION</Text>
+						}}>{ value } AION</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -114,7 +115,7 @@ class Account extends Component {
 					tx.timestamp = value.transactionTimestamp/1000;
 					tx.from = '0x'+value.fromAddr;
 					tx.to = '0x'+value.toAddr;
-					tx.value = new BigNumber(value.value,16).shiftedBy(-18);
+					tx.value = new BigNumber(value.value,16).shiftedBy(-18).toNumber();
 					tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
 					tx.blockNumber = value.blockNumber;
 					txs[tx.hash]=tx;
@@ -167,7 +168,7 @@ class Account extends Component {
 					</TouchableOpacity>
 				</View>
 
-				<View style={{...styles.Account.buttonContainer, width:width}}>
+				<View style={{...styles.Account.buttonContainer}}>
 					<Button
 						title="SEND"
 						onPress={()=>{
@@ -181,6 +182,9 @@ class Account extends Component {
 						}}
 					/>
 				</View>
+				<View style={{alignItems:'center', backgroundColor:'#eee', marginRight:10, marginLeft: 10}}>
+					<Text>Transaction History</Text>
+				</View>
 				<FlatList
 					style={{margin:10}}
 					data={Object.values(this.props.accounts[this.addr].transactions)}
@@ -189,8 +193,9 @@ class Account extends Component {
                     ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
 					ListEmptyComponent={()=>
 						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
-						<Text>No Transaction</Text>
-						</View>}
+							<Text>No Transaction</Text>
+						</View>
+					}
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}
