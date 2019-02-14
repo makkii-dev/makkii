@@ -3,6 +3,7 @@ import { ACCOUNT } from '../actions/account.js';
 const init = {
     address: '',
     private_key: '',
+    derivationIndex: '',
     balance: '',
     name: '',
     type: '',

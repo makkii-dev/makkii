@@ -16,7 +16,7 @@
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
-    "react-native-camera": "git+https://git@github.com/react-native-community/react-native-camera",
+    "react-native-camera": "^1.10.2",
     "react-native-fs": "^2.13.3",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-i18n": "^2.0.15",

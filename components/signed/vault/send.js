@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert} from 'react-native';
 import { strings } from '../../../locales/i18n';
-import { validateAddress, validateAmount, validatePositiveInteger} from '../../../utils';
+import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from '../../../utils';
 import {AionTransaction } from '../../../libs/aion-hd-wallet/index.js';
 import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
@@ -54,6 +54,8 @@ class Send extends Component {
                             style={st.text_input}
                             value={this.state.recipient}
                             placeholder={strings('send.hint_recipient')}
+                            multiline={true}
+							numberOfLines={2}
                             onChangeText={text => {
                                 this.setState({
                                     recipient: text,
@@ -164,6 +166,8 @@ class Send extends Component {
 		console.log("transfer clicked.");
 		if (!this.validateFields()) return;
 
+		let accountType = this.account.type;
+		let derivationIndex = this.account.derivationIndex;
 		let sender = this.account.address;
 		if (!sender.startsWith('0x')) {
 			sender = '0x' + sender;
@@ -177,6 +181,7 @@ class Send extends Component {
 
 			let amount = this.state.amount;
 			let tx = new AionTransaction({
+                sender: sender,
 				nonce: count,
 				gasPrice: this.state.gasPrice * 1e9,
 				gas: this.state.gasLimit - 0,
@@ -186,7 +191,19 @@ class Send extends Component {
 			});
 			console.log("tx to send:" , tx);
 			try {
-				tx.sign(Ed25519Key.fromSecretKey(this.account.private_key));
+				if (accountType == '[ledger]') {
+				    console.log("sign tx for " + accountType + " account(index=" + derivationIndex + ")");
+				    try {
+						tx.signByLedger(derivationIndex);
+					} catch (e) {
+						console.log("sign tx error:", error);
+						thisLoadingView.hide();
+						Alert.alert(strings('alert_title_error'), getLedgerMessage(e.message));
+				    	return;
+					}
+				} else {
+					tx.signByECKey(Ed25519Key.fromSecretKey(this.account.private_key));
+				}
 				web3.eth.sendSignedTransaction(tx.getEncoded()).on('transactionHash', function(hash) {
 					console.log("transaction sent: hash=" + hash);
 
@@ -206,7 +223,7 @@ class Send extends Component {
 					thisToast.show(strings('send.toast_tx_sent'));
 				});
 			} catch (error) {
-				console.log("sign tx error:", error);
+				console.log("send signed tx error:", error);
 				thisLoadingView.hide();
 				Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
 			}

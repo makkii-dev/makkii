@@ -3,7 +3,7 @@ import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
-import BigNumber from 'bignumber.js';
+import {strings} from './locales/i18n';
 
 function dbGet(key){
     return new Promise((resolve, reject)=>{
@@ -65,17 +65,19 @@ function hashPassword(password) {
 
 function getLedgerMessage(errorCode) {
     if (errorCode === wallet.APP_INACTIVATED) {
-        return 'Please activate Aion App on Ledger Device';
+        return strings('ledger.error.application_inactive');
     } else if (errorCode === wallet.INVALID_DEVICE_NUMBER) {
-        return 'No connected Ledger device';
+        return strings('ledger.error.device_count');
     } else if (errorCode === wallet.USER_REJECTED) {
-        return 'User cancelled this transaction';
+        return strings('ledger.error.user_rejected');
     } else if (errorCode === wallet.NO_PERMISSION) {
-        return 'Please grant usb device permission';
+        return strings('ledger.error.permission_denied');
     } else if (errorCode === wallet.GENERAL_ERROR || errorCode === wallet.INVALID_ACCOUNT_TYPE || errorCode === wallet.INVALID_TX_PAYLOAD || errorCode === wallet.OPEN_DEVICE_FAIL) {
-        return 'Internal error';
+        return strings('ledger.error.general');
+    } else if (errorCode === 'error.wrong_device') {
+        return strings('ledger.error.wrong_device');
     } else {
-        return 'Internal error';
+        return strings('ledger.error.general');
     }
 }
 

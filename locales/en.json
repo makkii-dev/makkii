@@ -56,7 +56,7 @@
         "button_send_all": "Send All",
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
-        "toast_tx_sent": "Transaction is sent"
+        "toast_tx_sent": "Transaction is sent",
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",
@@ -97,5 +97,14 @@
     "permission_storage_message": "Makki App needs access to your external storage to save some data.",
     "ok_button": "Ok",
     "cancel_button": "Cancel",
-    "save_file_button": "Save to Phone"
+    "save_file_button": "Save to Phone",
+    "ledger.error.unknown_account_type": "Ledger internal error",
+    "ledger.error.general": "Ledger internal error",
+    "ledger.error.device_count": "No connected Ledger device",
+    "ledger.error.open_device": "Ledger internal error",
+    "ledger.error.permission_denied": "Please grant usb device permission",
+    "ledger.error.application_inactive": "Please activate Aion App on Ledger Device",
+    "ledger.error.user_rejected": "User cancelled this transaction",
+    "ledger.error.invalid_tx_payload": "Ledger internal error",
+    "ledger.error.wrong_device": "Wrong ledger device connected! Account not found!"
 }

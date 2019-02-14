@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import blake2b from 'blake2b';
 import {Crypto} from "./utils/crypto";
 import {AionRlp} from './utils/rlp';
+import wallet from 'react-native-aion-hw-wallet';
 
 const sigToBytes = (signature, publicKey) => {
     let fullSignature = new Uint8Array((signature.length + publicKey.length));
@@ -11,6 +12,7 @@ const sigToBytes = (signature, publicKey) => {
 };
 
 export class AionTransaction {
+    sender;
     nonce;
     to;
     valueHex;
@@ -45,6 +47,7 @@ export class AionTransaction {
             return;
         }
 
+        this.sender = params.sender;
         this.setHexFieldOrNull('nonce', params.nonce);
         this['type'] = params.type;
 
@@ -137,9 +140,27 @@ export class AionTransaction {
         return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
-    sign = (ecKey) => {
+    signByECKey = (ecKey) => {
         let rawHash = this.getRawHash();
         this.signature = ecKey.sign(rawHash);
         this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
+    }
+
+    signByLedger = (index) => {
+        wallet.getAccount(index).then(account => {
+            if (account.address != this.sender) {
+                throw new Error('error.wrong_device');
+            }
+            wallet.sign(index, this.getRawHash()).then(signedTx => {
+                this.signature = signedTx;
+                this.fullSignature = sigToBytes(this.signature, account.publicKey);
+            }, err => {
+                console.log("sign tx error: " + err);
+                throw new Error(err.code);
+            });
+        }, error => {
+            console.log("get account error: " + error);
+            throw new Error(error.code);
+        })
     }
 }
