@@ -20,7 +20,7 @@ class Launch extends Component{
     };
     _onPress(){
         console.log('launch ');
-        this.props.navigation.navigate('DappsSingle',{
+        this.props.navigation.navigate('signed_dapps_dapp',{
             uri: this.dapp.uri,
         });
     }

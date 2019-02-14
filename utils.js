@@ -41,9 +41,21 @@ function validatePrivateKey(privateKey) {
     return reg.test(privateKey);
 }
 
+function validateAddress(address) {
+    // do not verify prefix a0
+    let reg = /^[0-9a-fA-F]{64}$/;
+    address = address.startsWith('0x')? address.substring(2): address;
+    return reg.test(address);
+}
+
 function validateAmount(amount) {
     let reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]+)?))$/;
     return reg.test(amount);
+}
+
+function validatePositiveInteger(input) {
+    let reg= /^(0|[1-9][0-9]*)$/;
+    return reg.test(input);
 }
 
 function hashPassword(password) {
@@ -104,14 +116,16 @@ function fetchRequest(url, method='GET', headers={}) {
 }
 
 module.exports = {
-    dbGet,
-    validatePassword,
-    validateUrl,
-    hashPassword,
-    getLedgerMessage,
-    validatePrivateKey,
-    generateQRCode,
-    validateAmount,
-    saveImage,
-    fetchRequest,
+    dbGet: dbGet,
+    validatePassword: validatePassword,
+    validateUrl: validateUrl,
+    hashPassword: hashPassword,
+    getLedgerMessage: getLedgerMessage,
+    validatePrivateKey: validatePrivateKey,
+    generateQRCode: generateQRCode,
+    validateAmount: validateAmount,
+    saveImage: saveImage,
+    validatePositiveInteger: validatePositiveInteger,
+    validateAddress: validateAddress,
+    fetchRequest: fetchRequest,
 }

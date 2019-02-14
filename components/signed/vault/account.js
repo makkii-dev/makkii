@@ -9,26 +9,6 @@ import {update_account_name, update_account_txs} from "../../../actions/accounts
 import Toast from '../../toast.js'; 
 import BigNumber from 'bignumber.js';
 const {width} = Dimensions.get('window');
-Date.prototype.Format = function (fmt) {
-	let o = {
-		"M+": this.getMonth() + 1, //month 
-		"d+": this.getDate(), //day 
-		"h+": this.getHours() % 12, //hour 
-		"m+": this.getMinutes(), //minute 
-		"s+": this.getSeconds(), //seconds 
-		"q+": Math.floor((this.getMonth() + 3) / 3), //quarter 
-		"S": this.getMilliseconds() //milliseconds 
-	};
-	if (/(y+)/.test(fmt))
-		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substring(4 - RegExp.$1.length));
-	for (let k in o){
-		if (new RegExp("(" + k + ")").test(fmt)) {
-			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substring(("" + o[k]).length)));
-		}
-	}
-	fmt = this.getHours() > 12 ? fmt + 'PM' : fmt + 'AM';
-	return fmt;
-};
 
 class Account extends Component {
 
@@ -74,11 +54,15 @@ class Account extends Component {
 	_renderTransaction(transaction){
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
 		const value = transaction.from === this.addr? -transaction.value: transaction.value;
+		console.log('[transaction 11] ' ,transaction);
 		return (
 			<TouchableOpacity
 				onPress={e => {
 					//dispatch(account(this.props.accounts[this.addr][key]));
-					this.props.navigation.navigate('signed_vault_transaction');
+					this.props.navigation.navigate('signed_vault_transaction',{
+						account:this.addr,
+						transactionHash: transaction.hash,
+					});
 				}}
 			>
 				<View style={styles.Transaction.container}>
@@ -96,7 +80,7 @@ class Account extends Component {
 						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
 						<Text style={{
 							color: 'grey',
-						}}>{ value.toFixed(2) } AION</Text>
+						}}>{ value } AION</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -119,7 +103,8 @@ class Account extends Component {
 	};
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
-		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+	    let mockAddress = 'a070e1ba6f947e416fbc64c408de944eb31e61a892a5c87c358281cdb096dd7e';
+		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${mockAddress}&page=${page}&size=${size}`;
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
@@ -130,8 +115,9 @@ class Account extends Component {
 					tx.timestamp = value.transactionTimestamp/1000;
 					tx.from = '0x'+value.fromAddr;
 					tx.to = '0x'+value.toAddr;
-					tx.value = new BigNumber(value.value,16).shiftedBy(-18);
+					tx.value = new BigNumber(value.value,16).shiftedBy(-18).toNumber();
 					tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
+					tx.blockNumber = value.blockNumber;
 					txs[tx.hash]=tx;
 				});
 			}else{
@@ -182,19 +168,26 @@ class Account extends Component {
 					</TouchableOpacity>
 				</View>
 
-				<View style={{...styles.Account.buttonContainer, width:width}}>
+				<View style={{...styles.Account.buttonContainer}}>
 					<Button
 						title="SEND"
 						onPress={()=>{
-							navigation.navigate('signed_vault_send');
+							navigation.navigate('signed_vault_send', {
+								address: this.addr,
+							});
 						}}
 					/>
 					<Button
 						title="RECEIVE"
 						onPress={()=>{
-							navigation.navigate('signed_vault_receive');
+							navigation.navigate('signed_vault_receive', {
+								address: this.addr,
+							});
 						}}
 					/>
+				</View>
+				<View style={{alignItems:'center', backgroundColor:'#eee', marginRight:10, marginLeft: 10}}>
+					<Text>Transaction History</Text>
 				</View>
 				<FlatList
 					style={{margin:10}}
@@ -204,8 +197,9 @@ class Account extends Component {
                     ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
 					ListEmptyComponent={()=>
 						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
-						<Text>No Transaction</Text>
-						</View>}
+							<Text>No Transaction</Text>
+						</View>
+					}
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}

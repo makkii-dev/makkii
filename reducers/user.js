@@ -10,7 +10,7 @@ import {
 const init = {
 	timestamp: 0,
 	hashed_password: '',     
-	mnemonic: '',  
+	mnemonic: 'month million tell whisper damp calm twelve stove sibling tissue brain again',
 };
  
 export default function user(state = init, action){

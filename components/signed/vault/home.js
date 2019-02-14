@@ -14,7 +14,7 @@ import {
 	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import { delete_account, accounts as action_accounts} from '../../../actions/accounts.js';
+import { delete_account, add_accounts} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
@@ -93,11 +93,14 @@ class Home extends Component {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
+					console.log(value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
 						value.balance = balance / Math.pow(10,18);
 						resolve(value)
 					},error => {
 						console.log('[error] account: ', value.address);
+						console.log(error);
+						console.log(web3);
 						reject(error)
 					})
 				}));
@@ -108,7 +111,7 @@ class Home extends Component {
 				accounts.forEach(account=>{
 					newAccounts[account.address] = account;
 				});
-				dispatch(action_accounts(newAccounts));
+				dispatch(add_accounts(newAccounts));
 				this.setState({
 					refreshing: false,
 				})
@@ -380,13 +383,14 @@ class Home extends Component {
 						position: 'absolute',
 						bottom: 0,  
 						backgroundColor: 'white', 
-						width: '100%',  
-						flex: 1,
 						flexDirection: 'row',
-						justifyContent: 'space-around',  
+						justifyContent: 'space-around',
+						right: 0,
+						left: 0,
 						borderTopWidth: 0.3,
 						borderTopColor: '#8c8a8a'  
-					}} 
+					}}
+					active={'wallet'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
 						()=>{this.props.navigation.navigate('signed_dapps');},
@@ -412,7 +416,6 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		height: top,
-		width: width,
 		backgroundColor: '#eeeeee',
 		elevation: 5,
 		flexDirection: 'row',

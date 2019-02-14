@@ -35,10 +35,12 @@ class Receive extends Component {
 	constructor(props){
 		super(props);
 		this.qrcodeRef = null;
+		this.addr=this.props.navigation.state.params.address;
 		this.state={
 			amount: '0',
-			qrCodeValue: generateQRCode('0', this.props.account.address),
+			qrCodeValue: generateQRCode('0', this.addr),
 		}
+
 	}
 
 	onRefresh(){
@@ -50,7 +52,7 @@ class Receive extends Component {
 
 		// refresh
 		this.setState({
-			qrCodeValue: generateQRCode(this.state.amount, this.props.account.address),
+			qrCodeValue: generateQRCode(this.state.amount, this.addr),
 		})
 	}
 	longPressCode() {
@@ -150,4 +152,4 @@ class Receive extends Component {
 	}
 }
 
-export default connect(state => { return ({ account: state.account }); })(Receive);
+export default connect(state => { return ({ accounts: state.accounts }); })(Receive);

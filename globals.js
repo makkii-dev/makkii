@@ -41,6 +41,28 @@ if (!Uint8Array.prototype.fill) {
     };
 }
 
+if(!Date.prototype.Format){
+    Date.prototype.Format = function (fmt) {
+        let o = {
+            "M+": this.getMonth() + 1, //month 
+            "d+": this.getDate(), //day 
+            "h+": this.getHours() % 12, //hour 
+            "m+": this.getMinutes(), //minute 
+            "s+": this.getSeconds(), //seconds 
+            "q+": Math.floor((this.getMonth() + 3) / 3), //quarter 
+            "S": this.getMilliseconds() //milliseconds 
+        };
+        if (/(y+)/.test(fmt))
+            fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substring(4 - RegExp.$1.length));
+        for (let k in o){
+            if (new RegExp("(" + k + ")").test(fmt)) {
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substring(("" + o[k]).length)));
+            }
+        }
+        fmt = this.getHours() > 12 ? fmt + 'PM' : fmt + 'AM';
+        return fmt;
+    };
+}
 if (typeof btoa === 'undefined') {
     global.btoa = function (str) {
         return new Buffer(str, 'binary').toString('base64');

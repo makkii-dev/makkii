@@ -1,4 +1,5 @@
 import crypto from 'react-native-crypto';
+import BigNumber from 'bignumber.js';
 
 /**
  *
@@ -28,11 +29,13 @@ export class Crypto{
         } else if (typeof value === 'string') {
             return appendHexStart(value);
         } else if (value instanceof Buffer) {
-            return '0x' + value.toString('hex');
+            return appendHexStart(value.toString('hex'));
         } else if (typeof value === 'number') {
             return appendHexStart(value.toString(16));
         } else if (value instanceof Uint8Array) {
-            return '0x' + Buffer.from(value).toString('hex');
+            return appendHexStart(Buffer.from(value).toString('hex'));
+        } else if (BigNumber.isBigNumber(value)) {
+            return appendHexStart(value.toString(16));
         } else {
             throw value;
         }
