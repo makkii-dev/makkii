@@ -16,7 +16,7 @@ import {add_accounts} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
 import wallet from 'react-native-aion-hw-wallet';
 import {getLedgerMessage} from '../../../utils.js';
-import {DEFAULT_ACCOUNT_NAME} from '../../constants.js'; 
+import {strings} from '../../../locales/i18n';
 const {width} = Dimensions.get('window');
 
 class ImportLedger extends React.Component {
@@ -33,7 +33,7 @@ class ImportLedger extends React.Component {
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(add_accounts(acc));
-                    navigation.navigate('VaultHome');
+                    navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 20}}>
                         <Text style={{color: 'blue'}}>IMPORT</Text>
@@ -93,7 +93,7 @@ class ImportLedger extends React.Component {
             let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = DEFAULT_ACCOUNT_NAME;
+            acc.name = strings('default_account_name');
             acc.type = '[ledger]';
             acc.transactions = {};
             if (!this.isAccountIsAlreadyImport(acc.address)) {

@@ -4,18 +4,57 @@ import styles from './styles.js';
 import PropTypes from 'prop-types';
 
 class ComponentTabBar extends Component{
+	static defaultProps={
+		activeTintColor: '#3366ff',
+		inactiveTintColor: '#adb0b5',
+	};
+	static propTypes= {
+		activeTintColor: PropTypes.string,
+		inactiveTintColor: PropTypes.string,
+		active: PropTypes.string.isRequired,
+	}
 	render(){
+		const wallet_tint_color =  this.props.active === 'wallet'?  this.props.activeTintColor:this.props.inactiveTintColor;
+		const dapp_tint_color =  this.props.active === 'dapp'?  this.props.activeTintColor:this.props.inactiveTintColor;
+		const settings_tint_color =  this.props.active === 'settings'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		return (
-			<View>
-				<View>
-					<Image source={require('../assets/tab_wallet.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
-				<View>
-					<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
-				<View>
-					<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, tintColor:tintColor, marginTop:10}} />
-				</View>
+			<View style={{...this.props.style}}>
+				<TouchableOpacity 
+					onPress={e=>{
+						this.props.onPress[0]()
+					}}
+				>
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} />
+						<Text style={{fontSize: 12, color:wallet_tint_color }}>Wallet</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={e=>{
+						this.props.onPress[1]()
+					}}
+				>
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} />
+						<Text style={{fontSize: 12, color:dapp_tint_color }}>DApps</Text>
+					</View>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={e=>{
+						this.props.onPress[2]()
+					}}
+				>
+					<View
+						style={{height:50,justifyContent:'center',alignItems:'center'}}
+					>
+						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} />
+						<Text style={{fontSize: 12, color:settings_tint_color }}>Settings</Text>
+					</View>
+				</TouchableOpacity>
 			</View>
 		);
 	}
@@ -239,7 +278,6 @@ class EditableView extends  React.PureComponent {
 						editable={this.state.editable}
 						style={{color:this.props.color, padding:0}}
 						onChangeText={value=>this.setState({value})}
-						onEndEditing={()=>this._onPress()}
 					/>
 					{
 						this.state.editable?<View style={{backgroundColor:'#000',height:1/ PixelRatio.get()}}/>:null
@@ -304,7 +342,22 @@ class TextInputWithLabel extends React.PureComponent{
 
 }
 
+class TransactionItemCell extends React.PureComponent {
+	static defaultProps={
+		valueTextAlign: 'right',
+	};
+	render(){
+		return(
+			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,flexDirection:'row',width:'100%',justifyContent:'space-around',alignItems:'flex-start'}}>
+				<Text style={{flex:3}}>{this.props.title}</Text>
+				<Text style={{flex:5,borderBottomColor:'#000',borderBottomWidth: 1,textAlign:this.props.valueTextAlign}}>{this.props.value}</Text>
+			</View>
+		)
+	}
+}
+
 module.exports = {
+	ComponentTabBar,
 	ComponentLogo,
 	Input,
 	InputMultiLines,
@@ -312,5 +365,6 @@ module.exports = {
 	ImportListItem,
 	ImportListfooter,
 	EditableView,
-	TextInputWithLabel
+	TextInputWithLabel,
+	TransactionItemCell,
 };

@@ -14,9 +14,8 @@ import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {add_accounts} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
-import {DEFAULT_ACCOUNT_NAME} from '../../constants.js'; 
+import {strings} from '../../../locales/i18n';
 const {width} = Dimensions.get('window');
-
 
 class ImportHdWallet extends React.Component {
     static navigationOptions = ({navigation})=> {
@@ -27,12 +26,12 @@ class ImportHdWallet extends React.Component {
                 alignSelf: 'center',
                 textAlign: 'center',
                 flex: 1,
-            },
+            },   
             headerRight: (
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(add_accounts(acc));
-                    navigation.navigate('VaultHome');
+                    navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 10}}>
                         <Text style={{color: 'blue'}}>IMPORT</Text>
@@ -97,7 +96,7 @@ class ImportHdWallet extends React.Component {
                     acc.address = getAcc.address;
                     acc.private_key = getAcc.private_key;
                     acc.balance = 0;
-                    acc.name = DEFAULT_ACCOUNT_NAME;
+                    acc.name = strings('default_account_name');
                     acc.type = '[local]';
                     acc.transactions = {};
                     if (!this.isAccountIsAlreadyImport(acc.address)) {

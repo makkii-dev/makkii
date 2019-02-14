@@ -2,7 +2,7 @@ import {AsyncStorage} from 'react-native';
 
 import { 
 	USER_REGISTER, 
-	USER_LOGIN,
+	USER_SIGNIN,
 	USER_SIGNOUT 
 } from '../actions/user.js'; 
 
@@ -13,8 +13,7 @@ const init = {
 };
  
 export default function user(state = init, action){
-	let new_state;
-	console.log('[action-type] ' + action.type); 
+	let new_state; 
 	switch(action.type){
 		case USER_REGISTER:
 			new_state = Object.assign({}, state, {
@@ -27,7 +26,7 @@ export default function user(state = init, action){
 				JSON.stringify(new_state)
 			);
 	      	break;
-	    case USER_LOGIN:
+	    case USER_SIGNIN:
 			new_state = Object.assign({}, state, {
 	        	timestamp: Date.now('milli'), 
 	        	hashed_password: action.hashed_password,

@@ -9,16 +9,13 @@ import {
 } from 'react-native';
 
 export default class AionCell extends Component {
-
     constructor(props) {
         super(props);
     }
-
     render() {
         return (
             <View style={{
                 height: 50,
-                width: Dimensions.get('window').width,
             }}>
                 <View style={styles.cellSeparator} />
                 <TouchableOpacity onPress={this.props.onClick}>
@@ -40,8 +37,9 @@ export default class AionCell extends Component {
 
 const styles = StyleSheet.create({
     titleText: {
-        fontSize: 18,
-        color: 'black'
+        fontSize: 15,
+        color: 'black',
+        fontWeight: 'normal',
     },
     cellItem: {
         flexDirection: 'row',
@@ -49,7 +47,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     cellSeparator: {
-        width: Dimensions.get('window').width,
         height: StyleSheet.hairlineWidth,
         left: 0,
         backgroundColor: 'lightgray',
@@ -60,7 +57,6 @@ const styles = StyleSheet.create({
     },
     cellContainer: {
         height: 50,
-        width: Dimensions.get('window').width,
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',

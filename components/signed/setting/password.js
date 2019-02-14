@@ -8,23 +8,13 @@ import { user } from '../../../actions/user.js';
 import Toast from '../../toast.js';
 import { strings } from '../../../locales/i18n';
 
-class UpdatePassword extends Component {
+class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-		    headerStyle: {
-		        backgroundColor: '#eeeeee'
-		    },
-		    headerTitleStyle: {
-		        alignSelf: 'center',
-		        textAlign: 'center',
-		        flex: 1
-		    },
-		    headerRight: (<View></View>),
 		    title: strings('password.title')
 	    }
     }
-
 	constructor(props){
 		super(props);
 		this.state = {
@@ -33,12 +23,10 @@ class UpdatePassword extends Component {
 			password_confirm: '',
 		}
 	}
-
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 	}
-
 	render(){
 		return (
 			<View style={styles.container}>	
@@ -51,13 +39,12 @@ class UpdatePassword extends Component {
 				<View style={styles.marginBottom10}>
 					<ComponentPassword 
 						value={this.state.password_current} 
-						placeholder={strings('password.hint_old_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
 								password_current: e
-							})
-						}}
+							}) 
+						}} 
 					/>
 				</View>
 				<View>
@@ -66,7 +53,6 @@ class UpdatePassword extends Component {
 				<View style={styles.marginBottom10}>
 					<ComponentPassword
 						value={this.state.password_new} 
-						placeholder={strings('password.hint_new_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
@@ -81,7 +67,6 @@ class UpdatePassword extends Component {
 				<View style={styles.marginBottom40}>
 					<ComponentPassword 
 						value={this.state.password_confirm}
-						placeholder={strings('password.hint_confirm_password')}
 						supportVisibility={false}
 						onChange={e => {
 							this.setState({
@@ -139,4 +124,4 @@ class UpdatePassword extends Component {
 
 }
 
-export default connect(state => { return ({ setting: state.setting, user: state.user }); })(UpdatePassword);
+export default connect(state => { return ({ setting: state.setting, user: state.user }); })(Password);

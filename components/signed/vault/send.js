@@ -7,6 +7,8 @@ import {AionTransaction } from '../../../libs/aion-hd-wallet/index.js';
 import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
 import Toast from '../../toast.js';
+import BigNumber from 'bignumber.js';
+import {update_account_txs} from "../../../actions/accounts";
 
 const {width, height} = Dimensions.get('window')
 class Send extends Component {
@@ -26,12 +28,14 @@ class Send extends Component {
 		super(props);
 		this.state={
 			showAdvanced: false,
-			amount: '0',
+			amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
 			recipient: '',
 			gasPrice: '10',
 			gasLimit: '21000',
 		}
-		console.log("selected account is: " + JSON.stringify(this.props.account));
+        this.addr=this.props.navigation.state.params.address;
+		this.account = this.props.accounts[this.addr];
+		console.log("selected account is: " + JSON.stringify(this.props.accounts[this.addr]));
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -160,31 +164,44 @@ class Send extends Component {
 		console.log("transfer clicked.");
 		if (!this.validateFields()) return;
 
-		let sender = this.props.account.address;
+		let sender = this.account.address;
 		if (!sender.startsWith('0x')) {
 			sender = '0x' + sender;
 		}
 		let thisLoadingView = this.loadingView;
 		let thisToast = this.refs.toast;
+		const {dispatch} = this.props;
 		thisLoadingView.show(strings('send.progress_sending_tx'));
 		web3.eth.getTransactionCount(sender).then(count => {
 			console.log('get transaction count: ' + count);
 
+			let amount = this.state.amount;
 			let tx = new AionTransaction({
 				nonce: count,
 				gasPrice: this.state.gasPrice * 1e9,
 				gas: this.state.gasLimit - 0,
 				to: this.state.recipient,
-                value: this.state.amount,
+                value: new BigNumber(amount).shiftedBy(18).toNumber(),
 				type: 1,
 			});
 			console.log("tx to send:" , tx);
 			try {
-				tx.sign(Ed25519Key.fromSecretKey(this.props.account.private_key));
+				tx.sign(Ed25519Key.fromSecretKey(this.account.private_key));
 				web3.eth.sendSignedTransaction(tx.getEncoded()).on('transactionHash', function(hash) {
 					console.log("transaction sent: hash=" + hash);
 
-					console.log("laodingvew: " + this.loadingView);
+					let txs = {};
+					let pendingTx={};
+					pendingTx.hash = hash;
+					pendingTx.timestamp = tx.timestamp;
+                    pendingTx.from = sender;
+                    pendingTx.to = tx.to;
+                    pendingTx.value = amount - 0;
+                    pendingTx.status = 'PENDING';
+                    txs[hash]=pendingTx;
+
+					dispatch(update_account_txs(sender, txs));
+
 					thisLoadingView.hide();
 					thisToast.show(strings('send.toast_tx_sent'));
 				});
@@ -216,8 +233,8 @@ class Send extends Component {
 		// 2. < total balance
 		console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
 		console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
-		console.log("total balance: " + this.props.account.balance);
-		if (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9) > this.props.account.balance) {
+		console.log("total balance: " + this.account.balance);
+		if (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9) > this.account.balance) {
 			Alert.alert(strings('alert_title_error'), strings('send.error_insufficient_amount'));
 			return false;
 		}
@@ -239,7 +256,7 @@ class Send extends Component {
 
 	sendAll=() => {
 		console.log("send all clicked.");
-		let all = this.props.account.balance - parseInt(this.state.gasLimit) * parseFloat(this.state.gasPrice) / Math.pow(10, 9);
+		let all = this.account.balance - parseInt(this.state.gasLimit) * parseFloat(this.state.gasPrice) / Math.pow(10, 9);
 		this.setState({
 			amount: '' + (all > 0? all: 0)
 		});
@@ -275,5 +292,5 @@ const st = StyleSheet.create({
 
 export default connect(state => { return ({
 	setting: state.setting,
-    account: state.account,
+    accounts: state.accounts,
 }); })(Send);

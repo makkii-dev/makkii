@@ -13,10 +13,12 @@ const sigToBytes = (signature, publicKey) => {
 export class AionTransaction {
     nonce;
     to;
+    valueHex;
     value;
     data;
     gas;
     gasPrice;
+    timestampHex;
     timestamp;
     type;
     signature;
@@ -47,32 +49,32 @@ export class AionTransaction {
         this['type'] = params.type;
 
         if (!params.timestamp) {
-            params.timestamp = new BigNumber(new Date().getTime() * 1000);
+            params.timestamp= new BigNumber(new Date().getTime() * 1000);
         }
         console.log("timestamp:", params.timestamp);
 
         this.setHexField('data', params.data);
-        this.setHexField('timestamp', params.timestamp);
-        this.setHexField('value', params.value);
+        this.setHexField('timestampHex', params.timestamp);
+        this.setHexField('valueHex', params.value);
         this.setHexField('to', params.to);
         this.setHexField('gas', params.gas);
         this.setHexField('gasPrice', params.gasPrice);
 
     }
 
-    setHexFieldOrNull(field, value) {
-        if (!value) {
+    setHexFieldOrNull(field, valueHex) {
+        if (!valueHex) {
             this[field] = '0x00';
         } else {
-            this.setHexField(field, value);
+            this.setHexField(field, valueHex);
         }
     }
 
-    setHexField(field, value) {
-        if (!value) {
+    setHexField(field, valueHex) {
+        if (!valueHex) {
             return;
         }
-        this[field] = Crypto.toHex(value);
+        this[field] = Crypto.toHex(valueHex);
     }
 
     /**
@@ -83,9 +85,9 @@ export class AionTransaction {
         let encodedTx = {};
         encodedTx.nonce = AionRlp.encode(this.nonce);
         encodedTx.to = AionRlp.encode(this.to);
-        encodedTx.value = AionRlp.encode(this.value);
+        encodedTx.valueHex = AionRlp.encode(this.valueHex);
         encodedTx.data = AionRlp.encode(this.data);
-        encodedTx.timestamp = AionRlp.encode(this.timestamp);
+        encodedTx.timestampHex = AionRlp.encode(this.timestampHex);
         encodedTx.gas = AionRlp.encodeLong(this.gas);
         encodedTx.gasPrice = AionRlp.encodeLong(this.gasPrice);
         encodedTx.type = AionRlp.encode(this.type);
@@ -93,9 +95,9 @@ export class AionTransaction {
         return AionRlp.encodeList([
             encodedTx.nonce,
             encodedTx.to,
-            encodedTx.value,
+            encodedTx.valueHex,
             encodedTx.data,
-            encodedTx.timestamp,
+            encodedTx.timestampHex,
             encodedTx.gas,
             encodedTx.gasPrice,
             encodedTx.type,
@@ -109,9 +111,9 @@ export class AionTransaction {
         let encodedTx = {};
         encodedTx.nonce = AionRlp.encode(this.nonce);
         encodedTx.to = AionRlp.encode(this.to);
-        encodedTx.value = AionRlp.encode(this.value);
+        encodedTx.valueHex = AionRlp.encode(this.valueHex);
         encodedTx.data = AionRlp.encode(this.data);
-        encodedTx.timestamp = AionRlp.encode(this.timestamp);
+        encodedTx.timestampHex = AionRlp.encode(this.timestampHex);
         encodedTx.gas = AionRlp.encodeLong(this.gas);
         encodedTx.gasPrice = AionRlp.encodeLong(this.gasPrice);
         encodedTx.type = AionRlp.encode(this.type);
@@ -120,9 +122,9 @@ export class AionTransaction {
         let encoded = AionRlp.encodeList([
             encodedTx.nonce,
             encodedTx.to,
-            encodedTx.value,
+            encodedTx.valueHex,
             encodedTx.data,
-            encodedTx.timestamp,
+            encodedTx.timestampHex,
             encodedTx.gas,
             encodedTx.gasPrice,
             encodedTx.type,
@@ -132,15 +134,11 @@ export class AionTransaction {
     };
 
     getRawHash = () => {
-        console.log(Crypto.toHex(this.getEncodedRaw()));
-        console.log("testblake2b:" + blake2b(32).update(Buffer.from([1,2])).digest('hex'));
         return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
     sign = (ecKey) => {
         let rawHash = this.getRawHash();
-        console.log("rawHash:", rawHash);
-        console.log("rawHash:", Crypto.toHex(rawHash));
         this.signature = ecKey.sign(rawHash);
         this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
     }

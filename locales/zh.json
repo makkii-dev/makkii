@@ -19,8 +19,9 @@
   },
   "service_configuration": {
     "title": "服务器配置",
-    "label_api_server": "钱包服务器地址",
-    "label_dapp_server": "DApp服务器地址",
+    "endpoint_wallet": "钱包服务器地址",
+    "endpoint_dapps": "Dapps服务器地址",
+    "endpoint_odex": "Odex服务器地址",
     "hint_api_server": "请输入钱包服务器地址",
     "hint_dapp_server": "请输入DApp服务器地址",
     "invalid_wallet_server_url": "钱包服务器地址不正确",
@@ -52,9 +53,22 @@
     "button_send_all": "全部",
     "error_send_transaction": "发送交易失败",
     "progress_sending_tx": "正在发送交易...",
-    "toast_tx_sent": "交易已发送"
+    "toast_tx_sentutils.js": "交易已发送"
   },
-  "app_name": "骂起",
+  "transaction_detail": {
+    "title": "交易详情",
+    "receiver_label": "接收方",
+    "sender_label": "发送方",
+    "timestamp_label": "时间戳",
+    "transactionHash_label": "交易哈希",
+    "blockNumber_label": "块号#",
+    "amount_label": "金额",
+    "status_label": "状态",
+    "sendAgain_button": "重新发送",
+    "viewInExplorer_button": "在Explorer中查看更多"
+  },
+  "app_name": "码奇",
+  "default_account_name": "账户",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",

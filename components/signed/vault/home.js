@@ -14,13 +14,14 @@ import {
 	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import { account } from '../../../actions/account.js';
-import { delete_account, accounts as action_accounts} from '../../../actions/accounts.js';
+import { delete_account, add_accounts} from '../../../actions/accounts.js';
+import {account} from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
 import { getLedgerMessage } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
+import {ComponentTabBar} from '../../common.js';
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
@@ -110,7 +111,7 @@ class Home extends Component {
 				accounts.forEach(account=>{
 					newAccounts[account.address] = account;
 				});
-				dispatch(action_accounts(newAccounts));
+				dispatch(add_accounts(newAccounts));
 				this.setState({
 					refreshing: false,
 				})
@@ -142,7 +143,7 @@ class Home extends Component {
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
-					this.props.navigation.navigate('VaultImportLedger');
+					this.props.navigation.navigate('signed_vault_import_ledger');
 				}, error => {
 					this.loadingView.hide();
 					Alert.alert('Error', getLedgerMessage(error.code));
@@ -173,14 +174,14 @@ class Home extends Component {
 				title:'Master key',
 				onPress:()=>{
 					console.log('New Account');
-					navigation.navigate('VaultImportHdWallet');
+					navigation.navigate('signed_vault_import_hdwallet');
 				},
 				image:require('../../../assets/aion_logo.png'),
 			},
 			{
 				title:'Private Key',
 				onPress:()=>{
-					navigation.navigate('VaultImportPrivateKey');
+					navigation.navigate('signed_vault_import_private_key');
 				},
 				image:require('../../../assets/key.png'),
 			},
@@ -239,14 +240,12 @@ class Home extends Component {
 	}
 
 	_onClose(Key: any) {
-		console.log('[onClose]');
 		this.setState({
 			openRowKey: null,
 		})
 	}
 
 	_setListViewScrollableTo(value: boolean) {
-		console.log('[_setListViewScrollableTo] ' + value);
 		this.setState({
 				scrollEnabled: value,
 		})
@@ -323,7 +322,7 @@ class Home extends Component {
 							return;
 						}
 						dispatch(account(this.props.accounts[item.address]));
-						this.props.navigation.navigate('VaultAccount');
+						this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
 					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
@@ -378,6 +377,25 @@ class Home extends Component {
 				<Loading ref={(element) => {
 					this.loadingView = element;
 				}}/>
+				<ComponentTabBar
+					style={{
+						position: 'absolute',
+						bottom: 0,  
+						backgroundColor: 'white', 
+						flexDirection: 'row',
+						justifyContent: 'space-around',
+						right: 0,
+						left: 0,
+						borderTopWidth: 0.3,
+						borderTopColor: '#8c8a8a'  
+					}}
+					active={'wallet'}
+					onPress={[
+						()=>{this.props.navigation.navigate('signed_vault');},
+						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_setting');},
+					]}
+				/>
 			</View>
 		)
 	}
@@ -397,7 +415,6 @@ const styles = StyleSheet.create({
 	},
 	header: {
 		height: top,
-		width: width,
 		backgroundColor: '#eeeeee',
 		elevation: 5,
 		flexDirection: 'row',

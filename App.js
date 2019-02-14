@@ -7,24 +7,23 @@ import {Provider} from 'react-redux';
 // actions
 import {accounts}           from './actions/accounts.js';
 import {accounts_ledger}    from './actions/accounts_ledger.js';
-import {account}            from './actions/account.js';
 import {dapps}              from './actions/dapps.js';
 import {setting}            from './actions/setting.js';
 import {user,user_signout} from './actions/user.js';
  
 // reducers
+import reducer_account        from './reducers/account.js';
 import reducer_accounts        from './reducers/accounts.js';
 import reducer_accounts_ledger from './reducers/accounts_ledger.js';
-import reducer_account         from './reducers/account.js'; 
 import reducer_dapps           from './reducers/dapps.js';
 import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js'; 
 
 // store 
 const store = createStore(combineReducers({
+	account:         reducer_account,
 	accounts:        reducer_accounts,
 	accounts_ledger: reducer_accounts_ledger,
-	account:         reducer_account,
 	dapps:           reducer_dapps,
 	setting:         reducer_setting,
 	user:            reducer_user,
@@ -32,12 +31,12 @@ const store = createStore(combineReducers({
 
 // ui 
 import splash   from './components/splash.js';
-import signed   from './components/identified/index.js';
 import unsigned from './components/unsigned/index.js';
+import signed   from './components/signed/index.js';
 const Routes = createAppContainer(createSwitchNavigator({
-	'splash':   { screen: splash }, 
-	'signed':   { screen: signed },  
-	'unsigned': { screen: unsigned },  
+	'splash':   {screen:splash}, 
+	'unsigned': {screen:unsigned},
+	'signed':   {screen:signed},  
 }, {
 	initialRouteName: 'splash', 
 }));
