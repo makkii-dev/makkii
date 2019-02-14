@@ -113,6 +113,7 @@ class Home extends Component {
 					refreshing: false,
 				})
 			},errors=>{
+				console.log(errors);
 				this.setState({
 					refreshing: false,
 				},()=>{

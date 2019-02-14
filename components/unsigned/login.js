@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,TouchableOpacity,AsyncStorage} from 'react-native';
+import {View,Text,Button,TouchableOpacity} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user_signin} from '../../actions/user.js';
+import {dbGet} from '../../utils.js';
 import styles from '../styles.js';
 
 class Login extends Component {
@@ -49,38 +50,27 @@ class Login extends Component {
 				    <Button
 						title="Login"
 						onPress={e=>{
-							AsyncStorage.getItem('user')
-							.then(json_user=>{
-								if(json_user){
-									let user  = JSON.parse(json_user);
-									if(user.hashed_password === hashPassword(this.state.password)){
-										dispatch(user_signin(user.hashed_password, user.mnemonic));
+							dbGet('user')
+							.then(user=>{
+								if(user.hashed_password === hashPassword(this.state.password)){
+									dispatch(user_signin(user.hashed_password, user.mnemonic));
 
-										// load db accounts
-										AsyncStorage
-											.getItem('accounts') 
-											.then(json_accounts=>{
-												if(json_accounts){
-													try{
-														let accounts = JSON.parse(json_accounts);
-														dispatch(add_accounts(accounts));
-													}catch(e){
-													} 
-												}
-											}); 
-
-										setTimeout(()=>{
-											this.props.navigation.navigate('signed_vault');
-										}, 200);
-									} else {
-										alert('Invalid password');
-									}
+									// load db accounts
+									dbGet('accounts')
+									.then(accounts=>{
+										dispatch(add_accounts(accounts));
+									},err=>{
+										console.log(err);
+									});
+									setTimeout(()=>{
+										this.props.navigation.navigate('signed_vault');
+									}, 200);
 								} else {
-									alert('user not found');
+									alert('Invalid password');
 								}
 							},err=>{
 								alert(err);
-							}); 
+							});
 						}}
 					/>
 				</View>
