@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, TouchableOpacity } from 'react-native';
-//import { Camera, Permissions } from 'expo';
-import { user } from '../../../actions/user.js';
+import { RNCamera } from 'react-native-camera';
+import { user_register } from '../../../actions/user.js';
 
 class RecoveryScan extends Component {
 	constructor(props){
@@ -26,23 +26,22 @@ class RecoveryScan extends Component {
 	        			console.log()
 	        		}}
 		  		>
-		  	{/*
-				<Camera type={Camera.Constants.Type.back}
-	        	    style={{
-	        	    	flex: 1,
-					    justifyContent: 'flex-end',
-					    alignItems: 'center',
-	        	    }}
-	        		onBarCodeScanned={(e)=>{
-	        			// { data: "http://en.m.wikipedia.org",target:15,type:256 }
-	        			console.log('[onBarCodeScanned] ' + JSON.stringify(e));
-	        			dispatch(user({
-	        				mnemonic: e.data
-	        			}));
-	        			this.props.navigation.navigate('Recovery');	
-	        		}}
-	        	>
-	        	</Camera>*/}
+		  			<RNCamera 
+		  			    style={{
+				            flex: 1,
+				        }} 
+		  				captureAudio={false}
+		  				onBarCodeRead={e=>{
+		  					dispatch(user_register(
+		  						'',
+		        				e.data
+		        			));
+		        			setTimeout(()=>{
+		        				this.props.navigation.navigate('unsigned_recovery');
+		        			}, 100)
+		        				
+		  				}}
+		  			/> 
 	        	</View>
         	</TouchableOpacity>	
 		);
