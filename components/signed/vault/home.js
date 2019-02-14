@@ -9,7 +9,7 @@ import {
 	TouchableOpacity,
 	StyleSheet,
 	Dimensions,
-	Platform,
+	Platform,  
 	Image,
 	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
@@ -71,7 +71,7 @@ class Home extends Component {
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(Object.keys(this.props.accounts).length);
+		console.log(this.props.accounts);
 		this.requestStoragePermission();
 	}
 	
@@ -104,7 +104,7 @@ class Home extends Component {
 						reject(error)
 					})
 				}));
-		});
+		});  
 		Promise.all(executors).then(
 			accounts=>{
 				let newAccounts={};

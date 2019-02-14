@@ -33,7 +33,7 @@ class Home extends Component {
 					<Button 
 						title="Scan"  
 						onPress={e=>{
-							this.props.navigation.navigate('RecoveryScan');
+							this.props.navigation.navigate('unsigned_recovery_scan');
 						}} 
 					/>
 				</View>
@@ -44,7 +44,7 @@ class Home extends Component {
 					<InputMultiLines
 						editable={true}
 						style={styles.input_multi_lines} 
-						value={this.state.mnemonic}
+						value={this.props.user.mnemonic} 
 						onChangeText={e=>{
 							this.setState({
 								mnemonic: e
