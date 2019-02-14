@@ -18,19 +18,27 @@ class Transaction extends Component {
 		const url = `https://mainnet.aion.network/#/transaction/${this.transactionHash}`;
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
-
+	sendAgain(){
+		const {navigation} = this.props;
+		const transaction = this.props.accounts[this.addr].transactions[this.transactionHash];
+		navigation.navigate('signed_vault_send',{
+			address: transaction.from,
+			value: transaction.value + '',
+			recipient: transaction.to,
+		})
+	}
 	render(){
 		const transaction = this.props.accounts[this.addr].transactions[this.transactionHash];
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
-		// const ifSender = this.addr === transaction.from;
-		const ifSender = true;
+		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
+		const value1 = ifSender? transaction.to: transaction.from;
 		return (
 			<View style={{flex:1,backgroundColor:'#eee',alignItems:'center'}}>
 				<TransactionItemCell
 					style={{height:80, marginTop:20}}
 					title={title1}
-					value={transaction.from}
+					value={value1}
 					valueTextAlign={'left'}
 				/>
 				<TransactionItemCell
@@ -60,7 +68,9 @@ class Transaction extends Component {
 					value={transaction.status}
 				/>
 				{
-					ifSender? <TouchableOpacity>
+					ifSender? <TouchableOpacity
+						onPress={()=>this.sendAgain()}
+					>
 						<View style={{
 							marginTop: 20,
 							width: 200,

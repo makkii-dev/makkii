@@ -70,6 +70,12 @@
         "sendAgain_button": "SEND AGAIN",
         "viewInExplorer_button": "VIEW IN EXPLORER"
     },
+    "account_view": {
+        "send_button": "SEND",
+        "receive_button": "RECEIVE",
+        "transaction_history_label": "Transaction History",
+        "empty_label": "No Transaction"
+    },
     "app_name": "MAKKI",
     "default_account_name": "Account",
     "logout": "Sign Out",

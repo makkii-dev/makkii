@@ -8,7 +8,7 @@ import {fetchRequest} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from '../../toast.js'; 
 import BigNumber from 'bignumber.js';
-const {width} = Dimensions.get('window');
+import {strings} from "../../../locales/i18n";
 
 class Account extends Component {
 
@@ -44,7 +44,7 @@ class Account extends Component {
 	async componentDidMount(){
 
 	}
-	componentWillMount(): void {
+	async componentWillMount(): void {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		this.props.navigation.setParams({
 			title: this.props.accounts[this.addr].name
@@ -52,9 +52,11 @@ class Account extends Component {
 	}
 
 	_renderTransaction(transaction){
+		console.log('[_renderTransaction] ', transaction);
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
-		const value = transaction.from === this.addr? -transaction.value: transaction.value;
-		console.log('[transaction 11] ' ,transaction);
+		const isSender = transaction.from === this.addr;
+		const value = isSender? -transaction.value: transaction.value;
+		const valueColor = isSender? 'red':'green';
 		return (
 			<TouchableOpacity
 				onPress={e => {
@@ -80,7 +82,10 @@ class Account extends Component {
 						}}>{ transaction.hash.substring(0, 16) + ' ...' }</Text>
 						<Text style={{
 							color: 'grey',
-						}}>{ value } AION</Text>
+						}}>
+							<Text style={{color:valueColor}}>{value} </Text>
+							AION
+						</Text>
 					</View>
 				</View>
 			</TouchableOpacity>
@@ -103,8 +108,7 @@ class Account extends Component {
 	};
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
-	    let mockAddress = 'a070e1ba6f947e416fbc64c408de944eb31e61a892a5c87c358281cdb096dd7e';
-		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${mockAddress}&page=${page}&size=${size}`;
+		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
@@ -169,37 +173,45 @@ class Account extends Component {
 				</View>
 
 				<View style={{...styles.Account.buttonContainer}}>
-					<Button
-						title="SEND"
+					<TouchableOpacity
 						onPress={()=>{
 							navigation.navigate('signed_vault_send', {
 								address: this.addr,
 							});
 						}}
-					/>
-					<Button
-						title="RECEIVE"
+					>
+						<View style={{width:100,height:40,borderRadius:10,backgroundColor:'#3399ff',alignItems:'center',justifyContent:'center',elevation:2}}>
+							<Text style={{color:'#fff'}}>{strings('account_view.send_button')}</Text>
+						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
 						onPress={()=>{
 							navigation.navigate('signed_vault_receive', {
 								address: this.addr,
 							});
 						}}
-					/>
+					>
+						<View style={{width:100,height:40,borderRadius:10,backgroundColor:'#3399ff',alignItems:'center',justifyContent:'center',elevation:2}}>
+						<Text style={{color:'#fff'}}>{strings('account_view.receive_button')}</Text>
+						</View>
+					</TouchableOpacity>
 				</View>
 				<View style={{alignItems:'center', backgroundColor:'#eee', marginRight:10, marginLeft: 10}}>
-					<Text>Transaction History</Text>
+					<Text>{strings('account_view.transaction_history_label')}</Text>
 				</View>
 				<FlatList
-					style={{margin:10}}
-					data={Object.values(this.props.accounts[this.addr].transactions)}
+					style={{marginLeft:10, marginRight:10}}
+					data={Object.values(this.props.accounts[this.addr].transactions).slice(0,2)}
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=>this._renderTransaction(item)}
                     ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
 					ListEmptyComponent={()=>
 						<View style={{alignItems:'center', backgroundColor:'#fff'}}>
-							<Text>No Transaction</Text>
+							<Text>{strings('account_view.empty_label')}</Text>
 						</View>
 					}
+					ListHeaderComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
+					ListFooterComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}

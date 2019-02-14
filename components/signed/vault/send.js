@@ -29,10 +29,10 @@ class Send extends Component {
 		this.state={
 			showAdvanced: false,
 			amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
-			recipient: '',
+			recipient: this.props.navigation.state.params.recipient? this.props.navigation.state.params.recipient: '',
 			gasPrice: '10',
 			gasLimit: '21000',
-		}
+		};
         this.addr=this.props.navigation.state.params.address;
 		this.account = this.props.accounts[this.addr];
 		console.log("selected account is: " + JSON.stringify(this.props.accounts[this.addr]));
@@ -52,7 +52,7 @@ class Send extends Component {
                     <View style={st.text_input_cell}>
                         <TextInput
                             style={st.text_input}
-                            value={this.state.receiver}
+                            value={this.state.recipient}
                             placeholder={strings('send.hint_recipient')}
                             onChangeText={text => {
                                 this.setState({
@@ -193,7 +193,7 @@ class Send extends Component {
 					let txs = {};
 					let pendingTx={};
 					pendingTx.hash = hash;
-					pendingTx.timestamp = tx.timestamp;
+					pendingTx.timestamp = tx.timestamp.toNumber()/1000;
                     pendingTx.from = sender;
                     pendingTx.to = tx.to;
                     pendingTx.value = amount - 0;
@@ -201,7 +201,7 @@ class Send extends Component {
                     txs[hash]=pendingTx;
 
 					dispatch(update_account_txs(sender, txs));
-
+					dispatch(update_account_txs(tx.to, txs));
 					thisLoadingView.hide();
 					thisToast.show(strings('send.toast_tx_sent'));
 				});

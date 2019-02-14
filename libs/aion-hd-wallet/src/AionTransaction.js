@@ -51,11 +51,11 @@ export class AionTransaction {
         if (!params.timestamp) {
             params.timestamp= new BigNumber(new Date().getTime() * 1000);
         }
-        console.log("timestamp:", params.timestamp);
-
+        this.timestamp = params.timestamp;
         this.setHexField('data', params.data);
         this.setHexField('timestampHex', params.timestamp);
         this.setHexField('valueHex', params.value);
+        this.value = params.value;
         this.setHexField('to', params.to);
         this.setHexField('gas', params.gas);
         this.setHexField('gasPrice', params.gasPrice);
