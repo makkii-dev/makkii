@@ -89,8 +89,8 @@ class Receive extends Component {
 	}
 	render(){
 		return (
-			<View style={styles.container}>
-				<View style={{marginTop: 40}}>
+			<View style={{flex:1, paddingRight: 20, paddingLeft: 20}}>
+				<View style={{marginTop: 10}}>
 					<Text>{strings('receive.label_modify_amount')}</Text>
 				</View>
 				<View>

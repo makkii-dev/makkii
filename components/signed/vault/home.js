@@ -22,7 +22,7 @@ import { getLedgerMessage } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
-
+import BigNumber from 'bignumber.js';
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const mHeight = 220;
@@ -93,9 +93,8 @@ class Home extends Component {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
-					console.log(value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
-						value.balance = balance / Math.pow(10,18);
+						value.balance = new BigNumber(balance).shiftedBy(-18).toNumber();
 						resolve(value)
 					},error => {
 						console.log('[error] account: ', value.address);
@@ -106,9 +105,10 @@ class Home extends Component {
 				}));
 		});  
 		Promise.all(executors).then(
-			accounts=>{
+			res=>{
+				console.log('[accounts promise] ', res) ;
 				let newAccounts={};
-				accounts.forEach(account=>{
+				res.forEach(account=>{
 					newAccounts[account.address] = account;
 				});
 				dispatch(add_accounts(newAccounts));
@@ -405,7 +405,8 @@ class Home extends Component {
 export default connect(state => {
 	return ({
 		accounts: state.accounts,
-		ui: state.ui
+		ui: state.ui,
+		settings: state.settings
 	}); })(Home);
 
 const styles = StyleSheet.create({
