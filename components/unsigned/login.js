@@ -66,11 +66,11 @@ class Login extends Component {
 									setTimeout(()=>{
 										this.props.navigation.navigate('signed_vault');
 									}, 200);
-								} else {
+								} else { 
 									alert('Invalid password');
 								}
 							},err=>{
-								alert(err);
+								console.log(err);
 							});
 						}}
 					/>

@@ -35,10 +35,9 @@ export default function user(state = init, action){
 	      	break;
 		case USER_SIGNOUT:
 			new_state = Object.assign({}, state, {
-	        	timestamp: 0,
-	        	hashed_password: '',
-	        	mnemonic: '', 
+	        	timestamp: 0
  	      	});   
+ 	      	should_update_db = true;
 	      	break;
 	    case USER_UPDATE_PASSWORD: 
 	    	new_state = Object.assign({}, state, {
