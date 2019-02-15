@@ -27,6 +27,7 @@ class Splash extends Component {
 			// TODO: move max_keep_signed to setting;
 			let max_keep_signed = 60000 * 30;  
 			let time_diff = Date.now() - user.timestamp; 
+			console.log('user.timestamp ' + user.timestamp);
 			if(time_diff < max_keep_signed) { 
 
 				// load db accounts
