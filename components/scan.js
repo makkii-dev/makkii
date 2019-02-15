@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import Toast from './toast.js';
+import Toast from 'react-native-root-toast';
 
 /*
     require from parent: 
@@ -39,7 +39,7 @@ class Scan extends Component {
 	  							// slow down toast log 
 	  							let now = Date.now();
 	  							if(now - this.state.toast > 1000){
-	  								this.refs.toast.show(res.err);
+	  								Toast.show(res.err);
 	  								this.setState({
 	  									toast: now
 	  								})
@@ -50,11 +50,7 @@ class Scan extends Component {
 	  					}
 	  				}}
 	  			/> 
-	  			<Toast ref={"toast"}
-				   duration={Toast.Duration.short}
-				   onDismiss={() => this.props.navigation.goBack()}
-				   />
-        	</View>	
+        	</View>
 		);
 	}
 }

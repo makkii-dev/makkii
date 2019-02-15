@@ -1,4 +1,8 @@
 {
+  "login": {
+    "error_login": "登录失败",
+    "error_incorrect_password": "密码不正确"
+  },
   "about": {
     "title": "关于",
     "version_label": "版本号",

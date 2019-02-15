@@ -47,6 +47,9 @@ const Routes = createAppContainer(createSwitchNavigator({
 import data from './data.js'; 
 store.dispatch(dapps(data.dapps));
 
+import {listenTransaction} from './utils';
+global.listenTx = new listenTransaction(store);
+
 export default class App extends Component {
 	render() {
 		return (

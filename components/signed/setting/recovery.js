@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View,Button,TextInput,Clipboard} from 'react-native';
 import {InputMultiLines} from '../../common.js';
 import QRCode from 'react-native-qrcode-svg';
-import Toast from '../../toast.js';
+import Toast from 'react-native-root-toast';
 import styles from '../../styles.js';
 import { strings } from '../../../locales/i18n';
 
@@ -41,7 +41,7 @@ class Recovery extends Component {
 						title={strings('copy_button')}
 						onPress={e => {
 							Clipboard.setString(this.props.user.mnemonic);
-							this.refs.toast.show(strings('toast_copy_success'));
+							Toast.show(strings('toast_copy_success'));
 						}}
 					/>
 				</View>
@@ -54,11 +54,6 @@ class Recovery extends Component {
 				      	value={this.props.user.mnemonic}
 				    />	   
 				</View>
-				<Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-                    onDismiss={() => {}}
-				/>
 			</View>
 		)
 	}

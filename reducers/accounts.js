@@ -13,7 +13,7 @@ export default function accounts(state = init, action){
 	let new_state;
 	switch(action.type){
 		case ADD_ACCOUNTS:
-			new_state = Object.assign({}, state, action.accounts);
+			new_state = Object.assign({}, action.accounts, state);
 			AsyncStorage.setItem(
 				'accounts',
 				JSON.stringify(new_state)
@@ -31,7 +31,7 @@ export default function accounts(state = init, action){
 			break;
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
-				state[action.key].transactions = Object.assign({}, state[action.key].transactions, action.transactions);
+				state[action.key].transactions = Object.assign({},action.transactions, state[action.key].transactions);
 			}
 			new_state = Object.assign({}, state);
 			AsyncStorage.setItem(
