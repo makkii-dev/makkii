@@ -39,6 +39,7 @@ class Login extends Component {
 
 			this.props.navigation.navigate('signed_vault');
 		}, err=> {
+			this.props.dispatch(setting(_setting));
 			this.props.navigation.navigate('signed_vault');
 		});
 	}
