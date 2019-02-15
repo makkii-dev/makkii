@@ -4,6 +4,7 @@ import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
+import {update_account_txs} from "./actions/accounts";
 
 function dbGet(key){
     return new Promise((resolve, reject)=>{
@@ -117,6 +118,52 @@ function fetchRequest(url, method='GET', headers={}) {
 
 }
 
+class listenTransaction{
+    constructor(store, timeOut=60*1000){
+        this.txMap={};
+        this.timeOut = timeOut;
+        this.store = store;
+    }
+    addTransaction(tx){
+        let thusMap = this.txMap;
+        let thusTimeOut = this.timeOut;
+        let thusStore = this.store;
+        if(typeof thusMap[tx.hash] !== 'undefined')
+            return;
+        let removeTransaction = function(tx){
+            if(typeof thusMap[tx.hash] !== 'undefined'){
+                console.log('clear listener');
+                clearInterval(thusMap[tx.hash]);
+                delete thusMap[tx.hash];
+            }
+        };
+        let start = Date.now();
+        thusMap[tx.hash]=setInterval(function(){
+            if (Date.now() - start > thusTimeOut) {
+                reject('timeout');
+                removeTransaction(tx);
+            }
+            web3.eth.getTransactionReceipt(tx.hash).then(
+                res=>{
+                    if(res){
+                        console.log(res);
+                        tx.status = res.status? 'CONFIRMED':'FAILED';
+                        tx.blockNumber = res.blockNumber;
+                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}));
+                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}));
+                        removeTransaction(tx);
+                    }
+                },
+                err=>{
+                    removeTransaction(tx);
+                }
+            )
+        }, 2000);
+
+    }
+
+}
+
 module.exports = {
     dbGet: dbGet,
     validatePassword: validatePassword,
@@ -130,4 +177,5 @@ module.exports = {
     validatePositiveInteger: validatePositiveInteger,
     validateAddress: validateAddress,
     fetchRequest: fetchRequest,
+    listenTransaction:listenTransaction,
 }

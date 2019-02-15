@@ -40,27 +40,32 @@ class Account extends Component {
 			refreshing: false,
 		};
 		this.addr=this.props.navigation.state.params.address;
+		this.account = this.props.accounts[this.addr];
+		this.props.navigation.setParams({
+			title: this.account.name
+		});
 	}
 	async componentDidMount(){
 
 	}
-	async componentWillMount(): void {
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		this.props.navigation.setParams({
-			title: this.props.accounts[this.addr].name
-		});
+	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
 	}
 
 	_renderTransaction(transaction){
-		console.log('[_renderTransaction] ', transaction);
+		if(transaction.status === 'PENDING'){
+			console.log('try to get transaction '+transaction.hash+' status');
+			listenTx.addTransaction(transaction);
+		}
+
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
 		const isSender = transaction.from === this.addr;
-		const value = isSender? -transaction.value: transaction.value;
+		const value = isSender? '-'+transaction.value: '+'+transaction.value;
 		const valueColor = isSender? 'red':'green';
 		return (
 			<TouchableOpacity
 				onPress={e => {
-					//dispatch(account(this.props.accounts[this.addr][key]));
+					//dispatch(account(this.account[key]));
 					this.props.navigation.navigate('signed_vault_transaction',{
 						account:this.addr,
 						transactionHash: transaction.hash,
@@ -93,7 +98,7 @@ class Account extends Component {
 	}
 	onChangeName = (newName) =>{
 		const {dispatch} = this.props;
-		const key = this.props.accounts[this.addr].address;
+		const key = this.account.address;
 		dispatch(update_account_name(key,newName));
 		this.props.navigation.setParams({
 			title: newName
@@ -109,6 +114,7 @@ class Account extends Component {
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
 		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+		console.log("11111");
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
@@ -147,15 +153,15 @@ class Account extends Component {
 				<View style={styles.Account.summaryContainer}>
 					<View style={styles.Account.summaryLeftContainer}>
 						<EditableView
-							value={this.props.accounts[this.addr].name}
+							value={this.account.name}
 							endInput={this.onChangeName.bind(this)}
-							type={this.props.accounts[this.addr].type}
+							type={this.account.type}
 						/>
-						<Text>{ this.props.accounts[this.addr].balance } AION</Text>
+						<Text>{ this.account.balance } AION</Text>
 					</View>
 					<View>
 						<QRCode
-							value={this.props.accounts[this.addr].address}
+							value={this.account.address}
 							size={100}
 							color='purple'
 							backgroundColor='white'
@@ -163,9 +169,9 @@ class Account extends Component {
 					</View>
 				</View>
 				<View style={styles.Account.addressView}>
-					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.props.accounts[this.addr].address }</Text>
+					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.account.address }</Text>
 					<TouchableOpacity onPress={()=>{
-						Clipboard.setString(this.props.accounts[this.addr].address);
+						Clipboard.setString(this.account.address);
 						this.refs.toast.show('Copied to clipboard successfully');
 					}}>
 						<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
@@ -201,7 +207,7 @@ class Account extends Component {
 				</View>
 				<FlatList
 					style={{marginLeft:10, marginRight:10}}
-					data={Object.values(this.props.accounts[this.addr].transactions).slice(0,2)}
+					data={Object.values(this.account.transactions).slice(0,3)}
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=>this._renderTransaction(item)}
                     ItemSeparatorComponent={()=><View style={{backgroundColor:'#000', height: 1/PixelRatio.get()}}/>}
@@ -215,7 +221,7 @@ class Account extends Component {
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}
-							onRefresh={()=>this.onRefresh(this.props.accounts[this.addr].address)}
+							onRefresh={()=>this.onRefresh(this.account.address)}
 							title={'loading'}
 						/>
 					}
