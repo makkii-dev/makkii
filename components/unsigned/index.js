@@ -7,7 +7,6 @@ import Register         from './register/home.js';
 import RegisterMnemonic from './register/mnemonic.js'; 
 import Recovery         from './recovery/home.js';
 import RecoveryPassword from './recovery/password.js';
-import Scan from '../scan.js';
 import styles from '../styles.js'; 
 
 const unsigned = createStackNavigator({  
@@ -47,12 +46,6 @@ const unsigned = createStackNavigator({
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle
-        }
-    },
-  	'scan': {
-        screen: Scan, 
-        navigationOptions: {
-            header: null
         }
     },
 }, {
