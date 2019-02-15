@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View,Text,Button} from 'react-native';
 import {ComponentPassword} from '../../common.js';
 import {validatePassword, hashPassword} from '../../../utils.js';
-import {user_register} from '../../../actions/user.js';
+import {user} from '../../../actions/user.js';
 import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
 import styles from '../../styles.js';   
 
@@ -73,7 +73,7 @@ class Home extends Component {
 							else {
 								let hashed_password = hashPassword(this.state.password);
 								let mnemonic = generateMnemonic();
-								dispatch(user_register(hashed_password, mnemonic));
+								dispatch(user(hashed_password, mnemonic));
 								this.setState({
 									password: '',
 									password_confirm: '',
