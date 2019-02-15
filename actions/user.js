@@ -1,16 +1,8 @@
-const USER_REGISTER = 'USER_REGISTER';
-function user_register(hashed_password, mnemonic){ 
+// atomic update for sigin and register routines
+const USER = 'USER';
+function user(hashed_password, mnemonic){ 
 	return { 
-		type: USER_REGISTER, 
-		hashed_password, 
-		mnemonic 
-	}; 
-}
-
-const USER_SIGNIN = 'USER_SIGNIN';
-function user_signin(hashed_password, mnemonic){ 
-	return { 
-		type: USER_REGISTER, 
+		type: USER, 
 		hashed_password, 
 		mnemonic 
 	}; 
@@ -32,10 +24,8 @@ function user_update_password(hashed_password) {
 }
 
 module.exports = {
-	USER_REGISTER,
-	user_register,
-	USER_SIGNIN,
-	user_signin,
+	USER,
+	user,
 	USER_SIGNOUT,
 	user_signout,
 	USER_UPDATE_PASSWORD,

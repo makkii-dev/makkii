@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View,Text,Button,TouchableOpacity, Alert} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
-import {user_signin} from '../../actions/user.js';
+import {user} from '../../actions/user.js';
 import {setting} from '../../actions/setting';
 import {add_accounts} from '../../actions/accounts';
 import {dbGet} from '../../utils.js';
@@ -77,9 +77,9 @@ class Login extends Component {
 							let _setting = this.props.setting;
 
 							dbGet('user')
-							.then(user=>{
-								if(user.hashed_password === hashPassword(this.state.password)){
-									dispatch(user_signin(user.hashed_password, user.mnemonic));
+							.then(db_user=>{
+								if(db_user.hashed_password === hashPassword(this.state.password)){
+									dispatch(user(db_user.hashed_password, db_user.mnemonic));
 									this.initAccounts(_setting);
 								} else {
 									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));

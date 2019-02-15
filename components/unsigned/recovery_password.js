@@ -1,10 +1,10 @@
 import React, {Component} from 'react';
 import {Button,View,Text} from 'react-native';
-import {ComponentPassword} from '../../common.js';
-import {connect} from 'react-redux';
-import {hashPassword,validatePassword} from '../../../utils.js';
-import {user_update_password} from '../../../actions/user.js';
-import styles from '../../styles.js';
+import {ComponentPassword} from '../common.js';
+import {connect} from 'react-redux'; 
+import {hashPassword,validatePassword} from '../../utils.js';
+import {user_update_password} from '../../actions/user.js';
+import styles from '../styles.js'; 
 
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -21,7 +21,7 @@ class Password extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.user);
+		console.log('[store.user] ' + this.props.user);
 		this.props.navigation.setParams({
 			title: 'Recovery/Password',
 		});

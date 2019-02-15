@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, Clipboard } from 'react-native';
-import { InputMultiLines } from '../../common.js';
-import {  } from '../../../libs/aion-hd-wallet/index.js';
-import styles from '../../styles.js';
- 
+import { InputMultiLines } from '../common.js';
+import styles from '../styles.js';
+  
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
