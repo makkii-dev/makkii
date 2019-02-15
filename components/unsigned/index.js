@@ -3,10 +3,10 @@ import {connect} from 'react-redux';
 import {View} from 'react-native';  
 import {createStackNavigator} from 'react-navigation';
 import Login            from './login.js';
-import Register         from './register/home.js';
-import RegisterMnemonic from './register/mnemonic.js'; 
-import Recovery         from './recovery/home.js';
-import RecoveryPassword from './recovery/password.js';
+import Register         from './register.js';
+import RegisterMnemonic from './register_mnemonic.js'; 
+import Recovery         from './recovery.js';
+import RecoveryPassword from './recovery_password.js';
 import styles from '../styles.js'; 
 
 const unsigned = createStackNavigator({  

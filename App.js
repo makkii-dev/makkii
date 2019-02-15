@@ -27,7 +27,7 @@ const store = createStore(combineReducers({
 	dapps:           reducer_dapps,
 	setting:         reducer_setting,
 	user:            reducer_user,
-}));
+}));  
 
 // ui 
 import scan     from './components/scan.js';

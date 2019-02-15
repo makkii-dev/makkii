@@ -1,11 +1,11 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button} from 'react-native';
-import {ComponentPassword} from '../../common.js';
-import {validatePassword, hashPassword} from '../../../utils.js';
-import {user} from '../../../actions/user.js';
-import {generateMnemonic,validateMnemonic,AionAccount} from '../../../libs/aion-hd-wallet/index.js';
-import styles from '../../styles.js';   
+import {View,Text,Button} from 'react-native'; 
+import {ComponentPassword} from '../common.js';
+import {validatePassword, hashPassword} from '../../utils.js';
+import {user} from '../../actions/user.js';
+import {generateMnemonic,AionAccount} from '../../libs/aion-hd-wallet/index.js';
+import styles from '../styles.js';   
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
