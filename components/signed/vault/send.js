@@ -160,6 +160,7 @@ class Send extends Component {
 
 	transfer=() => {
 		console.log("transfer clicked.");
+		const {goBack} = this.props.navigation;
 		if (!this.validateFields()) return;
 
 		let accountType = this.account.type;
@@ -217,7 +218,7 @@ class Send extends Component {
 					thisLoadingView.hide();
 					Toast.show(strings('send.toast_tx_sent'), {
 						onHidden: () => {
-							this.props.navigation.goBack();
+							goBack();
 						}
 					})
 				});
