@@ -8,10 +8,10 @@ import {
 	TouchableWithoutFeedback,
 	PermissionsAndroid
 } from 'react-native';
+import Toast from 'react-native-root-toast';
+import QRCode from 'react-native-qrcode-svg';
 import { Input } from '../../common.js';
 import styles from '../../styles.js';
-import QRCode from 'react-native-qrcode-svg';
-import Toast from '../../toast.js';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
 import ContextMenu from '../../contextMenu';
@@ -74,7 +74,7 @@ class Receive extends Component {
 			this.qrcodeRef.toDataURL(base64 => {
                 saveImage(base64, 'receive_qrcode_' + Date.now() + ".png").then(imagePath => {
                     console.log("image path:" + imagePath);
-                    this.refs.toast.show(strings('toast_save_image_success', { path: imagePath}));
+                    Toast.show(strings('toast_save_image_success', { path: imagePath}));
                 }, error => {
                     console.log(error);
                     Alert.alert(strings('alert_title_error'), strings('error_save_qrcode_image'));
@@ -131,11 +131,6 @@ class Receive extends Component {
 						{strings('receive.button_save_receive_code')}
 					</Text>
 				</View>
-                <Toast
-                    ref={"toast"}
-                    duration={Toast.Duration.short}
-                    onDismiss={() => {}}
-                />
 				<ContextMenu
 					message={strings('save_file_button')}
 					onClick={() => {

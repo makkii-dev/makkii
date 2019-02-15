@@ -6,7 +6,7 @@ import styles from '../../styles.js';
 import {EditableView} from "../../common";
 import {fetchRequest} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
-import Toast from '../../toast.js'; 
+import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 
@@ -125,7 +125,7 @@ class Account extends Component {
 					txs[tx.hash]=tx;
 				});
 			}else{
-				this.refs.toast.show('No More data');
+			    Toast.show('No More Data');
 			}
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
@@ -166,7 +166,7 @@ class Account extends Component {
 					<Text style={{fontSize:10, textAlign:'auto',marginRight: 10}}>{ this.props.accounts[this.addr].address }</Text>
 					<TouchableOpacity onPress={()=>{
 						Clipboard.setString(this.props.accounts[this.addr].address);
-						this.refs.toast.show('Copied to clipboard successfully');
+						Toast.show(strings('toast_copy_success'));
 					}}>
 						<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
 					</TouchableOpacity>
@@ -219,11 +219,6 @@ class Account extends Component {
 							title={'loading'}
 						/>
 					}
-				/>
-				<Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-					onDismiss={() => {}}
 				/>
 			</View>
 		)

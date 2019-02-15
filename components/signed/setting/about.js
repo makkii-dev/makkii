@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import {View,Text,Dimensions} from 'react-native';
 import {ComponentLogo} from '../../common.js';
 import AionCell from '../../cell.js';
-import Toast from '../../toast.js';
 import {strings} from '../../../locales/i18n';
 import styles from '../../styles.js';
+import Toast from 'react-native-root-toast';
 
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -48,7 +48,7 @@ class About extends Component {
 					<AionCell
 						title={strings('about.version_update_button')}
 						onClick={() => {
-							this.refs.toast.show(strings('about.version_latest'));
+						    Toast.show(strings('about.version_latest'));
 						}}
 					/>
 				</View>
@@ -65,11 +65,6 @@ class About extends Component {
 						{strings('about.copyright_label')}
 					</Text>	
 				</View>
-                <Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-					onDismiss={e=> {}}
-				/>
 			</View>
 		);
 	}

@@ -18,7 +18,7 @@ function dbGet(key){
                     reject('[dbGet] ' + e);
                 } 
             } else {
-                reject('[dbGet] db.user null');
+                reject('[dbGet] db.' + key + ' null');
             }
         });    
     });
