@@ -5,7 +5,7 @@ import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user } from '../../../actions/user.js';
-import Toast from '../../toast.js';
+import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 
 class Password extends Component {
@@ -81,12 +81,6 @@ class Password extends Component {
 						onPress={() => this.updatePassword()}
 					/>
 				</View>
-				<Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-					onDismiss={() => this.props.navigation.goBack()}
-				/>
-
 			</View>
 		)
 	}
@@ -119,7 +113,11 @@ class Password extends Component {
 		dispatch(user(updateUser));
 
         console.log("update password successfully.");
-        this.refs.toast.show(strings('toast_update_successfully'));
+        Toast.show(strings('toast_update_successfully'), {
+        	onHidden: () => {
+				this.props.navigation.goBack();
+			}
+		});
 	}
 
 }

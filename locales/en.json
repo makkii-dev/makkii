@@ -1,4 +1,8 @@
 {
+    "login": {
+        "error_login": "Login fail",
+        "error_incorrect_password": "Incorrect password"
+    },
     "about": {   
         "title": "About",
         "version_label": "Version",

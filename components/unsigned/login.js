@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,TouchableOpacity} from 'react-native';
+import {View,Text,Button,TouchableOpacity, Alert} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
+import {setting} from '../../actions/setting';
 import {add_accounts} from '../../actions/accounts';
 import {dbGet} from '../../utils.js';
 import styles from '../styles.js';
+import {strings} from "../../locales/i18n";
 
 class Login extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -25,6 +27,27 @@ class Login extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.user);
+	}
+	initAccounts=(_setting) => {
+		// load db accounts
+		dbGet('accounts').then(accounts=>{
+			this.props.dispatch(add_accounts(accounts));
+			this.initSettings(_setting);
+		},err=>{
+			this.initSettings(_setting);
+		});
+	}
+	initSettings=(_setting) => {
+		dbGet('settings').then(settings => {
+			_setting.endpoint_wallet = settings.endpoint_wallet;
+			_setting.endpoint_dapps = settings.endpoint_dapps;
+			_setting.endpoint_odex = settings.endpoint_odex;
+			this.props.dispatch(setting(_setting));
+
+			this.props.navigation.navigate('signed_vault');
+		}, err=> {
+			this.props.navigation.navigate('signed_vault');
+		});
 	}
 	render(){
 		const {dispatch} = this.props;
@@ -51,26 +74,19 @@ class Login extends Component {
 				    <Button
 						title="Login"
 						onPress={e=>{
+							let _setting = this.props.setting;
+
 							dbGet('user')
 							.then(db_user=>{
 								if(db_user.hashed_password === hashPassword(this.state.password)){
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
-
-									// load db accounts
-									dbGet('accounts')
-									.then(accounts=>{
-										dispatch(add_accounts(accounts));
-									},err=>{
-										console.log(err);
-									});
-									setTimeout(()=>{
-										this.props.navigation.navigate('signed_vault');
-									}, 200);
-								} else { 
-									alert('Invalid password');
+									this.initAccounts(_setting);
+								} else {
+									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));
 								}
 							},err=>{
-								console.log(err);
+								console.log("login failed: " + err);
+								Alert.alert(strings('alert_title_error'), strings('login.error_login'));
 							});
 						}}
 					/>
@@ -103,6 +119,7 @@ class Login extends Component {
 
 export default connect(state => { 
 	return { 
-		user: state.user 
+		user: state.user,
+		setting: state.setting,
 	}; 
 })(Login);

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert} from 'react-native';
+import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from '../../../utils';
 import {AionTransaction } from '../../../libs/aion-hd-wallet/index.js';
 import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
-import Toast from '../../toast.js';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
 
@@ -154,10 +154,6 @@ class Send extends Component {
                 <Loading ref={element => {
                     this.loadingView = element;
 				}}/>
-                <Toast ref={"toast"}
-					   duration={Toast.Duration.short}
-					   onDismiss={() => this.props.navigation.goBack()}
-					   />
 			</View>
 		)
 	}
@@ -173,7 +169,6 @@ class Send extends Component {
 			sender = '0x' + sender;
 		}
 		let thisLoadingView = this.loadingView;
-		let thisToast = this.refs.toast;
 		const {dispatch} = this.props;
 		thisLoadingView.show(strings('send.progress_sending_tx'));
 		web3.eth.getTransactionCount(sender).then(count => {
@@ -220,7 +215,11 @@ class Send extends Component {
 					dispatch(update_account_txs(sender, txs));
 					dispatch(update_account_txs(tx.to, txs));
 					thisLoadingView.hide();
-					thisToast.show(strings('send.toast_tx_sent'));
+					Toast.show(strings('send.toast_tx_sent'), {
+						onHidden: () => {
+							this.props.navigation.goBack();
+						}
+					})
 				});
 			} catch (error) {
 				console.log("send signed tx error:", error);

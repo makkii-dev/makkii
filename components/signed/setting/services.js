@@ -5,8 +5,8 @@ import {Input} from '../../common.js';
 import {setting} from '../../../actions/setting.js';
 import {validateUrl} from '../../../utils.js';
 import {strings} from "../../../locales/i18n";
-import Toast from '../../toast.js';
 import styles from '../../styles.js';
+import Toast from 'react-native-root-toast';
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -94,11 +94,6 @@ class Services extends Component {
 						onPress={e => this.update() }
 					/>
 				</View>
-				<Toast
-					ref={"toast"}
-					duration={Toast.Duration.short}
-					onDismiss={() => this.props.navigation.goBack()}
-				/>
 			</View>
 		)
 	}
@@ -127,7 +122,11 @@ class Services extends Component {
 		_setting.endpoint_odex = this.state.endpoint_odex;
 		dispatch(setting(_setting));
 
-		this.refs.toast.show(strings('toast_update_success'));
+        Toast.show(strings('toast_update_success'), {
+			onHidden: () => {
+        		this.props.navigation.goBack();
+			}
+		});
 	}
 
 }

@@ -38,7 +38,7 @@ class Home extends Component {
 						title="Scan"   
 						onPress={e=>{
 							this.props.navigation.navigate('scan',{
-								success:'unsigned_recovery',
+								success:'unsigned_register',
 								validate:function(data){
 									let pass = validateMnemonic(data.data);
 									return {
