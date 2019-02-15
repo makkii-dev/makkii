@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {View,Text,Button,TouchableOpacity} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
-import {user_signin} from '../../actions/user.js';
+import {user} from '../../actions/user.js';
 import {add_accounts} from '../../actions/accounts';
 import {dbGet} from '../../utils.js';
 import styles from '../styles.js';
@@ -52,9 +52,9 @@ class Login extends Component {
 						title="Login"
 						onPress={e=>{
 							dbGet('user')
-							.then(user=>{
-								if(user.hashed_password === hashPassword(this.state.password)){
-									dispatch(user_signin(user.hashed_password, user.mnemonic));
+							.then(db_user=>{
+								if(db_user.hashed_password === hashPassword(this.state.password)){
+									dispatch(user(db_user.hashed_password, db_user.mnemonic));
 
 									// load db accounts
 									dbGet('accounts')
@@ -66,11 +66,11 @@ class Login extends Component {
 									setTimeout(()=>{
 										this.props.navigation.navigate('signed_vault');
 									}, 200);
-								} else {
+								} else { 
 									alert('Invalid password');
 								}
 							},err=>{
-								alert(err);
+								console.log(err);
 							});
 						}}
 					/>

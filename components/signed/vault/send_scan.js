@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
 import { RNCamera } from 'react-native-camera';
-import { user_register } from '../../../actions/user.js';
+import { connect } from 'react-redux';
+import { strings } from '../../../locales/i18n';
 
-class RecoveryScan extends Component {
+class VaultSendScan extends Component {
 	constructor(props){
 		super(props);
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.user);
 	}
 	render(){
 		const { dispatch } = this.props;
@@ -26,18 +25,27 @@ class RecoveryScan extends Component {
 	        			console.log()
 	        		}}
 		  		>
-		  			<RNCamera 
+		  			<RNCamera
+						ref={ref => {
+							this.camera = ref;
+						}}
 		  			    style={{
 				            flex: 1,
 				        }} 
 		  				captureAudio={false}
 		  				onBarCodeRead={e=>{
-		  					dispatch(user_register(
-		  						'',
-		        				e.data
-		        			));
+							this.camera.pausePreview();
 		        			setTimeout(()=>{
-		        				this.props.navigation.navigate('unsigned_recovery');
+		        			    if (this.props.navigation.state.params.onScanResult(e.data)) {
+									this.props.navigation.goBack();
+								} else {
+		        			    	Alert.alert(strings('alert_title_error'),
+										strings('send.error_invalid_qrcode'),
+										[
+											{text: strings('alert_ok_button'), onPress: () => { this.camera.resumePreview() }}
+										],
+										{cancelable: false});
+								}
 		        			}, 100)
 		        				
 		  				}}
@@ -49,7 +57,5 @@ class RecoveryScan extends Component {
 }
 
 export default connect(state => {
-	return {
-		user: state.user
-	};
-})(RecoveryScan);
+	return state;
+})(VaultSendScan);

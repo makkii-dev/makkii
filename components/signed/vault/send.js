@@ -281,6 +281,40 @@ class Send extends Component {
 	}
 	scan=() => {
 		console.log("scan clicked.");
+
+		this.props.navigation.navigate('signed_vault_send_scan', {
+			onScanResult: (scanResult) => this.onScanResult(scanResult),
+		});
+	}
+	onScanResult=(scanResult) => {
+		console.log("scan result is:" + scanResult);
+		try {
+			let receiverObj = JSON.parse(scanResult)
+            if (receiverObj.receiver) {
+                if (!validateAddress(receiverObj.receiver)) {
+                    console.log("qrcode receiver is invalid");
+                    return false;
+                }
+
+            	this.setState({
+					recipient: receiverObj.receiver,
+				});
+			}
+			if (receiverObj.amount) {
+			    if (!validateAmount(receiverObj.amount)) {
+					console.log("qrcode amount is invalid");
+			    	return false;
+				}
+
+				this.setState({
+					amount: receiverObj.amount,
+				})
+			}
+			return true;
+		} catch (error) {
+			console.log("failed to parse json string " + scanResult + ", error=" + error);
+			return false;
+		}
 	}
 }
 

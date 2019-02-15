@@ -3,11 +3,10 @@ import {connect} from 'react-redux';
 import {View} from 'react-native';  
 import {createStackNavigator} from 'react-navigation';
 import Login            from './login.js';
-import Register         from './register/home.js';
-import RegisterMnemonic from './register/mnemonic.js'; 
-import Recovery         from './recovery/home.js';
-import RecoveryPassword from './recovery/password.js';
-import RecoveryScan     from './recovery/scan.js';
+import Register         from './register.js';
+import RegisterMnemonic from './register_mnemonic.js'; 
+import Recovery         from './recovery.js';
+import RecoveryPassword from './recovery_password.js';
 import styles from '../styles.js'; 
 
 const unsigned = createStackNavigator({  
@@ -49,19 +48,7 @@ const unsigned = createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle
         }
     },
-  	'unsigned_recovery_scan': {
-        screen: RecoveryScan, 
-        navigationOptions: {
-            header: null
-        }
-    },
 }, {
-  	//initialRouteName: 'unsigned_login',    
-    //initialRouteName: 'unsigned_register',
-    //initialRouteName: 'unsigned_register_mnemonic', 
-    //initialRouteName: 'unsigned_recovery',
-    //initialRouteName: 'unsigned_recovery_password',  
-    //initialRouteName: 'unsigned_recovery_scan',
     swipeEnabled: false,
   	animationEnabled: false,
   	lazy: true,

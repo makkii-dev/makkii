@@ -126,6 +126,7 @@ class Services extends Component {
 		_setting.endpoint_dapps = this.state.endpoint_dapps;
 		_setting.endpoint_odex = this.state.endpoint_odex;
 		dispatch(setting(_setting));
+
 		this.refs.toast.show(strings('toast_update_success'));
 	}
 

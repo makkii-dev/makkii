@@ -54,7 +54,8 @@
     "error_send_transaction": "发送交易失败",
     "progress_sending_tx": "正在发送交易...",
     "toast_tx_sentutils.js": "交易已发送",
-    "error_wrong_ledger_device": "账号不存在，错误的Ledger设备!"
+    "error_wrong_ledger_device": "账号不存在，错误的Ledger设备!",
+    "error_invalid_qrcode": "无效的二维码"
   },
   "transaction_detail": {
     "title": "交易详情",
@@ -96,6 +97,7 @@
   "permission_storage_title": "Makki应用存储权限",
   "permission_storage_message": "Makki App需要得到您授权来保存部分数据文件",
   "ok_button": "同意",
+  "alert_ok_button": "确定",
   "cancel_button": "拒绝",
   "save_file_button": "保存到手机"
 }

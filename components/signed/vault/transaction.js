@@ -29,7 +29,7 @@ class Transaction extends Component {
 	}
 	render(){
 		const transaction = this.props.accounts[this.addr].transactions[this.transactionHash];
-		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
+		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;

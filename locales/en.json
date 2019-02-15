@@ -57,6 +57,7 @@
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
         "toast_tx_sent": "Transaction is sent",
+        "error_invalid_qrcode": "Invalid QRCode"
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",
@@ -96,6 +97,7 @@
     "permission_storage_title": "Makki Storage Permission",
     "permission_storage_message": "Makki App needs access to your external storage to save some data.",
     "ok_button": "Ok",
+    "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
     "ledger.error.unknown_account_type": "Ledger internal error",

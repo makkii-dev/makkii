@@ -16,10 +16,10 @@ function dbGet(key){
                     let data = JSON.parse(json);
                     resolve(data);
                 }catch(e){
-                    reject(e);
+                    reject('[dbGet] ' + e);
                 } 
             } else {
-                reject();
+                reject('[dbGet] db.user null');
             }
         });    
     });

@@ -6,7 +6,6 @@ import {
 	Button,
 	Alert,
 	TouchableWithoutFeedback,
-	TouchableOpacity,
 	PermissionsAndroid
 } from 'react-native';
 import { Input } from '../../common.js';
