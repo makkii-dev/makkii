@@ -1,4 +1,5 @@
 import { SETTING } from '../actions/setting.js';
+import Web3 from "aion-web3";
 
 const init = { 
 	lang: 'en',
@@ -15,6 +16,7 @@ const init = {
 export default function setting(state = init, action){
 	switch(action.type){
 		case SETTING:
+			web3.setProvider(new Web3.providers.HttpProvider(action.setting.endpoint_wallet))
 			return Object.assign({}, action.setting);
 		default: 
 			return state;

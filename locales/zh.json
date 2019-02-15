@@ -68,6 +68,12 @@
     "sendAgain_button": "重新发送",
     "viewInExplorer_button": "在Explorer中查看更多"
   },
+  "account_view": {
+    "send_button": "转账",
+    "receive_button": "收款",
+    "transaction_history_label": "交易历史记录",
+    "empty_label": "没有交易"
+  },
   "app_name": "码奇",
   "default_account_name": "账户",
   "logout": "退出",

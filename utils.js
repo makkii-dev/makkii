@@ -4,7 +4,6 @@ import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
-import BigNumber from 'bignumber.js';
 
 function dbGet(key){
     return new Promise((resolve, reject)=>{

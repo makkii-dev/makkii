@@ -4,6 +4,7 @@ import {View,Text,Button,TouchableOpacity} from 'react-native';
 import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user_signin} from '../../actions/user.js';
+import {add_accounts} from '../../actions/accounts';
 import {dbGet} from '../../utils.js';
 import styles from '../styles.js';
 
