@@ -5544,9 +5544,10 @@ react-lifecycles-compat@^3.0.4:
   version "1.0.0"
   resolved "https://github.com/chaion/lib-react-native-aion-hw.git#c7e544a6bcabececbe43633effe1a82d82405b02"
 
-"react-native-camera@git+https://git@github.com/react-native-community/react-native-camera":
+react-native-camera@^1.10.2:
   version "1.10.2"
-  resolved "git+https://git@github.com/react-native-community/react-native-camera#956d2e223092e2778b5c51148877326c1537e6c2"
+  resolved "http://registry.npm.taobao.org/react-native-camera/download/react-native-camera-1.10.2.tgz#0e188c4efdf1f1af0f44664d57b84e33b1343978"
+  integrity sha1-DhiMTv3x8a8PRGZNV7hOM7E0OXg=
   dependencies:
     prop-types "^15.6.2"
 
@@ -7153,11 +7154,6 @@ xhr2-cookies@1.1.0:
   integrity sha1-fXdEnQmZGX8VXLc7I99yUF7YnUg=
   dependencies:
     cookiejar "^2.1.1"
-
-xhr2@^0.1.4:
-  version "0.1.4"
-  resolved "http://registry.npm.taobao.org/xhr2/download/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
-  integrity sha1-f4dliEdxbbUCYyOBL4GMras4el8=
 
 xml-name-validator@^3.0.0:
   version "3.0.0"

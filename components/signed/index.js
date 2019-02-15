@@ -9,6 +9,7 @@ import VaultImportLedger     from './vault/import_ledger.js';
 import VaultImportPrivateKey from './vault/import_private_key.js';
 import VaultReceive          from './vault/receive.js';
 import VaultSend             from './vault/send.js';
+import VaultSendScan         from './vault/send_scan.js';
 import VaultTransaction      from './vault/transaction.js';
 import Dapps                 from './dapps/home.js';
 import DappsDapp             from './dapps/dapp.js';
@@ -71,7 +72,13 @@ const signed = createStackNavigator({
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }  
-	}, 
+	},
+    'signed_vault_send_scan': {
+		screen: VaultSendScan,
+		navigationOptions: {
+		    header: null,
+		}
+	},
 	'signed_vault_transaction': { 
 		screen: VaultTransaction,
 		navigationOptions: {
