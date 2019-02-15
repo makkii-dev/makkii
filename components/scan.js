@@ -36,7 +36,7 @@ class Scan extends Component {
 	  						if (res.pass) {
 	  							this.props.navigation.navigate(this.props.navigation.state.params['success'], { scanned: e.data });
 	  						} else {
-	  							// slow toast log 
+	  							// slow down toast log 
 	  							let now = Date.now();
 	  							if(now - this.state.toast > 1000){
 	  								this.refs.toast.show(res.err);

@@ -74,6 +74,8 @@ export default styles = {
 		color: FONT_COLOR,
 		borderColor: BORDER_COLOR,
 		fontSize: 16,
+		fontWeight: 'bold',
+		padding: 10,
 		textAlignVertical: 'top'
 	},
 	input: {

@@ -5,14 +5,7 @@ import {user} from '../actions/user.js';
 import {add_accounts} from '../actions/accounts.js';
 import {dbGet} from '../utils.js';
 
-class Splash extends Component {
-	static navigationOptions = ({ navigation }) => {
-	    return {
-	       	headerStyle: { 
-	       		visibility: 'none'
-	       	} 
-	    };
-    };
+class Splash extends Component { 
 	constructor(props){
 		super(props); 
 	} 
@@ -40,15 +33,15 @@ class Splash extends Component {
 					navigate('signed_vault');
 				}, 1000);      
 			} else {
-				//console.log('[splash] timeout');
+				console.log('[splash] timeout');
 				setTimeout(()=>{
-					navigate('unsigned_login');    
+					navigate('unsigned_login');      
 				}, 500);
 			}
 		}, err=>{
-			//console.log('[splash] db.user null');
+			console.log('[splash] db.user null');
 			setTimeout(()=>{
-				navigate('unsigned_login');  
+				navigate('unsigned_recovery');  
 			}, 500); 
 		});
 	}

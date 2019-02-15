@@ -9,22 +9,15 @@ import {dbGet} from '../../utils.js';
 import styles from '../styles.js';
 
 class Login extends Component {
-	static navigationOptions = ({ navigation }) => {
-	    return {
-	       	headerStyle: {
-	       		visibility:'none'
-	       	}
-	    };
-    };
 	constructor(props){
 		super(props);
-		this.state = {
+		this.state = { 
 			password: '',
 		}
 	}
 	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.user);
+		console.log('[route] ' + this.props.navigation.state.routeName); 
+		console.log('[store.user] ' + JSON.stringify(this.props.user));
 	}
 	render(){
 		const {dispatch} = this.props;

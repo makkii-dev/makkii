@@ -14,7 +14,7 @@ class Home extends Component {
 	    }; 
     }
 	constructor(props){
-		super(props); 
+		super(props);   
 		this.state = { 
 			mnemonic: ''
 		}
@@ -24,7 +24,7 @@ class Home extends Component {
 		this.props.navigation.setParams({
 			title: 'Recovery',
 		}); 
-	}
+	} 
 	async componentWillReceiveProps(props){   
 		this.setState({
 			mnemonic: props.navigation.getParam('scanned', '')  
@@ -37,7 +37,7 @@ class Home extends Component {
 					<Button 
 						title="Scan"   
 						onPress={e=>{
-							this.props.navigation.navigate('scan',{
+							this.props.navigation.navigate('unsigned_recovery_scan',{
 								success:'unsigned_recovery',
 								validate:function(data){
 									let pass = validateMnemonic(data.data);

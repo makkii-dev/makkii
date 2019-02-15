@@ -3,7 +3,7 @@ import {Button,View,Text} from 'react-native';
 import {ComponentPassword} from '../common.js';
 import {connect} from 'react-redux'; 
 import {hashPassword,validatePassword} from '../../utils.js';
-import {user_update_password} from '../../actions/user.js';
+import {user} from '../../actions/user.js';
 import styles from '../styles.js'; 
 
 class Password extends Component {
@@ -15,15 +15,21 @@ class Password extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			mnemonic: '',
 			password: '',            
 			password_confirm: '',
 		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log('[store.user] ' + this.props.user);
+		console.log('[store.user] ' + JSON.stringify(this.props.user));
 		this.props.navigation.setParams({
 			title: 'Recovery/Password',
+		});
+	}
+	async componentWillReceiveProps(props){   
+		this.setState({
+			mnemonic: props.navigation.getParam('mnemonic', '')  
 		});
 	}
 	render(){
@@ -63,13 +69,14 @@ class Password extends Component {
 							alert('Confirm password does not match password!') 
 						else {
 							let hashed_password = hashPassword(this.state.password);
-							dispatch(user_update_password(hashed_password));
+							dispatch(user(hashed_password, this.state.mnemonic)); 
 							this.setState({
 								password: '',
 								password_confirm: '',
+								mnemonic: ''
 							});
-							this.props.navigation.navigate('signed');
-						}   
+						    this.props.navigation.navigate('signed_vault');
+						}    
 					}}
 				/>
 			</View>
