@@ -18,14 +18,13 @@ import { delete_account, add_accounts} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
-import { getLedgerMessage } from '../../../utils.js';
+import { getLedgerMessage, fetchRequest, getCoinPrice } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
-const mHeight = 220;
 const top = 100;
 
 class Home extends Component {
@@ -39,7 +38,7 @@ class Home extends Component {
 		super(props);
 		this.state={
 			showPop: false,
-			title: 'Total: XXX RMB',
+			title: `Total: XXX RMB`,
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -80,6 +79,13 @@ class Home extends Component {
 			this.fetchAccountsBalance();
 		})
 	}
+	BalanceToRMB(amount){
+		getCoinPrice('CNY',amount).then(res=>{
+			this.setState({
+				title : `Total: ${res.toFixed(2)} RMB`
+			})
+		})
+	}
 
 	fetchAccountsBalance = ()=> {
 		const {dispatch,accounts} = this.props;
@@ -108,9 +114,12 @@ class Home extends Component {
 			res=>{
 				console.log('[accounts promise] ', res) ;
 				let newAccounts={};
+				let totalBalance=0;
 				res.forEach(account=>{
+					totalBalance+=account.balance;
 					newAccounts[account.address] = account;
 				});
+				this.BalanceToRMB(totalBalance);
 				dispatch(add_accounts(newAccounts));
 				this.setState({
 					refreshing: false,

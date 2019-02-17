@@ -117,6 +117,21 @@ function fetchRequest(url, method='GET', headers={}) {
     })
 
 }
+function getCoinPrice(currency='CNY',amount=1) {
+    const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=AION&convert=${currency}`;
+    const headers={
+        'X-CMC_PRO_API_KEY': 'a4fa68bd-6ff6-468e-85e1-0baf709b658d'
+    };
+    return new Promise((resolve, reject) => {
+        fetchRequest(url,'GET',headers).then(res=>{
+            const price = res.data['AION'].quote[currency].price;
+               resolve(amount*price)
+        },err=>{
+            console.log('[err] ', err);
+            reject(err)
+        });
+    })
+}
 
 class listenTransaction{
     constructor(store, timeOut=60*1000){
@@ -177,5 +192,6 @@ module.exports = {
     validatePositiveInteger: validatePositiveInteger,
     validateAddress: validateAddress,
     fetchRequest: fetchRequest,
+    getCoinPrice: getCoinPrice,
     listenTransaction:listenTransaction,
 }
