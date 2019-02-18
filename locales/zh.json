@@ -45,6 +45,7 @@
     "endpoint_wallet": "钱包服务器地址",
     "endpoint_dapps": "Dapps服务器地址",
     "endpoint_odex": "Odex服务器地址",
+    "explorer_server": "Aion浏览器服务地址",
     "hint_api_server": "请输入钱包服务器地址",
     "hint_dapp_server": "请输入DApp服务器地址",
     "invalid_wallet_server_url": "钱包服务器地址不正确",
@@ -103,6 +104,12 @@
     "instruction_private_key": "请输入私钥",
     "error_invalid_private_key": "私钥不正确"
   },
+  "import_master_key": {
+    "title": "主密钥"
+  },
+  "import_ledger": {
+    "title": "Ledger冷钱包"
+  },
   "ledger": {
     "toast_connecting": "正在连接Ledger设备...",
     "error_unknown_account_type": "Ledger内部错误",
@@ -120,6 +127,12 @@
     "menu_master_key": "主密钥",
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包"
+  },
+  "language": {
+    "title": "多语言",
+    "chinese": "简体中文",
+    "english": "English",
+    "auto": "跟随系统"
   },
   "app_name": "码奇",
   "default_account_name": "账户",

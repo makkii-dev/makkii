@@ -22,7 +22,7 @@ const {width} = Dimensions.get('window');
 class ImportHdWallet extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: 'SELECT ACCOUNTS',
+            title: strings('import_master_key.title'),
             headerTitleStyle: {
                 fontSize: 14,
                 alignSelf: 'center',
@@ -37,7 +37,7 @@ class ImportHdWallet extends React.Component {
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 10}}>
-                        <Text style={{color: 'blue'}}>IMPORT</Text>
+                        <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )
