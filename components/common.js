@@ -2,6 +2,7 @@ import React,{ Component } from 'react';
 import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio} from 'react-native';
 import styles from './styles.js';
 import PropTypes from 'prop-types';
+import {strings} from '../locales/i18n';
 
 class ComponentTabBar extends Component{
 	static defaultProps={
@@ -28,7 +29,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} />
-						<Text style={{fontSize: 12, color:wallet_tint_color }}>Wallet</Text>
+						<Text style={{fontSize: 12, color:wallet_tint_color }}>{strings('menu.title_wallet')}</Text>
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
@@ -40,7 +41,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} />
-						<Text style={{fontSize: 12, color:dapp_tint_color }}>DApps</Text>
+						<Text style={{fontSize: 12, color:dapp_tint_color }}>{strings('menu.title_dapps')}</Text>
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
@@ -52,7 +53,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} />
-						<Text style={{fontSize: 12, color:settings_tint_color }}>Settings</Text>
+						<Text style={{fontSize: 12, color:settings_tint_color }}>{strings('menu.title_settings')}</Text>
 					</View>
 				</TouchableOpacity>
 			</View>

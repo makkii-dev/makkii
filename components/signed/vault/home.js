@@ -144,19 +144,19 @@ class Home extends Component {
 	};
 	onImportLedger=()=> {
 		console.log("click import ledger.");
-		this.loadingView.show('Connecting to Ledger...');
+		this.loadingView.show(strings('ledger.toast_connecting'));
 
 		wallet.listDevice().then((deviceList) => {
 			if (deviceList.length <= 0) {
 				this.loadingView.hide();
-				Alert.alert('Error', 'No connected Ledger device!');
+				Alert.alert(strings('alert_title_error'), strings('ledger.error_device_count'));
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
 					this.props.navigation.navigate('signed_vault_import_ledger');
 				}, error => {
 					this.loadingView.hide();
-					Alert.alert('Error', getLedgerMessage(error.code));
+					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
 				});
 			}
 		});
@@ -181,21 +181,21 @@ class Home extends Component {
 		const {navigation} = this.props;
 		const menuItems = [
 			{
-				title:'Master key',
+				title:strings('wallet.menu_master_key'),
 				onPress:()=>{
 					navigation.navigate('signed_vault_import_hdwallet');
 				},
 				image:require('../../../assets/aion_logo.png'),
 			},
 			{
-				title:'Private Key',
+				title:strings('wallet.menu_private_key'),
 				onPress:()=>{
 					navigation.navigate('signed_vault_import_private_key');
 				},
 				image:require('../../../assets/key.png'),
 			},
 			{
-				title:'Ledger',
+				title:strings('wallet.menu_ledger'),
 				onPress:()=>this.onImportLedger(),
 				image:require('../../../assets/ledger_logo.png'),
 			},
@@ -228,7 +228,7 @@ class Home extends Component {
 									ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}
 									ListHeaderComponent={()=>(
 										<View style={{flex:1, height:50, justifyContent:'space-between', paddingTop: 10}}>
-											<Text style={{...styles.modalText}}>Import from:</Text>
+											<Text style={{...styles.modalText}}>{strings('wallet.title_import_from')}</Text>
 											<View style={{...styles.divider, marginLeft: 0}}/>
 										</View>)}
 								/>
