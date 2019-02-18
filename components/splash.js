@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Image} from 'react-native';
 import {user} from '../actions/user.js';
+import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils.js';
 
@@ -34,7 +35,13 @@ class Splash extends Component {
 				},err=>{
 					console.log(err);
 				});
-				dispatch(user(db_user.hashed_password, db_user.mnemonic)); 
+				dispatch(user(db_user.hashed_password, db_user.mnemonic));
+
+				dbGet('settings').then(json => {
+					this.props.dispatch(setting(JSON.parse(json)));
+				}, err=> {
+					console.log("load setting failed: ", err);
+				});
 				setTimeout(()=>{   
 					navigate('signed_vault');
 				}, 1000);      

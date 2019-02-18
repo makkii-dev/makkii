@@ -56,6 +56,7 @@ const unsigned = createStackNavigator({
         }
     },
 }, {
+    //initialRouteName: 'unsigned_recovery_scan', 
     swipeEnabled: false,
   	animationEnabled: false,
   	lazy: true,

@@ -73,19 +73,19 @@ function hashPassword(password) {
 
 function getLedgerMessage(errorCode) {
     if (errorCode === wallet.APP_INACTIVATED) {
-        return strings('ledger.error.application_inactive');
+        return strings('ledger.error_application_inactive');
     } else if (errorCode === wallet.INVALID_DEVICE_NUMBER) {
-        return strings('ledger.error.device_count');
+        return strings('ledger.error_device_count');
     } else if (errorCode === wallet.USER_REJECTED) {
-        return strings('ledger.error.user_rejected');
+        return strings('ledger.error_user_rejected');
     } else if (errorCode === wallet.NO_PERMISSION) {
-        return strings('ledger.error.permission_denied');
+        return strings('ledger.error_permission_denied');
     } else if (errorCode === wallet.GENERAL_ERROR || errorCode === wallet.INVALID_ACCOUNT_TYPE || errorCode === wallet.INVALID_TX_PAYLOAD || errorCode === wallet.OPEN_DEVICE_FAIL) {
-        return strings('ledger.error.general');
-    } else if (errorCode === 'error.wrong_device') {
-        return strings('ledger.error.wrong_device');
+        return strings('ledger.error_general');
+    } else if (errorCode === 'error_wrong_device') {
+        return strings('ledger.error_wrong_device');
     } else {
-        return strings('ledger.error.general');
+        return strings('ledger.error_general');
     }
 }
 

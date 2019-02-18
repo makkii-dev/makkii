@@ -10,8 +10,8 @@ import styles from '../../styles.js';
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
-	    return {  
-	        title: state.params ? state.params.title : 'Settings', 
+	    return {
+			title: strings('menu.title_settings')
 	    };
     };
 	constructor(props){
@@ -20,9 +20,6 @@ class Home extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
-		this.props.navigation.setParams({
-			title: 'Settings',
-		});
 	}
 	render(){
 		return ( 

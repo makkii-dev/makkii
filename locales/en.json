@@ -1,4 +1,9 @@
 {
+    "menu": {
+        "title_settings": "Settings",
+        "title_wallet": "Wallet",
+        "title_dapps": "DApps"
+    },
     "login": {
         "error_login": "Login fail",
         "error_incorrect_password": "Incorrect password"
@@ -95,6 +100,29 @@
         "transaction_history_label": "Transaction History",
         "empty_label": "No Transaction"
     },
+    "import_private_key": {
+        "title": "Private Key",
+        "instruction_private_key": "Enter private key",
+        "error_invalid_private_key": "Invalid private key"
+    },
+    "ledger": {
+        "toast_connecting": "Connecting to Ledger...",
+        "error_unknown_account_type": "Ledger internal error",
+        "error_general": "Ledger internal error",
+        "error_device_count": "No connected Ledger device",
+        "error_open_device": "Ledger internal error",
+        "error_permission_denied": "Please grant usb device permission",
+        "error_application_inactive": "Please activate Aion App on Ledger Device",
+        "error_user_rejected": "User cancelled this transaction",
+        "error_invalid_tx_payload": "Ledger internal error",
+        "error_wrong_device": "Wrong ledger device connected! Account not found!"
+    },
+    "wallet": {
+        "title_import_from": "Import From:",
+        "menu_master_key": "Master Key",
+        "menu_private_key": "Private Key",
+        "menu_ledger": "Ledger"
+    },
     "app_name": "MAKKI",
     "default_account_name": "Account",
     "logout": "Sign Out",
@@ -103,6 +131,7 @@
     "copy_button": "Copy",
     "send_button": "Send",
     "refresh_button": "Refresh",
+    "import_button": "Import",
     "toast_update_success": "Update successfully",
     "alert_title_error": "Error",
     "invalid_old_password": "Old password is incorrect",
@@ -118,13 +147,4 @@
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
-    "ledger.error.unknown_account_type": "Ledger internal error",
-    "ledger.error.general": "Ledger internal error",
-    "ledger.error.device_count": "No connected Ledger device",
-    "ledger.error.open_device": "Ledger internal error",
-    "ledger.error.permission_denied": "Please grant usb device permission",
-    "ledger.error.application_inactive": "Please activate Aion App on Ledger Device",
-    "ledger.error.user_rejected": "User cancelled this transaction",
-    "ledger.error.invalid_tx_payload": "Ledger internal error",
-    "ledger.error.wrong_device": "Wrong ledger device connected! Account not found!"
 }

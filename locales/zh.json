@@ -1,4 +1,9 @@
 {
+  "menu": {
+    "title_settings": "设置",
+    "title_wallet": "钱包",
+    "title_dapps": "应用"
+  },
   "login": {
     "error_login": "登录失败",
     "error_incorrect_password": "密码不正确"
@@ -93,6 +98,29 @@
     "transaction_history_label": "交易历史记录",
     "empty_label": "没有交易"
   },
+  "import_private_key": {
+    "title": "私钥",
+    "instruction_private_key": "请输入私钥",
+    "error_invalid_private_key": "私钥不正确"
+  },
+  "ledger": {
+    "toast_connecting": "正在连接Ledger设备...",
+    "error_unknown_account_type": "Ledger内部错误",
+    "error_general": "Ledger内部错误",
+    "error_device_count": "请连接Ledger设备",
+    "error_open_device": "Ledger internal error",
+    "error_permission_denied": "请授权USB设备",
+    "error_application_inactive": "请打开Ledger设备上的AION应用",
+    "error_user_rejected": "很抱歉，您取消了交易",
+    "error_invalid_tx_payload": "Ledger内部错误",
+    "error_wrong_device": "找不到账号，连接了不匹配的Ledger设备"
+  },
+  "wallet": {
+    "title_import_from": "选择导入来源：",
+    "menu_master_key": "主密钥",
+    "menu_private_key": "私钥",
+    "menu_ledger": "Ledger冷钱包"
+  },
   "app_name": "码奇",
   "default_account_name": "账户",
   "logout": "退出",
@@ -100,6 +128,7 @@
   "save_button": "保存",
   "copy_button": "复制",
   "send_button": "提交",
+  "import_button": "导入",
   "refresh_button": "刷新",
   "toast_update_success": "提交成功",
   "alert_title_error": "错误",
