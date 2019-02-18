@@ -38,7 +38,7 @@ class Home extends Component {
 		super(props);
 		this.state={
 			showPop: false,
-			title: `Total: XXX RMB`,
+			title: `Total: 0.00 RMB`,
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -268,7 +268,7 @@ class Home extends Component {
 			[
 				{text:'CANCEL',onPress:()=>{}},
 				{text: 'DELETE', onPress:()=>{
-						dispatch(delete_account(key));
+						dispatch(delete_account(key,this.props.user.hashed_password));
 						console.log('delete account: ', key );
 					}}
 				],

@@ -17,9 +17,10 @@ class Splash extends Component {
 		 
 		// load db user
 		dbGet('user')
-		.then(json=>{ 
+		.then(json=>{
 			let db_user = JSON.parse(json);
-			let max_keep_signed = 60000 * 30;    
+			console.log('[db_user]', db_user);
+			let max_keep_signed = 60000 * 30;
 			let time_diff = Date.now() - db_user.timestamp; 
 			if(time_diff < max_keep_signed) { 
 				console.log('[splash] keep signin');
@@ -27,7 +28,9 @@ class Splash extends Component {
 				// load db accounts
 				dbGet('accounts')
 				.then(json=>{
+					console.log('[db_user.hashed_password] ', db_user.hashed_password);
 					let decrypted = decrypt(json, db_user.hashed_password);
+					console.log('[decrypted] ', decrypted);
 					dispatch(accounts(JSON.parse(decrypted)));
 				},err=>{
 					console.log(err);

@@ -8,6 +8,20 @@
     "error_login": "登录失败",
     "error_incorrect_password": "密码不正确"
   },
+  "register": {
+    "title": "注册",
+    "error_password": "密码必须是8-16位的数字、字母、特殊字符组合!",
+    "error_dont_match": "两次密码不一致!",
+    "label_password": "输入密码",
+    "label_confirm_password": "再次输入密码",
+    "button_register": "注册"
+  },
+  "recovery": {
+    "title": "忘记密码",
+    "label_prompt": "输入12个助记词",
+    "button_scan": "扫一扫",
+    "button_confirm": "确定"
+  },
   "about": {
     "title": "关于",
     "version_label": "版本号",

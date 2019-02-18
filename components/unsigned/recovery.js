@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity,Button} from 'react-native';
+import {View,Text,Button} from 'react-native';
 import {dbGet} from '../../utils.js';
-import {user} from '../../actions/user.js';
 import {InputMultiLines} from '../common.js';
 import {validateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import styles from '../styles.js';
+import {strings} from "../../locales/i18n";
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       	title: navigation.getParam('title', 'Recovery'),
+	       	title: strings("recovery.title"),
 	    }; 
     }
 	constructor(props){
@@ -21,9 +21,6 @@ class Home extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		this.props.navigation.setParams({
-			title: 'Recovery',
-		}); 
 	} 
 	async componentWillReceiveProps(props){   
 		this.setState({
@@ -35,7 +32,7 @@ class Home extends Component {
 			<View style={styles.container}> 
 				<View style={styles.marginBottom20}>
 					<Button 
-						title="Scan"   
+						title= {strings("recovery.button_scan")}
 						onPress={e=>{
 							this.props.navigation.navigate('unsigned_recovery_scan',{
 								success:'unsigned_recovery',
@@ -51,7 +48,7 @@ class Home extends Component {
 					/>
 				</View>
 				<View style={styles.marginBottom10}>
-					<Text>Enter 24 characters mnemonic</Text>
+					<Text>{strings("recovery.label_prompt")}</Text>
 				</View>
 				<View style={styles.marginBottom20}>
 					<InputMultiLines
@@ -66,8 +63,8 @@ class Home extends Component {
 			        />
 		        </View>
 		        <Button  
-		        	title="Confirm" 
-		        	onPress={e=>{
+		        	title={strings("recovery.button_confirm")}
+					onPress={e=>{
 		        		dbGet('user').then(data=>{
 		        			if(data.mnemonic === this.state.mnemonic){ 
 		        				this.props.navigation.navigate('unsigned_recovery_password', {
