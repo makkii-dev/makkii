@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Dimensions,View,Button,StyleSheet} from 'react-native';
+import {View,DeviceEventEmitter} from 'react-native';
 import AionCell from '../../cell.js'; 
 import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
@@ -11,7 +11,7 @@ class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-			title: strings('menu.title_settings')
+			title: navigation.getParam('title')
 	    };
     };
 	constructor(props){
@@ -20,7 +20,25 @@ class Home extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
+
+		this.update_locale();
+
+		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
+		    console.log("locale changed");
+		    this.update_locale();
+		});
 	}
+
+	update_locale= () => {
+		this.props.navigation.setParams({
+			'title': strings('menu.title_settings'),
+		});
+	}
+
+	componentWillUnmount() {
+		this.listener.remove();
+	}
+
 	render(){
 		return ( 
 			<View style={{

@@ -207,7 +207,7 @@ class ImportListfooter extends React.PureComponent {
 		if (this.props.footerState === 1) {
 			return (
 				<View style={{height:30,alignItems:'center',justifyContent:'flex-start',}}>
-					<View style={{marginLeft:20,backgroundColor:'#000',height:1/PixelRatio.get()}}/>
+					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
 					<Text style={{color:'#999999',fontSize:14,marginTop:5,marginBottom:5,}}>
 						No More Accounts
 					</Text>
@@ -216,7 +216,7 @@ class ImportListfooter extends React.PureComponent {
 		} else if(this.props.footerState === 2) {
 			return (
 				<View>
-					<View style={{marginLeft:20,backgroundColor:'#000',height:1/PixelRatio.get()}}/>
+					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
 					<View style={styles.ImportList.footer}>
 						<ActivityIndicator style={{paddingRight: 10}}/>
 					<Text>Fetching accounts</Text>

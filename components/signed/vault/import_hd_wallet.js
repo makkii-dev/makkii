@@ -64,7 +64,7 @@ class ImportHdWallet extends React.Component {
     componentDidMount() {
         // setTimeout(()=>{this.fetchAccount(10)},500);
         InteractionManager.runAfterInteractions(()=>{
-            this.fetchAccount(10)
+            this.fetchAccount(20)
         });
     }
 
@@ -166,7 +166,7 @@ class ImportHdWallet extends React.Component {
             <View style={styles.container}>
                 <SelectList
                     isMultiSelect={true}
-                    itemHeight={60}
+                    itemHeight={55}
                     ref={ref=>this.selectList=ref}
                     data={this.state.accountsList}
                     cellLeftView={item=>{
@@ -179,7 +179,6 @@ class ImportHdWallet extends React.Component {
                             footerState={this.state.footerState}
                         />
                     }
-                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
                 />
@@ -214,10 +213,10 @@ const styles=StyleSheet.create({
         backgroundColor: '#000'
     },
     container:{
-        paddingBottom: 10,
         width: width,
         flex:1,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        backgroundColor: '#eeeeee'
     },
     itemContainer:{
         flex:1,

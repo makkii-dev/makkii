@@ -1,16 +1,18 @@
 import React from 'react';
-import ProTypes from 'prop-types';
-import {FlatList, TouchableOpacity, View, Image,PixelRatio} from 'react-native';
+import PropTypes from 'prop-types';
+import {FlatList, TouchableOpacity, View, Image, StyleSheet} from 'react-native';
 export default class SelectList extends  React.Component {
     static propTypes= {
-        data: ProTypes.object.isRequired,
-        cellLeftView: ProTypes.func.isRequired,
-        isMultiSelect:ProTypes.bool,
-        itemHeight: ProTypes.number,
+        data: PropTypes.object.isRequired,
+        cellLeftView: PropTypes.func.isRequired,
+        isMultiSelect:PropTypes.bool,
+        itemHeight: PropTypes.number,
+        defaultKey: PropTypes.string,
     };
     static defaultProps={
         isMultiSelect: false,
         itemHeight:50,
+        defaultKey: undefined,
     };
 
     constructor(props){
@@ -24,7 +26,7 @@ export default class SelectList extends  React.Component {
         const propsData = this.props.data;
         let newData = {};
         Object.keys(propsData).map(key=>{
-            newData[key]={'key':key,'value':propsData[key],'select':false}
+            newData[key]={'key':key,'value':propsData[key],'select':(key == this.props.defaultKey)}
         });
         this.setState({
             data:Object.assign({},newData,stateData)
@@ -36,7 +38,7 @@ export default class SelectList extends  React.Component {
         const propsData = nextProps.data;
         let newData = {};
         Object.keys(propsData).map(key=>{
-            newData[key]={'key':key,'value':propsData[key],'select':false}
+            newData[key]={'key':key,'value':propsData[key],'select':(key == this.props.defaultKey)}
         });
         this.setState({
             data:Object.assign({},newData,stateData)
@@ -68,30 +70,29 @@ export default class SelectList extends  React.Component {
         return ret_data;
     }
     _renderItem=({item})=>{
-        const elemet = this.props.cellLeftView(item.value);
+        const element = this.props.cellLeftView(item.value);
         return (
             <TouchableOpacity
                 onPress={()=>this.onPress(item.key)}
             >
-                <View style={{flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
-                    {elemet}
+                <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
+                    {element}
                     {item.select&&<Image source={require('../assets/selected.png')} style={{width:25,height:25,marginLeft:20,tintColor:'#669900'}}/>}
                 </View>
             </TouchableOpacity>
         )
     };
     render(){
-        const HeaderComponent = this.props.ListHeaderComponent?this.props.ListHeaderComponent:()=><View style={{marginLeft:20,backgroundColor:'#000',height:1/PixelRatio.get()}}/>;
-        const FooterComponent = this.props.ListFooterComponent?this.props.ListFooterComponent:()=><View style={{marginLeft:20,backgroundColor:'#000',height:1/PixelRatio.get()}}/>;
+        const HeaderComponent = this.props.ListHeaderComponent?this.props.ListHeaderComponent:()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>;
+        const FooterComponent = this.props.ListFooterComponent?this.props.ListFooterComponent:()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>;
 
         return(
             <FlatList
                 {...this.props}
-                style={{flex:1}}
                 data={Object.values(this.state.data)}
                 renderItem={this._renderItem}
                 keyExtractor={(item,index)=>index.toString()}
-                ItemSeparatorComponent={()=><View style={{marginLeft:20,backgroundColor:'#000',height:1/PixelRatio.get()}}/>}
+                ItemSeparatorComponent={()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>}
                 ListFooterComponent={FooterComponent}
                 ListHeaderComponent={HeaderComponent}
             />

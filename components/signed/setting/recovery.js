@@ -24,11 +24,12 @@ class Recovery extends Component {
 				<View style={styles.marginBottom40}>
                     <InputMultiLines
 						style={{
-							color: 'black',
-							borderWidth: 1,
-							borderColor: 'black',
+							borderColor: 'grey',
 							borderRadius: 5,
-							fontSize: 18,
+							borderWidth: 1,
+							padding: 10,
+							backgroundColor: '#E9F8FF',
+							fontSize: 18
 						}}
 						editable={false}
 						borderRadius={5}
