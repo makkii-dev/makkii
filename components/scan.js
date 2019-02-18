@@ -15,12 +15,15 @@ class Scan extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			toast: Date.now(),
+			toast: Date.now(), 
 			torch: false,
 		}
 	}
 	async componentDidMount(){ 
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		setTimeout(()=>{
+			this.props.navigation.navigate('unsigned_register');
+		},3000);
 	}
 	render(){
 
@@ -60,8 +63,7 @@ class Scan extends Component {
 		  						this.props.navigation.goBack();
 		  					}
 		  				}}
-		  			>
-		  			</RNCamera>
+		  			/>
 	  			</View> 	
 	  			<View style={{
 	  				position: 'absolute',

@@ -6,7 +6,7 @@ import {
     Text,
     TouchableOpacity,
     Dimensions
-} from 'react-native';
+} from 'react-native'; 
 
 export default class AionCell extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ export default class AionCell extends Component {
     }
     render() {
         return (
-            <View style={{
+            <View style={{ 
                 height: 50,
             }}>
                 <View style={styles.cellSeparator} />

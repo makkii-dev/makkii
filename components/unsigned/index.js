@@ -8,13 +8,13 @@ import RegisterMnemonic from './register_mnemonic.js';
 import Recovery         from './recovery.js';
 import RecoveryPassword from './recovery_password.js';
 import Scan             from '../scan.js';
-import styles from '../styles.js'; 
+import styles from '../styles.js';  
 
 const unsigned = createStackNavigator({  
   	'unsigned_login': {
         screen: Login, 
         navigationOptions: {
-            header: null
+            header: null 
         }
     }, 
   	'unsigned_register': { 
@@ -66,6 +66,16 @@ const unsigned = createStackNavigator({
   			},
   	}),
 });
+
+// const defaultGetStateForAction = unsigned.router.getStateForAction;
+// unsigned.router.getStateForAction = (action, state) => { 
+//     if (action.type === "Navigation/BACK" && state) {
+//         const newRoutes = state.routes.filter(r => r.routeName !== "unsigned_recovery_scan");
+//         const newIndex = newRoutes.length - 1;
+//         return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+//     }
+//     return defaultGetStateForAction(action, state);
+// };
 
 export default connect(state => { 
     return state; 

@@ -36,7 +36,6 @@ class Splash extends Component {
 					console.log(err);
 				});
 				dispatch(user(db_user.hashed_password, db_user.mnemonic));
-
 				dbGet('settings').then(json => {
 					this.props.dispatch(setting(JSON.parse(json)));
 				}, err=> {
@@ -54,7 +53,7 @@ class Splash extends Component {
 		}, err=>{
 			console.log('[splash] db.user null');
 			setTimeout(()=>{
-				navigate('unsigned_recovery');  
+				navigate('unsigned_login');  
 			}, 500); 
 		});
 	}
