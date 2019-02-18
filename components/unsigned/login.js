@@ -46,7 +46,6 @@ class Login extends Component {
 				    <Button
 						title="Login"
 						onPress={e=>{
-							let _setting = this.props.setting;
 							dbGet('user')
 							.then(json=>{
 								console.log('here ');
@@ -54,16 +53,9 @@ class Login extends Component {
 								if(db_user.hashed_password === hashPassword(this.state.password)){
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
 									dbGet('accounts').then(json=>{
-										let accounts = JSON.parse(decrypt(json, db.user.hashed_password))
+										let accounts = JSON.parse(decrypt(json, db_user.hashed_password))
 										this.props.dispatch(accounts(accounts));
 									},err=>{});
-									dbGet('settings').then(json => {
-										let settings = JSON.parse(json);
-										_setting.endpoint_wallet = settings.endpoint_wallet;
-										_setting.endpoint_dapps = settings.endpoint_dapps;
-										_setting.endpoint_odex = settings.endpoint_odex;
-										this.props.dispatch(setting(_setting));
-									}, err=> {});
 									this.props.navigation.navigate('signed_vault');
 								} else {
 									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));
@@ -104,6 +96,5 @@ class Login extends Component {
 export default connect(state => { 
 	return { 
 		user: state.user,
-		setting: state.setting,
-	}; 
+	};
 })(Login);

@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet, Dimensions, PixelRatio} from 'react-native';
 import {ComponentTabBar} from '../../common.js';
+import {strings} from '../../../locales/i18n.js';
 
 const {width} = Dimensions.get('window');
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: navigation.getParam('title', 'Dapps'),
+		title: strings('menu.title_dapps')
 	});
 	constructor(props){
 		super(props);

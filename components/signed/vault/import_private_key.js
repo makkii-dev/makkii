@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { validatePrivateKey } from '../../../utils';
-import {accounts} from "../../../actions/accounts";
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 
@@ -10,7 +9,7 @@ class ImportPrivateKey extends Component {
 
 	static navigationOptions = ({navigation})=> {
 		return ({
-			title: 'Private Key',
+			title: strings('import_private_key.title'),
 			headerStyle: {
 				backgroundColor: '#eeeeee'
 			},
@@ -24,7 +23,7 @@ class ImportPrivateKey extends Component {
 					navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
 				}}>
 					<View style={{marginRight: 20}}>
-						<Text style={{color: 'blue'}}>IMPORT</Text>
+						<Text style={{color: 'blue'}}>{strings('import_button')}</Text>
 					</View>
 				</TouchableOpacity>
 			) 
@@ -46,10 +45,10 @@ class ImportPrivateKey extends Component {
 				this.props.navigation.navigate('signed_vault');
 			}, error=> {
     			console.log("error: " + error);
-				Alert.alert('Error', 'Invalid private key');
+				Alert.alert(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
 			});
 		} else {
-	    	Alert.alert('Error', 'Invalid private key.')
+	    	Alert.alert(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'))
 		}
 	};
 
@@ -77,7 +76,7 @@ class ImportPrivateKey extends Component {
 				backgroundColor: '#ffffff',
 				padding: 20,
 			}}>	
-                <Text style={styles.instruction}>Enter private key</Text>
+                <Text style={styles.instruction}>{strings('import_private_key.instruction_private_key')}</Text>
 				<View style={ styles.marginTop20 }>
 					<TextInput
                         value={this.state.private_key}
