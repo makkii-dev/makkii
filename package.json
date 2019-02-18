@@ -19,6 +19,7 @@
     "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
     "react-native-camera": "^1.10.2",
     "react-native-device-info": "^0.26.3",
+    "react-native-flexi-radio-button": "^0.2.2",
     "react-native-fs": "^2.13.3",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-i18n": "^2.0.15",

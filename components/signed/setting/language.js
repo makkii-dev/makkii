@@ -20,7 +20,7 @@ class SettingLanguage extends Component {
                     this.props.navigation.goBack();
                 }}>
                     <View style={{marginRight: 20}}>
-                        <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
+                        <Text style={{color: 'blue'}}>{strings('save_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -30,13 +30,13 @@ class SettingLanguage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            lang: this.props.setting.lang,
+            lang: props.setting.lang,
         };
     }
 
     componentWillMount() {
         this.props.navigation.setParams({
-            updateLocale: this.updateLocale(),
+            updateLocale: this.updateLocale,
         });
     }
 

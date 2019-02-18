@@ -7,6 +7,7 @@ import {validateUrl} from '../../../utils.js';
 import {strings} from "../../../locales/i18n";
 import styles from '../../styles.js';
 import Toast from 'react-native-root-toast';
+import {RadioGroup, RadioButton} from 'react-native-flexi-radio-button';
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -22,6 +23,7 @@ class Services extends Component {
 			endpoint_wallet: props.setting.endpoint_wallet,
 			endpoint_dapps: props.setting.endpoint_dapps,
 			endpoint_odex: props.setting.endpoint_odex,
+            explorer_server: props.setting.explorer_server,
 		}
 	}
 	async componentDidMount(){
@@ -72,7 +74,7 @@ class Services extends Component {
 				<View>
 					<Text>{strings('service_configuration.endpoint_odex')}</Text>
 				</View>
-				<View style={styles.marginBottom40}>
+				<View style={styles.marginBottom20}>
 					<Input
 						supportVisibility={false}
                         value={this.state.endpoint_odex}
@@ -87,6 +89,25 @@ class Services extends Component {
 							});
 						}}
 					/>
+				</View>
+				<View>
+					<Text>{strings('service_configuration.explorer_server')}</Text>
+				</View>
+				<View style={styles.marginBottom40}>
+					<RadioGroup
+						selectedIndex={this.state.explorer_server == 'https://mainnet-api.aion.network'? 0: 1}
+						onSelect={(index, value) => {
+						this.setState({
+							explorer_server: value,
+						});
+					} }>
+						<RadioButton value={'https://mainnet-api.aion.network'}>
+							<Text>Mainnet</Text>
+						</RadioButton>
+						<RadioButton value={'https://mastery-api.aion.network'}>
+							<Text>Mastery</Text>
+						</RadioButton>
+					</RadioGroup>
 				</View>
 				<View>
 					<Button 
@@ -110,7 +131,7 @@ class Services extends Component {
 		}
 
 		if (!validateUrl(this.state.endpoint_odex)) {
-			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
+			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_odex_server_url'));
 			return;
 		}
 
@@ -120,6 +141,7 @@ class Services extends Component {
 		_setting.endpoint_wallet = this.state.endpoint_wallet;
 		_setting.endpoint_dapps = this.state.endpoint_dapps;
 		_setting.endpoint_odex = this.state.endpoint_odex;
+		_setting.explorer_server = this.state.explorer_server;
 		dispatch(setting(_setting));
 
         Toast.show(strings('toast_update_success'), {

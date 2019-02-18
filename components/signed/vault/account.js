@@ -119,7 +119,8 @@ class Account extends Component {
 	};
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
-		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+		const url = this.props.setting.explorer_server + `/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+		console.log("request url: " + url);
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
@@ -244,5 +245,6 @@ export default connect(state => {
 	return ({
 		accounts: state.accounts,
 		user: state.user,
+		setting: state.setting,
 	});
 })(Account);

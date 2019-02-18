@@ -46,6 +46,7 @@
         "endpoint_wallet": "Rpc Server",
         "endpoint_dapps": "Dapps Server",
         "endpoint_odex": "Odex Server",
+        "explorer_server": "Aion Explorer Server",
         "hint_api_server": "Enter wallet api server uri",
         "hint_dapp_server": "Enter dapps server uri",
         "invalid_wallet_server_url": "Invalid wallet server url",
