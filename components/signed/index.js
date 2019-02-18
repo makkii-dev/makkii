@@ -18,7 +18,9 @@ import Setting               from './setting/home.js';
 import SettingAbout          from './setting/about.js';
 import SettingPassword       from './setting/password.js';
 import SettingRecovery       from './setting/recovery.js';
-import SettingServices       from './setting/services.js'; 
+import SettingServices       from './setting/services.js';
+import SettingLanguage       from './setting/language.js';
+import SettingAdvanced       from './setting/advanced.js';
 import styles from '../styles.js';  
 
 const signed = createStackNavigator({
@@ -152,8 +154,23 @@ const signed = createStackNavigator({
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         } 
-	},  
-}, {    
+	},
+	'signed_setting_language': {
+		screen: SettingLanguage,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
+	},
+	'signed_setting_advanced': {
+		screen: SettingAdvanced,
+		navigationOptions: {
+			headerRight: (<View></View>),
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
+	},
+}, {
 	initialRouteName: 'signed_vault', 
 	//initialRouteName: 'signed_dapps',
 	//initialRouteName: 'signed_odex',  

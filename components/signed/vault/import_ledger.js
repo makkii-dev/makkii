@@ -17,12 +17,13 @@ import {ImportListItem, ImportListfooter} from "../../common";
 import wallet from 'react-native-aion-hw-wallet';
 import {getLedgerMessage} from '../../../utils.js';
 import {strings} from '../../../locales/i18n';
+import SelectList from "./import_hd_wallet";
 const {width} = Dimensions.get('window');
 
 class ImportLedger extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: 'Select Accounts',
+            title: strings('import_ledger.title'),
             headerTitleStyle: {
                 fontSize: 20,
                 alignSelf: 'center',
@@ -37,7 +38,7 @@ class ImportLedger extends React.Component {
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 20}}>
-                        <Text style={{color: 'blue'}}>IMPORT</Text>
+                        <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -46,7 +47,7 @@ class ImportLedger extends React.Component {
 
     constructor(props){
         super(props);
-
+        this.selectList=null;
         this.state={
             isLoading: true,
             lastIndex: 0,
@@ -56,13 +57,7 @@ class ImportLedger extends React.Component {
     }
 
     ImportAccount= () => {
-        let acc = {};
-        Object.values(this.state.accountsList).map(value =>{
-            if( value.selected ){
-                acc[value.account.address] = value.account;
-            }
-        });
-        return acc;
+        return this.selectList.getSelect();
     };
 
     componentDidMount() {
@@ -101,7 +96,7 @@ class ImportLedger extends React.Component {
             acc.derivationIndex = i;
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
-                accounts[acc.address] = {'account': acc, 'selected': false}
+                accounts[acc.address] = acc
             }
             i = i + 1;
             this.getAccount(accounts, i, sum, n, resolve, reject);
@@ -130,11 +125,11 @@ class ImportLedger extends React.Component {
             });
         },err=>{
             console.log('fetch accounts error:' + err);
-            Alert.alert('Error',
-                getLedgerMessage(err.code) + ". And reconnect to Ledger again.",
+            Alert.alert(strings('alert_title_error'),
+                getLedgerMessage(err.code),
                 [
                     {
-                        text: 'OK',
+                        text: strings('alert_ok_button'),
                         onPress: () => this.props.navigation.goBack(),
                     }
                 ]);
@@ -153,14 +148,6 @@ class ImportLedger extends React.Component {
         console.log('after')
     }
 
-    changeSelect(item){
-        let {accountsList} = this.state;
-        item.selected = !item.selected;
-        accountsList[item.account.address] = item;
-        this.setState({
-            accountsList
-        });
-    }
 
     // loading page
     renderLoadingView() {
@@ -178,29 +165,24 @@ class ImportLedger extends React.Component {
     renderData(){
         return (
             <View style={styles.container}>
-                <FlatList
-                    style={{height: Dimensions.get('window').height-80}}
-                    data={Object.values(this.state.accountsList)}
-                    keyExtractor={(item,index)=>index.toString()}
-                    ItemSeparatorComponent={()=>(
-                        <View style={styles.divider}/>
-                    )}
+                <SelectList
+                    isMultiSelect={true}
+                    itemHeight={80}
+                    ref={ref=>this.selectList=ref}
+                    data={this.state.accountsList}
+                    cellLeftView={item=>{
+                        const address = item.address;
+                        return(
+                            <Text style={{flex:1}}>{address.substring(0, 10) + '...'+ address.substring(54)}</Text>
+                        )}}
                     ListFooterComponent={()=>
                         <ImportListfooter
                             footerState={this.state.footerState}
                         />
                     }
+                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
-                    extraData={this.state.footerState}
-                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
-                    renderItem={({item})=>(
-                        <ImportListItem
-                            item={item}
-                            selected={item.selected}
-                            onPress={()=>this.changeSelect(item)}
-                        />
-                    )}
                 />
             </View>
         )

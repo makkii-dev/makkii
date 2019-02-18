@@ -73,6 +73,7 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.accounts);
 		this.requestStoragePermission();
+		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 	}
 	
@@ -83,14 +84,17 @@ class Home extends Component {
 	}
 
 	componentWillUnmount(): void {
+		this.isMount = false;
 		this.listener.remove();
 	}
 
 	BalanceToRMB(amount){
 		getCoinPrice('CNY',amount).then(res=>{
-			this.setState({
-				title : `Total: ${res.toFixed(2)} RMB`
-			})
+		    if (this.isMount) {
+				this.setState({
+					title: `Total: ${res.toFixed(2)} RMB`
+				})
+			}
 		})
 	}
 
@@ -98,9 +102,11 @@ class Home extends Component {
 		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
 		if (Object.keys(accounts).length === 0) {
-			this.setState({
-				refreshing: false,
-			});
+			if (this.isMount) {
+				this.setState({
+					refreshing: false,
+				});
+			}
 			return;
 		}
 		let executors=[];
@@ -126,16 +132,20 @@ class Home extends Component {
 				});
 				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
-				this.setState({
-					refreshing: false,
-				})
+				if (this.isMount) {
+					this.setState({
+						refreshing: false,
+					})
+				}
 			},errors=>{
 				console.log(errors);
-				this.setState({
-					refreshing: false,
-				},()=>{
-					Toast.show("Unable to connect to remote server");
-				})
+				if (this.isMount) {
+					this.setState({
+						refreshing: false,
+					}, () => {
+						Toast.show("Unable to connect to remote server");
+					})
+				}
 			}
 		)
 	};

@@ -46,6 +46,7 @@
         "endpoint_wallet": "Rpc Server",
         "endpoint_dapps": "Dapps Server",
         "endpoint_odex": "Odex Server",
+        "explorer_server": "Aion Explorer Server",
         "hint_api_server": "Enter wallet api server uri",
         "hint_dapp_server": "Enter dapps server uri",
         "invalid_wallet_server_url": "Invalid wallet server url",
@@ -101,9 +102,15 @@
         "empty_label": "No Transaction"
     },
     "import_private_key": {
-        "title": "Private Key",
+        "title": "Import from Private Key",
         "instruction_private_key": "Enter private key",
         "error_invalid_private_key": "Invalid private key"
+    },
+    "import_master_key": {
+        "title": "Master Key"
+    },
+    "import_ledger": {
+        "title": "Ledger"
     },
     "ledger": {
         "toast_connecting": "Connecting to Ledger...",
@@ -122,6 +129,15 @@
         "menu_master_key": "Master Key",
         "menu_private_key": "Private Key",
         "menu_ledger": "Ledger"
+    },
+    "language": {
+        "title": "Language",
+        "chinese": "简体中文",
+        "english": "English",
+        "auto": "Auto"
+    },
+    "advanced": {
+        "title": "Advanced"
     },
     "app_name": "MAKKI",
     "default_account_name": "Account",

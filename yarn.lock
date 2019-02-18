@@ -5568,6 +5568,16 @@ react-native-crypto@^2.0.1:
     pbkdf2 "3.0.8"
     public-encrypt "^4.0.0"
 
+react-native-device-info@^0.26.3:
+  version "0.26.3"
+  resolved "http://registry.npm.taobao.org/react-native-device-info/download/react-native-device-info-0.26.3.tgz#8dff9e64284ca274a8a574d5ae3bf4ed3f0a236d"
+  integrity sha1-jf+eZChMonSopXTVrjv07T8KI20=
+
+react-native-flexi-radio-button@^0.2.2:
+  version "0.2.2"
+  resolved "http://registry.npm.taobao.org/react-native-flexi-radio-button/download/react-native-flexi-radio-button-0.2.2.tgz#a0180393c531ba3477722c6e42a31ceb1c11623b"
+  integrity sha1-oBgDk8UxujR3cixuQqMc6xwRYjs=
+
 react-native-fs@^2.13.3:
   version "2.13.3"
   resolved "https://registry.yarnpkg.com/react-native-fs/-/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"

@@ -1,6 +1,8 @@
 import { SETTING } from '../actions/setting.js';
 import Web3 from "aion-web3";
 import {AsyncStorage} from 'react-native';
+import {setLocale} from '../locales/i18n';
+import DeviceInfo from 'react-native-device-info';
 
 const init = { 
 	lang: 'en',
@@ -11,7 +13,8 @@ const init = {
     tx_confirm: 6,  
     endpoint_wallet: 'http://127.0.0.1:8545',
     endpoint_dapps:  'http://dapps.chaion.net',
-    endpoint_odex:   'http://odex.chaion.net'	 
+    endpoint_odex:   'http://odex.chaion.net',
+	explorer_server: 'https://mainnet-api.aion.network',
 }
 
 export default function setting(state = init, action){
@@ -19,6 +22,11 @@ export default function setting(state = init, action){
 		case SETTING:
 			web3.setProvider(new Web3.providers.HttpProvider(action.setting.endpoint_wallet))
 			AsyncStorage.setItem('settings', JSON.stringify(action.setting));
+			if (action.setting.lang == 'auto') {
+				setLocale(DeviceInfo.getDeviceLocale());
+			} else {
+				setLocale(action.setting.lang);
+			}
 			return Object.assign({}, action.setting);
 		default: 
 			return state;
