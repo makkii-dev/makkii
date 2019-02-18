@@ -15,7 +15,7 @@ class Transaction extends Component {
 		console.log('[transactionHash] ', this.transactionHash);
 	}
 	onViewInExplorer(){
-		const url = `https://mainnet.aion.network/#/transaction/${this.transactionHash}`;
+		const url = `https://mastery.aion.network/#/transaction/${this.transactionHash}`;
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
 	sendAgain(){
