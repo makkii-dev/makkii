@@ -52,6 +52,12 @@ class Home extends Component {
 						this.props.navigation.navigate('signed_setting_language');
 					}}
 					/>
+				<AionCell
+					title={strings('advanced.title')}
+					onClick={() => {
+						this.props.navigation.navigate('signed_setting_advanced');
+					}}
+					/>
                 <AionCell
                     title={strings('about.title')}
                     onClick={() => {

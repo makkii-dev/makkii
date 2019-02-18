@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {strings, setLocale} from '../../../locales/i18n';
 import DeviceInfo from 'react-native-device-info';
 
-class SettingLanguage extends Component {
+class Language extends Component {
     static navigationOptions = ({navigation})=> {
         return ({
             title: strings('language.title'),
@@ -70,4 +70,4 @@ export default connect( state => {
     return {
         setting: state.setting,
     };
-})(SettingLanguage);
+})(Language);

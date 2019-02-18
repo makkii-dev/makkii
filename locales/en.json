@@ -136,6 +136,9 @@
         "english": "English",
         "auto": "Auto"
     },
+    "advanced": {
+        "title": "Advanced"
+    },
     "app_name": "MAKKI",
     "default_account_name": "Account",
     "logout": "Sign Out",

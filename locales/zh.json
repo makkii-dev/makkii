@@ -134,6 +134,9 @@
     "english": "English",
     "auto": "跟随系统"
   },
+  "advanced": {
+    "title": "高级"
+  },
   "app_name": "码奇",
   "default_account_name": "账户",
   "logout": "退出",
