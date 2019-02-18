@@ -1,10 +1,11 @@
-import {AsyncStorage} from 'react-native';
+import {AsyncStorage, DeviceEventEmitter} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
+import Toast from 'react-native-root-toast';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -147,8 +148,9 @@ class listenTransaction{
     }
     addTransaction(tx){
         let thusMap = this.txMap;
-        let thusTimeOut = this.timeOut;
-        let thusStore = this.store;
+        const thusTimeOut = this.timeOut;
+        const thusStore = this.store;
+        const {user}= this.store.getState();
         if(typeof thusMap[tx.hash] !== 'undefined')
             return;
         let removeTransaction = function(tx){
@@ -170,12 +172,14 @@ class listenTransaction{
                         console.log(res);
                         tx.status = res.status? 'CONFIRMED':'FAILED';
                         tx.blockNumber = res.blockNumber;
-                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, thusStore.user.hashed_password));
-                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, thusStore.user.hashed_password));
+                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, user.hashed_password));
+                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, user.hashed_password));
+                        DeviceEventEmitter.emit('updateAccountBalance');
                         removeTransaction(tx);
                     }
                 },
                 err=>{
+                    Toast.show("Unable to connect to remote server");
                     removeTransaction(tx);
                 }
             )

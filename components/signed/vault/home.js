@@ -11,7 +11,7 @@ import {
 	Dimensions,
 	Platform,  
 	Image,
-	FlatList, PixelRatio, InteractionManager, RefreshControl
+	FlatList, PixelRatio, InteractionManager, RefreshControl,DeviceEventEmitter
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { delete_account, accounts_add} from '../../../actions/accounts.js';
@@ -23,6 +23,7 @@ import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
+import Toast from "react-native-root-toast";
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -72,6 +73,7 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.accounts);
 		this.requestStoragePermission();
+		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 	}
 	
 	componentWillMount(): void {
@@ -79,6 +81,11 @@ class Home extends Component {
 			this.fetchAccountsBalance();
 		})
 	}
+
+	componentWillUnmount(): void {
+		this.listener.remove();
+	}
+
 	BalanceToRMB(amount){
 		getCoinPrice('CNY',amount).then(res=>{
 			this.setState({
@@ -88,6 +95,7 @@ class Home extends Component {
 	}
 
 	fetchAccountsBalance = ()=> {
+		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
 		if (Object.keys(accounts).length === 0) {
 			this.setState({
@@ -103,9 +111,6 @@ class Home extends Component {
 						value.balance = new BigNumber(balance).shiftedBy(-18).toNumber();
 						resolve(value)
 					},error => {
-						console.log('[error] account: ', value.address);
-						console.log(error);
-						console.log(web3);
 						reject(error)
 					})
 				}));
@@ -129,7 +134,7 @@ class Home extends Component {
 				this.setState({
 					refreshing: false,
 				},()=>{
-					Alert.alert('Error', 'get Balance error');
+					Toast.show("Unable to connect to remote server");
 				})
 			}
 		)
@@ -269,6 +274,7 @@ class Home extends Component {
 				{text:'CANCEL',onPress:()=>{}},
 				{text: 'DELETE', onPress:()=>{
 						dispatch(delete_account(key,this.props.user.hashed_password));
+						DeviceEventEmitter.emit('updateAccountBalance');
 						console.log('delete account: ', key );
 					}}
 				],
@@ -323,15 +329,9 @@ class Home extends Component {
 				<TouchableOpacity
 					activeOpacity={1}
 					onPress={() => {
-						if (this.state.openRowKey) {
-							// if one of key is open, close it first
-							this.setState({
-								openRowKey: null,
-							});
-							return;
-						}
-						dispatch(account(this.props.accounts[item.address]));
-						this.props.navigation.navigate('signed_vault_account',{address: item.address});
+						this.state.openRowKey&&this.setState({openRowKey: null,});
+						this.state.openRowKey||dispatch(account(this.props.accounts[item.address]));
+						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
 					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
@@ -354,35 +354,44 @@ class Home extends Component {
 	};
 
 	render(){
+		console.log('rerender');
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
-				<FlatList
+				<TouchableOpacity
 					style={{flex:1}}
-					renderItem={({item})=>this._renderListItem(item)}
-					scrollEnabled={this.state.scrollEnabled}
-					data={Object.values(this.props.accounts)}
-					keyExtractor={(item, index)=>index + ''}
-					onScroll={(e)=>{
-						this.setState({
-							openRowKey: null,
-						});
+					activeOpacity={1}
+					onPress={()=>{
+						this.state.openRowKey&&this.setState({openRowKey: null})
 					}}
-					ListEmptyComponent={()=>
-						<View>
-							<Text style={{alignSelf: 'center', textAlign:'center'}}>
-								Please Import a account
-							</Text>
-						</View>
-					}
-					refreshControl={
-						<RefreshControl
-							refreshing={this.state.refreshing}
-							onRefresh={this.onRefresh}
-							title={'Loading'}
-						/>
-					}
-				/>
+				>
+					<FlatList
+						style={{flex:1}}
+						renderItem={({item})=>this._renderListItem(item)}
+						scrollEnabled={this.state.scrollEnabled}
+						data={Object.values(this.props.accounts)}
+						keyExtractor={(item, index)=>index + ''}
+						onScroll={(e)=>{
+							this.setState({
+								openRowKey: null,
+							});
+						}}
+						ListEmptyComponent={()=>
+							<View>
+								<Text style={{alignSelf: 'center', textAlign:'center'}}>
+									Please Import a account
+								</Text>
+							</View>
+						}
+						refreshControl={
+							<RefreshControl
+								refreshing={this.state.refreshing}
+								onRefresh={this.onRefresh}
+								title={'Loading'}
+							/>
+						}
+					/>
+				</TouchableOpacity>
 				<Loading ref={(element) => {
 					this.loadingView = element;
 				}}/>
@@ -400,9 +409,18 @@ class Home extends Component {
 					}}
 					active={'wallet'}
 					onPress={[
-						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps');},
-						()=>{this.props.navigation.navigate('signed_setting');},
+						()=>{
+							this.state.openRowKey&&this.setState({openRowKey: null});
+							this.state.openRowKey||this.props.navigation.navigate('signed_vault');
+						},
+						()=>{
+							this.state.openRowKey&&this.setState({openRowKey: null});
+							this.state.openRowKey||this.props.navigation.navigate('signed_dapps');
+						},
+						()=>{
+							this.state.openRowKey&&this.setState({openRowKey: null});
+							this.state.openRowKey||this.props.navigation.navigate('signed_setting');
+						},
 					]}
 				/>
 			</View>

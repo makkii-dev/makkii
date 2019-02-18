@@ -170,7 +170,7 @@ class Send extends Component {
 			sender = '0x' + sender;
 		}
 		let thisLoadingView = this.loadingView;
-		const {dispatch} = this.props;
+		const {dispatch,user} = this.props;
 		thisLoadingView.show(strings('send.progress_sending_tx'));
 		web3.eth.getTransactionCount(sender).then(count => {
 			console.log('get transaction count: ' + count);
@@ -213,8 +213,8 @@ class Send extends Component {
                     pendingTx.status = 'PENDING';
                     txs[hash]=pendingTx;
 
-					dispatch(update_account_txs(sender, txs, this.props.user.hashed_password));
-					dispatch(update_account_txs(tx.to, txs, this.props.user.hashed_password));
+					dispatch(update_account_txs(sender, txs, user.hashed_password));
+					dispatch(update_account_txs(tx.to, txs, user.hashed_password));
 					thisLoadingView.hide();
 					Toast.show(strings('send.toast_tx_sent'), {
 						onHidden: () => {

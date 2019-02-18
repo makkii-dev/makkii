@@ -5,7 +5,7 @@ import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {setting} from '../../actions/setting';
-import {accounts} from '../../actions/accounts';
+import {accounts as accounts_action} from '../../actions/accounts';
 import {dbGet,decrypt} from '../../utils.js';
 import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
@@ -55,7 +55,7 @@ class Login extends Component {
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
 									dbGet('accounts').then(json=>{
 										let accounts = JSON.parse(decrypt(json, db_user.hashed_password))
-										this.props.dispatch(accounts(accounts));
+										this.props.dispatch(accounts_action(accounts));
 									},err=>{});
 									dbGet('settings').then(json => {
 										let settings = JSON.parse(json);
