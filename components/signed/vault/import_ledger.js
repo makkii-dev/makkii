@@ -36,7 +36,7 @@ class ImportLedger extends React.Component {
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 20}}>
-                        <Text style={{color: 'blue'}}>IMPORT</Text>
+                        <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )

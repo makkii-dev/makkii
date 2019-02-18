@@ -12,6 +12,7 @@ I18n.translations = {
 }
 
 const currentLocale = I18n.currentLocale();
+console.log("currentLocale:" + currentLocale);
 
 export const isRTL = false;
 
@@ -20,5 +21,9 @@ ReactNative.I18nManager.allowRTL(isRTL);
 export function strings(name, params = {}) {
     return I18n.t(name, params);
 };
+
+export function setLocale(name) {
+    I18n.locale = name;
+}
 
 export default I18n;

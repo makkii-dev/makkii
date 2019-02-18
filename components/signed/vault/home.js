@@ -72,6 +72,7 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.accounts);
 		this.requestStoragePermission();
+		this.isMounted = true;
 	}
 	
 	componentWillMount(): void {
@@ -79,20 +80,29 @@ class Home extends Component {
 			this.fetchAccountsBalance();
 		})
 	}
+
+	componentWillUnmount() {
+		this.isMounted = false;
+	}
+
 	BalanceToRMB(amount){
 		getCoinPrice('CNY',amount).then(res=>{
-			this.setState({
-				title : `Total: ${res.toFixed(2)} RMB`
-			})
+		    if (this.isMounted) {
+				this.setState({
+					title: `Total: ${res.toFixed(2)} RMB`
+				})
+			}
 		})
 	}
 
 	fetchAccountsBalance = ()=> {
 		const {dispatch,accounts} = this.props;
 		if (Object.keys(accounts).length === 0) {
-			this.setState({
-				refreshing: false,
-			});
+			if (this.isMounted) {
+				this.setState({
+					refreshing: false,
+				});
+			}
 			return;
 		}
 		let executors=[];
@@ -121,16 +131,20 @@ class Home extends Component {
 				});
 				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
-				this.setState({
-					refreshing: false,
-				})
+				if (this.isMounted) {
+					this.setState({
+						refreshing: false,
+					})
+				}
 			},errors=>{
 				console.log(errors);
-				this.setState({
-					refreshing: false,
-				},()=>{
-					Alert.alert('Error', 'get Balance error');
-				})
+				if (this.isMounted) {
+					this.setState({
+						refreshing: false,
+					}, () => {
+						Alert.alert('Error', 'get Balance error');
+					})
+				}
 			}
 		)
 	};

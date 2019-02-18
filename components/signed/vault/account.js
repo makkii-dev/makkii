@@ -44,10 +44,16 @@ class Account extends Component {
 		this.props.navigation.setParams({
 			title: this.account.name
 		});
+		this.isMounted = false;
 	}
 	async componentDidMount(){
-
+		this.isMounted = true;
 	}
+
+	async componentWillUnmount() {
+		this.isMounted = false;
+	}
+
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
 	}
@@ -114,7 +120,6 @@ class Account extends Component {
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
 		const url = `https://mainnet-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
-		console.log("11111");
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);
 			let txs = {};
@@ -136,14 +141,18 @@ class Account extends Component {
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
 			dispatch(update_account_txs(address,txs,this.props.user.hashed_password));
-			this.setState({
-				refreshing: false,
-			})
+			if (this.isMounted) {
+				this.setState({
+					refreshing: false,
+				})
+			}
 		},error => {
 			console.log(error);
-			this.setState({
-				refreshing: false,
-			})
+			if (this.isMounted) {
+				this.setState({
+					refreshing: false,
+				})
+			}
 		})
 	};
 	render(){

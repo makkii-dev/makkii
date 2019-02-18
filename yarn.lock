@@ -5571,6 +5571,11 @@ react-native-crypto@^2.0.1:
     pbkdf2 "3.0.8"
     public-encrypt "^4.0.0"
 
+react-native-device-info@^0.26.3:
+  version "0.26.3"
+  resolved "http://registry.npm.taobao.org/react-native-device-info/download/react-native-device-info-0.26.3.tgz#8dff9e64284ca274a8a574d5ae3bf4ed3f0a236d"
+  integrity sha1-jf+eZChMonSopXTVrjv07T8KI20=
+
 react-native-fs@^2.13.3:
   version "2.13.3"
   resolved "http://registry.npm.taobao.org/react-native-fs/download/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"

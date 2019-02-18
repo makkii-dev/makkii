@@ -121,6 +121,12 @@
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包"
   },
+  "language": {
+    "title": "多语言",
+    "chinese": "简体中文",
+    "english": "English",
+    "auto": "跟随系统"
+  },
   "app_name": "码奇",
   "default_account_name": "账户",
   "logout": "退出",

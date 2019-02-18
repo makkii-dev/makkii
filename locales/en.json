@@ -123,6 +123,12 @@
         "menu_private_key": "Private Key",
         "menu_ledger": "Ledger"
     },
+    "language": {
+        "title": "Language",
+        "chinese": "简体中文",
+        "english": "English",
+        "auto": "Auto"
+    },
     "app_name": "MAKKI",
     "default_account_name": "Account",
     "logout": "Sign Out",
