@@ -14,6 +14,7 @@ import {
 import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
+import SelectList from '../../selectList';
 import {ImportListItem, ImportListfooter} from "../../common";
 import {strings} from '../../../locales/i18n';
 const {width} = Dimensions.get('window');
@@ -45,6 +46,7 @@ class ImportHdWallet extends React.Component {
 
     constructor(props){
         super(props);
+        this.selectList=null;
         this.state={
             isLoading: true,
             hardenedIndex: 0,
@@ -56,13 +58,7 @@ class ImportHdWallet extends React.Component {
     }
 
     ImportAccount= () => {
-        let acc = {};
-        Object.values(this.state.accountsList).map(value =>{
-            if( value.selected ){
-                acc[value.account.address] = value.account;
-            }
-        });
-        return acc;
+        return this.selectList.getSelect();
     };
 
     componentDidMount() {
@@ -104,7 +100,7 @@ class ImportHdWallet extends React.Component {
                     acc.transactions = {};
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
                         sum = sum + 1;
-                        accounts[acc.address] = {'account': acc, 'selected': false}
+                        accounts[acc.address] = acc
                     }
                     i = i + 1;
                 }
@@ -139,14 +135,6 @@ class ImportHdWallet extends React.Component {
         console.log('after')
     }
 
-    changeSelect(item){
-        let {accountsList} = this.state;
-        item.selected = !item.selected;
-        accountsList[item.account.address] = item;
-        this.setState({
-            accountsList
-        });
-    }
 
     // loading page
     renderLoadingView() {
@@ -176,29 +164,24 @@ class ImportHdWallet extends React.Component {
     renderData(){
         return (
             <View style={styles.container}>
-                <FlatList
-                    style={{height: Dimensions.get('window').height-80}}
-                    data={Object.values(this.state.accountsList)}
-                    keyExtractor={(item,index)=>index.toString()}
-                    ItemSeparatorComponent={()=>(
-                        <View style={styles.divider}/>
-                    )}
+                <SelectList
+                    isMultiSelect={true}
+                    itemHeight={60}
+                    ref={ref=>this.selectList=ref}
+                    data={this.state.accountsList}
+                    cellLeftView={item=>{
+                        const address = item.address;
+                        return(
+                            <Text style={{flex:1}}>{address.substring(0, 10) + '...'+ address.substring(54)}</Text>
+                        )}}
                     ListFooterComponent={()=>
                         <ImportListfooter
                             footerState={this.state.footerState}
                         />
                     }
+                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
-                    extraData={this.state.footerState}
-                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
-                    renderItem={({item})=>(
-                        <ImportListItem
-                            item={item}
-                            selected={item.selected}
-                            onPress={()=>this.changeSelect(item)}
-                        />
-                    )}
                 />
             </View>
         )
@@ -231,11 +214,9 @@ const styles=StyleSheet.create({
         backgroundColor: '#000'
     },
     container:{
-        paddingTop:10,
         paddingBottom: 10,
         width: width,
         flex:1,
-        flexDirection: 'column',
         justifyContent: 'center'
     },
     itemContainer:{

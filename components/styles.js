@@ -154,7 +154,6 @@ export default styles = {
 			textAlign: 'right',
 		},
 		footer:{
-			flexDirection:'row',
 			height:24,
 			justifyContent:'center',
 			alignItems:'center',
