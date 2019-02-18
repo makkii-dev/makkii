@@ -54,7 +54,7 @@ class Login extends Component {
 								if(db_user.hashed_password === hashPassword(this.state.password)){
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
 									dbGet('accounts').then(json=>{
-										let accounts = JSON.parse(decrypt(json, db.user.hashed_password))
+										let accounts = JSON.parse(decrypt(json, db_user.hashed_password))
 										this.props.dispatch(accounts(accounts));
 									},err=>{});
 									dbGet('settings').then(json => {

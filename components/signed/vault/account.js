@@ -99,7 +99,7 @@ class Account extends Component {
 	onChangeName = (newName) =>{
 		const {dispatch} = this.props;
 		const key = this.account.address;
-		dispatch(update_account_name(key,newName));
+		dispatch(update_account_name(key,newName,this.props.user.hashed_password));
 		this.props.navigation.setParams({
 			title: newName
 		});
@@ -135,7 +135,7 @@ class Account extends Component {
 			}
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
-			dispatch(update_account_txs(address,txs));
+			dispatch(update_account_txs(address,txs,this.props.user.hashed_password));
 			this.setState({
 				refreshing: false,
 			})
@@ -234,5 +234,6 @@ class Account extends Component {
 export default connect(state => {
 	return ({
 		accounts: state.accounts,
+		user: state.user,
 	});
 })(Account);

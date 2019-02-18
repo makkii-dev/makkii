@@ -3,6 +3,20 @@
         "error_login": "Login fail",
         "error_incorrect_password": "Incorrect password"
     },
+    "register": {
+        "title": "Register",
+        "error_password": "Password must be 8-16 characters and contains numbers, letters and sepcial characters!",
+        "error_dont_match": "Confirm password does not match password!",
+        "label_password": "Enter password",
+        "label_confirm_password": "Confirm password",
+        "button_register": "Register"
+    },
+    "recovery": {
+        "title": "Recovery",
+        "label_prompt": "Enter 12 characters mnemonic",
+        "button_scan": "SCAN",
+        "button_confirm": "CONFIRM"
+    },
     "about": {   
         "title": "About",
         "version_label": "Version",

@@ -213,8 +213,8 @@ class Send extends Component {
                     pendingTx.status = 'PENDING';
                     txs[hash]=pendingTx;
 
-					dispatch(update_account_txs(sender, txs));
-					dispatch(update_account_txs(tx.to, txs));
+					dispatch(update_account_txs(sender, txs, this.props.user.hashed_password));
+					dispatch(update_account_txs(tx.to, txs, this.props.user.hashed_password));
 					thisLoadingView.hide();
 					Toast.show(strings('send.toast_tx_sent'), {
 						onHidden: () => {
@@ -344,4 +344,5 @@ const st = StyleSheet.create({
 export default connect(state => { return ({
 	setting: state.setting,
     accounts: state.accounts,
+	user:state.user,
 }); })(Send);

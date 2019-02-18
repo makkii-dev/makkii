@@ -1,16 +1,17 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button} from 'react-native'; 
+import {View, Text, Button, Alert} from 'react-native';
 import {ComponentPassword} from '../common.js';
 import {validatePassword, hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {generateMnemonic,AionAccount} from '../../libs/aion-hd-wallet/index.js';
-import styles from '../styles.js';   
+import styles from '../styles.js';
+import {strings} from "../../locales/i18n";
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    return {   
-	       	title: navigation.getParam('title', 'Register'), 
+	    return {
+			title: strings('register.title'),
 	    };   
     };
 	constructor(props){ 
@@ -24,18 +25,13 @@ class Home extends Component {
 		}; 
 	}
 	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.user);
-		this.props.navigation.setParams({
-			title: 'Register',
-		});
 	}
 	render(){
 		const { dispatch } = this.props;
 		return (
 			<View style={styles.container}>
 				<View>
-					<Text>Enter password</Text>
+					<Text>{strings("register.label_password")}</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<ComponentPassword 
@@ -48,7 +44,7 @@ class Home extends Component {
 					/>
 				</View>
 				<View>
-					<Text>Confirm password</Text>
+					<Text>{strings("register.label_confirm_password")}</Text>
 				</View>
 				<View style={styles.marginBottom20}>
 					<ComponentPassword
@@ -62,17 +58,15 @@ class Home extends Component {
 				</View>
 				<View>  
 					<Button
-						title="Register"
+						title={strings("register.button_register")}
 						onPress={e=>{
 							if (!validatePassword(this.state.password))
-								alert("Invalid password!");
-							else if (!validatePassword(this.state.password_confirm))
-								alert('Invalid confirm password!');
+								Alert.alert(strings('alert_title_error'),strings("register.error_password"));
 							else if (this.state.password !== this.state.password_confirm)
-								alert('Confirm password does not match password!') 
+								Alert.alert(strings('alert_title_error'),strings("register.error_dont_match"))
 							else {
-								let hashed_password = hashPassword(this.state.password);
-								let mnemonic = generateMnemonic();
+								const hashed_password = hashPassword(this.state.password);
+								const mnemonic = generateMnemonic();
 								dispatch(user(hashed_password, mnemonic));
 								this.setState({
 									password: '',

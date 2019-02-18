@@ -170,8 +170,8 @@ class listenTransaction{
                         console.log(res);
                         tx.status = res.status? 'CONFIRMED':'FAILED';
                         tx.blockNumber = res.blockNumber;
-                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}));
-                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}));
+                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, thusStore.user.hashed_password));
+                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, thusStore.user.hashed_password));
                         removeTransaction(tx);
                     }
                 },
