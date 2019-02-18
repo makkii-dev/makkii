@@ -97,29 +97,39 @@ class Scan extends Component {
 	  					}}
 		  				>	
 		  				{
-		  					this.state.torch ? 
-		  					<Image 
-		  						style={{
-		  							width: 25,
-		  							height: 25,
-		  							marginTop: 10,
-		  							marginRight: 5,
-		  						}} 
-		  						source={require('../assets/flash_off_white_36x36.png')} /> : 
-		  					<Image 
-		  						style={{
-		  							width: 25,
-		  							height: 25,
-		  							marginTop: 10,
-		  							marginRight: 5,
-		  						}} 
-		  						source={require('../assets/flash_on_white_36x36.png')} />
+		  					this.state.torch ? <FlashOff /> : <FlashOn /> 
 		  				}
   					</TouchableOpacity>
 	  			</View>
         	</View>
 		);
 	}
+}
+
+const FlashOff = ()=>{
+	return (
+		<Image 
+			style={{
+				width: 25,
+				height: 25,
+				marginTop: 10,
+				marginRight: 5,
+			}} 
+			source={require('../assets/flash_off_white_36x36.png')} />
+	);
+}
+
+const FlashOn = ()=>{
+	return (
+		<Image 
+			style={{
+				width: 25,
+				height: 25,
+				marginTop: 10,
+				marginRight: 5,
+			}} 
+			source={require('../assets/flash_on_white_36x36.png')} />
+	);
 }
 
 export default connect(state => {
