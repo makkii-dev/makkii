@@ -40,7 +40,8 @@ const Routes = createAppContainer(createSwitchNavigator({
 	'unsigned': {screen:unsigned},
 	'signed':   {screen:signed},  
 }, {
-	initialRouteName: 'splash', 
+	//initialRouteName: 'splash',
+	initialRouteName: 'unsigned',  
 }));
 
 // dummy
