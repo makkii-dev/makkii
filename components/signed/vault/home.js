@@ -73,7 +73,7 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.accounts);
 		this.requestStoragePermission();
-		this.isMounted = true;
+		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 	}
 	
@@ -84,13 +84,13 @@ class Home extends Component {
 	}
 
 	componentWillUnmount(): void {
-		this.isMounted = false;
+		this.isMount = false;
 		this.listener.remove();
 	}
 
 	BalanceToRMB(amount){
 		getCoinPrice('CNY',amount).then(res=>{
-		    if (this.isMounted) {
+		    if (this.isMount) {
 				this.setState({
 					title: `Total: ${res.toFixed(2)} RMB`
 				})
@@ -102,7 +102,7 @@ class Home extends Component {
 		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
 		if (Object.keys(accounts).length === 0) {
-			if (this.isMounted) {
+			if (this.isMount) {
 				this.setState({
 					refreshing: false,
 				});
@@ -132,14 +132,14 @@ class Home extends Component {
 				});
 				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
-				if (this.isMounted) {
+				if (this.isMount) {
 					this.setState({
 						refreshing: false,
 					})
 				}
 			},errors=>{
 				console.log(errors);
-				if (this.isMounted) {
+				if (this.isMount) {
 					this.setState({
 						refreshing: false,
 					}, () => {

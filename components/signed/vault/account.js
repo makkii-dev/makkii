@@ -44,14 +44,14 @@ class Account extends Component {
 		this.props.navigation.setParams({
 			title: this.account.name
 		});
-		this.isMounted = false;
+		this.isMount = false;
 	}
 	async componentDidMount(){
-		this.isMounted = true;
+		this.isMount = true;
 	}
 
 	async componentWillUnmount() {
-		this.isMounted = false;
+		this.isMount = false;
 	}
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
@@ -142,14 +142,14 @@ class Account extends Component {
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
 			dispatch(update_account_txs(address,txs,this.props.user.hashed_password));
-			if (this.isMounted) {
+			if (this.isMount) {
 				this.setState({
 					refreshing: false,
 				})
 			}
 		},error => {
 			console.log(error);
-			if (this.isMounted) {
+			if (this.isMount) {
 				this.setState({
 					refreshing: false,
 				})

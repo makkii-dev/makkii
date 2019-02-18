@@ -22,7 +22,7 @@ const {width} = Dimensions.get('window');
 class ImportLedger extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: 'Select Accounts',
+            title: strings('import_ledger.title'),
             headerTitleStyle: {
                 fontSize: 20,
                 alignSelf: 'center',
@@ -130,11 +130,11 @@ class ImportLedger extends React.Component {
             });
         },err=>{
             console.log('fetch accounts error:' + err);
-            Alert.alert('Error',
-                getLedgerMessage(err.code) + ". And reconnect to Ledger again.",
+            Alert.alert(strings('alert_title_error'),
+                getLedgerMessage(err.code),
                 [
                     {
-                        text: 'OK',
+                        text: strings('alert_ok_button'),
                         onPress: () => this.props.navigation.goBack(),
                     }
                 ]);

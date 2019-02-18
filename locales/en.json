@@ -102,9 +102,15 @@
         "empty_label": "No Transaction"
     },
     "import_private_key": {
-        "title": "Private Key",
+        "title": "Import from Private Key",
         "instruction_private_key": "Enter private key",
         "error_invalid_private_key": "Invalid private key"
+    },
+    "import_master_key": {
+        "title": "Master Key"
+    },
+    "import_ledger": {
+        "title": "Ledger"
     },
     "ledger": {
         "toast_connecting": "Connecting to Ledger...",
