@@ -16,7 +16,7 @@ import reducer_account         from './reducers/account.js';
 import reducer_accounts        from './reducers/accounts.js';
 import reducer_accounts_ledger from './reducers/accounts_ledger.js';
 import reducer_dapps           from './reducers/dapps.js';
-import reducer_setting         from './reducers/setting.js';
+import reducer_setting         from './reducers/setting.js'; 
 import reducer_user            from './reducers/user.js'; 
 
 // store 

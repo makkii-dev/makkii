@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
-import {add_accounts} from "../../../actions/accounts";
+import {accounts_add} from "../../../actions/accounts";
 import {ImportListItem, ImportListfooter} from "../../common";
 import {strings} from '../../../locales/i18n';
 const {width} = Dimensions.get('window');
@@ -30,7 +30,7 @@ class ImportHdWallet extends React.Component {
             headerRight: (
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
-                    navigation.state.params.dispatch(add_accounts(acc));
+                    navigation.state.params.dispatch(accounts_add(acc,navigation.state.params.hashed_password));
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 10}}>
@@ -75,7 +75,8 @@ class ImportHdWallet extends React.Component {
         const {dispatch} = this.props;
         this.props.navigation.setParams({
             ImportAccount : this.ImportAccount,
-            dispatch: dispatch
+            dispatch: dispatch,
+            hashed_password: this.props.user.hashed_password,
         });
     }
 

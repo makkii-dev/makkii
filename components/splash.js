@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Image} from 'react-native';
 import {user} from '../actions/user.js';
-import {add_accounts} from '../actions/accounts.js';
-import {dbGet} from '../utils.js';
+import {accounts} from '../actions/accounts.js';
+import {dbGet,decrypt} from '../utils.js';
 
 class Splash extends Component { 
 	constructor(props){
@@ -13,18 +13,21 @@ class Splash extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
-		
+		 
 		// load db user
 		dbGet('user')
-		.then(db_user=>{
-			// TODO: move max_keep_signed to setting;
-			let max_keep_signed = 60000 * 30;  
+		.then(json=>{ 
+			let db_user = JSON.parse(json);
+			let max_keep_signed = 60000 * 30;    
 			let time_diff = Date.now() - db_user.timestamp; 
 			if(time_diff < max_keep_signed) { 
+				console.log('[splash] keep signin');
+
 				// load db accounts
 				dbGet('accounts')
-				.then(accounts=>{
-					dispatch(add_accounts(accounts));
+				.then(json=>{
+					let decrypted = decrypt(json, db_user.hashed_password);
+					dispatch(accounts(JSON.parse(decrypted)));
 				},err=>{
 					console.log(err);
 				});
@@ -33,7 +36,7 @@ class Splash extends Component {
 					navigate('signed_vault');
 				}, 1000);      
 			} else {
-				console.log('[splash] timeout');
+				console.log('[splash] timeout signin');
 				setTimeout(()=>{
 					navigate('unsigned_login');      
 				}, 500);

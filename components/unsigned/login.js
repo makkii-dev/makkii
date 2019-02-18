@@ -5,8 +5,8 @@ import {ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {setting} from '../../actions/setting';
-import {add_accounts} from '../../actions/accounts';
-import {dbGet} from '../../utils.js';
+import {accounts} from '../../actions/accounts';
+import {dbGet,decrypt} from '../../utils.js';
 import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
 
@@ -21,31 +21,9 @@ class Login extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName); 
 		console.log('[store.user] ' + JSON.stringify(this.props.user));
 	}
-	initAccounts=(_setting) => {
-		// load db accounts
-		dbGet('accounts').then(accounts=>{
-			this.props.dispatch(add_accounts(accounts));
-			this.initSettings(_setting);
-		},err=>{
-			this.initSettings(_setting);
-		});
-	}
-	initSettings=(_setting) => {
-		dbGet('settings').then(settings => {
-			_setting.endpoint_wallet = settings.endpoint_wallet;
-			_setting.endpoint_dapps = settings.endpoint_dapps;
-			_setting.endpoint_odex = settings.endpoint_odex;
-			this.props.dispatch(setting(_setting));
-
-			this.props.navigation.navigate('signed_vault');
-		}, err=> {
-			this.props.dispatch(setting(_setting));
-			this.props.navigation.navigate('signed_vault');
-		});
-	}
 	render(){
 		const {dispatch} = this.props;
-		return (
+		return ( 
 			<View style={styles.container}>
 				<View style={{
 					padding: 40,
@@ -69,12 +47,24 @@ class Login extends Component {
 						title="Login"
 						onPress={e=>{
 							let _setting = this.props.setting;
-
 							dbGet('user')
-							.then(db_user=>{
+							.then(json=>{
+								console.log('here ');
+								let db_user = JSON.parse(json);
 								if(db_user.hashed_password === hashPassword(this.state.password)){
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
-									this.initAccounts(_setting);
+									dbGet('accounts').then(json=>{
+										let accounts = JSON.parse(decrypt(json, db.user.hashed_password))
+										this.props.dispatch(accounts(accounts));
+									},err=>{});
+									dbGet('settings').then(json => {
+										let settings = JSON.parse(json);
+										_setting.endpoint_wallet = settings.endpoint_wallet;
+										_setting.endpoint_dapps = settings.endpoint_dapps;
+										_setting.endpoint_odex = settings.endpoint_odex;
+										this.props.dispatch(setting(_setting));
+									}, err=> {});
+									this.props.navigation.navigate('signed_vault');
 								} else {
 									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));
 								}

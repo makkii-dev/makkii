@@ -6,18 +6,24 @@ import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
 
+const tripledes = require('crypto-js/tripledes');
+const CryptoJS = require("crypto-js");
+
+function encrypt(plain, seed){
+    return tripledes.encrypt(plain, seed).toString();
+}
+
+function decrypt(encrypted, seed){
+    return tripledes.decrypt(encrypted, seed).toString(CryptoJS.enc.Utf8);
+}
+
 function dbGet(key){
     return new Promise((resolve, reject)=>{
         AsyncStorage 
         .getItem(key) 
         .then(json=>{
             if(json){
-                try{
-                    let data = JSON.parse(json);
-                    resolve(data);
-                }catch(e){
-                    reject('[dbGet] ' + e);
-                } 
+                resolve(json); 
             } else {
                 reject('[dbGet] db.' + key + ' null');
             }
@@ -180,6 +186,8 @@ class listenTransaction{
 }
 
 module.exports = {
+    encrypt: encrypt,
+    decrypt: decrypt,
     dbGet: dbGet,
     validatePassword: validatePassword,
     validateUrl: validateUrl,

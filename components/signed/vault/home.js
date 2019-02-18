@@ -14,7 +14,7 @@ import {
 	FlatList, PixelRatio, InteractionManager, RefreshControl
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import { delete_account, add_accounts} from '../../../actions/accounts.js';
+import { delete_account, accounts_add} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
@@ -120,7 +120,7 @@ class Home extends Component {
 					newAccounts[account.address] = account;
 				});
 				this.BalanceToRMB(totalBalance);
-				dispatch(add_accounts(newAccounts));
+				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
 				this.setState({
 					refreshing: false,
 				})
@@ -183,7 +183,6 @@ class Home extends Component {
 			{
 				title:'Master key',
 				onPress:()=>{
-					console.log('New Account');
 					navigation.navigate('signed_vault_import_hdwallet');
 				},
 				image:require('../../../assets/aion_logo.png'),
@@ -413,6 +412,7 @@ class Home extends Component {
 
 export default connect(state => {
 	return ({
+		user: state.user,
 		accounts: state.accounts,
 		ui: state.ui,
 		settings: state.settings

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { validatePrivateKey } from '../../../utils';
-import {add_accounts} from "../../../actions/accounts";
+import {accounts} from "../../../actions/accounts";
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 
@@ -16,22 +16,22 @@ class ImportPrivateKey extends Component {
 			},
 			headerTitleStyle: {
 				alignSelf: 'center',
-				textAlign: 'center',
+				textAlign: 'center', 
 				flex: 1,
 			},
 			headerRight: (
 				<TouchableOpacity onPress={() => {
-					navigation.state.params.ImportAccount();
+					navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
 				}}>
 					<View style={{marginRight: 20}}>
 						<Text style={{color: 'blue'}}>IMPORT</Text>
 					</View>
 				</TouchableOpacity>
-			)
+			) 
         });
 	};
 
-	ImportAccount= () => {
+	ImportAccount= (hashed_password) => {
 	    if (validatePrivateKey(this.state.private_key)) {
     		AionAccount.importAccount(this.state.private_key).then(address => {
 				let acc = {};
@@ -42,10 +42,7 @@ class ImportPrivateKey extends Component {
 				account.type = '[pk]';
 				account.transactions = {};
 				acc[account.address] = account;
-				console.log('add account:');
-				console.log(acc);
-
-				this.props.navigation.state.params.dispatch(add_accounts(acc));
+				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
 				this.props.navigation.navigate('signed_vault');
 			}, error=> {
     			console.log("error: " + error);
@@ -64,12 +61,12 @@ class ImportPrivateKey extends Component {
 	}
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(Object.keys(this.props.accounts).length);
-
-		const {dispatch} = this.props;
+		console.log(Object.keys(this.props.accounts).length); 
+		const {dispatch} = this.props;	
 		this.props.navigation.setParams({
 			ImportAccount: this.ImportAccount,
 			dispatch: dispatch,
+			hashed_password: this.props.user.hashed_password,
 		});
 	}
 
@@ -108,4 +105,9 @@ class ImportPrivateKey extends Component {
 	}
 }
 
-export default connect(state => { return ({ accounts: state.accounts, user: state.user, }); })(ImportPrivateKey);
+export default connect(state => { 
+	return ({ 
+		accounts: state.accounts, 
+		user: state.user, 
+	}); 
+})(ImportPrivateKey);
