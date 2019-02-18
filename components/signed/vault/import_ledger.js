@@ -9,7 +9,7 @@ import {
     Image, PixelRatio,
     ActivityIndicator,
     InteractionManager,
-    Alert
+    Alert, DeviceEventEmitter
 } from 'react-native';
 import {connect} from 'react-redux';
 import {accounts_add} from "../../../actions/accounts";
@@ -33,6 +33,7 @@ class ImportLedger extends React.Component {
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(accounts_add(acc, navigation.state.params.hashed_password));
+                    DeviceEventEmitter.emit('updateAccountBalance');
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 20}}>

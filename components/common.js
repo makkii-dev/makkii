@@ -20,7 +20,8 @@ class ComponentTabBar extends Component{
 		const settings_tint_color =  this.props.active === 'settings'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		return (
 			<View style={{...this.props.style}}>
-				<TouchableOpacity 
+				<TouchableOpacity
+					activeOpacity={1}
 					onPress={e=>{
 						this.props.onPress[0]()
 					}}
@@ -33,6 +34,7 @@ class ComponentTabBar extends Component{
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
+					activeOpacity={1}
 					onPress={e=>{
 						this.props.onPress[1]()
 					}}
@@ -45,6 +47,7 @@ class ComponentTabBar extends Component{
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
+					activeOpacity={1}
 					onPress={e=>{
 						this.props.onPress[2]()
 					}}

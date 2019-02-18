@@ -8,7 +8,8 @@ import {
     Dimensions,
     PixelRatio,
     ActivityIndicator,
-    InteractionManager
+    InteractionManager,
+    DeviceEventEmitter
 } from 'react-native';
 import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
@@ -31,6 +32,7 @@ class ImportHdWallet extends React.Component {
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(accounts_add(acc,navigation.state.params.hashed_password));
+                    DeviceEventEmitter.emit('updateAccountBalance');
                     navigation.navigate('signed_vault');
                 }}>
                     <View style={{marginRight: 10}}>

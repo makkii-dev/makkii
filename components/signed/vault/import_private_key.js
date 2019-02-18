@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import {Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, DeviceEventEmitter} from 'react-native';
 import { validatePrivateKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
@@ -42,6 +42,7 @@ class ImportPrivateKey extends Component {
 				account.transactions = {};
 				acc[account.address] = account;
 				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
+				DeviceEventEmitter.emit('updateAccountBalance');
 				this.props.navigation.navigate('signed_vault');
 			}, error=> {
     			console.log("error: " + error);
