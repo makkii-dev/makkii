@@ -365,6 +365,8 @@ class Home extends Component {
 
 	render(){
 		console.log('rerender');
+		// sort by balance
+		const listData =  Object.keys(this.props.accounts).sort((a,b)=>this.props.accounts[a].balance<this.props.accounts[b].balance).map(key=>this.props.accounts[key]);
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
@@ -379,7 +381,7 @@ class Home extends Component {
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
 						scrollEnabled={this.state.scrollEnabled}
-						data={Object.values(this.props.accounts)}
+						data={listData}
 						keyExtractor={(item, index)=>index + ''}
 						onScroll={(e)=>{
 							this.setState({
@@ -407,15 +409,11 @@ class Home extends Component {
 				}}/>
 				<ComponentTabBar
 					style={{
-						position: 'absolute',
-						bottom: 0,  
-						backgroundColor: 'white', 
+						backgroundColor: 'white',
 						flexDirection: 'row',
 						justifyContent: 'space-around',
-						right: 0,
-						left: 0,
 						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'  
+						borderTopColor: '#8c8a8a'
 					}}
 					active={'wallet'}
 					onPress={[
