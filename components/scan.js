@@ -63,20 +63,20 @@ class Scan extends Component {
 	  			>
 	  				<View style={{
 	  					flex: 1,
-						backgroundColor: 'rgba(0,0,0,0.6)',
+						backgroundColor: 'rgba(0,0,0,0.8)',
 						width: '100%',
   					}}></View>
   					<View style={{
-  						height: 250,
+  						height: 300,
   						flexDirection: 'row',
   						justifyContent: 'center', 
   					}}>
   						<View style={{
   							flex: 1,
-  							backgroundColor: 'rgba(0,0,0,0.6)',
+  							backgroundColor: 'rgba(0,0,0,0.8)',
   						}}></View>
   						<View style={{
-  							width: 250,
+  							width: 300,
   							justifyContent: 'center', 
   							alignItems: 'center',
   							borderWidth: 2,
@@ -91,13 +91,13 @@ class Scan extends Component {
   						</View>
   						<View style={{
   							flex: 1,
-  							backgroundColor: 'rgba(0,0,0,0.6)',
+  							backgroundColor: 'rgba(0,0,0,0.8)',
   						}}></View>
   					</View>
   					<View style={{
   						flex: 1,
   						width: '100%',
-						backgroundColor: 'rgba(0,0,0,0.6)',
+						backgroundColor: 'rgba(0,0,0,0.8)',
 					}}></View>
 	  			</RNCamera>	
 	  			<View style={{
