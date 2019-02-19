@@ -95,16 +95,16 @@ class Services extends Component {
 				</View>
 				<View style={styles.marginBottom40}>
 					<RadioGroup
-						selectedIndex={this.state.explorer_server == 'https://mainnet-api.aion.network'? 0: 1}
+						selectedIndex={this.state.explorer_server === 'mainnet'? 0: 1}
 						onSelect={(index, value) => {
 						this.setState({
 							explorer_server: value,
 						});
 					} }>
-						<RadioButton value={'https://mainnet-api.aion.network'}>
+						<RadioButton value={'mainnet'}>
 							<Text>Mainnet</Text>
 						</RadioButton>
-						<RadioButton value={'https://mastery-api.aion.network'}>
+						<RadioButton value={'mastery'}>
 							<Text>Mastery</Text>
 						</RadioButton>
 					</RadioGroup>

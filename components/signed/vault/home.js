@@ -168,7 +168,7 @@ class Home extends Component {
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
-					this.props.navigation.navigate('signed_vault_import_ledger');
+					this.props.navigation.navigate('signed_vault_import_list',{type:'ledger',title:strings('import_ledger.title')});
 				}, error => {
 					this.loadingView.hide();
 					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
@@ -198,7 +198,7 @@ class Home extends Component {
 			{
 				title:strings('wallet.menu_master_key'),
 				onPress:()=>{
-					navigation.navigate('signed_vault_import_hdwallet');
+					navigation.navigate('signed_vault_import_list',{type:'masterKey', title:strings('import_master_key.title')});
 				},
 				image:require('../../../assets/aion_logo.png'),
 			},
