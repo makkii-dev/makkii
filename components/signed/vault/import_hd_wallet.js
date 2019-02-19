@@ -95,7 +95,7 @@ class ImportHdWallet extends React.Component {
                     acc.address = getAcc.address;
                     acc.private_key = getAcc.private_key;
                     acc.balance = 0;
-                    acc.name = strings('default_account_name');
+                    acc.name = this.props.setting.default_account_name;
                     acc.type = '[local]';
                     acc.transactions = {};
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
@@ -203,6 +203,7 @@ export default connect( state => {
   return {
       accounts: state.accounts,
       user: state.user,
+      setting: state.setting,
   };
 })(ImportHdWallet);
 

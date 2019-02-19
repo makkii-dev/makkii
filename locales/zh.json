@@ -135,10 +135,18 @@
     "auto": "跟随系统"
   },
   "advanced": {
-    "title": "高级"
+    "title": "高级",
+    "label_default_account_name": "默认账号名称",
+    "label_login_session_timeout": "登录超时时间",
+    "label_minute": "分钟",
+    "label_fiat_currency": "法币显示",
+    "label_exchange_refresh_interval": "汇率刷新间隔",
+    "label_hour": "小时",
+    "error_default_account_name_empty": "默认账号名称不能为空",
+    "error_invalid_login_session_timeout": "登录超时时间格式不正确",
+    "error_invalid_exchange_refresh_interval": "汇率刷新时间间隔不正确"
   },
   "app_name": "码奇",
-  "default_account_name": "账户",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",

@@ -172,7 +172,7 @@ class Send extends Component {
 		let thisLoadingView = this.loadingView;
 		const {dispatch,user} = this.props;
 		thisLoadingView.show(strings('send.progress_sending_tx'));
-		web3.eth.getTransactionCount(sender).then(count => {
+		web3.eth.getTransactionCount(sender, 'pending').then(count => {
 			console.log('get transaction count: ' + count);
 
 			let amount = this.state.amount;
@@ -221,6 +221,8 @@ class Send extends Component {
 							goBack();
 						}
 					})
+				}).on('error', function(error) {
+					throw error;
 				});
 			} catch (error) {
 				console.log("send signed tx error:", error);

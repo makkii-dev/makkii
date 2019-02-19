@@ -8,6 +8,9 @@ const init = {
 	lang: 'en',
 	version: '0.1.0-rc0',
 	theme: 'white',
+	default_account_name: 'Default Account',
+	login_session_timeout: '30',
+	exchange_refresh_interval: "24",
 
 	tx_fee: 10000,
     tx_confirm: 6,  
