@@ -189,8 +189,8 @@ class listenCoinPrice{
     startListen() {
         const thusStore = this.store;
         this.listener = setInterval(function() {
-             getCoinPrice(currency).then(price => {
-                 let settings = thusStore.getState().setting;
+             getCoinPrice(this.currency).then(price => {
+                let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
                 DeviceEventEmitter.emit('price_updated');
                 thusStore.dispatch(setting(settings));
