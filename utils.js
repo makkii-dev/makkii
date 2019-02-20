@@ -67,6 +67,30 @@ function validatePositiveInteger(input) {
     return reg.test(input);
 }
 
+function validateRecipient(recipientQRCode) {
+    if (validateAddress(recipientQRCode)) {
+        return true;
+    }
+    try {
+        let receiverObj = JSON.parse(recipientQRCode);
+        if (!receiverObj.receiver) {
+            return false;
+        }
+        if (!validateAddress(receiverObj.receiver)) {
+            return false;
+        }
+        if (receiverObj.amount) {
+            if (!validateAmount(receiverObj.amount)) {
+                return false;
+            }
+        }
+    } catch (error) {
+        console.log("recipient qr code is not a json");
+        return false;
+    }
+    return true;
+}
+
 function hashPassword(password) {
     let passwordHash = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex')
     return passwordHash;
@@ -247,4 +271,5 @@ module.exports = {
     getCoinPrice: getCoinPrice,
     listenTransaction:listenTransaction,
     listenCoinPrice: listenCoinPrice,
+    validateRecipient: validateRecipient,
 }

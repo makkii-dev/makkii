@@ -80,8 +80,7 @@
         "button_send_all": "Send All",
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
-        "toast_tx_sent": "Transaction is sent",
-        "error_invalid_qrcode": "Invalid QRCode"
+        "toast_tx_sent": "Transaction is sent"
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",
@@ -177,4 +176,5 @@
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
+    "error_invalid_qrcode": "Invalid QRCode"
 }

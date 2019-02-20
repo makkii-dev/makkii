@@ -44,7 +44,6 @@ import VaultImportHdWallet   from './components/signed/vault/import_list';
 import VaultImportPrivateKey from './components/signed/vault/import_private_key.js';
 import VaultReceive          from './components/signed/vault/receive.js';
 import VaultSend             from './components/signed/vault/send.js';
-import VaultSendScan         from './components/signed/vault/send_scan.js';
 import VaultTransaction      from './components/signed/vault/transaction.js';
 import Dapps                 from './components/signed/dapps/home.js';
 import DappsDapp             from './components/signed/dapps/dapp.js';
@@ -153,13 +152,7 @@ const Routes = createAppContainer(createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
         }  
 	},
-    'signed_vault_send_scan': {
-		screen: VaultSendScan,
-		navigationOptions: {
-		    header: null,
-		}
-	},
-	'signed_vault_transaction': { 
+	'signed_vault_transaction': {
 		screen: VaultTransaction,
 		navigationOptions: {
             headerRight: (<View></View>),
