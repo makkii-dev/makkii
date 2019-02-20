@@ -4,6 +4,7 @@ import {Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Devi
 import { validatePrivateKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
+import {accounts_add} from "../../../actions/accounts";
 
 class ImportPrivateKey extends Component {
 
