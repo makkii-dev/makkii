@@ -272,14 +272,37 @@ const Routes = createAppContainer(createStackNavigator({
 			duration: 0,
 		},
   	}),
-}));
+})); 
 
 const defaultGetStateForAction = Routes.router.getStateForAction;
-Routes.router.getStateForAction = (action, state) => { 
-    if (action.type === "Navigation/BACK" && state) {
-        const newRoutes = state.routes.filter(r => r.routeName !== 'scan' && r.routeName !== 'splash');
-        const newIndex = newRoutes.length - 1;
-        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+Routes.router.getStateForAction = (action, state) => {
+	console.log('[action.type] ' + action.type);
+	console.log(state);
+    if (state) {
+    	let newRoutes, newIndex;
+    	switch(action.type){
+    		case 'Navigation/COMPLETE_TRANSITION':
+    			// condition routes from login, register and recovery
+    			if(state.routes[state.routes.length - 1].routeName === 'signed_vault'){
+    				newRoutes = [
+	    				state.routes[state.routes.length - 1]
+	    			];
+	    			newIndex = 0; 
+	    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes}); 
+    			} else {
+    				return defaultGetStateForAction(action, state);	
+    			}
+    		case 'Navigation/BACK': 
+    			newRoutes = state.routes.filter(
+    				r => 
+    					r.routeName !== 'scan' && 
+    					r.routeName !== 'splash'
+				); 
+        		newIndex = newRoutes.length - 1;
+    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+    		default:
+    			return defaultGetStateForAction(action, state); 
+    	}
     }
     return defaultGetStateForAction(action, state);
 }; 

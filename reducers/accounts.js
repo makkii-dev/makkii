@@ -45,7 +45,6 @@ export default function accounts(state = init, action){
 			break;
 	}
 	if(should_update_db){
-		console.log('[]')
 		AsyncStorage.setItem( 
 			'accounts',
 			encrypt(JSON.stringify(new_state), action.hashed_password) 

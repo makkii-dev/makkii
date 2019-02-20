@@ -48,7 +48,7 @@ class Mnemonic extends Component {
 					<Button
 						title="I'M DONE"
 						onPress={e=>{   
-							this.props.navigation.navigate('signed_setting');
+							this.props.navigation.navigate('signed_vault');
 						}}
 					/>
 				</View>
