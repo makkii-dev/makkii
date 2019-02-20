@@ -31,7 +31,7 @@ class Home extends Component {
 
 	update_locale= () => {
 		this.props.navigation.setParams({
-			'title': strings('menu.title_settings'),
+			'title': strings('menuRef.title_settings'),
 		});
 	}
 

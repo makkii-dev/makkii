@@ -1,5 +1,5 @@
 {
-  "menu": {
+  "menuRef": {
     "title_settings": "设置",
     "title_wallet": "钱包",
     "title_dapps": "应用"
@@ -78,8 +78,6 @@
     "error_send_transaction": "发送交易失败",
     "progress_sending_tx": "正在发送交易...",
     "toast_tx_sent": "交易已发送",
-    "error_wrong_ledger_device": "账号不存在，错误的Ledger设备!",
-    "error_invalid_qrcode": "无效的二维码"
   },
   "transaction_detail": {
     "title": "交易详情",
@@ -152,6 +150,10 @@
     "USD": "美元",
     "CAD": "加拿大元"
   },
+  "sort": {
+    "balance": "余额优先",
+    "transaction": "交易数量优先"
+  },
   "app_name": "码奇",
   "logout": "退出",
   "update_button": "提交",
@@ -176,5 +178,6 @@
   "ok_button": "同意",
   "alert_ok_button": "确定",
   "cancel_button": "拒绝",
-  "save_file_button": "保存到手机"
+  "save_file_button": "保存到手机",
+  "error_invalid_qrcode": "无效的二维码"
 }

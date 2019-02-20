@@ -5,6 +5,7 @@ import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
+import {setting} from "./actions/setting";
 import Toast from 'react-native-root-toast';
 
 const tripledes = require('crypto-js/tripledes');
@@ -72,6 +73,30 @@ function validatePositiveInteger(input) {
     return reg.test(input);
 }
 
+function validateRecipient(recipientQRCode) {
+    if (validateAddress(recipientQRCode)) {
+        return true;
+    }
+    try {
+        let receiverObj = JSON.parse(recipientQRCode);
+        if (!receiverObj.receiver) {
+            return false;
+        }
+        if (!validateAddress(receiverObj.receiver)) {
+            return false;
+        }
+        if (receiverObj.amount) {
+            if (!validateAmount(receiverObj.amount)) {
+                return false;
+            }
+        }
+    } catch (error) {
+        console.log("recipient qr code is not a json");
+        return false;
+    }
+    return true;
+}
+
 function hashPassword(password) {
     let passwordHash = blake2b(32).update(Buffer.from(password, 'utf8')).digest('hex')
     return passwordHash;
@@ -137,13 +162,54 @@ function getCoinPrice(currency='CNY',amount=1) {
     };
     return new Promise((resolve, reject) => {
         fetchRequest(url,'GET',headers).then(res=>{
-            const price = res.data['AION'].quote[currency].price;
-               resolve(amount*price)
+            if(!res.status.error_message){
+                const price = res.data['AION'].quote[currency].price;
+                resolve(amount*price)
+            }
         },err=>{
             console.log('[err] ', err);
             reject(err)
         });
     })
+}
+
+class listenCoinPrice{
+    constructor(store) {
+        this.store = store;
+        this.interval = store.getState().setting.exchange_refresh_interval;
+        this.currency = store.getState().setting.fiat_currency;
+    }
+
+    setInterval(interval) {
+        this.interval = interval;
+        this.stopListen();
+        this.startListen();
+    }
+
+    setCurrency(currency) {
+        this.currency = currency;
+        this.stopListen();
+        this.startListen();
+    }
+
+    startListen() {
+        const thusStore = this.store;
+        this.listener = setInterval(function() {
+             getCoinPrice(this.currency).then(price => {
+                let settings = thusStore.getState().setting;
+                settings.coinPrice = price;
+                DeviceEventEmitter.emit('price_updated');
+                thusStore.dispatch(setting(settings));
+            }, error => {
+                console.log("get coin price error", error);
+             });
+        }, this.interval * 60 * 1000);
+    }
+
+    stopListen() {
+        clearInterval(this.listener);
+    }
+
 }
 
 class listenTransaction{
@@ -212,4 +278,6 @@ module.exports = {
     fetchRequest: fetchRequest,
     getCoinPrice: getCoinPrice,
     listenTransaction:listenTransaction,
+    listenCoinPrice: listenCoinPrice,
+    validateRecipient: validateRecipient,
 }

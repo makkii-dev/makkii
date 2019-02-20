@@ -53,7 +53,8 @@ export default class SelectList extends  React.Component {
                     newData[_key].select=false;
             })
         }
-        newData[key].select=!newData[key].select;
+        this.props.isMultiSelect&&(newData[key].select=!newData[key].select);
+        this.props.isMultiSelect||(newData[key].select=true);
         this.setState({
             data:Object.assign({},newData)
         });

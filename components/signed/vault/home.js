@@ -4,29 +4,37 @@ import {
 	Alert,
 	PermissionsAndroid,
 	View,
-	Modal,
 	Text,
 	TouchableOpacity,
 	StyleSheet,
 	Dimensions,
-	Platform,  
 	Image,
 	FlatList, PixelRatio, InteractionManager, RefreshControl,DeviceEventEmitter
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import { delete_account, accounts_add} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
-import Loading from '../../loading.js';
 import wallet from 'react-native-aion-hw-wallet';
-import { getLedgerMessage, fetchRequest, getCoinPrice } from '../../../utils.js';
+import { getCoinPrice } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
+import {ModalList} from "../../modalList";
+import {HomeHeader} from "./home_header";
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
+
+const SORT = [
+	{
+		title: 'sort.balance',
+	},
+	{
+		title: 'sort.transaction',
+	},
+];
 
 class Home extends Component {
 
@@ -37,8 +45,10 @@ class Home extends Component {
     };
 	constructor(props){
 		super(props);
+		this.menuRef=null;
 		this.state={
-			showPop: false,
+			showSort: false,
+			sortOrder: SORT[0].title,
 			title: `Total: 0.00 RMB`,
 			openRowKey: null,
 			scrollEnabled:true,
@@ -46,7 +56,6 @@ class Home extends Component {
 		};
 
 	}
-
 
 	async requestStoragePermission() {
 		try {
@@ -71,17 +80,13 @@ class Home extends Component {
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.accounts);
+		console.log('[route] ' + this.props.accounts);
 		this.requestStoragePermission();
+		this.fetchAccountsBalance();
 		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 	}
-	
-	componentWillMount(): void {
-		InteractionManager.runAfterInteractions(()=> {
-			this.fetchAccountsBalance();
-		})
-	}
+
 
 	componentWillUnmount(): void {
 		this.isMount = false;
@@ -89,13 +94,12 @@ class Home extends Component {
 	}
 
 	BalanceToRMB(amount){
-		getCoinPrice('CNY',amount).then(res=>{
-		    if (this.isMount) {
-				this.setState({
-					title: `Total: ${res.toFixed(2)} RMB`
-				})
-			}
-		})
+        if (this.isMount) {
+            let total = this.props.setting.coinPrice * amount;
+            this.setState({
+                title: `Total: ${total.toFixed(2)} RMB`
+            })
+        }
 	}
 
 	fetchAccountsBalance = ()=> {
@@ -123,32 +127,29 @@ class Home extends Component {
 		});  
 		Promise.all(executors).then(
 			res=>{
-				console.log('[accounts promise] ', res) ;
 				let newAccounts={};
 				let totalBalance=0;
 				res.forEach(account=>{
 					totalBalance+=account.balance;
 					newAccounts[account.address] = account;
 				});
+				console.log('totalBalance', totalBalance);
 				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
-				if (this.isMount) {
-					this.setState({
-						refreshing: false,
-					})
-				}
+				this.isMount&&this.state.refreshing&&this.setState({
+					refreshing: false,
+				})
 			},errors=>{
 				console.log(errors);
-				if (this.isMount) {
-					this.setState({
-						refreshing: false,
-					}, () => {
-						Toast.show("Unable to connect to remote server");
-					})
-				}
+				this.isMount&&this.state.refreshing&&this.setState({
+					refreshing: false,
+				}, () => {
+					Toast.show("Unable to connect to remote server");
+				})
 			}
 		)
 	};
+
 	onRefresh = () => {
 		this.setState({
 			refreshing: true
@@ -157,102 +158,19 @@ class Home extends Component {
 			this.fetchAccountsBalance();
 		}, 1000);
 	};
-	onImportLedger=()=> {
-		console.log("click import ledger.");
-		this.loadingView.show(strings('ledger.toast_connecting'));
 
-		wallet.listDevice().then((deviceList) => {
-			if (deviceList.length <= 0) {
-				this.loadingView.hide();
-				Alert.alert(strings('alert_title_error'), strings('ledger.error_device_count'));
-			} else {
-				wallet.getAccount(0).then(account => {
-					this.loadingView.hide();
-					this.props.navigation.navigate('signed_vault_import_list',{type:'ledger',title:strings('import_ledger.title')});
-				}, error => {
-					this.loadingView.hide();
-					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
-				});
-			}
+
+
+
+	closeSort(){
+		const select = this.sortRef.getSelect();
+		select&&this.setState({
+			showSort:false,
+			sortOrder:select,
 		});
-	};
-
-	_handleAddClick=()=>{this.setState({showPop:!this.state.showPop})};
-
-	_closeModal=()=>{this.setState({showPop:false})};
-
-	_renderModalItem=(item)=>{
-		return (
-			<View style={styles.modalItemView}>
-				<TouchableOpacity activeOpacity={0.3} onPress={()=>{item.onPress();this._closeModal()}} style={styles.modalItemView}>
-					<Image source={item.image} style={styles.modalImage}/>
-					<Text numberOfLines={1} style={styles.modalText}>{item.title}</Text>
-				</TouchableOpacity>
-			</View>
-		);
-	};
-
-	_renderHeader() {
-		const {navigation} = this.props;
-		const menuItems = [
-			{
-				title:strings('wallet.menu_master_key'),
-				onPress:()=>{
-					navigation.navigate('signed_vault_import_list',{type:'masterKey', title:strings('import_master_key.title')});
-				},
-				image:require('../../../assets/aion_logo.png'),
-			},
-			{
-				title:strings('wallet.menu_private_key'),
-				onPress:()=>{
-					navigation.navigate('signed_vault_import_private_key');
-				},
-				image:require('../../../assets/key.png'),
-			},
-			{
-				title:strings('wallet.menu_ledger'),
-				onPress:()=>this.onImportLedger(),
-				image:require('../../../assets/ledger_logo.png'),
-			},
-		];
-		return (
-			<View style={styles.header}>
-				<View style={styles.headerEnds}/>
-				<View style={styles.headerTitle}>
-					<Text style={styles.headerTitleText}>{this.state.title}</Text>
-				</View>
-				<View style={styles.headerEnds}>
-					<TouchableOpacity activeOpacity={0.5} onPress={this._handleAddClick}>
-						<Image
-							source={require('../../../assets/ic_add.png')}
-							style={styles.titleBarImg}
-						/>
-					</TouchableOpacity>
-					<View style={{position: 'absolute', top: 10, left: 0, width: width, height: height}}>
-						<Modal
-							transparent={true}
-							visible={this.state.showPop}
-							animationType={'none'}
-							onRequestClose={()=>{}}>
-							<TouchableOpacity activeOpacity={1} style={{width,height}} onPress={this._closeModal}>
-								<FlatList
-									style={styles.modalContainer}
-									data={menuItems}
-									renderItem={({item})=>this._renderModalItem(item)}
-									keyExtractor={(item,index)=>index.toString()}
-									ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}
-									ListHeaderComponent={()=>(
-										<View style={{flex:1, height:50, justifyContent:'space-between', paddingTop: 10}}>
-											<Text style={{...styles.modalText}}>{strings('wallet.title_import_from')}</Text>
-											<View style={{...styles.divider, marginLeft: 0}}/>
-										</View>)}
-								/>
-							</TouchableOpacity>
-						</Modal>
-					</View>
-				</View>
-			</View>
-		)
+		select||this.setState({
+			showSort:false,
+		})
 	}
 
 
@@ -283,7 +201,11 @@ class Home extends Component {
 			[
 				{text:'CANCEL',onPress:()=>{}},
 				{text: 'DELETE', onPress:()=>{
-						dispatch(delete_account(key,this.props.user.hashed_password));
+						this.setState({
+							openRowKey: null,
+						},()=>setTimeout(()=>
+							dispatch(delete_account(key,this.props.user.hashed_password)),
+							500));
 						DeviceEventEmitter.emit('updateAccountBalance');
 						console.log('delete account: ', key );
 					}}
@@ -363,13 +285,36 @@ class Home extends Component {
 		)
 	};
 
+	sortAccounts(select){
+		let res = Object.values(this.props.accounts);
+		switch (select) {
+			case SORT[0].title:
+				res =  res.sort((a,b)=>{
+					return b.balance-a.balance
+				});
+				break;
+			case SORT[1].title:
+				res =  res.sort((a,b)=>{
+					return Object.keys(b.transactions).length - Object.keys(a.transactions).length;
+					});
+				break;
+			default:
+				res =  res.sort((a,b)=> {
+					return b.balance-a.balance
+				});
+		}
+
+		return res;
+	}
+
 	render(){
-		console.log('rerender');
-		// sort by balance
-		const listData =  Object.keys(this.props.accounts).sort((a,b)=>this.props.accounts[a].balance<this.props.accounts[b].balance).map(key=>this.props.accounts[key]);
+		const renderAccounts=this.sortAccounts(this.state.sortOrder);
 		return (
 			<View style={{flex:1}}>
-				{this._renderHeader()}
+				<HomeHeader
+					title={this.state.title}
+					navigation={this.props.navigation}
+				/>
 				<TouchableOpacity
 					style={{flex:1}}
 					activeOpacity={1}
@@ -377,11 +322,40 @@ class Home extends Component {
 						this.state.openRowKey&&this.setState({openRowKey: null})
 					}}
 				>
+					<View style={{flexDirection:'row',height:40, alignItems:'center',
+						marginLeft:10,
+						marginRight:10,
+						width:width-20,
+						borderColor:'lightgray',
+						borderBottomWidth: 1,}}>
+						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:'black'}}/>
+						<TouchableOpacity
+							onPress={()=>this.setState({showSort:true})}
+						>
+							<View style={styles.sortHeader}>
+								<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
+								{
+									this.state.showSort?<Image source={require('../../../assets/arrow_up.png')} style={styles.sortHeaderImageStyle}/>
+									:<Image source={require('../../../assets/arrow_down.png')} style={styles.sortHeaderImageStyle}/>
+								}
+							</View>
+						</TouchableOpacity>
+						<ModalList
+							data={SORT}
+							ref={ref=>this.sortRef=ref}
+							visible={this.state.showSort}
+							style={styles.sortContainer}
+							viewStyle={styles.sortViewStyle}
+							fontStyle={styles.sortFontStyle}
+							onClose={()=>this.closeSort()}
+							ItemSeparatorComponent={()=>(<View style={{height:1/PixelRatio.get(),backgroundColor:'#000'}}/>)}
+						/>
+					</View>
 					<FlatList
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
 						scrollEnabled={this.state.scrollEnabled}
-						data={listData}
+						data={renderAccounts}
 						keyExtractor={(item, index)=>index + ''}
 						onScroll={(e)=>{
 							this.setState({
@@ -404,9 +378,12 @@ class Home extends Component {
 						}
 					/>
 				</TouchableOpacity>
-				<Loading ref={(element) => {
-					this.loadingView = element;
-				}}/>
+				{
+					this.state.showSort?<TouchableOpacity style={{position: 'absolute',
+						top:10+top+30, left:0,right:0, width:width,height:height-(10+top+30),
+						backgroundColor:'rgba(0, 0, 0, 0.5)'
+					}}/>:null
+				}
 				<ComponentTabBar
 					style={{
 						backgroundColor: 'white',
@@ -436,12 +413,14 @@ class Home extends Component {
 	}
 }
 
+
+
 export default connect(state => {
 	return ({
 		user: state.user,
 		accounts: state.accounts,
 		ui: state.ui,
-		settings: state.settings
+		setting: state.setting
 	}); })(Home);
 
 const styles = StyleSheet.create({
@@ -450,61 +429,42 @@ const styles = StyleSheet.create({
 		height: 1 / PixelRatio.get(),
 		backgroundColor: '#fff'
 	},
-	header: {
-		height: top,
-		backgroundColor: '#eeeeee',
-		elevation: 5,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	headerEnds:{
-		width: 50,
-		justifyContent: 'flex-start',
+	sortHeader:{
+		marginRight:10,
+		marginLeft:10,
+		height:40,
+		flex:1,
+		flexDirection:'row',
 		alignItems: 'center'
 	},
-	headerTitle:{
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	headerTitleText:{
-		fontSize: Platform.OS === 'ios' ? 17 : 20,
-		fontWeight: Platform.OS === 'ios' ? '600' : '500',
-		color: 'rgba(0, 0, 0, .9)',
-	},
-	titleBarImg: {
-		width: 25,
-		height: 25,
-		margin: 15,
-	},
-	modalContainer: {
-		backgroundColor: 'black',
-		width: mWidth,
+	sortContainer:{
+		width: width,
+		backgroundColor: '#eee',
 		position: 'absolute',
-		left: width - mWidth - 10,
-		top: 50,
+		left:0,
+		right:0,
+		top: 10+top+30, //status bar + title bar + sort header
 		padding: 5,
 	},
-	modalItemView: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'flex-start',
+	sortViewStyle:{
 		flex:1,
-		width: mWidth,
-		paddingLeft: 10,
-		paddingRight: 10,
-		paddingTop: 8,
-		paddingBottom: 8,
+		width:width,
+		justifyContent:'center',
 	},
-	modalText:{
-		color: '#fff',
+	sortFontStyle:{
+		color: '#000',
 		fontSize: 16,
-		marginLeft: 5,
+		margin:5,
 	},
-	modalImage:{
-		width: 20,
+	sortHeaderFontStyle:{
+		color: 'blue',
+		fontSize: 16,
+	},
+	sortHeaderImageStyle:{
+		marginLeft:10,
+		width:20,
 		height:20,
-		marginRight: 10,
-		tintColor: '#fff'
+		tintColor:'blue'
 	},
 	listBtnContainer:{
 		flex:1,

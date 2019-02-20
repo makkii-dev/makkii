@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
-import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from '../../../utils';
+import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
 import {AionTransaction } from '../../../libs/aion-hd-wallet/index.js';
 import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
@@ -40,6 +40,28 @@ class Send extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
+	}
+	async componentWillReceiveProps(props) {
+	    let scannedData = props.navigation.getParam('scanned', '');
+	    if (scannedData != '') {
+	    	if (validateAddress(scannedData)) {
+	    		this.setState({
+					recipient: scannedData,
+				})
+			} else {
+	    		let receiverCode = JSON.parse(scannedData);
+	    		if (receiverCode.receiver) {
+	    			this.setState({
+						recipient: receiverCode.receiver,
+					})
+				}
+	    		if (receiverCode.amount) {
+	    			this.setState({
+						amount: receiverCode.amount,
+					})
+				}
+			}
+		}
 	}
 	render(){
 		const arrowImage =  this.state.showAdvanced? require('../../../assets/arrow_up.png') :  require('../../../assets/arrow_down.png')
@@ -284,40 +306,18 @@ class Send extends Component {
 	scan=() => {
 		console.log("scan clicked.");
 
-		this.props.navigation.navigate('signed_vault_send_scan', {
-			onScanResult: (scanResult) => this.onScanResult(scanResult),
+		this.props.navigation.navigate('scan', {
+			success: 'signed_vault_send',
+			validate: function(data) {
+				console.log("scanned: " + data.data);
+				let pass = validateRecipient(data.data);
+				return {
+					pass: pass,
+					err: pass? '': strings('error_invalid_qrcode')
+				}
+			},
 		});
 	};
-	onScanResult=(scanResult) => {
-		console.log("scan result is:" + scanResult);
-		try {
-			let receiverObj = JSON.parse(scanResult)
-            if (receiverObj.receiver) {
-                if (!validateAddress(receiverObj.receiver)) {
-                    console.log("qrcode receiver is invalid");
-                    return false;
-                }
-
-            	this.setState({
-					recipient: receiverObj.receiver,
-				});
-			}
-			if (receiverObj.amount) {
-			    if (!validateAmount(receiverObj.amount)) {
-					console.log("qrcode amount is invalid");
-			    	return false;
-				}
-
-				this.setState({
-					amount: receiverObj.amount,
-				})
-			}
-			return true;
-		} catch (error) {
-			console.log("failed to parse json string " + scanResult + ", error=" + error);
-			return false;
-		}
-	}
 }
 
 const st = StyleSheet.create({
