@@ -21,9 +21,6 @@ class Scan extends Component {
 	}
 	async componentDidMount(){ 
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		setTimeout(()=>{
-			this.props.navigation.navigate('unsigned_register');
-		},3000);
 	}
 	render(){
 
