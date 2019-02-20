@@ -90,7 +90,7 @@ class ImportLedger extends React.Component {
             let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = strings('default_account_name');
+            acc.name = this.props.setting.default_account_name;
             acc.type = '[ledger]';
             acc.transactions = {};
             acc.derivationIndex = i;
@@ -202,6 +202,7 @@ export default connect( state => {
   return {
       accounts: state.accounts,
       user: state.user,
+      setting: state.setting,
   };
 })(ImportLedger);
 

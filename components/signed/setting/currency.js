@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Text, DeviceEventEmitter} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
 
-class Language extends Component {
+class Currency extends Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: strings('language.title'),
+            title: strings('currency.title'),
             headerTitleStyle: {
                 fontSize: 20,
                 alignSelf: 'center',
@@ -17,7 +17,7 @@ class Language extends Component {
             },
             headerRight: (
                 <TouchableOpacity onPress={() => {
-                    navigation.state.params.updateLocale();
+                    navigation.state.params.updateCurrency();
                     navigation.goBack();
                 }}>
                     <View style={{marginRight: 20}}>
@@ -34,16 +34,14 @@ class Language extends Component {
 
     componentWillMount() {
         this.props.navigation.setParams({
-            updateLocale: this.updateLocale,
+            updateCurrency: this.updateCurrency,
         });
     }
 
-    updateLocale= () => {
+    updateCurrency= () => {
         const {dispatch} = this.props;
-        this.props.setting.lang = Object.keys(this.selectList.getSelect())[0];
+        this.props.setting.fiat_currency = Object.keys(this.selectList.getSelect())[0];
         dispatch(setting(this.props.setting));
-
-        DeviceEventEmitter.emit('locale_change');
     }
 
     render() {
@@ -55,15 +53,15 @@ class Language extends Component {
                 <SelectList
                     ref={ref=>this.selectList=ref}
                     itemHeight={55}
-                    data={{ 'auto': strings('language.auto'),
-                        'en': strings('language.english'),
-                        'zh': strings('language.chinese')}}
+                    data={{ 'CNY': strings('currency.CNY'),
+                        'USD': strings('currency.USD'),
+                        'CAD': strings('currency.CAD')}}
                     cellLeftView={item=>{
                         return (
                             <Text style={{flex: 1}}>{item}</Text>
                         )
                     }}
-                    defaultKey={this.props.setting.lang}
+                    defaultKey={this.props.setting.fiat_currency}
                 />
             </View>
         )
@@ -74,4 +72,4 @@ export default connect( state => {
     return {
         setting: state.setting,
     };
-})(Language);
+})(Currency);

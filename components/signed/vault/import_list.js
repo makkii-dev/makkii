@@ -3,26 +3,27 @@ import {
     View,
     Text,
     TouchableOpacity,
-    FlatList,
     StyleSheet,
     Dimensions,
     PixelRatio,
     ActivityIndicator,
     InteractionManager,
-    DeviceEventEmitter
+    DeviceEventEmitter, Alert
 } from 'react-native';
 import {connect} from 'react-redux';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import SelectList from '../../selectList';
-import {ImportListItem, ImportListfooter} from "../../common";
+import {ImportListfooter} from "../../common";
 import {strings} from '../../../locales/i18n';
+import wallet from "react-native-aion-hw-wallet";
+import {getLedgerMessage} from "../../../utils";
 const {width} = Dimensions.get('window');
 
 class ImportHdWallet extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: strings('import_master_key.title'),
+            title: navigation.getParam('title'),
             headerTitleStyle: {
                 fontSize: 14,
                 alignSelf: 'center',
@@ -46,6 +47,11 @@ class ImportHdWallet extends React.Component {
 
     constructor(props){
         super(props);
+        if (this.props.navigation.getParam('type') === 'masterKey'){
+            this.fetchAccount = this.fetchAccountFromMasterKey;
+        }else{
+            this.fetchAccount = this.fetchAccountFromLedger;
+        }
         this.selectList=null;
         this.state={
             isLoading: true,
@@ -81,7 +87,8 @@ class ImportHdWallet extends React.Component {
     isAccountIsAlreadyImport(address){
         return typeof this.props.accounts[address] !== 'undefined';
     }
-    fetchAccount(n){
+
+    fetchAccountFromMasterKey(n){
         //fetch n Accounts from MasterKey;
         return new Promise((resolve, reject) => {
             try{
@@ -95,7 +102,7 @@ class ImportHdWallet extends React.Component {
                     acc.address = getAcc.address;
                     acc.private_key = getAcc.private_key;
                     acc.balance = 0;
-                    acc.name = strings('default_account_name');
+                    acc.name = this.props.setting.default_account_name;
                     acc.type = '[local]';
                     acc.transactions = {};
                     if (!this.isAccountIsAlreadyImport(acc.address)) {
@@ -120,6 +127,62 @@ class ImportHdWallet extends React.Component {
                 error: true,
                 errInfo: err.toString(),
             });
+        });
+    }
+
+    getAccountFromLedger(accounts, i, sum, n, resolve, reject) {
+        console.log("i=" + i + ",sum=" + sum + ",n=" + n);
+        if (sum >= n) {
+            resolve({'accountsList': accounts, 'lastIndex':this.state.lastIndex + n })
+            return;
+        }
+        wallet.getAccount(i).then(account => {
+            let acc = {};
+            acc.address = account.address;
+            acc.balance = 0;
+            acc.name = strings('default_account_name');
+            acc.type = '[ledger]';
+            acc.transactions = {};
+            acc.derivationIndex = i;
+            if (!this.isAccountIsAlreadyImport(acc.address)) {
+                sum = sum + 1;
+                accounts[acc.address] = acc
+            }
+            i = i + 1;
+            this.getAccount(accounts, i, sum, n, resolve, reject);
+        }, error => {
+            reject(error);
+        });
+    }
+
+    fetchAccountFromLedger(n){
+        //fetch n Accounts from MasterKey;
+        return new Promise((resolve, reject) => {
+            try{
+                let accounts = {};
+                let i = this.state.lastIndex;
+                let sum = 0;
+                this.getAccountFromLedger(accounts, i, sum, n, resolve, reject);
+            }catch (e) {
+                reject(e)
+            }
+        }).then(value => {
+            this.setState({
+                isLoading: false,
+                accountsList: Object.assign(this.state.accountsList, value.accountsList),
+                lastIndex: value.lastIndex,
+                footerState: 0,
+            });
+        },err=>{
+            console.log('fetch accounts error:' + err);
+            Alert.alert(strings('alert_title_error'),
+                getLedgerMessage(err.code),
+                [
+                    {
+                        text: strings('alert_ok_button'),
+                        onPress: () => this.props.navigation.goBack(),
+                    }
+                ]);
         });
     }
 
@@ -203,6 +266,7 @@ export default connect( state => {
   return {
       accounts: state.accounts,
       user: state.user,
+      setting: state.setting,
   };
 })(ImportHdWallet);
 

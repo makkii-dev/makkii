@@ -14,15 +14,22 @@ class Splash extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
-		 
+
+
+		dbGet('settings').then(json => {
+			this.props.dispatch(setting(JSON.parse(json)));
+		}, err=> {
+			console.log("load setting failed: ", err);
+		});
+
 		// load db user
 		dbGet('user')
 		.then(json=>{
 			let db_user = JSON.parse(json);
 			console.log('[db_user]', db_user);
-			let max_keep_signed = 60000 * 30;
-			let time_diff = Date.now() - db_user.timestamp; 
-			if(time_diff < max_keep_signed) { 
+			let max_keep_signed = 60000 * parseInt(this.props.setting.login_session_timeout);
+			let time_diff = Date.now() - db_user.timestamp;
+			if(time_diff < max_keep_signed) {
 				console.log('[splash] keep signin');
 
 				// load db accounts
@@ -36,12 +43,7 @@ class Splash extends Component {
 					console.log(err);
 				});
 				dispatch(user(db_user.hashed_password, db_user.mnemonic));
-				dbGet('settings').then(json => {
-					this.props.dispatch(setting(JSON.parse(json)));
-				}, err=> {
-					console.log("load setting failed: ", err);
-				});
-				setTimeout(()=>{   
+				setTimeout(()=>{
 					navigate('signed_vault');
 				}, 1000);      
 			} else {
@@ -82,5 +84,6 @@ class Splash extends Component {
 export default connect(state => {
 	return {   
 		user: state.user,
+        setting: state.setting,
 	};
 })(Splash);

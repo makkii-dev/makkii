@@ -119,7 +119,7 @@ class Account extends Component {
 	};
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
-		const url = this.props.setting.explorer_server + `/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+		const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
 		console.log("request url: " + url);
 		fetchRequest(url).then(res=>{
 			console.log('[fetch result]', res);

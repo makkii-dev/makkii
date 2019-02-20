@@ -41,8 +41,7 @@ import Recovery              from './components/unsigned/recovery.js';
 import RecoveryPassword      from './components/unsigned/recovery_password.js';
 import Vault                 from './components/signed/vault/home.js'; 
 import VaultAccount          from './components/signed/vault/account.js';
-import VaultImportHdWallet   from './components/signed/vault/import_hd_wallet';
-import VaultImportLedger     from './components/signed/vault/import_ledger.js';
+import VaultImportHdWallet   from './components/signed/vault/import_list';
 import VaultImportPrivateKey from './components/signed/vault/import_private_key.js';
 import VaultReceive          from './components/signed/vault/receive.js';
 import VaultSend             from './components/signed/vault/send.js';
@@ -58,6 +57,7 @@ import SettingRecovery       from './components/signed/setting/recovery.js';
 import SettingServices       from './components/signed/setting/services.js';
 import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
+import SettingCurrency       from './components/signed/setting/currency.js';
 
 const Routes = createAppContainer(createStackNavigator({
 	'test': {
@@ -130,20 +130,13 @@ const Routes = createAppContainer(createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
         }  
 	}, 
-	'signed_vault_import_hdwallet': { 
+	'signed_vault_import_list': {
 		screen: VaultImportHdWallet,
 		navigationOptions: {
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
-	}, 
-	'signed_vault_import_ledger': { 
-		screen: VaultImportLedger,
-		navigationOptions: {
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
-	}, 
+	},
 	'signed_vault_import_private_key': { 
 		screen: VaultImportPrivateKey,
 		navigationOptions: {
@@ -246,6 +239,13 @@ const Routes = createAppContainer(createStackNavigator({
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         } 
+	},
+	'signed_setting_currency': {
+		screen: SettingCurrency,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
 	},
 	'signed_setting_language': {
 		screen: SettingLanguage,

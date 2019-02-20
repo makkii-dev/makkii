@@ -8,13 +8,17 @@ const init = {
 	lang: 'en',
 	version: '0.1.0-rc0',
 	theme: 'white',
+	default_account_name: 'Default Account',
+	login_session_timeout: '30',
+	exchange_refresh_interval: "24",
+	fiat_currency: "CNY",
 
 	tx_fee: 10000,
     tx_confirm: 6,  
     endpoint_wallet: 'http://127.0.0.1:8545',
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net',
-	explorer_server: 'https://mainnet-api.aion.network',
+	explorer_server: 'mainnet',
 }
 
 export default function setting(state = init, action){
