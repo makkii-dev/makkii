@@ -5,7 +5,7 @@ import {setLocale} from '../locales/i18n';
 import DeviceInfo from 'react-native-device-info';
 
 const init = { 
-	lang: 'en',
+	lang: 'auto',
 	version: '0.1.0-rc0',
 	theme: 'white',
 	default_account_name: 'Default Account',
