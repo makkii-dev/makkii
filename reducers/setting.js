@@ -12,6 +12,7 @@ const init = {
 	login_session_timeout: '30',
 	exchange_refresh_interval: "24",
 	fiat_currency: "CNY",
+	coinPrice: "",
 
 	tx_fee: 10000,
     tx_confirm: 6,  

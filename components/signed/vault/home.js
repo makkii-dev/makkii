@@ -89,13 +89,12 @@ class Home extends Component {
 	}
 
 	BalanceToRMB(amount){
-		getCoinPrice('CNY',amount).then(res=>{
-		    if (this.isMount) {
-				this.setState({
-					title: `Total: ${res.toFixed(2)} RMB`
-				})
-			}
-		})
+        if (this.isMount) {
+            let total = this.props.setting.coinPrice * amount;
+            this.setState({
+                title: `Total: ${total.toFixed(2)} RMB`
+            })
+        }
 	}
 
 	fetchAccountsBalance = ()=> {
@@ -441,7 +440,7 @@ export default connect(state => {
 		user: state.user,
 		accounts: state.accounts,
 		ui: state.ui,
-		settings: state.settings
+		setting: state.setting
 	}); })(Home);
 
 const styles = StyleSheet.create({

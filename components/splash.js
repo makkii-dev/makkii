@@ -22,6 +22,8 @@ class Splash extends Component {
 			console.log("load setting failed: ", err);
 		});
 
+		listenPrice.startListen();
+
 		// load db user
 		dbGet('user')
 		.then(json=>{

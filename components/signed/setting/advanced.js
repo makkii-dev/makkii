@@ -76,7 +76,7 @@ class Advanced extends Component {
                             });
                         }}
                     />
-                    <Text style={{ color: '#777676', fontSize: 16 }}>{strings('advanced.label_hour')}</Text>
+                    <Text style={{ color: '#777676', fontSize: 16 }}>{strings('advanced.label_minute')}</Text>
                 </View>
                 <View>
                     <Button title={strings('save_button')}
@@ -104,11 +104,17 @@ class Advanced extends Component {
         }
 
         const {dispatch} = this.props;
+
         let _setting = this.props.setting;
+        if (this.state.exchange_refresh_interval != _setting.exchange_refresh_interval) {
+            listenPrice.setInterval(this.state.exchange_refresh_interval);
+        }
+
         _setting.default_account_name = this.state.default_account_name;
         _setting.login_session_timeout = this.state.login_session_timeout;
         _setting.exchange_refresh_interval = this.state.exchange_refresh_interval;
         dispatch(setting(_setting));
+
 
         Toast.show(strings('toast_update_success'), {
             onHidden: () => {

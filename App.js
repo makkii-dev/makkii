@@ -281,8 +281,9 @@ Routes.router.getStateForAction = (action, state) => {
 import data from './data.js'; 
 store.dispatch(dapps(data.dapps));
 
-import {listenTransaction} from './utils';
+import {listenTransaction, listenCoinPrice} from './utils';
 global.listenTx = new listenTransaction(store);
+global.listenPrice = new listenCoinPrice(store);
 
 export default class App extends Component {
 	render() {
