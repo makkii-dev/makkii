@@ -73,7 +73,8 @@ class Home extends Component {
 				<AionCell
 					title={strings('currency.title')}
 					onClick={() => {
-						this.props.navigation.navigate('signed_setting_currency'); }}
+						this.props.navigation.navigate('signed_setting_currency');
+					}}
 					/>
 				<AionCell
 					title={strings('advanced.title')}

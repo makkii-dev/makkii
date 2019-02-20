@@ -5,7 +5,7 @@ import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
 
-class Language extends Component {
+class Currency extends Component {
     static navigationOptions = ({navigation})=> {
         return ({
             title: strings('currency.title'),
@@ -72,4 +72,4 @@ export default connect( state => {
     return {
         setting: state.setting,
     };
-})(Language);
+})(Currency);

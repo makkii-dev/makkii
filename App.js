@@ -56,6 +56,7 @@ import SettingRecovery       from './components/signed/setting/recovery.js';
 import SettingServices       from './components/signed/setting/services.js';
 import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
+import SettingCurrency       from './components/signed/setting/currency.js';
 
 const Routes = createAppContainer(createStackNavigator({
 	'splash':   {
@@ -231,6 +232,13 @@ const Routes = createAppContainer(createStackNavigator({
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         } 
+	},
+	'signed_setting_currency': {
+		screen: SettingCurrency,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
 	},
 	'signed_setting_language': {
 		screen: SettingLanguage,
