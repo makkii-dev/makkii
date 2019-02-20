@@ -19,6 +19,12 @@ function decrypt(encrypted, seed){
     return tripledes.decrypt(encrypted, seed).toString(CryptoJS.enc.Utf8);
 }
 
+function dbSet(key, value){
+    return new Promise((resolve, reject)=>{
+
+    });
+}
+
 function dbGet(key){
     return new Promise((resolve, reject)=>{
         AsyncStorage 
@@ -37,7 +43,7 @@ function validatePassword(password) {
     let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
     return reg.test(password);
 }
-
+ 
 function validateUrl(url) {
     // TODO: validate format http(s)://<host>(:<port>)/
     // TODO: validate port range

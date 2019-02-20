@@ -30,14 +30,15 @@ const store = createStore(combineReducers({
 	user:            reducer_user,
 }));  
 
-// ui 
+// ui
+import Test                  from './components/test.js'; 
 import Scan                  from './components/scan.js';
 import Splash                from './components/splash.js';
 import Login                 from './components/unsigned/login.js';
 import Register              from './components/unsigned/register.js';
-import RegisterMnemonic     from './components/unsigned/register_mnemonic.js'; 
+import RegisterMnemonic      from './components/unsigned/register_mnemonic.js'; 
 import Recovery              from './components/unsigned/recovery.js';
-import RecoveryPassword     from './components/unsigned/recovery_password.js';
+import RecoveryPassword      from './components/unsigned/recovery_password.js';
 import Vault                 from './components/signed/vault/home.js'; 
 import VaultAccount          from './components/signed/vault/account.js';
 import VaultImportHdWallet   from './components/signed/vault/import_list';
@@ -58,6 +59,12 @@ import SettingAdvanced       from './components/signed/setting/advanced.js';
 import SettingCurrency       from './components/signed/setting/currency.js';
 
 const Routes = createAppContainer(createStackNavigator({
+	'test': {
+		screen:Test,
+		navigationOptions: {
+            header: null 
+        }
+	},
 	'splash':   {
 		screen:Splash,
 		navigationOptions: {
@@ -258,14 +265,37 @@ const Routes = createAppContainer(createStackNavigator({
 			duration: 0,
 		},
   	}),
-}));
+})); 
 
 const defaultGetStateForAction = Routes.router.getStateForAction;
-Routes.router.getStateForAction = (action, state) => { 
-    if (action.type === "Navigation/BACK" && state) {
-        const newRoutes = state.routes.filter(r => r.routeName !== 'scan' && r.routeName !== 'splash');
-        const newIndex = newRoutes.length - 1;
-        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+Routes.router.getStateForAction = (action, state) => {
+	console.log('[action.type] ' + action.type);
+	console.log(state);
+    if (state) {
+    	let newRoutes, newIndex;
+    	switch(action.type){
+    		case 'Navigation/COMPLETE_TRANSITION':
+    			// condition routes from login, register and recovery
+    			if(state.routes[state.routes.length - 1].routeName === 'signed_vault'){
+    				newRoutes = [
+	    				state.routes[state.routes.length - 1]
+	    			];
+	    			newIndex = 0; 
+	    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes}); 
+    			} else {
+    				return defaultGetStateForAction(action, state);	
+    			}
+    		case 'Navigation/BACK': 
+    			newRoutes = state.routes.filter(
+    				r => 
+    					r.routeName !== 'scan' && 
+    					r.routeName !== 'splash'
+				); 
+        		newIndex = newRoutes.length - 1;
+    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+    		default:
+    			return defaultGetStateForAction(action, state); 
+    	}
     }
     return defaultGetStateForAction(action, state);
 }; 
