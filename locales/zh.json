@@ -17,7 +17,14 @@
     "error_dont_match": "两次密码不一致!",
     "label_password": "输入密码",
     "label_confirm_password": "再次输入密码",
-    "button_register": "注册"
+    "button_register": "注册",  
+  },
+  "unsigned_register_mnemonic": {
+    "title": "助记词",
+    "hint": "请妥善保存您的助记词!",
+    "btn_copy": "复制助记词",
+    "btn_done": "完成",
+    "toastr_copy_mnemonic": "助记词复制到粘贴板",
   },
   "recovery": {
     "title": "忘记密码",
