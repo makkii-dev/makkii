@@ -30,14 +30,15 @@ const store = createStore(combineReducers({
 	user:            reducer_user,
 }));  
 
-// ui 
+// ui
+import Test                  from './components/test.js'; 
 import Scan                  from './components/scan.js';
 import Splash                from './components/splash.js';
 import Login                 from './components/unsigned/login.js';
 import Register              from './components/unsigned/register.js';
-import RegisterMnemonic     from './components/unsigned/register_mnemonic.js'; 
+import RegisterMnemonic      from './components/unsigned/register_mnemonic.js'; 
 import Recovery              from './components/unsigned/recovery.js';
-import RecoveryPassword     from './components/unsigned/recovery_password.js';
+import RecoveryPassword      from './components/unsigned/recovery_password.js';
 import Vault                 from './components/signed/vault/home.js'; 
 import VaultAccount          from './components/signed/vault/account.js';
 import VaultImportHdWallet   from './components/signed/vault/import_hd_wallet';
@@ -59,6 +60,12 @@ import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
 
 const Routes = createAppContainer(createStackNavigator({
+	'test': {
+		screen:Test,
+		navigationOptions: {
+            header: null 
+        }
+	},
 	'splash':   {
 		screen:Splash,
 		navigationOptions: {
