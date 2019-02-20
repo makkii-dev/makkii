@@ -4,7 +4,7 @@ import { View, Text, Button, Alert} from 'react-native';
 import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
-import { user } from '../../../actions/user.js';
+import { user_update_password } from '../../../actions/user.js';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 
@@ -107,13 +107,11 @@ class Password extends Component {
 
 		// update password
 		const { dispatch } = this.props;
-		let updateUser = this.props.user;
 		let newHashedPassword = hashPassword(this.state.password_new);
-		updateUser.hashed_password = newHashedPassword;
-		dispatch(user(updateUser));
+		dispatch(user_update_password(newHashedPassword));
 
         console.log("update password successfully.");
-        Toast.show(strings('toast_update_successfully'), {
+        Toast.show(strings('toast_update_success'), {
         	onHidden: () => {
 				this.props.navigation.goBack();
 			}
