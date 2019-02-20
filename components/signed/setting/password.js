@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, Alert} from 'react-native';
+import { View, Text, Button, Alert, ScrollView} from 'react-native';
 import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
@@ -29,7 +29,7 @@ class Password extends Component {
 	}
 	render(){
 		return (
-			<View style={styles.container}>	
+			<ScrollView style={styles.container}>
 				<View style={styles.marginBottom40}>
 					<Text style={styles.instruction}>{strings('password.password_format')}</Text>
 				</View>
@@ -81,7 +81,7 @@ class Password extends Component {
 						onPress={() => this.updatePassword()}
 					/>
 				</View>
-			</View>
+			</ScrollView>
 		)
 	}
 
