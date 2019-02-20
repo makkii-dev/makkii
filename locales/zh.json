@@ -4,10 +4,13 @@
     "title_wallet": "钱包",
     "title_dapps": "应用"
   },
-  "login": {
+  "unsigned_login": {
     "error_login": "登录失败",
-    "error_incorrect_password": "密码不正确"
-  },
+    "error_incorrect_password": "密码不正确",
+    "btn_login": "登录",
+    "btn_register": "注册",
+    "btn_recovery": "恢复",
+  }, 
   "register": {
     "title": "注册",
     "error_password": "密码必须是8-16位的数字、字母、特殊字符组合!",
@@ -20,7 +23,8 @@
     "title": "忘记密码",
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
-    "button_confirm": "确定"
+    "button_confirm": "确定",
+    "error_mnemonic_not_match": "助记词不匹配",
   },
   "about": {
     "title": "关于",

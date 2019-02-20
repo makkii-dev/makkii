@@ -71,7 +71,7 @@ class Home extends Component {
 		        					mnemonic: this.state.mnemonic
 		        				});
 		        			} else {
-		        				alert('Mnemonic not matched');
+		        				alert(strings('recovery.error_mnemonic_not_match'));
 		        			}
 		        		},err=>{
 		        			console.log('db.user is null');

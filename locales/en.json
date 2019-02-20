@@ -4,7 +4,7 @@
         "title_wallet": "Wallet",
         "title_dapps": "DApps"
     },
-    "login": {
+    "unsigned_login": {
         "error_login": "Login fail",
         "error_incorrect_password": "Incorrect password"
     },
@@ -129,6 +129,7 @@
     },
     "wallet": {
         "fiat_total": "Total",
+        "import_accounts_hint": "Please import accounts",
         "title_import_from": "Import From:",
         "menu_master_key": "Master Key",
         "menu_private_key": "Private Key",
