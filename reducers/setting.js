@@ -18,7 +18,7 @@ const init = {
     endpoint_wallet: 'http://127.0.0.1:8545',
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net',
-	explorer_server: 'https://mainnet-api.aion.network',
+	explorer_server: 'mainnet',
 }
 
 export default function setting(state = init, action){

@@ -34,7 +34,7 @@ class Home extends Component {
 					<Button 
 						title= {strings("recovery.button_scan")}
 						onPress={e=>{
-							this.props.navigation.navigate('unsigned_recovery_scan',{
+							this.props.navigation.navigate('scan',{
 								success:'unsigned_recovery',
 								validate:function(data){
 									let pass = validateMnemonic(data.data);

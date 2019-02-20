@@ -61,7 +61,6 @@ class Login extends Component {
 									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));
 								}
 							},err=>{
-								console.log("login failed: " + err);
 								Alert.alert(strings('alert_title_error'), strings('login.error_login'));
 							});
 						}}

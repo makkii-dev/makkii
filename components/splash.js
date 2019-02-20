@@ -49,13 +49,15 @@ class Splash extends Component {
 			} else {
 				console.log('[splash] timeout signin');
 				setTimeout(()=>{
-					navigate('unsigned_login');      
+					navigate('unsigned_login'); 
+					//navigate('unsigned_recovery_scan');     
 				}, 500);
 			}
 		}, err=>{
 			console.log('[splash] db.user null');
 			setTimeout(()=>{
-				navigate('unsigned_recovery');  
+				navigate('unsigned_register');  
+				//navigate('unsigned_recovery_scan');
 			}, 500); 
 		});
 	}

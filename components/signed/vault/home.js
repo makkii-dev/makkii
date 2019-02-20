@@ -168,7 +168,7 @@ class Home extends Component {
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
-					this.props.navigation.navigate('signed_vault_import_ledger');
+					this.props.navigation.navigate('signed_vault_import_list',{type:'ledger',title:strings('import_ledger.title')});
 				}, error => {
 					this.loadingView.hide();
 					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
@@ -198,7 +198,7 @@ class Home extends Component {
 			{
 				title:strings('wallet.menu_master_key'),
 				onPress:()=>{
-					navigation.navigate('signed_vault_import_hdwallet');
+					navigation.navigate('signed_vault_import_list',{type:'masterKey', title:strings('import_master_key.title')});
 				},
 				image:require('../../../assets/aion_logo.png'),
 			},
@@ -365,6 +365,8 @@ class Home extends Component {
 
 	render(){
 		console.log('rerender');
+		// sort by balance
+		const listData =  Object.keys(this.props.accounts).sort((a,b)=>this.props.accounts[a].balance<this.props.accounts[b].balance).map(key=>this.props.accounts[key]);
 		return (
 			<View style={{flex:1}}>
 				{this._renderHeader()}
@@ -379,7 +381,7 @@ class Home extends Component {
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
 						scrollEnabled={this.state.scrollEnabled}
-						data={Object.values(this.props.accounts)}
+						data={listData}
 						keyExtractor={(item, index)=>index + ''}
 						onScroll={(e)=>{
 							this.setState({
@@ -407,15 +409,11 @@ class Home extends Component {
 				}}/>
 				<ComponentTabBar
 					style={{
-						position: 'absolute',
-						bottom: 0,  
-						backgroundColor: 'white', 
+						backgroundColor: 'white',
 						flexDirection: 'row',
 						justifyContent: 'space-around',
-						right: 0,
-						left: 0,
 						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'  
+						borderTopColor: '#8c8a8a'
 					}}
 					active={'wallet'}
 					onPress={[

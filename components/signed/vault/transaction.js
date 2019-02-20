@@ -15,7 +15,7 @@ class Transaction extends Component {
 		console.log('[transactionHash] ', this.transactionHash);
 	}
 	onViewInExplorer(){
-		const url = `https://mastery.aion.network/#/transaction/${this.transactionHash}`;
+		const url = `https://${this.props.setting.explorer_server}.aion.network/#/transaction/${this.transactionHash}`;
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
 	sendAgain(){
@@ -96,7 +96,11 @@ class Transaction extends Component {
 	}
 }
 
-export default connect(state => { return ({ accounts: state.accounts }); })(Transaction);
+export default connect(state => {
+	return ({
+		accounts: state.accounts,
+		setting: state.setting
+	}); })(Transaction);
 
 const style =  StyleSheet.create({
 

@@ -271,7 +271,7 @@ class Send extends Component {
 		}
 
 		return true;
-	}
+	};
 
 	sendAll=() => {
 		console.log("send all clicked.");
@@ -280,14 +280,14 @@ class Send extends Component {
 			amount: '' + (all > 0? all: 0)
 		});
 
-	}
+	};
 	scan=() => {
 		console.log("scan clicked.");
 
 		this.props.navigation.navigate('signed_vault_send_scan', {
 			onScanResult: (scanResult) => this.onScanResult(scanResult),
 		});
-	}
+	};
 	onScanResult=(scanResult) => {
 		console.log("scan result is:" + scanResult);
 		try {
