@@ -221,13 +221,13 @@ class Home extends Component {
 		let accountImage = '';
 		switch (item.type) {
 			case '[ledger]':
-				backgroundColor = '#000';
+				backgroundColor = '#00796b';
 				accountImage = require('../../../assets/ledger_logo.png');break;
 			case '[pk]':
-				backgroundColor = '#6600ff';
+				backgroundColor = '#6200ee';
 				accountImage = require('../../../assets/key.png');break;
 			default:
-				backgroundColor = '#3399ff';
+				backgroundColor = '#2962ff';
 				accountImage = require('../../../assets/aion_logo.png');
 		}
 		return (
@@ -322,35 +322,43 @@ class Home extends Component {
 						this.state.openRowKey&&this.setState({openRowKey: null})
 					}}
 				>
-					<View style={{flexDirection:'row',height:40, alignItems:'center',
-						marginLeft:10,
-						marginRight:10,
-						width:width-20,
-						borderColor:'lightgray',
-						borderBottomWidth: 1,}}>
-						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:'black'}}/>
-						<TouchableOpacity
-							onPress={()=>this.setState({showSort:true})}
-						>
-							<View style={styles.sortHeader}>
-								<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
-								{
-									this.state.showSort?<Image source={require('../../../assets/arrow_up.png')} style={styles.sortHeaderImageStyle}/>
-									:<Image source={require('../../../assets/arrow_down.png')} style={styles.sortHeaderImageStyle}/>
-								}
-							</View>
-						</TouchableOpacity>
-						<ModalList
-							data={SORT}
-							ref={ref=>this.sortRef=ref}
-							visible={this.state.showSort}
-							style={styles.sortContainer}
-							viewStyle={styles.sortViewStyle}
-							fontStyle={styles.sortFontStyle}
-							onClose={()=>this.closeSort()}
-							ItemSeparatorComponent={()=>(<View style={{height:1/PixelRatio.get(),backgroundColor:'#000'}}/>)}
-						/>
-					</View>
+					{
+						renderAccounts.length?<View style={{
+							flexDirection: 'row', height: 40, alignItems: 'center',
+							marginLeft: 10,
+							marginRight: 10,
+							width: width - 20,
+							borderColor: 'lightgray',
+							borderBottomWidth: 1,
+						}}>
+							<Image source={require('../../../assets/sort.png')}
+								   style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>
+							<TouchableOpacity
+								onPress={() => this.setState({showSort: true})}
+							>
+								<View style={styles.sortHeader}>
+									<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
+									{
+										this.state.showSort ? <Image source={require('../../../assets/arrow_up.png')}
+																	 style={styles.sortHeaderImageStyle}/>
+											: <Image source={require('../../../assets/arrow_down.png')}
+													 style={styles.sortHeaderImageStyle}/>
+									}
+								</View>
+							</TouchableOpacity>
+							<ModalList
+								data={SORT}
+								ref={ref => this.sortRef = ref}
+								visible={this.state.showSort}
+								style={styles.sortContainer}
+								viewStyle={styles.sortViewStyle}
+								fontStyle={styles.sortFontStyle}
+								onClose={() => this.closeSort()}
+								ItemSeparatorComponent={() => (
+									<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+							/>
+						</View>:null
+					}
 					<FlatList
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
