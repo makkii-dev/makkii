@@ -128,6 +128,7 @@
         "error_wrong_device": "Wrong ledger device connected! Account not found!"
     },
     "wallet": {
+        "fiat_total": "Total",
         "title_import_from": "Import From:",
         "menu_master_key": "Master Key",
         "menu_private_key": "Private Key",

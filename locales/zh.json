@@ -110,7 +110,7 @@
   },
   "ledger": {
     "toast_connecting": "正在连接Ledger设备...",
-    "error_unknown_account_type": "Ledger内部错误",
+    "error_unknown_account_type" : "Ledger内部错误",
     "error_general": "Ledger内部错误",
     "error_device_count": "请连接Ledger设备",
     "error_open_device": "Ledger internal error",
@@ -121,8 +121,10 @@
     "error_wrong_device": "找不到账号，连接了不匹配的Ledger设备"
   },
   "wallet": {
+    "fiat_total": "总额", 
+    "import_accounts_hint": "请导入账户",
     "title_import_from": "选择导入来源：",
-    "menu_master_key": "主密钥",
+    "menu_master_key": "主密钥", 
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包"
   },

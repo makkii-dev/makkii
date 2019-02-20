@@ -49,7 +49,7 @@ class Home extends Component {
 		this.state={
 			showSort: false,
 			sortOrder: SORT[0].title,
-			title: `Total: 0.00 RMB`,
+			title: strings('wallet.fiat_total') + ' 0.00 RMB',
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -371,9 +371,9 @@ class Home extends Component {
 							});
 						}}
 						ListEmptyComponent={()=>
-							<View>
+							<View style={{marginTop: 10}}>
 								<Text style={{alignSelf: 'center', textAlign:'center'}}>
-									Please Import a account
+									{strings('wallet.import_accounts_hint')}
 								</Text>
 							</View>
 						}
