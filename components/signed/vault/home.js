@@ -96,11 +96,12 @@ class Home extends Component {
 	}
 
 	BalanceToRMB(amount){
-		getCoinPrice('CNY',amount).then(res=>{
-			this.isMount&&this.setState({
-				title: `Total: ${res.toFixed(2)} RMB`
-			});
-		})
+        if (this.isMount) {
+            let total = this.props.setting.coinPrice * amount;
+            this.setState({
+                title: `Total: ${total.toFixed(2)} RMB`
+            })
+        }
 	}
 
 	fetchAccountsBalance = ()=> {

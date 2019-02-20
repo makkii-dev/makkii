@@ -80,8 +80,7 @@
         "button_send_all": "Send All",
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
-        "toast_tx_sent": "Transaction is sent",
-        "error_invalid_qrcode": "Invalid QRCode"
+        "toast_tx_sent": "Transaction is sent"
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",
@@ -141,10 +140,24 @@
         "auto": "Auto"
     },
     "advanced": {
-        "title": "Advanced"
+        "title": "Advanced",
+        "label_default_account_name": "Default Account Name",
+        "label_login_session_timeout": "Login Session Timeout",
+        "label_minute": "Mins",
+        "label_fiat_currency": "Fiat Currency Display",
+        "label_exchange_refresh_interval": "Exchange Rate Refresh Interval",
+        "label_hour": "Hours",
+        "error_default_account_name_empty": "Default account name is empty",
+        "error_invalid_login_session_timeout": "Invalid login session timeout",
+        "error_invalid_exchange_refresh_interval": "Invalid exchange rate refresh interval"
+    },
+    "currency": {
+        "title": "Fiat Currency",
+        "CNY": "RMB",
+        "USD": "USD",
+        "CAD": "CAD"
     },
     "app_name": "MAKKI",
-    "default_account_name": "Account",
     "logout": "Sign Out",
     "update_button": "Update",
     "save_button": "Save",
@@ -167,4 +180,5 @@
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
+    "error_invalid_qrcode": "Invalid QRCode"
 }

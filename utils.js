@@ -5,6 +5,7 @@ import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
+import {setting} from "./actions/setting";
 import Toast from 'react-native-root-toast';
 
 const tripledes = require('crypto-js/tripledes');
@@ -64,6 +65,30 @@ function validateAmount(amount) {
 function validatePositiveInteger(input) {
     let reg= /^(0|[1-9][0-9]*)$/;
     return reg.test(input);
+}
+
+function validateRecipient(recipientQRCode) {
+    if (validateAddress(recipientQRCode)) {
+        return true;
+    }
+    try {
+        let receiverObj = JSON.parse(recipientQRCode);
+        if (!receiverObj.receiver) {
+            return false;
+        }
+        if (!validateAddress(receiverObj.receiver)) {
+            return false;
+        }
+        if (receiverObj.amount) {
+            if (!validateAmount(receiverObj.amount)) {
+                return false;
+            }
+        }
+    } catch (error) {
+        console.log("recipient qr code is not a json");
+        return false;
+    }
+    return true;
 }
 
 function hashPassword(password) {
@@ -142,6 +167,45 @@ function getCoinPrice(currency='CNY',amount=1) {
     })
 }
 
+class listenCoinPrice{
+    constructor(store) {
+        this.store = store;
+        this.interval = store.getState().setting.exchange_refresh_interval;
+        this.currency = store.getState().setting.fiat_currency;
+    }
+
+    setInterval(interval) {
+        this.interval = interval;
+        this.stopListen();
+        this.startListen();
+    }
+
+    setCurrency(currency) {
+        this.currency = currency;
+        this.stopListen();
+        this.startListen();
+    }
+
+    startListen() {
+        const thusStore = this.store;
+        this.listener = setInterval(function() {
+             getCoinPrice(currency).then(price => {
+                 let settings = thusStore.getState().setting;
+                settings.coinPrice = price;
+                DeviceEventEmitter.emit('price_updated');
+                thusStore.dispatch(setting(settings));
+            }, error => {
+                console.log("get coin price error", error);
+             });
+        }, this.interval * 60 * 1000);
+    }
+
+    stopListen() {
+        clearInterval(this.listener);
+    }
+
+}
+
 class listenTransaction{
     constructor(store, timeOut=60*1000){
         this.txMap={};
@@ -208,4 +272,6 @@ module.exports = {
     fetchRequest: fetchRequest,
     getCoinPrice: getCoinPrice,
     listenTransaction:listenTransaction,
+    listenCoinPrice: listenCoinPrice,
+    validateRecipient: validateRecipient,
 }

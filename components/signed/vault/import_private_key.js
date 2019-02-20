@@ -4,6 +4,7 @@ import {Alert, View, Text, TextInput, Button, StyleSheet, TouchableOpacity, Devi
 import { validatePrivateKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
+import {accounts_add} from "../../../actions/accounts";
 
 class ImportPrivateKey extends Component {
 
@@ -37,7 +38,7 @@ class ImportPrivateKey extends Component {
 				let account = {};
 				account.address = address.address;
 				account.private_key = this.state.private_key;
-				account.name = strings('default_account_name');
+				account.name = this.props.setting.default_account_name;
 				account.type = '[pk]';
 				account.transactions = {};
 				acc[account.address] = account;
@@ -108,6 +109,7 @@ class ImportPrivateKey extends Component {
 export default connect(state => { 
 	return ({ 
 		accounts: state.accounts, 
-		user: state.user, 
+		user: state.user,
+		setting: state.setting,
 	}); 
 })(ImportPrivateKey);

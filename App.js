@@ -44,7 +44,6 @@ import VaultImportHdWallet   from './components/signed/vault/import_list';
 import VaultImportPrivateKey from './components/signed/vault/import_private_key.js';
 import VaultReceive          from './components/signed/vault/receive.js';
 import VaultSend             from './components/signed/vault/send.js';
-import VaultSendScan         from './components/signed/vault/send_scan.js';
 import VaultTransaction      from './components/signed/vault/transaction.js';
 import Dapps                 from './components/signed/dapps/home.js';
 import DappsDapp             from './components/signed/dapps/dapp.js';
@@ -56,6 +55,7 @@ import SettingRecovery       from './components/signed/setting/recovery.js';
 import SettingServices       from './components/signed/setting/services.js';
 import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
+import SettingCurrency       from './components/signed/setting/currency.js';
 
 const Routes = createAppContainer(createStackNavigator({
 	'splash':   {
@@ -152,13 +152,7 @@ const Routes = createAppContainer(createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
         }  
 	},
-    'signed_vault_send_scan': {
-		screen: VaultSendScan,
-		navigationOptions: {
-		    header: null,
-		}
-	},
-	'signed_vault_transaction': { 
+	'signed_vault_transaction': {
 		screen: VaultTransaction,
 		navigationOptions: {
             headerRight: (<View></View>),
@@ -232,6 +226,13 @@ const Routes = createAppContainer(createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
         } 
 	},
+	'signed_setting_currency': {
+		screen: SettingCurrency,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
+	},
 	'signed_setting_language': {
 		screen: SettingLanguage,
 		navigationOptions: {
@@ -273,8 +274,9 @@ Routes.router.getStateForAction = (action, state) => {
 import data from './data.js'; 
 store.dispatch(dapps(data.dapps));
 
-import {listenTransaction} from './utils';
+import {listenTransaction, listenCoinPrice} from './utils';
 global.listenTx = new listenTransaction(store);
+global.listenPrice = new listenCoinPrice(store);
 
 export default class App extends Component {
 	render() {

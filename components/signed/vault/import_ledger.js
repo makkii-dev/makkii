@@ -3,41 +3,41 @@ import {
     View,
     Text,
     TouchableOpacity,
+    FlatList,
     StyleSheet,
     Dimensions,
-    PixelRatio,
+    Image, PixelRatio,
     ActivityIndicator,
     InteractionManager,
-    DeviceEventEmitter, Alert
+    Alert, DeviceEventEmitter
 } from 'react-native';
 import {connect} from 'react-redux';
-import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
-import SelectList from '../../selectList';
-import {ImportListfooter} from "../../common";
+import {ImportListItem, ImportListfooter} from "../../common";
+import wallet from 'react-native-aion-hw-wallet';
+import {getLedgerMessage} from '../../../utils.js';
 import {strings} from '../../../locales/i18n';
-import wallet from "react-native-aion-hw-wallet";
-import {getLedgerMessage} from "../../../utils";
+import SelectList from "./import_hd_wallet";
 const {width} = Dimensions.get('window');
 
-class ImportHdWallet extends React.Component {
+class ImportLedger extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: navigation.getParam('title'),
+            title: strings('import_ledger.title'),
             headerTitleStyle: {
-                fontSize: 14,
+                fontSize: 20,
                 alignSelf: 'center',
                 textAlign: 'center',
                 flex: 1,
-            },   
+            },
             headerRight: (
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
-                    navigation.state.params.dispatch(accounts_add(acc,navigation.state.params.hashed_password));
+                    navigation.state.params.dispatch(accounts_add(acc, navigation.state.params.hashed_password));
                     DeviceEventEmitter.emit('updateAccountBalance');
                     navigation.navigate('signed_vault');
                 }}>
-                    <View style={{marginRight: 10}}>
+                    <View style={{marginRight: 20}}>
                         <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
                     </View>
                 </TouchableOpacity>
@@ -47,17 +47,10 @@ class ImportHdWallet extends React.Component {
 
     constructor(props){
         super(props);
-        if (this.props.navigation.getParam('type') === 'masterKey'){
-            this.fetchAccount = this.fetchAccountFromMasterKey;
-        }else{
-            this.fetchAccount = this.fetchAccountFromLedger;
-        }
         this.selectList=null;
         this.state={
             isLoading: true,
-            hardenedIndex: 0,
-            error: false,
-            errInfo: '',
+            lastIndex: 0,
             accountsList: {},
             footerState: 0,
         };
@@ -67,79 +60,27 @@ class ImportHdWallet extends React.Component {
         return this.selectList.getSelect();
     };
 
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        if (this.props.navigation.getParam('type') === 'masterKey'){
-            this.fetchAccount = this.fetchAccountFromMasterKey;
-        }else{
-            this.fetchAccount = this.fetchAccountFromLedger;
-        }
+    componentDidMount() {
+        // setTimeout(()=>{this.fetchAccount(10)},500);
+        InteractionManager.runAfterInteractions(()=>{
+            this.fetchAccount(10)
+        });
     }
 
-
-    componentWillMount(){
+    componentWillMount(): void {
         const {dispatch} = this.props;
         this.props.navigation.setParams({
             ImportAccount : this.ImportAccount,
             dispatch: dispatch,
             hashed_password: this.props.user.hashed_password,
         });
-        InteractionManager.runAfterInteractions(()=>{
-            this.fetchAccount(20)
-        });
-        this.isUnmount = true;
-        console.log('ok')
-    }
-    componentWillUnmount(): void {
-        this.isUnmount = false;
     }
 
     isAccountIsAlreadyImport(address){
         return typeof this.props.accounts[address] !== 'undefined';
     }
 
-    fetchAccountFromMasterKey(n){
-        //fetch n Accounts from MasterKey;
-        return new Promise((resolve, reject) => {
-            try{
-                let masterKey = AionAccount.recoverAccount(this.props.user.mnemonic)
-                let accounts = {};
-                let i = this.state.hardenedIndex;
-                let sum = 0;
-                while (sum < n) {
-                    let getAcc = masterKey.deriveHardened(i);  
-                    let acc = {};
-                    acc.address = getAcc.address;
-                    acc.private_key = getAcc.private_key;
-                    acc.balance = 0;
-                    acc.name = this.props.setting.default_account_name;
-                    acc.type = '[local]';
-                    acc.transactions = {};
-                    if (!this.isAccountIsAlreadyImport(acc.address)) {
-                        sum = sum + 1;
-                        accounts[acc.address] = acc
-                    }
-                    i = i + 1;
-                }
-                resolve({'accountsList': accounts, 'hardenedIndex':this.state.hardenedIndex + n })
-            }catch (e) {
-                reject(e)
-            }
-        }).then(value => {
-            this.isUnmount&&this.setState({
-                isLoading: false,
-                accountsList: Object.assign(this.state.accountsList, value.accountsList),
-                hardenedIndex: value.hardenedIndex,
-                footerState: 0,
-            });
-        },err=>{
-            this.isUnmount&&this.setState({
-                error: true,
-                errInfo: err.toString(),
-            });
-        });
-    }
-
-    getAccountFromLedger(accounts, i, sum, n, resolve, reject) {
+    getAccount(accounts, i, sum, n, resolve, reject) {
         console.log("i=" + i + ",sum=" + sum + ",n=" + n);
         if (sum >= n) {
             resolve({'accountsList': accounts, 'lastIndex':this.state.lastIndex + n })
@@ -149,7 +90,7 @@ class ImportHdWallet extends React.Component {
             let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = strings('default_account_name');
+            acc.name = this.props.setting.default_account_name;
             acc.type = '[ledger]';
             acc.transactions = {};
             acc.derivationIndex = i;
@@ -164,29 +105,25 @@ class ImportHdWallet extends React.Component {
         });
     }
 
-    fetchAccountFromLedger(n){
+    fetchAccount(n){
         //fetch n Accounts from MasterKey;
         return new Promise((resolve, reject) => {
             try{
                 let accounts = {};
                 let i = this.state.lastIndex;
                 let sum = 0;
-                this.getAccountFromLedger(accounts, i, sum, n, resolve, reject);
+                this.getAccount(accounts, i, sum, n, resolve, reject);
             }catch (e) {
                 reject(e)
             }
         }).then(value => {
-            this.isUnmount&&this.setState({
+            this.setState({
                 isLoading: false,
                 accountsList: Object.assign(this.state.accountsList, value.accountsList),
                 lastIndex: value.lastIndex,
                 footerState: 0,
             });
         },err=>{
-            this.isUnmount&&this.setState({
-                error: true,
-                errInfo: err.toString(),
-            });
             console.log('fetch accounts error:' + err);
             Alert.alert(strings('alert_title_error'),
                 getLedgerMessage(err.code),
@@ -207,7 +144,7 @@ class ImportHdWallet extends React.Component {
         // set footer state
         this.setState({
             footerState: 2,
-        },()=>{setTimeout(()=>this.fetchAccount(5),500)});
+        },()=>{setTimeout(()=>this.fetchAccount(10),500)});
         console.log('after')
     }
 
@@ -225,24 +162,12 @@ class ImportHdWallet extends React.Component {
         );
     }
 
-    //error page
-    renderErrorView() {
-        return (
-            <View style={styles.container}>
-                <Text style={{alignSelf: 'center', textAlign:'center'}}>
-                    {this.state.errInfo}
-                </Text>
-            </View>
-        );
-    }
-
-
     renderData(){
         return (
             <View style={styles.container}>
                 <SelectList
                     isMultiSelect={true}
-                    itemHeight={55}
+                    itemHeight={80}
                     ref={ref=>this.selectList=ref}
                     data={this.state.accountsList}
                     cellLeftView={item=>{
@@ -255,6 +180,7 @@ class ImportHdWallet extends React.Component {
                             footerState={this.state.footerState}
                         />
                     }
+                    getItemLayout={(data, index)=>({length:80, offset:(81)*index, index})}
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
                 />
@@ -265,11 +191,8 @@ class ImportHdWallet extends React.Component {
 
     render() {
         // if first loading
-        if (this.state.isLoading && !this.state.error) {
+        if (this.state.isLoading) {
             return this.renderLoadingView();
-        } else if (this.state.error) {
-            //if error
-            return this.renderErrorView();
         }
         //show data
         return this.renderData();
@@ -281,7 +204,7 @@ export default connect( state => {
       user: state.user,
       setting: state.setting,
   };
-})(ImportHdWallet);
+})(ImportLedger);
 
 const styles=StyleSheet.create({
     divider: {
@@ -290,10 +213,12 @@ const styles=StyleSheet.create({
         backgroundColor: '#000'
     },
     container:{
+        paddingTop:10,
+        paddingBottom: 10,
         width: width,
         flex:1,
-        justifyContent: 'center',
-        backgroundColor: '#eeeeee'
+        flexDirection: 'column',
+        justifyContent: 'center'
     },
     itemContainer:{
         flex:1,
