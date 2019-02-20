@@ -142,7 +142,7 @@
         "fiat_total": "Total",
         "import_accounts_hint": "Please import accounts",
         "title_import_from": "Import From:",
-        "menu_master_key": "Master Key",
+        "menu_master_key": "seed phrases",
         "menu_private_key": "Private Key",
         "menu_ledger": "Ledger"
     },
