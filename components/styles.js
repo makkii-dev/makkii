@@ -21,7 +21,8 @@ export default styles = {
     },
   	container: { 
   		padding: 20,
-  		height: Dimensions.get('window').height, 
+  		height: Dimensions.get('window').height,
+		marginBottom:20,
   	},
   	center: {
   		flex: 1,
