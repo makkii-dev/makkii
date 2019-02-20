@@ -1,5 +1,5 @@
 {
-    "menu": {
+    "menuRef": {
         "title_settings": "Settings",
         "title_wallet": "Wallet",
         "title_dapps": "DApps"
@@ -111,6 +111,10 @@
     },
     "import_ledger": {
         "title": "Ledger"
+    },
+    "sort": {
+        "balance": "Balance first",
+        "transaction": "Transaction first"
     },
     "ledger": {
         "toast_connecting": "Connecting to Ledger...",

@@ -1,5 +1,5 @@
 {
-  "menu": {
+  "menuRef": {
     "title_settings": "设置",
     "title_wallet": "钱包",
     "title_dapps": "应用"
@@ -136,6 +136,10 @@
   },
   "advanced": {
     "title": "高级"
+  },
+  "sort": {
+    "balance": "余额优先",
+    "transaction": "交易数量优先"
   },
   "app_name": "码奇",
   "default_account_name": "账户",

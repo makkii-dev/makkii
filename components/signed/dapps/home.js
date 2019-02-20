@@ -7,7 +7,7 @@ import {strings} from '../../../locales/i18n.js';
 const {width} = Dimensions.get('window');
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: strings('menu.title_dapps')
+		title: strings('menuRef.title_dapps')
 	});
 	constructor(props){
 		super(props);
