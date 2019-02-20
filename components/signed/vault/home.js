@@ -51,13 +51,11 @@ class Home extends Component {
 			sortOrder: SORT[0].title,
 			title: `Total: 0.00 RMB`,
 			openRowKey: null,
-			renderAccounts: this.sortAccounts(SORT[0].title),
 			scrollEnabled:true,
 			refreshing: false,
 		};
 
 	}
-
 
 	async requestStoragePermission() {
 		try {
@@ -82,7 +80,7 @@ class Home extends Component {
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.accounts);
+		console.log('[route] ' + this.props.accounts);
 		this.requestStoragePermission();
 		this.fetchAccountsBalance();
 		this.isMount = true;
@@ -169,7 +167,6 @@ class Home extends Component {
 		select&&this.setState({
 			showSort:false,
 			sortOrder:select,
-			renderAccounts: this.sortAccounts(select)
 		});
 		select||this.setState({
 			showSort:false,
@@ -204,7 +201,11 @@ class Home extends Component {
 			[
 				{text:'CANCEL',onPress:()=>{}},
 				{text: 'DELETE', onPress:()=>{
-						dispatch(delete_account(key,this.props.user.hashed_password));
+						this.setState({
+							openRowKey: null,
+						},()=>setTimeout(()=>
+							dispatch(delete_account(key,this.props.user.hashed_password)),
+							500));
 						DeviceEventEmitter.emit('updateAccountBalance');
 						console.log('delete account: ', key );
 					}}
@@ -307,6 +308,7 @@ class Home extends Component {
 	}
 
 	render(){
+		const renderAccounts=this.sortAccounts(this.state.sortOrder);
 		return (
 			<View style={{flex:1}}>
 				<HomeHeader
@@ -353,7 +355,7 @@ class Home extends Component {
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
 						scrollEnabled={this.state.scrollEnabled}
-						data={this.state.renderAccounts}
+						data={renderAccounts}
 						keyExtractor={(item, index)=>index + ''}
 						onScroll={(e)=>{
 							this.setState({

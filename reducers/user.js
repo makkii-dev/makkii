@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native';
+import {encrypt} from '../utils.js';
 
 import { 
 	USER, 
@@ -8,8 +9,8 @@ import {
 
 const init = {
 	timestamp: 0,
-	hashed_password: '',     
-	mnemonic: '',
+	hashed_password: '',   // hashed  
+	mnemonic: '',          // encrypted
 }; 
  
 export default function user(state = init, action){

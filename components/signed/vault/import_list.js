@@ -35,7 +35,7 @@ class ImportHdWallet extends React.Component {
                     let acc = navigation.state.params.ImportAccount();
                     navigation.state.params.dispatch(accounts_add(acc,navigation.state.params.hashed_password));
                     DeviceEventEmitter.emit('updateAccountBalance');
-                    navigation.navigate('signed_vault');
+                    navigation.goBack();
                 }}>
                     <View style={{marginRight: 10}}>
                         <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
@@ -55,7 +55,7 @@ class ImportHdWallet extends React.Component {
         this.selectList=null;
         this.state={
             isLoading: true,
-            hardenedIndex: 0,
+            lastIndex: 0,
             error: false,
             errInfo: '',
             accountsList: {},
@@ -67,13 +67,6 @@ class ImportHdWallet extends React.Component {
         return this.selectList.getSelect();
     };
 
-    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
-        if (this.props.navigation.getParam('type') === 'masterKey'){
-            this.fetchAccount = this.fetchAccountFromMasterKey;
-        }else{
-            this.fetchAccount = this.fetchAccountFromLedger;
-        }
-    }
 
 
     componentWillMount(){
@@ -103,7 +96,7 @@ class ImportHdWallet extends React.Component {
             try{
                 let masterKey = AionAccount.recoverAccount(this.props.user.mnemonic)
                 let accounts = {};
-                let i = this.state.hardenedIndex;
+                let i = this.state.lastIndex;
                 let sum = 0;
                 while (sum < n) {
                     let getAcc = masterKey.deriveHardened(i);  
@@ -120,7 +113,7 @@ class ImportHdWallet extends React.Component {
                     }
                     i = i + 1;
                 }
-                resolve({'accountsList': accounts, 'hardenedIndex':this.state.hardenedIndex + n })
+                resolve({'accountsList': accounts, 'lastIndex':this.state.lastIndex + n })
             }catch (e) {
                 reject(e)
             }
@@ -128,7 +121,7 @@ class ImportHdWallet extends React.Component {
             this.isUnmount&&this.setState({
                 isLoading: false,
                 accountsList: Object.assign(this.state.accountsList, value.accountsList),
-                hardenedIndex: value.hardenedIndex,
+                lastIndex: value.lastIndex,
                 footerState: 0,
             });
         },err=>{
@@ -149,7 +142,7 @@ class ImportHdWallet extends React.Component {
             let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = strings('default_account_name');
+            acc.name = this.props.setting.default_account_name;
             acc.type = '[ledger]';
             acc.transactions = {};
             acc.derivationIndex = i;
@@ -158,7 +151,7 @@ class ImportHdWallet extends React.Component {
                 accounts[acc.address] = acc
             }
             i = i + 1;
-            this.getAccount(accounts, i, sum, n, resolve, reject);
+            this.getAccountFromLedger(accounts, i, sum, n, resolve, reject);
         }, error => {
             reject(error);
         });

@@ -48,7 +48,6 @@ class Login extends Component {
 						onPress={e=>{
 							dbGet('user')
 							.then(json=>{
-								console.log('here ');
 								let db_user = JSON.parse(json);
 								if(db_user.hashed_password === hashPassword(this.state.password)){
 									dispatch(user(db_user.hashed_password, db_user.mnemonic));
