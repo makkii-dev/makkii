@@ -11,6 +11,7 @@ const init = {
 	default_account_name: 'Default Account',
 	login_session_timeout: '30',
 	exchange_refresh_interval: "24",
+	fiat_currency: "CNY",
 
 	tx_fee: 10000,
     tx_confirm: 6,  

@@ -21,6 +21,7 @@ import SettingRecovery       from './setting/recovery.js';
 import SettingServices       from './setting/services.js';
 import SettingLanguage       from './setting/language.js';
 import SettingAdvanced       from './setting/advanced.js';
+import SettingCurrency       from './setting/currency.js';
 import styles from '../styles.js';  
 
 const signed = createStackNavigator({
@@ -157,6 +158,13 @@ const signed = createStackNavigator({
 	},
 	'signed_setting_language': {
 		screen: SettingLanguage,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
+	},
+	'signed_setting_currency': {
+		screen: SettingCurrency,
 		navigationOptions: {
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,

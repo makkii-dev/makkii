@@ -148,6 +148,12 @@
         "error_invalid_login_session_timeout": "Invalid login session timeout",
         "error_invalid_exchange_refresh_interval": "Invalid exchange rate refresh interval"
     },
+    "currency": {
+        "title": "Fiat Currency",
+        "CNY": "RMB",
+        "USD": "USD",
+        "CAD": "CAD"
+    },
     "app_name": "MAKKI",
     "logout": "Sign Out",
     "update_button": "Update",

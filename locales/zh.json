@@ -146,6 +146,12 @@
     "error_invalid_login_session_timeout": "登录超时时间格式不正确",
     "error_invalid_exchange_refresh_interval": "汇率刷新时间间隔不正确"
   },
+  "currency": {
+    "title": "法定货币",
+    "CNY": "人民币",
+    "USD": "美元",
+    "CAD": "加拿大元"
+  },
   "app_name": "码奇",
   "logout": "退出",
   "update_button": "提交",
