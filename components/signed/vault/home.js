@@ -89,7 +89,6 @@ class Home extends HomeComponent {
 
 
 	componentWillUnmount(): void {
-		super.componentWillUnmount();
 		this.isMount = false;
 		this.listener.remove();
 	}

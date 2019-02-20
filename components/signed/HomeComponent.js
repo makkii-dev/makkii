@@ -18,9 +18,12 @@ export class HomeComponent extends Component {
     }
 
     handleBackButton=() => {
-        console.log("count: " + this.backClickCount);
-        this.backClickCount == 1? BackHandler.exitApp(): this.prepare();
-        return true;
+        if (this.props.navigation.isFocused()) {
+                console.log("count: " + this.backClickCount);
+                this.backClickCount == 1? BackHandler.exitApp(): this.prepare();
+                return true;
+        }
+        return false;
     }
 
     prepare() {
