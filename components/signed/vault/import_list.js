@@ -67,21 +67,30 @@ class ImportHdWallet extends React.Component {
         return this.selectList.getSelect();
     };
 
-    componentDidMount() {
-        // setTimeout(()=>{this.fetchAccount(10)},500);
-        InteractionManager.runAfterInteractions(()=>{
-            this.fetchAccount(20)
-        });
+    componentWillReceiveProps(nextProps: Readonly<P>, nextContext: any): void {
+        if (this.props.navigation.getParam('type') === 'masterKey'){
+            this.fetchAccount = this.fetchAccountFromMasterKey;
+        }else{
+            this.fetchAccount = this.fetchAccountFromLedger;
+        }
     }
 
 
-    componentWillMount(): void {
+    componentWillMount(){
         const {dispatch} = this.props;
         this.props.navigation.setParams({
             ImportAccount : this.ImportAccount,
             dispatch: dispatch,
             hashed_password: this.props.user.hashed_password,
         });
+        InteractionManager.runAfterInteractions(()=>{
+            this.fetchAccount(20)
+        });
+        this.isUnmount = true;
+        console.log('ok')
+    }
+    componentWillUnmount(): void {
+        this.isUnmount = false;
     }
 
     isAccountIsAlreadyImport(address){
@@ -116,14 +125,14 @@ class ImportHdWallet extends React.Component {
                 reject(e)
             }
         }).then(value => {
-            this.setState({
+            this.isUnmount&&this.setState({
                 isLoading: false,
                 accountsList: Object.assign(this.state.accountsList, value.accountsList),
                 hardenedIndex: value.hardenedIndex,
                 footerState: 0,
             });
         },err=>{
-            this.setState({
+            this.isUnmount&&this.setState({
                 error: true,
                 errInfo: err.toString(),
             });
@@ -167,13 +176,17 @@ class ImportHdWallet extends React.Component {
                 reject(e)
             }
         }).then(value => {
-            this.setState({
+            this.isUnmount&&this.setState({
                 isLoading: false,
                 accountsList: Object.assign(this.state.accountsList, value.accountsList),
                 lastIndex: value.lastIndex,
                 footerState: 0,
             });
         },err=>{
+            this.isUnmount&&this.setState({
+                error: true,
+                errInfo: err.toString(),
+            });
             console.log('fetch accounts error:' + err);
             Alert.alert(strings('alert_title_error'),
                 getLedgerMessage(err.code),

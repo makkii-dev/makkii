@@ -1,5 +1,5 @@
 {
-  "menu": {
+  "menuRef": {
     "title_settings": "设置",
     "title_wallet": "钱包",
     "title_dapps": "应用"
@@ -149,6 +149,10 @@
     "CNY": "人民币",
     "USD": "美元",
     "CAD": "加拿大元"
+  },
+  "sort": {
+    "balance": "余额优先",
+    "transaction": "交易数量优先"
   },
   "app_name": "码奇",
   "logout": "退出",

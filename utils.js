@@ -156,8 +156,10 @@ function getCoinPrice(currency='CNY',amount=1) {
     };
     return new Promise((resolve, reject) => {
         fetchRequest(url,'GET',headers).then(res=>{
-            const price = res.data['AION'].quote[currency].price;
-               resolve(amount*price)
+            if(!res.status.error_message){
+                const price = res.data['AION'].quote[currency].price;
+                resolve(amount*price)
+            }
         },err=>{
             console.log('[err] ', err);
             reject(err)
