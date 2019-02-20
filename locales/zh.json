@@ -135,7 +135,7 @@
     "fiat_total": "总额", 
     "import_accounts_hint": "请导入账户",
     "title_import_from": "选择导入来源：",
-    "menu_master_key": "主密钥", 
+    "menu_master_key": "助记词短语",
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包"
   },
