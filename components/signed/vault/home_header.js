@@ -6,6 +6,7 @@ import wallet from "react-native-aion-hw-wallet";
 import {getLedgerMessage} from "../../../utils";
 import PropTypes from "prop-types";
 import Loading from '../../loading.js';
+import {connect} from "react-redux";
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -25,10 +26,10 @@ const MENU = [
 ];
 
 
-export class HomeHeader extends React.Component{
+class HomeHeader extends React.Component{
 
     static propTypes={
-        title:PropTypes.string.isRequired,
+        total:PropTypes.number.isRequired,
         navigation: PropTypes.object.isRequired,
     };
 
@@ -83,11 +84,12 @@ export class HomeHeader extends React.Component{
 
 
     render() {
+        const balance = this.props.total*this.props.setting.coinPrice;
         return (
             <View style={styles.header}>
                 <View style={styles.headerEnds}/>
                 <View style={styles.headerTitle}>
-                    <Text style={styles.headerTitleText}>{this.props.title}</Text>
+                    <Text style={styles.headerTitleText}>{`${strings('wallet.fiat_total')}: ${balance.toFixed(2)} ${strings(`currency.${this.props.setting.fiat_currency}`)}`}</Text>
                 </View>
                 <View style={styles.headerEnds}>
                     <TouchableOpacity
@@ -125,6 +127,11 @@ export class HomeHeader extends React.Component{
         )
     }
 }
+
+export default connect(state => {
+    return ({
+        setting: state.setting
+    }); })(HomeHeader);
 
 const styles = StyleSheet.create({
     divider: {

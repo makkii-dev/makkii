@@ -42,6 +42,7 @@ class Currency extends Component {
         const {dispatch} = this.props;
         let newCurrency = Object.keys(this.selectList.getSelect())[0];
         if (newCurrency != this.props.setting.fiat_currency) {
+            console.log('updateCurrency');
             listenPrice.setCurrency(newCurrency);
         }
 

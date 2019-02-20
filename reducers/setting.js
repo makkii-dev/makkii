@@ -27,7 +27,7 @@ export default function setting(state = init, action){
 		case SETTING:
 			web3.setProvider(new Web3.providers.HttpProvider(action.setting.endpoint_wallet))
 			AsyncStorage.setItem('settings', JSON.stringify(action.setting));
-			if (action.setting.lang == 'auto') {
+			if (action.setting.lang === 'auto') {
 				setLocale(DeviceInfo.getDeviceLocale());
 			} else {
 				setLocale(action.setting.lang);

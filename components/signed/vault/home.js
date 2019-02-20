@@ -15,14 +15,13 @@ import SwipeableRow from '../../swipeCell';
 import { delete_account, accounts_add} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import wallet from 'react-native-aion-hw-wallet';
-import { getCoinPrice } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {ModalList} from "../../modalList";
-import {HomeHeader} from "./home_header";
+import HomeHeader from "./home_header";
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -49,7 +48,7 @@ class Home extends Component {
 		this.state={
 			showSort: false,
 			sortOrder: SORT[0].title,
-			title: strings('wallet.fiat_total') + ' 0.00 RMB',
+			totalBalance: 0,
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -93,15 +92,6 @@ class Home extends Component {
 		this.listener.remove();
 	}
 
-	BalanceToRMB(amount){
-        if (this.isMount) {
-            let total = this.props.setting.coinPrice * amount;
-            this.setState({
-                title: `Total: ${total.toFixed(2)} RMB`
-            })
-        }
-	}
-
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
@@ -124,7 +114,7 @@ class Home extends Component {
 						reject(error)
 					})
 				}));
-		});  
+		});
 		Promise.all(executors).then(
 			res=>{
 				let newAccounts={};
@@ -134,10 +124,10 @@ class Home extends Component {
 					newAccounts[account.address] = account;
 				});
 				console.log('totalBalance', totalBalance);
-				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
 				this.isMount&&this.state.refreshing&&this.setState({
 					refreshing: false,
+					totalBalance,
 				})
 			},errors=>{
 				console.log(errors);
@@ -312,7 +302,7 @@ class Home extends Component {
 		return (
 			<View style={{flex:1}}>
 				<HomeHeader
-					title={this.state.title}
+					total={this.state.totalBalance}
 					navigation={this.props.navigation}
 				/>
 				<TouchableOpacity
