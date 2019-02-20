@@ -23,6 +23,8 @@ import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {ModalList} from "../../modalList";
 import {HomeHeader} from "./home_header";
+import {HomeComponent} from "../HomeComponent";
+
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -36,7 +38,7 @@ const SORT = [
 	},
 ];
 
-class Home extends Component {
+class Home extends HomeComponent {
 
 	static navigationOptions = ({ navigation }) => {
 	    return {
@@ -89,6 +91,7 @@ class Home extends Component {
 
 
 	componentWillUnmount(): void {
+		super.componentWillUnmount();
 		this.isMount = false;
 		this.listener.remove();
 	}

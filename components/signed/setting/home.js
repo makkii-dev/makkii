@@ -6,8 +6,9 @@ import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
 import {ComponentTabBar} from '../../common.js';
 import styles from '../../styles.js';
+import {HomeComponent} from "../HomeComponent";
 
-class Home extends Component {
+class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
@@ -36,6 +37,7 @@ class Home extends Component {
 	}
 
 	componentWillUnmount() {
+		super.componentWillUnmount();t
 		this.listener.remove();
 	}
 

@@ -3,9 +3,10 @@ import { connect } from 'react-redux';
 import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet, Dimensions, PixelRatio} from 'react-native';
 import {ComponentTabBar} from '../../common.js';
 import {strings} from '../../../locales/i18n.js';
+import {HomeComponent} from "../HomeComponent";
 
 const {width} = Dimensions.get('window');
-class Home extends Component {
+class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => ({
 		title: strings('menuRef.title_dapps')
 	});
@@ -16,6 +17,7 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.dapps);
 	}
+
 	render(){
 		return (
 			<View style={{
