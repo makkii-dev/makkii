@@ -4,23 +4,34 @@
     "title_wallet": "钱包",
     "title_dapps": "应用"
   },
-  "login": {
+  "unsigned_login": {
     "error_login": "登录失败",
-    "error_incorrect_password": "密码不正确"
-  },
+    "error_incorrect_password": "密码不正确",
+    "btn_login": "登录",
+    "btn_register": "注册",
+    "btn_recovery": "恢复",
+  }, 
   "register": {
     "title": "注册",
     "error_password": "密码必须是8-16位的数字、字母、特殊字符组合!",
     "error_dont_match": "两次密码不一致!",
     "label_password": "输入密码",
     "label_confirm_password": "再次输入密码",
-    "button_register": "注册"
+    "button_register": "注册",  
+  },
+  "unsigned_register_mnemonic": {
+    "title": "助记词",
+    "hint": "请妥善保存您的助记词!",
+    "btn_copy": "复制助记词",
+    "btn_done": "完成",
+    "toastr_copy_mnemonic": "助记词复制到粘贴板",
   },
   "recovery": {
     "title": "忘记密码",
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
-    "button_confirm": "确定"
+    "button_confirm": "确定",
+    "error_mnemonic_not_match": "助记词不匹配",
   },
   "about": {
     "title": "关于",
@@ -110,7 +121,7 @@
   },
   "ledger": {
     "toast_connecting": "正在连接Ledger设备...",
-    "error_unknown_account_type": "Ledger内部错误",
+    "error_unknown_account_type" : "Ledger内部错误",
     "error_general": "Ledger内部错误",
     "error_device_count": "请连接Ledger设备",
     "error_open_device": "Ledger internal error",
@@ -121,8 +132,10 @@
     "error_wrong_device": "找不到账号，连接了不匹配的Ledger设备"
   },
   "wallet": {
+    "fiat_total": "总额", 
+    "import_accounts_hint": "请导入账户",
     "title_import_from": "选择导入来源：",
-    "menu_master_key": "主密钥",
+    "menu_master_key": "主密钥", 
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包"
   },
@@ -146,7 +159,7 @@
   },
   "currency": {
     "title": "法定货币",
-    "CNY": "人民币",
+    "CNY": "元",
     "USD": "美元",
     "CAD": "加拿大元"
   },

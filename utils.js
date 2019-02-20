@@ -162,10 +162,9 @@ function getCoinPrice(currency='CNY',amount=1) {
     };
     return new Promise((resolve, reject) => {
         fetchRequest(url,'GET',headers).then(res=>{
-            if(!res.status.error_message){
-                const price = res.data['AION'].quote[currency].price;
-                resolve(amount*price)
-            }
+            console.log('[res] ',res);
+            const price = res.data['AION'].quote[currency].price;
+            resolve(amount*price)
         },err=>{
             console.log('[err] ', err);
             reject(err)
@@ -193,12 +192,24 @@ class listenCoinPrice{
     }
 
     startListen() {
+        console.log('===================================')
         const thusStore = this.store;
+        getCoinPrice(this.currency).then(price => {
+            console.log('------------------------------')
+            let settings = thusStore.getState().setting;
+            settings.coinPrice = price;
+            DeviceEventEmitter.emit('updateAccountBalance');
+            thusStore.dispatch(setting(settings));
+        }, error => {
+            console.log("get coin price error", error);
+        });
+
         this.listener = setInterval(function() {
              getCoinPrice(this.currency).then(price => {
+                 console.log('------------------------------')
                 let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
-                DeviceEventEmitter.emit('price_updated');
+                DeviceEventEmitter.emit('updateAccountBalance');
                 thusStore.dispatch(setting(settings));
             }, error => {
                 console.log("get coin price error", error);

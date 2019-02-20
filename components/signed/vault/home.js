@@ -15,16 +15,14 @@ import SwipeableRow from '../../swipeCell';
 import { delete_account, accounts_add} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import wallet from 'react-native-aion-hw-wallet';
-import { getCoinPrice } from '../../../utils.js';
 import otherStyles from  '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {ModalList} from "../../modalList";
-import {HomeHeader} from "./home_header";
 import {HomeComponent} from "../HomeComponent";
-
+import HomeHeader from "./home_header";
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -51,7 +49,7 @@ class Home extends HomeComponent {
 		this.state={
 			showSort: false,
 			sortOrder: SORT[0].title,
-			title: `Total: 0.00 RMB`,
+			totalBalance: 0,
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -96,15 +94,6 @@ class Home extends HomeComponent {
 		this.listener.remove();
 	}
 
-	BalanceToRMB(amount){
-        if (this.isMount) {
-            let total = this.props.setting.coinPrice * amount;
-            this.setState({
-                title: `Total: ${total.toFixed(2)} RMB`
-            })
-        }
-	}
-
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
@@ -127,7 +116,7 @@ class Home extends HomeComponent {
 						reject(error)
 					})
 				}));
-		});  
+		});
 		Promise.all(executors).then(
 			res=>{
 				let newAccounts={};
@@ -137,10 +126,10 @@ class Home extends HomeComponent {
 					newAccounts[account.address] = account;
 				});
 				console.log('totalBalance', totalBalance);
-				this.BalanceToRMB(totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
 				this.isMount&&this.state.refreshing&&this.setState({
 					refreshing: false,
+					totalBalance,
 				})
 			},errors=>{
 				console.log(errors);
@@ -224,13 +213,13 @@ class Home extends HomeComponent {
 		let accountImage = '';
 		switch (item.type) {
 			case '[ledger]':
-				backgroundColor = '#000';
+				backgroundColor = '#00796b';
 				accountImage = require('../../../assets/ledger_logo.png');break;
 			case '[pk]':
-				backgroundColor = '#6600ff';
+				backgroundColor = '#6200ee';
 				accountImage = require('../../../assets/key.png');break;
 			default:
-				backgroundColor = '#3399ff';
+				backgroundColor = '#2962ff';
 				accountImage = require('../../../assets/aion_logo.png');
 		}
 		return (
@@ -315,7 +304,7 @@ class Home extends HomeComponent {
 		return (
 			<View style={{flex:1}}>
 				<HomeHeader
-					title={this.state.title}
+					total={this.state.totalBalance}
 					navigation={this.props.navigation}
 				/>
 				<TouchableOpacity
@@ -325,35 +314,43 @@ class Home extends HomeComponent {
 						this.state.openRowKey&&this.setState({openRowKey: null})
 					}}
 				>
-					<View style={{flexDirection:'row',height:40, alignItems:'center',
-						marginLeft:10,
-						marginRight:10,
-						width:width-20,
-						borderColor:'lightgray',
-						borderBottomWidth: 1,}}>
-						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:'black'}}/>
-						<TouchableOpacity
-							onPress={()=>this.setState({showSort:true})}
-						>
-							<View style={styles.sortHeader}>
-								<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
-								{
-									this.state.showSort?<Image source={require('../../../assets/arrow_up.png')} style={styles.sortHeaderImageStyle}/>
-									:<Image source={require('../../../assets/arrow_down.png')} style={styles.sortHeaderImageStyle}/>
-								}
-							</View>
-						</TouchableOpacity>
-						<ModalList
-							data={SORT}
-							ref={ref=>this.sortRef=ref}
-							visible={this.state.showSort}
-							style={styles.sortContainer}
-							viewStyle={styles.sortViewStyle}
-							fontStyle={styles.sortFontStyle}
-							onClose={()=>this.closeSort()}
-							ItemSeparatorComponent={()=>(<View style={{height:1/PixelRatio.get(),backgroundColor:'#000'}}/>)}
-						/>
-					</View>
+					{
+						renderAccounts.length?<View style={{
+							flexDirection: 'row', height: 40, alignItems: 'center',
+							marginLeft: 10,
+							marginRight: 10,
+							width: width - 20,
+							borderColor: 'lightgray',
+							borderBottomWidth: 1,
+						}}>
+							<Image source={require('../../../assets/sort.png')}
+								   style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>
+							<TouchableOpacity
+								onPress={() => this.setState({showSort: true})}
+							>
+								<View style={styles.sortHeader}>
+									<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
+									{
+										this.state.showSort ? <Image source={require('../../../assets/arrow_up.png')}
+																	 style={styles.sortHeaderImageStyle}/>
+											: <Image source={require('../../../assets/arrow_down.png')}
+													 style={styles.sortHeaderImageStyle}/>
+									}
+								</View>
+							</TouchableOpacity>
+							<ModalList
+								data={SORT}
+								ref={ref => this.sortRef = ref}
+								visible={this.state.showSort}
+								style={styles.sortContainer}
+								viewStyle={styles.sortViewStyle}
+								fontStyle={styles.sortFontStyle}
+								onClose={() => this.closeSort()}
+								ItemSeparatorComponent={() => (
+									<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+							/>
+						</View>:null
+					}
 					<FlatList
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
@@ -366,9 +363,9 @@ class Home extends HomeComponent {
 							});
 						}}
 						ListEmptyComponent={()=>
-							<View>
+							<View style={{marginTop: 10}}>
 								<Text style={{alignSelf: 'center', textAlign:'center'}}>
-									Please Import a account
+									{strings('wallet.import_accounts_hint')}
 								</Text>
 							</View>
 						}
