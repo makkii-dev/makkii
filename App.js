@@ -280,30 +280,40 @@ console.warn = message => {
 
 const defaultGetStateForAction = Routes.router.getStateForAction;
 Routes.router.getStateForAction = (action, state) => {
-	console.log('[action.type] ' + action.type);
-	console.log(state);
+	//console.log('[action.type] ' + action.type);
+	//console.log(state);
     if (state) {
     	let newRoutes, newIndex;
     	switch(action.type){
     		case 'Navigation/COMPLETE_TRANSITION':
     			// condition routes from login, register and recovery
-    			if(state.routes[state.routes.length - 1].routeName === 'signed_vault'){
-    				newRoutes = [
-	    				state.routes[state.routes.length - 1]
-	    			];
-	    			newIndex = 0; 
-	    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes}); 
-    			} else {
-    				return defaultGetStateForAction(action, state);	
-    			}
-    		case 'Navigation/BACK': 
-    			newRoutes = state.routes.filter(
-    				r => 
-    					r.routeName !== 'scan' && 
-    					r.routeName !== 'splash'
-				); 
-        		newIndex = newRoutes.length - 1;
-    			return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+    			switch(state.routes[state.routes.length - 1].routeName){
+                    case 'signed_vault': 
+                        newRoutes = [
+                            state.routes[state.routes.length - 1]
+                        ];
+                        newIndex = 0; 
+                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                    default: 
+                        return defaultGetStateForAction(action, state);        
+                }
+    		case 'Navigation/BACK':
+                switch(state.routes[state.routes.length - 1].routeName){
+                    case 'unsigned_login':
+                        newRoutes = [
+                            state.routes[state.routes.length - 1]
+                        ];
+                        newIndex = 0; 
+                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                    default: 
+                        newRoutes = state.routes.filter(
+                            r => 
+                                r.routeName !== 'scan' && 
+                                r.routeName !== 'splash'
+                        ); 
+                        newIndex = newRoutes.length - 1;
+                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                }
     		default:
     			return defaultGetStateForAction(action, state); 
     	}

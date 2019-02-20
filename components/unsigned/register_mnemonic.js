@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Button, Clipboard } from 'react-native';
 import { InputMultiLines } from '../common.js';
+import Toast from 'react-native-root-toast';
+import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
   
 class Mnemonic extends Component {
@@ -27,7 +29,7 @@ class Mnemonic extends Component {
 		return (
 			<View style={styles.container}>
 				<View style={styles.marginBottom10}>
-					<Text>Please keep your mnemonic safely !</Text>
+					<Text>{strings('unsigned_register_mnemonic.hint')}</Text>
 				</View>
 				<View style={styles.marginBottom10}>
 					<InputMultiLines
@@ -38,15 +40,16 @@ class Mnemonic extends Component {
 				</View>
 				<View style={styles.marginBottom80}>
 					<Button
-						title="COPY" 
+						title={strings('unsigned_register_mnemonic.btn_copy')} 
 						onPress={e=>{
 							Clipboard.setString(this.props.user.mnemonic);
+							Toast.show(strings('unsigned_register_mnemonic.toastr_copy_mnemonic'));
 						}}
 					/>
 				</View>
 				<View>
 					<Button
-						title="I'M DONE"
+						title={strings('unsigned_register_mnemonic.btn_done')}
 						onPress={e=>{   
 							this.props.navigation.navigate('signed_vault');
 						}}

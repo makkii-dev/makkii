@@ -44,7 +44,7 @@ class Login extends Component {
 				</View>
 				<View style={styles.marginBottom20}>
 				    <Button
-						title="Login"
+						title={strings('unsigned_login.btn_login')}
 						onPress={e=>{
 							dbGet('user')
 							.then(json=>{
@@ -57,10 +57,10 @@ class Login extends Component {
 									},err=>{});
 									this.props.navigation.navigate('signed_vault');
 								} else {
-									Alert.alert(strings('alert_title_error'), strings('login.error_incorrect_password'));
+									Alert.alert(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
 								}
 							},err=>{
-								Alert.alert(strings('alert_title_error'), strings('login.error_login'));
+								Alert.alert(strings('alert_title_error'), strings('unsigned_login.error_login'));
 							});
 						}}
 					/>
@@ -76,14 +76,14 @@ class Login extends Component {
 							this.props.navigation.navigate('unsigned_register')
 						}}
 					>
-						<Text>Register</Text>
+						<Text>{strings('unsigned_login.btn_register')}</Text>
 					</TouchableOpacity>
 					<TouchableOpacity
 						onPress={e=>{
 							this.props.navigation.navigate('unsigned_recovery')
 						}}
 					>
-						<Text>Recovery</Text>
+						<Text>{strings('unsigned_login.btn_recovery')}</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
