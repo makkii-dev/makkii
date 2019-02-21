@@ -180,7 +180,7 @@ class ComponentPassword extends Component {
 			    >
 			    	{
 			    		this.state.secure ?
-			    		<Show /> : <Hide />
+			    		<Hide />: <Show /> 
 			    	}
 			    </TouchableOpacity> 
 		    </View>
