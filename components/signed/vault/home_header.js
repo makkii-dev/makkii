@@ -139,12 +139,17 @@ const styles = StyleSheet.create({
         height: 1 / PixelRatio.get(),
         backgroundColor: '#fff'
     },
-    header: {
-        height: top,
-        backgroundColor: '#eeeeee',
-        elevation: 5,
+    header: {        
         flexDirection: 'row',
         justifyContent: 'space-between',
+        height: top,
+        shadowOpacity: 0,
+        shadowOffset: { height: 0, width:0 }, 
+        shadowRadius: 0, 
+        borderBottomWidth:0.2,
+        borderColor: '#8c8a8a',
+        elevation: 0.5, 
+        fontWeight: 'normal',
     },
     headerEnds:{
         width: 50,
@@ -157,7 +162,7 @@ const styles = StyleSheet.create({
     },
     headerTitleText:{
         fontSize: Platform.OS === 'ios' ? 17 : 20,
-        fontWeight: Platform.OS === 'ios' ? '600' : '500',
+        fontWeight: 'normal', // Platform.OS === 'ios' ? '600' : '500',
         color: 'rgba(0, 0, 0, .9)',
     },
     titleBarImg: {
