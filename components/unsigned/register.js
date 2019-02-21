@@ -2,11 +2,13 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Text, Button, Alert} from 'react-native';
 import {ComponentPassword} from '../common.js';
-import {validatePassword, hashPassword} from '../../utils.js';
+import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import {generateMnemonic,AionAccount} from '../../libs/aion-hd-wallet/index.js';
+import {delete_accounts} from "../../actions/accounts";
+import {generateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
+
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -63,17 +65,30 @@ class Home extends Component {
 							if (!validatePassword(this.state.password))
 								Alert.alert(strings('alert_title_error'),strings("register.error_password"));
 							else if (this.state.password !== this.state.password_confirm)
-								Alert.alert(strings('alert_title_error'),strings("register.error_dont_match"))
+								Alert.alert(strings('alert_title_error'),strings("register.error_dont_match"));
 							else {
 								const hashed_password = hashPassword(this.state.password);
 								const mnemonic = generateMnemonic();
-								dispatch(user(hashed_password, mnemonic));
-								this.setState({
-									password: '',
-									password_confirm: '',
-								});
-								this.props.navigation.navigate('unsigned_register_mnemonic');
-							}   
+								dbGet('user').then(userJson=>{
+									Alert.alert(
+										strings('alert_title_warning'),
+										strings("register.warning_register_again"),
+										[
+											{text: strings('cancel_button'),onPress:()=>{}},
+											{text: strings('alert_ok_button'),onPress:()=>{
+												console.log('mnemonic ', mnemonic);
+												dispatch(user(hashed_password, mnemonic));
+												dispatch(delete_accounts(hashed_password));
+												this.props.navigation.navigate('unsigned_register_mnemonic')
+
+											}},
+										]
+									)
+								},err=>{
+									dispatch(user(hashed_password, mnemonic));
+									this.props.navigation.navigate('unsigned_register_mnemonic')
+								})
+							}
 						}}
 					/>
 				</View>

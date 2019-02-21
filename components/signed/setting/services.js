@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,Alert} from 'react-native';
+import {View,Text,Button,Alert,DeviceEventEmitter} from 'react-native';
 import {Input} from '../../common.js';
 import {setting} from '../../../actions/setting.js';
 import {validateUrl} from '../../../utils.js';
@@ -146,6 +146,7 @@ class Services extends Component {
 
         Toast.show(strings('toast_update_success'), {
 			onHidden: () => {
+				DeviceEventEmitter.emit('updateAccountBalance');
         		this.props.navigation.goBack();
 			}
 		});

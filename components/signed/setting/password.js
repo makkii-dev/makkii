@@ -5,6 +5,7 @@ import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user_update_password } from '../../../actions/user.js';
+import { accounts_save } from '../../../actions/accounts.js';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 
@@ -88,7 +89,7 @@ class Password extends Component {
 	updatePassword=()=> {
 		// validate old password correctness
 		let hashedPassword = hashPassword(this.state.password_current);
-		if (hashedPassword != this.props.user.hashed_password) {
+		if (hashedPassword !== this.props.user.hashed_password) {
 			Alert.alert(strings('alert_title_error'), strings('invalid_old_password'));
 			return;
 		}
@@ -100,7 +101,7 @@ class Password extends Component {
 		}
 
 		// validate new password and confirmed password consistency
-		if (this.state.password_new != this.state.password_confirm) {
+		if (this.state.password_new !== this.state.password_confirm) {
 			Alert.alert(strings('alert_title_error'), strings('inconsistent_passwords'));
 			return;
 		}
@@ -109,7 +110,7 @@ class Password extends Component {
 		const { dispatch } = this.props;
 		let newHashedPassword = hashPassword(this.state.password_new);
 		dispatch(user_update_password(newHashedPassword));
-
+		dispatch(accounts_save(newHashedPassword));
         console.log("update password successfully.");
         Toast.show(strings('toast_update_success'), {
         	onHidden: () => {
