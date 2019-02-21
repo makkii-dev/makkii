@@ -136,7 +136,12 @@ class InputMultiLines extends Component{
 	}
 }
 
+const Show = ()=> <Image style={{width:24,height:24}} source={require('../assets/view_32x32.png')} />;
+
+const Hide = ()=> <Image style={{width:24,height:24}} source={require('../assets/hide_32x32.png')} />;
+
 class ComponentPassword extends Component {
+
 	static defaultProps = {
 		supportVisibility: true
 	};
@@ -146,7 +151,8 @@ class ComponentPassword extends Component {
 		this.state = {
 			secure: true
 		};
-	}
+	};
+
 	render(){
 		return (
 			<View style={styles.password.view}>
@@ -164,8 +170,8 @@ class ComponentPassword extends Component {
 			        secureTextEntry={this.state.secure}
 			        value={this.props.value}
 			    />
-			    <Text
-			    	style={styles.password.text}
+			    <TouchableOpacity
+			    	style={styles.password.display}
 			    	onPress={e=>{
 			    		this.setState({
 			    			secure: !this.state.secure
@@ -174,12 +180,12 @@ class ComponentPassword extends Component {
 			    >
 			    	{
 			    		this.state.secure ?
-			    		'SHOW' : 'HIDE'
+			    		<Show /> : <Hide />
 			    	}
-			    </Text> 
+			    </TouchableOpacity> 
 		    </View>
 		);
-	}
+	};
 }
 
 class ImportListItem extends React.Component {
