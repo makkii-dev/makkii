@@ -30,7 +30,7 @@ const store = createStore(combineReducers({
 	user:            reducer_user,
 }));  
 
-// ui
+// ui 
 import Test                  from './components/test.js'; 
 import Scan                  from './components/scan.js';
 import Splash                from './components/splash.js';
