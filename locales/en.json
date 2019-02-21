@@ -204,5 +204,6 @@
     "delete_button": "DELETE",
     "warning_delete_account": "Are you sure you want to delete this account?",
     "error_connect_remote_server": "Unable to connect to remote server",
-    "message_no_more_data": "No More Data"
+    "message_no_more_data": "No More Data",
+    "toast_double_press_exit": "Press Back again to quit app"
 }
