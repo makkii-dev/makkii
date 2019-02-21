@@ -15,6 +15,7 @@
         "title": "Register",
         "error_password": "Password must be 8-16 characters and contains numbers, letters and sepcial characters!",
         "error_dont_match": "Confirm password does not match password!",
+        "warning_register_again": "Re-registration will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
         "label_password": "Enter password",
         "label_confirm_password": "Confirm password",
         "button_register": "Register"
@@ -31,7 +32,8 @@
         "label_prompt": "Enter 12 characters mnemonic",
         "button_scan": "SCAN",
         "button_confirm": "CONFIRM",
-        "error_mnemonic_not_match": "Mnemonic not matched"
+        "warning_mnemonic_not_match": "Importing different mnemonics will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
+        "error_invalid_mnemonic": "Please input valid mnemonics"
     },
     "about": {   
         "title": "About",

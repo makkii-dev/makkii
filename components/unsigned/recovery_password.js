@@ -22,7 +22,6 @@ class Password extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log('[store.user] ' + JSON.stringify(this.props.user));
 		this.props.navigation.setParams({
 			title: 'Recovery/Password',
 		});
@@ -84,4 +83,4 @@ class Password extends Component {
 	}
 }
 
-export default connect(state => { return { user: state.user };})(Password);
+export default connect()(Password);

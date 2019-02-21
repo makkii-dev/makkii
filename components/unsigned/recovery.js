@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button} from 'react-native';
+import {View,Text,Button,Alert} from 'react-native';
 import {dbGet} from '../../utils.js';
 import {InputMultiLines} from '../common.js';
 import {validateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
+import {delete_accounts} from "../../actions/accounts"
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -65,7 +66,7 @@ class Home extends Component {
 		        <Button  
 		        	title={strings("recovery.button_confirm")}
 					onPress={e=>{
-		        		dbGet('user').then(data=>{
+						validateMnemonic(this.state.mnemonic)&&dbGet('user').then(data=>{
 		        			try{
 			        			let user = JSON.parse(data);
 			        			if(user.mnemonic === this.state.mnemonic){ 
@@ -73,16 +74,32 @@ class Home extends Component {
 			        					mnemonic: this.state.mnemonic
 			        				});
 			        			} else {
-			        				alert(strings('recovery.error_mnemonic_not_match'));
+			        				Alert.alert(
+			        					strings('alert_title_warning'),
+										strings('recovery.warning_mnemonic_not_match'),
+										[
+											{text: strings('cancel_button'),onPress:()=>{}},
+											{text: strings('alert_ok_button'),onPress:()=>{
+													this.props.dispatch(delete_accounts(user.hashed_password))
+													this.props.navigation.navigate('unsigned_recovery_password', {
+														mnemonic: this.state.mnemonic
+													});
+
+												}},
+											]
+										)
 			        			}
 		        			} catch(e){
 		        				alert(e);
 		        			}
 		        		},err=>{
 		        			console.log('db.user is null');
-		        			this.props.navigation.navigate('unsigned_register');
+							this.props.navigation.navigate('unsigned_recovery_password', {
+								mnemonic: this.state.mnemonic
+							});
 		        		});
-					}} 
+						validateMnemonic(this.state.mnemonic)||Alert.alert(strings('recovery.error_invalid_mnemonic'))
+					}}
 				/>
 			</View>
 		); 

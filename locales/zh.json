@@ -15,6 +15,7 @@
     "title": "注册",
     "error_password": "密码必须是8-16位的数字、字母、特殊字符组合!",
     "error_dont_match": "两次密码不一致!",
+    "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "label_password": "输入密码",
     "label_confirm_password": "再次输入密码",
     "button_register": "注册",  
@@ -31,7 +32,8 @@
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
     "button_confirm": "确定",
-    "error_mnemonic_not_match": "助记词不匹配",
+    "warning_mnemonic_not_match": "导入不同的助记词会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
+    "error_invalid_mnemonic": "请输入有效的助记符"
   },
   "about": {
     "title": "关于",

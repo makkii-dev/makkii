@@ -3,9 +3,11 @@ import {encrypt} from '../utils.js';
 
 import { 
 	ACCOUNTS,
-	ACCOUNTS_ADD, 
+	ACCOUNTS_ADD,
+	ACCOUNTS_SAVE,
 	UPDATE_ACCOUNT_NAME, 
-	DEL_ACCOUNT, 
+	DEL_ACCOUNT,
+	DEL_ACCOUNTS,
 	UPDATE_ACCOUNT_TRANSACTIONS
 } from '../actions/accounts.js';
 
@@ -19,6 +21,10 @@ export default function accounts(state = init, action){
 			break;
 		case ACCOUNTS_ADD:
 			new_state = Object.assign({}, action.accounts, state);
+			should_update_db = true;
+			break;
+		case ACCOUNTS_SAVE:
+			new_state = state;
 			should_update_db = true;
 			break;
 		case UPDATE_ACCOUNT_NAME:
@@ -38,6 +44,10 @@ export default function accounts(state = init, action){
 		case DEL_ACCOUNT:
 			delete state[action.key];  
 			new_state = Object.assign({}, state);
+			should_update_db = true;
+			break;
+		case DEL_ACCOUNTS:
+			new_state = Object.assign({},init);
 			should_update_db = true;
 			break;
 		default:
