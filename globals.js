@@ -63,6 +63,18 @@ if(!Date.prototype.Format){
         return fmt;
     };
 }
+
+if(!String.prototype.isChinese){
+    String.prototype.isChinese = function () {
+        let patrn=/[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
+        if(!patrn.exec(this)){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+}
 if (typeof btoa === 'undefined') {
     global.btoa = function (str) {
         return new Buffer(str, 'binary').toString('base64');

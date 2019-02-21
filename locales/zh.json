@@ -167,6 +167,12 @@
     "balance": "余额优先",
     "transaction": "交易数量优先"
   },
+  "filter": {
+    "all": "全部",
+    "masterKey": "助记词短语",
+    "privateKey": "私钥",
+    "ledger": "Ledger冷钱包"
+  },
   "app_name": "码奇",
   "logout": "退出",
   "update_button": "提交",
