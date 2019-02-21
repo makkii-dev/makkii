@@ -206,7 +206,7 @@ class Home extends HomeComponent {
 				this.isMount&&this.setState({
 					refreshing: false,
 				}, () => {
-					Toast.show("Unable to connect to remote server");
+					Toast.show(strings("error_connect_remote_server"));
 				})
 			}
 		)
@@ -245,18 +245,17 @@ class Home extends HomeComponent {
 	onDeleteAccount(key){
 		const { dispatch } = this.props;
 		Alert.alert(
-			'WARNING',
-			'Are you sure you want to delete this account?',
+			strings('alert_title_warning'),
+			strings('warning_delete_account'),
 			[
-				{text:'CANCEL',onPress:()=>{}},
-				{text: 'DELETE', onPress:()=>{
+				{text: strings('cancel_button'),onPress:()=>{}},
+				{text: strings('delete_button'), onPress:()=>{
 						this.setState({
 							openRowKey: null,
 						},()=>setTimeout(()=>
 							dispatch(delete_account(key,this.props.user.hashed_password)),
 							500));
 						DeviceEventEmitter.emit('updateAccountBalance');
-						console.log('delete account: ', key );
 					}}
 				],
 			{cancelable:false}
@@ -300,8 +299,8 @@ class Home extends HomeComponent {
 						this.onDeleteAccount(Key);
 					}}>
 						<View style={otherStyles.VaultHome.slideOutContainer}>
-							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'orange'}}>
-								<Text>DELETE</Text>
+							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'red'}}>
+								<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>

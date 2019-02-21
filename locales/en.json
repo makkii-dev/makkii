@@ -186,6 +186,7 @@
     "import_button": "Import",
     "toast_update_success": "Update successfully",
     "alert_title_error": "Error",
+    "alert_title_warning": "Warning",
     "invalid_old_password": "Old password is incorrect",
     "invalid_new_password": "New password is invalid",
     "inconsistent_passwords": "Confirmed password and new password are different",
@@ -199,5 +200,9 @@
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
-    "error_invalid_qrcode": "Invalid QRCode"
+    "error_invalid_qrcode": "Invalid QRCode",
+    "delete_button": "DELETE",
+    "warning_delete_account": "Are you sure you want to delete this account?",
+    "error_connect_remote_server": "Unable to connect to remote server",
+    "message_no_more_data": "No More Data"
 }
