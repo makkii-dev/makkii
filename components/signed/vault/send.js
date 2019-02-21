@@ -209,42 +209,46 @@ class Send extends Component {
 			});
 			console.log("tx to send:" , tx);
 			try {
+				let promise;
 				if (accountType == '[ledger]') {
 				    console.log("sign tx for " + accountType + " account(index=" + derivationIndex + ")");
 				    try {
-						tx.signByLedger(derivationIndex);
+						promise = tx.signByLedger(derivationIndex);
 					} catch (e) {
-						console.log("sign tx error:", error);
-						thisLoadingView.hide();
-						Alert.alert(strings('alert_title_error'), getLedgerMessage(e.message));
 				    	return;
 					}
 				} else {
-					tx.signByECKey(Ed25519Key.fromSecretKey(this.account.private_key));
+					promise = tx.signByECKey(Ed25519Key.fromSecretKey(this.account.private_key));
 				}
-				web3.eth.sendSignedTransaction(tx.getEncoded()).on('transactionHash', function(hash) {
-					console.log("transaction sent: hash=" + hash);
+				promise.then(()=> {
+					web3.eth.sendSignedTransaction(tx.getEncoded()).on('transactionHash', function(hash) {
+						console.log("transaction sent: hash=" + hash);
 
-					let txs = {};
-					let pendingTx={};
-					pendingTx.hash = hash;
-					pendingTx.timestamp = tx.timestamp.toNumber()/1000;
-                    pendingTx.from = sender;
-                    pendingTx.to = tx.to;
-                    pendingTx.value = amount - 0;
-                    pendingTx.status = 'PENDING';
-                    txs[hash]=pendingTx;
+						let txs = {};
+						let pendingTx={};
+						pendingTx.hash = hash;
+						pendingTx.timestamp = tx.timestamp.toNumber()/1000;
+						pendingTx.from = sender;
+						pendingTx.to = tx.to;
+						pendingTx.value = amount - 0;
+						pendingTx.status = 'PENDING';
+						txs[hash]=pendingTx;
 
-					dispatch(update_account_txs(sender, txs, user.hashed_password));
-					dispatch(update_account_txs(tx.to, txs, user.hashed_password));
+						dispatch(update_account_txs(sender, txs, user.hashed_password));
+						dispatch(update_account_txs(tx.to, txs, user.hashed_password));
+						thisLoadingView.hide();
+						Toast.show(strings('send.toast_tx_sent'), {
+							onHidden: () => {
+								goBack();
+							}
+						})
+					}).on('error', function(error) {
+						throw error;
+					});
+				}, error=> {
+					console.log("sign ledger tx error:", error);
 					thisLoadingView.hide();
-					Toast.show(strings('send.toast_tx_sent'), {
-						onHidden: () => {
-							goBack();
-						}
-					})
-				}).on('error', function(error) {
-					throw error;
+					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.message));
 				});
 			} catch (error) {
 				console.log("send signed tx error:", error);

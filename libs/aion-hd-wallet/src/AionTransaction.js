@@ -3,6 +3,7 @@ import blake2b from 'blake2b';
 import {Crypto} from "./utils/crypto";
 import {AionRlp} from './utils/rlp';
 import wallet from 'react-native-aion-hw-wallet';
+import {hexString2Array} from '../.././../utils';
 
 const sigToBytes = (signature, publicKey) => {
     let fullSignature = new Uint8Array((signature.length + publicKey.length));
@@ -141,26 +142,33 @@ export class AionTransaction {
     };
 
     signByECKey = (ecKey) => {
-        let rawHash = this.getRawHash();
-        this.signature = ecKey.sign(rawHash);
-        this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
+        new Promise((resolve, reject) => {
+            let rawHash = this.getRawHash();
+            this.signature = ecKey.sign(rawHash);
+            this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
+            resolve();
+        });
     }
 
     signByLedger = (index) => {
-        wallet.getAccount(index).then(account => {
-            if (account.address != this.sender) {
-                throw new Error('error.wrong_device');
-            }
-            wallet.sign(index, this.getRawHash()).then(signedTx => {
-                this.signature = signedTx;
-                this.fullSignature = sigToBytes(this.signature, account.publicKey);
-            }, err => {
-                console.log("sign tx error: " + err);
-                throw new Error(err.code);
-            });
-        }, error => {
-            console.log("get account error: " + error);
-            throw new Error(error.code);
-        })
+        return new Promise((resolve, reject) => {
+            wallet.getAccount(index).then(account => {
+                if (account.address != this.sender) {
+                    reject(new Error('error.wrong_device'));
+                    return;
+                }
+                wallet.sign(index, Object.values(this.getEncodedRaw())/*Object.values(this.getEncodedRaw())*/).then(signedTx => {
+                    this.signature = signedTx;
+                    this.fullSignature = sigToBytes(this.signature, hexString2Array(account.publicKey));
+                    resolve();
+                }, err => {
+                    console.log("sign tx error: " + err);
+                    reject(new Error(err.code));
+                });
+            }, error => {
+                console.log("get account error: " + error);
+                reject(new Error(error.code));
+            })
+        });
     }
 }

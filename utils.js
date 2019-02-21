@@ -11,6 +11,20 @@ import Toast from 'react-native-root-toast';
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
+function hexString2Array(str) {
+    if (str.startsWith('0x')) {
+        str = str.substring(2);
+    }
+
+    var result = [];
+    while (str.length >= 2) {
+        result.push(parseInt(str.substring(0, 2), 16));
+        str = str.substring(2, str.length);
+    }
+
+    return result;
+}
+
 function encrypt(plain, seed){
     return tripledes.encrypt(plain, seed).toString();
 }
@@ -113,7 +127,7 @@ function getLedgerMessage(errorCode) {
         return strings('ledger.error_permission_denied');
     } else if (errorCode === wallet.GENERAL_ERROR || errorCode === wallet.INVALID_ACCOUNT_TYPE || errorCode === wallet.INVALID_TX_PAYLOAD || errorCode === wallet.OPEN_DEVICE_FAIL) {
         return strings('ledger.error_general');
-    } else if (errorCode === 'error_wrong_device') {
+    } else if (errorCode === 'error.wrong_device') {
         return strings('ledger.error_wrong_device');
     } else {
         return strings('ledger.error_general');
@@ -291,4 +305,5 @@ module.exports = {
     listenTransaction:listenTransaction,
     listenCoinPrice: listenCoinPrice,
     validateRecipient: validateRecipient,
+    hexString2Array: hexString2Array,
 }
