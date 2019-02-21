@@ -9,7 +9,7 @@
         "error_incorrect_password": "Incorrect password",
         "btn_login": "Login",
         "btn_register": "Register",
-        "btn_recovery": "Recovery",
+        "btn_recovery": "Recovery"
     },
     "register": {
         "title": "Register",
@@ -17,21 +17,21 @@
         "error_dont_match": "Confirm password does not match password!",
         "label_password": "Enter password",
         "label_confirm_password": "Confirm password",
-        "button_register": "Register",
+        "button_register": "Register"
     },
     "unsigned_register_mnemonic": {
         "title": "Mnemonic",
         "hint": "Please keep your mnemonic safely!",
         "btn_copy": "Copy",
         "btn_done": "I'm done",
-        "toastr_copy_mnemonic": "Mnemonic copied to clipboard",
+        "toastr_copy_mnemonic": "Mnemonic copied to clipboard"
     },
     "recovery": {
         "title": "Recovery",
         "label_prompt": "Enter 12 characters mnemonic",
         "button_scan": "SCAN",
         "button_confirm": "CONFIRM",
-        "error_mnemonic_not_match": "Mnemonic not matched",
+        "error_mnemonic_not_match": "Mnemonic not matched"
     },
     "about": {   
         "title": "About",
@@ -126,6 +126,12 @@
         "balance": "Balance first",
         "transaction": "Transaction first"
     },
+    "filter": {
+        "all": "ALL",
+        "masterKey": "Seed phrases",
+        "privateKey": "Private key",
+        "ledger": "Ledger"
+    },
     "ledger": {
         "toast_connecting": "Connecting to Ledger...",
         "error_unknown_account_type": "Ledger internal error",
@@ -142,8 +148,8 @@
         "fiat_total": "Total",
         "import_accounts_hint": "Please import accounts",
         "title_import_from": "Import From:",
-        "menu_master_key": "seed phrases",
-        "menu_private_key": "Private Key",
+        "menu_master_key": "Seed phrases",
+        "menu_private_key": "Private key",
         "menu_ledger": "Ledger"
     },
     "language": {
@@ -180,6 +186,7 @@
     "import_button": "Import",
     "toast_update_success": "Update successfully",
     "alert_title_error": "Error",
+    "alert_title_warning": "Warning",
     "invalid_old_password": "Old password is incorrect",
     "invalid_new_password": "New password is invalid",
     "inconsistent_passwords": "Confirmed password and new password are different",
@@ -193,5 +200,9 @@
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
-    "error_invalid_qrcode": "Invalid QRCode"
+    "error_invalid_qrcode": "Invalid QRCode",
+    "delete_button": "DELETE",
+    "warning_delete_account": "Are you sure you want to delete this account?",
+    "error_connect_remote_server": "Unable to connect to remote server",
+    "message_no_more_data": "No More Data"
 }

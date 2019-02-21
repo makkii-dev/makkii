@@ -167,6 +167,12 @@
     "balance": "余额优先",
     "transaction": "交易数量优先"
   },
+  "filter": {
+    "all": "全部",
+    "masterKey": "助记词短语",
+    "privateKey": "私钥",
+    "ledger": "Ledger冷钱包"
+  },
   "app_name": "码奇",
   "logout": "退出",
   "update_button": "提交",
@@ -177,6 +183,7 @@
   "refresh_button": "刷新",
   "toast_update_success": "提交成功",
   "alert_title_error": "错误",
+  "alert_title_warning": "警告",
   "invalid_old_password": "旧密码不正确",
   "invalid_new_password": "新密码格式不正确",
   "inconsistent_passwords": "确认密码不一致",
@@ -190,7 +197,11 @@
   "permission_storage_message": "Makki App需要得到您授权来保存部分数据文件",
   "ok_button": "同意",
   "alert_ok_button": "确定",
-  "cancel_button": "拒绝",
+  "cancel_button": "取消",
   "save_file_button": "保存到手机",
-  "error_invalid_qrcode": "无效的二维码"
+  "error_invalid_qrcode": "无效的二维码",
+  "delete_button": "删除",
+  "warning_delete_account": "确定要删除这个账户吗?",
+  "error_connect_remote_server": "无法连接到远程服务器",
+  "message_no_more_data": "暂无更多数据"
 }

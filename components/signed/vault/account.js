@@ -137,7 +137,7 @@ class Account extends Component {
 					txs[tx.hash]=tx;
 				});
 			}else{
-			    Toast.show('No More Data');
+			    Toast.show(strings('message_no_more_data'));
 			}
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));

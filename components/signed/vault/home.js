@@ -1,21 +1,25 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
+import {connect} from 'react-redux';
 import {
 	Alert,
-	PermissionsAndroid,
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet,
+	DeviceEventEmitter,
 	Dimensions,
+	FlatList,
 	Image,
-	FlatList, PixelRatio, InteractionManager, RefreshControl,DeviceEventEmitter
+	PermissionsAndroid,
+	PixelRatio,
+	RefreshControl,
+	StyleSheet,
+	Text,
+	TextInput,
+	TouchableOpacity,
+	View
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import { delete_account, accounts_add} from '../../../actions/accounts.js';
+import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import wallet from 'react-native-aion-hw-wallet';
-import otherStyles from  '../../styles';
+import otherStyles from '../../styles';
 import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
@@ -23,6 +27,7 @@ import Toast from "react-native-root-toast";
 import {ModalList} from "../../modalList";
 import {HomeComponent} from "../HomeComponent";
 import HomeHeader from "./home_header";
+
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
@@ -35,6 +40,70 @@ const SORT = [
 		title: 'sort.transaction',
 	},
 ];
+
+const FILTER = [
+	{
+		title: 'filter.all',
+	},
+	{
+		title: 'filter.masterKey',
+	},
+	{
+		title: 'filter.privateKey',
+	},
+	{
+		title: 'filter.ledger',
+	},
+];
+
+function sortAccounts(src,select){
+	let res = src;
+	switch (select) {
+		case SORT[0].title:
+			res =  res.sort((a,b)=>{
+				return b.balance-a.balance
+			});
+			break;
+		case SORT[1].title:
+			res =  res.sort((a,b)=>{
+				return Object.keys(b.transactions).length - Object.keys(a.transactions).length;
+			});
+			break;
+	}
+
+	return res;
+}
+
+function filterAccounts(src,select){
+	let res = src;
+	switch (select) {
+		case FILTER[1].title:
+			res  = res.filter(a=>{
+				return a.type === '[local]';
+			});
+			break;
+		case FILTER[2].title:
+			res  = res.filter(a=>{
+				return a.type === '[pk]';
+			});
+			break;
+		case FILTER[3].title:
+			res  = res.filter(a=>{
+				return a.type === '[ledger]';
+			});
+			break;
+	}
+	return res;
+}
+
+function searchAccounts(src,keyword){
+	if(keyword==='')
+		return src;
+	return src.filter(a => {
+		return a.name.indexOf(keyword) >= 0;
+	});
+}
+
 
 class Home extends HomeComponent {
 
@@ -49,10 +118,13 @@ class Home extends HomeComponent {
 		this.state={
 			showSort: false,
 			sortOrder: SORT[0].title,
+			showFilter: false,
+			filter: FILTER[0].title,
 			totalBalance: 0,
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
+			keyWords:'',
 		};
 
 	}
@@ -82,7 +154,6 @@ class Home extends HomeComponent {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[route] ' + this.props.accounts);
 		this.requestStoragePermission();
-		this.fetchAccountsBalance();
 		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 	}
@@ -126,16 +197,16 @@ class Home extends HomeComponent {
 				});
 				console.log('totalBalance', totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
-				this.isMount&&this.state.refreshing&&this.setState({
+				this.isMount&&this.setState({
 					refreshing: false,
 					totalBalance,
 				})
 			},errors=>{
 				console.log(errors);
-				this.isMount&&this.state.refreshing&&this.setState({
+				this.isMount&&this.setState({
 					refreshing: false,
 				}, () => {
-					Toast.show("Unable to connect to remote server");
+					Toast.show(strings("error_connect_remote_server"));
 				})
 			}
 		)
@@ -150,19 +221,6 @@ class Home extends HomeComponent {
 		}, 1000);
 	};
 
-
-
-
-	closeSort(){
-		const select = this.sortRef.getSelect();
-		select&&this.setState({
-			showSort:false,
-			sortOrder:select,
-		});
-		select||this.setState({
-			showSort:false,
-		})
-	}
 
 
 	_onOpen (Key: any) {
@@ -187,18 +245,17 @@ class Home extends HomeComponent {
 	onDeleteAccount(key){
 		const { dispatch } = this.props;
 		Alert.alert(
-			'WARNING',
-			'Are you sure you want to delete this account?',
+			strings('alert_title_warning'),
+			strings('warning_delete_account'),
 			[
-				{text:'CANCEL',onPress:()=>{}},
-				{text: 'DELETE', onPress:()=>{
+				{text: strings('cancel_button'),onPress:()=>{}},
+				{text: strings('delete_button'), onPress:()=>{
 						this.setState({
 							openRowKey: null,
 						},()=>setTimeout(()=>
 							dispatch(delete_account(key,this.props.user.hashed_password)),
 							500));
 						DeviceEventEmitter.emit('updateAccountBalance');
-						console.log('delete account: ', key );
 					}}
 				],
 			{cancelable:false}
@@ -242,8 +299,8 @@ class Home extends HomeComponent {
 						this.onDeleteAccount(Key);
 					}}>
 						<View style={otherStyles.VaultHome.slideOutContainer}>
-							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'orange'}}>
-								<Text>DELETE</Text>
+							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'red'}}>
+								<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>
@@ -276,30 +333,41 @@ class Home extends HomeComponent {
 		)
 	};
 
-	sortAccounts(select){
-		let res = Object.values(this.props.accounts);
-		switch (select) {
-			case SORT[0].title:
-				res =  res.sort((a,b)=>{
-					return b.balance-a.balance
-				});
-				break;
-			case SORT[1].title:
-				res =  res.sort((a,b)=>{
-					return Object.keys(b.transactions).length - Object.keys(a.transactions).length;
-					});
-				break;
-			default:
-				res =  res.sort((a,b)=> {
-					return b.balance-a.balance
-				});
-		}
+	closeSort(){
+		const select = this.sortRef.getSelect();
+		select&&this.setState({
+			showSort:false,
+			sortOrder:select,
+		});
+		select||this.setState({
+			showSort:false,
+		})
+	}
 
-		return res;
+	closeFilter(){
+		const select = this.filterRef.getSelect();
+		select&&this.setState({
+			showFilter:false,
+			filter:select,
+		});
+		select||this.setState({
+			showFilter:false,
+		})
 	}
 
 	render(){
-		const renderAccounts=this.sortAccounts(this.state.sortOrder);
+		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
+		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
+		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
+		const sortTintColor = this.state.showSort?'blue':'black';
+		const filterTintColor = this.state.showFilter?'blue':'black';
+		let sortLabel = strings(this.state.sortOrder);
+		console.log(sortLabel.isChinese());
+		sortLabel.slice(0,6).isChinese()&&sortLabel.length>3&&(sortLabel=sortLabel.slice(0,3) + '...');
+		sortLabel.slice(0,6).isChinese()||sortLabel.length>6&&(sortLabel=sortLabel.slice(0,6) + '...');
+		let filterLabel = strings(this.state.filter);
+		filterLabel.slice(0,6).isChinese()&&filterLabel.length>3&&(filterLabel=filterLabel.slice(0,3) + '...');
+		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
 		return (
 			<View style={{flex:1}}>
 				<HomeHeader
@@ -313,43 +381,65 @@ class Home extends HomeComponent {
 						this.state.openRowKey&&this.setState({openRowKey: null})
 					}}
 				>
-					{
-						renderAccounts.length?<View style={{
-							flexDirection: 'row', height: 40, alignItems: 'center',
-							marginLeft: 10,
-							marginRight: 10,
-							width: width - 20,
-							borderColor: 'lightgray',
-							borderBottomWidth: 1,
-						}}>
-							<Image source={require('../../../assets/sort.png')}
+					<View style={{
+						flexDirection: 'row', height: 40, alignItems: 'center',
+						marginLeft: 10,
+						marginRight: 10,
+						width: width - 20,
+						borderColor: 'lightgray',
+						borderBottomWidth: 1,
+						justifyContent:'space-around'
+					}}>
+
+						<TouchableOpacity
+							onPress={() => this.setState({showSort: true, showFilter:false})}
+						>
+							<View style={styles.sortHeader}>
+								<Image source={require('../../../assets/sort.png')}
+									   style={{...styles.sortHeaderImageStyle, tintColor: sortTintColor}}/>
+								<Text style={{...styles.sortHeaderFontStyle, color:sortTintColor, width:80}}>{sortLabel}</Text>
+							</View>
+						</TouchableOpacity>
+						<TouchableOpacity
+							onPress={() => this.setState({showSort: false, showFilter:true})}
+						>
+							<View style={styles.sortHeader}>
+								<Image source={require('../../../assets/filter.png')}
+									   style={{...styles.sortHeaderImageStyle, tintColor: filterTintColor}}/>
+								<Text style={{...styles.sortHeaderFontStyle, color:filterTintColor,width:80}}>{filterLabel}</Text>
+							</View>
+						</TouchableOpacity>
+						<View style={styles.sortHeader}>
+							<Image source={require('../../../assets/search.png')}
 								   style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>
-							<TouchableOpacity
-								onPress={() => this.setState({showSort: true})}
-							>
-								<View style={styles.sortHeader}>
-									<Text style={styles.sortHeaderFontStyle}>{strings(this.state.sortOrder)}</Text>
-									{
-										this.state.showSort ? <Image source={require('../../../assets/arrow_up.png')}
-																	 style={styles.sortHeaderImageStyle}/>
-											: <Image source={require('../../../assets/arrow_down.png')}
-													 style={styles.sortHeaderImageStyle}/>
-									}
-								</View>
-							</TouchableOpacity>
-							<ModalList
-								data={SORT}
-								ref={ref => this.sortRef = ref}
-								visible={this.state.showSort}
-								style={styles.sortContainer}
-								viewStyle={styles.sortViewStyle}
-								fontStyle={styles.sortFontStyle}
-								onClose={() => this.closeSort()}
-								ItemSeparatorComponent={() => (
-									<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+							<TextInput style={styles.searchStyle}
+								onChangeText={(value)=>this.setState({keyWords:value})}
 							/>
-						</View>:null
-					}
+						</View>
+
+						<ModalList
+							data={SORT}
+							ref={ref => this.sortRef = ref}
+							visible={this.state.showSort}
+							style={styles.sortContainer}
+							viewStyle={styles.sortViewStyle}
+							fontStyle={styles.sortFontStyle}
+							onClose={() => this.closeSort()}
+							ItemSeparatorComponent={() => (
+								<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+						/>
+						<ModalList
+							data={FILTER}
+							ref={ref => this.filterRef = ref}
+							visible={this.state.showFilter}
+							style={styles.sortContainer}
+							viewStyle={styles.sortViewStyle}
+							fontStyle={styles.sortFontStyle}
+							onClose={() => this.closeFilter()}
+							ItemSeparatorComponent={() => (
+								<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+						/>
+					</View>
 					<FlatList
 						style={{flex:1}}
 						renderItem={({item})=>this._renderListItem(item)}
@@ -378,7 +468,7 @@ class Home extends HomeComponent {
 					/>
 				</TouchableOpacity>
 				{
-					this.state.showSort?<TouchableOpacity style={{position: 'absolute',
+					(this.state.showSort||this.state.showFilter)?<TouchableOpacity style={{position: 'absolute',
 						top:10+top+30, left:0,right:0, width:width,height:height-(10+top+30),
 						backgroundColor:'rgba(0, 0, 0, 0.5)'
 					}}/>:null
@@ -429,16 +519,12 @@ const styles = StyleSheet.create({
 		backgroundColor: '#fff'
 	},
 	sortHeader:{
-		marginRight:10,
-		marginLeft:10,
-		height:40,
-		flex:1,
 		flexDirection:'row',
 		alignItems: 'center'
 	},
 	sortContainer:{
 		width: width,
-		backgroundColor: '#eee',
+		backgroundColor: '#fff',
 		position: 'absolute',
 		left:0,
 		right:0,
@@ -460,10 +546,18 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	sortHeaderImageStyle:{
-		marginLeft:10,
 		width:20,
 		height:20,
+		marginRight:10,
 		tintColor:'blue'
+	},
+	searchStyle:{
+		borderBottomWidth: 1,
+		borderBottomColor:'#000',
+		marginBottom:5,
+		padding:0,
+		width:80,
+		alignItems:'flex-end',
 	},
 	listBtnContainer:{
 		flex:1,
