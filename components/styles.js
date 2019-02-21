@@ -116,7 +116,7 @@ export default styles = {
 			alignItems: 'center'
 		},
 		text_input: {
-			fontSize: 16,
+			fontSize: 18,
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
@@ -125,15 +125,10 @@ export default styles = {
 			borderBottomWidth: 1,
 			flex: 1,
 		},
-		text: {
-			fontSize: 12,
-			color: FONT_COLOR,
-			fontWeight: 'normal',
-			lineHeight: 31, 
-			flex: 1,
+		display: {
 			position: 'absolute',
 			right: 0,
-			top: 9,
+			top: 12, 
 		}
 	},
 	ImportList:{

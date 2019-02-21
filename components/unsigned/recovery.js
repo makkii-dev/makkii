@@ -4,8 +4,8 @@ import {View,Text,Button} from 'react-native';
 import {dbGet} from '../../utils.js';
 import {InputMultiLines} from '../common.js';
 import {validateMnemonic} from '../../libs/aion-hd-wallet/index.js';
-import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
+import styles from '../styles.js';
 
 class Home extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -66,12 +66,17 @@ class Home extends Component {
 		        	title={strings("recovery.button_confirm")}
 					onPress={e=>{
 		        		dbGet('user').then(data=>{
-		        			if(data.mnemonic === this.state.mnemonic){ 
-		        				this.props.navigation.navigate('unsigned_recovery_password', {
-		        					mnemonic: this.state.mnemonic
-		        				});
-		        			} else {
-		        				alert(strings('recovery.error_mnemonic_not_match'));
+		        			try{
+			        			let user = JSON.parse(data);
+			        			if(user.mnemonic === this.state.mnemonic){ 
+			        				this.props.navigation.navigate('unsigned_recovery_password', {
+			        					mnemonic: this.state.mnemonic
+			        				});
+			        			} else {
+			        				alert(strings('recovery.error_mnemonic_not_match'));
+			        			}
+		        			} catch(e){
+		        				alert(e);
 		        			}
 		        		},err=>{
 		        			console.log('db.user is null');
