@@ -253,9 +253,10 @@ class Home extends HomeComponent {
 						this.setState({
 							openRowKey: null,
 						},()=>setTimeout(()=>
-							dispatch(delete_account(key,this.props.user.hashed_password)),
-							500));
-						DeviceEventEmitter.emit('updateAccountBalance');
+						{
+							dispatch(delete_account(key,this.props.user.hashed_password));
+							DeviceEventEmitter.emit('updateAccountBalance');
+						}, 500));
 					}}
 				],
 			{cancelable:false}
@@ -299,7 +300,7 @@ class Home extends HomeComponent {
 						this.onDeleteAccount(Key);
 					}}>
 						<View style={otherStyles.VaultHome.slideOutContainer}>
-							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: 'red'}}>
+							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#DE0215'}}>
 								<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
 							</View>
 						</View>
