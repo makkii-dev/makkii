@@ -54,7 +54,7 @@ class About extends Component {
 				</View>
 				<View style={styles.marginBottom40}>
 					<Text style={styles.center_text}>
-						Power by Chaion
+						Powered by Chaion
 					</Text>
 				</View>
 				<View>

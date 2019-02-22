@@ -212,7 +212,7 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_setting_password': {  
 		screen: SettingPassword,
 		navigationOptions: {
-            headerRight: (<View></View>),
+            // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
@@ -220,7 +220,7 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_setting_recovery': {  
 		screen: SettingRecovery,
 		navigationOptions: {
-            headerRight: (<View></View>),
+            // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         } 
@@ -228,7 +228,7 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_setting_services': {  
 		screen: SettingServices,
 		navigationOptions: {
-            headerRight: (<View></View>),
+            // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         } 
@@ -250,7 +250,7 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_setting_advanced': {
 		screen: SettingAdvanced,
 		navigationOptions: {
-			headerRight: (<View></View>),
+			// headerRight: (<View></View>),
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
 		}
