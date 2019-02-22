@@ -119,7 +119,7 @@
         "error_invalid_private_key": "Invalid private key"
     },
     "import_master_key": {
-        "title": "Master Key"
+        "title": "Seed Phrases"
     },
     "import_ledger": {
         "title": "Ledger"

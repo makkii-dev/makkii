@@ -37,7 +37,6 @@ class Language extends Component {
             updateLocale: this.updateLocale,
         });
     }
-
     updateLocale= () => {
         const {dispatch} = this.props;
         this.props.setting.lang = Object.keys(this.selectList.getSelect())[0];

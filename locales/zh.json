@@ -116,7 +116,7 @@
     "error_invalid_private_key": "私钥不正确"
   },
   "import_master_key": {
-    "title": "主密钥"
+    "title": "助记词短语"
   },
   "import_ledger": {
     "title": "Ledger冷钱包"
