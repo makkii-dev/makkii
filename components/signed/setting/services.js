@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,Alert,DeviceEventEmitter} from 'react-native';
+import {View,Text,Alert,DeviceEventEmitter, TouchableOpacity} from 'react-native';
 import {Input} from '../../common.js';
 import {setting} from '../../../actions/setting.js';
 import {validateUrl} from '../../../utils.js';
@@ -13,6 +13,21 @@ class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
 	        title: strings('service_configuration.title'),
+			headerTitleStyle: {
+				fontSize: 20,
+				alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1,
+			},
+			headerRight: (
+				<TouchableOpacity onPress={() => {
+					navigation.state.params.updateServiceConfiguration();
+				}}>
+					<View style={{marginRight: 20}}>
+						<Text style={{color: 'blue'}}>{strings('save_button')}</Text>
+					</View>
+				</TouchableOpacity>
+			)
 	    };
     };
 
@@ -30,6 +45,12 @@ class Services extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 	}
+	componentWillMount() {
+		this.props.navigation.setParams({
+			updateServiceConfiguration: this.updateServiceConfiguration,
+		});
+	}
+
 	render(){
 		return (
 			<View style={styles.container}>	
@@ -109,17 +130,18 @@ class Services extends Component {
 						</RadioButton>
 					</RadioGroup>
 				</View>
-				<View>
-					<Button 
-						title={strings('save_button')}
-						onPress={e => this.update() }
-					/>
-				</View>
+				{/*<View>*/}
+					{/*<Button */}
+						{/*title={strings('save_button')}*/}
+						{/*onPress={e => this.update() }*/}
+					{/*/>*/}
+				{/*</View>*/}
 			</View>
 		)
 	}
 
-	update(){
+	updateServiceConfiguration=() => {
+        console.log(this.state);
 		if (!validateUrl(this.state.endpoint_wallet)) {
 			Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_wallet_server_url'));
 			return;

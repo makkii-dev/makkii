@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, Alert, ScrollView} from 'react-native';
+import { View, Text, Button, Alert, ScrollView, TouchableOpacity} from 'react-native';
 import { ComponentPassword } from '../../common.js';
 import styles from '../../styles.js';
 import { validatePassword, hashPassword } from '../../../utils.js';
@@ -13,7 +13,22 @@ class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-		    title: strings('password.title')
+		    title: strings('password.title'),
+			headerTitleStyle: {
+				fontSize: 20,
+				alignSelf: 'center',
+				textAlign: 'center',
+				flex: 1,
+			},
+			headerRight: (
+				<TouchableOpacity onPress={() => {
+					navigation.state.params.updatePassword();
+				}}>
+					<View style={{marginRight: 20}}>
+						<Text style={{color: 'blue'}}>{strings('save_button')}</Text>
+					</View>
+				</TouchableOpacity>
+			)
 	    }
     }
 	constructor(props){
@@ -28,9 +43,16 @@ class Password extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 	}
+
+	componentWillMount() {
+		this.props.navigation.setParams({
+			updatePassword: this.updatePassword,
+		});
+	}
+
 	render(){
 		return (
-			<ScrollView style={styles.container}>
+			<ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
 				<View style={styles.marginBottom40}>
 					<Text style={styles.instruction}>{strings('password.password_format')}</Text>
 				</View>
@@ -76,12 +98,12 @@ class Password extends Component {
 						}} 
 					/>
 				</View>
-				<View>
-					<Button 
-						title={strings('update_button')}
-						onPress={() => this.updatePassword()}
-					/>
-				</View>
+				{/*<View>*/}
+					{/*<Button */}
+						{/*title={strings('update_button')}*/}
+						{/*onPress={() => this.updatePassword()}*/}
+					{/*/>*/}
+				{/*</View>*/}
 			</ScrollView>
 		)
 	}

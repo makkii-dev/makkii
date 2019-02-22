@@ -39,8 +39,8 @@
     "title": "关于",
     "version_label": "版本号",
     "version_update_button": "版本更新",
-    "terms_label": "骂起软件许可及服务协议",
-    "policy_label": "骂起隐私保护指引",
+    "terms_label": "码奇软件许可及服务协议",
+    "policy_label": "码奇隐私保护指引",
     "version_latest": "当前已是最新版"
   },
   "password": {
@@ -116,7 +116,7 @@
     "error_invalid_private_key": "私钥不正确"
   },
   "import_master_key": {
-    "title": "主密钥"
+    "title": "助记词短语"
   },
   "import_ledger": {
     "title": "Ledger冷钱包"
@@ -205,5 +205,6 @@
   "delete_button": "删除",
   "warning_delete_account": "确定要删除这个账户吗?",
   "error_connect_remote_server": "无法连接到远程服务器",
-  "message_no_more_data": "暂无更多数据"
+  "message_no_more_data": "暂无更多数据",
+  "toast_double_press_exit": "再按一次退出应用"
 }

@@ -1,6 +1,7 @@
 import {Component} from 'react';
 import {BackHandler} from 'react-native';
 import Toast from 'react-native-root-toast';
+import {strings} from '../../locales/i18n';
 
 export class HomeComponent extends Component {
 
@@ -29,7 +30,7 @@ export class HomeComponent extends Component {
     prepare() {
         this.backClickCount = 1;
         let thus = this;
-        Toast.show('Press Back again to quit app');
+        Toast.show(strings('toast_double_press_exit'));
         setTimeout(function() {
             console.log("timeout");
             thus.backClickCount = 0;

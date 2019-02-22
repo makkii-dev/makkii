@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
-import {Alert, View, Text, TextInput, StyleSheet, Button} from 'react-native';
+import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
@@ -10,6 +10,21 @@ class Advanced extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings('advanced.title'),
+            headerTitleStyle: {
+                fontSize: 20,
+                alignSelf: 'center',
+                textAlign: 'center',
+                flex: 1,
+            },
+            headerRight: (
+                <TouchableOpacity onPress={() => {
+                    navigation.state.params.updateAdvancedSettings();
+                }}>
+                    <View style={{marginRight: 20}}>
+                        <Text style={{color: 'blue'}}>{strings('save_button')}</Text>
+                    </View>
+                </TouchableOpacity>
+            )
         };
     };
     constructor(props) {
@@ -20,6 +35,11 @@ class Advanced extends Component {
             login_session_timeout: props.setting.login_session_timeout,
             exchange_refresh_interval: props.setting.exchange_refresh_interval,
         };
+    }
+    componentWillMount() {
+        this.props.navigation.setParams({
+            updateAdvancedSettings: this.updateAdvancedSettings,
+        });
     }
     render() {
         return (
@@ -78,16 +98,16 @@ class Advanced extends Component {
                     />
                     <Text style={{ color: '#777676', fontSize: 16 }}>{strings('advanced.label_minute')}</Text>
                 </View>
-                <View>
-                    <Button title={strings('save_button')}
-                            onPress={this.updateAdvancedSetting}
-                            />
-                </View>
+                {/*<View>*/}
+                    {/*<Button title={strings('save_button')}*/}
+                            {/*onPress={this.updateAdvancedSetting}*/}
+                            {/*/>*/}
+                {/*</View>*/}
             </View>
         )
     }
 
-    updateAdvancedSetting = () => {
+    updateAdvancedSettings = () => {
         if (this.state.default_account_name.length == 0) {
             Alert.alert(strings('alert_title_error'), strings('advanced.error_default_account_name_empty'));
             return;
