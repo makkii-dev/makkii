@@ -30,7 +30,7 @@ class Password extends Component {
 	}
 	render(){
 		return (
-			<ScrollView style={styles.container}>
+			<ScrollView style={styles.container} keyboardShouldPersistTaps='always'>
 				<View style={styles.marginBottom40}>
 					<Text style={styles.instruction}>{strings('password.password_format')}</Text>
 				</View>

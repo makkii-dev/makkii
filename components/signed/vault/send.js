@@ -67,7 +67,11 @@ class Send extends Component {
 		const arrowImage =  this.state.showAdvanced? require('../../../assets/arrow_up.png') :  require('../../../assets/arrow_down.png')
 		return (
 			<View style={{flex:1,justifyContent:'center'}}>
-                <ScrollView style={{width,height}}  contentContainerStyle={{justifyContent: 'center',padding:20}}>
+                <ScrollView
+					style={{width,height}}
+					contentContainerStyle={{justifyContent: 'center',padding:20}}
+                    keyboardShouldPersistTaps='always'
+				>
                     <View>
                         <Text>{strings('send.label_receiver')}</Text>
                     </View>
