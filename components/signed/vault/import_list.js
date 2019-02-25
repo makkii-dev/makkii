@@ -24,12 +24,6 @@ class ImportHdWallet extends React.Component {
     static navigationOptions = ({navigation})=> {
         return ({
             title: navigation.getParam('title'),
-            headerTitleStyle: {
-                fontSize: 14,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },   
             headerRight: (
                 <TouchableOpacity onPress={() => {
                     let acc = navigation.state.params.ImportAccount();
@@ -38,7 +32,7 @@ class ImportHdWallet extends React.Component {
                     navigation.goBack();
                 }}>
                     <View style={{marginRight: 10}}>
-                        <Text style={{color: 'blue'}}>{strings('import_button')}</Text>
+                        <Text style={{color: '#8c8a8a'}}>{strings('import_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )

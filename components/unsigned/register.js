@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, Button, Alert} from 'react-native';
-import {ComponentPassword} from '../common.js';
+import {View, Text, Alert} from 'react-native';
+import {ComponentButton,ComponentPassword} from '../common.js';
 import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
@@ -59,7 +59,7 @@ class Home extends Component {
 					/>
 				</View>
 				<View>  
-					<Button
+					<ComponentButton
 						title={strings("register.button_register")}
 						onPress={e=>{
 							if (!validatePassword(this.state.password))
@@ -70,7 +70,7 @@ class Home extends Component {
 								const hashed_password = hashPassword(this.state.password);
 								const mnemonic = generateMnemonic();
 								dbGet('user').then(userJson=>{
-									Alert.alert(
+									Alert.alert( 
 										strings('alert_title_warning'),
 										strings("register.warning_register_again"),
 										[

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,Alert} from 'react-native';
+import {View,Text,Alert} from 'react-native';
 import {dbGet} from '../../utils.js';
-import {InputMultiLines} from '../common.js';
+import {ComponentButton,InputMultiLines} from '../common.js';
 import {validateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
@@ -32,7 +32,7 @@ class Home extends Component {
 		return (
 			<View style={styles.container}> 
 				<View style={styles.marginBottom20}>
-					<Button 
+					<ComponentButton 
 						title= {strings("recovery.button_scan")}
 						onPress={e=>{
 							this.props.navigation.navigate('scan',{
@@ -63,7 +63,7 @@ class Home extends Component {
 						}} 
 			        />
 		        </View>
-		        <Button  
+		        <ComponentButton 
 		        	title={strings("recovery.button_confirm")}
 					onPress={e=>{
 						validateMnemonic(this.state.mnemonic)&&dbGet('user').then(data=>{

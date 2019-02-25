@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Button,TouchableOpacity, Alert} from 'react-native';
-import {ComponentLogo,ComponentPassword} from '../common.js';
+import {View,Text,TouchableOpacity, Alert} from 'react-native';
+import {ComponentButton, ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {setting} from '../../actions/setting';
@@ -43,7 +43,7 @@ class Login extends Component {
 					/>
 				</View>
 				<View style={styles.marginBottom20}>
-				    <Button
+				    <ComponentButton
 						title={strings('unsigned_login.btn_login')}
 						onPress={e=>{
 							dbGet('user')

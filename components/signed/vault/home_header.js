@@ -112,12 +112,7 @@ class HomeHeader extends React.Component{
                         fontStyle={styles.menuFontStyle}
                         imageStyle={styles.menuImageStyle}
                         onClose={()=>this.closeMenu()}
-                        ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}
-                        ListHeaderComponent={()=>(
-                            <View style={{flex:1, height:50, justifyContent:'space-between', paddingTop: 10}}>
-                                <Text style={{...styles.menuFontStyle}}>{strings('wallet.title_import_from')}</Text>
-                                <View style={{...styles.divider, marginLeft: 0}}/>
-                            </View>)}
+                        ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}                        
                     />
                 </View>
                 <Loading ref={(element) => {
@@ -171,12 +166,15 @@ const styles = StyleSheet.create({
         margin: 15,
     },
     menuContainer: {
-        backgroundColor: 'black',
         width: mWidth,
         position: 'absolute',
         left: width - mWidth - 10,
         top: 50,
         padding: 5,
+        borderWidth: 1,
+        borderColor: '#8c8a8a',
+        backgroundColor: 'white',
+        borderRadius: 5,
     },
     menuStyle: {
         flexDirection: 'row',
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
         paddingBottom: 8,
     },
     menuFontStyle:{
-        color: '#fff',
+        color: '#8c8a8a',
         fontSize: 16,
         marginLeft: 5,
     },
@@ -198,7 +196,6 @@ const styles = StyleSheet.create({
         width: 20,
         height:20,
         marginRight: 10,
-        tintColor: '#fff'
+        tintColor: '#8c8a8a'
     },
-
 });

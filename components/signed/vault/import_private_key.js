@@ -10,21 +10,13 @@ class ImportPrivateKey extends Component {
 
 	static navigationOptions = ({navigation})=> {
 		return ({
-			title: strings('import_private_key.title'),
-			headerStyle: {
-				backgroundColor: '#eeeeee'
-			},
-			headerTitleStyle: {
-				alignSelf: 'center',
-				textAlign: 'center', 
-				flex: 1,
-			},
+			title: strings('import_private_key.title'),	
 			headerRight: (
 				<TouchableOpacity onPress={() => {
 					navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
 				}}>
 					<View style={{marginRight: 20}}>
-						<Text style={{color: 'blue'}}>{strings('import_button')}</Text>
+						<Text style={{color: '#8c8a8a'}}>{strings('import_button')}</Text>
 					</View>
 				</TouchableOpacity>
 			) 
