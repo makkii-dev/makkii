@@ -54,7 +54,7 @@ function dbGet(key){
 }
 
 function validatePassword(password) {
-    let reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,16}$/;
+    let reg = /^[A-Za-z0-9!?#]{8,16}$/;
     return reg.test(password);
 }
  

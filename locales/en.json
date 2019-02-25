@@ -13,7 +13,7 @@
     },
     "register": {
         "title": "Register",
-        "error_password": "Password must be 8-16 characters and contains numbers, letters and sepcial characters!",
+        "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Sepcial characters include \"!?#\".",
         "error_dont_match": "Confirm password does not match password!",
         "warning_register_again": "Re-registration will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
         "label_password": "Enter password",
