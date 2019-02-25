@@ -28,7 +28,7 @@ class ComponentButton extends Component{
 
 class ComponentTabBar extends Component{
 	static defaultProps={
-		activeTintColor: '#3366ff',
+		activeTintColor: '#6c7476',
 		inactiveTintColor: '#adb0b5',
 	};
 	static propTypes= {
@@ -52,7 +52,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} />
-						<Text style={{fontSize: 12, color:wallet_tint_color }}>{strings('menuRef.title_wallet')}</Text>
+						<Text style={{fontSize: 8, color:wallet_tint_color }}>{strings('menuRef.title_wallet')}</Text>
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
@@ -65,7 +65,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} />
-						<Text style={{fontSize: 12, color:dapp_tint_color }}>{strings('menuRef.title_dapps')}</Text>
+						<Text style={{fontSize: 8, color:dapp_tint_color }}>{strings('menuRef.title_dapps')}</Text>
 					</View>
 				</TouchableOpacity>
 				<TouchableOpacity
@@ -78,7 +78,7 @@ class ComponentTabBar extends Component{
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
 						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} />
-						<Text style={{fontSize: 12, color:settings_tint_color }}>{strings('menuRef.title_settings')}</Text>
+						<Text style={{fontSize: 8, color:settings_tint_color }}>{strings('menuRef.title_settings')}</Text>
 					</View>
 				</TouchableOpacity>
 			</View>
