@@ -30,8 +30,8 @@
     "recovery": {
         "title": "Recovery",
         "label_prompt": "Enter 12 characters mnemonic",
-        "button_scan": "SCAN",
-        "button_confirm": "CONFIRM",
+        "button_scan": "Scan",
+        "button_confirm": "Confirm",
         "warning_mnemonic_not_match": "Importing different mnemonics will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
         "error_invalid_mnemonic": "Please input valid mnemonics"
     },

@@ -4,6 +4,28 @@ import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
 
+class ComponentButton extends Component{
+	render(){
+		return (
+			<TouchableOpacity onPress={this.props.onPress}> 
+			    <Text style={{
+			    	backgroundColor: '#455372',
+			    	color: 'white',
+			    	paddingTop: 10,
+			    	paddingBottom: 10, 
+			    	borderRadius: 5,
+			    	width: '100%',
+			    	textAlign: 'center',
+			    	fontWeight: 'bold',
+			    	fontSize: 18,
+			    }}>
+			   		{this.props.title}    
+			    </Text>
+			</TouchableOpacity >
+		);
+	}
+}
+
 class ComponentTabBar extends Component{
 	static defaultProps={
 		activeTintColor: '#3366ff',
@@ -371,6 +393,7 @@ class TransactionItemCell extends React.PureComponent {
 }
 
 module.exports = {
+	ComponentButton,
 	ComponentTabBar,
 	ComponentLogo,
 	Input,

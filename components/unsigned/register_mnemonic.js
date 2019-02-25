@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Button, Clipboard } from 'react-native';
-import { InputMultiLines } from '../common.js';
+import { View, Text, Clipboard } from 'react-native';
+import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
@@ -39,7 +39,7 @@ class Mnemonic extends Component {
 					/>
 				</View>
 				<View style={styles.marginBottom80}>
-					<Button
+					<ComponentButton
 						title={strings('unsigned_register_mnemonic.btn_copy')} 
 						onPress={e=>{
 							Clipboard.setString(this.props.user.mnemonic);
@@ -48,7 +48,7 @@ class Mnemonic extends Component {
 					/>
 				</View>
 				<View>
-					<Button
+					<ComponentButton
 						title={strings('unsigned_register_mnemonic.btn_done')}
 						onPress={e=>{   
 							this.props.navigation.navigate('signed_vault');
