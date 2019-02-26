@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "postinstall": "cd libs/aion-web3-inject; yarn",
-    "build-inject": "cd libs/aion-web3-inject; yarn build-inject"
+    "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/ "
   },
   "dependencies": {
     "aion-web3": "^1.1.5",
@@ -28,6 +28,7 @@
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-root-toast": "^3.0.2",
     "react-native-svg": "^9.0.6",
+    "react-native-webview": "^5.2.1",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",
