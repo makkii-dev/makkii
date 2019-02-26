@@ -17,7 +17,7 @@ function accounts_add(accounts, hashed_password){
 	return {
 		type: ACCOUNTS_ADD,
 		accounts,
-		hashed_password
+		hashed_password,
 	}
 }
 

@@ -35,8 +35,11 @@ class ImportPrivateKey extends Component {
 				account.transactions = {};
 				acc[account.address] = account;
 				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
-				DeviceEventEmitter.emit('updateAccountBalance');
-				this.props.navigation.navigate('signed_vault');
+				setTimeout(() => {
+					DeviceEventEmitter.emit('updateAccountBalance');
+				}, 500);
+				// this.props.navigation.navigate('signed_vault');
+                this.props.navigation.goBack();
 			}, error=> {
     			console.log("error: " + error);
 				Alert.alert(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
