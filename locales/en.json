@@ -114,7 +114,7 @@
         "empty_label": "No Transaction"
     },
     "import_private_key": {
-        "title": "Import from Private Key",
+        "title": "Private Key",
         "instruction_private_key": "Enter private key",
         "error_invalid_private_key": "Invalid private key"
     },
