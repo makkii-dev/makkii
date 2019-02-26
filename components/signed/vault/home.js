@@ -167,6 +167,7 @@ class Home extends HomeComponent {
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance')
 		const {dispatch,accounts} = this.props;
+		console.log("accounts：", accounts);
 		if (Object.keys(accounts).length === 0) {
 			if (this.isMount) {
 				this.setState({
@@ -179,6 +180,7 @@ class Home extends HomeComponent {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
+					console.log("getbalance: " + value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
 						value.balance = new BigNumber(balance).shiftedBy(-18).toNumber();
 						resolve(value)

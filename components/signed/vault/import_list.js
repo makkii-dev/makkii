@@ -26,10 +26,7 @@ class ImportHdWallet extends React.Component {
             title: navigation.getParam('title'),
             headerRight: (
                 <TouchableOpacity onPress={() => {
-                    let acc = navigation.state.params.ImportAccount();
-                    navigation.state.params.dispatch(accounts_add(acc,navigation.state.params.hashed_password));
-                    DeviceEventEmitter.emit('updateAccountBalance');
-                    navigation.goBack();
+                    navigation.state.params.ImportAccount();
                 }}>
                     <View style={{marginRight: 10}}>
                         <Text style={{color: '#8c8a8a'}}>{strings('import_button')}</Text>
@@ -58,7 +55,13 @@ class ImportHdWallet extends React.Component {
     }
 
     ImportAccount= () => {
-        return this.selectList.getSelect();
+        let acc = this.selectList.getSelect();
+        const {dispatch} = this.props;
+        dispatch(accounts_add(acc,this.props.user.hashed_password));
+        setTimeout(() => {
+            DeviceEventEmitter.emit('updateAccountBalance');
+        }, 500);
+        this.props.navigation.goBack();
     };
 
 
@@ -67,8 +70,6 @@ class ImportHdWallet extends React.Component {
         const {dispatch} = this.props;
         this.props.navigation.setParams({
             ImportAccount : this.ImportAccount,
-            dispatch: dispatch,
-            hashed_password: this.props.user.hashed_password,
         });
         InteractionManager.runAfterInteractions(()=>{
             this.fetchAccount(20)
