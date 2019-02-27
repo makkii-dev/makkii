@@ -142,7 +142,7 @@ export class AionTransaction {
     };
 
     signByECKey = (ecKey) => {
-        new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let rawHash = this.getRawHash();
             this.signature = ecKey.sign(rawHash);
             this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);

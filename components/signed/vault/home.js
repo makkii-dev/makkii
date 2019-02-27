@@ -326,7 +326,7 @@ class Home extends HomeComponent {
 							<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 						</View>
 						<View style={otherStyles.VaultHome.accountRightView}>
-							<Text style={styles.listItemText} numberOfLines={1}>{ (item.balance-0).toFixed(4) } AION</Text>
+							<Text style={styles.listItemText} numberOfLines={1}>{ new BigNumber(item.balance).toString() } AION</Text>
 						</View>
 					</View>
 				</TouchableOpacity>

@@ -167,7 +167,7 @@ class Account extends Component {
 							endInput={this.onChangeName.bind(this)}
 							type={this.account.type}
 						/>
-						<Text>{ this.account.balance } AION</Text>
+						<Text>{ new BigNumber(this.account.balance).toString() } AION</Text>
 					</View>
 					<View>
 						<QRCode

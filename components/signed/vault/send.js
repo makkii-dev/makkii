@@ -219,6 +219,9 @@ class Send extends Component {
 				    try {
 						promise = tx.signByLedger(derivationIndex);
 					} catch (e) {
+				    	console.log("sign by ledger throw error: ", e);
+						thisLoadingView.hide();
+						Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
 				    	return;
 					}
 				} else {
@@ -283,7 +286,12 @@ class Send extends Component {
 		console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
 		console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
 		console.log("total balance: " + this.account.balance);
-		if (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9) > this.account.balance) {
+
+		let gasLimit = new BigNumber(this.state.gasLimit);
+		let gasPrice = new BigNumber(this.state.gasPrice);
+		let amount = new BigNumber(this.state.amount);
+		let balance = new BigNumber(this.account.balance);
+		if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
 			Alert.alert(strings('alert_title_error'), strings('send.error_insufficient_amount'));
 			return false;
 		}
@@ -305,9 +313,14 @@ class Send extends Component {
 
 	sendAll=() => {
 		console.log("send all clicked.");
-		let all = this.account.balance - parseInt(this.state.gasLimit) * parseFloat(this.state.gasPrice) / Math.pow(10, 9);
+
+		let gasLimit = new BigNumber(this.state.gasLimit);
+		let gasPrice = new BigNumber(this.state.gasPrice);
+		let totalBalance = new BigNumber(this.account.balance);
+		let totalAmount = totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9)));
+
 		this.setState({
-			amount: '' + (all > 0? all: 0)
+			amount: totalAmount.toString()
 		});
 
 	};
