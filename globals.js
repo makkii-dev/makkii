@@ -1,3 +1,4 @@
+global.BigNumber = require('bignumber.js');
 // polyfill unit8array
 if (!Uint8Array.prototype.fill) {
     Uint8Array.prototype.fill = function (value) {
@@ -73,6 +74,12 @@ if(!String.prototype.isChinese){
         else{
             return true;
         }
+    }
+}
+if (!BigNumber.prototype.toNonExString) {
+    BigNumber.prototype.toNotExString = function() {
+        let m = this.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+        return this.toFixed(Math.max(0, (m[1] || '').length - m[2]));
     }
 }
 if (typeof btoa === 'undefined') {

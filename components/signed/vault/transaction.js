@@ -60,7 +60,7 @@ class Transaction extends Component {
 				<TransactionItemCell
 					style={{height:50}}
 					title={strings('transaction_detail.amount_label')}
-					value={transaction.value+' AION'}
+					value={new BigNumber(transaction.value).toNotExString()+' AION'}
 				/>
 				<TransactionItemCell
 					style={{height:50}}

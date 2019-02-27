@@ -208,7 +208,7 @@ class Send extends Component {
 				gasPrice: this.state.gasPrice * 1e9,
 				gas: this.state.gasLimit - 0,
 				to: this.state.recipient,
-                value: new BigNumber(amount).shiftedBy(18).toNumber(),
+                value: new BigNumber(amount).shiftedBy(18),
 				type: 1,
 			});
 			console.log("tx to send:" , tx);
@@ -250,7 +250,9 @@ class Send extends Component {
 							}
 						})
 					}).on('error', function(error) {
-						throw error;
+						console.log("send singed tx failed? ", error);
+						thisLoadingView.hide();
+						Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
 					});
 				}, error=> {
 					console.log("sign ledger tx error:", error);
