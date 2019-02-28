@@ -79,7 +79,11 @@ if(!String.prototype.isChinese){
 if (!BigNumber.prototype.toNonExString) {
     BigNumber.prototype.toNotExString = function() {
         let m = this.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
-        return this.toFixed(Math.max(0, (m[1] || '').length - m[2]));
+        if (m) {
+            return this.toFixed(Math.max(0, (m[1] || '').length - m[2]));
+        } else {
+            return this.toString();
+        }
     }
 }
 if (typeof btoa === 'undefined') {

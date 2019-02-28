@@ -288,7 +288,14 @@ Routes.router.getStateForAction = (action, state) => {
     		case 'Navigation/COMPLETE_TRANSITION':
     			// condition routes from login, register and recovery
     			switch(state.routes[state.routes.length - 1].routeName){
-                    case 'signed_vault': 
+					case 'unsigned_login':
+						console.log("before unsigned login routes:", state.routes);
+						newRoutes = [
+							state.routes[state.routes.length - 1]
+						];
+						newIndex = 0;
+						return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                    case 'signed_vault':
                         newRoutes = [
                             state.routes[state.routes.length - 1]
                         ];
