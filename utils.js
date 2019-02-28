@@ -170,14 +170,11 @@ function fetchRequest(url, method='GET', headers={}) {
 
 }
 function getCoinPrice(currency='CNY',amount=1) {
-    const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest?symbol=AION&convert=${currency}`;
-    const headers={
-        'X-CMC_PRO_API_KEY': 'a4fa68bd-6ff6-468e-85e1-0baf709b658d'
-    };
+    const url = `http://45.118.132.89:8080/price?crypto=AION&fiat=${currency}`;
     return new Promise((resolve, reject) => {
-        fetchRequest(url,'GET',headers).then(res=>{
+        fetchRequest(url,'GET').then(res=>{
             console.log('[res] ',res);
-            const price = res.data['AION'].quote[currency].price;
+            const price = res.price;
             resolve(amount*price)
         },err=>{
             console.log('[err] ', err);
