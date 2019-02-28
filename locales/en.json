@@ -35,7 +35,7 @@
         "warning_mnemonic_not_match": "Importing different mnemonics will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
         "error_invalid_mnemonic": "Please input valid mnemonics"
     },
-    "about": {   
+    "about": {
         "title": "About",
         "version_label": "Version",
         "version_update_button": "Version Update",
@@ -93,7 +93,8 @@
         "button_send_all": "Send All",
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
-        "toast_tx_sent": "Transaction is sent"
+        "toast_tx_sent": "Transaction is sent",
+        "cancel": "Cancel"
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",

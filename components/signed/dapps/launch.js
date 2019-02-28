@@ -22,6 +22,7 @@ class Launch extends Component{
         console.log('launch ');
         this.props.navigation.navigate('signed_dapps_dapp',{
             uri: this.dapp.uri,
+            dappName: this.dapp.name,
         });
     }
     render(){
