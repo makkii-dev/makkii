@@ -10,17 +10,17 @@ import {accounts}          from './actions/accounts.js';
 import {accounts_ledger}   from './actions/accounts_ledger.js';
 import {dapps}             from './actions/dapps.js';
 import {setting}           from './actions/setting.js';
-import {user,user_signout} from './actions/user.js';  
-     
-// reducers    
+import {user,user_signout} from './actions/user.js';
+
+// reducers
 import reducer_account         from './reducers/account.js';
 import reducer_accounts        from './reducers/accounts.js';
 import reducer_accounts_ledger from './reducers/accounts_ledger.js';
 import reducer_dapps           from './reducers/dapps.js';
-import reducer_setting         from './reducers/setting.js'; 
-import reducer_user            from './reducers/user.js'; 
+import reducer_setting         from './reducers/setting.js';
+import reducer_user            from './reducers/user.js';
 
-// store 
+// store
 const store = createStore(combineReducers({
 	account:         reducer_account,
 	accounts:        reducer_accounts,
@@ -28,18 +28,18 @@ const store = createStore(combineReducers({
 	dapps:           reducer_dapps,
 	setting:         reducer_setting,
 	user:            reducer_user,
-}));  
+}));
 
-// ui 
-import Test                  from './components/test.js'; 
+// ui
+import Test                  from './components/test.js';
 import Scan                  from './components/scan.js';
 import Splash                from './components/splash.js';
 import Login                 from './components/unsigned/login.js';
 import Register              from './components/unsigned/register.js';
-import RegisterMnemonic      from './components/unsigned/register_mnemonic.js'; 
+import RegisterMnemonic      from './components/unsigned/register_mnemonic.js';
 import Recovery              from './components/unsigned/recovery.js';
 import RecoveryPassword      from './components/unsigned/recovery_password.js';
-import Vault                 from './components/signed/vault/home.js'; 
+import Vault                 from './components/signed/vault/home.js';
 import VaultAccount          from './components/signed/vault/account.js';
 import VaultImportHdWallet   from './components/signed/vault/import_list';
 import VaultImportPrivateKey from './components/signed/vault/import_private_key.js';
@@ -49,6 +49,7 @@ import VaultTransaction      from './components/signed/vault/transaction.js';
 import Dapps                 from './components/signed/dapps/home.js';
 import DappsDapp             from './components/signed/dapps/dapp.js';
 import DappsLaunch           from './components/signed/dapps/launch.js';
+import DappsSend 	         from './components/signed/dapps/dapp_send.js';
 import Setting               from './components/signed/setting/home.js';
 import SettingAbout          from './components/signed/setting/about.js';
 import SettingPassword       from './components/signed/setting/password.js';
@@ -62,29 +63,29 @@ const Routes = createAppContainer(createStackNavigator({
 	'test': {
 		screen:Test,
 		navigationOptions: {
-            header: null 
+            header: null
         }
 	},
 	'splash':   {
 		screen:Splash,
 		navigationOptions: {
-            header: null 
+            header: null
         }
-	},  
+	},
 	'scan': {
-        screen: Scan, 
+        screen: Scan,
         navigationOptions: {
             header: null
-        } 
+        }
     },
 	'unsigned_login': {
-        screen: Login, 
+        screen: Login,
         navigationOptions: {
-            header: null 
+            header: null
         }
-    }, 
-  	'unsigned_register': { 
-        screen: Register, 
+    },
+  	'unsigned_register': {
+        screen: Register,
         navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
@@ -92,15 +93,15 @@ const Routes = createAppContainer(createStackNavigator({
         }
     },
   	'unsigned_register_mnemonic': {
-        screen: RegisterMnemonic, 
-        navigationOptions: { 
+        screen: RegisterMnemonic,
+        navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle
         }
-    }, 
+    },
   	'unsigned_recovery': {
-        screen: Recovery, 
+        screen: Recovery,
         navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
@@ -108,27 +109,27 @@ const Routes = createAppContainer(createStackNavigator({
         }
     },
   	'unsigned_recovery_password': {
-        screen: RecoveryPassword,  
+        screen: RecoveryPassword,
         navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle
         }
     },
-	'signed_vault': { 
+	'signed_vault': {
 		screen: Vault,
 		navigationOptions: {
             header: null
-        }  
-	}, 
-	'signed_vault_account': { 
+        }
+	},
+	'signed_vault_account': {
 		screen: VaultAccount,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        }  
-	}, 
+        }
+	},
 	'signed_vault_import_list': {
 		screen: VaultImportHdWallet,
 		navigationOptions: {
@@ -136,28 +137,28 @@ const Routes = createAppContainer(createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
         }
 	},
-	'signed_vault_import_private_key': { 
+	'signed_vault_import_private_key': {
 		screen: VaultImportPrivateKey,
 		navigationOptions: {
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
-	}, 
-	'signed_vault_receive': { 
+	},
+	'signed_vault_receive': {
 		screen: VaultReceive,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        }  
-	}, 
-	'signed_vault_send': { 
+        }
+	},
+	'signed_vault_send': {
 		screen: VaultSend,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        }  
+        }
 	},
 	'signed_vault_transaction': {
 		screen: VaultTransaction,
@@ -165,34 +166,42 @@ const Routes = createAppContainer(createStackNavigator({
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        }  
-	}, 
-	'signed_dapps': { 
+        }
+	},
+	'signed_dapps': {
 		screen: Dapps,
 		navigationOptions: {
             headerLeft: null,
             headerRight: null,
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        } 
-	}, 
-	'signed_dapps_dapp': { 
+        }
+	},
+	'signed_dapps_dapp': {
 		screen: DappsDapp,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        } 
-	}, 
-	'signed_dapps_launch': { 
+        }
+	},
+	'signed_dapps_launch': {
 		screen: DappsLaunch,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        } 
-	}, 
-	'signed_setting': {  
+        }
+	},
+	'signed_dapps_send': {
+		screen: DappsSend,
+		navigationOptions: {
+			headerRight: (<View></View>),
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
+	},
+	'signed_setting': {
 		screen: Setting,
 		navigationOptions: {
 			headerLeft: null,
@@ -200,38 +209,38 @@ const Routes = createAppContainer(createStackNavigator({
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
-	},  
-	'signed_setting_about': {  
+	},
+	'signed_setting_about': {
 		screen: SettingAbout,
 		navigationOptions: {
             headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
-	},  
-	'signed_setting_password': {  
+	},
+	'signed_setting_password': {
 		screen: SettingPassword,
 		navigationOptions: {
             // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
         }
-	},  
-	'signed_setting_recovery': {  
+	},
+	'signed_setting_recovery': {
 		screen: SettingRecovery,
 		navigationOptions: {
             // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        } 
-	},  
-	'signed_setting_services': {  
+        }
+	},
+	'signed_setting_services': {
 		screen: SettingServices,
 		navigationOptions: {
             // headerRight: (<View></View>),
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
-        } 
+        }
 	},
 	'signed_setting_currency': {
 		screen: SettingCurrency,
@@ -256,8 +265,8 @@ const Routes = createAppContainer(createStackNavigator({
 		}
 	},
 }, {
-	initialRouteName: 'splash', 
-	swipeEnabled: false, 
+	initialRouteName: 'splash',
+	swipeEnabled: false,
   	animationEnabled: false,
   	lazy: true,
   	transitionConfig: () => ({
@@ -265,7 +274,7 @@ const Routes = createAppContainer(createStackNavigator({
 			duration: 0,
 		},
   	}),
-})); 
+}));
 
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
@@ -299,10 +308,10 @@ Routes.router.getStateForAction = (action, state) => {
                         newRoutes = [
                             state.routes[state.routes.length - 1]
                         ];
-                        newIndex = 0; 
+                        newIndex = 0;
                         return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
-                    default: 
-                        return defaultGetStateForAction(action, state);        
+                    default:
+                        return defaultGetStateForAction(action, state);
                 }
     		case 'Navigation/BACK':
                 switch(state.routes[state.routes.length - 1].routeName){
@@ -310,26 +319,26 @@ Routes.router.getStateForAction = (action, state) => {
                         newRoutes = [
                             state.routes[state.routes.length - 1]
                         ];
-                        newIndex = 0; 
+                        newIndex = 0;
                         return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
-                    default: 
+                    default:
                         newRoutes = state.routes.filter(
-                            r => 
-                                r.routeName !== 'scan' && 
+                            r =>
+                                r.routeName !== 'scan' &&
                                 r.routeName !== 'splash'
-                        ); 
+                        );
                         newIndex = newRoutes.length - 1;
                         return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
                 }
     		default:
-    			return defaultGetStateForAction(action, state); 
+    			return defaultGetStateForAction(action, state);
     	}
     }
     return defaultGetStateForAction(action, state);
-}; 
+};
 
 // dummy
-import data from './data.js'; 
+import data from './data.js';
 store.dispatch(dapps(data.dapps));
 
 import {listenTransaction, listenCoinPrice} from './utils';

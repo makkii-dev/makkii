@@ -10,7 +10,7 @@
     "btn_login": "登录",
     "btn_register": "注册",
     "btn_recovery": "恢复",
-  }, 
+  },
   "register": {
     "title": "注册",
     "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
@@ -18,7 +18,7 @@
     "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "label_password": "输入密码",
     "label_confirm_password": "再次输入密码",
-    "button_register": "注册",  
+    "button_register": "注册",
   },
   "unsigned_register_mnemonic": {
     "title": "助记词",
@@ -91,6 +91,7 @@
     "error_send_transaction": "发送交易失败",
     "progress_sending_tx": "正在发送交易...",
     "toast_tx_sent": "交易已发送",
+    "cancel": "取消",
   },
   "transaction_detail": {
     "title": "交易详情",
@@ -134,7 +135,7 @@
     "error_wrong_device": "找不到账号，连接了不匹配的Ledger设备"
   },
   "wallet": {
-    "fiat_total": "总额", 
+    "fiat_total": "总额",
     "import_accounts_hint": "请导入账户",
     "title_import_from": "选择导入来源：",
     "menu_master_key": "助记词短语",
