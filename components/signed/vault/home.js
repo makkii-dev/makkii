@@ -120,7 +120,7 @@ class Home extends HomeComponent {
 			sortOrder: SORT[0].title,
 			showFilter: false,
 			filter: FILTER[0].title,
-			totalBalance: 0,
+			totalBalance: new BigNumber(0),
 			openRowKey: null,
 			scrollEnabled:true,
 			refreshing: false,
@@ -182,7 +182,7 @@ class Home extends HomeComponent {
 				new Promise((resolve, reject) => {
 					console.log("getbalance: " + value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
-						value.balance = new BigNumber(balance).shiftedBy(-18).toNumber();
+						value.balance = new BigNumber(balance).shiftedBy(-18);
 						resolve(value)
 					},error => {
 						reject(error)
@@ -192,9 +192,10 @@ class Home extends HomeComponent {
 		Promise.all(executors).then(
 			res=>{
 				let newAccounts={};
-				let totalBalance=0;
+				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
-					totalBalance+=account.balance;
+					console.log(account.balance);
+					totalBalance = totalBalance.plus(account.balance);
 					newAccounts[account.address] = account;
 				});
 				console.log('totalBalance', totalBalance);
@@ -326,7 +327,7 @@ class Home extends HomeComponent {
 							<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 						</View>
 						<View style={otherStyles.VaultHome.accountRightView}>
-							<Text style={styles.listItemText} numberOfLines={1}>{ (item.balance-0).toFixed(4) } AION</Text>
+							<Text style={styles.listItemText} numberOfLines={1}>{ new BigNumber(item.balance).toNotExString() } AION</Text>
 						</View>
 					</View>
 				</TouchableOpacity>

@@ -4,7 +4,7 @@ const init = {
     address: '',
     private_key: '',
     derivationIndex: '',
-    balance: '',
+    balance: new BigNumber(0),
     name: '',
     type: '',
     transactions: {}

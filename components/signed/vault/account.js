@@ -64,9 +64,9 @@ class Account extends Component {
 			listenTx.addTransaction(transaction);
 		}
 
-		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd/ hh:mm");
+		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const isSender = transaction.from === this.addr;
-		const value = isSender? '-'+transaction.value: '+'+transaction.value;
+		const value = isSender? '-'+new BigNumber(transaction.value).toNotExString(): '+'+new BigNumber(transaction.value).toNotExString();
 		const valueColor = isSender? 'red':'green';
 		return (
 			<TouchableOpacity
@@ -167,7 +167,7 @@ class Account extends Component {
 							endInput={this.onChangeName.bind(this)}
 							type={this.account.type}
 						/>
-						<Text>{ this.account.balance } AION</Text>
+						<Text numberOfLines={1}>{ new BigNumber(this.account.balance).toNotExString()} AION</Text>
 					</View>
 					<View>
 						<QRCode

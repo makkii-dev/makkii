@@ -29,7 +29,7 @@ const MENU = [
 class HomeHeader extends React.Component{
 
     static propTypes={
-        total:PropTypes.number.isRequired,
+        total:PropTypes.any.isRequired,
         navigation: PropTypes.object.isRequired,
     };
 
@@ -84,7 +84,8 @@ class HomeHeader extends React.Component{
 
 
     render() {
-        const balance = this.props.total*this.props.setting.coinPrice;
+        console.log("homeheader: " , this.props.total.toNumber());
+        const balance = this.props.total.toNumber() * this.props.setting.coinPrice;
         return (
             <View style={styles.header}>
                 <View style={styles.headerEnds}/>
