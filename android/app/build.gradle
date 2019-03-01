@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-web3-webview')
     compile project(':react-native-webview')
     compile project(':react-native-device-info')
     compile project(':react-native-camera')
