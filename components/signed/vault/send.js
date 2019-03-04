@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert} from 'react-native';
+import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -40,7 +40,18 @@ class Send extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
+
+		Linking.addEventListener('chaion://', this._handleOpenURL);
 	}
+
+	componentWillUnmount() {
+		Linking.removeEventListener('', this._handleOpenURL);
+	}
+
+	_handleOpenURL(event) {
+		console.log(event.url);
+	}
+
 	async componentWillReceiveProps(props) {
 	    let scannedData = props.navigation.getParam('scanned', '');
 	    if (scannedData != '') {
