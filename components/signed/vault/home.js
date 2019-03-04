@@ -13,7 +13,8 @@ import {
 	Text,
 	TextInput,
 	TouchableOpacity,
-	View
+	View,
+	Linking
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
@@ -27,6 +28,7 @@ import Toast from "react-native-root-toast";
 import {ModalList} from "../../modalList";
 import {HomeComponent} from "../HomeComponent";
 import HomeHeader from "./home_header";
+import {parseUrl} from "query-string";
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
@@ -151,15 +153,37 @@ class Home extends HomeComponent {
 	}
 
 	componentDidMount(){
+	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[route] ' + this.props.accounts);
 		this.requestStoragePermission();
 		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
+
+		Linking.getInitialURL().then(url => {
+			console.log("linking url: " + url);
+		});
+		Linking.addEventListener('url', this.handleOpenURL);
 	}
 
+	handleOpenURL = (event) => {
+		console.log("linking url=" + event.url);
+		// if (event.url.startsWith('chaion://')) {
+		// 	let urlObj = parseUrl(event.url);
+		// 	if (urlObj.query.address) {
+		// 		this.props.navigation.navigate('signed_vault_send', {
+		// 			address: urlObj.query.address,
+		// 		});
+		// 	} else {
+		// 		console.log("invalid chaion send schema");
+		// 	}
+		// }
+	}
 
 	componentWillUnmount(): void {
+		console.log("unmount home");
+		Linking.removeEventListener('url', this.handleOpenURL);
+
 		this.isMount = false;
 		this.listener.remove();
 	}

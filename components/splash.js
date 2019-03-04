@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Image} from 'react-native';
+import {View,Image, Linking, Platform} from 'react-native';
 import {user} from '../actions/user.js';
 import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
@@ -9,7 +9,8 @@ import {dbGet,decrypt} from '../utils.js';
 class Splash extends Component { 
 	constructor(props){
 		super(props); 
-	} 
+	}
+
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;

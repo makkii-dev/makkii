@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity, Alert} from 'react-native';
+import {View,Text,TouchableOpacity, Alert, Linking} from 'react-native';
 import {ComponentButton, ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
@@ -18,8 +18,22 @@ class Login extends Component {
 		}
 	}
 	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName); 
+		console.log("mount login");
+		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[store.user] ' + JSON.stringify(this.props.user));
+
+		Linking.getInitialURL().then(url => {
+			console.log("linking url: " + url);
+		});
+
+		Linking.addEventListener('url', this.handleOpenURL);
+	}
+	componentWillUnmount() {
+		console.log("unmount login");
+		Linking.removeEventListener('url', this.handleOpenURL);
+	}
+	handleOpenURL = (event) => {
+		console.log("linking url=" + event.url);
 	}
 	render(){
 		const {dispatch} = this.props;
