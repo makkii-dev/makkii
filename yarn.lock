@@ -2624,7 +2624,7 @@ fbjs-scripts@^1.0.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.0, fbjs@^0.8.17, fbjs@^0.8.9:
+fbjs@^0.8.0, fbjs@^0.8.17, fbjs@^0.8.3, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -5665,6 +5665,13 @@ react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   integrity sha512-2U+HxDQdjzExoC6gZ+wUhC8v8JjntppsFVU4v4pRvC/1dkN7DJv1k8UEy9+p7ucEaNrcAzu/j5N09Jf4qG36vw==
   dependencies:
     prop-types "^15.6.1"
+
+react-native-web3-webview@^1.2.8:
+  version "1.2.8"
+  resolved "http://registry.npm.taobao.org/react-native-web3-webview/download/react-native-web3-webview-1.2.8.tgz#c4e76d2e8dfaef7eba93f49cc1934845cfebdbc5"
+  integrity sha1-xOdtLo367366k/ScwZNIRc/r28U=
+  dependencies:
+    fbjs "^0.8.3"
 
 react-native-webview@^5.2.1:
   version "5.2.1"

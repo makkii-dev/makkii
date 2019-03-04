@@ -3,6 +3,7 @@ package com.wallet;
 import android.app.Application;
 import android.webkit.WebView;
 import com.facebook.react.ReactApplication;
+import com.web3webview.Web3WebviewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.reactnative.camera.RNCameraPackage;
@@ -33,6 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new Web3WebviewPackage(),
             new RNCWebViewPackage(),
             new RNDeviceInfo(),
             new RNCameraPackage(),

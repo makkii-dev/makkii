@@ -22,7 +22,7 @@ function updateCurrentNetwork(current_network: string) {
 
 function updateCurrentAddress(current_address: string) {
     console.log('current_address', current_address);
-    currentAddress = [current_address];
+    currentAddress = current_address;
 }
 
 invoke.define("updateCurrentNetwork", updateCurrentNetwork)

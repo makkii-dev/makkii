@@ -12,7 +12,10 @@ export default (getWebview: () => any) => {
             let data: any;
             try {
                 // FIX: webpack hotloader will triger this
-                data = JSON.parse(e.nativeEvent.data)
+                data = JSON.parse(e.nativeEvent.data);
+                if( typeof data === 'string')
+                    data = JSON.parse(data);
+                console.log('listener data ', typeof data, ' ', data);
             } catch (e) { }
             data && listener(data)
         },
