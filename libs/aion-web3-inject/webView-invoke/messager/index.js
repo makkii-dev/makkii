@@ -45,7 +45,6 @@ export function createMessager(sendHandler) {
     function isConnect() { return needWait.length===0 }
 
     function bind(name: string) {
-        console.log('bind', name);
         return (...args: any): Promise<any> => send(name, args)
     }
 
