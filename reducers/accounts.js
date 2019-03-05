@@ -37,8 +37,9 @@ export default function accounts(state = init, action){
 			break;
 		case ACCOUNT_DEFAULT:
 			Object.values(state).map(v=>v.isDefault=false);
-			state[key].isDefault=true;
+			state[action.key].isDefault=true;
 			new_state = Object.assign({},state);
+			should_update_db = true;
 			break;
 		case UPDATE_ACCOUNT_NAME:
 			if (typeof state[action.key] !== 'undefined') {

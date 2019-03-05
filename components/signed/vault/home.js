@@ -295,7 +295,11 @@ class Home extends HomeComponent {
 
 	onSetDefaultAccount(key) {
 		const {dispatch} = this.props;
-		dispatch(account_default(key,this.props.user.hashed_password));
+		this.setState({
+			openRowKey:null
+		},()=>{
+			dispatch(account_default(key,this.props.user.hashed_password));
+		});
 	}
 
 	_renderListItem=(item) => {
@@ -339,7 +343,7 @@ class Home extends HomeComponent {
 										this.onSetDefaultAccount(Key);
 									}}>
 										<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#EEEEEE'}}>
-											<Text style={{color:'#000'}}>{strings('delete_button')}</Text>
+											<Text style={{color:'#000'}}>{strings('set_default_button')}</Text>
 										</View>
 									</TouchableOpacity>
 							}
@@ -362,6 +366,9 @@ class Home extends HomeComponent {
 					}}
 				>
 					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
+						{
+							item.isDefault?<Image source={require("../../../assets/default.png")} style={{width:40,height:40,position:'absolute', top:0, right:0}}/>:null
+						}
 						<View style={otherStyles.VaultHome.accountLeftView}>
 							<View style={otherStyles.VaultHome.accountNameView}>
 								<Image source={accountImage} style={{width:15, height:15, tintColor:'#fff', marginRight:10}}/>

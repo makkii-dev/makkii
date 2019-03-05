@@ -1,32 +1,25 @@
 package com.wallet;
 
 import android.app.Application;
-import android.webkit.WebView;
+
 import com.facebook.react.ReactApplication;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.web3webview.Web3WebviewPackage;
-import com.horcrux.svg.SvgPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
-import com.rnfs.RNFSPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import org.reactnative.camera.RNCameraPackage;
-import com.reactlibrary.RNAionHwWalletPackage;
-import com.web3webview.Web3WebviewPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import org.reactnative.camera.RNCameraPackage;
-import com.rnfs.RNFSPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
-import com.reactlibrary.RNAionHwWalletPackage;
-import com.horcrux.svg.SvgPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
-import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.web3webview.Web3WebviewPackage;
+import com.horcrux.svg.SvgPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.rnfs.RNFSPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.reactnative.camera.RNCameraPackage;
+import com.reactlibrary.RNAionHwWalletPackage;
+;
+
+import android.webkit.WebView;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RandomBytesPackage(),
             new RNFetchBlobPackage(),
             new Web3WebviewPackage(),
             new SvgPackage(),
@@ -51,18 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFSPackage(),
             new RNDeviceInfo(),
             new RNCameraPackage(),
-            new RNAionHwWalletPackage(),
-            new Web3WebviewPackage(),
-            new RNCWebViewPackage(),
-            new RNDeviceInfo(),
-            new RNCameraPackage(),
-            new RNFSPackage(),
-            new RNFetchBlobPackage(),
-            new RNI18nPackage(),
-            new RNAionHwWalletPackage(),
-            new SvgPackage(),
-            new RandomBytesPackage(),
-            new RNGestureHandlerPackage()
+            new RNAionHwWalletPackage()
       );
     }
 

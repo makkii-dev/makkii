@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Button, View, DeviceEventEmitter, ActivityIndicator} from 'react-native';
+import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert} from 'react-native';
 import Web3WebView from 'react-native-web3-webview';
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
@@ -16,6 +16,16 @@ class Dapp extends Component {
     constructor(props) {
         super(props);
         this.uri = this.props.navigation.state.params.uri;
+        this.wallet = null;
+        Object.values(this.props.accounts).map(v=>{
+            if (v.isDefault)
+                this.wallet = v.address;
+        });
+        if(!this.wallet){
+            console.log('not set wallet');
+            Alert.alert(strings('alert_title_error'), strings('dapp_send.error_not_set_default'));
+            this.props.navigation.goBack();
+        }
         this.webViewRef = null;
         this.count = 0;
         this.listeners = [];
@@ -27,7 +37,7 @@ class Dapp extends Component {
     getInitState=()=>{
         console.log('getInitState');
         const network = this.props.setting.endpoint_wallet;
-        const wallet = Object.values(this.props.accounts)[0].address;
+        const wallet = this.wallet;
         return {
             network,
             wallet,
@@ -76,7 +86,7 @@ class Dapp extends Component {
     };
     Ethaccounts = ()=>{
         console.log('eth_accounts');
-        return [Object.values(this.props.accounts)[0].address];
+        return this.wallet;
     };
 
     componentWillUnmount(): void {

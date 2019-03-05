@@ -187,12 +187,16 @@
     "privateKey": "私钥",
     "ledger": "Ledger冷钱包"
   },
+  "dapp_send": {
+    "error_not_set_default": "请先设置一个默认账户."
+  },
   "app_name": "码奇",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",
   "copy_button": "复制",
   "send_button": "提交",
+  "set_default_button": "设为默认",
   "import_button": "导入",
   "refresh_button": "刷新",
   "toast_update_success": "提交成功",

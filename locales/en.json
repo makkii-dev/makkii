@@ -190,6 +190,9 @@
         "USD": "USD",
         "CAD": "CAD"
     },
+    "dapp_send": {
+        "error_not_set_default": "Please set your default account firstly."
+    },
     "app_name": "MAKKI",
     "logout": "Sign Out",
     "update_button": "Update",
@@ -197,6 +200,7 @@
     "copy_button": "Copy",
     "send_button": "Send",
     "refresh_button": "Refresh",
+    "set_default_button": "Set Default",
     "import_button": "Import",
     "toast_update_success": "Update successfully",
     "alert_title_error": "Error",
