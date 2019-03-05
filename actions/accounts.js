@@ -3,6 +3,7 @@ const ACCOUNTS_ADD = 'ADD_ACCOUNTS';
 const ACCOUNTS_SAVE = 'ACCOUNTS_SAVE';
 const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
 const UPDATE_ACCOUNT_TRANSACTIONS = 'UPDATE_ACCOUNT_TRANSACTIONS';
+const ACCOUNT_DEFAULT = "ACCOUNT_DEFAULT";
 const DEL_ACCOUNT = 'DEL_ACCOUNT';
 const DEL_ACCOUNTS = 'DEL_ACCOUNTS';
 
@@ -27,6 +28,14 @@ function accounts_save(hashed_password) {
 		hashed_password
 	}
 
+}
+
+function account_default(key, hashed_password){
+	return {
+		type: ACCOUNT_DEFAULT,
+		key,
+		hashed_password
+	}
 }
 
 function update_account_name(key, newName, hashed_password){
@@ -66,6 +75,7 @@ module.exports={
 	ACCOUNTS,
 	ACCOUNTS_ADD,
 	ACCOUNTS_SAVE,
+	ACCOUNT_DEFAULT,
 	UPDATE_ACCOUNT_NAME,
 	UPDATE_ACCOUNT_TRANSACTIONS,
 	DEL_ACCOUNT,
@@ -73,6 +83,7 @@ module.exports={
 	accounts,
 	accounts_add,
 	accounts_save,
+	account_default,
 	update_account_name,
 	update_account_txs,
 	delete_account,

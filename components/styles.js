@@ -4,12 +4,12 @@ const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
 
 export default styles = {
-	headerStyle: {  
+	headerStyle: {
         shadowOpacity: 0,
-        shadowOffset: { height: 0, width:0 }, 
-        shadowRadius: 0, 
+        shadowOffset: { height: 0, width:0 },
+        shadowRadius: 0,
         borderBottomWidth:0,
-        elevation: 0.5, 
+        elevation: 0.5,
         fontWeight: 'normal',
     },
     headerTitleStyle: {
@@ -19,7 +19,7 @@ export default styles = {
         textAlign: 'center',
         flex: 1
     },
-  	container: { 
+  	container: {
   		padding: 20,
   		height: Dimensions.get('window').height,
 		marginBottom:20,
@@ -40,28 +40,28 @@ export default styles = {
 	marginTop10: {
 		marginTop: 10,
 	},
-	marginTop20: {  
+	marginTop20: {
 		marginTop: 10,
 	},
-	marginTop40: {  
+	marginTop40: {
 		marginTop: 10,
 	},
-	marginTop60: {   
+	marginTop60: {
 		marginTop: 10,
 	},
-	marginTop80: {   
+	marginTop80: {
 		marginTop: 10,
 	},
-  	marginBottom10: {  
+  	marginBottom10: {
 		marginBottom: 10,
 	},
-  	marginBottom20: { 
+  	marginBottom20: {
   		marginBottom: 20,
   	},
-  	marginBottom40: {   
+  	marginBottom40: {
   		marginBottom: 40,
   	},
-  	marginBottom80: {  
+  	marginBottom80: {
   		marginBottom: 80,
   	},
     instruction: {
@@ -128,7 +128,7 @@ export default styles = {
 		display: {
 			position: 'absolute',
 			right: 0,
-			top: 12, 
+			top: 12,
 		}
 	},
 	ImportList:{
@@ -206,6 +206,7 @@ export default styles = {
 		},
 		slideBtn:{
 			width: 100,
+			height: 100,
 			justifyContent: 'center',
 			alignItems: 'center',
 			borderRadius: 10

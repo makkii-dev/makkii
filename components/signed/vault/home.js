@@ -17,7 +17,7 @@ import {
 	Linking
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import {accounts_add, delete_account} from '../../../actions/accounts.js';
+import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
 import {account} from '../../../actions/account.js';
 import wallet from 'react-native-aion-hw-wallet';
 import otherStyles from '../../styles';
@@ -290,6 +290,11 @@ class Home extends HomeComponent {
 		)
 	}
 
+	onSetDefaultAccount(key) {
+		const {dispatch} = this.props;
+		dispatch(account_default(key,this.props.user.hashed_password));
+	}
+
 	_renderListItem=(item) => {
 		const { dispatch } = this.props;
 		const Key = item.address;
@@ -306,13 +311,14 @@ class Home extends HomeComponent {
 				backgroundColor = '#2962ff';
 				accountImage = require('../../../assets/aion_logo.png');
 		}
+		const maxSwipeDistance = item.isDefault? 100: 200;
 		return (
 			<SwipeableRow
 				style={{padding:10}}
 				isOpen={ Key === this.state.openRowKey }
 				swipeEnabled={ this.state.openRowKey === null }
 				preventSwipeRight={true}
-				maxSwipeDistance={100}
+				maxSwipeDistance={maxSwipeDistance}
 				onOpen={()=> {
 					this._onOpen(Key);
 					this._setListViewScrollableTo(false)
@@ -323,15 +329,25 @@ class Home extends HomeComponent {
 				}}
 				shouldBounceOnMount={true}
 				slideoutView={
-					<TouchableOpacity style={otherStyles.VaultHome.slideOutContainer} onPress={()=>{
-						this.onDeleteAccount(Key);
-					}}>
 						<View style={otherStyles.VaultHome.slideOutContainer}>
-							<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#DE0215'}}>
-								<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
-							</View>
+							{
+								item.isDefault?null:
+									<TouchableOpacity onPress={()=>{
+										this.onSetDefaultAccount(Key);
+									}}>
+										<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#EEEEEE'}}>
+											<Text style={{color:'#000'}}>{strings('delete_button')}</Text>
+										</View>
+									</TouchableOpacity>
+							}
+							<TouchableOpacity onPress={()=>{
+								this.onDeleteAccount(Key);
+							}}>
+								<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#DE0215'}}>
+									<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
+								</View>
+							</TouchableOpacity>
 						</View>
-					</TouchableOpacity>
 				}
 			>
 				<TouchableOpacity
