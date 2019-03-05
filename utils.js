@@ -83,7 +83,7 @@ function validateAmount(amount) {
 }
 
 function validatePositiveInteger(input) {
-    let reg= /^(0|[1-9][0-9]*)$/;
+    let reg= /^[1-9][0-9]*$/;
     return reg.test(input);
 }
 

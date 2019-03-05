@@ -173,9 +173,12 @@
   },
   "currency": {
     "title": "法定货币",
-    "CNY": "元",
+    "CNY": "人民币",
     "USD": "美元",
-    "CAD": "加拿大元"
+    "CAD": "加拿大元",
+    "CNY_unit": "元",
+    "USD_unit": "美元",
+    "CAD_unit": "加拿大元"
   },
   "sort": {
     "balance": "余额优先",

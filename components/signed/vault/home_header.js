@@ -90,7 +90,7 @@ class HomeHeader extends React.Component{
             <View style={styles.header}>
                 <View style={styles.headerEnds}/>
                 <View style={styles.headerTitle}>
-                    <Text style={styles.headerTitleText}>{`${strings('wallet.fiat_total')}: ${balance.toFixed(2)} ${strings(`currency.${this.props.setting.fiat_currency}`)}`}</Text>
+                    <Text style={styles.headerTitleText}>{`${strings('wallet.fiat_total')}: ${balance.toFixed(2)} ${strings(`currency.${this.props.setting.fiat_currency}_unit`)}`}</Text>
                 </View>
                 <View style={styles.headerEnds}>
                     <TouchableOpacity
@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
         borderColor: '#8c8a8a',
         elevation: 0.5, 
         fontWeight: 'normal',
+        marginTop: 40
     },
     headerEnds:{
         width: 50,
