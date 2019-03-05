@@ -586,7 +586,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		left:0,
 		right:0,
-		top: 10+top+30 + 40, //status bar + title bar + sort header
+		top: 10+top+30, //status bar + title bar + sort header
 		padding: 5,
 	},
 	sortViewStyle:{
