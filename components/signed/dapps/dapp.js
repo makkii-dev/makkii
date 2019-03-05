@@ -6,7 +6,6 @@ import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
 
-let isInjected = false;
 class Dapp extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -35,18 +34,29 @@ class Dapp extends Component {
         };
     };
 
-    EthsignTransaction = ()=>{
+    EthsignTransaction = (txInfo)=>{
         console.log('eth_signTransaction');
+        return new Promise((resolve, reject) => {
+            reject("Temporarily not implemented")
+        })
     };
 
-    EthsendTransaction = ()=> {
+    EthsendTransaction = (txInfo)=> {
         console.log('eth_sendTransaction');
         return new Promise((resolve, reject) => {
             const count = this.count++;
             const message =  `Dappsend_${count}`;
-            this.props.navigation.navigate('signed_dapps_send', {message: message});
+            setTimeout(()=>{
+                if(this.listeners[count]){
+                    this.listeners[count].remove();
+                    delete this.listeners[count];
+                    reject("timeOut")
+                }
+            },5*60*1000);
+            this.props.navigation.navigate('signed_dapps_send', {message: message, txInfo: txInfo});
             this.listeners[count] = DeviceEventEmitter.addListener(message, (res)=>{
                 this.listeners[count].remove();
+                delete this.listeners[count];
                 console.log('res ', res);
                 if (res.cancel||res.error){
                     console.log('reject');
@@ -60,6 +70,9 @@ class Dapp extends Component {
 
     Ethsign = ()=>{
         console.log('eth_sign');
+        return new Promise((resolve, reject) => {
+            reject("Temporarily not implemented")
+        })
     };
     Ethaccounts = ()=>{
         console.log('eth_accounts');

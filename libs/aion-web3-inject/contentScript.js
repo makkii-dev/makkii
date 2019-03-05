@@ -38,7 +38,7 @@ const signFn = invoke.bind('eth_sign');
 
 const getCurrentAddressFn = invoke.bind('eth_accounts');
 
-const sendTransaction=(...args)=>{
+const sendTransaction=(args)=>{
     args =formatters.inputTransactionFormatter(args);
     return sendTransactionFn(args);
 };
