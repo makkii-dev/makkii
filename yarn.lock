@@ -5703,10 +5703,9 @@ react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   dependencies:
     prop-types "^15.6.1"
 
-react-native-web3-webview@^1.2.8:
+"react-native-web3-webview@https://github.com/Chengchcc/react-native-web3-webview.git":
   version "1.2.8"
-  resolved "http://registry.npm.taobao.org/react-native-web3-webview/download/react-native-web3-webview-1.2.8.tgz#c4e76d2e8dfaef7eba93f49cc1934845cfebdbc5"
-  integrity sha1-xOdtLo367366k/ScwZNIRc/r28U=
+  resolved "https://github.com/Chengchcc/react-native-web3-webview.git#a30fa194bfbe196c5c0c9c0df42b73c3f6ee1e72"
   dependencies:
     fbjs "^0.8.3"
 
