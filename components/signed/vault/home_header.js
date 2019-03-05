@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
         borderColor: '#8c8a8a',
         elevation: 0.5, 
         fontWeight: 'normal',
-        marginTop: 40
+        paddingTop: 40
     },
     headerEnds:{
         width: 50,

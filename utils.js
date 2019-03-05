@@ -59,9 +59,8 @@ function validatePassword(password) {
 }
  
 function validateUrl(url) {
-    // TODO: validate format http(s)://<host>(:<port>)/
-    // TODO: validate port range
-    return true;
+    let reg = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.?)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&amp;a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
+    return reg.test(url);
 }
 
 function validatePrivateKey(privateKey) {
