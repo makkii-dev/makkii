@@ -423,7 +423,7 @@ class Home extends HomeComponent {
 		filterLabel.slice(0,6).isChinese()&&filterLabel.length>3&&(filterLabel=filterLabel.slice(0,3) + '...');
 		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
 		return (
-			<View style={{flex:1, marginTop: 40}}>
+			<View style={{flex:1}}>
 				<HomeHeader
 					total={this.state.totalBalance}
 					navigation={this.props.navigation}

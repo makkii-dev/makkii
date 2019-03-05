@@ -41,7 +41,7 @@ class Send extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
 
-		Linking.addEventListener('chaion://', this._handleOpenURL);
+		Linking.addEventListener('url', this._handleOpenURL);
 	}
 
 	componentWillUnmount() {
