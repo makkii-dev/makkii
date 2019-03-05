@@ -49,39 +49,46 @@ export class ModalList extends React.Component {
     }
 
     render(){
-        return (
-            <View style={{position: 'absolute', top: 10, left: 0, width: width, height: height-10}}>
-                <Modal
-                    transparent={true}
-                    visible={this.props.visible}
-                    animationType={'none'}
-                    onShow={()=>{
-                        this.select='';
-                    }}
-                    onRequestClose={()=>this.props.onClose()}>
-                    <TouchableOpacity activeOpacity={1} style={{width,height}} onPress={()=>this.props.onClose()}>
-                        <FlatList
-                            {...this.props}
-                            style={this.props.style}
-                            data={this.props.data}
-                            renderItem={({item})=>
-                                <TouchableOpacity activeOpacity={0.3} onPress={()=>{
-                                    this.select=item.title;
-                                    this.props.onClose()
-                                }}>
-                                    <View style={this.props.viewStyle}>
-                                        {item.image?<Image source={item.image} style={this.props.imageStyle}/>:null}
-                                        <Text numberOfLines={1} style={this.props.fontStyle}>{strings(item.title)}</Text>
-                                    </View>
-                                </TouchableOpacity>
+        if (this.props.visible) {
+            return (
+                <View style={{position: 'absolute', top: 10, left: 0, width: width, height: height - 10}}>
+                    <Modal
+                        transparent={true}
+                        visible={true}
+                        animationType={'none'}
+                        onShow={() => {
+                            this.select = '';
+                        }}
+                        onRequestClose={() => this.props.onClose()}>
+                        <TouchableOpacity activeOpacity={1} style={{width, height}}
+                                          onPress={() => this.props.onClose()}>
+                            <FlatList
+                                {...this.props}
+                                style={this.props.style}
+                                data={this.props.data}
+                                renderItem={({item}) =>
+                                    <TouchableOpacity activeOpacity={0.3} onPress={() => {
+                                        this.select = item.title;
+                                        this.props.onClose()
+                                    }}>
+                                        <View style={this.props.viewStyle}>
+                                            {item.image ?
+                                                <Image source={item.image} style={this.props.imageStyle}/> : null}
+                                            <Text numberOfLines={1}
+                                                  style={this.props.fontStyle}>{strings(item.title)}</Text>
+                                        </View>
+                                    </TouchableOpacity>
 
-                            }
-                            keyExtractor={(item,index)=>index.toString()}
-                        />
-                    </TouchableOpacity>
-                </Modal>
-            </View>
-        )
+                                }
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                        </TouchableOpacity>
+                    </Modal>
+                </View>
+            )
+        } else {
+            return (null);
+        }
     }
 }
 

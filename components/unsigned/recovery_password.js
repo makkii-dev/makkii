@@ -1,15 +1,16 @@
 import React, {Component} from 'react';
-import {Button,View,Text} from 'react-native';
-import {ComponentPassword} from '../common.js';
+import {Button,View,Text, Alert} from 'react-native';
+import {ComponentPassword, ComponentButton} from '../common.js';
 import {connect} from 'react-redux'; 
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import styles from '../styles.js'; 
+import styles from '../styles.js';
+import {strings} from "../../locales/i18n";
 
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       	title: navigation.getParam('title', 'Recovery/Password'),
+	       	title: strings('recovery_password.title'),
 	    };
     };
 	constructor(props){
@@ -22,9 +23,6 @@ class Password extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		this.props.navigation.setParams({
-			title: 'Recovery/Password',
-		});
 	}
 	async componentWillReceiveProps(props){   
 		this.setState({
@@ -35,7 +33,7 @@ class Password extends Component {
 		const {dispatch} = this.props; 
 		return (
 			<View style={ styles.container }>
-				<Text>Enter password</Text>
+				<Text>{strings('recovery_password.label_password')}</Text>
 				<View style={styles.marginBottom20}>
 					<ComponentPassword  
 						value={this.state.password}
@@ -46,7 +44,7 @@ class Password extends Component {
 						}}
 					/>
 				</View>
-				<Text>Confirm your password</Text>
+				<Text>{strings('recovery_password.label_confirm_password')}</Text>
 				<View style={styles.marginBottom20}>
 					<ComponentPassword 
 						value={this.state.password_confirm} 
@@ -57,16 +55,14 @@ class Password extends Component {
 						}}
 					/>
 				</View>
-				<Button 
-					title="Reset" 
+				<ComponentButton
+					title={strings('recovery_password.button_reset')}
 					onPress={e=>{
-						if (!validatePassword(this.state.password))
-							alert("Invalid password!");
-						else if (!validatePassword(this.state.password_confirm))
-							alert('Invalid confirm password!');
-						else if (this.state.password !== this.state.password_confirm)
-							alert('Confirm password does not match password!') 
-						else {
+						if (!validatePassword(this.state.password)) {
+						    Alert.alert(strings('alert_title_error'), strings('recovery_password.error_password'));
+						} else if (this.state.password !== this.state.password_confirm) {
+							Alert.alert(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
+						} else {
 							let hashed_password = hashPassword(this.state.password);
 							dispatch(user(hashed_password, this.state.mnemonic)); 
 							this.setState({

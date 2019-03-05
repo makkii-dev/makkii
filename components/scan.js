@@ -25,7 +25,7 @@ class Scan extends Component {
 	render(){
 
 		return (
-	  		<View style={{wdith:'100%',height:'100%'}}>		
+	  		<View style={{wdith:'100%',height:'100%'}}>
   				<RNCamera 
 	  			    style={{
 			            flex: 1, 
@@ -101,7 +101,7 @@ class Scan extends Component {
 	  				position: 'absolute',
 	  				backgroundColor:'transparent',
 	  				left: 0,
-	  				top: 0,
+	  				top: 40,
 	  				width: '100%',
 	  				height: 50,	
 	  				flex: 1,

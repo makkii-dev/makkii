@@ -1,6 +1,6 @@
 // libs
 import React, {Component} from 'react';
-import {View} from 'react-native';
+import {View, TouchableOpacity, Image} from 'react-native';
 import {createSwitchNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
@@ -31,7 +31,6 @@ const store = createStore(combineReducers({
 }));
 
 // ui
-import Test                  from './components/test.js';
 import Scan                  from './components/scan.js';
 import Splash                from './components/splash.js';
 import Login                 from './components/unsigned/login.js';
@@ -59,13 +58,47 @@ import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
 import SettingCurrency       from './components/signed/setting/currency.js';
 
+
+const navigationOptions = ({navigation}) => ({
+            headerRight: (<View></View>),
+			headerLeft: (
+                    <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+                    	width: 48,
+						height: 48,
+						alignItems: 'center',
+						justifyContent: 'center',
+					}}>
+						<Image source={require('./assets/arrow_back.png')} style={{
+							tintColor: 'black',
+							width: 20,
+							height: 20,
+						}} />
+					</TouchableOpacity>
+                ),
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle
+        });
+
+const navigationOptionsWithoutRight = ({navigation}) => ({
+	headerLeft: (
+		<TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+			width: 48,
+			height: 48,
+			alignItems: 'center',
+			justifyContent: 'center',
+		}}>
+			<Image source={require('./assets/arrow_back.png')} style={{
+				tintColor: 'black',
+				width: 20,
+				height: 20,
+			}} />
+		</TouchableOpacity>
+	),
+	headerStyle: styles.headerStyle,
+	headerTitleStyle: styles.headerTitleStyle
+});
+
 const Routes = createAppContainer(createStackNavigator({
-	'test': {
-		screen:Test,
-		navigationOptions: {
-            header: null
-        }
-	},
 	'splash':   {
 		screen:Splash,
 		navigationOptions: {
@@ -86,35 +119,19 @@ const Routes = createAppContainer(createStackNavigator({
     },
   	'unsigned_register': {
         screen: Register,
-        navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle
-        }
+        navigationOptions,
     },
   	'unsigned_register_mnemonic': {
         screen: RegisterMnemonic,
-        navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle
-        }
+        navigationOptions,
     },
   	'unsigned_recovery': {
         screen: Recovery,
-        navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle
-        }
+        navigationOptions,
     },
   	'unsigned_recovery_password': {
         screen: RecoveryPassword,
-        navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle
-        }
+        navigationOptions,
     },
 	'signed_vault': {
 		screen: Vault,
@@ -124,49 +141,27 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_vault_account': {
 		screen: VaultAccount,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_vault_import_list': {
 		screen: VaultImportHdWallet,
-		navigationOptions: {
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_vault_import_private_key': {
 		screen: VaultImportPrivateKey,
-		navigationOptions: {
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_vault_receive': {
 		screen: VaultReceive,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_vault_send': {
 		screen: VaultSend,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_vault_transaction': {
 		screen: VaultTransaction,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_dapps': {
 		screen: Dapps,
@@ -179,24 +174,16 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_dapps_dapp': {
 		screen: DappsDapp,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_dapps_launch': {
 		screen: DappsLaunch,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_dapps_send': {
 		screen: DappsSend,
 		navigationOptions: {
-			headerRight: (<View></View>),
+		    headerRight: (<View></View>),
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
 		}
@@ -212,57 +199,31 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_setting_about': {
 		screen: SettingAbout,
-		navigationOptions: {
-            headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions,
 	},
 	'signed_setting_password': {
 		screen: SettingPassword,
-		navigationOptions: {
-            // headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_setting_recovery': {
 		screen: SettingRecovery,
-		navigationOptions: {
-            // headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_setting_services': {
 		screen: SettingServices,
-		navigationOptions: {
-            // headerRight: (<View></View>),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-        }
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_setting_currency': {
 		screen: SettingCurrency,
-		navigationOptions: {
-			headerStyle: styles.headerStyle,
-			headerTitleStyle: styles.headerTitleStyle,
-		}
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_setting_language': {
 		screen: SettingLanguage,
-		navigationOptions: {
-			headerStyle: styles.headerStyle,
-			headerTitleStyle: styles.headerTitleStyle,
-		}
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_setting_advanced': {
 		screen: SettingAdvanced,
-		navigationOptions: {
-			// headerRight: (<View></View>),
-			headerStyle: styles.headerStyle,
-			headerTitleStyle: styles.headerTitleStyle,
-		}
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 }, {
 	initialRouteName: 'splash',

@@ -9,7 +9,7 @@
     "error_incorrect_password": "密码不正确",
     "btn_login": "登录",
     "btn_register": "注册",
-    "btn_recovery": "恢复",
+    "btn_recovery": "恢复"
   },
   "register": {
     "title": "注册",
@@ -18,14 +18,14 @@
     "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "label_password": "输入密码",
     "label_confirm_password": "再次输入密码",
-    "button_register": "注册",
+    "button_register": "注册"
   },
   "unsigned_register_mnemonic": {
     "title": "助记词",
     "hint": "请妥善保存您的助记词!",
     "btn_copy": "复制助记词",
     "btn_done": "完成",
-    "toastr_copy_mnemonic": "助记词复制到粘贴板",
+    "toast_copy_mnemonic": "助记词复制到粘贴板"
   },
   "recovery": {
     "title": "忘记密码",
@@ -34,6 +34,14 @@
     "button_confirm": "确定",
     "warning_mnemonic_not_match": "导入不同的助记词会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "error_invalid_mnemonic": "请输入有效的助记符"
+  },
+  "recovery_password": {
+    "title": "恢复密码",
+    "label_password": "输入密码",
+    "label_confirm_password": "请再次输入密码",
+    "button_reset": "重置",
+    "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
+    "error_dont_match": "两次密码不一致!"
   },
   "about": {
     "title": "关于",
@@ -210,5 +218,6 @@
   "warning_delete_account": "确定要删除这个账户吗?",
   "error_connect_remote_server": "无法连接到远程服务器",
   "message_no_more_data": "暂无更多数据",
-  "toast_double_press_exit": "再按一次退出应用"
+  "toast_double_press_exit": "再按一次退出应用",
+  "toast_invalid_mnemonic": "无效的助记词"
 }

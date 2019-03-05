@@ -41,8 +41,8 @@ class Home extends Component {
 									let pass = validateMnemonic(data.data);
 									return {
 										pass: pass,
-										err: pass ? '' : 'Invalid mnemonic'
-									};  
+										err: pass ? '' : strings('toast_invalid_mnemonic')
+									};
 								}
 							}); 
 						}} 
