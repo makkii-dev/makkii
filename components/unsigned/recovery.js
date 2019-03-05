@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Alert} from 'react-native';
+import {View,Text,Alert,Keyboard, TouchableOpacity} from 'react-native';
 import {dbGet} from '../../utils.js';
 import {ComponentButton,InputMultiLines} from '../common.js';
 import {validateMnemonic} from '../../libs/aion-hd-wallet/index.js';
@@ -30,6 +30,7 @@ class Home extends Component {
 	}
 	render(){	
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
 			<View style={styles.container}> 
 				<View style={styles.marginBottom20}>
 					<ComponentButton 
@@ -102,6 +103,7 @@ class Home extends Component {
 					}}
 				/>
 			</View>
+			</TouchableOpacity>
 		); 
 	}
 }

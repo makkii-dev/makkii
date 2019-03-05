@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity, Alert, Linking} from 'react-native';
+import {View,Text,TouchableOpacity, Alert, Linking, Keyboard} from 'react-native';
 import {ComponentButton, ComponentLogo,ComponentPassword} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import {setting} from '../../actions/setting';
 import {accounts as accounts_action} from '../../actions/accounts';
 import {dbGet,decrypt} from '../../utils.js';
 import styles from '../styles.js';
@@ -37,7 +36,8 @@ class Login extends Component {
 	}
 	render(){
 		const {dispatch} = this.props;
-		return ( 
+		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={styles.container}>
 				<View style={{
 					padding: 40,
@@ -101,6 +101,7 @@ class Login extends Component {
 					</TouchableOpacity>
 				</View>
 			</View>
+			</TouchableOpacity>
 		);
 	}
 }

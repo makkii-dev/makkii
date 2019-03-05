@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Alert,DeviceEventEmitter, TouchableOpacity} from 'react-native';
+import {View,Text,Alert,DeviceEventEmitter, TouchableOpacity, Keyboard} from 'react-native';
 import {Input} from '../../common.js';
 import {setting} from '../../../actions/setting.js';
 import {validateUrl} from '../../../utils.js';
@@ -53,6 +53,7 @@ class Services extends Component {
 
 	render(){
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
 			<View style={styles.container}>	
 				<View>
 					<Text>{strings('service_configuration.endpoint_wallet')}</Text>
@@ -137,6 +138,7 @@ class Services extends Component {
 					{/*/>*/}
 				{/*</View>*/}
 			</View>
+			</TouchableOpacity>
 		)
 	}
 

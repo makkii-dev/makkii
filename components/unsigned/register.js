@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Text, Alert} from 'react-native';
+import {View, Text, Alert, TouchableOpacity, Keyboard} from 'react-native';
 import {ComponentButton,ComponentPassword} from '../common.js';
 import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
@@ -31,6 +31,7 @@ class Home extends Component {
 	render(){
 		const { dispatch } = this.props;
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={styles.container}>
 				<View>
 					<Text>{strings("register.label_password")}</Text>
@@ -93,6 +94,7 @@ class Home extends Component {
 					/>
 				</View>
 			</View>
+			</TouchableOpacity>
 		);
 	}
 }

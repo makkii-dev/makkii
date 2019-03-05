@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
-import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity} from 'react-native';
+import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
@@ -43,6 +43,7 @@ class Advanced extends Component {
     }
     render() {
         return (
+            <TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
             <View style={styles.container}>
                 <View>
                     <Text>{strings('advanced.label_default_account_name')}</Text>
@@ -104,6 +105,7 @@ class Advanced extends Component {
                             {/*/>*/}
                 {/*</View>*/}
             </View>
+            </TouchableOpacity>
         )
     }
 

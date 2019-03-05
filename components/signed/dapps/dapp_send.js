@@ -7,7 +7,7 @@ import {
     Text,
     BackHandler,
     ScrollView,
-    TextInput, Image, StyleSheet, Dimensions, Alert
+    TextInput, Keyboard, StyleSheet, Dimensions, Alert
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
@@ -171,6 +171,7 @@ class DappSend extends React.Component{
 
     render(){
         return (
+            <TouchableOpacity activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
             <View style={{flex:1,justifyContent:'center'}}>
                 <ScrollView
                     style={{width,height}}
@@ -279,6 +280,7 @@ class DappSend extends React.Component{
                     this.loadingView = element;
                 }}/>
             </View>
+            </TouchableOpacity>
         )
     }
 
