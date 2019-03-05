@@ -3,6 +3,15 @@ package com.wallet;
 import android.app.Application;
 import android.webkit.WebView;
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.web3webview.Web3WebviewPackage;
+import com.horcrux.svg.SvgPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.rnfs.RNFSPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import org.reactnative.camera.RNCameraPackage;
+import com.reactlibrary.RNAionHwWalletPackage;
 import com.web3webview.Web3WebviewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
@@ -34,6 +43,15 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new Web3WebviewPackage(),
+            new SvgPackage(),
+            new RNI18nPackage(),
+            new RNGestureHandlerPackage(),
+            new RNFSPackage(),
+            new RNDeviceInfo(),
+            new RNCameraPackage(),
+            new RNAionHwWalletPackage(),
             new Web3WebviewPackage(),
             new RNCWebViewPackage(),
             new RNDeviceInfo(),

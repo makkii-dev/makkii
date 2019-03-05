@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, View, DeviceEventEmitter, ActivityIndicator} from 'react-native';
-import {WebView} from 'react-native-webview';
 import Web3WebView from 'react-native-web3-webview';
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';

@@ -14,7 +14,8 @@ import {
 	TextInput,
 	TouchableOpacity,
 	View,
-	Linking
+	Linking,
+	Platform,
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
@@ -156,7 +157,9 @@ class Home extends HomeComponent {
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[route] ' + this.props.accounts);
-		this.requestStoragePermission();
+		if (Platform.OS === 'android') {
+			this.requestStoragePermission();
+		}
 		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
 
@@ -397,7 +400,7 @@ class Home extends HomeComponent {
 		filterLabel.slice(0,6).isChinese()&&filterLabel.length>3&&(filterLabel=filterLabel.slice(0,3) + '...');
 		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
 		return (
-			<View style={{flex:1}}>
+			<View style={{flex:1, marginTop: 40}}>
 				<HomeHeader
 					total={this.state.totalBalance}
 					navigation={this.props.navigation}
@@ -410,7 +413,7 @@ class Home extends HomeComponent {
 					}}
 				>
 					<View style={{
-						flexDirection: 'row', height: 40, alignItems: 'center',
+						flexDirection: 'row', height: 50, alignItems: 'center',
 						marginLeft: 10,
 						marginRight: 10,
 						width: width - 20,
@@ -441,32 +444,33 @@ class Home extends HomeComponent {
 							<Image source={require('../../../assets/search.png')}
 								   style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>
 							<TextInput style={styles.searchStyle}
+                                       multiline={false}
 								onChangeText={(value)=>this.setState({keyWords:value})}
 							/>
 						</View>
 
-						<ModalList
-							data={SORT}
-							ref={ref => this.sortRef = ref}
-							visible={this.state.showSort}
-							style={styles.sortContainer}
-							viewStyle={styles.sortViewStyle}
-							fontStyle={styles.sortFontStyle}
-							onClose={() => this.closeSort()}
-							ItemSeparatorComponent={() => (
-								<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
-						/>
-						<ModalList
-							data={FILTER}
-							ref={ref => this.filterRef = ref}
-							visible={this.state.showFilter}
-							style={styles.sortContainer}
-							viewStyle={styles.sortViewStyle}
-							fontStyle={styles.sortFontStyle}
-							onClose={() => this.closeFilter()}
-							ItemSeparatorComponent={() => (
-								<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
-						/>
+                        <ModalList
+                            data={SORT}
+                            ref={ref => this.sortRef = ref}
+                            visible={this.state.showSort}
+                            style={styles.sortContainer}
+                            viewStyle={styles.sortViewStyle}
+                            fontStyle={styles.sortFontStyle}
+                            onClose={() => this.closeSort()}
+                            ItemSeparatorComponent={() => (
+                                <View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+                        />
+                        <ModalList
+                            data={FILTER}
+                            ref={ref => this.filterRef = ref}
+                            visible={this.state.showFilter}
+                            style={styles.sortContainer}
+                            viewStyle={styles.sortViewStyle}
+                            fontStyle={styles.sortFontStyle}
+                            onClose={() => this.closeFilter()}
+                            ItemSeparatorComponent={() => (
+                                <View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
+                        />
 					</View>
 					<FlatList
 						style={{flex:1}}
@@ -556,7 +560,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		left:0,
 		right:0,
-		top: 10+top+30, //status bar + title bar + sort header
+		top: 10+top+30 + 40, //status bar + title bar + sort header
 		padding: 5,
 	},
 	sortViewStyle:{
@@ -583,7 +587,8 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 		borderBottomColor:'#000',
 		marginBottom:5,
-		padding:0,
+		padding: 0,
+		height: 48,
 		width:80,
 		alignItems:'flex-end',
 	},

@@ -9,7 +9,7 @@ import styles from '../styles.js';
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
-	       title: navigation.getParam('title', 'Register/Mnemonic'),
+	       title: strings('unsigned_register_mnemonic.title')
 	    };
     };
 	constructor(props){
@@ -18,9 +18,6 @@ class Mnemonic extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.user);
-		this.props.navigation.setParams({
-			title: 'Register/Mnemonic',
-		});
 		if(this.props.user.mnemonic !== ''){
 
 		} 
@@ -43,7 +40,7 @@ class Mnemonic extends Component {
 						title={strings('unsigned_register_mnemonic.btn_copy')} 
 						onPress={e=>{
 							Clipboard.setString(this.props.user.mnemonic);
-							Toast.show(strings('unsigned_register_mnemonic.toastr_copy_mnemonic'));
+							Toast.show(strings('unsigned_register_mnemonic.toast_copy_mnemonic'));
 						}}
 					/>
 				</View>

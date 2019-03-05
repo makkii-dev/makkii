@@ -94,6 +94,7 @@ class HomeHeader extends React.Component{
                 </View>
                 <View style={styles.headerEnds}>
                     <TouchableOpacity
+                        style={{width: 60, height: 60, justifyContent: 'center', alignItems: 'center'}}
                         activeOpacity={0.5}
                         onPress={()=>{
                             this.setState({showMenu:true});
@@ -107,13 +108,13 @@ class HomeHeader extends React.Component{
                     <ModalList
                         data={MENU}
                         visible={this.state.showMenu}
-                        ref={ref=>this.menuRef=ref}
+                        ref={ref => this.menuRef = ref}
                         style={styles.menuContainer}
                         viewStyle={styles.menuStyle}
                         fontStyle={styles.menuFontStyle}
                         imageStyle={styles.menuImageStyle}
-                        onClose={()=>this.closeMenu()}
-                        ItemSeparatorComponent={()=>(<View style={styles.divider}/>)}                        
+                        onClose={() => this.closeMenu()}
+                        ItemSeparatorComponent={() => (<View style={styles.divider}/>)}
                     />
                 </View>
                 <Loading ref={(element) => {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0,
         shadowOffset: { height: 0, width:0 }, 
         shadowRadius: 0, 
-        borderBottomWidth:0.2,
+        borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#8c8a8a',
         elevation: 0.5, 
         fontWeight: 'normal',
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
         width: mWidth,
         position: 'absolute',
         left: width - mWidth - 10,
-        top: 50,
+        top: 80,
         padding: 5,
         borderWidth: 1,
         borderColor: '#8c8a8a',
@@ -194,8 +195,7 @@ const styles = StyleSheet.create({
         marginLeft: 5,
     },
     menuImageStyle:{
-        width: 20,
-        height:20,
+        width: 20, height:20,
         marginRight: 10,
         tintColor: '#8c8a8a'
     },
