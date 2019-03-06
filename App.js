@@ -206,7 +206,7 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_setting_recovery': {
 		screen: SettingRecovery,
-		navigationOptions: navigationOptionsWithoutRight,
+		navigationOptions,
 	},
 	'signed_setting_services': {
 		screen: SettingServices,

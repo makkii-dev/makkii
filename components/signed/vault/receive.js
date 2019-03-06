@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
-import { Input } from '../../common.js';
+import { Input, ComponentButton } from '../../common.js';
 import styles from '../../styles.js';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
@@ -117,7 +117,7 @@ class Receive extends Component {
 					/>
 				</View>
 				<View style={styles.marginTop20}>
-					<Button
+					<ComponentButton
 						title={strings('refresh_button')}
 						onPress={ () => this.onRefresh() }
 					/>

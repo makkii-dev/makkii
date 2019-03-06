@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Button,Keyboard,Clipboard, TouchableOpacity} from 'react-native';
-import {InputMultiLines} from '../../common.js';
+import {View,Keyboard,Clipboard, TouchableOpacity} from 'react-native';
+import {InputMultiLines, ComponentButton} from '../../common.js';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-root-toast';
 import styles from '../../styles.js';
@@ -39,7 +39,7 @@ class Recovery extends Component {
 					/>
 				</View>
 				<View style={styles.marginBottom80}>
-					<Button
+					<ComponentButton
 						title={strings('copy_button')}
 						onPress={e => {
 							Clipboard.setString(this.props.user.mnemonic);
