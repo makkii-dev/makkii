@@ -330,54 +330,6 @@ class EditableView extends  React.PureComponent {
 	}
 }
 
-class TextInputWithLabel extends React.PureComponent{
-	static propTypes={
-		leftView: PropTypes.any.isRequired,
-		rightView: PropTypes.any,
-		textStyle: PropTypes.any.isRequired,
-		onChangeText: PropTypes.func.isRequired,
-	};
-	static defaultProps={
-		leftView: null,
-		textStyle: {}
-	};
-	constructor(props){
-		super(props);
-		this.state={
-			focus:false,
-		}
-	}
-	render(): React.ReactNode {
-		let leftView = null;
-		let leftViewLen = this.state.focus? 80:100;
-		if (this.props.leftView){
-			leftView = (
-				<View style={{justifyContent: 'center', width:leftViewLen}}>
-					{
-						this.props.leftView
-					}
-				</View>
-			) }
-		return (
-			<View style={{...this.props.style, flexDirection: 'row', alignItems: 'flex-start'}}>
-				{leftView}
-				<TextInput
-					{...this.props}
-					onChangeText={value=>this.props.onChangeText(value)}
-					placeholder={this.props.placeholder}
-					style={{...this.props.textStyle,padding:10,borderColor:'#000',borderWidth: 1/ PixelRatio.get(), flex:1}}
-					onFocus={()=>this.setState({focus:true})}
-					onBlur={()=>this.setState({focus:false})}
-					numberOfLines={this.props.numberOfLines}
-					returnKeyType='done'
-				/>
-				{this.props.rightView}
-			</View>
-		);
-	}
-
-}
-
 class TransactionItemCell extends React.PureComponent {
 	static defaultProps={
 		valueTextAlign: 'right',
@@ -402,6 +354,5 @@ module.exports = {
 	ImportListItem,
 	ImportListfooter,
 	EditableView,
-	TextInputWithLabel,
 	TransactionItemCell,
 };

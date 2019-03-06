@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking} from 'react-native';
+import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking, Keyboard} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -77,121 +77,123 @@ class Send extends Component {
 	render(){
 		const arrowImage =  this.state.showAdvanced? require('../../../assets/arrow_up.png') :  require('../../../assets/arrow_down.png')
 		return (
-			<View style={{flex:1,justifyContent:'center'}}>
-                <ScrollView
-					style={{width,height}}
-					contentContainerStyle={{justifyContent: 'center',padding:20}}
-                    keyboardShouldPersistTaps='always'
-				>
-                    <View>
-                        <Text>{strings('send.label_receiver')}</Text>
-                    </View>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={st.text_input}
-                            value={this.state.recipient}
-                            placeholder={strings('send.hint_recipient')}
-                            multiline={true}
-							numberOfLines={2}
-                            onChangeText={text => {
-                                this.setState({
-                                    recipient: text,
-                                });
-                            }}
-                        />
-                        <TouchableOpacity onPress={()=> this.scan()}>
-                            <Image source={require('../../../assets/scan.png')} style={{
-                                width: 20,
-                                height: 20,
-                            }} />
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{
-                        marginTop: 20,
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                    }}>
-                        <Text>{strings('send.label_amount')}</Text>
-                        <Text style={{
-                            color: 'blue',
-                        }} onPress={()=>this.sendAll()}>{strings('send.button_send_all')}</Text>
-                    </View>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={st.text_input}
-                            value={this.state.amount}
-                            onChangeText={text => {
-                                this.setState({
-                                    amount: text,
-                                });
-                            }}
-                        />
-                        <Text style={{
-                            color: 'black',
-                            fontWeight: 'normal',
-                            fontSize: 16,
-                        }}>AION</Text>
-                    </View>
-                    <TouchableOpacity activeOpacity={1} onPress={()=>{
-                        this.setState({
-                            showAdvanced: !this.state.showAdvanced,
-                        })
-                    }}>
-                        <View style={{marginTop: 20, marginBottom: 10}}>
-                            {
-                                this.state.showAdvanced ?
-                                <Text style={{color:'blue'}}>{strings('send.hide_advanced')}</Text>:
-                                <Text style={{color:'blue'}}>{strings('send.show_advanced')}</Text>
-                            }
-                            {/*<Image source={arrowImage} style={{marginLeft:10, width:30, height:30, tintColor: '#fff'}}/>*/}
+			<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
+                <View style={{flex:1,justifyContent:'center'}}>
+                    <ScrollView
+                        style={{width,height}}
+                        contentContainerStyle={{justifyContent: 'center',padding:20}}
+                        keyboardShouldPersistTaps='always'
+                    >
+                        <View>
+                            <Text>{strings('send.label_receiver')}</Text>
                         </View>
-                    </TouchableOpacity>
-                    {
-                        this.state.showAdvanced ?
-                            <View>
+                        <View style={st.text_input_cell}>
+                            <TextInput
+                                style={st.text_input}
+                                value={this.state.recipient}
+                                placeholder={strings('send.hint_recipient')}
+                                multiline={true}
+                                numberOfLines={2}
+                                onChangeText={text => {
+                                    this.setState({
+                                        recipient: text,
+                                    });
+                                }}
+                            />
+                            <TouchableOpacity onPress={()=> this.scan()}>
+                                <Image source={require('../../../assets/scan.png')} style={{
+                                    width: 20,
+                                    height: 20,
+                                }} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{
+                            marginTop: 20,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                        }}>
+                            <Text>{strings('send.label_amount')}</Text>
+                            <Text style={{
+                                color: 'blue',
+                            }} onPress={()=>this.sendAll()}>{strings('send.button_send_all')}</Text>
+                        </View>
+                        <View style={st.text_input_cell}>
+                            <TextInput
+                                style={st.text_input}
+                                value={this.state.amount}
+                                onChangeText={text => {
+                                    this.setState({
+                                        amount: text,
+                                    });
+                                }}
+                            />
+                            <Text style={{
+                                color: 'black',
+                                fontWeight: 'normal',
+                                fontSize: 16,
+                            }}>AION</Text>
+                        </View>
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{
+                            this.setState({
+                                showAdvanced: !this.state.showAdvanced,
+                            })
+                        }}>
+                            <View style={{marginTop: 20, marginBottom: 10}}>
+                                {
+                                    this.state.showAdvanced ?
+                                    <Text style={{color:'blue'}}>{strings('send.hide_advanced')}</Text>:
+                                    <Text style={{color:'blue'}}>{strings('send.show_advanced')}</Text>
+                                }
+                                {/*<Image source={arrowImage} style={{marginLeft:10, width:30, height:30, tintColor: '#fff'}}/>*/}
+                            </View>
+                        </TouchableOpacity>
+                        {
+                            this.state.showAdvanced ?
                                 <View>
-                                    <Text>{strings('send.label_gas_price')}</Text>
-                                </View>
-                                <View style={st.text_input_cell}>
+                                    <View>
+                                        <Text>{strings('send.label_gas_price')}</Text>
+                                    </View>
+                                    <View style={st.text_input_cell}>
+                                        <TextInput
+                                            style={st.text_input}
+                                            value={this.state.gasPrice}
+                                            onChangeText={text => {
+                                                this.setState({
+                                                    gasPrice: text,
+                                                });
+                                            }}
+                                        />
+                                        <Text style={{
+                                            color: 'black',
+                                            fontWeight: 'normal',
+                                            fontSize: 16,
+                                        }}>AMP</Text>
+                                    </View>
+                                    <View style={{marginTop: 20}}>
+                                        <Text>{strings('send.label_gas_limit')}</Text>
+                                    </View>
                                     <TextInput
-                                        style={st.text_input}
-                                        value={this.state.gasPrice}
+                                        style={{...st.text_input, marginRight: 0}}
+                                        value={this.state.gasLimit}
                                         onChangeText={text => {
                                             this.setState({
-                                                gasPrice: text,
+                                                gasLimit: text,
                                             });
                                         }}
                                     />
-                                    <Text style={{
-                                        color: 'black',
-                                        fontWeight: 'normal',
-                                        fontSize: 16,
-                                    }}>AMP</Text>
-                                </View>
-                                <View style={{marginTop: 20}}>
-                                    <Text>{strings('send.label_gas_limit')}</Text>
-                                </View>
-                                <TextInput
-                                    style={{...st.text_input, marginRight: 0}}
-                                    value={this.state.gasLimit}
-                                    onChangeText={text => {
-                                        this.setState({
-                                            gasLimit: text,
-                                        });
-                                    }}
-                                />
-                            </View>: null
-                    }
-                    <View style={{ marginTop:40, }}>
-                        <Button title={strings('send_button')}
-                                onPress={this.transfer.bind(this)}
-                                />
-                    </View>
-                </ScrollView>
-                <Loading ref={element => {
-                    this.loadingView = element;
-				}}/>
-			</View>
+                                </View>: null
+                        }
+                        <View style={{ marginTop:40, }}>
+                            <Button title={strings('send_button')}
+                                    onPress={this.transfer.bind(this)}
+                                    />
+                        </View>
+                    </ScrollView>
+                    <Loading ref={element => {
+                        this.loadingView = element;
+                    }}/>
+                </View>
+			</TouchableOpacity>
 		)
 	}
 

@@ -145,9 +145,8 @@ const styles = StyleSheet.create({
         shadowRadius: 0, 
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#8c8a8a',
-        elevation: 0.5, 
+        elevation: 0.5,
         fontWeight: 'normal',
-        paddingTop: 40
     },
     headerEnds:{
         width: 50,

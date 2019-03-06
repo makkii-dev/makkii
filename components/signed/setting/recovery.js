@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Button,TextInput,Clipboard} from 'react-native';
+import {View,Button,Keyboard,Clipboard, TouchableOpacity} from 'react-native';
 import {InputMultiLines} from '../../common.js';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-root-toast';
@@ -20,6 +20,7 @@ class Recovery extends Component {
 	}
 	render(){
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={styles.container}>
 				<View style={styles.marginBottom40}>
                     <InputMultiLines
@@ -56,6 +57,7 @@ class Recovery extends Component {
 				    />	   
 				</View>
 			</View>
+			</TouchableOpacity>
 		)
 	}
 }

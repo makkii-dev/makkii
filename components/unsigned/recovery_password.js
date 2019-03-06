@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button,View,Text, Alert} from 'react-native';
+import {Keyboard,TouchableOpacity,View,Text, Alert} from 'react-native';
 import {ComponentPassword, ComponentButton} from '../common.js';
 import {connect} from 'react-redux'; 
 import {hashPassword,validatePassword} from '../../utils.js';
@@ -32,6 +32,7 @@ class Password extends Component {
 	render(){
 		const {dispatch} = this.props; 
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={ styles.container }>
 				<Text>{strings('recovery_password.label_password')}</Text>
 				<View style={styles.marginBottom20}>
@@ -75,6 +76,7 @@ class Password extends Component {
 					}}
 				/>
 			</View>
+			</TouchableOpacity>
 		);
 	}
 }

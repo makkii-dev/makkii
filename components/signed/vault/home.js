@@ -16,6 +16,7 @@ import {
 	View,
 	Linking,
 	Platform,
+	Keyboard,
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
@@ -424,6 +425,7 @@ class Home extends HomeComponent {
 		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
 		return (
 			<View style={{flex:1}}>
+				<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 				<HomeHeader
 					total={this.state.totalBalance}
 					navigation={this.props.navigation}
@@ -528,6 +530,7 @@ class Home extends HomeComponent {
 						backgroundColor:'rgba(0, 0, 0, 0.5)'
 					}}/>:null
 				}
+				</TouchableOpacity>
 				<ComponentTabBar
 					style={{
 						backgroundColor: 'white',
@@ -583,7 +586,7 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		left:0,
 		right:0,
-		top: 10+top+30 + 40, //status bar + title bar + sort header
+		top: 10+top+30, //status bar + title bar + sort header
 		padding: 5,
 	},
 	sortViewStyle:{

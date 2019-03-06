@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Clipboard } from 'react-native';
+import { View, Text, Clipboard, TouchableOpacity, Keyboard } from 'react-native';
 import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
@@ -24,6 +24,7 @@ class Mnemonic extends Component {
 	}
 	render(){
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={styles.container}>
 				<View style={styles.marginBottom10}>
 					<Text>{strings('unsigned_register_mnemonic.hint')}</Text>
@@ -53,6 +54,7 @@ class Mnemonic extends Component {
 					/>
 				</View>
 			</View>
+			</TouchableOpacity>
 		);
 	}
 }

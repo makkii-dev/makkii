@@ -6,7 +6,9 @@ import {
 	Button,
 	Alert,
 	TouchableWithoutFeedback,
-	PermissionsAndroid
+	PermissionsAndroid,
+	TouchableOpacity,
+	Keyboard
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
@@ -88,6 +90,7 @@ class Receive extends Component {
 	}
 	render(){
 		return (
+			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={{flex:1, paddingRight: 20, paddingLeft: 20}}>
 				<View style={{marginTop: 10}}>
 					<Text>{strings('receive.label_modify_amount')}</Text>
@@ -142,6 +145,7 @@ class Receive extends Component {
 					}}
 				/>
 			</View>
+			</TouchableOpacity>
 		)
 	}
 }

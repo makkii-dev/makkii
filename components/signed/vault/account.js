@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, Button, PixelRatio, Image,Clipboard, Dimensions, RefreshControl} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import styles from '../../styles.js';
 import {EditableView} from "../../common";
@@ -159,6 +159,7 @@ class Account extends Component {
 	render(){
 		const {navigation} = this.props;
 		return (
+			<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={{flex:1, justifyContent: 'space-between'}}>
 				<View style={styles.Account.summaryContainer}>
 					<View style={styles.Account.summaryLeftContainer}>
@@ -237,6 +238,7 @@ class Account extends Component {
 					}
 				/>
 			</View>
+			</TouchableOpacity>
 		)
 	}
 }
