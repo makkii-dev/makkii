@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert} from 'react-native';
+import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert, TouchableOpacity, Image} from 'react-native';
 import Web3WebView from 'react-native-web3-webview';
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
@@ -9,7 +9,14 @@ import {strings} from "../../../locales/i18n";
 class Dapp extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: navigation.state.params.dappName || 'Dapp'
+        title: navigation.state.params.dappName || 'Dapp',
+        headerRight: (
+            <TouchableOpacity activeOpacity={1} style={{height:48, width:48, justifyContent: 'center', alignItems: 'center', marginRight:10}} onPress={()=>{
+                navigation.state.params.Reload&&navigation.state.params.Reload();
+            }}>
+                <Image source={require("../../../assets/refresh.png")} style={{height:24,width:24,tintColor:'black'}}/>
+            </TouchableOpacity>
+        )
     });
 
 
@@ -32,7 +39,8 @@ class Dapp extends Component {
         this.state={
             inject:'',
             loading:false,
-        }
+        };
+        this.props.navigation.setParams({Reload:()=>this.onReload()})
     }
     getInitState=()=>{
         console.log('getInitState');
@@ -117,18 +125,25 @@ class Dapp extends Component {
         this.invoke.listener(event)
     };
 
+    onReload = ()=>{
+        this.webViewRef.reload();
+    };
+
+    renderLoading = () => {
+        return (
+            <View style={{flex: 1,justifyContent: 'center', alignItems:'center'}}>
+                <ActivityIndicator
+                    animating={true}
+                    color='red'
+                    size="large"
+                />
+            </View>
+        );
+    };
 
     render() {
         if(this.state.inject === ''){
-            return (
-                <View style={{flex: 1,justifyContent: 'center', alignItems:'center'}}>
-                    <ActivityIndicator
-                        animating={true}
-                        color='red'
-                        size="large"
-                    />
-                </View>
-            );
+            return this.renderLoading();
         }else{
             return (
                 <View style={{flex: 1}}>
@@ -137,7 +152,12 @@ class Dapp extends Component {
                         source={{uri: this.uri}}
                         cacheEnabled={false}
                         onMessage={this.onMessage}
+                        renderLoading={()=>this.renderLoading()}
                         injectedOnStartLoadingJavaScript={this.state.inject}
+                        onLoadEnd={()=>{
+                            this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
+                            this.updateCurrentAddress(this.wallet);
+                        }}
                     />
                 </View>
             )
