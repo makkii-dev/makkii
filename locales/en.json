@@ -212,6 +212,7 @@
     "invalid_amount": "Invalid amount",
     "error_save_qrcode_image": "Failed to save qrcode image.",
     "toast_save_image_success": "Image was saved to {{path}}",
+    "toast_save_image_to_album": "Image was saved to album",
     "permission_storage_title": "Makki Storage Permission",
     "permission_storage_message": "Makki App needs access to your external storage to save some data.",
     "ok_button": "Ok",

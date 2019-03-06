@@ -1,4 +1,4 @@
-import {AsyncStorage, DeviceEventEmitter} from 'react-native';
+import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
@@ -142,16 +142,44 @@ function generateQRCode(amount, address) {
 
 function saveImage(base64, imageFileName) {
     const dirs = fetch_blob.fs.dirs;
-    const filePath = dirs.PictureDir + "/" + imageFileName;
-    return new Promise((resolve, reject)=>{
-        RNFS.writeFile(filePath, base64, 'base64').then(() => {
-            resolve(filePath);
-        }, error => {
-            console.log("save image failed: ", error);
-            reject(error);
+    if (Platform.OS === 'android') {
+        const filePath = dirs.PictureDir + "/" + imageFileName;
+        return new Promise((resolve, reject)=>{
+            RNFS.writeFile(filePath, base64, 'base64').then(() => {
+                resolve(filePath);
+            }, error => {
+                console.log("save image failed: ", error);
+                reject(error);
+            });
+        })
+    } else {
+        const filePath = dirs.DocumentDir + "/" + imageFileName;
+        return new Promise((resolve, reject)=> {
+            RNFS.writeFile(filePath, base64, 'base64').then(() => {
+                CameraRoll.saveToCameraRoll(filePath).then(result => {
+                    deleteFile(filePath);
+                    resolve(result);
+                }).catch(error => {
+                    deleteFile(filePath);
+                    console.log("save image fail: " + error);
+                    reject(error);
+                });
+            }, error => {
+                console.log("save image failed: ", error);
+                reject(error);
+            });
         });
-    })
+    }
 }
+
+function deleteFile(filePath) {
+    RNFS.unlink(filePath).then(() => {
+        console.log("delete " + filePath + " succeed");
+    }).catch(err=> {
+        console.log("delete " + filePath + " failed: " + err);
+    });
+}
+
 function fetchRequest(url, method='GET', headers={}) {
     return new Promise((resolve, reject) => {
         fetch(url,{

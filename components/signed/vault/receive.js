@@ -7,12 +7,13 @@ import {
 	Alert,
 	TouchableWithoutFeedback,
 	PermissionsAndroid,
+    Platform,
 	TouchableOpacity,
-	Keyboard
+	Keyboard,
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
-import { Input } from '../../common.js';
+import { Input, ComponentButton } from '../../common.js';
 import styles from '../../styles.js';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
@@ -64,24 +65,30 @@ class Receive extends Component {
 
 	async saveQRCode() {
 		if (this.qrcodeRef) {
-		    // check storage permission first.
-			const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
-			console.log("storagePermission: " + storagePermission);
-			if (!storagePermission) {
-				Alert.alert(strings('alert_title_error'), strings('receive.no_permission_save_file'));
-				return;
+			if (Platform.OS === 'android') {
+				// check storage permission first.
+				const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+				console.log("storagePermission: " + storagePermission);
+				if (!storagePermission) {
+					Alert.alert(strings('alert_title_error'), strings('receive.no_permission_save_file'));
+					return;
+				}
 			}
 
-			// save image
-			this.qrcodeRef.toDataURL(base64 => {
+            // save image
+            this.qrcodeRef.toDataURL(base64 => {
                 saveImage(base64, 'receive_qrcode_' + Date.now() + ".png").then(imagePath => {
                     console.log("image path:" + imagePath);
-                    Toast.show(strings('toast_save_image_success', { path: imagePath}));
+                    if (Platform.OS === 'android') {
+						Toast.show(strings('toast_save_image_success', {path: imagePath}));
+					} else {
+                        Toast.show(strings('toast_save_image_to_album'));
+					}
                 }, error => {
                     console.log(error);
                     Alert.alert(strings('alert_title_error'), strings('error_save_qrcode_image'));
                 });
-			});
+            });
 		}
 	}
 	async componentDidMount(){
@@ -90,7 +97,7 @@ class Receive extends Component {
 	}
 	render(){
 		return (
-			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
+			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={{flex:1, paddingRight: 20, paddingLeft: 20}}>
 				<View style={{marginTop: 10}}>
 					<Text>{strings('receive.label_modify_amount')}</Text>
@@ -110,7 +117,7 @@ class Receive extends Component {
 					/>
 				</View>
 				<View style={styles.marginTop20}>
-					<Button
+					<ComponentButton
 						title={strings('refresh_button')}
 						onPress={ () => this.onRefresh() }
 					/>

@@ -214,6 +214,7 @@
   "error_invalid_gas_limit": "Gas Limit不正确",
   "error_save_qrcode_image": "保存二维码图片失败",
   "toast_save_image_success": "图片已保存至{{path}}",
+  "toast_save_image_to_album": "图片已保存至相册",
   "permission_storage_title": "Makki应用存储权限",
   "permission_storage_message": "Makki App需要得到您授权来保存部分数据文件",
   "ok_button": "同意",
