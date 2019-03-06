@@ -6,7 +6,7 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "postinstall": "cd libs/aion-web3-inject; yarn",
-    "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/ "
+    "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; cp dist/contentScript.bundle.js ../../ios/wallet/"
   },
   "dependencies": {
     "aion-web3": "^1.1.5",
