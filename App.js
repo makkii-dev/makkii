@@ -174,7 +174,7 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_dapps_dapp': {
 		screen: DappsDapp,
-		navigationOptions,
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_dapps_launch': {
 		screen: DappsLaunch,
@@ -183,7 +183,6 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_dapps_send': {
 		screen: DappsSend,
 		navigationOptions: {
-		    headerRight: (<View></View>),
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
 		}
