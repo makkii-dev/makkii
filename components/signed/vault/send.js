@@ -9,6 +9,7 @@ import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
+import {ComponentButton} from '../../common';
 
 const {width, height} = Dimensions.get('window')
 class Send extends Component {
@@ -77,7 +78,7 @@ class Send extends Component {
 	render(){
 		const arrowImage =  this.state.showAdvanced? require('../../../assets/arrow_up.png') :  require('../../../assets/arrow_down.png')
 		return (
-			<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
+			<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
                 <View style={{flex:1,justifyContent:'center'}}>
                     <ScrollView
                         style={{width,height}}
@@ -184,7 +185,7 @@ class Send extends Component {
                                 </View>: null
                         }
                         <View style={{ marginTop:40, }}>
-                            <Button title={strings('send_button')}
+                            <ComponentButton title={strings('send_button')}
                                     onPress={this.transfer.bind(this)}
                                     />
                         </View>
