@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert, TouchableOpacity, Image} from 'react-native';
+import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert, TouchableOpacity, Image, Platform} from 'react-native';
 import Web3WebView from 'react-native-web3-webview';
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
@@ -103,22 +103,38 @@ class Dapp extends Component {
 
     componentDidMount() {
         console.log('[route]' + this.props.navigation.state.routeName);
-
-
-        RNFS.readFileAssets('contentScript.bundle.js', 'utf8').then((content)=>{
-            this.setState({
-                inject: content
-            },()=>{
-                this.invoke=createInvoke(()=>this.webViewRef);
-                this.invoke.define('getInitState', this.getInitState)
-                    .define('eth_signTransaction', this.EthsignTransaction)
-                    .define('eth_sendTransaction', this.EthsendTransaction)
-                    .define('eth_sign', this.Ethsign)
-                    .define('eth_accounts', this.Ethaccounts);
-                this.updateCurrentNetwork = this.invoke.bind("updateCurrentNetwork");
-                this.updateCurrentAddress = this.invoke.bind("updateCurrentAddress");
-            });
-        })
+        if (Platform.OS==='android') {
+            RNFS.readFileAssets('contentScript.bundle.js', 'utf8').then((content) => {
+                this.setState({
+                    inject: content
+                }, () => {
+                    this.invoke = createInvoke(() => this.webViewRef);
+                    this.invoke.define('getInitState', this.getInitState)
+                        .define('eth_signTransaction', this.EthsignTransaction)
+                        .define('eth_sendTransaction', this.EthsendTransaction)
+                        .define('eth_sign', this.Ethsign)
+                        .define('eth_accounts', this.Ethaccounts);
+                    this.updateCurrentNetwork = this.invoke.bind("updateCurrentNetwork");
+                    this.updateCurrentAddress = this.invoke.bind("updateCurrentAddress");
+                });
+            })
+        }else {
+            const path = `${RNFS.MainBundlePath}/contentScript.bundle.js`;
+            RNFS.readFile(path, 'utf8').then((content) => {
+                this.setState({
+                    inject: content
+                }, () => {
+                    this.invoke = createInvoke(() => this.webViewRef);
+                    this.invoke.define('getInitState', this.getInitState)
+                        .define('eth_signTransaction', this.EthsignTransaction)
+                        .define('eth_sendTransaction', this.EthsendTransaction)
+                        .define('eth_sign', this.Ethsign)
+                        .define('eth_accounts', this.Ethaccounts);
+                    this.updateCurrentNetwork = this.invoke.bind("updateCurrentNetwork");
+                    this.updateCurrentAddress = this.invoke.bind("updateCurrentAddress");
+                });
+            })
+        }
     }
 
     onMessage=(event)=>{
@@ -155,8 +171,8 @@ class Dapp extends Component {
                         renderLoading={()=>this.renderLoading()}
                         injectedOnStartLoadingJavaScript={this.state.inject}
                         onLoadEnd={()=>{
-                            this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
-                            this.updateCurrentAddress(this.wallet);
+                            this.updateCurrentNetwork&&this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
+                            this.updateCurrentAddress&&this.updateCurrentAddress(this.wallet);
                         }}
                     />
                 </View>
