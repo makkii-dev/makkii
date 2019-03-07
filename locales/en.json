@@ -186,9 +186,12 @@
     },
     "currency": {
         "title": "Fiat Currency",
-        "CNY": "RMB",
+        "CNY": "CNY",
         "USD": "USD",
-        "CAD": "CAD"
+        "CAD": "CAD",
+        "CNY_unit": "RMB",
+        "USD_unit": "USD",
+        "CAD_unit": "CAD"
     },
     "dapp_send": {
         "error_not_set_default": "Please set your default account firstly."
