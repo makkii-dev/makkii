@@ -3,17 +3,17 @@ import { connect } from 'react-redux';
 import {
 	View,
 	Text,
-	Button,
 	Alert,
 	TouchableWithoutFeedback,
 	PermissionsAndroid,
     Platform,
 	TouchableOpacity,
 	Keyboard,
+    TextInput
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
-import { Input, ComponentButton } from '../../common.js';
+import {  ComponentButton } from '../../common.js';
 import styles from '../../styles.js';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
@@ -103,13 +103,21 @@ class Receive extends Component {
 					<Text>{strings('receive.label_modify_amount')}</Text>
 				</View>
 				<View>
-					<Input
-						value={ this.state.amount}
-						supportVisibility={false}
-						onClear={e => {
-
+					<TextInput
+						style={{
+							fontSize: 16,
+							color: '#777676',
+							lineHeight: 20,
+							paddingTop: 5,
+							paddingBottom: 5,
+							paddingLeft: 5,
+							paddingRight: 5,
+							borderColor: '#8c8a8a',
+							borderBottomWidth: 1,
 						}}
-						onChange={e => {
+						value={ this.state.amount}
+						keyboardType={'decimal-pad'}
+						onChangeText={e => {
 							this.setState({
 								amount: e,
 							})

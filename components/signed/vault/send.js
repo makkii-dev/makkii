@@ -122,6 +122,7 @@ class Send extends Component {
                             <TextInput
                                 style={st.text_input}
                                 value={this.state.amount}
+								keyboardType={'decimal-pad'}
                                 onChangeText={text => {
                                     this.setState({
                                         amount: text,
