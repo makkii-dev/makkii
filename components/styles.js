@@ -162,11 +162,13 @@ export default styles = {
 			flexDirection: 'row',
 			justifyContent: 'space-between',
 			padding: 20,
+			width:Dimensions.get('window').width,
 		},
 		summaryLeftContainer:{
 			justifyContent: 'space-between',
 			padding: 10,
-			alignItems: 'flex-start'
+			alignItems: 'flex-start',
+			width:Dimensions.get('window').width/5*3,
 		},
 		addressView: {
 			paddingLeft: 30,
@@ -213,19 +215,9 @@ export default styles = {
 		},
 		accountContainer:{
 			height: 100,
-			justifyContent: 'space-between',
-			flexDirection: 'row',
+			justifyContent: 'space-around',
 			padding: 10,
 			borderRadius: 10
-		},
-		accountLeftView:{
-			alignItems: 'flex-start',
-			justifyContent: 'space-between',
-			padding: 10,
-		},
-		accountRightView:{
-			justifyContent: 'center',
-			alignItems: 'flex-start'
 		},
 		accountNameView:{
 			flexDirection: 'row',

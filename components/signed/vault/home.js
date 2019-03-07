@@ -370,16 +370,14 @@ class Home extends HomeComponent {
 						{
 							item.isDefault?<Image source={require("../../../assets/default.png")} style={{width:40,height:40,position:'absolute', top:0, right:0}}/>:null
 						}
-						<View style={otherStyles.VaultHome.accountLeftView}>
-							<View style={otherStyles.VaultHome.accountNameView}>
-								<Image source={accountImage} style={{width:15, height:15, tintColor:'#fff', marginRight:10}}/>
-								<Text style={styles.listItemText}>{ item.name }</Text>
-							</View>
-							<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
+						<View style={otherStyles.VaultHome.accountNameView}>
+							<Image source={accountImage} style={{width:15, height:15, tintColor:'#fff', marginRight:10}}/>
+							<Text style={styles.listItemText}>{ item.name }</Text>
 						</View>
-						<View style={otherStyles.VaultHome.accountRightView}>
-							<Text style={styles.listItemText} numberOfLines={1}>{ new BigNumber(item.balance).toNotExString() } AION</Text>
+						<View style={{alignItems:'flex-end'}}>
+							<Text style={styles.listItemText}>{new BigNumber(item.balance).toNotExString()} AION</Text>
 						</View>
+						<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 					</View>
 				</TouchableOpacity>
 

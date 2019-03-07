@@ -41,15 +41,15 @@ function dbSet(key, value){
 
 function dbGet(key){
     return new Promise((resolve, reject)=>{
-        AsyncStorage 
-        .getItem(key) 
+        AsyncStorage
+        .getItem(key)
         .then(json=>{
             if(json){
-                resolve(json); 
+                resolve(json);
             } else {
                 reject('[dbGet] db.' + key + ' null');
             }
-        });    
+        });
     });
 }
 
@@ -57,7 +57,7 @@ function validatePassword(password) {
     let reg = /^[A-Za-z0-9!?#]{8,16}$/;
     return reg.test(password);
 }
- 
+
 function validateUrl(url) {
     let reg = /^(https?:\/\/)?((([a-z\d]([a-z\d-]*[a-z\d])*)\.?)+[a-z]{2,}|((\d{1,3}\.){3}\d{1,3}))(\:\d+)?(\/[-a-z\d%_.~+]*)*(\?[;&amp;a-z\d%_.~+=-]*)?(\#[-a-z\d_]*)?$/i;
     return reg.test(url);
@@ -284,7 +284,6 @@ class listenTransaction{
         let start = Date.now();
         thusMap[tx.hash]=setInterval(function(){
             if (Date.now() - start > thusTimeOut) {
-                reject('timeout');
                 removeTransaction(tx);
             }
             web3.eth.getTransactionReceipt(tx.hash).then(

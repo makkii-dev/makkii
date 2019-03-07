@@ -23,11 +23,11 @@ class Account extends Component {
 	        },
 	        headerStyle: {
 	        	shadowOpacity: 0,
-	        	shadowOffset: { 
-	        		height: 0, 
-	        		width:0, 
-	        	}, 
-	        	shadowRadius: 0, 
+	        	shadowOffset: {
+	        		height: 0,
+	        		width:0,
+	        	},
+	        	shadowRadius: 0,
 	        	borderBottomWidth:0,
 	        	elevation: 1,
 	        },
@@ -168,7 +168,7 @@ class Account extends Component {
 							endInput={this.onChangeName.bind(this)}
 							type={this.account.type}
 						/>
-						<Text numberOfLines={1}>{ new BigNumber(this.account.balance).toNotExString()} AION</Text>
+						<Text style={{textAlign:'auto'}}>{new BigNumber(this.account.balance).toNotExString()} AION</Text>
 					</View>
 					<View>
 						<QRCode
