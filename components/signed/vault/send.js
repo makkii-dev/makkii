@@ -159,6 +159,7 @@ class Send extends Component {
                                         <TextInput
                                             style={st.text_input}
                                             value={this.state.gasPrice}
+											keyboardType={'decimal-pad'}
                                             onChangeText={text => {
                                                 this.setState({
                                                     gasPrice: text,
@@ -177,6 +178,7 @@ class Send extends Component {
                                     <TextInput
                                         style={{...st.text_input, marginRight: 0}}
                                         value={this.state.gasLimit}
+										keyboardType={'number-pad'}
                                         onChangeText={text => {
                                             this.setState({
                                                 gasLimit: text,

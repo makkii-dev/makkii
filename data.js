@@ -40,7 +40,8 @@ dapps.push({
 	name: 'dapp1',
 	logo: 'https://i0.wp.com/www.blockchaindk.com/wp-content/uploads/2017/11/Aion-Logo.png?fit=400%2C400&ssl=1',
 	description: 'desc1',
-	uri: 'http://192.168.50.83:8082'
+	// uri: 'http://192.168.50.83:8082'
+	uri: 'https://aion-roulette.netlify.com/'
 });
 dapps.push({
 	name: 'dapp2',
