@@ -171,7 +171,7 @@ class DappSend extends React.Component{
 
     render(){
         return (
-            <TouchableOpacity activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
+            <TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
             <View style={{flex:1,justifyContent:'center'}}>
                 <ScrollView
                     style={{width,height}}
