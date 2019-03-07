@@ -43,6 +43,8 @@
         <string>Makki needs to use your camera to scan qrcode</string>
         <key>NSPhotoLibraryUsageDescription</key>
         <string>Makki will save image to your album</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Makki will save image to your album</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
