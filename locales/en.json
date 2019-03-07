@@ -97,7 +97,7 @@
         "error_format_recipient": "Invalid recipient address",
         "error_format_sender": "Invalid sender address",
         "error_format_amount": "Invalid amount",
-        "error_insufficient_amount": "Amount can't exceed total balance",
+        "error_insufficient_amount": "Insufficient Amount",
         "error_invalid_gas_price": "Gas Price is invalid",
         "error_invalid_gas_limit": "Gas Limit is invalid",
         "hint_recipient": "Please enter recipient address",

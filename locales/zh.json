@@ -96,7 +96,7 @@
     "error_format_recipient": "收款方地址格式不正确",
     "error_format_sender": "发送方地址格式不正确",
     "error_format_amount": "金额格式不正确",
-    "error_insufficient_amount": "金额不能大于账户余额",
+    "error_insufficient_amount": "账户余额不足",
     "hint_recipient": "请填写收款地址",
     "button_send_all": "全部",
     "error_send_transaction": "发送交易失败",
