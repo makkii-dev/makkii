@@ -71,6 +71,7 @@ class Advanced extends Component {
                     <TextInput
                         style={{...st.text_input, marginRight: 10, flex: 1}}
                         value={this.state.login_session_timeout}
+                        keyboardType={'number-pad'}
                         onChangeText={text => {
                             this.setState({
                                 login_session_timeout: text
@@ -91,6 +92,7 @@ class Advanced extends Component {
                     <TextInput
                         style={{...st.text_input, marginRight: 10, flex: 1}}
                         value={this.state.exchange_refresh_interval}
+                        keyboardType={'number-pad'}
                         onChangeText={text => {
                             this.setState({
                                 exchange_refresh_interval: text

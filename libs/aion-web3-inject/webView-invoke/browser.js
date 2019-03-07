@@ -29,7 +29,7 @@ if (isBrowser) {
         Object.defineProperty(window, 'originalPostMessage', descriptor)
     }
     document.addEventListener('message', e => {
-        let data = JSON.parse(e.data);
+        let data = JSON.parse(e.data);a
         if( typeof data === 'string')
             data = JSON.parse(data);
         listener(data);
