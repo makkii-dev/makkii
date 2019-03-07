@@ -32,7 +32,7 @@
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
     "button_confirm": "确定",
-    "warning_mnemonic_not_match": "导入不同的助记词会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
+    "warning_mnemonic": "这会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "error_invalid_mnemonic": "请输入有效的助记符"
   },
   "recovery_password": {
