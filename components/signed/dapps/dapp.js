@@ -171,8 +171,10 @@ class Dapp extends Component {
                         renderLoading={()=>this.renderLoading()}
                         injectedOnStartLoadingJavaScript={this.state.inject}
                         onLoadEnd={()=>{
-                            this.updateCurrentNetwork&&this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
-                            this.updateCurrentAddress&&this.updateCurrentAddress(this.wallet);
+                            setTimeout(() => {
+                                this.updateCurrentNetwork && this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
+                                this.updateCurrentAddress && this.updateCurrentAddress(this.wallet);
+                            }, 500);
                         }}
                     />
                 </View>

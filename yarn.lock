@@ -5705,7 +5705,7 @@ react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
 
 "react-native-web3-webview@https://github.com/Chengchcc/react-native-web3-webview.git":
   version "1.2.8"
-  resolved "https://github.com/Chengchcc/react-native-web3-webview.git#a30fa194bfbe196c5c0c9c0df42b73c3f6ee1e72"
+  resolved "https://github.com/Chengchcc/react-native-web3-webview.git#54fbc4800f65f6c4bf5105f4dff1bc5534778d95"
   dependencies:
     fbjs "^0.8.3"
 

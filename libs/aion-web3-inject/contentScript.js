@@ -10,6 +10,8 @@ const {
     ETH_SIGN,
 } = require('./constants');
 
+global.aionweb3 = 'not injected';
+
 let currentAddress;
 const commonInfo = {
     type: 'FROM_PAGE',
@@ -89,14 +91,14 @@ getInitState().then(
     d=>{
         console.log('initState  res', d);
         initializeWeb3(d.network);
+        // document.dispatchEvent(new MessageEvent('injected', null));
         currentAddress = d.wallet;
     },
     e=>console.log('initState err', e)
 );
 
+initializeWeb3('https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780');
 
 global.aiwa = {
     enable: enableFn,
 };
-
-
