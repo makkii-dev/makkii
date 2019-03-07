@@ -5,7 +5,7 @@ import { createMessager } from './messager/index'
 const isBrowser = typeof window !== 'undefined'
 
 const { bind, define, listener, ready, fn, addEventListener, removeEventListener, isConnect } = createMessager(
-    (data: any) => { isBrowser && window.postMessageToNative(JSON.stringify(data)) }
+    (data: any) => { isBrowser && window.postMessageToNative && window.postMessageToNative(JSON.stringify(data)) }
 );
 
 if (isBrowser) {
