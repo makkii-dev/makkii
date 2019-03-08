@@ -51,7 +51,7 @@ export default function accounts(state = init, action){
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
 				// only keep 10 latest txs
-				let transactions = Object.assign({},actions.transactions, state[action.key].transactions);
+				let transactions = Object.assign({},action.transactions, state[action.key].transactions);
 				let new_transactions = {};
 				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,11).forEach(s=>new_transactions[s.hash]=s);
 				state[action.key].transactions = new_transactions;

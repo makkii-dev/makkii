@@ -230,10 +230,8 @@ class listenCoinPrice{
     }
 
     startListen() {
-        console.log('===================================')
         const thusStore = this.store;
         getCoinPrice(this.currency).then(price => {
-            console.log('------------------------------')
             let settings = thusStore.getState().setting;
             settings.coinPrice = price;
             DeviceEventEmitter.emit('updateAccountBalance');
@@ -244,7 +242,6 @@ class listenCoinPrice{
 
         this.listener = setInterval(function() {
              getCoinPrice(this.currency).then(price => {
-                 console.log('------------------------------')
                 let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
                 DeviceEventEmitter.emit('updateAccountBalance');
@@ -289,7 +286,6 @@ class listenTransaction{
             web3.eth.getTransactionReceipt(tx.hash).then(
                 res=>{
                     if(res){
-                        console.log(res);
                         tx.status = res.status? 'CONFIRMED':'FAILED';
                         tx.blockNumber = res.blockNumber;
                         thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, user.hashed_password));
@@ -299,7 +295,7 @@ class listenTransaction{
                     }
                 },
                 err=>{
-                    Toast.show("Unable to connect to remote server");
+                    Toast.show(strings('error_connect_remote_server'));
                     removeTransaction(tx);
                 }
             )
