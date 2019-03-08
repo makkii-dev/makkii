@@ -239,10 +239,10 @@ const Routes = createAppContainer(createStackNavigator({
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 
-YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been']);
 const _console = _.clone(console);
 console.warn = message => {
-	if (message.indexOf('Setting a timer') <= -1) {
+	if (message.indexOf('Setting a timer') <= -1 && message.indexOf('WebView has been') <= -1) {
 		_console.warn(message);
 	}
 };
