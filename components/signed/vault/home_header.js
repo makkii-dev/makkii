@@ -106,7 +106,7 @@ class HomeHeader extends React.Component{
                         />
                     </TouchableOpacity>
                     <ModalList
-                        data={MENU}
+                        data={Platform.OS==="ios"?MENU.slice(0,2):MENU}
                         visible={this.state.showMenu}
                         ref={ref => this.menuRef = ref}
                         style={styles.menuContainer}
@@ -136,13 +136,13 @@ const styles = StyleSheet.create({
         height: 1 / PixelRatio.get(),
         backgroundColor: '#fff'
     },
-    header: {        
+    header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         height: top,
         shadowOpacity: 0,
-        shadowOffset: { height: 0, width:0 }, 
-        shadowRadius: 0, 
+        shadowOffset: { height: 0, width:0 },
+        shadowRadius: 0,
         borderBottomWidth: StyleSheet.hairlineWidth,
         borderColor: '#8c8a8a',
         elevation: 0.5,
