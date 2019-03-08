@@ -29,7 +29,7 @@ class Dapp extends Component {
                 this.wallet = v.address;
         });
         if(!this.wallet){
-            console.log('not set wallet');
+            console.log('not set makkii');
             Alert.alert(strings('alert_title_error'), strings('dapp_send.error_not_set_default'));
             this.props.navigation.goBack();
         }

@@ -47,8 +47,8 @@
     "title": "关于",
     "version_label": "版本号",
     "version_update_button": "版本更新",
-    "terms_label": "码奇软件许可及服务协议",
-    "policy_label": "码奇隐私保护指引",
+    "terms_label": "Makkii软件许可及服务协议",
+    "policy_label": "Makkii隐私政策",
     "version_latest": "当前已是最新版"
   },
   "password": {
@@ -193,7 +193,10 @@
   "dapp_send": {
     "error_not_set_default": "请先设置一个默认账户."
   },
-  "app_name": "码奇",
+  "privacy_policy": {
+    "title": "隐私政策"
+  },
+  "app_name": "Makkii",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",

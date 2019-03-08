@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Dimensions} from 'react-native';
+import {View,Text,Dimensions, TouchableOpacity} from 'react-native';
 import {ComponentLogo} from '../../common.js';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
@@ -58,9 +58,15 @@ class About extends Component {
 					</Text>
 				</View>
 				<View>
-					<Text style={styles.center_text}>
-						{strings('about.terms_label')} & {strings('about.policy_label')}
-					</Text>
+					<Text style={{...styles.center_text, color: 'blue'}}> {strings('about.terms_label')} </Text>
+					<TouchableOpacity onPress={() => {
+					    console.log("aaaaa");
+						this.props.navigation.navigate("signed_setting_privacy_policy");
+					}}>
+                        <Text style={{...styles.center_text, color: 'blue'}}>
+                             {strings('about.policy_label')}
+                        </Text>
+                    </TouchableOpacity>
 					<Text style={styles.center_text}>
 						{strings('about.copyright_label')}
 					</Text>	

@@ -196,7 +196,10 @@
     "dapp_send": {
         "error_not_set_default": "Please set your default account firstly."
     },
-    "app_name": "MAKKI",
+    "privacy_policy": {
+        "title": "Privacy Policy"
+    },
+    "app_name": "Makkii",
     "logout": "Sign Out",
     "update_button": "Update",
     "save_button": "Save",
@@ -216,8 +219,8 @@
     "error_save_qrcode_image": "Failed to save qrcode image.",
     "toast_save_image_success": "Image was saved to {{path}}",
     "toast_save_image_to_album": "Image was saved to album",
-    "permission_storage_title": "Makki Storage Permission",
-    "permission_storage_message": "Makki App needs access to your external storage to save some data.",
+    "permission_storage_title": "Makkii Storage Permission",
+    "permission_storage_message": "Makkii App needs access to your external storage to save some data.",
     "ok_button": "Ok",
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",
