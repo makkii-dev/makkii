@@ -85,8 +85,8 @@ export default function accounts(state = init, action){
 		if(key){
 			new_state[key].isDefault=true;
 		}
+		new_state = Object.assign({},new_state);
 	}
-	new_state = Object.assign({},new_state);
 
 	if(should_update_db){
 		AsyncStorage.setItem(
