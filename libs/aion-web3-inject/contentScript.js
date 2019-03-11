@@ -13,9 +13,7 @@ const {
 global.aionweb3 = 'not injected';
 
 let currentAddress;
-const commonInfo = {
-    type: 'FROM_PAGE',
-};
+
 
 function updateCurrentNetwork(current_network: string) {
     console.log("current_network",current_network);
@@ -73,25 +71,11 @@ function initializeWeb3(url) {
     global.aionweb3 = new Proxy(web3, handler);
 }
 
-const enableFn = async () => {
-    const data = {
-        ...commonInfo,
-        func: 'privacy',
-    };
-    const { result } = await activateStream(data);
-    if (result.cancel) throw new Error(result.message);
-
-    const address = result.connect_privacy.data;
-    currentAddress = [address];
-    return currentAddress;
-};
-
 
 getInitState().then(
     d=>{
         console.log('initState  res', d);
         initializeWeb3(d.network);
-        // document.dispatchEvent(new MessageEvent('injected', null));
         currentAddress = d.wallet;
     },
     e=>console.log('initState err', e)
@@ -99,6 +83,3 @@ getInitState().then(
 
 initializeWeb3('https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780');
 
-global.aiwa = {
-    enable: enableFn,
-};
