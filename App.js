@@ -57,6 +57,7 @@ import SettingServices       from './components/signed/setting/services.js';
 import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
 import SettingCurrency       from './components/signed/setting/currency.js';
+import SettingPrivacyPolicy  from './components/signed/setting/privacy_policy.js';
 
 
 const navigationOptions = ({navigation}) => ({
@@ -224,6 +225,10 @@ const Routes = createAppContainer(createStackNavigator({
 		screen: SettingAdvanced,
 		navigationOptions: navigationOptionsWithoutRight,
 	},
+	'signed_setting_privacy_policy': {
+		screen: SettingPrivacyPolicy,
+		navigationOptions,
+	}
 }, {
 	initialRouteName: 'splash',
 	swipeEnabled: false,
