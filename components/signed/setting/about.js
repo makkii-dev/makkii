@@ -11,7 +11,7 @@ class About extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-			title: strings('about.title') 
+			title: strings('about.title')
 	    };
     };
 	constructor(props){
@@ -25,11 +25,11 @@ class About extends Component {
 		return (
 			<View style={{
 				backgroundColor: '#eeeeee',
-				height: Dimensions.get('window').height, 
+				height: Dimensions.get('window').height,
 			}}>
 				<View style={{
 					justifyContent:'center',
-    				alignItems:'center',					
+    				alignItems:'center',
 					marginBottom:60,
 					marginTop:80,
 				}}>
@@ -81,7 +81,7 @@ class About extends Component {
                     </TouchableOpacity>
 					<Text style={styles.center_text}>
 						{strings('about.copyright_label')}
-					</Text>	
+					</Text>
 				</View>
 			</View>
 		);
