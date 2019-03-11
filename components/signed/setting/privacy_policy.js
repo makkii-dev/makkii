@@ -2,6 +2,8 @@ import React,{Component} from 'react';
 import {View} from 'react-native';
 import {strings} from '../../../locales/i18n';
 import Web3WebView from 'react-native-web3-webview';
+import {connect} from 'react-redux';
+
 
 class PrivacyPolicy extends Component {
 	static navigationOptions = ({ navigation }) => {
