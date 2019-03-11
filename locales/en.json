@@ -50,7 +50,8 @@
         "terms_label": "Terms of Service",
         "policy_label": "Privacy Policy",
         "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
-        "version_latest": "Your version is already up to date."
+        "version_latest": "Your version is already up to date.",
+        "label_and": "and"
     },
     "password": {
         "title": "Password",
@@ -198,6 +199,9 @@
     },
     "privacy_policy": {
         "title": "Privacy Policy"
+    },
+    "terms_service": {
+        "title": "Terms of Services"
     },
     "app_name": "Makkii",
     "logout": "Sign Out",

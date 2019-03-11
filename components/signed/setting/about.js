@@ -58,10 +58,22 @@ class About extends Component {
 					</Text>
 				</View>
 				<View>
-					<Text style={{...styles.center_text, color: 'blue'}}> {strings('about.terms_label')} </Text>
 					<TouchableOpacity onPress={() => {
-					    console.log("aaaaa");
-						this.props.navigation.navigate("signed_setting_privacy_policy");
+						this.props.navigation.navigate('simple_webview', {
+							title: strings('terms_service.title'),
+							initialUrl: 'http://45.118.132.89/terms_services.html',
+						});
+					}}>
+                        <Text style={{...styles.center_text, color: 'blue'}}> {strings('about.terms_label')} </Text>
+					</TouchableOpacity>
+					<Text style={styles.center_text}>
+						{strings('about.label_and')}
+					</Text>
+					<TouchableOpacity onPress={() => {
+						this.props.navigation.navigate("simple_webview", {
+                            title: strings('privacy_policy.title'),
+							initialUrl: 'http://45.118.132.89/privacy_policy.html',
+						});
 					}}>
                         <Text style={{...styles.center_text, color: 'blue'}}>
                              {strings('about.policy_label')}
