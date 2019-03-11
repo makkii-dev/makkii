@@ -32,7 +32,7 @@
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
     "button_confirm": "确定",
-    "warning_mnemonic_not_match": "导入不同的助记词会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
+    "warning_mnemonic": "这会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
     "error_invalid_mnemonic": "请输入有效的助记符"
   },
   "recovery_password": {
@@ -47,9 +47,10 @@
     "title": "关于",
     "version_label": "版本号",
     "version_update_button": "版本更新",
-    "terms_label": "码奇软件许可及服务协议",
-    "policy_label": "码奇隐私保护指引",
-    "version_latest": "当前已是最新版"
+    "terms_label": "Makkii软件许可及服务协议",
+    "policy_label": "Makkii隐私政策",
+    "version_latest": "当前已是最新版",
+    "label_and": "和"
   },
   "password": {
     "title": "密码",
@@ -96,7 +97,7 @@
     "error_format_recipient": "收款方地址格式不正确",
     "error_format_sender": "发送方地址格式不正确",
     "error_format_amount": "金额格式不正确",
-    "error_insufficient_amount": "金额不能大于账户余额",
+    "error_insufficient_amount": "账户余额不足",
     "hint_recipient": "请填写收款地址",
     "button_send_all": "全部",
     "error_send_transaction": "发送交易失败",
@@ -193,7 +194,13 @@
   "dapp_send": {
     "error_not_set_default": "请先设置一个默认账户."
   },
-  "app_name": "码奇",
+  "privacy_policy": {
+    "title": "隐私政策"
+  },
+  "terms_service": {
+    "title": "软件许可及服务协议"
+  },
+  "app_name": "Makkii",
   "logout": "退出",
   "update_button": "提交",
   "save_button": "保存",

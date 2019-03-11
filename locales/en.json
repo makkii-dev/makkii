@@ -32,7 +32,7 @@
         "label_prompt": "Enter 12 characters mnemonic",
         "button_scan": "Scan",
         "button_confirm": "Confirm",
-        "warning_mnemonic_not_match": "Importing different mnemonics will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
+        "warning_mnemonic": "It will cause all previous accounts data to be emptied and cannot be recovered. Are you sure you want to do this?",
         "error_invalid_mnemonic": "Please input valid mnemonics"
     },
     "recovery_password": {
@@ -50,7 +50,8 @@
         "terms_label": "Terms of Service",
         "policy_label": "Privacy Policy",
         "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
-        "version_latest": "Your version is already up to date."
+        "version_latest": "Your version is already up to date.",
+        "label_and": "and"
     },
     "password": {
         "title": "Password",
@@ -97,7 +98,7 @@
         "error_format_recipient": "Invalid recipient address",
         "error_format_sender": "Invalid sender address",
         "error_format_amount": "Invalid amount",
-        "error_insufficient_amount": "Amount can't exceed total balance",
+        "error_insufficient_amount": "Insufficient Amount",
         "error_invalid_gas_price": "Gas Price is invalid",
         "error_invalid_gas_limit": "Gas Limit is invalid",
         "hint_recipient": "Please enter recipient address",
@@ -196,7 +197,13 @@
     "dapp_send": {
         "error_not_set_default": "Please set your default account firstly."
     },
-    "app_name": "MAKKI",
+    "privacy_policy": {
+        "title": "Privacy Policy"
+    },
+    "terms_service": {
+        "title": "Terms of Services"
+    },
+    "app_name": "Makkii",
     "logout": "Sign Out",
     "update_button": "Update",
     "save_button": "Save",
@@ -216,8 +223,8 @@
     "error_save_qrcode_image": "Failed to save qrcode image.",
     "toast_save_image_success": "Image was saved to {{path}}",
     "toast_save_image_to_album": "Image was saved to album",
-    "permission_storage_title": "Makki Storage Permission",
-    "permission_storage_message": "Makki App needs access to your external storage to save some data.",
+    "permission_storage_title": "Makkii Storage Permission",
+    "permission_storage_message": "Makkii App needs access to your external storage to save some data.",
     "ok_button": "Ok",
     "alert_ok_button": "Ok",
     "cancel_button": "Cancel",

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Keyboard,TouchableOpacity,View,Text, Alert} from 'react-native';
 import {ComponentPassword, ComponentButton} from '../common.js';
-import {connect} from 'react-redux'; 
+import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import styles from '../styles.js';
@@ -15,28 +15,24 @@ class Password extends Component {
     };
 	constructor(props){
 		super(props);
+		this.mnemonic = this.props.navigation.getParam('mnemonic', '');
 		this.state = {
-			mnemonic: '',
-			password: '',            
+			password: '',
 			password_confirm: '',
 		}
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 	}
-	async componentWillReceiveProps(props){   
-		this.setState({
-			mnemonic: props.navigation.getParam('mnemonic', '')  
-		});
-	}
+
 	render(){
-		const {dispatch} = this.props; 
+		const {dispatch} = this.props;
 		return (
 			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
 			<View style={ styles.container }>
 				<Text>{strings('recovery_password.label_password')}</Text>
 				<View style={styles.marginBottom20}>
-					<ComponentPassword  
+					<ComponentPassword
 						value={this.state.password}
 						onChange={e=>{
 							this.setState({
@@ -47,8 +43,8 @@ class Password extends Component {
 				</View>
 				<Text>{strings('recovery_password.label_confirm_password')}</Text>
 				<View style={styles.marginBottom20}>
-					<ComponentPassword 
-						value={this.state.password_confirm} 
+					<ComponentPassword
+						value={this.state.password_confirm}
 						onChange={e=>{
 							this.setState({
 								password_confirm: e
@@ -65,14 +61,15 @@ class Password extends Component {
 							Alert.alert(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
 						} else {
 							let hashed_password = hashPassword(this.state.password);
-							dispatch(user(hashed_password, this.state.mnemonic)); 
+							dispatch(user(hashed_password, this.mnemonic));
+							console.log('hashed_password: ',this.state.password);
+							console.log('mnemonic: ', this.mnemonic);
 							this.setState({
 								password: '',
 								password_confirm: '',
-								mnemonic: ''
 							});
 						    this.props.navigation.navigate('signed_vault');
-						}    
+						}
 					}}
 				/>
 			</View>

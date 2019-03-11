@@ -55,3 +55,5 @@ buck-out/
 
 # Bundle artifact
 *.jsbundle
+
+terms_services.html

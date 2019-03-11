@@ -57,6 +57,7 @@ import SettingServices       from './components/signed/setting/services.js';
 import SettingLanguage       from './components/signed/setting/language.js';
 import SettingAdvanced       from './components/signed/setting/advanced.js';
 import SettingCurrency       from './components/signed/setting/currency.js';
+import SimpleWebView         from './components/WebViewComponent';
 
 
 const navigationOptions = ({navigation}) => ({
@@ -224,6 +225,10 @@ const Routes = createAppContainer(createStackNavigator({
 		screen: SettingAdvanced,
 		navigationOptions: navigationOptionsWithoutRight,
 	},
+	'simple_webview': {
+		screen: SimpleWebView,
+		navigationOptions,
+	}
 }, {
 	initialRouteName: 'splash',
 	swipeEnabled: false,
@@ -239,10 +244,10 @@ const Routes = createAppContainer(createStackNavigator({
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 
-YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been']);
 const _console = _.clone(console);
 console.warn = message => {
-	if (message.indexOf('Setting a timer') <= -1) {
+	if (message.indexOf('Setting a timer') <= -1 && message.indexOf('WebView has been') <= -1) {
 		_console.warn(message);
 	}
 };

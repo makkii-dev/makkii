@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Makki</string>
+	<string>Makkii</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -40,11 +40,11 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
         <key>NSCameraUsageDescription</key>
-        <string>Makki needs to use your camera to scan qrcode</string>
+        <string>Makkii needs to use your camera to scan qrcode</string>
         <key>NSPhotoLibraryUsageDescription</key>
-        <string>Makki will save image to your album</string>
+        <string>Makkii will save image to your album</string>
         <key>NSPhotoLibraryAddUsageDescription</key>
-        <string>Makki will save image to your album</string>
+        <string>Makkii will save image to your album</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

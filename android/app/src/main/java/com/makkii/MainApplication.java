@@ -1,4 +1,4 @@
-package com.wallet;
+package com.makkii;
 
 import android.app.Application;
 

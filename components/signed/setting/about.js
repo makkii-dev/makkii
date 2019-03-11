@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Dimensions} from 'react-native';
+import {View,Text,Dimensions, TouchableOpacity} from 'react-native';
 import {ComponentLogo} from '../../common.js';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
@@ -11,7 +11,7 @@ class About extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    const { state } = navigation;
 	    return {
-			title: strings('about.title') 
+			title: strings('about.title')
 	    };
     };
 	constructor(props){
@@ -25,11 +25,11 @@ class About extends Component {
 		return (
 			<View style={{
 				backgroundColor: '#eeeeee',
-				height: Dimensions.get('window').height, 
+				height: Dimensions.get('window').height,
 			}}>
 				<View style={{
 					justifyContent:'center',
-    				alignItems:'center',					
+    				alignItems:'center',
 					marginBottom:60,
 					marginTop:80,
 				}}>
@@ -58,12 +58,30 @@ class About extends Component {
 					</Text>
 				</View>
 				<View>
+					<TouchableOpacity onPress={() => {
+						this.props.navigation.navigate('simple_webview', {
+							title: strings('terms_service.title'),
+							initialUrl: 'http://45.118.132.89/terms_services.html',
+						});
+					}}>
+                        <Text style={{...styles.center_text, color: 'blue'}}> {strings('about.terms_label')} </Text>
+					</TouchableOpacity>
 					<Text style={styles.center_text}>
-						{strings('about.terms_label')} & {strings('about.policy_label')}
+						{strings('about.label_and')}
 					</Text>
+					<TouchableOpacity onPress={() => {
+						this.props.navigation.navigate("simple_webview", {
+                            title: strings('privacy_policy.title'),
+							initialUrl: 'http://45.118.132.89/privacy_policy.html',
+						});
+					}}>
+                        <Text style={{...styles.center_text, color: 'blue'}}>
+                             {strings('about.policy_label')}
+                        </Text>
+                    </TouchableOpacity>
 					<Text style={styles.center_text}>
 						{strings('about.copyright_label')}
-					</Text>	
+					</Text>
 				</View>
 			</View>
 		);
