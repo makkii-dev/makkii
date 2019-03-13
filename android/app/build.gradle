@@ -148,6 +148,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-screenshot-helper')
+    implementation project(':react-native-aion-hw-wallet')
     implementation project(':react-native-randombytes')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-web3-webview')
@@ -157,7 +159,6 @@ dependencies {
     implementation project(':react-native-fs')
     implementation project(':react-native-device-info')
     implementation project(':react-native-camera')
-    implementation project(':react-native-aion-hw-wallet')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules

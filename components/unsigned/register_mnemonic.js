@@ -5,6 +5,7 @@ import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
+import screenshotHelper from 'react-native-screenshot-helper';
   
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -20,8 +21,19 @@ class Mnemonic extends Component {
 		console.log(this.props.user);
 		if(this.props.user.mnemonic !== ''){
 
-		} 
+		}
+
+		if (Platform.OS === 'android') {
+			screenshotHelper.disableTakeScreenshot();
+        }
 	}
+
+	componentWillUnmount() {
+	    if (Platform.OS === 'android') {
+			screenshotHelper.enableTakeScreenshot();
+		}
+	}
+
 	render(){
 		return (
 			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>

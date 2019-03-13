@@ -1,4 +1,8 @@
 rootProject.name = 'wallet'
+include ':react-native-screenshot-helper'
+project(':react-native-screenshot-helper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screenshot-helper/android')
+include ':react-native-aion-hw-wallet'
+project(':react-native-aion-hw-wallet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-aion-hw-wallet/android')
 include ':react-native-randombytes'
 project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
 include ':rn-fetch-blob'
@@ -17,6 +21,4 @@ include ':react-native-device-info'
 project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
 include ':react-native-camera'
 project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
-include ':react-native-aion-hw-wallet'
-project(':react-native-aion-hw-wallet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-aion-hw-wallet/android')
 include ':app'

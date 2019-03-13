@@ -3,6 +3,8 @@ package com.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
+import com.chaion.rn.hwwallet.RNAionHwWalletPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -16,8 +18,6 @@ import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.rnfs.RNFSPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import org.reactnative.camera.RNCameraPackage;
-import com.reactlibrary.RNAionHwWalletPackage;
-;
 
 import android.webkit.WebView;
 
@@ -36,6 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNScreenshotHelperPackage(),
+            new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
             new RNFetchBlobPackage(),
             new Web3WebviewPackage(),
@@ -44,8 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNGestureHandlerPackage(),
             new RNFSPackage(),
             new RNDeviceInfo(),
-            new RNCameraPackage(),
-            new RNAionHwWalletPackage()
+            new RNCameraPackage()
       );
     }
 
