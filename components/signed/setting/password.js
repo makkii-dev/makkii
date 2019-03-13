@@ -124,6 +124,11 @@ class Password extends Component {
 			return;
 		}
 
+		if (hashedPassword === hashPassword(this.state.password_new)) {
+			Alert.alert(strings('alert_title_error'), strings('same_old_new_passwords'));
+			return;
+		}
+
 		// validate new password and confirmed password consistency
 		if (this.state.password_new !== this.state.password_confirm) {
 			Alert.alert(strings('alert_title_error'), strings('inconsistent_passwords'));

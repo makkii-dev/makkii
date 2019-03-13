@@ -215,6 +215,7 @@
   "invalid_old_password": "旧密码不正确",
   "invalid_new_password": "新密码格式不正确",
   "inconsistent_passwords": "确认密码不一致",
+  "same_old_new_passwords": "新密码不能和旧密码相同",
   "toast_copy_success": "已复制到剪切板",
   "invalid_amount": "无效的金额",
   "error_invalid_gas_price": "Gas Price不正确",
