@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Clipboard, TouchableOpacity, Keyboard } from 'react-native';
+import { View, Text, Clipboard, TouchableOpacity, Keyboard, NativeModules, Platform, NativeEventEmitter } from 'react-native';
 import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
 import screenshotHelper from 'react-native-screenshot-helper';
-  
+
+var nativeBridge = NativeModules.RNScreenshotHelper;
+const NativeModule = new NativeEventEmitter(nativeBridge);
+
 class Mnemonic extends Component {
 	static navigationOptions = ({ navigation }) => {
 	    return {
@@ -25,12 +28,21 @@ class Mnemonic extends Component {
 
 		if (Platform.OS === 'android') {
 			screenshotHelper.disableTakeScreenshot();
-        }
+        } else {
+			this.subscription = NativeModule.addListener('screenshot_taken',() => {
+				Toast.show(strings('toast_mnemonic_share_warning'), {
+					duration: Toast.durations.LONG,
+					position: Toast.positions.CENTER
+				});
+			});
+		}
 	}
 
 	componentWillUnmount() {
 	    if (Platform.OS === 'android') {
 			screenshotHelper.enableTakeScreenshot();
+		} else {
+			this.subscription.remove();
 		}
 	}
 

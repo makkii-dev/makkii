@@ -235,5 +235,6 @@
   "error_connect_remote_server": "无法连接到远程服务器",
   "message_no_more_data": "暂无更多数据",
   "toast_double_press_exit": "再按一次退出应用",
-  "toast_invalid_mnemonic": "无效的助记词"
+  "toast_invalid_mnemonic": "无效的助记词",
+  "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。"
 }
