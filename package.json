@@ -28,7 +28,7 @@
     "react-native-i18n": "^2.0.15",
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-root-toast": "^3.0.2",
-    "react-native-screenshot-helper": "https://github.com/leoaion/react-native-screenshot-helper.git",
+    "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-svg": "^9.0.6",
     "react-native-web3-webview": "https://github.com/Chengchcc/react-native-web3-webview.git",
     "react-navigation": "^3.0.9",

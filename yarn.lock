@@ -5691,9 +5691,9 @@ react-native-safe-area-view@^0.12.0:
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.22.tgz#7a120377b52aa9bbb94d0b8541a014026be9289b"
   integrity sha512-kSyAt0AeVU6N7ZonfV6dP6iZF8B7Bce+tk3eujXhzBGsLg0VSLnU7uE9VqJF0xdQrHR91ZjGgVMieo/8df9KTA==
 
-"react-native-screenshot-helper@https://github.com/leoaion/react-native-screenshot-helper.git":
+"react-native-screenshot-helper@https://github.com/chaion/react-native-screenshot.git":
   version "1.0.0"
-  resolved "https://github.com/leoaion/react-native-screenshot-helper.git#148e1fbab90a61fdc3727e4e65b11efd6dbe20e9"
+  resolved "https://github.com/chaion/react-native-screenshot.git#cc5eff51ea8a05aa762d808093ea722b5343ea73"
 
 react-native-svg@^9.0.6:
   version "9.2.4"
