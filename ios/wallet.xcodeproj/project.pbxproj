@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -53,6 +52,7 @@
 		D783AAF1FC124A40A1B2998F /* libRNDeviceInfo-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6D0D40E2B8F4455994A8915 /* libRNDeviceInfo-tvOS.a */; };
 		E271862803BA4005B73DCBD3 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88757E7900954B85A61D4755 /* libRNFS.a */; };
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
+		6C1E62F4392942EFB8CE074E /* libRNScreenshotHelper.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AFDEC35200441A1AF2A1D74 /* libRNScreenshotHelper.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -488,6 +488,8 @@
 		E51256701EE941A0A8C8D7A8 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		F5DFDF34D7A842928DDC1BD9 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		FD5C7EED60074CA8B34AA8A3 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
+		F5428B37921E40A2BDC07C49 /* RNScreenshotHelper.xcodeproj */ = {isa = PBXFileReference; name = "RNScreenshotHelper.xcodeproj"; path = "../node_modules/react-native-screenshot-helper/ios/RNScreenshotHelper.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		9AFDEC35200441A1AF2A1D74 /* libRNScreenshotHelper.a */ = {isa = PBXFileReference; name = "libRNScreenshotHelper.a"; path = "libRNScreenshotHelper.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -526,6 +528,7 @@
 				4FAA076F303545BEA6C8B7BE /* libRNCamera.a in Frameworks */,
 				FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */,
 				ACD991F11E224C7EA927AB3A /* libRNWeb3Webview.a in Frameworks */,
+				6C1E62F4392942EFB8CE074E /* libRNScreenshotHelper.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -692,6 +695,7 @@
 				1021DD313DCD46EDB48A4E48 /* libRNSVG-tvOS.a */,
 				A976292257E64301B93EEDFC /* libRNI18n-tvOS.a */,
 				C6D0D40E2B8F4455994A8915 /* libRNDeviceInfo-tvOS.a */,
+				92D4BA0DAB6E4919AB4D4580 /* libRNScreenshotHelper.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -840,6 +844,7 @@
 				026C83C250AA4BF89B9E97AC /* RNCamera.xcodeproj */,
 				50C2B6DE4F914C6D83A4E788 /* RNDeviceInfo.xcodeproj */,
 				57A2FFF76A314B9F964C7745 /* RNWeb3Webview.xcodeproj */,
+				F5428B37921E40A2BDC07C49 /* RNScreenshotHelper.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1617,11 +1622,15 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = walletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1648,11 +1657,15 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = walletTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1683,6 +1696,7 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1717,6 +1731,7 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1755,10 +1770,14 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = "wallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1794,10 +1813,14 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = "wallet-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1832,10 +1855,14 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = "wallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
@@ -1870,10 +1897,14 @@
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
 					"$(SRCROOT)/../node_modules/react-native-web3-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 				);
 				INFOPLIST_FILE = "wallet-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
 				OTHER_LDFLAGS = (
 					"-ObjC",
 					"-lc++",
