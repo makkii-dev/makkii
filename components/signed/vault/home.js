@@ -21,10 +21,8 @@ import {
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
-import {account} from '../../../actions/account.js';
 import wallet from 'react-native-aion-hw-wallet';
-import otherStyles from '../../styles';
-import {strings} from "../../../locales/i18n";
+import I18n, {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
@@ -236,24 +234,20 @@ class Home extends HomeComponent {
 
 
 
-	_onOpen (Key: any) {
-		console.log('[onOpen]');
+	onSwipeOpen (Key: any) {
 		this.setState({
 			openRowKey: Key,
+			scrollEnabled: false,
 		})
 	}
 
-	_onClose(Key: any) {
+	onSwipeClose(Key: any) {
 		this.setState({
 			openRowKey: null,
+			scrollEnabled: true,
 		})
 	}
 
-	_setListViewScrollableTo(value: boolean) {
-		this.setState({
-				scrollEnabled: value,
-		})
-	}
 
 	onDeleteAccount(key){
 		const { dispatch } = this.props;
@@ -306,55 +300,43 @@ class Home extends HomeComponent {
 	};
 
 	_renderListItem=(item) => {
-		const { dispatch } = this.props;
 		const Key = item.address;
-		let backgroundColor = '';
 		let accountImage = '';
 		switch (item.type) {
 			case '[ledger]':
-				backgroundColor = '#00796b';
-				accountImage = require('../../../assets/ledger_logo.png');break;
+				accountImage = require('../../../assets/account_le.png');break;
 			case '[pk]':
-				backgroundColor = '#6200ee';
-				accountImage = require('../../../assets/key.png');break;
+				accountImage = require('../../../assets/account_pk.png');break;
 			default:
-				backgroundColor = '#2962ff';
-				accountImage = require('../../../assets/aion_logo.png');
+				accountImage = require('../../../assets/account_mk.png');
 		}
-		const maxSwipeDistance = item.isDefault? 100: 200;
+		const defaultImage = I18n.locale.indexOf('zh')>=0? require('../../../assets/default_zh.png'):require('../../../assets/default_en.png');
 		return (
 			<SwipeableRow
-				style={{padding:10}}
 				isOpen={ Key === this.state.openRowKey }
 				swipeEnabled={ this.state.openRowKey === null }
 				preventSwipeRight={true}
-				maxSwipeDistance={maxSwipeDistance}
-				onOpen={()=> {
-					this._onOpen(Key);
-					this._setListViewScrollableTo(false)
-				}}
-				onClose={() => {
-					this._onClose(Key);
-					this._setListViewScrollableTo(true)
-				}}
+				maxSwipeDistance={item.isDefault? fixedHeight(186): fixedHeight(186)*2}
+				onOpen={()=>this.onSwipeOpen(Key)}
+				onClose={() => this.onSwipeClose(Key)}
 				shouldBounceOnMount={true}
 				slideoutView={
-						<View style={otherStyles.VaultHome.slideOutContainer}>
+						<View style={{...styles.accountContainer, justifyContent:'flex-end'}}>
 							{
 								item.isDefault?null:
 									<TouchableOpacity onPress={()=>{
 										this.onSetDefaultAccount(Key);
 									}}>
-										<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#EEEEEE'}}>
-											<Text style={{color:'#000'}}>{strings('set_default_button')}</Text>
+										<View style={{...styles.accountSlideButton, backgroundColor: '#c8c7ed'}}>
+											<Text style={{fontSize:10,color:'#000'}}>{strings('set_default_button')}</Text>
 										</View>
 									</TouchableOpacity>
 							}
 							<TouchableOpacity onPress={()=>{
 								this.onDeleteAccount(Key);
 							}}>
-								<View style={{...otherStyles.VaultHome.slideBtn, backgroundColor: '#DE0215'}}>
-									<Text style={{color:'#fff'}}>{strings('delete_button')}</Text>
+								<View style={{...styles.accountSlideButton, backgroundColor: '#fe0000'}}>
+									<Text style={{fontSize:10,color:'#fff'}}>{strings('delete_button')}</Text>
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -363,23 +345,26 @@ class Home extends HomeComponent {
 				<TouchableOpacity
 					activeOpacity={1}
 					onPress={() => {
-						this.state.openRowKey&&this.setState({openRowKey: null,});
-						this.state.openRowKey||dispatch(account(this.props.accounts[item.address]));
+					    Keyboard.dismiss();
+                        (this.state.showFilter||this.state.showSort||this.state.openRowKey)&&this.setState({showFilter:false,showSort:false,openRowKey:null});
 						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
-					<View style={ {...otherStyles.VaultHome.accountContainer, backgroundColor:backgroundColor} }>
+					<View style={{...styles.accountContainer, justifyContent:'flex-start', elevation:3}}>
+						<Image source={accountImage} style={{width:fixedHeight(186), height:fixedHeight(186)}}/>
+						<View style={{flex:1}}>
+							<View style={{...styles.accountSubContainer, flex:3, alignItems:'flex-end'}}>
+								<Text style={styles.accountSubTextFontStyle1}>{item.name}</Text>
+								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toNotExString()}</Text>
+							</View>
+							<View style={{...styles.accountSubContainer, flex:2, alignItems:'flex-start'}}>
+								<Text style={styles.accountSubTextFontStyle2}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
+								<Text style={styles.accountSubTextFontStyle2}>AION</Text>
+							</View>
+						</View>
 						{
-							item.isDefault?<Image source={require("../../../assets/default.png")} style={{width:40,height:40,position:'absolute', top:0, right:0}}/>:null
+							item.isDefault?<Image source={defaultImage} style={{width:30,height:30,position:'absolute', top:0, right:0}}/>:null
 						}
-						<View style={otherStyles.VaultHome.accountNameView}>
-							<Image source={accountImage} style={{width:15, height:15, tintColor:'#fff', marginRight:10}}/>
-							<Text style={styles.listItemText}>{ item.name }</Text>
-						</View>
-						<View style={{alignItems:'flex-end'}}>
-							<Text style={styles.listItemText}>{new BigNumber(item.balance).toNotExString()} AION</Text>
-						</View>
-						<Text style={otherStyles.VaultHome.addressFontStyle}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 					</View>
 				</TouchableOpacity>
 
@@ -435,135 +420,127 @@ class Home extends HomeComponent {
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
 		const sortTintColor = this.state.showSort?'blue':'black';
 		const filterTintColor = this.state.showFilter?'blue':'black';
-		let sortLabel = strings(this.state.sortOrder);
-		sortLabel.slice(0,6).isChinese()&&sortLabel.length>3&&(sortLabel=sortLabel.slice(0,3) + '...');
-		sortLabel.slice(0,6).isChinese()||sortLabel.length>6&&(sortLabel=sortLabel.slice(0,6) + '...');
-		let filterLabel = strings(this.state.filter);
-		filterLabel.slice(0,6).isChinese()&&filterLabel.length>3&&(filterLabel=filterLabel.slice(0,3) + '...');
-		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
 		const total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
-		console.log('---',width);
-		console.log('+++',fixedWidth(32));
 		return (
 			<View style={{flex:1}}>
 				<GeneralStatusBar backgroundColor={"#4a87fa"}/>
+				<TouchableOpacity style={{flex:1}}  activeOpacity={1} onPress={()=>{
+					(this.state.showFilter||this.state.showSort||this.state.openRowKey)&&this.setState({showFilter:false,showSort:false,openRowKey:null});
+					Keyboard.dismiss();
+				}}>
 				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1}} imageStyle={{width:width, height: fixedHeight(686)}}>
-					<View style={{flexDirection:'row', justifyContent:'flex-end', margin:10}}>
-						<TouchableOpacity style={{height:48, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{this.setState({showMenu:true})}}>
+					{/*title bar*/}
+					<View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:15, marginLeft:10,marginRight:10}}>
+						<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{
+                            Keyboard.dismiss();
+							this.setState({showMenu:true,showSort:false,showFilter:false, openRowKey:null})}}>
 							<Image source={require('../../../assets/ic_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
 						</TouchableOpacity>
 					</View>
+					<View style={{flexDirection:'row', justifyContent:'flex-start'}}>
+						<Text style={{marginLeft:30,color:'#fff'}}>{strings('wallet.fiat_total')}:</Text>
+					</View>
+					<View style={{flexDirection:'row', justifyContent:'center'}}>
+						<Text style={{color:'#fff', fontSize:32}} numberOfLines={1}>{total_currency}{strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>
+					</View>
+
+                    {/*accounts bar*/}
+                    {
+                        renderAccounts.length > 0 ? <FlatList
+                            style={styles.accountView}
+                            renderItem={({item}) => this._renderListItem(item)}
+                            scrollEnabled={this.state.scrollEnabled}
+                            data={renderAccounts}
+                            keyExtractor={(item, index) => index + ''}
+                            onScroll={(e) => {
+                                this.setState({
+                                    openRowKey: null,
+                                });
+                            }}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={this.state.refreshing}
+                                    onRefresh={this.onRefresh}
+                                    title={'Loading'}
+                                />
+                            }
+                        />:<View style={{...styles.accountView, justifyContent:'center', alignItems:'center'}}>
+                            <Image source={require('../../../assets/empty_account.png')} style={{height:80,width:80, tintColor:'gray', marginBottom:30}}/>
+                            <Text style={{fontSize:16,color:'gray'}}>{strings('wallet.import_accounts_hint')}</Text>
+                        </View>
+                    }
+
+
+					{/*center bar*/}
+					<View style={{...styles.shadow,justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
+						width:fixedWidth(970), position:'absolute', top: fixedHeight(466), right: fixedWidth(55), paddingVertical:30
+					}}>
+						<View style={{flexDirection:'row', width:width-30,paddingHorizontal:15, alignItems:'center'}}>
+							<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss();this.setState({showFilter: !this.state.showFilter,showSort:false, openRowKey:null})}}>
+								<Image source={require('../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
+							</TouchableOpacity>
+							<TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss();this.setState({showSort: !this.state.showSort, showFilter:false, openRowKey:null})}}>
+								<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
+							</TouchableOpacity>
+							<TextInput multiline={false} maxLength={10} style={styles.searchStyle} onChangeText={v=>{this.setState({keyWords:v})}}
+                                onFocus={()=>(this.state.showFilter||this.state.showSort||this.state.openRowKey)&&this.setState({showFilter:false,showSort:false,openRowKey:null})}
+                            />
+							<View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:'#4a87fa', borderRadius:fixedWidth(20), paddingLeft:5}}>
+								<Image source={require('../../../assets/search.png')} style={{...styles.sortHeaderImageStyle, tintColor:'#fff'}}/>
+							</View>
+						</View>
+						{
+							// filter list
+							this.state.showFilter?<FlatList
+								style={{marginTop:10}}
+								data={FILTER}
+								renderItem={({item}) =>
+									<TouchableOpacity activeOpacity={0.3} onPress={() => {
+										this.closeFilter(item.title)
+									}}>
+										<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center',paddingLeft:20}}>
+											{item.image ?
+												<Image source={item.image} style={{width:20,height:20}}/> : null}
+											<Text numberOfLines={1}
+												  style={{marginLeft:40,color:item.title===this.state.filter?'blue':'black'}}>{strings(item.title)}</Text>
+										</View>
+									</TouchableOpacity>
+
+								}
+								ItemSeparatorComponent={()=><View style={styles.divider}/>}
+								keyExtractor={(item, index) => index.toString()}
+							 />:null
+						}
+						{
+							// sort list
+							this.state.showSort?<FlatList
+								style={{marginTop:10}}
+								data={SORT}
+								renderItem={({item}) =>
+									<TouchableOpacity activeOpacity={0.3} onPress={() => {
+										this.closeSort(item.title)
+									}}>
+										<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center',paddingLeft:20}}>
+											{item.image ?
+												<Image source={item.image} style={{width:20,height:20}}/> : null}
+											<Text numberOfLines={1}
+												  style={{marginLeft:40,color:item.title===this.state.sortOrder?'blue':'black'}}>{strings(item.title)}</Text>
+										</View>
+									</TouchableOpacity>
+
+								}
+								ItemSeparatorComponent={()=><View style={styles.divider}/>}
+								keyExtractor={(item, index) => index.toString()}
+							/>:null
+						}
+					</View>
+
 
 				</ImageBackground>
-				{/*<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>*/}
-				{/*<HomeHeader*/}
-					{/*total={this.state.totalBalance}*/}
-					{/*navigation={this.props.navigation}*/}
-				{/*/>*/}
-				{/*<TouchableOpacity*/}
-					{/*style={{flex:1}}*/}
-					{/*activeOpacity={1}*/}
-					{/*onPress={()=>{*/}
-						{/*this.state.openRowKey&&this.setState({openRowKey: null})*/}
-					{/*}}*/}
-				{/*>*/}
-					{/*<View style={{*/}
-						{/*flexDirection: 'row', height: 50, alignItems: 'center',*/}
-						{/*marginLeft: 10,*/}
-						{/*marginRight: 10,*/}
-						{/*width: width - 20,*/}
-						{/*borderColor: 'lightgray',*/}
-						{/*borderBottomWidth: 1,*/}
-						{/*justifyContent:'space-around'*/}
-					{/*}}>*/}
-
-						{/*<TouchableOpacity*/}
-							{/*onPress={() => this.setState({showSort: true, showFilter:false})}*/}
-						{/*>*/}
-							{/*<View style={styles.sortHeader}>*/}
-								{/*<Image source={require('../../../assets/sort.png')}*/}
-									   {/*style={{...styles.sortHeaderImageStyle, tintColor: sortTintColor}}/>*/}
-								{/*<Text style={{...styles.sortHeaderFontStyle, color:sortTintColor, width:80}}>{sortLabel}</Text>*/}
-							{/*</View>*/}
-						{/*</TouchableOpacity>*/}
-						{/*<TouchableOpacity*/}
-							{/*onPress={() => this.setState({showSort: false, showFilter:true})}*/}
-						{/*>*/}
-							{/*<View style={styles.sortHeader}>*/}
-								{/*<Image source={require('../../../assets/filter.png')}*/}
-									   {/*style={{...styles.sortHeaderImageStyle, tintColor: filterTintColor}}/>*/}
-								{/*<Text style={{...styles.sortHeaderFontStyle, color:filterTintColor,width:80}}>{filterLabel}</Text>*/}
-							{/*</View>*/}
-						{/*</TouchableOpacity>*/}
-						{/*<View style={styles.sortHeader}>*/}
-							{/*<Image source={require('../../../assets/search.png')}*/}
-								   {/*style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>*/}
-							{/*<TextInput style={styles.searchStyle}*/}
-                                       {/*multiline={false}*/}
-								{/*onChangeText={(value)=>this.setState({keyWords:value})}*/}
-							{/*/>*/}
-						{/*</View>*/}
-
-                        {/*<ModalList*/}
-                            {/*data={SORT}*/}
-                            {/*ref={ref => this.sortRef = ref}*/}
-                            {/*visible={this.state.showSort}*/}
-                            {/*style={styles.sortContainer}*/}
-                            {/*viewStyle={styles.sortViewStyle}*/}
-                            {/*fontStyle={styles.sortFontStyle}*/}
-                            {/*onClose={() => this.closeSort()}*/}
-                            {/*ItemSeparatorComponent={() => (*/}
-                                {/*<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}*/}
-                        {/*/>*/}
-                        {/*<ModalList*/}
-                            {/*data={FILTER}*/}
-                            {/*ref={ref => this.filterRef = ref}*/}
-                            {/*visible={this.state.showFilter}*/}
-                            {/*style={styles.sortContainer}*/}
-                            {/*viewStyle={styles.sortViewStyle}*/}
-                            {/*fontStyle={styles.sortFontStyle}*/}
-                            {/*onClose={() => this.closeFilter()}*/}
-                            {/*ItemSeparatorComponent={() => (*/}
-                                {/*<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}*/}
-                        {/*/>*/}
-					{/*</View>*/}
-					{/*<FlatList*/}
-						{/*style={{flex:1}}*/}
-						{/*renderItem={({item})=>this._renderListItem(item)}*/}
-						{/*scrollEnabled={this.state.scrollEnabled}*/}
-						{/*data={renderAccounts}*/}
-						{/*keyExtractor={(item, index)=>index + ''}*/}
-						{/*onScroll={(e)=>{*/}
-							{/*this.setState({*/}
-								{/*openRowKey: null,*/}
-							{/*});*/}
-						{/*}}*/}
-						{/*ListEmptyComponent={()=>*/}
-							{/*<View style={{marginTop: 10}}>*/}
-								{/*<Text style={{alignSelf: 'center', textAlign:'center'}}>*/}
-									{/*{strings('wallet.import_accounts_hint')}*/}
-								{/*</Text>*/}
-							{/*</View>*/}
-						{/*}*/}
-						{/*refreshControl={*/}
-							{/*<RefreshControl*/}
-								{/*refreshing={this.state.refreshing}*/}
-								{/*onRefresh={this.onRefresh}*/}
-								{/*title={'Loading'}*/}
-							{/*/>*/}
-						{/*}*/}
-					{/*/>*/}
-				{/*</TouchableOpacity>*/}
-				{/*{*/}
-					{/*(this.state.showSort||this.state.showFilter)?<TouchableOpacity style={{position: 'absolute',*/}
-						{/*top:10+top+30, left:0,right:0, width:width,height:height-(10+top+30),*/}
-						{/*backgroundColor:'rgba(0, 0, 0, 0.5)'*/}
-					{/*}}/>:null*/}
-				{/*}*/}
-				{/*</TouchableOpacity>*/}
 				<ComponentTabBar
 					style={{
 						position: 'absolute',
+						height: fixedHeight(156),
 						bottom: 0,
 						right: 0,
 						left: 0,
@@ -589,20 +566,26 @@ class Home extends HomeComponent {
 						},
 					]}
 				/>
+				</TouchableOpacity>
 				<Loading ref={(element) => {
 					this.loadingView = element;
 				}}/>
+				{/*Menu Pop window*/}
 				{
 					this.state.showMenu?
 						<PopWindow
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerStyle={{position:'absolute', top:80,right:10,width:180,height:200, backgroundColor:'#fff'}}
-							imageStyle={{width: 20, height: 20, marginLeft:10,marginRight:30}}
+							containerPosition={{position:'absolute', top:80,right:10,width:180,height:150}}
+							imageStyle={{width: 20, height: 20, marginLeft:10,marginRight:30, resizeMode:'contain'}}
 							fontStyle={{fontSize:12, color:'#000'}}
-							itemStyle={{width:180,height:50,flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}
+							itemStyle={{width:180,height:30,flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}
 							containerBackgroundColor={'#fff'}
+							ItemSeparatorComponent={()=><View style={styles.divider}/>}
+							ListHeaderComponent={()=><View style={{width:180,height:40, padding:10}}>
+								<Text style={{fontSize:16}}>{strings('wallet.title_import_from')}</Text>
+							</View>}
 						/>
 						 :null
 				}
@@ -624,63 +607,54 @@ export default connect(state => {
 	}); })(Home);
 
 const styles = StyleSheet.create({
-	divider: {
-		marginLeft: 50,
-		height: 1 / PixelRatio.get(),
-		backgroundColor: '#fff'
+    accountView:{
+        flex: 1, marginTop: fixedHeight(450), marginBottom: fixedHeight(156)
+    },
+	accountContainer:{
+		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
+		flexDirection:'row', marginHorizontal: fixedWidth(55), marginVertical: fixedHeight(32),
+		height:fixedHeight(186), backgroundColor:'#fff',
 	},
-	sortHeader:{
+	accountSubContainer:{
 		flexDirection:'row',
-		alignItems: 'center'
+		justifyContent:'space-between',
+		paddingHorizontal: 18,
 	},
-	sortContainer:{
-		width: width,
-		backgroundColor: '#fff',
-		position: 'absolute',
-		left:0,
-		right:0,
-		top: 10+top+30, //status bar + title bar + sort header
-		padding: 5,
+	accountSubTextFontStyle1:{
+		fontSize:12,
+		color:'#000'
 	},
-	sortViewStyle:{
-		flex:1,
-		width:width,
-		justifyContent:'center',
+	accountSubTextFontStyle2:{
+		fontSize:8,
+		color:'gray'
 	},
-	sortFontStyle:{
-		color: '#000',
-		fontSize: 16,
-		margin:5,
+	accountSlideButton:{
+		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
+		justifyContent:'center', alignItems:'center',
+		height:fixedHeight(186),
+		width: fixedHeight(186),
 	},
-	sortHeaderFontStyle:{
-		color: 'blue',
-		fontSize: 16,
+	divider: {
+		marginHorizontal: 10,
+		height: 1 / PixelRatio.get(),
+		backgroundColor: '#eee'
+	},
+	shadow:{
+		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
+		elevation:10,
 	},
 	sortHeaderImageStyle:{
-		width:20,
-		height:20,
+		width:30,
+		height:30,
 		marginRight:10,
 		tintColor:'blue'
 	},
 	searchStyle:{
-		borderBottomWidth: 1,
-		borderBottomColor:'#000',
-		marginBottom:5,
-		padding: 0,
-		height: 48,
-		width:80,
-		alignItems:'flex-end',
-	},
-	listBtnContainer:{
-		flex:1,
-		flexDirection: 'row',
-		margin:0,
-		justifyContent: 'flex-end',
-	},
-	listBtn:{
-		width: 100,
-		justifyContent: 'center',
-		alignItems: 'center'
+		borderWidth: 1/PixelRatio.get(),
+		borderColor:'#000',
+		height: 40,
+		width: fixedWidth(500),
+		borderRadius: fixedWidth(20),
 	},
 	listItem: {
 		height: 80,
@@ -688,12 +662,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 1,
 		backgroundColor: '#fff'
-	},
-	listItemLeft: {
-		justifyContent: 'space-between'
-	},
-	listItemRight: {
-	    width: 80,
 	},
 	listItemText: {
 		textAlign:'left',

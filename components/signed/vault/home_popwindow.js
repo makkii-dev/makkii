@@ -7,7 +7,7 @@ export class PopWindow extends React.Component {
     static propTypes={
         data: PropTypes.array.isRequired,
         onClose: PropTypes.func.isRequired,
-        containerStyle: PropTypes.object.isRequired,
+        containerPosition: PropTypes.object.isRequired,
         itemStyle: PropTypes.object,
         fontStyle: PropTypes.object,
         imageStyle: PropTypes.object,
@@ -17,7 +17,7 @@ export class PopWindow extends React.Component {
 
     static defaultProps={
         backgroundColor: 'rgba(0,0,0,0)',
-        containerStyle:{},
+        containerPosition:{},
         fontStyle:{
             color: '#fff',
             fontSize: 16,
@@ -56,12 +56,12 @@ export class PopWindow extends React.Component {
 
     render(){
         return (
-            <View  style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0}}>
+            <View  style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0, elevation:11}}>
                 <TouchableOpacity activeOpacity={1}
                                   style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0, backgroundColor: this.props.backgroundColor}}
                                   onPress={() => this.props.onClose()}>
                     <View style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0}}>
-                        <Animated.View  style={{...this.props.containerStyle, transform:[{scale:this.state.animation}]}}>
+                        <Animated.View  style={{...this.props.containerPosition, transform:[{scale:this.state.animation}]}}>
                             <FlatList
                                 {...this.props}
                                 style={{backgroundColor:this.props.containerBackgroundColor}}
