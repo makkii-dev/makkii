@@ -59,26 +59,45 @@ import SettingAdvanced       from './components/signed/setting/advanced.js';
 import SettingCurrency       from './components/signed/setting/currency.js';
 import SimpleWebView         from './components/WebViewComponent';
 
-
 const navigationOptions = ({navigation}) => ({
-            headerRight: (<View></View>),
-			headerLeft: (
-                    <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
-                    	width: 48,
-						height: 48,
-						alignItems: 'center',
-						justifyContent: 'center',
-					}}>
-						<Image source={require('./assets/arrow_back.png')} style={{
-							tintColor: 'black',
-							width: 20,
-							height: 20,
-						}} />
-					</TouchableOpacity>
-                ),
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle
-        });
+    headerRight: (<View></View>),
+    headerLeft: (
+            <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+                width: 48,
+                height: 48,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <Image source={require('./assets/arrow_back.png')} style={{
+                    tintColor: 'white',
+                    width: 20,
+                    height: 20,
+                }} />
+            </TouchableOpacity>
+        ),
+    headerStyle: styles.headerStyle,
+    headerTitleStyle: styles.headerTitleStyle
+});
+
+const navigationOptionsWithoutShadow = ({navigation}) => ({
+	headerRight: (<View></View>),
+	headerLeft: (
+		<TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+			width: 48,
+			height: 48,
+			alignItems: 'center',
+			justifyContent: 'center',
+		}}>
+			<Image source={require('./assets/arrow_back.png')} style={{
+				tintColor: 'white',
+				width: 20,
+				height: 20,
+			}} />
+		</TouchableOpacity>
+	),
+	headerStyle: styles.headerStyleWithoutShadow,
+	headerTitleStyle: styles.headerTitleStyle
+});
 
 const navigationOptionsWithoutRight = ({navigation}) => ({
 	headerLeft: (
@@ -89,7 +108,7 @@ const navigationOptionsWithoutRight = ({navigation}) => ({
 			justifyContent: 'center',
 		}}>
 			<Image source={require('./assets/arrow_back.png')} style={{
-				tintColor: 'black',
+				tintColor: 'white',
 				width: 20,
 				height: 20,
 			}} />
@@ -120,7 +139,7 @@ const Routes = createAppContainer(createStackNavigator({
     },
   	'unsigned_register': {
         screen: Register,
-        navigationOptions,
+        navigationOptions: navigationOptionsWithoutShadow,
     },
   	'unsigned_register_mnemonic': {
         screen: RegisterMnemonic,
@@ -128,7 +147,7 @@ const Routes = createAppContainer(createStackNavigator({
     },
   	'unsigned_recovery': {
         screen: Recovery,
-        navigationOptions,
+        navigationOptions: navigationOptionsWithoutRight,
     },
   	'unsigned_recovery_password': {
         screen: RecoveryPassword,

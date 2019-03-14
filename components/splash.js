@@ -6,6 +6,9 @@ import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils.js';
 import {strings} from "../locales/i18n";
+import GeneralStatusBar from "./GeneralStatusBar";
+import {ComponentLogo} from "./common";
+import {mainColor} from './style_util';
 
 const {width,height} = Dimensions.get('window');
 
@@ -47,7 +50,7 @@ class Splash extends Component {
 				dispatch(user(db_user.hashed_password, db_user.mnemonic));
 				setTimeout(()=>{
 					navigate('signed_vault');
-				}, 100000);
+				}, 1000);
 			} else {
 				console.log('[splash] timeout signin');
 				setTimeout(()=>{
@@ -71,17 +74,12 @@ class Splash extends Component {
 					width: width,
 					height: height,
                     alignItems: 'center',
+					paddingTop: 150,
 				}}
 				source={require('../assets/splash_bg.png')}
 			>
-                <Image
-                    style={{
-                    	marginTop: 150,
-                        width: 50,
-                        height: 50,
-						resizeMode: 'contain'
-                    }}
-                    source={require('../assets/app_logo.png')} />
+				<GeneralStatusBar backgroundColor={mainColor}/>
+                <ComponentLogo/>
                 <Text style={{
                     fontSize: 24,
                     color: 'white',

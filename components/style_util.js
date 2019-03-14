@@ -21,8 +21,16 @@ const fixedHeight = value => {
 };
 
 
+const LINK_BUTTON_COLOR = '#4278eb';
+const BLUE_BLOCK_COLOR = '#4a87fa';
+const MAIN_COLOR = '#246ffa';
+const FONT_COLOR = '#777676';
 
 module.exports = {
     fixedWidth,
     fixedHeight,
+    linkButtonColor: LINK_BUTTON_COLOR,
+    blueBlockColor: BLUE_BLOCK_COLOR,
+    mainColor: MAIN_COLOR,
+    fontColor: FONT_COLOR
 };

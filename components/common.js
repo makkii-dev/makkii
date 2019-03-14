@@ -3,6 +3,7 @@ import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndi
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
+import {mainColor, fontColor} from './style_util';
 
 class ComponentButton extends Component{
 	render(){
@@ -91,10 +92,11 @@ class ComponentLogo extends Component{
 		return(
 			<Image
 				style={{
-					width:60,
-					height:60,
+					width:50,
+					height:50,
+                    resizeMode: 'contain'
 				}}
-				source={require('../assets/wallet.png')}
+				source={require('../assets/app_logo.png')}
 			/>
 		);
 	}
@@ -158,15 +160,14 @@ class InputMultiLines extends Component{
 	}
 }
 
-const Show = ()=> <Image style={{width:24,height:24}} source={require('../assets/view_32x32.png')} />;
+const Show = ()=> <Image style={{width:20,height:20}} source={require('../assets/view_32x32.png')} />;
 
-const Hide = ()=> <Image style={{width:24,height:24}} source={require('../assets/hide_32x32.png')} />;
+const Hide = ()=> <Image style={{width:20,height:20}} source={require('../assets/hide_32x32.png')} />;
+
+const Visible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/visible.png')} />
+const Invisible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/invisible.png')} />
 
 class ComponentPassword extends Component {
-
-	static defaultProps = {
-		supportVisibility: true
-	};
 
 	constructor(props){
 		super(props);
@@ -178,6 +179,7 @@ class ComponentPassword extends Component {
 	render(){
 		return (
 			<View style={styles.password.view}>
+                <Image style={{width:24, height: 24, resizeMode: 'contain'}} source={require('../assets/icon_password.png')} />
 				<TextInput
 					style={styles.password.text_input}
 					placeholder={this.props.placeholder}
@@ -206,6 +208,122 @@ class ComponentPassword extends Component {
 			    	}
 			    </TouchableOpacity> 
 		    </View>
+		);
+	};
+}
+
+class PasswordInputWithTitle extends Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			secure: true
+		};
+	};
+
+	render(){
+		return (
+		    <View>
+				<Text style={{
+					marginBottom: 5,
+					fontSize: 16,
+					fontWeight: 'bold'
+				}}>{this.props.title}</Text>
+                <View style={{
+                        flexDirection: 'row',
+                        height: 50,
+                        alignItems: 'center',
+                    }}
+                >
+                    <TextInput
+                        style={{
+							fontSize: 16,
+							color: fontColor,
+							fontWeight: 'normal',
+							lineHeight: 20,
+							paddingRight: 45,
+							borderColor: 'lightgray',
+							borderBottomWidth: 1,
+							flex: 1,
+						}}
+                        placeholder={this.props.placeholder}
+                        onChangeText={e=>{
+                            this.props.onChange(e);
+                        }}
+                        onBlur={e=>{
+                            this.setState({
+                                secure: true
+                            });
+                        }}
+                        secureTextEntry={this.state.secure}
+                        value={this.props.value}
+                    />
+                    <TouchableOpacity
+                        style={styles.password.display}
+                        onPress={e=>{
+                            this.setState({
+                                secure: !this.state.secure
+                            });
+                        }}
+                    >
+                        {
+                            this.state.secure ?
+                                <Invisible />: <Visible />
+                        }
+                    </TouchableOpacity>
+                </View>
+			</View>
+		);
+	};
+}
+class PasswordInput extends Component {
+	constructor(props){
+		super(props);
+		this.state = {
+			secure: true
+		};
+	};
+
+	render(){
+		return (
+			<View style={styles.password.view}>
+                <Image
+                    style={{
+                        width: 20,
+                        height: 20,
+                        resizeMode: 'contain',
+                        position: 'absolute',
+                        left: 0,
+                    }}
+                    source={require('../assets/icon_password.png')}
+                />
+				<TextInput
+					style={styles.password.text_input}
+					placeholder={this.props.placeholder}
+					onChangeText={e=>{
+						this.props.onChange(e);
+					}}
+					onBlur={e=>{
+						this.setState({
+							secure: true
+						});
+					}}
+					secureTextEntry={this.state.secure}
+					value={this.props.value}
+				/>
+				<TouchableOpacity
+					style={styles.password.display}
+					onPress={e=>{
+						this.setState({
+							secure: !this.state.secure
+						});
+					}}
+				>
+					{
+						this.state.secure ?
+							<Invisible />: <Visible />
+					}
+				</TouchableOpacity>
+			</View>
 		);
 	};
 }
@@ -344,6 +462,28 @@ class TransactionItemCell extends React.PureComponent {
 	}
 }
 
+class UnsignedActionButton extends Component{
+	render(){
+		return (
+			<TouchableOpacity onPress={this.props.onPress}>
+				<Text style={{
+					backgroundColor: mainColor,
+					color: 'white',
+					paddingTop: 10,
+					paddingBottom: 10,
+					borderRadius: 5,
+					width: '100%',
+					textAlign: 'center',
+					fontWeight: 'bold',
+					fontSize: 18,
+				}}>
+					{this.props.title}
+				</Text>
+			</TouchableOpacity >
+		);
+	}
+}
+
 module.exports = {
 	ComponentButton,
 	ComponentTabBar,
@@ -351,8 +491,11 @@ module.exports = {
 	Input,
 	InputMultiLines,
 	ComponentPassword,
+    PasswordInput,
+	PasswordInputWithTitle,
 	ImportListItem,
 	ImportListfooter,
 	EditableView,
 	TransactionItemCell,
+	UnsignedActionButton
 };
