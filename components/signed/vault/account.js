@@ -9,6 +9,7 @@ import {update_account_name, update_account_txs} from "../../../actions/accounts
 import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
+import GeneralStatusBar from "./home";
 
 class Account extends Component {
 
@@ -160,7 +161,7 @@ class Account extends Component {
 		const {navigation} = this.props;
 		return (
 			<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-			<View style={{flex:1, justifyContent: 'space-between'}}>
+				<View style={{flex:1, justifyContent: 'space-between'}}>
 				<View style={styles.Account.summaryContainer}>
 					<View style={styles.Account.summaryLeftContainer}>
 						<EditableView

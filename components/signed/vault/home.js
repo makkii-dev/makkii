@@ -17,6 +17,7 @@ import {
 	Linking,
 	Platform,
 	Keyboard,
+	ImageBackground
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
@@ -27,38 +28,18 @@ import {strings} from "../../../locales/i18n";
 import {ComponentTabBar} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
-import {ModalList} from "../../modalList";
 import {HomeComponent} from "../HomeComponent";
-import HomeHeader from "./home_header";
-import {parseUrl} from "query-string";
+import GeneralStatusBar from "../../GeneralStatusBar";
+import {SORT, FILTER, MENU} from "./home_contanst";
+import {getLedgerMessage} from "../../../utils";
+import Loading from '../../loading.js';
+import {PopWindow} from "./home_popwindow";
+import {fixedWidth, fixedHeight} from "../../style_util";
 
 const {width, height} = Dimensions.get('window');
 const mWidth = 180;
 const top = 100;
 
-const SORT = [
-	{
-		title: 'sort.balance',
-	},
-	{
-		title: 'sort.transaction',
-	},
-];
-
-const FILTER = [
-	{
-		title: 'filter.all',
-	},
-	{
-		title: 'filter.masterKey',
-	},
-	{
-		title: 'filter.privateKey',
-	},
-	{
-		title: 'filter.ledger',
-	},
-];
 
 function sortAccounts(src,select){
 	let res = src;
@@ -120,6 +101,7 @@ class Home extends HomeComponent {
 		super(props);
 		this.menuRef=null;
 		this.state={
+			showMenu: false,
 			showSort: false,
 			sortOrder: SORT[0].title,
 			showFilter: false,
@@ -182,7 +164,7 @@ class Home extends HomeComponent {
 		// 		console.log("invalid chaion send schema");
 		// 	}
 		// }
-	}
+	};
 
 	componentWillUnmount(): void {
 		console.log("unmount home");
@@ -303,6 +285,26 @@ class Home extends HomeComponent {
 		});
 	}
 
+	onImportLedger=()=> {
+		console.log("click import ledger.");
+		this.loadingView.show(strings('ledger.toast_connecting'));
+
+		wallet.listDevice().then((deviceList) => {
+			if (deviceList.length <= 0) {
+				this.loadingView.hide();
+				Alert.alert(strings('alert_title_error'), strings('ledger.error_device_count'));
+			} else {
+				wallet.getAccount(0).then(account => {
+					this.loadingView.hide();
+					this.props.navigation.navigate('signed_vault_import_list',{type:'ledger',title:strings('import_ledger.title')});
+				}, error => {
+					this.loadingView.hide();
+					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
+				});
+			}
+		});
+	};
+
 	_renderListItem=(item) => {
 		const { dispatch } = this.props;
 		const Key = item.address;
@@ -386,8 +388,26 @@ class Home extends HomeComponent {
 		)
 	};
 
-	closeSort(){
-		const select = this.sortRef.getSelect();
+	closeMenu(select){
+		const {navigation} = this.props;
+		this.setState({
+			showMenu:false
+		},()=>{
+			switch (select) {
+				case MENU[0].title:
+					navigation.navigate('signed_vault_import_list',{type:'masterKey', title:strings('import_master_key.title')});
+					break;
+				case MENU[1].title:
+					navigation.navigate('signed_vault_import_private_key');
+					break;
+				case MENU[2].title:
+					this.onImportLedger();
+					break;
+				default:
+			}
+		})
+	}
+	closeSort(select){
 		select&&this.setState({
 			showSort:false,
 			sortOrder:select,
@@ -397,8 +417,7 @@ class Home extends HomeComponent {
 		})
 	}
 
-	closeFilter(){
-		const select = this.filterRef.getSelect();
+	closeFilter(select){
 		select&&this.setState({
 			showFilter:false,
 			filter:select,
@@ -408,6 +427,8 @@ class Home extends HomeComponent {
 		})
 	}
 
+
+
 	render(){
 		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
@@ -415,122 +436,137 @@ class Home extends HomeComponent {
 		const sortTintColor = this.state.showSort?'blue':'black';
 		const filterTintColor = this.state.showFilter?'blue':'black';
 		let sortLabel = strings(this.state.sortOrder);
-		console.log(sortLabel.isChinese());
 		sortLabel.slice(0,6).isChinese()&&sortLabel.length>3&&(sortLabel=sortLabel.slice(0,3) + '...');
 		sortLabel.slice(0,6).isChinese()||sortLabel.length>6&&(sortLabel=sortLabel.slice(0,6) + '...');
 		let filterLabel = strings(this.state.filter);
 		filterLabel.slice(0,6).isChinese()&&filterLabel.length>3&&(filterLabel=filterLabel.slice(0,3) + '...');
 		filterLabel.slice(0,6).isChinese()||filterLabel.length>6&&(filterLabel=filterLabel.slice(0,6) + '...');
+		const total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
+		console.log('---',width);
+		console.log('+++',fixedWidth(32));
 		return (
 			<View style={{flex:1}}>
-				<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<HomeHeader
-					total={this.state.totalBalance}
-					navigation={this.props.navigation}
-				/>
-				<TouchableOpacity
-					style={{flex:1}}
-					activeOpacity={1}
-					onPress={()=>{
-						this.state.openRowKey&&this.setState({openRowKey: null})
-					}}
-				>
-					<View style={{
-						flexDirection: 'row', height: 50, alignItems: 'center',
-						marginLeft: 10,
-						marginRight: 10,
-						width: width - 20,
-						borderColor: 'lightgray',
-						borderBottomWidth: 1,
-						justifyContent:'space-around'
-					}}>
-
-						<TouchableOpacity
-							onPress={() => this.setState({showSort: true, showFilter:false})}
-						>
-							<View style={styles.sortHeader}>
-								<Image source={require('../../../assets/sort.png')}
-									   style={{...styles.sortHeaderImageStyle, tintColor: sortTintColor}}/>
-								<Text style={{...styles.sortHeaderFontStyle, color:sortTintColor, width:80}}>{sortLabel}</Text>
-							</View>
+				<GeneralStatusBar backgroundColor={"#4a87fa"}/>
+				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1}} imageStyle={{width:width, height: fixedHeight(686)}}>
+					<View style={{flexDirection:'row', justifyContent:'flex-end', margin:10}}>
+						<TouchableOpacity style={{height:48, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{this.setState({showMenu:true})}}>
+							<Image source={require('../../../assets/ic_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
 						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={() => this.setState({showSort: false, showFilter:true})}
-						>
-							<View style={styles.sortHeader}>
-								<Image source={require('../../../assets/filter.png')}
-									   style={{...styles.sortHeaderImageStyle, tintColor: filterTintColor}}/>
-								<Text style={{...styles.sortHeaderFontStyle, color:filterTintColor,width:80}}>{filterLabel}</Text>
-							</View>
-						</TouchableOpacity>
-						<View style={styles.sortHeader}>
-							<Image source={require('../../../assets/search.png')}
-								   style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>
-							<TextInput style={styles.searchStyle}
-                                       multiline={false}
-								onChangeText={(value)=>this.setState({keyWords:value})}
-							/>
-						</View>
-
-                        <ModalList
-                            data={SORT}
-                            ref={ref => this.sortRef = ref}
-                            visible={this.state.showSort}
-                            style={styles.sortContainer}
-                            viewStyle={styles.sortViewStyle}
-                            fontStyle={styles.sortFontStyle}
-                            onClose={() => this.closeSort()}
-                            ItemSeparatorComponent={() => (
-                                <View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
-                        />
-                        <ModalList
-                            data={FILTER}
-                            ref={ref => this.filterRef = ref}
-                            visible={this.state.showFilter}
-                            style={styles.sortContainer}
-                            viewStyle={styles.sortViewStyle}
-                            fontStyle={styles.sortFontStyle}
-                            onClose={() => this.closeFilter()}
-                            ItemSeparatorComponent={() => (
-                                <View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}
-                        />
 					</View>
-					<FlatList
-						style={{flex:1}}
-						renderItem={({item})=>this._renderListItem(item)}
-						scrollEnabled={this.state.scrollEnabled}
-						data={renderAccounts}
-						keyExtractor={(item, index)=>index + ''}
-						onScroll={(e)=>{
-							this.setState({
-								openRowKey: null,
-							});
-						}}
-						ListEmptyComponent={()=>
-							<View style={{marginTop: 10}}>
-								<Text style={{alignSelf: 'center', textAlign:'center'}}>
-									{strings('wallet.import_accounts_hint')}
-								</Text>
-							</View>
-						}
-						refreshControl={
-							<RefreshControl
-								refreshing={this.state.refreshing}
-								onRefresh={this.onRefresh}
-								title={'Loading'}
-							/>
-						}
-					/>
-				</TouchableOpacity>
-				{
-					(this.state.showSort||this.state.showFilter)?<TouchableOpacity style={{position: 'absolute',
-						top:10+top+30, left:0,right:0, width:width,height:height-(10+top+30),
-						backgroundColor:'rgba(0, 0, 0, 0.5)'
-					}}/>:null
-				}
-				</TouchableOpacity>
+
+				</ImageBackground>
+				{/*<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>*/}
+				{/*<HomeHeader*/}
+					{/*total={this.state.totalBalance}*/}
+					{/*navigation={this.props.navigation}*/}
+				{/*/>*/}
+				{/*<TouchableOpacity*/}
+					{/*style={{flex:1}}*/}
+					{/*activeOpacity={1}*/}
+					{/*onPress={()=>{*/}
+						{/*this.state.openRowKey&&this.setState({openRowKey: null})*/}
+					{/*}}*/}
+				{/*>*/}
+					{/*<View style={{*/}
+						{/*flexDirection: 'row', height: 50, alignItems: 'center',*/}
+						{/*marginLeft: 10,*/}
+						{/*marginRight: 10,*/}
+						{/*width: width - 20,*/}
+						{/*borderColor: 'lightgray',*/}
+						{/*borderBottomWidth: 1,*/}
+						{/*justifyContent:'space-around'*/}
+					{/*}}>*/}
+
+						{/*<TouchableOpacity*/}
+							{/*onPress={() => this.setState({showSort: true, showFilter:false})}*/}
+						{/*>*/}
+							{/*<View style={styles.sortHeader}>*/}
+								{/*<Image source={require('../../../assets/sort.png')}*/}
+									   {/*style={{...styles.sortHeaderImageStyle, tintColor: sortTintColor}}/>*/}
+								{/*<Text style={{...styles.sortHeaderFontStyle, color:sortTintColor, width:80}}>{sortLabel}</Text>*/}
+							{/*</View>*/}
+						{/*</TouchableOpacity>*/}
+						{/*<TouchableOpacity*/}
+							{/*onPress={() => this.setState({showSort: false, showFilter:true})}*/}
+						{/*>*/}
+							{/*<View style={styles.sortHeader}>*/}
+								{/*<Image source={require('../../../assets/filter.png')}*/}
+									   {/*style={{...styles.sortHeaderImageStyle, tintColor: filterTintColor}}/>*/}
+								{/*<Text style={{...styles.sortHeaderFontStyle, color:filterTintColor,width:80}}>{filterLabel}</Text>*/}
+							{/*</View>*/}
+						{/*</TouchableOpacity>*/}
+						{/*<View style={styles.sortHeader}>*/}
+							{/*<Image source={require('../../../assets/search.png')}*/}
+								   {/*style={{...styles.sortHeaderImageStyle, tintColor: 'black'}}/>*/}
+							{/*<TextInput style={styles.searchStyle}*/}
+                                       {/*multiline={false}*/}
+								{/*onChangeText={(value)=>this.setState({keyWords:value})}*/}
+							{/*/>*/}
+						{/*</View>*/}
+
+                        {/*<ModalList*/}
+                            {/*data={SORT}*/}
+                            {/*ref={ref => this.sortRef = ref}*/}
+                            {/*visible={this.state.showSort}*/}
+                            {/*style={styles.sortContainer}*/}
+                            {/*viewStyle={styles.sortViewStyle}*/}
+                            {/*fontStyle={styles.sortFontStyle}*/}
+                            {/*onClose={() => this.closeSort()}*/}
+                            {/*ItemSeparatorComponent={() => (*/}
+                                {/*<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}*/}
+                        {/*/>*/}
+                        {/*<ModalList*/}
+                            {/*data={FILTER}*/}
+                            {/*ref={ref => this.filterRef = ref}*/}
+                            {/*visible={this.state.showFilter}*/}
+                            {/*style={styles.sortContainer}*/}
+                            {/*viewStyle={styles.sortViewStyle}*/}
+                            {/*fontStyle={styles.sortFontStyle}*/}
+                            {/*onClose={() => this.closeFilter()}*/}
+                            {/*ItemSeparatorComponent={() => (*/}
+                                {/*<View style={{height: 1 / PixelRatio.get(), backgroundColor: '#000'}}/>)}*/}
+                        {/*/>*/}
+					{/*</View>*/}
+					{/*<FlatList*/}
+						{/*style={{flex:1}}*/}
+						{/*renderItem={({item})=>this._renderListItem(item)}*/}
+						{/*scrollEnabled={this.state.scrollEnabled}*/}
+						{/*data={renderAccounts}*/}
+						{/*keyExtractor={(item, index)=>index + ''}*/}
+						{/*onScroll={(e)=>{*/}
+							{/*this.setState({*/}
+								{/*openRowKey: null,*/}
+							{/*});*/}
+						{/*}}*/}
+						{/*ListEmptyComponent={()=>*/}
+							{/*<View style={{marginTop: 10}}>*/}
+								{/*<Text style={{alignSelf: 'center', textAlign:'center'}}>*/}
+									{/*{strings('wallet.import_accounts_hint')}*/}
+								{/*</Text>*/}
+							{/*</View>*/}
+						{/*}*/}
+						{/*refreshControl={*/}
+							{/*<RefreshControl*/}
+								{/*refreshing={this.state.refreshing}*/}
+								{/*onRefresh={this.onRefresh}*/}
+								{/*title={'Loading'}*/}
+							{/*/>*/}
+						{/*}*/}
+					{/*/>*/}
+				{/*</TouchableOpacity>*/}
+				{/*{*/}
+					{/*(this.state.showSort||this.state.showFilter)?<TouchableOpacity style={{position: 'absolute',*/}
+						{/*top:10+top+30, left:0,right:0, width:width,height:height-(10+top+30),*/}
+						{/*backgroundColor:'rgba(0, 0, 0, 0.5)'*/}
+					{/*}}/>:null*/}
+				{/*}*/}
+				{/*</TouchableOpacity>*/}
 				<ComponentTabBar
 					style={{
+						position: 'absolute',
+						bottom: 0,
+						right: 0,
+						left: 0,
 						backgroundColor: 'white',
 						flexDirection: 'row',
 						justifyContent: 'space-around',
@@ -553,6 +589,25 @@ class Home extends HomeComponent {
 						},
 					]}
 				/>
+				<Loading ref={(element) => {
+					this.loadingView = element;
+				}}/>
+				{
+					this.state.showMenu?
+						<PopWindow
+							backgroundColor={'rgba(52,52,52,0.54)'}
+							onClose={(select)=>this.closeMenu(select)}
+						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
+							containerStyle={{position:'absolute', top:80,right:10,width:180,height:200, backgroundColor:'#fff'}}
+							imageStyle={{width: 20, height: 20, marginLeft:10,marginRight:30}}
+							fontStyle={{fontSize:12, color:'#000'}}
+							itemStyle={{width:180,height:50,flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}
+							containerBackgroundColor={'#fff'}
+						/>
+						 :null
+				}
+
+
 			</View>
 		)
 	}

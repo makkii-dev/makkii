@@ -1,5 +1,5 @@
 import React from "react";
-import {Alert, Dimensions, Image, PixelRatio, Platform, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Dimensions, Image, PixelRatio, Platform, StyleSheet, Text, TouchableOpacity, View, TouchableWithoutFeedback} from "react-native";
 import {ModalList} from "../../modalList";
 import {strings} from "../../../locales/i18n";
 import wallet from "react-native-aion-hw-wallet";
@@ -105,18 +105,30 @@ class HomeHeader extends React.Component{
                             style={styles.titleBarImg}
                         />
                     </TouchableOpacity>
-                    <ModalList
-                        data={Platform.OS==="ios"?MENU.slice(0,2):MENU}
-                        visible={this.state.showMenu}
-                        ref={ref => this.menuRef = ref}
-                        style={styles.menuContainer}
-                        viewStyle={styles.menuStyle}
-                        fontStyle={styles.menuFontStyle}
-                        imageStyle={styles.menuImageStyle}
-                        onClose={() => this.closeMenu()}
-                        ItemSeparatorComponent={() => (<View style={styles.divider}/>)}
-                    />
+                    {/*<ModalList*/}
+                        {/*data={Platform.OS==="ios"?MENU.slice(0,2):MENU}*/}
+                        {/*visible={this.state.showMenu}*/}
+                        {/*ref={ref => this.menuRef = ref}*/}
+                        {/*style={styles.menuContainer}*/}
+                        {/*viewStyle={styles.menuStyle}*/}
+                        {/*fontStyle={styles.menuFontStyle}*/}
+                        {/*imageStyle={styles.menuImageStyle}*/}
+                        {/*onClose={() => this.closeMenu()}*/}
+                        {/*ItemSeparatorComponent={() => (<View style={styles.divider}/>)}*/}
+                    {/*/>*/}
                 </View>
+                {
+                    this.state.showMenu?
+                        <View style={{position:'absolute', top:0, left:0, width:width, height:height}}>
+                            <TouchableOpacity
+                                style={{width:width, height:height, backgroundColor:'rgba(0,0,0,.54)'}}
+                                onPress={()=>{
+                                    this.setState({showMenu:false});
+                                }}
+                            >
+                            </TouchableOpacity>
+                        </View>:null
+                }
                 <Loading ref={(element) => {
                     this.loadingView = element;
                 }}/>
@@ -140,12 +152,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         height: top,
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width:0 },
-        shadowRadius: 0,
-        borderBottomWidth: StyleSheet.hairlineWidth,
-        borderColor: '#8c8a8a',
-        elevation: 0.5,
         fontWeight: 'normal',
     },
     headerEnds:{
@@ -161,6 +167,7 @@ const styles = StyleSheet.create({
         fontSize: Platform.OS === 'ios' ? 17 : 20,
         fontWeight: 'normal', // Platform.OS === 'ios' ? '600' : '500',
         color: 'rgba(0, 0, 0, .9)',
+        fontFamily:'SourceHanSansCN-Medium'
     },
     titleBarImg: {
         width: 25,
