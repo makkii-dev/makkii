@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,DeviceEventEmitter} from 'react-native';
-import AionCell from '../../cell.js'; 
+import AionCell from '../../cell.js';
 import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
 import {ComponentTabBar} from '../../common.js';
 import styles from '../../styles.js';
 import {HomeComponent} from "../HomeComponent";
+import {fixedHeight} from "../../style_util";
 
 class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => {
@@ -41,7 +42,7 @@ class Home extends HomeComponent {
 	}
 
 	render(){
-		return ( 
+		return (
 			<View style={{
 				backgroundColor: '#eeeeee',
 				flex:1,
@@ -93,24 +94,25 @@ class Home extends HomeComponent {
                 <AionCell
 					title={strings('logout')}
 					onClick={() => {
-						const { dispatch } = this.props; 
+						const { dispatch } = this.props;
 						dispatch(user_signout());
 						setTimeout(()=>{
 							this.props.navigation.navigate('unsigned_login');
 						},200);
 					}}/>
-				<ComponentTabBar 
+				<ComponentTabBar
 					// TODO
 					style={{
 						position: 'absolute',
 						bottom: 0,
 						right: 0,
+						height: fixedHeight(156),
 						left: 0,
 						backgroundColor: 'white',
 						flexDirection: 'row',
-						justifyContent: 'space-around',  
+						justifyContent: 'space-around',
 						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'  
+						borderTopColor: '#8c8a8a'
 					}}
 					active={'settings'}
 					onPress={[
@@ -124,8 +126,8 @@ class Home extends HomeComponent {
 	}
 }
 
-export default connect(state => { 
-	return { 
-		setting: state.setting 
-	}; 
+export default connect(state => {
+	return {
+		setting: state.setting
+	};
 })(Home);

@@ -4,6 +4,7 @@ import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet,
 import {ComponentTabBar} from '../../common.js';
 import {strings} from '../../../locales/i18n.js';
 import {HomeComponent} from "../HomeComponent";
+import {fixedHeight} from "../../style_util";
 
 const {width} = Dimensions.get('window');
 class Home extends HomeComponent {
@@ -79,6 +80,7 @@ class Home extends HomeComponent {
 						position: 'absolute',
 						bottom: 0,
 						right: 0,
+						height: fixedHeight(156),
 						left: 0,
 						backgroundColor: 'white',
 						flexDirection: 'row',
