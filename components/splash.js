@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Image, Linking, Platform} from 'react-native';
+import {View, ImageBackground, Dimensions, Text, Image} from 'react-native';
 import {user} from '../actions/user.js';
 import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils.js';
+import {strings} from "../locales/i18n";
+import GeneralStatusBar from "./GeneralStatusBar";
+import {ComponentLogo} from "./common";
+import {mainColor} from './style_util';
+
+const {width,height} = Dimensions.get('window');
 
 class Splash extends Component {
 	constructor(props){
@@ -62,20 +68,24 @@ class Splash extends Component {
 	}
 	render(){
 		return (
-			<View style={{
-				flex: 1,
-				justifyContent: 'center',
-    			alignItems: 'center',
-    			backgroundColor: 'white',
-			}}>
-				<Image
-					style={{
-						width: 120,
-						height: 120,
-					}}
-					source={require('../assets/loading.gif')}
-				/>
-			</View>
+			<ImageBackground
+				style={{
+					flex: 1,
+					width: width,
+					height: height,
+                    alignItems: 'center',
+					paddingTop: 150,
+				}}
+				source={require('../assets/splash_bg.png')}
+			>
+				<GeneralStatusBar backgroundColor={mainColor}/>
+                <ComponentLogo/>
+                <Text style={{
+                    fontSize: 24,
+                    color: 'white',
+                    marginTop: 20,
+                }}>{strings('app_name')}</Text>
+			</ImageBackground>
 		);
 	}
 }

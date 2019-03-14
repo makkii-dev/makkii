@@ -9,15 +9,16 @@
         "error_incorrect_password": "Incorrect password",
         "btn_login": "Login",
         "btn_register": "Register",
-        "btn_recovery": "Recovery"
+        "btn_recovery": "Recovery",
+        "hint_enter_password": "Please enter password"
     },
     "register": {
         "title": "Register",
         "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Sepcial characters include \"!?#\".",
         "error_dont_match": "Confirm password does not match password!",
         "warning_register_again": "Re-registration will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
-        "label_password": "Enter password",
-        "label_confirm_password": "Confirm password",
+        "hint_enter_password": "Enter password",
+        "hint_enter_confirm_password": "Confirm password",
         "button_register": "Register"
     },
     "unsigned_register_mnemonic": {
@@ -25,7 +26,7 @@
         "hint": "Please keep your mnemonic safely!",
         "btn_copy": "Copy",
         "btn_done": "I'm done",
-        "toast_copy_mnemonic": "Mnemonic copied to clipboard"
+        "toast_copy_mnemonic": "Mnemonic is copied to clipboard"
     },
     "recovery": {
         "title": "Recovery",

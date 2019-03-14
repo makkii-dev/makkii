@@ -1,4 +1,5 @@
-import {Dimensions, PixelRatio, Platform, StatusBar} from 'react-native';
+import {Dimensions, PixelRatio, Platform, StatusBar, StyleSheet} from 'react-native';
+import {mainColor} from './style_util';
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
 
 const BORDER_COLOR = '#8c8a8a';
@@ -6,20 +7,32 @@ const FONT_COLOR = '#777676';
 
 export default styles = {
 	headerStyle: {
-        shadowOpacity: 0,
-        shadowOffset: { height: 0, width:0 },
-        shadowRadius: 0,
+		shadowOpacity: 0,
+		shadowOffset: { height: 0, width:0 },
+		shadowRadius: 0,
+		elevation: 0.5,
 		marginTop: STATUSBAR_HEIGHT,
-        borderBottomWidth:0,
-        elevation: 0.5,
-        fontWeight: 'normal',
-    },
+		borderBottomWidth:0,
+		fontWeight: 'normal',
+		backgroundColor: mainColor
+	},
+	headerStyleWithoutShadow: {
+		shadowOpacity: 0,
+		shadowOffset: { height: 0, width:0 },
+		shadowRadius: 0,
+		elevation: 0,
+		marginTop: STATUSBAR_HEIGHT,
+		borderBottomWidth:0,
+		fontWeight: 'normal',
+		backgroundColor: mainColor
+	},
     headerTitleStyle: {
-      	fontWeight: 'normal',
+      	fontWeight: 'bold',
       	fontSize: 18,
       	alignSelf: 'center',
         textAlign: 'center',
-        flex: 1
+        flex: 1,
+		color: 'white'
     },
   	container: {
   		padding: 20,
@@ -73,9 +86,9 @@ export default styles = {
     },
     input_multi_lines: {
 		borderWidth: 1,
-		borderRadius: 5,
+		// borderRadius: 5,
 		color: FONT_COLOR,
-		borderColor: BORDER_COLOR,
+		borderColor: 'lightgray',
 		fontSize: 16,
 		fontWeight: 'bold',
 		padding: 10,
@@ -115,22 +128,23 @@ export default styles = {
 		view: {
 			flexDirection: 'row',
 			height: 50,
-			alignItems: 'center'
+			alignItems: 'center',
 		},
 		text_input: {
-			fontSize: 18,
+			fontSize: 16,
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
 			paddingRight: 45,
-			borderColor: BORDER_COLOR,
+            paddingLeft: 30,
+			borderColor: 'lightgray',
 			borderBottomWidth: 1,
 			flex: 1,
 		},
 		display: {
 			position: 'absolute',
 			right: 0,
-			top: 12,
+			// top: 12,
 		}
 	},
 	ImportList:{

@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Keyboard,TouchableOpacity,View,Text, Alert} from 'react-native';
-import {ComponentPassword, ComponentButton} from '../common.js';
+import {Dimensions, Keyboard,TouchableOpacity,View,Text, Alert} from 'react-native';
+import {PasswordInputWithTitle, UnsignedActionButton, ComponentButton} from '../common.js';
 import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
+
+const {width,height} = Dimensions.get('window');
 
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -28,11 +30,26 @@ class Password extends Component {
 	render(){
 		const {dispatch} = this.props;
 		return (
-			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-			<View style={ styles.container }>
-				<Text>{strings('recovery_password.label_password')}</Text>
-				<View style={styles.marginBottom20}>
-					<ComponentPassword
+			<TouchableOpacity
+				activeOpacity={1}
+				onPress={() => {Keyboard.dismiss()}}
+				style={{
+					flex: 1,
+					padding: 40,
+				}}
+			>
+				<View style={{
+					marginBottom: 40,
+					width: width - 80,
+					height: 220,
+					borderRadius: 10,
+					backgroundColor: 'white',
+					elevation: 3,
+					padding: 20,
+				}}>
+					<PasswordInputWithTitle
+						title={strings('recovery_password.label_password')}
+                        placeholder={strings('recovery_password.hint_enter_password')}
 						value={this.state.password}
 						onChange={e=>{
 							this.setState({
@@ -40,19 +57,19 @@ class Password extends Component {
 							});
 						}}
 					/>
-				</View>
-				<Text>{strings('recovery_password.label_confirm_password')}</Text>
-				<View style={styles.marginBottom20}>
-					<ComponentPassword
+					<View style={{marginBottom: 20}} />
+					<PasswordInputWithTitle
+                        title={strings('recovery_password.label_confirm_password')}
+						placeholder={strings('recovery_password.hint_enter_confirm_password')}
 						value={this.state.password_confirm}
 						onChange={e=>{
 							this.setState({
 								password_confirm: e
 							});
 						}}
-					/>
+                    />
 				</View>
-				<ComponentButton
+				<UnsignedActionButton
 					title={strings('recovery_password.button_reset')}
 					onPress={e=>{
 						if (!validatePassword(this.state.password)) {
@@ -72,7 +89,6 @@ class Password extends Component {
 						}
 					}}
 				/>
-			</View>
 			</TouchableOpacity>
 		);
 	}

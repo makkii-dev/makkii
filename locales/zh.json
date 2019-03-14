@@ -8,16 +8,17 @@
     "error_login": "登录失败",
     "error_incorrect_password": "密码不正确",
     "btn_login": "登录",
-    "btn_register": "注册",
-    "btn_recovery": "恢复"
+    "btn_register": "一键注册",
+    "btn_recovery": "恢复",
+    "hint_enter_password": "请输入密码"
   },
   "register": {
     "title": "注册",
     "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
     "error_dont_match": "两次密码不一致!",
     "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
-    "label_password": "输入密码",
-    "label_confirm_password": "再次输入密码",
+    "hint_enter_password": "输入密码",
+    "hint_enter_confirm_password": "再次输入密码",
     "button_register": "注册"
   },
   "unsigned_register_mnemonic": {
@@ -25,10 +26,10 @@
     "hint": "请妥善保存您的助记词!",
     "btn_copy": "复制助记词",
     "btn_done": "完成",
-    "toast_copy_mnemonic": "助记词复制到粘贴板"
+    "toast_copy_mnemonic": "助记词已复制到粘贴板"
   },
   "recovery": {
-    "title": "忘记密码",
+    "title": "恢复账号",
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
     "button_confirm": "确定",
@@ -37,8 +38,10 @@
   },
   "recovery_password": {
     "title": "恢复密码",
-    "label_password": "输入密码",
-    "label_confirm_password": "请再次输入密码",
+    "label_password": "密码",
+    "hint_enter_password": "输入密码",
+    "label_confirm_password": "确认密码",
+    "hint_enter_confirm_password": "请再次输入密码",
     "button_reset": "重置",
     "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
     "error_dont_match": "两次密码不一致!"
