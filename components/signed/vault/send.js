@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking, Keyboard} from 'react-native';
+import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking, Keyboard, PixelRatio} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -10,8 +10,38 @@ import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
 import {ComponentButton} from '../../common';
+import PropTypes from 'prop-types';
+import {mainColor} from '../../style_util';
 
-const {width, height} = Dimensions.get('window')
+const {width, height} = Dimensions.get('window');
+
+class SubTextInput extends Component{
+	static propTypes= {
+		title: PropTypes.string.isRequired,
+		rightView: PropTypes.func,
+		unit: PropTypes.string,
+	};
+	render(){
+		return(
+			<View style={{justifyContent:'center', alignItems:'center',width:width-100, flex:1, marginVertical: 10}}>
+				<View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'flex-start', height:20,flex:1}}>
+					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000', flex:1}}>{this.props.title}</Text>
+					{
+						this.props.rightView&&this.props.rightView()
+					}
+				</View>
+				<View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'flex-end',flex:1}}>
+					<TextInput
+						{...this.props}
+					/>
+					{
+						this.props.unit&&<Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
+					}
+				</View>
+			</View>
+		)
+	}
+}
 class Send extends Component {
 
 	static navigationOptions=({navigation})=>{
@@ -76,123 +106,83 @@ class Send extends Component {
 		}
 	}
 	render(){
-		const arrowImage =  this.state.showAdvanced? require('../../../assets/arrow_up.png') :  require('../../../assets/arrow_down.png')
 		return (
 			<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
-                <View style={{flex:1,justifyContent:'center'}}>
+                <View style={{flex:1}}>
                     <ScrollView
                         style={{width,height}}
-                        contentContainerStyle={{justifyContent: 'center',padding:20}}
+                        contentContainerStyle={{justifyContent: 'center'}}
                         keyboardShouldPersistTaps='always'
                     >
-                        <View>
-                            <Text>{strings('send.label_receiver')}</Text>
-                        </View>
-                        <View style={st.text_input_cell}>
-                            <TextInput
-                                style={st.text_input}
-                                value={this.state.recipient}
-                                placeholder={strings('send.hint_recipient')}
-                                multiline={true}
-                                numberOfLines={2}
-                                onChangeText={text => {
-                                    this.setState({
-                                        recipient: text,
-                                    });
-                                }}
-                            />
-                            <TouchableOpacity onPress={()=> this.scan()}>
-                                <Image source={require('../../../assets/scan.png')} style={{
-                                    width: 20,
-                                    height: 20,
-                                }} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{
-                            marginTop: 20,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}>
-                            <Text>{strings('send.label_amount')}</Text>
-                            <Text style={{
-                                color: 'blue',
-                            }} onPress={()=>this.sendAll()}>{strings('send.button_send_all')}</Text>
-                        </View>
-                        <View style={st.text_input_cell}>
-                            <TextInput
-                                style={st.text_input}
-                                value={this.state.amount}
+						<View style={{...styles.containerView, marginTop:30}}>
+							<SubTextInput
+								title={strings('send.label_receiver')}
+								style={styles.text_input}
+								value={this.state.recipient}
+								multiline={true}
+								onChangeText={v=>this.setState({recipient:v})}
+								placeholder={strings('send.hint_recipient')}
+								rightView={()=>
+									<TouchableOpacity onPress={()=> this.scan()}>
+										<Image source={require('../../../assets/scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
+									</TouchableOpacity>}
+							/>
+
+							<SubTextInput
+								title={strings('send.label_amount')}
+								style={styles.text_input}
+								value={this.state.amount}
+								onChangeText={v=>this.setState({amount:v})}
 								keyboardType={'decimal-pad'}
-                                onChangeText={text => {
-                                    this.setState({
-                                        amount: text,
-                                    });
-                                }}
-                            />
-                            <Text style={{
-                                color: 'black',
-                                fontWeight: 'normal',
-                                fontSize: 16,
-                            }}>AION</Text>
-                        </View>
-                        <TouchableOpacity activeOpacity={1} onPress={()=>{
-                            this.setState({
-                                showAdvanced: !this.state.showAdvanced,
-                            })
-                        }}>
-                            <View style={{marginTop: 20, marginBottom: 10}}>
-                                {
-                                    this.state.showAdvanced ?
-                                    <Text style={{color:'blue'}}>{strings('send.hide_advanced')}</Text>:
-                                    <Text style={{color:'blue'}}>{strings('send.show_advanced')}</Text>
-                                }
-                                {/*<Image source={arrowImage} style={{marginLeft:10, width:30, height:30, tintColor: '#fff'}}/>*/}
-                            </View>
-                        </TouchableOpacity>
-                        {
-                            this.state.showAdvanced ?
-                                <View>
-                                    <View>
-                                        <Text>{strings('send.label_gas_price')}</Text>
-                                    </View>
-                                    <View style={st.text_input_cell}>
-                                        <TextInput
-                                            style={st.text_input}
-                                            value={this.state.gasPrice}
-											keyboardType={'decimal-pad'}
-                                            onChangeText={text => {
-                                                this.setState({
-                                                    gasPrice: text,
-                                                });
-                                            }}
-                                        />
-                                        <Text style={{
-                                            color: 'black',
-                                            fontWeight: 'normal',
-                                            fontSize: 16,
-                                        }}>AMP</Text>
-                                    </View>
-                                    <View style={{marginTop: 20}}>
-                                        <Text>{strings('send.label_gas_limit')}</Text>
-                                    </View>
-                                    <TextInput
-                                        style={{...st.text_input, marginRight: 0}}
-                                        value={this.state.gasLimit}
-										keyboardType={'number-pad'}
-                                        onChangeText={text => {
-                                            this.setState({
-                                                gasLimit: text,
-                                            });
-                                        }}
-                                    />
-                                </View>: null
-                        }
-                        <View style={{ marginTop:40, }}>
-                            <ComponentButton title={strings('send_button')}
-                                    onPress={this.transfer.bind(this)}
-                                    />
-                        </View>
+								rightView={()=>
+									<TouchableOpacity onPress={()=> this.sendAll()}>
+									<Text style={{color: 'blue'}}>{strings('send.button_send_all')}</Text>
+									</TouchableOpacity>}
+								unit={'AION'}
+
+							/>
+
+						</View>
+
+						{/*advanced button*/}
+
+						<TouchableOpacity activeOpacity={1} onPress={()=>{
+							this.setState({
+								showAdvanced: !this.state.showAdvanced,
+							})
+						}}>
+							<Text style={{color:'blue', marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+						</TouchableOpacity>
+
+
+						{
+							this.state.showAdvanced?<View style={styles.containerView}>
+								<SubTextInput
+									title={strings('send.label_gas_price')}
+									style={styles.text_input}
+									value={this.state.gasPrice}
+									onChangeText={v=>this.setState({gasPrice:v})}
+									keyboardType={'decimal-pad'}
+									unit={'AMP'}
+								/>
+								<SubTextInput
+									title={strings('send.label_gas_limit')}
+									style={styles.text_input}
+									value={this.state.gasLimit}
+									onChangeText={v=>this.setState({gasLimit:v})}
+									keyboardType={'decimal-pad'}
+								/>
+							</View>:null
+						}
+
+						{/*send button*/}
+						<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+							<ComponentButton title={strings('send_button')}
+											 onPress={this.transfer.bind(this)}
+							/>
+						</View>
                     </ScrollView>
+
                     <Loading ref={element => {
                         this.loadingView = element;
                     }}/>
@@ -231,7 +221,7 @@ class Send extends Component {
 			console.log("tx to send:" , tx);
 			try {
 				let promise;
-				if (accountType == '[ledger]') {
+				if (accountType === '[ledger]') {
 				    console.log("sign tx for " + accountType + " account(index=" + derivationIndex + ")");
 				    try {
 						promise = tx.signByLedger(derivationIndex);
@@ -360,26 +350,29 @@ class Send extends Component {
 	};
 }
 
-const st = StyleSheet.create({
+const styles = StyleSheet.create({
 	text_input: {
 		flex: 1,
 		fontSize: 16,
 		color: '#777676',
 		fontWeight: 'normal',
-		lineHeight: 20,
-		paddingTop: 5,
-		paddingBottom: 5,
-		paddingLeft: 5,
-		paddingRight: 60,
 		borderColor: '#8c8a8a',
-		borderBottomWidth: 1,
-		marginRight: 10,
+		textAlignVertical:'bottom',
+		borderBottomWidth: 1/ PixelRatio.get(),
 	},
-	text_input_cell: {
-		flex: 1,
-		flexDirection: 'row',
-		alignItems: 'center',
-		justifyContent: 'space-between',
+	containerView:{
+		width:width-40,
+		marginHorizontal:20,
+		marginVertical: 10,
+		paddingHorizontal:30,
+		paddingVertical:10,
+		justifyContent:'center',
+		alignItems:'center',
+		borderWidth:1/ PixelRatio.get(),
+		backgroundColor:'#fff',
+		borderColor:'#eee',
+		borderRadius:10,
+		shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
 	}
 });
 

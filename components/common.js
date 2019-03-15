@@ -8,19 +8,19 @@ import {mainColor, fontColor} from './style_util';
 class ComponentButton extends Component{
 	render(){
 		return (
-			<TouchableOpacity onPress={this.props.onPress}> 
+			<TouchableOpacity onPress={this.props.onPress}>
 			    <Text style={{
-			    	backgroundColor: '#455372',
+			    	backgroundColor: '#246ffa',
 			    	color: 'white',
 			    	paddingTop: 10,
-			    	paddingBottom: 10, 
+			    	paddingBottom: 10,
 			    	borderRadius: 5,
 			    	width: '100%',
 			    	textAlign: 'center',
 			    	fontWeight: 'bold',
 			    	fontSize: 18,
 			    }}>
-			   		{this.props.title}    
+			   		{this.props.title}
 			    </Text>
 			</TouchableOpacity >
 		);
@@ -85,7 +85,7 @@ class ComponentTabBar extends Component{
 			</View>
 		);
 	}
-} 
+}
 
 class ComponentLogo extends Component{
 	render(){
@@ -189,7 +189,7 @@ class ComponentPassword extends Component {
 			    	onBlur={e=>{
 			    		this.setState({
 			    			secure: true
-			    		});	
+			    		});
 			    	}}
 			        secureTextEntry={this.state.secure}
 			        value={this.props.value}
@@ -204,9 +204,9 @@ class ComponentPassword extends Component {
 			    >
 			    	{
 			    		this.state.secure ?
-			    		<Hide />: <Show /> 
+			    		<Hide />: <Show />
 			    	}
-			    </TouchableOpacity> 
+			    </TouchableOpacity>
 		    </View>
 		);
 	};
