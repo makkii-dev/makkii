@@ -11,8 +11,6 @@ class Transaction extends Component {
 		super(props);
 		this.addr = this.props.navigation.state.params.account;
 		this.transactionHash = this.props.navigation.state.params.transactionHash;
-		console.log('[addr] ', this.addr);
-		console.log('[transactionHash] ', this.transactionHash);
 	}
 	onViewInExplorer(){
 		const url = `https://${this.props.setting.explorer_server}.aion.network/#/transaction/${this.transactionHash}`;
