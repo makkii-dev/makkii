@@ -1,11 +1,13 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,Dimensions, TouchableOpacity} from 'react-native';
-import {ComponentLogo} from '../../common.js';
+import { Image, View,Text,Dimensions, TouchableOpacity} from 'react-native';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
 import styles from '../../styles.js';
 import Toast from 'react-native-root-toast';
+import {linkButtonColor} from '../../style_util';
+
+const {width,height} = Dimensions.get('window');
 
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -26,33 +28,52 @@ class About extends Component {
 			<View style={{
 				backgroundColor: '#eeeeee',
 				height: Dimensions.get('window').height,
+				alignItems:'center',
 			}}>
 				<View style={{
+					marginBottom:40,
+					marginTop:40,
 					justifyContent:'center',
-    				alignItems:'center',
-					marginBottom:60,
-					marginTop:80,
+					alignItems:'center',
 				}}>
-					<ComponentLogo />
+					<Image
+						style={{
+							width:50,
+							height:50,
+							resizeMode: 'contain'
+						}}
+						source={require('../../../assets/app_logo_bg.png')}
+					/>
 					<Text style={{
-						marginTop: 10,
+						marginTop: 15,
 						fontSize: 22,
                         color: 'black',
 					}}>{ strings('app_name') }</Text>
 					<Text style={{
+						marginTop: 15,
 						fontSize: 14,
 						color: 'black',
 					}}>{strings('about.version_label')} {this.props.setting.version}</Text>
 				</View>
-				<View style={ styles.marginBottom80 }>
+				<View style={{
+				    marginBottom: 150,
+					width: width - 40,
+					borderRadius: 5,
+					backgroundColor: 'white',
+					elevation: 3,
+					paddingLeft: 10,
+					paddingRight: 10,
+				}} >
 					<AionCell
+						topSeparator={false}
+						bottomSeparator={false}
 						title={strings('about.version_update_button')}
 						onClick={() => {
 						    Toast.show(strings('about.version_latest'));
 						}}
 					/>
 				</View>
-				<View style={styles.marginBottom40}>
+				<View style={{marginBottom: 40}}>
 					<Text style={styles.center_text}>
 						Powered by Chaion
 					</Text>
@@ -64,7 +85,7 @@ class About extends Component {
 							initialUrl: 'http://45.118.132.89/terms_services.html',
 						});
 					}}>
-                        <Text style={{...styles.center_text, color: 'blue'}}> {strings('about.terms_label')} </Text>
+                        <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
 					</TouchableOpacity>
 					<Text style={styles.center_text}>
 						{strings('about.label_and')}
@@ -75,7 +96,7 @@ class About extends Component {
 							initialUrl: 'http://45.118.132.89/privacy_policy.html',
 						});
 					}}>
-                        <Text style={{...styles.center_text, color: 'blue'}}>
+                        <Text style={{...styles.center_text, color: linkButtonColor}}>
                              {strings('about.policy_label')}
                         </Text>
                     </TouchableOpacity>
