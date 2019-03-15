@@ -4,7 +4,7 @@ import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet,
 import {ComponentTabBar} from '../../common.js';
 import {strings} from '../../../locales/i18n.js';
 import {HomeComponent} from "../HomeComponent";
-import {fixedHeight} from "../../style_util";
+import {fixedHeight, mainBgColor} from "../../style_util";
 
 const {width} = Dimensions.get('window');
 class Home extends HomeComponent {
@@ -22,7 +22,7 @@ class Home extends HomeComponent {
 	render(){
 		return (
 			<View style={{
-				backgroundColor: '#eeeeee',
+				backgroundColor: mainBgColor,
 				flex:1
 			}}>
 				<View style={{

@@ -4,17 +4,13 @@ import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
+import {mainBgColor} from '../../style_util';
+import {RightActionButton} from '../../common';
 
 const {width,height} = Dimensions.get('window');
 
 class Language extends Component {
     static navigationOptions = ({navigation})=> {
-        let textColor;
-        if (navigation.state.params && navigation.state.params.isEdited) {
-            textColor = 'rgba(255, 255, 255, 1.0)';
-        } else {
-            textColor = 'rgba(255, 255, 255, 0.3)';
-        }
         return ({
             title: strings('language.title'),
             headerTitleStyle: {
@@ -24,19 +20,13 @@ class Language extends Component {
                 flex: 1,
             },
             headerRight: (
-                <TouchableOpacity
+                <RightActionButton
                     onPress={() => {
                         navigation.state.params.updateLocale();
                     }}
                     disabled={!navigation.state.params || !navigation.state.params.isEdited}
                 >
-                    <View style={{marginRight: 20}}>
-                        <Text style={{
-                            color: textColor,
-                            fontWeight: 'bold'
-                        }}>{strings('save_button')}</Text>
-                    </View>
-                </TouchableOpacity>
+                </RightActionButton>
             )
         });
     };
@@ -63,7 +53,7 @@ class Language extends Component {
     render() {
         return (
             <View style={{
-                backgroundColor: '#eeeeee',
+                backgroundColor: mainBgColor,
                 alignItems: 'center',
                 flex: 1,
                 paddingTop: 40

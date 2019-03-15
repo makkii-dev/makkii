@@ -11,13 +11,16 @@ import {
     DeviceEventEmitter, Alert
 } from 'react-native';
 import {connect} from 'react-redux';
+import wallet from "react-native-aion-hw-wallet";
+
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import SelectList from '../../selectList';
 import {ImportListfooter} from "../../common";
 import {strings} from '../../../locales/i18n';
-import wallet from "react-native-aion-hw-wallet";
 import {getLedgerMessage} from "../../../utils";
+import {mainBgColor} from '../../style_util';
+
 const {width} = Dimensions.get('window');
 
 class ImportHdWallet extends React.Component {
@@ -281,7 +284,7 @@ const styles=StyleSheet.create({
         width: width,
         flex:1,
         justifyContent: 'center',
-        backgroundColor: '#eeeeee'
+        backgroundColor: mainBgColor
     },
     itemContainer:{
         flex:1,

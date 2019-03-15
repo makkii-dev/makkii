@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Image, View,Text,Keyboard, Alert, TouchableOpacity, Dimensions} from 'react-native';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
-import {InputMultiLines, UnsignedActionButton} from '../common';
+import {InputMultiLines, ActionButton} from '../common';
 import {validateMnemonic} from "../../libs/aion-hd-wallet";
 import {dbGet} from '../../utils';
 import {delete_accounts} from '../../actions/accounts';
@@ -116,7 +116,7 @@ class Home extends Component {
                             }}
                         />
 					</View>
-					<UnsignedActionButton
+					<ActionButton
 						title={strings('recovery.button_confirm')}
                         onPress={e=> {
 							validateMnemonic(this.state.mnemonic)&&dbGet('user').then(data=>{

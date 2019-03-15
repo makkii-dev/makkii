@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, View, Text, Keyboard, Alert, ScrollView, TouchableOpacity} from 'react-native';
-import { PasswordInputWithTitle } from '../../common.js';
+import { Dimensions, View, Text, Keyboard, Alert, TouchableOpacity} from 'react-native';
+import Toast from 'react-native-root-toast';
+
+import { PasswordInputWithTitle, RightActionButton } from '../../common.js';
 import styles from '../../styles.js';
+import {mainBgColor} from '../../style_util';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user_update_password } from '../../../actions/user.js';
 import { accounts_save } from '../../../actions/accounts.js';
-import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
-		let textColor;
-		if (navigation.state.params && navigation.state.params.isEdited) {
-			textColor = 'rgba(255, 255, 255, 1.0)';
-		} else {
-			textColor = 'rgba(255, 255, 255, 0.3)';
-		}
 	    return {
 		    title: strings('password.title'),
 			headerTitleStyle: {
@@ -28,19 +24,13 @@ class Password extends Component {
 				flex: 1,
 			},
 			headerRight: (
-				<TouchableOpacity
+				<RightActionButton
 					onPress={() => {
                         navigation.state.params.updatePassword();
                     }}
 					disabled={!navigation.state.params || !navigation.state.params.isEdited}
 				>
-					<View style={{marginRight: 20}}>
-						<Text style={{
-							color: textColor,
-							fontWeight: 'bold'
-						}}>{strings('save_button')}</Text>
-					</View>
-				</TouchableOpacity>
+				</RightActionButton>
 			)
 	    }
     }
@@ -70,7 +60,7 @@ class Password extends Component {
 				activeOpacity={1}
 				onPress={()=>{Keyboard.dismiss()}}
 				style={{
-					backgroundColor: '#eeeeee',
+					backgroundColor: mainBgColor,
                     flex:1,
 					paddingLeft: 20,
 					paddingRight: 20,
