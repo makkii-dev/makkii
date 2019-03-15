@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Alert, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
-import {UnsignedActionButton,PasswordInput} from '../common.js';
+import {ActionButton,PasswordInput} from '../common.js';
 import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
@@ -77,7 +77,7 @@ class Home extends Component {
 						}}
 					/>
 					<View style={{marginTop: 40}}/>
-					<UnsignedActionButton
+					<ActionButton
 						title={strings("register.button_register")}
 						onPress={e=>{
 							if (!validatePassword(this.state.password))

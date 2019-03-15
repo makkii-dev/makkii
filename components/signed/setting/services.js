@@ -1,22 +1,19 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Dimensions, View,Text,DeviceEventEmitter, TouchableOpacity} from 'react-native';
+import Toast from 'react-native-root-toast';
+
 import {setting} from '../../../actions/setting.js';
 import {strings} from "../../../locales/i18n";
-import Toast from 'react-native-root-toast';
 import {mainnet_url, mastery_url} from '../../../utils';
 import SelectList from '../../selectList.js';
+import {mainBgColor} from '../../style_util';
+import {RightActionButton} from '../../common';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Services extends Component {
 	static navigationOptions = ({ navigation }) => {
-		let textColor;
-		if (navigation.state.params && navigation.state.params.isEdited) {
-			textColor = 'rgba(255, 255, 255, 1.0)';
-		} else {
-			textColor = 'rgba(255, 255, 255, 0.3)';
-		}
 	    return {
 	        title: strings('service_configuration.title'),
 			headerTitleStyle: {
@@ -26,19 +23,13 @@ class Services extends Component {
 				flex: 1,
 			},
 			headerRight: (
-				<TouchableOpacity
+				<RightActionButton
 					onPress={() => {
                         navigation.state.params.updateServiceConfiguration();
                     }}
 					disabled={!navigation.state.params || !navigation.state.params.isEdited}
 				>
-					<View style={{marginRight: 20}}>
-						<Text style={{
-							color: textColor,
-							fontWeight: 'bold'
-						}}>{strings('save_button')}</Text>
-					</View>
-				</TouchableOpacity>
+				</RightActionButton>
 			)
 	    };
     };
@@ -61,7 +52,7 @@ class Services extends Component {
 	render(){
 		return (
 			<View style={{
-				backgroundColor: '#eeeeee',
+				backgroundColor: mainBgColor,
 				alignItems: 'center',
 				flex: 1,
 				paddingTop: 40

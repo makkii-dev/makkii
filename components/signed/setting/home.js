@@ -6,7 +6,7 @@ import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
 import {ComponentTabBar} from '../../common.js';
 import {HomeComponent} from "../HomeComponent";
-import {fixedHeight} from "../../style_util";
+import {fixedHeight, mainBgColor} from "../../style_util";
 
 const {width,height} = Dimensions.get('window');
 
@@ -45,7 +45,7 @@ class Home extends HomeComponent {
 	render(){
 		return (
 			<View style={{
-				backgroundColor: '#eeeeee',
+				backgroundColor: mainBgColor,
 				flex:1,
 				alignItems: 'center'
 			}}>

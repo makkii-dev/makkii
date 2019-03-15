@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Text,TouchableOpacity, Alert, Linking, Keyboard, Dimensions, ImageBackground} from 'react-native';
 
-import {ComponentLogo,PasswordInput, UnsignedActionButton} from '../common.js';
+import {ComponentLogo,PasswordInput, ActionButton} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {accounts as accounts_action} from '../../actions/accounts';
@@ -81,7 +81,7 @@ class Login extends Component {
                                 }}
                             />
                             <View style={{marginTop: 40}}/>
-                            <UnsignedActionButton
+                            <ActionButton
                                 onPress={e => {
                                     dbGet('user')
                                         .then(json=>{

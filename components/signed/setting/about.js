@@ -1,17 +1,17 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import { Image, View,Text,Dimensions, TouchableOpacity} from 'react-native';
+import Toast from 'react-native-root-toast';
+
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
 import styles from '../../styles.js';
-import Toast from 'react-native-root-toast';
-import {linkButtonColor} from '../../style_util';
+import {linkButtonColor, mainBgColor} from '../../style_util';
 
 const {width,height} = Dimensions.get('window');
 
 class About extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    const { state } = navigation;
 	    return {
 			title: strings('about.title')
 	    };
@@ -26,8 +26,8 @@ class About extends Component {
 	render(){
 		return (
 			<View style={{
-				backgroundColor: '#eeeeee',
-				height: Dimensions.get('window').height,
+				backgroundColor: mainBgColor,
+				height: height,
 				alignItems:'center',
 			}}>
 				<View style={{

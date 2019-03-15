@@ -5,18 +5,13 @@ import {Dimensions, Alert, View, Text, StyleSheet, TouchableOpacity, Keyboard} f
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
-import {TextInputWithTitle} from '../../common';
+import {TextInputWithTitle, RightActionButton} from '../../common';
+import {mainBgColor} from '../../style_util';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Advanced extends Component {
     static navigationOptions = ({ navigation }) => {
-        let textColor;
-        if (navigation.state.params && navigation.state.params.isEdited) {
-            textColor = 'rgba(255, 255, 255, 1.0)';
-        } else {
-            textColor = 'rgba(255, 255, 255, 0.3)';
-        }
         return {
             title: strings('advanced.title'),
             headerTitleStyle: {
@@ -26,19 +21,13 @@ class Advanced extends Component {
                 flex: 1,
             },
             headerRight: (
-                <TouchableOpacity
+                <RightActionButton
                     onPress={() => {
                         navigation.state.params.updateAdvancedSettings();
                     }}
                     disabled={!navigation.state.params || !navigation.state.params.isEdited}
                 >
-                    <View style={{marginRight: 20}}>
-                        <Text style={{
-                            color: textColor,
-                            fontWeight: 'bold'
-                        }}>{strings('save_button')}</Text>
-                    </View>
-                </TouchableOpacity>
+                </RightActionButton>
             )
         };
     };
@@ -63,7 +52,7 @@ class Advanced extends Component {
                 activeOpacity={1}
                 onPress={()=>{Keyboard.dismiss()}}
                 style={{
-                    backgroundColor: '#eeeeee',
+                    backgroundColor: mainBgColor,
                     flex:1,
                     alignItems: 'center'
                 }}

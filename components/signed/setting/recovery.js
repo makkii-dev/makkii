@@ -3,26 +3,25 @@ import {connect} from 'react-redux';
 import {
 	Dimensions,
 	View,
-	Keyboard,
 	Clipboard,
-	TouchableOpacity,
 	Platform,
 	NativeModules,
 	NativeEventEmitter} from 'react-native';
-import {InputMultiLines, UnsignedActionButton} from '../../common.js';
+import screenshotHelper from 'react-native-screenshot-helper';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-root-toast';
+
+import {InputMultiLines, ActionButton} from '../../common.js';
 import styles from '../../styles.js';
+import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
-import screenshotHelper from 'react-native-screenshot-helper';
 
 var nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    const { state } = navigation;
 	    return {
 			title: strings('recovery_phrase.title'),
 	    };
@@ -56,7 +55,7 @@ class Recovery extends Component {
 
 	render(){
 		return (
-			<View style={{...styles.container, backgroundColor: '#eeeeee'}}>
+			<View style={{...styles.container, backgroundColor: mainBgColor}}>
 				<View style={{
 					width: width - 40,
                     height: width - 40,
@@ -93,7 +92,7 @@ class Recovery extends Component {
 						value={this.props.user.mnemonic}
 					/>
 				</View>
-                <UnsignedActionButton
+                <ActionButton
                     title={strings('copy_button')}
                     onPress={e => {
                         Clipboard.setString(this.props.user.mnemonic);
