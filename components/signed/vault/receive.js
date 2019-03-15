@@ -20,6 +20,7 @@ import {mainColor} from '../../style_util';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
 import ContextMenu from '../../contextMenu';
+import {fixedHeight,fixedWidth} from '../../style_util';
 
 const {width,height} = Dimensions.get('window');
 class Receive extends Component {
@@ -100,55 +101,58 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:20, paddingTop:40,paddingBottom:80}}>
-			<ImageBackground source={require('../../../assets/receive_bg.png')} style={{flex:1, backgroundColor:mainColor, alignItems:'center'}}
-							 imageStyle={{justifyContent:'flex-start',alignItems:'center'}}
-							 resizeMode={'stretch'}
-			>
-				<Text style={{marginTop:15,fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
-				<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
-					<View style={{alignItems: 'center', margin: 10, marginTop:30}} >
-						<QRCode
-							value={this.state.qrCodeValue}
-							size={200}
-							getRef={ref => {
-								this.qrcodeRef = ref;
-							}}
-						/>
-					</View>
-				</TouchableWithoutFeedback>
-				<TouchableOpacity style={{alignItems: 'center', margin: 10}}>
-					<Text style={{ color: 'blue', }} onPress={() => this.saveQRCode()}>
-						{strings('receive.button_save_receive_code')}
-					</Text>
-				</TouchableOpacity>
-				<View style={{marginTop:20, paddingHorizontal:20,height:100,width:'100%'}}>
-				<SubTextInput
-					title={strings('receive.label_modify_amount')}
-					style={{
-						flex:1,
-						fontSize: 12,
-						color: '#777676',
-						borderColor: '#8c8a8a',
-						borderBottomWidth: 1,
-					}}
-					value={ this.state.amount}
-					keyboardType={'decimal-pad'}
-					onChangeText={e => {
-						this.setState({
-							amount: e,
-						})
-					}}
-					rightView={()=>
-						<TouchableOpacity onPress={()=>this.onRefresh()}>
-							<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:'blue'}} resizeMode={'contain'}/>
+				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:fixedWidth(105), paddingTop:20,paddingBottom:20,alignItems:'center'}}>
+					<View style={{flex:1, backgroundColor:'#fff', alignItems:'center',width:fixedWidth(871), borderRadius:10}}>
+						<View style={{height:60, width:fixedWidth(871),alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
+									borderTopEndRadius: 10, borderTopStartRadius:10,
+						}}>
+							<Text style={{marginTop:15,fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
+						</View>
+						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
+							<View style={{alignItems: 'center', margin: 10, marginTop:30}} >
+								<QRCode
+									value={this.state.qrCodeValue}
+									size={200}
+									getRef={ref => {
+										this.qrcodeRef = ref;
+									}}
+								/>
+							</View>
+						</TouchableWithoutFeedback>
+						<TouchableOpacity style={{alignItems: 'center', margin: 10}}>
+							<Text style={{ color: 'blue', }} onPress={() => this.saveQRCode()}>
+								{strings('receive.button_save_receive_code')}
+							</Text>
 						</TouchableOpacity>
-					}
-					unit={'AION'}
-				/>
-				</View>
+						<ImageBackground source={require('../../../assets/receive_separate.png')} style={{width:fixedWidth(871),height:20,backgroundColor:mainColor}}
+										 imageStyle={{width:fixedWidth(871),height:fixedHeight(64)}}/>
+						<View style={{marginTop:20, paddingHorizontal:20,height:100,width:'100%'}}>
+							<SubTextInput
+								title={strings('receive.label_modify_amount')}
+								style={{
+									flex:1,
+									fontSize: 12,
+									color: '#777676',
+									borderColor: '#8c8a8a',
+									borderBottomWidth: 1,
+								}}
+								value={ this.state.amount}
+								keyboardType={'decimal-pad'}
+								onChangeText={e => {
+									this.setState({
+										amount: e,
+									})
+								}}
+								rightView={()=>
+									<TouchableOpacity onPress={()=>this.onRefresh()}>
+										<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:'blue'}} resizeMode={'contain'}/>
+									</TouchableOpacity>
+								}
+								unit={'AION'}
+							/>
+						</View>
+					</View>
 
-			</ImageBackground>
 					<ContextMenu
 						message={strings('save_file_button')}
 						onClick={() => {

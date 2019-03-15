@@ -117,10 +117,10 @@ class HomeCenterComponent extends  React.Component{
 		return (
 			<View style={this.props.style}>
 				<View style={{flexDirection:'row', width:width-30,paddingHorizontal:15, alignItems:'center'}}>
-					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();this.setState({showFilter: !this.state.showFilter,showSort:false})}}>
+					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();	Keyboard.dismiss();this.setState({showFilter: !this.state.showFilter,showSort:false})}}>
 						<Image source={require('../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
 					</TouchableOpacity>
-					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();this.setState({showSort: !this.state.showSort, showFilter:false})}}>
+					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();Keyboard.dismiss();this.setState({showSort: !this.state.showSort, showFilter:false})}}>
 						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
 					</TouchableOpacity>
 					<TextInput multiline={false} maxLength={10} style={styles.searchStyle} onChangeText={v=>this.props.onChangeText(v)}
@@ -509,7 +509,6 @@ class Home extends HomeComponent {
 	}
 
 	onTouchCenter(){
-		Keyboard.dismiss();
 		this.setState({openRowKey:null,swipeEnable:false});
 	}
 
