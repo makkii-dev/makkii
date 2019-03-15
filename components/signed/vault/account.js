@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,ImageBackground} from 'react-native';
+import {FlatList, View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,ImageBackground,Platform} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import {EditableView} from "../../common";
 import {fetchRequest} from "../../../utils";
@@ -12,7 +12,7 @@ import GeneralStatusBar from "../../GeneralStatusBar";
 import {mainColor} from "../../style_util";
 import PropTypes from 'prop-types';
 const {width,height} = Dimensions.get('window');
-
+const header_height = Platform.OS==='ios'?64:56;
 
 const SwithType = type=>{
 	let  accountImage=null;
@@ -61,7 +61,7 @@ class AccountNameComponent extends Component{
 		this.state.editable&&(style={...style, borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'#fff'});
 		return (
 			<View style={{...this.props.style, flexDirection:'row'}}>
-				<TouchableOpacity onPress={()=>navigation.goBack()} style={{width: 48, height: 48, alignItems: 'center', justifyContent: 'center'}}>
+				<TouchableOpacity onPress={()=>navigation.goBack()} style={{width: header_height, height: header_height, alignItems: 'flex-start', justifyContent: 'center'}}>
 					<Image source={require('../../../assets/arrow_back.png')} style={{tintColor: '#fff', width: 20, height: 20}}/>
 				</TouchableOpacity>
 				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
@@ -282,7 +282,7 @@ class Account extends Component {
 					{/*title bar*/}
 					<AccountNameComponent
 						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,
-							height:48, width:width, backgroundColor:mainColor}}
+							height:header_height, width:width, backgroundColor:mainColor}}
 						value={name}
 						type={type}
 						navigation={navigation}
