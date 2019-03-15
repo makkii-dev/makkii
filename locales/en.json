@@ -132,7 +132,9 @@
         "transaction_history_label": "Transaction History",
         "empty_label": "No Transaction",
         "show_all_button": "Show All",
-        "collapse_button": "Collapse"
+        "collapse_button": "Collapse",
+        "editable_button": "Edit",
+        "save_button": "Save",
     },
     "import_private_key": {
         "title": "Private Key",

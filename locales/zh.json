@@ -127,10 +127,11 @@
     "send_button": "转账",
     "receive_button": "收款",
     "transaction_history_label": "交易历史记录",
-    "empty_label": "没有交易",
+    "empty_label": "暂无历史记录",
     "show_all_button": "显示完整",
-    "collapse_button": "收起"
-
+    "collapse_button": "收起",
+    "editable_button": "编辑",
+    "save_button": "保存",
   },
   "import_private_key": {
     "title": "私钥",
