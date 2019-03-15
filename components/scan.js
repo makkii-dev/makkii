@@ -1,17 +1,44 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Image,Text,TouchableOpacity} from 'react-native';
+import {View,Image,TouchableOpacity} from 'react-native';
 import {RNCamera} from 'react-native-camera';
 import Toast from 'react-native-root-toast';
+import {strings} from "../locales/i18n";
 
-/*
-    require from parent:  
-    	navigation.state.params['validate'] 
-    	navigation.state.params['success'] 
-    return to child:
-        navigation.state.params['scanned']
- */
 class Scan extends Component {
+    static navigationOptions = ({navigation}) => {
+    	return {
+    		title: strings('scan.title'),
+            headerRight: (
+                <TouchableOpacity
+                    onPress={()=>{
+                        navigation.state.params.switchFlash()
+                    }}
+                    style={{
+                        width: 48,
+                        height: 48,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    {navigation.state.params.torch ?
+                        <Image source={require('../assets/flash_off.png')} style={{
+                            tintColor: 'white',
+                            width: 20,
+                            height: 20,
+                        }}/> :
+                        <Image source={require('../assets/flash_on.png')} style={{
+                            tintColor: 'white',
+                            width: 20,
+                            height: 20,
+                        }}/>
+                    }
+
+                </TouchableOpacity>
+			)
+		};
+	}
+
 	constructor(props){
 		super(props);
 		this.state = {
@@ -19,7 +46,25 @@ class Scan extends Component {
 			torch: false,
 		}
 	}
-	async componentDidMount(){ 
+
+	componentWillMount() {
+        this.props.navigation.setParams({
+            switchFlash: this.switchFlash,
+            torch: false
+        });
+	}
+
+	switchFlash=() => {
+        let currentTorch = this.state.torch;
+		this.setState({
+			torch: !currentTorch,
+		});
+		this.props.navigation.setParams({
+			torch: !currentTorch,
+		})
+	}
+
+	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 	}
 	render(){
@@ -64,7 +109,7 @@ class Scan extends Component {
 						width: '100%',
   					}}></View>
   					<View style={{
-  						height: 300,
+  						height: 250,
   						flexDirection: 'row',
   						justifyContent: 'center', 
   					}}>
@@ -73,18 +118,16 @@ class Scan extends Component {
   							backgroundColor: 'rgba(0,0,0,0.8)',
   						}}></View>
   						<View style={{
-  							width: 300,
+  							width: 250,
   							justifyContent: 'center', 
   							alignItems: 'center',
-  							borderWidth: 2,
-  							borderColor: 'rgba(255,255,255,0.9)'
+  							// borderWidth: 2,
+  							// borderColor: 'rgba(255,255,255,0.9)'
    						}}>
-   							{/*
   							<Image style={{
-	  							width: 450,
-	  							height: 450,
-	  						}} source={require('../assets/qr_border.png')} />
-	  						*/}
+	  							width: 250,
+	  							height: 250,
+	  						}} source={require('../assets/scan_border.png')} />
   						</View>
   						<View style={{
   							flex: 1,
@@ -99,80 +142,10 @@ class Scan extends Component {
 	  			</RNCamera>	
 	  			<View style={{
 	  				position: 'absolute',
-	  				backgroundColor:'transparent',
-	  				left: 0,
-	  				top: 40,
-	  				width: '100%',
-	  				height: 50,	
-	  				flex: 1,
-	  				flexDirection: 'row',
-	  				justifyContent: 'space-between',
-	  				alignItems: 'stretch',
-	  			}}>
-	  				<TouchableOpacity
-	  					onPress={e=>{
-	  						this.props.navigation.goBack();
-	  					}}
-	  				>	
-		  				<Back />
-	  				</TouchableOpacity>
-  					<TouchableOpacity
-	  					onPress={e=>{
-	  						this.setState({
-	  							torch: !this.state.torch
-	  						});
-	  					}}
-		  				>	
-		  				{
-		  					this.state.torch ? <FlashOff /> : <FlashOn /> 
-		  				}
-  					</TouchableOpacity>
-	  			</View>
-	  			<View style={{
-	  				position: 'absolute',
 	  			}}></View>
         	</View>
 		);
 	}
-}
-
-const Back = ()=>{
-	return (
-		<Image 
-			style={{
-				width: 20,
-				height: 20,
-				marginTop: 14,
-				marginLeft: 8,
-			}} 
-			source={require('../assets/arrow_back_white_32x32.png')} />
-	);
-}
-
-const FlashOff = ()=>{
-	return (
-		<Image 
-			style={{
-				width: 25,
-				height: 25,
-				marginTop: 11,
-				marginRight: 5,
-			}} 
-			source={require('../assets/flash_off_white_36x36.png')} />
-	);
-}
-
-const FlashOn = ()=>{
-	return (
-		<Image 
-			style={{
-				width: 25,
-				height: 25,
-				marginTop: 11,
-				marginRight: 5,
-			}} 
-			source={require('../assets/flash_on_white_36x36.png')} />
-	);
 }
 
 export default connect(state => {
