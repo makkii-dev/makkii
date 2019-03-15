@@ -208,6 +208,9 @@
     "terms_service": {
         "title": "Terms of Services"
     },
+    "scan": {
+        "title": "Scan"
+    },
     "app_name": "Makkii",
     "logout": "Sign Out",
     "update_button": "Update",

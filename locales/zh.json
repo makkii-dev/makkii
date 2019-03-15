@@ -207,6 +207,9 @@
   "terms_service": {
     "title": "软件许可及服务协议"
   },
+  "scan": {
+    "title": "扫一扫"
+  },
   "app_name": "Makkii",
   "logout": "退出",
   "update_button": "提交",

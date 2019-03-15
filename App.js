@@ -127,9 +127,7 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'scan': {
         screen: Scan,
-        navigationOptions: {
-            header: null
-        }
+        navigationOptions: navigationOptionsWithoutRight,
     },
 	'unsigned_login': {
         screen: Login,
