@@ -1,10 +1,10 @@
 import React,{ Component } from 'react';
-import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio} from 'react-native';
+import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio,Dimensions} from 'react-native';
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
 import {mainColor, fontColor} from './style_util';
-
+const {width,height} = Dimensions.get('window');
 class ComponentButton extends Component{
 	render(){
 		return (
@@ -379,70 +379,30 @@ class ImportListfooter extends React.PureComponent {
 	}
 }
 
-class EditableView extends  React.PureComponent {
 
-	static defaultProps={
-		value: 'Account Name',
-		color: 'black',
-		type: 0,
-		endInput: ()=>{},
+class SubTextInput extends Component{
+	static propTypes= {
+		title: PropTypes.string.isRequired,
+		rightView: PropTypes.func,
+		unit: PropTypes.string,
 	};
-	constructor(props){
-		super(props);
-		this.state={
-			value:this.props.value,
-			editable:false,
-		};
-		this.textInputRef=null;
-	}
-	_onPress(){
-		const {editable} = this.state;
-		this.setState({
-			editable: !editable,
-		},()=>{
-			if (this.state.editable){
-				this.textInputRef.focus();
-			}else {
-				this.textInputRef.blur();
-				this.props.endInput(this.state.value);
-			}
-		})
-	}
-
 	render(){
-		let typeImage ='';
-		switch (this.props.type) {
-			case '[ledger]':
-				typeImage = require('../assets/ledger_logo.png');
-				break;
-			case '[pk]':
-				typeImage = require('../assets/key.png');
-				break;
-			default:
-				typeImage = require('../assets/aion_logo.png')
-		}
 		return(
-			<View style={{flexDirection: 'row',alignItems: 'center'}}>
-				<Image source={typeImage} style={{width:20, height:20, marginRight:10}}/>
-				<View style={{marginRight: 30}}>
-					<TextInput
-						ref={ref=>this.textInputRef=ref}
-						numberOfLines={1}
-						value={this.state.value}
-						editable={this.state.editable}
-						style={{color:this.props.color, padding:0}}
-						onChangeText={value=>this.setState({value})}
-					/>
+			<View style={{justifyContent:'center', alignItems:'center',width:width-100, flex:1, marginVertical: 10}}>
+				<View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'flex-start', height:20,flex:1}}>
+					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000', flex:1}}>{this.props.title}</Text>
 					{
-						this.state.editable?<View style={{backgroundColor:'#000',height:1/ PixelRatio.get()}}/>:null
+						this.props.rightView&&this.props.rightView()
 					}
 				</View>
-				<TouchableOpacity onPress={()=>this._onPress()} style={{right: 0, position:'absolute'}}>
+				<View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'flex-end',flex:1}}>
+					<TextInput
+						{...this.props}
+					/>
 					{
-						this.state.editable?<Image source={require('../assets/ok-s.png')} style={{width:20,height:20}}/>
-						:<Image source={require('../assets/edit.png')} style={{width:20,height:20}}/>
+						this.props.unit&&<Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
 					}
-				</TouchableOpacity>
+				</View>
 			</View>
 		)
 	}
@@ -495,7 +455,7 @@ module.exports = {
 	PasswordInputWithTitle,
 	ImportListItem,
 	ImportListfooter,
-	EditableView,
 	TransactionItemCell,
-	UnsignedActionButton
+	UnsignedActionButton,
+	SubTextInput
 };

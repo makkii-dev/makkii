@@ -9,39 +9,11 @@ import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
-import {ComponentButton} from '../../common';
-import PropTypes from 'prop-types';
-import {mainColor} from '../../style_util';
+import {ComponentButton,SubTextInput} from '../../common';
 
 const {width, height} = Dimensions.get('window');
 
-class SubTextInput extends Component{
-	static propTypes= {
-		title: PropTypes.string.isRequired,
-		rightView: PropTypes.func,
-		unit: PropTypes.string,
-	};
-	render(){
-		return(
-			<View style={{justifyContent:'center', alignItems:'center',width:width-100, flex:1, marginVertical: 10}}>
-				<View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'flex-start', height:20,flex:1}}>
-					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000', flex:1}}>{this.props.title}</Text>
-					{
-						this.props.rightView&&this.props.rightView()
-					}
-				</View>
-				<View style={{flexDirection:'row', justifyContent:'flex-start', alignItems:'flex-end',flex:1}}>
-					<TextInput
-						{...this.props}
-					/>
-					{
-						this.props.unit&&<Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
-					}
-				</View>
-			</View>
-		)
-	}
-}
+
 class Send extends Component {
 
 	static navigationOptions=({navigation})=>{
