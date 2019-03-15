@@ -7,7 +7,7 @@ import {
     Text,
     BackHandler,
     ScrollView,
-    TextInput, Keyboard, StyleSheet, Dimensions, Alert
+    TextInput, Keyboard, StyleSheet, Dimensions, Alert, Image, PixelRatio
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
@@ -18,6 +18,7 @@ import {update_account_txs} from "../../../actions/accounts";
 import Toast from "react-native-root-toast";
 import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from "../../../utils";
 import {connect} from "react-redux";
+import {ComponentButton, SubTextInput} from "../../common";
 const {width,height} = Dimensions.get('window');
 class DappSend extends React.Component{
     static navigationOptions = ({ navigation }) => ({
@@ -175,104 +176,78 @@ class DappSend extends React.Component{
             <View style={{flex:1,justifyContent:'center'}}>
                 <ScrollView
                     style={{width,height}}
-                    contentContainerStyle={{justifyContent: 'center',padding:20}}
-                    keyboardShouldPersistTaps='always'
+                    contentContainerStyle={{justifyContent: 'center'}}
                 >
-                    <Text>{strings('send.label_sender')}</Text>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={{...st.text_input, paddingRight:5}}
+                    <View style={{...styles.containerView, marginTop:30}}>
+                        <SubTextInput
+                            title={strings('send.label_sender')}
+                            style={styles.text_input}
                             value={this.state.from}
-                            editable={false}
                             multiline={true}
-                            numberOfLines={2}
+                            editable={false}
                         />
-                    </View>
-                    <Text style={{marginTop:20}}>{strings('send.label_receiver')}</Text>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={{...st.text_input, paddingRight:5}}
+
+                        <SubTextInput
+                            title={strings('send.label_receiver')}
+                            style={styles.text_input}
                             value={this.state.to}
+                            multiline={true}
                             editable={false}
                             placeholder={strings('send.hint_recipient')}
-                            multiline={true}
-                            numberOfLines={2}
                         />
-                    </View>
-                    <Text style={{marginTop:20}}>{strings('send.label_amount')}</Text>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={st.text_input}
-                            editable={false}
+
+                        <SubTextInput
+                            title={strings('send.label_amount')}
+                            style={styles.text_input}
                             value={this.state.amount}
-                        />
-                        <Text style={{
-                            color: 'black',
-                            fontWeight: 'normal',
-                            fontSize: 16,
-                        }}>AION</Text>
-                    </View>
-                    <Text style={{marginTop:20}}>{strings('send.label_data')}</Text>
-                    <View style={st.text_input_cell}>
-                        <TextInput
-                            style={{...st.text_input, paddingRight:5}}
                             editable={false}
-                            multiline={true}
-                            value={this.state.data}
+                            unit={'AION'}
                         />
+                        <SubTextInput
+                            title={strings('send.label_data')}
+                            style={styles.text_input}
+                            value={this.state.data}
+                            multiline={true}
+                            editable={false}
+                        />
+
                     </View>
+
+                    {/*advanced button*/}
+
                     <TouchableOpacity activeOpacity={1} onPress={()=>{
                         this.setState({
                             showAdvanced: !this.state.showAdvanced,
                         })
                     }}>
-                        <View style={{marginTop: 20, marginBottom: 10}}>
-                            {
-                                this.state.showAdvanced ?
-                                    <Text style={{color:'blue'}}>{strings('send.hide_advanced')}</Text>:
-                                    <Text style={{color:'blue'}}>{strings('send.show_advanced')}</Text>
-                            }
-                        </View>
+                        <Text style={{color:'blue', marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
                     </TouchableOpacity>
+
+
                     {
-                        this.state.showAdvanced ?
-                            <View>
-                                <View>
-                                    <Text>{strings('send.label_gas_price')}</Text>
-                                </View>
-                                <View style={st.text_input_cell}>
-                                    <TextInput
-                                        style={st.text_input}
-                                        value={this.state.gasPrice}
-                                        onChangeText={text => {
-                                            this.setState({
-                                                gasPrice: text,
-                                            });
-                                        }}
-                                    />
-                                    <Text style={{
-                                        color: 'black',
-                                        fontWeight: 'normal',
-                                        fontSize: 16,
-                                    }}>AMP</Text>
-                                </View>
-                                <View style={{marginTop: 20}}>
-                                    <Text>{strings('send.label_gas_limit')}</Text>
-                                </View>
-                                <TextInput
-                                    style={{...st.text_input, marginRight: 0}}
-                                    value={this.state.gasLimit}
-                                    onChangeText={text => {
-                                        this.setState({
-                                            gasLimit: text,
-                                        });
-                                    }}
-                                />
-                            </View>: null
+                        this.state.showAdvanced?<View style={styles.containerView}>
+                            <SubTextInput
+                                title={strings('send.label_gas_price')}
+                                style={styles.text_input}
+                                value={this.state.gasPrice}
+                                onChangeText={v=>this.setState({gasPrice:v})}
+                                keyboardType={'decimal-pad'}
+                                unit={'AMP'}
+                            />
+                            <SubTextInput
+                                title={strings('send.label_gas_limit')}
+                                style={styles.text_input}
+                                value={this.state.gasLimit}
+                                onChangeText={v=>this.setState({gasLimit:v})}
+                                keyboardType={'decimal-pad'}
+                            />
+                        </View>:null
                     }
-                    <View style={{ marginTop:40, }}>
-                        <Button title={strings('send_button')}
-                                onPress={this.transfer.bind(this)}
+
+                    {/*send button*/}
+                    <View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+                        <ComponentButton title={strings('send_button')}
+                                         onPress={this.transfer.bind(this)}
                         />
                     </View>
                 </ScrollView>
@@ -336,26 +311,29 @@ class DappSend extends React.Component{
 
 }
 
-const st = StyleSheet.create({
+const styles = StyleSheet.create({
     text_input: {
         flex: 1,
         fontSize: 16,
         color: '#777676',
         fontWeight: 'normal',
-        lineHeight: 20,
-        paddingTop: 5,
-        paddingBottom: 5,
-        paddingLeft: 5,
-        paddingRight: 60,
         borderColor: '#8c8a8a',
-        borderBottomWidth: 1,
-        marginRight: 10,
+        textAlignVertical:'bottom',
+        borderBottomWidth: 1/ PixelRatio.get(),
     },
-    text_input_cell: {
-        flex: 1,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    containerView:{
+        width:width-40,
+        marginHorizontal:20,
+        marginVertical: 10,
+        paddingHorizontal:30,
+        paddingVertical:10,
+        justifyContent:'center',
+        alignItems:'center',
+        borderWidth:1/ PixelRatio.get(),
+        backgroundColor:'#fff',
+        borderColor:'#eee',
+        borderRadius:10,
+        shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
     }
 });
 
