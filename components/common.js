@@ -227,9 +227,10 @@ class TransactionItemCell extends React.PureComponent {
 	};
 	render(){
 		return(
-			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,flexDirection:'row',width:'100%',justifyContent:'space-around',alignItems:'flex-start'}}>
-				<Text style={{flex:3}}>{this.props.title}</Text>
-				<Text style={{flex:5,borderBottomColor:'#000',borderBottomWidth: 1,textAlign:this.props.valueTextAlign}}>{this.props.value}</Text>
+			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'space-between',alignItems:'flex-start'}}>
+				<Text style={{flex:3,fontSize:16, fontWeight:'bold', color:'#000'}}>{this.props.title}</Text>
+				<Text style={{flex:5,width:'100%',borderBottomColor:'#000',borderBottomWidth: 1/PixelRatio.get(),
+					textAlign:this.props.valueTextAlign,textAlignVertical: 'bottom'}}>{this.props.value}</Text>
 			</View>
 		)
 	}
