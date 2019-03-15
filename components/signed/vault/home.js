@@ -577,7 +577,7 @@ class Home extends HomeComponent {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerPosition={{position:'absolute', top:80,right:10,width:180,height:150}}
+							containerPosition={{position:'absolute', top:80,right:10,width:150,height:180}}
 							imageStyle={{width: 20, height: 20, marginLeft:10,marginRight:30, resizeMode:'contain'}}
 							fontStyle={{fontSize:12, color:'#000'}}
 							itemStyle={{width:180,height:30,flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}
@@ -611,7 +611,7 @@ const styles = StyleSheet.create({
         flex: 1, marginTop: fixedHeight(450), marginBottom: fixedHeight(156)
     },
 	accountContainer:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
+		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedHeight(10),
 		flexDirection:'row', marginHorizontal: fixedWidth(55), marginVertical: fixedHeight(32),
 		height:fixedHeight(186), backgroundColor:'#fff',
 	},
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
 		color:'gray'
 	},
 	accountSlideButton:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
+		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedHeight(10),
 		justifyContent:'center', alignItems:'center',
 		height:fixedHeight(186),
 		width: fixedHeight(186),
