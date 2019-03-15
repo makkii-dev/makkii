@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
-import {Alert, View, Text, TextInput, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
+import {Dimensions, Alert, View, Text, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
+import {TextInputWithTitle} from '../../common';
+
+const {width,height} = Dimensions.get('window');
 
 class Advanced extends Component {
     static navigationOptions = ({ navigation }) => {
+        let textColor;
+        if (navigation.state.params && navigation.state.params.isEdited) {
+            textColor = 'rgba(255, 255, 255, 1.0)';
+        } else {
+            textColor = 'rgba(255, 255, 255, 0.3)';
+        }
         return {
             title: strings('advanced.title'),
             headerTitleStyle: {
@@ -17,11 +26,17 @@ class Advanced extends Component {
                 flex: 1,
             },
             headerRight: (
-                <TouchableOpacity onPress={() => {
-                    navigation.state.params.updateAdvancedSettings();
-                }}>
+                <TouchableOpacity
+                    onPress={() => {
+                        navigation.state.params.updateAdvancedSettings();
+                    }}
+                    disabled={!navigation.state.params || !navigation.state.params.isEdited}
+                >
                     <View style={{marginRight: 20}}>
-                        <Text style={{color: 'blue'}}>{strings('save_button')}</Text>
+                        <Text style={{
+                            color: textColor,
+                            fontWeight: 'bold'
+                        }}>{strings('save_button')}</Text>
                     </View>
                 </TouchableOpacity>
             )
@@ -39,76 +54,77 @@ class Advanced extends Component {
     componentWillMount() {
         this.props.navigation.setParams({
             updateAdvancedSettings: this.updateAdvancedSettings,
+            isEdited: false
         });
     }
     render() {
         return (
-            <TouchableOpacity activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
-            <View style={styles.container}>
-                <View>
-                    <Text>{strings('advanced.label_default_account_name')}</Text>
-                </View>
-                <View style={styles.marginBottom20}>
-                    <TextInput
-                        style={st.text_input}
+            <TouchableOpacity
+                activeOpacity={1}
+                onPress={()=>{Keyboard.dismiss()}}
+                style={{
+                    backgroundColor: '#eeeeee',
+                    flex:1,
+                    alignItems: 'center'
+                }}
+            >
+                <View style={{
+                    marginTop: 20,
+                    width: width - 40,
+                    borderRadius: 5,
+                    backgroundColor: 'white',
+                    elevation: 3,
+                    padding: 20,
+                }} >
+                    <TextInputWithTitle
+                        title={strings('advanced.label_default_account_name')}
                         value={this.state.default_account_name}
-                        onChangeText={text => {
+                        onChange={text => {
                             this.setState({
                                 default_account_name:text
                             });
+                            this.updateEditStatus(text, this.state.login_session_timeout, this.state.exchange_refresh_interval);
                         }}
                     />
-                </View>
-                <View>
-                    <Text>{strings('advanced.label_login_session_timeout')}</Text>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 20,
-                }}>
-                    <TextInput
-                        style={{...st.text_input, marginRight: 10, flex: 1}}
+                    <View style={{marginTop: 20}} />
+                    <TextInputWithTitle
+                        title={strings('advanced.label_login_session_timeout')}
                         value={this.state.login_session_timeout}
+                        trailingText={strings('advanced.label_minute')}
                         keyboardType={'number-pad'}
-                        onChangeText={text => {
+                        onChange={text => {
                             this.setState({
                                 login_session_timeout: text
                             });
+                            this.updateEditStatus(this.state.default_account_name ,text, this.state.exchange_refresh_interval);
                         }}
                     />
-                    <Text style={{ color: '#777676', fontSize: 16 }}>{strings('advanced.label_minute')}</Text>
-                </View>
-                <View>
-                    <Text>{strings('advanced.label_exchange_refresh_interval')}</Text>
-                </View>
-                <View style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginBottom: 20,
-                }}>
-                    <TextInput
-                        style={{...st.text_input, marginRight: 10, flex: 1}}
+                    <View style={{marginTop: 20}} />
+                    <TextInputWithTitle
+                        title={strings('advanced.label_exchange_refresh_interval')}
                         value={this.state.exchange_refresh_interval}
+                        trailingText={strings('advanced.label_minute')}
                         keyboardType={'number-pad'}
-                        onChangeText={text => {
+                        onChange={text => {
                             this.setState({
                                 exchange_refresh_interval: text
                             });
+                            this.updateEditStatus(this.state.default_account_name, this.state.login_session_timeout, text);
                         }}
                     />
-                    <Text style={{ color: '#777676', fontSize: 16 }}>{strings('advanced.label_minute')}</Text>
                 </View>
-                {/*<View>*/}
-                    {/*<Button title={strings('save_button')}*/}
-                            {/*onPress={this.updateAdvancedSetting}*/}
-                            {/*/>*/}
-                {/*</View>*/}
-            </View>
             </TouchableOpacity>
         )
+    }
+
+    updateEditStatus = (name, time, interval) => {
+        let allFill = name.length > 0 && time.length > 0 && interval.length > 0;
+        let anyChange = (name != this.props.setting.default_account_name
+            || time != this.props.setting.login_session_timeout
+            || interval != this.props.setting.exchange_refresh_interval);
+        this.props.navigation.setParams({
+            isEdited: allFill && anyChange,
+        });
     }
 
     updateAdvancedSettings = () => {
@@ -141,6 +157,7 @@ class Advanced extends Component {
 
 
         Toast.show(strings('toast_update_success'), {
+            position: Toast.positions.CENTER,
             onHidden: () => {
                 this.props.navigation.goBack();
             }

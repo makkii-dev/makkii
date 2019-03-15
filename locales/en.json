@@ -38,8 +38,10 @@
     },
     "recovery_password": {
         "title": "Recovery Password",
-        "label_password": "Enter password",
+        "label_password": "Password",
+        "hint_enter_password": "Please enter password",
         "label_confirm_password": "Confirm Password",
+        "hint_enter_confirm_password": "Please enter password again",
         "button_reset": "Reset",
         "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Sepcial characters include \"!?#\".",
         "error_dont_match": "Confirm password does not match password!"
@@ -57,15 +59,18 @@
     "password": {
         "title": "Password",
         "current_password_label": "Current Password",
-        "new_password_label" : "New Password",
+        "hint_enter_current_password": "Please enter current password",
+        "new_password_label": "New Password",
+        "hint_enter_new_password": "Please enter new password",
         "confirm_password_label": "Confirm Password",
+        "hint_enter_confirm_password": "Please enter new password again",
         "password_format": "Password must be 8-16 characters and contains numbers, letters and sepcial characters.",
         "hint_old_password": "Enter old password",
         "hint_new_password": "Enter new password",
         "hint_confirm_password": "Enter new password again"
     },
     "service_configuration": {
-        "title": "Service Configuration",
+        "title": "Network Connection",
         "endpoint_wallet": "Rpc Server",
         "endpoint_dapps": "Dapps Server",
         "endpoint_odex": "Odex Server",
@@ -210,6 +215,9 @@
     },
     "scan": {
         "title": "Scan"
+    },
+    "setting": {
+        "confirm_logout": "Logging out will not delete data. You can still log in with this account."
     },
     "app_name": "Makkii",
     "logout": "Sign Out",

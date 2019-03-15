@@ -5,23 +5,37 @@ import {
     Image,
     Text,
     TouchableOpacity,
-    Dimensions
-} from 'react-native'; 
+} from 'react-native';
 
 export default class AionCell extends Component {
+    static defaultProps = {
+        topSeparator: true,
+        bottomSeparator: true,
+    }
     constructor(props) {
         super(props);
     }
     render() {
+        let titlePadLeft = 0;
+        if (this.props.leadIcon) {
+            titlePadLeft = 30;
+        }
         return (
-            <View style={{ 
+            <View style={{
                 height: 50,
             }}>
-                <View style={styles.cellSeparator} />
+                {this.props.topSeparator ? <View style={styles.cellSeparator}/> : null }
                 <TouchableOpacity onPress={this.props.onClick}>
                     <View style={styles.cellContainer} >
+                        <Image source={this.props.leadIcon} style={{
+                            width: 15,
+                            height: 15,
+                            position: 'absolute',
+                            left: 5,
+                            resizeMode: 'contain'
+                        }} />
                         <View style={styles.cellItem}>
-                            <Text style={styles.titleText}>{this.props.title}</Text>
+                            <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
                         </View>
                         <View style={styles.cellItem}>
                             <Image style={styles.icon}
@@ -29,7 +43,7 @@ export default class AionCell extends Component {
                         </View>
                     </View>
                 </TouchableOpacity>
-                <View style={styles.cellSeparator} />
+                {this.props.bottomSeparator? <View style={styles.cellSeparator} /> :null }
             </View>
         )
     }

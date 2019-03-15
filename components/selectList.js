@@ -8,6 +8,7 @@ export default class SelectList extends  React.Component {
         isMultiSelect:PropTypes.bool,
         itemHeight: PropTypes.number,
         defaultKey: PropTypes.string,
+        onItemSelected: PropTypes.func,
     };
     static defaultProps={
         isMultiSelect: false,
@@ -59,6 +60,7 @@ export default class SelectList extends  React.Component {
             data:Object.assign({},newData)
         });
 
+        this.props.onItemSelected && this.props.onItemSelected();
     }
     getSelect(){
         let ret_data={};
@@ -78,7 +80,7 @@ export default class SelectList extends  React.Component {
             >
                 <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
                     {element}
-                    {item.select&&<Image source={require('../assets/selected.png')} style={{width:25,height:25,marginLeft:20,tintColor:'#669900'}}/>}
+                    {item.select&&<Image source={require('../assets/icon_checked.png')} style={{width:20,height:20,marginLeft:20,resizeMode: 'contain'}}/>}
                 </View>
             </TouchableOpacity>
         )

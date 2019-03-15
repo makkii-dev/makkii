@@ -212,6 +212,51 @@ class ComponentPassword extends Component {
 	};
 }
 
+class TextInputWithTitle extends Component {
+	constructor(props){
+		super(props);
+	};
+
+	render(){
+		return (
+			<View>
+				<Text style={{
+					marginBottom: 5,
+					fontSize: 16,
+					fontWeight: 'bold'
+				}}>{this.props.title}</Text>
+				<View style={{
+					flexDirection: 'row',
+					height: 50,
+					alignItems: 'center',
+				}}
+				>
+					<TextInput
+						style={{
+							fontSize: 16,
+							color: fontColor,
+							fontWeight: 'normal',
+							lineHeight: 20,
+							paddingRight: 45,
+							borderColor: 'lightgray',
+							borderBottomWidth: 1,
+							flex: 1,
+						}}
+						placeholder={this.props.placeholder}
+						keyboardType={this.props.keyboardType}
+						onChangeText={e=>{
+							this.props.onChange(e);
+						}}
+						value={this.props.value}
+					/>
+					{this.props.trailingText ?
+						<Text style={{color: fontColor, fontSize: 16}}>{this.props.trailingText}</Text>: null
+					}
+				</View>
+			</View>
+		);
+	};
+}
 class PasswordInputWithTitle extends Component {
 	constructor(props){
 		super(props);
@@ -451,6 +496,7 @@ module.exports = {
 	Input,
 	InputMultiLines,
 	ComponentPassword,
+	TextInputWithTitle,
     PasswordInput,
 	PasswordInputWithTitle,
 	ImportListItem,

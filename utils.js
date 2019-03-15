@@ -305,6 +305,9 @@ class listenTransaction{
 
 }
 
+const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
+const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
+
 module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
@@ -325,4 +328,6 @@ module.exports = {
     listenCoinPrice: listenCoinPrice,
     validateRecipient: validateRecipient,
     hexString2Array: hexString2Array,
+    mainnet_url: mainnet_url,
+    mastery_url: mastery_url
 }

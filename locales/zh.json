@@ -50,8 +50,8 @@
     "title": "关于",
     "version_label": "版本号",
     "version_update_button": "版本更新",
-    "terms_label": "Makkii软件许可及服务协议",
-    "policy_label": "Makkii隐私政策",
+    "terms_label": "《软件许可及服务协议》",
+    "policy_label": "《隐私政策》",
     "version_latest": "当前已是最新版",
     "label_and": "和"
   },
@@ -60,13 +60,16 @@
     "current_password_label": "原密码",
     "new_password_label": "新密码",
     "confirm_password_label": "确认密码",
+    "hint_enter_current_password": "请输入原密码",
+    "hint_enter_new_password": "请输入新密码",
+    "hint_enter_confirm_password": "请再次输入新密码",
     "password_format": "密码必须是8-16位的数字、字母、特殊字符组合",
     "hint_old_password": "请输入原密码",
     "hint_new_password": "请输入新密码",
     "hint_confirm_password": "请再次输入新密码"
   },
   "service_configuration": {
-    "title": "服务器配置",
+    "title": "网络连接",
     "endpoint_wallet": "钱包服务器地址",
     "endpoint_dapps": "Dapps服务器地址",
     "endpoint_odex": "Odex服务器地址",
@@ -209,6 +212,9 @@
   },
   "scan": {
     "title": "扫一扫"
+  },
+  "setting": {
+    "confirm_logout": "退出后不会删除任何历史数据，下次登录依然可以使用本账号．"
   },
   "app_name": "Makkii",
   "logout": "退出",
