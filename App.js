@@ -44,7 +44,7 @@ import VaultImportPrivateKey 	from './components/signed/vault/import_private_key
 import VaultReceive          	from './components/signed/vault/receive.js';
 import VaultSend             	from './components/signed/vault/send.js';
 import VaultTransaction      	from './components/signed/vault/transaction.js';
-import VaultTransactionHistory 	from './components/signed/vault/transaction_histroy.js';
+import VaultTransactionHistory 	from './components/signed/vault/transaction_history.js';
 import Dapps                 	from './components/signed/dapps/home.js';
 import DappsDapp             	from './components/signed/dapps/dapp.js';
 import DappsLaunch           	from './components/signed/dapps/launch.js';

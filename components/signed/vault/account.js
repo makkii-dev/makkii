@@ -336,25 +336,24 @@ class Account extends Component {
 							</TouchableOpacity>
 						</View>
 					</View>
-					<FlatList
-						data={transactionsList}
-						style={{backgroundColor:'#fff'}}
-						keyExtractor={(item,index)=>index + ''}
-						renderItem={({item})=>this._renderTransaction(item)}
-						ListEmptyComponent={()=>
-							<View style={{width:width,height:180,justifyContent:'center',alignItems:'center'}}>
-								<Image source={require('../../../assets/empty_transactions.png')} style={{width:80,height:80, tintColor:'gray',marginBottom:20}}/>
-								<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
-							</View>
-						}
-						refreshControl={
-							<RefreshControl
-								refreshing={this.state.refreshing}
-								onRefresh={()=>this.onRefresh(this.account.address)}
-								title={'loading'}
-							/>
-						}
-					/>
+					{
+						transactionsList.length?<FlatList
+							data={transactionsList}
+							style={{backgroundColor:'#fff'}}
+							keyExtractor={(item,index)=>index + ''}
+							renderItem={({item})=>this._renderTransaction(item)}
+							refreshControl={
+								<RefreshControl
+									refreshing={this.state.refreshing}
+									onRefresh={()=>this.onRefresh(this.account.address)}
+									title={'loading'}
+								/>
+							}
+						/>:<View style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}>
+							<Image source={require('../../../assets/empty_transactions.png')} style={{width:80,height:80, tintColor:'gray',marginBottom:20}}/>
+							<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
+						</View>
+					}
 
 				</TouchableOpacity>
 			</View>

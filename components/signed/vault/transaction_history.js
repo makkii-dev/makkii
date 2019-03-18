@@ -82,7 +82,7 @@ class TransactionHistory extends React.Component {
                     totalPages,
                     transactions,
                     isLoading: false,
-                    footerState:0
+                    footerState:Object.values(transactions)>25?0:1
                 })
         },error => {
             console.log(error);
@@ -164,7 +164,7 @@ class TransactionHistory extends React.Component {
         } else {
             const transactions = Object.values(this.state.transactions).sort((a, b) => a.timestamp > b.timestamp);
             return (
-                <View style={{flex: 1}}>
+                <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>
                     {
                         transactions.length ? <FlatList
                             data={transactions}
