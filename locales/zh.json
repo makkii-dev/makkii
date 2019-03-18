@@ -202,6 +202,13 @@
     "privateKey": "私钥",
     "ledger": "Ledger冷钱包"
   },
+  "dapp": {
+    "launch_button": "前往",
+    "desc_label": "详情",
+    "author_label": "作者",
+    "type_label": "类别",
+    "type_game": "游戏"
+  },
   "dapp_send": {
     "error_not_set_default": "请先设置一个默认账户."
   },
@@ -255,5 +262,5 @@
   "toast_invalid_mnemonic": "无效的助记词",
   "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。",
   "fetch_data_label": "获取数据中 ...",
-  "no_more_data_label": "-- 没有更多数据了 --"
+  "no_more_data_label": "-- 没有更多数据了 --",
 }

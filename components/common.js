@@ -29,7 +29,7 @@ class ComponentButton extends Component{
 
 class ComponentTabBar extends Component{
 	static defaultProps={
-		activeTintColor: '#6c7476',
+		activeTintColor: mainColor,
 		inactiveTintColor: '#adb0b5',
 	};
 	static propTypes= {

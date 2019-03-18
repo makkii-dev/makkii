@@ -615,7 +615,7 @@ class Home extends HomeComponent {
 						},
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_dapps');
+							this.state.openRowKey||this.props.navigation.navigate('signed_dapps_launch');
 						},
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});

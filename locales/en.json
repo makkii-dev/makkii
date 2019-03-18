@@ -205,6 +205,13 @@
         "USD_unit": "USD",
         "CAD_unit": "CAD"
     },
+    "dapp": {
+        "launch_button": "Launch",
+        "desc_label": "Description",
+        "author_label": "By",
+        "type_label": "Type",
+        "type_game": "Game"
+    },
     "dapp_send": {
         "error_not_set_default": "Please set your default account firstly."
     },
@@ -256,5 +263,5 @@
     "toast_invalid_mnemonic": "Invalid Mnemonic!",
     "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others.",
     "fetch_data_label": "fetching data ...",
-    "no_more_data_label": "-- No More data --"
+    "no_more_data_label": "-- No More data --",
 }
