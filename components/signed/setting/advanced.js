@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
-import {Dimensions, Alert, View, Text, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
+import {Dimensions, View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
-import {TextInputWithTitle, RightActionButton} from '../../common';
+import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
 
 const {width} = Dimensions.get('window');
@@ -118,17 +118,17 @@ class Advanced extends Component {
 
     updateAdvancedSettings = () => {
         if (this.state.default_account_name.length == 0) {
-            Alert.alert(strings('alert_title_error'), strings('advanced.error_default_account_name_empty'));
+            alert_ok(strings('alert_title_error'), strings('advanced.error_default_account_name_empty'));
             return;
         }
 
         if (!validatePositiveInteger(this.state.login_session_timeout)) {
-            Alert.alert(strings('alert_title_error'), strings('advanced.error_invalid_login_session_timeout'));
+            alert_ok(strings('alert_title_error'), strings('advanced.error_invalid_login_session_timeout'));
             return;
         }
 
         if (!validatePositiveInteger(this.state.exchange_refresh_interval)) {
-            Alert.alert(strings('alert_title_error'), strings('advanced.error_invalid_exchange_refresh_interval'));
+            alert_ok(strings('alert_title_error'), strings('advanced.error_invalid_exchange_refresh_interval'));
             return;
         }
 

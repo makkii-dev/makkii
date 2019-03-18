@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import {Dimensions, Keyboard,TouchableOpacity,View,Text, Alert} from 'react-native';
-import {PasswordInputWithTitle, ActionButton, ComponentButton} from '../common.js';
+import {Dimensions, Keyboard,TouchableOpacity,View, Alert} from 'react-native';
+import {PasswordInputWithTitle, ActionButton, alert_ok } from '../common.js';
 import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import styles from '../styles.js';
 import {strings} from "../../locales/i18n";
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Password extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -73,19 +72,34 @@ class Password extends Component {
 					title={strings('recovery_password.button_reset')}
 					onPress={e=>{
 						if (!validatePassword(this.state.password)) {
-						    Alert.alert(strings('alert_title_error'), strings('recovery_password.error_password'));
+						    alert_ok(strings('alert_title_error'), strings('recovery_password.error_password'));
 						} else if (this.state.password !== this.state.password_confirm) {
-							Alert.alert(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
+							alert_ok(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
 						} else {
-							let hashed_password = hashPassword(this.state.password);
-							dispatch(user(hashed_password, this.mnemonic));
-							console.log('hashed_password: ',this.state.password);
-							console.log('mnemonic: ', this.mnemonic);
-							this.setState({
-								password: '',
-								password_confirm: '',
-							});
-						    this.props.navigation.navigate('signed_vault');
+							Alert.alert(
+								strings('alert_title_warning'),
+								strings('recovery.warning_mnemonic'),
+								[
+									{
+										text: strings('cancel_button'), onPress: () => {}
+									},
+									{
+										text: strings('alert_ok_button'), onPress: () => {
+											let hashed_password = hashPassword(this.state.password);
+
+											this.props.dispatch(delete_accounts(hashed_password))
+
+											dispatch(user(hashed_password, this.mnemonic));
+											this.setState({
+												password: '',
+												password_confirm: '',
+											});
+											this.props.navigation.navigate('signed_vault');
+										}
+									},
+								]
+							)
+
 						}
 					}}
 				/>

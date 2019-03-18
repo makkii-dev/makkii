@@ -16,7 +16,7 @@ import wallet from "react-native-aion-hw-wallet";
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import SelectList from '../../selectList';
-import {ImportListfooter} from "../../common";
+import {ImportListfooter, RightActionButton} from "../../common";
 import {strings} from '../../../locales/i18n';
 import {getLedgerMessage} from "../../../utils";
 import {mainBgColor} from '../../style_util';
@@ -28,13 +28,13 @@ class ImportHdWallet extends React.Component {
         return ({
             title: navigation.getParam('title'),
             headerRight: (
-                <TouchableOpacity onPress={() => {
-                    navigation.state.params.ImportAccount();
-                }}>
-                    <View style={{marginRight: 10}}>
-                        <Text style={{color: '#8c8a8a'}}>{strings('import_button')}</Text>
-                    </View>
-                </TouchableOpacity>
+                <RightActionButton
+                    onPress={() => {
+                        navigation.state.params.ImportAccount();
+                    }}
+                    disabled={!navigation.state.params || !navigation.state.params.isEdited}
+                    btnTitle={strings('import_button')}
+                />
             )
         });
     };
@@ -73,12 +73,12 @@ class ImportHdWallet extends React.Component {
         const {dispatch} = this.props;
         this.props.navigation.setParams({
             ImportAccount : this.ImportAccount,
+            isEdited: false
         });
         InteractionManager.runAfterInteractions(()=>{
             this.fetchAccount(20)
         });
         this.isUnmount = true;
-        console.log('ok')
     }
     componentWillUnmount(): void {
         this.isUnmount = false;
@@ -248,6 +248,11 @@ class ImportHdWallet extends React.Component {
                     }
                     onEndReached={()=>{this._onEndReached()}}
                     onEndReachedThreshold={0.1}
+                    onItemSelected={() => {
+                        this.props.navigation.setParams({
+                            isEdited: Object.keys(this.selectList.getSelect()).length > 0
+                        });
+                    }}
                 />
             </View>
         )

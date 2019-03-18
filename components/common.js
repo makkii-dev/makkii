@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import {View, TextInput, Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator,PixelRatio,Dimensions} from 'react-native';
+import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator,PixelRatio,Dimensions} from 'react-native';
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
@@ -250,7 +250,7 @@ class RightActionButton extends Component {
 					<Text style={{
 						color: textColor,
 						fontWeight: 'bold'
-					}}>{strings('save_button')}</Text>
+					}}>{this.props.btnTitle ? this.props.btnTitle: strings('save_button')}</Text>
 				</View>
 			</TouchableOpacity>
 		);
@@ -443,6 +443,14 @@ class TextInputWithTitle extends Component {
 	};
 }
 
+function alert_ok(title, msg) {
+	Alert.alert(title, msg, [
+		{
+			text: strings('alert_ok_button'), onPress: ()=> {}
+		}
+	]);
+}
+
 
 module.exports = {
 	ComponentButton,
@@ -451,11 +459,12 @@ module.exports = {
 	Input,
 	InputMultiLines,
 	TextInputWithTitle,
-    PasswordInput,
+	PasswordInput,
 	PasswordInputWithTitle,
 	ImportListfooter,
 	TransactionItemCell,
 	ActionButton,
 	RightActionButton,
-	SubTextInput
+	SubTextInput,
+	alert_ok,
 };

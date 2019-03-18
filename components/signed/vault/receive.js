@@ -3,19 +3,17 @@ import { connect } from 'react-redux';
 import {
 	View,
 	Text,
-	Alert,
 	TouchableWithoutFeedback,
 	PermissionsAndroid,
     Platform,
 	TouchableOpacity,
 	Keyboard,
     Image,
-	ImageBackground,
 	Dimensions,
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
-import {  SubTextInput } from '../../common.js';
+import { SubTextInput, alert_ok } from '../../common.js';
 import {mainColor} from '../../style_util';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
@@ -64,7 +62,7 @@ class Receive extends Component {
 	onRefresh(){
 	    // validate
 		if (!validateAmount(this.state.amount)) {
-			Alert.alert(strings('alert_title_error'), strings('invalid_amount'));
+			alert_ok(strings('alert_title_error'), strings('invalid_amount'));
 			return;
 		}
 
@@ -86,7 +84,7 @@ class Receive extends Component {
 				const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
 				console.log("storagePermission: " + storagePermission);
 				if (!storagePermission) {
-					Alert.alert(strings('alert_title_error'), strings('receive.no_permission_save_file'));
+					alert_ok(strings('alert_title_error'), strings('receive.no_permission_save_file'));
 					return;
 				}
 			}
@@ -102,7 +100,7 @@ class Receive extends Component {
 					}
                 }, error => {
                     console.log(error);
-                    Alert.alert(strings('alert_title_error'), strings('error_save_qrcode_image'));
+                    alert_ok(strings('alert_title_error'), strings('error_save_qrcode_image'));
                 });
             });
 		}

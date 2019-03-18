@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity, Alert, Linking, Keyboard, Dimensions, ImageBackground} from 'react-native';
+import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground} from 'react-native';
 
-import {ComponentLogo,PasswordInput, ActionButton} from '../common.js';
+import {ComponentLogo,PasswordInput, ActionButton, alert_ok} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {accounts as accounts_action} from '../../actions/accounts';
@@ -23,7 +23,6 @@ class Login extends Component {
 	async componentDidMount(){
 		console.log("mount login");
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log('[store.user] ' + JSON.stringify(this.props.user));
 
 		Linking.getInitialURL().then(url => {
 			console.log("linking url: " + url);
@@ -94,10 +93,10 @@ class Login extends Component {
                                                 },err=>{});
                                                 this.props.navigation.navigate('signed_vault');
                                             } else {
-                                                Alert.alert(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
+                                                alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
                                             }
                                         },err=>{
-                                            Alert.alert(strings('alert_title_error'), strings('unsigned_login.error_login'));
+                                            alert_ok(strings('alert_title_error'), strings('unsigned_login.error_login'));
                                         })
                                 }}
                                 title={strings('unsigned_login.btn_login')}

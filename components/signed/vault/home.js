@@ -23,7 +23,7 @@ import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
-import {ComponentTabBar} from '../../common.js';
+import {ComponentTabBar, alert_ok} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
@@ -34,9 +34,7 @@ import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
 import {fixedWidth, fixedHeight, mainColor} from "../../style_util";
 import PropTypes from 'prop-types';
-const {width, height} = Dimensions.get('window');
-const mWidth = 180;
-const top = 100;
+const {width, } = Dimensions.get('window');
 
 
 function sortAccounts(src,select){
@@ -384,14 +382,14 @@ class Home extends HomeComponent {
 		wallet.listDevice().then((deviceList) => {
 			if (deviceList.length <= 0) {
 				this.loadingView.hide();
-				Alert.alert(strings('alert_title_error'), strings('ledger.error_device_count'));
+				alert_ok(strings('alert_title_error'), strings('ledger.error_device_count'));
 			} else {
 				wallet.getAccount(0).then(account => {
 					this.loadingView.hide();
 					this.props.navigation.navigate('signed_vault_import_list',{type:'ledger',title:strings('import_ledger.title')});
 				}, error => {
 					this.loadingView.hide();
-					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.code));
+					alert_ok(strings('alert_title_error'), getLedgerMessage(error.code));
 				});
 			}
 		});
