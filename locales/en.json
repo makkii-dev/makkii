@@ -135,6 +135,7 @@
         "collapse_button": "Collapse",
         "editable_button": "Edit",
         "save_button": "Save",
+        "complete_button": "Complete History"
     },
     "import_private_key": {
         "title": "Private Key",
@@ -253,5 +254,7 @@
     "message_no_more_data": "No More Data",
     "toast_double_press_exit": "Press Back again to quit app",
     "toast_invalid_mnemonic": "Invalid Mnemonic!",
-    "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others."
+    "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others.",
+    "fetch_data_label": "fetching data ...",
+    "no_more_data_label": "-- No More data --"
 }

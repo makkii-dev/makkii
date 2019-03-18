@@ -132,6 +132,7 @@
     "collapse_button": "收起",
     "editable_button": "编辑",
     "save_button": "保存",
+    "complete_button": "完整历史"
   },
   "import_private_key": {
     "title": "私钥",
@@ -252,5 +253,7 @@
   "message_no_more_data": "暂无更多数据",
   "toast_double_press_exit": "再按一次退出应用",
   "toast_invalid_mnemonic": "无效的助记词",
-  "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。"
+  "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。",
+  "fetch_data_label": "获取数据中 ...",
+  "no_more_data_label": "-- 没有更多数据了 --"
 }

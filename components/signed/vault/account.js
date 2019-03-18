@@ -196,7 +196,7 @@ class Account extends Component {
 					Keyboard.dismiss();
 					this.props.navigation.navigate('signed_vault_transaction',{
 						account:this.addr,
-						transactionHash: transaction.hash,
+						transaction: transaction,
 					});
 				}}
 			>
@@ -325,6 +325,16 @@ class Account extends Component {
 						borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'gray'}}>
 						<Image source={require('../../../assets/rectangle.png')} style={{width:5, height:30}}/>
 						<Text style={{marginLeft:20, fontSize: 16, color:'#000'}}>{strings('account_view.transaction_history_label')}</Text>
+						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
+							<TouchableOpacity style={{paddingHorizontal:10,flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
+								onPress={()=>{
+									this.props.navigation.navigate('signed_vault_transaction_history', {account: this.account.address})
+								}}
+							>
+								<Text style={{color:'blue'}}>{strings('account_view.complete_button')}</Text>
+								<Image source={require('../../../assets/arrow_right.png')} style={{height:20,width:20,tintColor:'blue'}}/>
+							</TouchableOpacity>
+						</View>
 					</View>
 					<FlatList
 						data={transactionsList}

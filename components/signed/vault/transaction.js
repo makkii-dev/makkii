@@ -12,15 +12,15 @@ class Transaction extends Component {
 	constructor(props){
 		super(props);
 		this.addr = this.props.navigation.state.params.account;
-		this.transactionHash = this.props.navigation.state.params.transactionHash;
+		this.transaction = this.props.navigation.state.params.transaction;
 	}
 	onViewInExplorer(){
-		const url = `https://${this.props.setting.explorer_server}.aion.network/#/transaction/${this.transactionHash}`;
+		const url = `https://${this.props.setting.explorer_server}.aion.network/#/transaction/${this.transaction.hash}`;
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
 	sendAgain(){
 		const {navigation} = this.props;
-		const transaction = this.props.accounts[this.addr].transactions[this.transactionHash];
+		const transaction = this.transaction;
 		navigation.navigate('signed_vault_send',{
 			address: transaction.from,
 			value: transaction.value + '',
@@ -28,7 +28,8 @@ class Transaction extends Component {
 		})
 	}
 	render(){
-		const transaction = this.props.accounts[this.addr].transactions[this.transactionHash];
+		const transaction = this.transaction;
+		console.log('tx ',this.transaction)
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
