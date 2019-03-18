@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Alert, View, Text, TextInput, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
+import {Dimensions, Alert, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
 import { validatePrivateKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
+import {RightActionButton, InputMultiLines} from "../../common";
+
+const {width, height} = Dimensions.get('window');
 
 class ImportPrivateKey extends Component {
 
@@ -12,14 +15,14 @@ class ImportPrivateKey extends Component {
 		return ({
 			title: strings('import_private_key.title'),	
 			headerRight: (
-				<TouchableOpacity onPress={() => {
-					navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
-				}}>
-					<View style={{marginRight: 20}}>
-						<Text style={{color: '#8c8a8a'}}>{strings('import_button')}</Text>
-					</View>
-				</TouchableOpacity>
-			) 
+				<RightActionButton
+					onPress={() => {
+						navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
+					}}
+					disabled={!navigation.state.params || !navigation.state.params.isEdited}
+                    btnTitle={strings('import_button')}
+				/>
+			)
         });
 	};
 
@@ -55,6 +58,7 @@ class ImportPrivateKey extends Component {
 			private_key: ''
 		};
 	}
+
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(Object.keys(this.props.accounts).length); 
@@ -63,37 +67,57 @@ class ImportPrivateKey extends Component {
 			ImportAccount: this.ImportAccount,
 			dispatch: dispatch,
 			hashed_password: this.props.user.hashed_password,
+            isEdited: false
 		});
 	}
 
 	render(){
 		return (
-			<TouchableOpacity activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
+			<TouchableOpacity
+				activeOpacity={1}
+				onPress={()=> {Keyboard.dismiss()}}
+				style={{
+					flex: 1,
+					width: width,
+					height: height,
+					alignItems: 'center',
+				}}
+			>
 			<View style={{
-				height: '100%',
-				backgroundColor: '#ffffff',
-				padding: 20,
-			}}>	
-                <Text style={styles.instruction}>{strings('import_private_key.instruction_private_key')}</Text>
-				<View style={ styles.marginTop20 }>
-					<TextInput
-                        value={this.state.private_key}
-						multiline = {true}
-						numberOfLines = {5}
-						textAlignVertical = 'top'
-						onChangeText={ val => {
-						    this.setState({
-								private_key: val,
-							});
+			    flex: 1,
+				padding: 40,
+			}}>
+                <Text style={{
+                	marginBottom: 20,
+                    fontSize: 16,
+				}}>{strings('import_private_key.instruction_private_key')}</Text>
+
+				<View style={{
+					elevation: 3,
+					padding: 10,
+					borderRadius: 5,
+					height: 150,
+					backgroundColor: 'white',
+					width: width - 80,
+					marginBottom: 40,
+				}}>
+					<InputMultiLines
+						editable={true}
+						numberOfLines={8}
+						style={{
+							borderWidth: 0,
+							fontSize: 18,
+							fontWeight: 'normal',
+							textAlignVertical: 'top'
 						}}
-						style = {{
-							marginBottom: 20,
-							borderColor: 'grey',
-							borderRadius: 5,
-							borderWidth: 1,
-							padding: 10,
-							backgroundColor: '#E9F8FF',
-                            fontSize: 16
+						value={this.state.private_key}
+						onChangeText={val=>{
+							this.setState({
+								private_key: val
+							});
+							this.props.navigation.setParams({
+								isEdited: val.length != 0
+							});
 						}}
 					/>
 				</View>

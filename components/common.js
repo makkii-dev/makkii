@@ -252,7 +252,7 @@ class RightActionButton extends Component {
 					<Text style={{
 						color: textColor,
 						fontWeight: 'bold'
-					}}>{strings('save_button')}</Text>
+					}}>{this.props.btnTitle ? this.props.btnTitle: strings('save_button')}</Text>
 				</View>
 			</TouchableOpacity>
 		);
