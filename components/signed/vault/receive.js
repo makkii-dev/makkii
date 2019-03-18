@@ -22,7 +22,20 @@ import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
 import ContextMenu from '../../contextMenu';
 import {fixedHeight,fixedWidth} from '../../style_util';
 
+const CIRCLE_SIZE = 20;
+const SMALL_CIRCLE_SIZE = 10;
+const SMALL_CIRCLE_COLOR = '#dfdfdf';
 const {width,height} = Dimensions.get('window');
+const draw_circle=()=>{
+	const max = (width-60-CIRCLE_SIZE*2)/(SMALL_CIRCLE_SIZE+20);
+	let ret=[];
+	for(let i=0;i<max;i++){
+		ret.push(
+			<View key={i+''} style={{width:SMALL_CIRCLE_SIZE,height:SMALL_CIRCLE_SIZE, borderRadius: SMALL_CIRCLE_SIZE/2 , backgroundColor: SMALL_CIRCLE_COLOR, marginHorizontal:10}}/>
+		)
+	}
+	return ret;
+};
 class Receive extends Component {
 
 	static navigationOptions=({navigation})=>{
@@ -101,12 +114,12 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:fixedWidth(105), paddingTop:20,paddingBottom:20,alignItems:'center'}}>
-					<View style={{flex:1, backgroundColor:'#fff', alignItems:'center',width:fixedWidth(871), borderRadius:10}}>
-						<View style={{height:60, width:fixedWidth(871),alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
+				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:30, paddingTop:20,paddingBottom:20,alignItems:'center'}}>
+					<View style={{flex:1, backgroundColor:'#fff', alignItems:'center',width:width-60, borderRadius:10}}>
+						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
 									borderTopEndRadius: 10, borderTopStartRadius:10,
 						}}>
-							<Text style={{marginTop:15,fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
+							<Text style={{fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
 						</View>
 						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
 							<View style={{alignItems: 'center', margin: 10, marginTop:30}} >
@@ -124,8 +137,13 @@ class Receive extends Component {
 								{strings('receive.button_save_receive_code')}
 							</Text>
 						</TouchableOpacity>
-						<ImageBackground source={require('../../../assets/receive_separate.png')} style={{width:fixedWidth(871),height:20,backgroundColor:mainColor}}
-										 imageStyle={{width:fixedWidth(871),height:fixedHeight(64)}}/>
+						<View style={{height:CIRCLE_SIZE,flex:1, flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
+							<View style={{height:CIRCLE_SIZE,width:CIRCLE_SIZE/2,borderTopRightRadius:CIRCLE_SIZE/2,borderBottomRightRadius:CIRCLE_SIZE/2, backgroundColor:mainColor}}/>
+							<View style={{flex:1,height:CIRCLE_SIZE, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
+								{draw_circle()}
+							</View>
+							<View style={{height:CIRCLE_SIZE,width:CIRCLE_SIZE/2,borderTopLeftRadius:CIRCLE_SIZE/2,borderBottomLeftRadius:CIRCLE_SIZE/2, backgroundColor:mainColor}}/>
+						</View>
 						<View style={{marginTop:20, paddingHorizontal:20,height:100,width:'100%'}}>
 							<SubTextInput
 								title={strings('receive.label_modify_amount')}
