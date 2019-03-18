@@ -79,7 +79,6 @@ class ImportHdWallet extends React.Component {
             this.fetchAccount(20)
         });
         this.isUnmount = true;
-        console.log('ok')
     }
     componentWillUnmount(): void {
         this.isUnmount = false;

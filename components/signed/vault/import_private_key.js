@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Dimensions, Alert, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
+import {Dimensions, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
 import { validatePrivateKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
-import {RightActionButton, InputMultiLines} from "../../common";
+import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
 
 const {width, height} = Dimensions.get('window');
 
@@ -45,10 +45,10 @@ class ImportPrivateKey extends Component {
                 this.props.navigation.goBack();
 			}, error=> {
     			console.log("error: " + error);
-				Alert.alert(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
+				alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
 			});
 		} else {
-	    	Alert.alert(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'))
+	    	alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'))
 		}
 	};
 

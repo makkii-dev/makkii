@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, View, Text, Keyboard, Alert, TouchableOpacity} from 'react-native';
+import { Dimensions, View, Text, Keyboard, TouchableOpacity} from 'react-native';
 import Toast from 'react-native-root-toast';
 
-import { PasswordInputWithTitle, RightActionButton } from '../../common.js';
+import { PasswordInputWithTitle, RightActionButton, alert_ok } from '../../common.js';
 import styles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { validatePassword, hashPassword } from '../../../utils.js';
@@ -127,24 +127,24 @@ class Password extends Component {
 		// validate old password correctness
 		let hashedPassword = hashPassword(this.state.password_current);
 		if (hashedPassword !== this.props.user.hashed_password) {
-			Alert.alert(strings('alert_title_error'), strings('invalid_old_password'));
+			alert_ok(strings('alert_title_error'), strings('invalid_old_password'));
 			return;
 		}
 
 		// validate new password format
 		if (!validatePassword(this.state.password_new)) {
-			Alert.alert(strings('alert_title_error'), strings('invalid_new_password'));
+			alert_ok(strings('alert_title_error'), strings('invalid_new_password'));
 			return;
 		}
 
 		if (hashedPassword === hashPassword(this.state.password_new)) {
-			Alert.alert(strings('alert_title_error'), strings('same_old_new_passwords'));
+			alert_ok(strings('alert_title_error'), strings('same_old_new_passwords'));
 			return;
 		}
 
 		// validate new password and confirmed password consistency
 		if (this.state.password_new !== this.state.password_confirm) {
-			Alert.alert(strings('alert_title_error'), strings('inconsistent_passwords'));
+			alert_ok(strings('alert_title_error'), strings('inconsistent_passwords'));
 			return;
 		}
 

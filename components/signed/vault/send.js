@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Button, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Alert, Linking, Keyboard, PixelRatio} from 'react-native';
+import {View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Linking, Keyboard, PixelRatio} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -9,7 +9,7 @@ import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
-import {ComponentButton,SubTextInput} from '../../common';
+import {ComponentButton,SubTextInput, alert_ok} from '../../common';
 
 const {width, height} = Dimensions.get('window');
 
@@ -200,7 +200,7 @@ class Send extends Component {
 					} catch (e) {
 				    	console.log("sign by ledger throw error: ", e);
 						thisLoadingView.hide();
-						Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
+						alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
 				    	return;
 					}
 				} else {
@@ -231,36 +231,36 @@ class Send extends Component {
 					}).on('error', function(error) {
 						console.log("send singed tx failed? ", error);
 						thisLoadingView.hide();
-						Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
+						alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
 					});
 				}, error=> {
 					console.log("sign ledger tx error:", error);
 					thisLoadingView.hide();
-					Alert.alert(strings('alert_title_error'), getLedgerMessage(error.message));
+					alert_ok(strings('alert_title_error'), getLedgerMessage(error.message));
 				});
 			} catch (error) {
 				console.log("send signed tx error:", error);
 				thisLoadingView.hide();
-				Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
+				alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
 			}
 		}, error => {
 			console.log('get transaction count failed:', error);
 			thisLoadingView.hide();
-			Alert.alert(strings('alert_title_error'), strings('send.error_send_transaction'));
+			alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
 		});
 	}
 
 	validateFields=() => {
 		// validate recipient
 		if (!validateAddress(this.state.recipient)) {
-			Alert.alert(strings('alert_title_error'), strings('send.error_format_recipient'));
+			alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
 			return false;
 		}
 
 		// validate amount
 		// 1. amount format
 		if (!validateAmount(this.state.amount)) {
-			Alert.alert(strings('alert_title_error'), strings('send.error_format_amount'));
+			alert_ok(strings('alert_title_error'), strings('send.error_format_amount'));
 			return false;
 		}
 		// 2. < total balance
@@ -273,19 +273,19 @@ class Send extends Component {
 		let amount = new BigNumber(this.state.amount);
 		let balance = new BigNumber(this.account.balance);
 		if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
-			Alert.alert(strings('alert_title_error'), strings('send.error_insufficient_amount'));
+			alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
 			return false;
 		}
 
 		// validate gas price
 		if (!validateAmount(this.state.gasPrice)) {
-			Alert.alert(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
+			alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
 			return false;
 		}
 
 		// validate gas limit
 		if (!validatePositiveInteger(this.state.gasLimit)) {
-			Alert.alert(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
+			alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
 			return false;
 		}
 

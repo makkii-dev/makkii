@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Button, View, DeviceEventEmitter, ActivityIndicator,Alert, TouchableOpacity, Image, Platform} from 'react-native';
+import {View, DeviceEventEmitter, ActivityIndicator, TouchableOpacity, Image, Platform} from 'react-native';
 import Web3WebView from 'react-native-web3-webview';
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
+import {alert_ok} from '../../common';
 
 class Dapp extends Component {
 
@@ -30,7 +31,7 @@ class Dapp extends Component {
         });
         if(!this.wallet){
             console.log('not set makkii');
-            Alert.alert(strings('alert_title_error'), strings('dapp_send.error_not_set_default'));
+            alert_ok(strings('alert_title_error'), strings('dapp_send.error_not_set_default'));
             this.props.navigation.goBack();
         }
         this.webViewRef = null;

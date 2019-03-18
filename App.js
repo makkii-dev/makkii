@@ -271,8 +271,6 @@ console.warn = message => {
 
 const defaultGetStateForAction = Routes.router.getStateForAction;
 Routes.router.getStateForAction = (action, state) => {
-	//console.log('[action.type] ' + action.type);
-	//console.log(state);
     if (state) {
     	let newRoutes, newIndex;
     	switch(action.type){

@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Image, View,Text,Keyboard, Alert, TouchableOpacity, Dimensions} from 'react-native';
+import {Image, View,Text,Keyboard, TouchableOpacity, Dimensions} from 'react-native';
 import {strings} from "../../locales/i18n";
-import styles from '../styles.js';
-import {InputMultiLines, ActionButton} from '../common';
+import {InputMultiLines, ActionButton, alert_ok} from '../common';
 import {validateMnemonic} from "../../libs/aion-hd-wallet";
-import {dbGet} from '../../utils';
-import {delete_accounts} from '../../actions/accounts';
 
 const {width,height} = Dimensions.get('window');
 
@@ -119,33 +116,13 @@ class Home extends Component {
 					<ActionButton
 						title={strings('recovery.button_confirm')}
                         onPress={e=> {
-							validateMnemonic(this.state.mnemonic)&&dbGet('user').then(data=>{
-								try{
-									let user = JSON.parse(data);
-									Alert.alert(
-										strings('alert_title_warning'),
-										strings('recovery.warning_mnemonic'),
-										[
-											{text: strings('cancel_button'),onPress:()=>{}},
-											{text: strings('alert_ok_button'),onPress:()=>{
-													this.props.dispatch(delete_accounts(user.hashed_password))
-													this.props.navigation.navigate('unsigned_recovery_password', {
-														mnemonic: this.state.mnemonic
-													});
-
-												}},
-										]
-									)
-								} catch(e){
-									alert(e);
-								}
-							},err=>{
-								console.log('db.user is null');
-								this.props.navigation.navigate('unsigned_recovery_password', {
-									mnemonic: this.state.mnemonic
-								});
+                            if (!validateMnemonic(this.state.mnemonic)) {
+								alert_ok(strings('recovery.error_invalid_mnemonic'))
+                                return;
+							}
+							this.props.navigation.navigate('unsigned_recovery_password', {
+								mnemonic: this.state.mnemonic
 							});
-							validateMnemonic(this.state.mnemonic)||Alert.alert(strings('recovery.error_invalid_mnemonic'))
 						}}
 					/>
 				</View>

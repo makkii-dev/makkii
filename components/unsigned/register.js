@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Alert, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
-import {ActionButton,PasswordInput} from '../common.js';
+import {ActionButton,PasswordInput, alert_ok} from '../common.js';
 import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
@@ -81,9 +81,9 @@ class Home extends Component {
 						title={strings("register.button_register")}
 						onPress={e=>{
 							if (!validatePassword(this.state.password))
-								Alert.alert(strings('alert_title_error'),strings("register.error_password"));
+								alert_ok(strings('alert_title_error'),strings("register.error_password"));
 							else if (this.state.password !== this.state.password_confirm)
-								Alert.alert(strings('alert_title_error'),strings("register.error_dont_match"));
+								alert_ok(strings('alert_title_error'),strings("register.error_dont_match"));
 							else {
 								const hashed_password = hashPassword(this.state.password);
 								const mnemonic = generateMnemonic();
