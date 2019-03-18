@@ -144,7 +144,7 @@ class Receive extends Component {
 							</View>
 							<View style={{height:CIRCLE_SIZE,width:CIRCLE_SIZE/2,borderTopLeftRadius:CIRCLE_SIZE/2,borderBottomLeftRadius:CIRCLE_SIZE/2, backgroundColor:mainColor}}/>
 						</View>
-						<View style={{marginTop:20, paddingHorizontal:20,height:100,width:'100%'}}>
+						<View style={{marginTop:10, paddingHorizontal:20,height:100,width:'100%', justifyContent:'flex-start'}}>
 							<SubTextInput
 								title={strings('receive.label_modify_amount')}
 								style={{

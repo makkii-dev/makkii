@@ -79,6 +79,7 @@ class Transaction extends Component {
 					{
 						ifSender? <ComponentButton
 							title={strings('transaction_detail.sendAgain_button')}
+							onPress={()=>this.sendAgain()}
 						/>: null
 					}
 					<View style={{marginTop:10, flexDirection: 'row', justifyContent: 'flex-end', width:'100%', padding:10}}>

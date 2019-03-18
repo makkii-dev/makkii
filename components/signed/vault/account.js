@@ -77,7 +77,7 @@ class AccountNameComponent extends Component{
 					/>
 				</View>
 				<TouchableOpacity onPress={()=>this.onPress()}>
-					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'flex-end'}} imageStyle={{borderRadius:20}}>
+					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'center', justifyContent:'center'}} imageStyle={{borderRadius:20}}>
 						<Text style={{marginLeft:30, marginRight:10,fontSize:12, color:'#fff', fontFamily: 'monospace'}}>
 							{this.state.editable?strings('account_view.save_button'):strings('account_view.editable_button')}</Text>
 					</ImageBackground>

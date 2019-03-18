@@ -124,7 +124,13 @@ class HomeCenterComponent extends  React.Component{
 						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
 					</TouchableOpacity>
 					<TextInput multiline={false} maxLength={10} style={styles.searchStyle} onChangeText={v=>this.props.onChangeText(v)}
-							   onFocus={()=>{this.props.onTouch();(this.state.showFilter||this.state.showSort)&&this.setState({showFilter:false,showSort:false})}}
+							   onFocus={() => {
+								   this.props.onTouch();
+								   (this.state.showFilter || this.state.showSort) && (this.closeAll());
+							   }}
+							   onBlur={()=>{
+							   		this.closeAll();
+							   }}
 					/>
 					<View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:mainColor, borderRadius:fixedWidth(20), paddingLeft:5}}>
 						<Image source={require('../../../assets/search.png')} style={{...styles.sortHeaderImageStyle, tintColor:'#fff'}}/>
