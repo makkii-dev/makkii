@@ -82,7 +82,7 @@ class TransactionHistory extends React.Component {
                     totalPages,
                     transactions,
                     isLoading: false,
-                    footerState:Object.values(transactions)>25?0:1
+                    footerState:Object.values(transactions)>=25?0:1
                 })
         },error => {
             console.log(error);
