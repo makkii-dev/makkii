@@ -164,7 +164,8 @@
     "title_import_from": "选择导入来源：",
     "menu_master_key": "助记词短语",
     "menu_private_key": "私钥",
-    "menu_ledger": "Ledger冷钱包"
+    "menu_ledger": "Ledger冷钱包",
+    "no_satisfied_accounts": "无满足条件账号"
   },
   "language": {
     "title": "多语言",

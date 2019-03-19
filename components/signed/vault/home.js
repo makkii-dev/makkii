@@ -114,24 +114,28 @@ class HomeCenterComponent extends  React.Component{
 		const filterTintColor = this.state.showFilter?'blue':'black';
 		return (
 			<View style={this.props.style}>
-				<View style={{flexDirection:'row', width:width-30,paddingHorizontal:15, alignItems:'center'}}>
-					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();	Keyboard.dismiss();this.setState({showFilter: !this.state.showFilter,showSort:false})}}>
-						<Image source={require('../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
-					</TouchableOpacity>
-					<TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();Keyboard.dismiss();this.setState({showSort: !this.state.showSort, showFilter:false})}}>
-						<Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
-					</TouchableOpacity>
-					<TextInput multiline={false} maxLength={10} style={styles.searchStyle} onChangeText={v=>this.props.onChangeText(v)}
-							   onFocus={() => {
-								   this.props.onTouch();
-								   (this.state.showFilter || this.state.showSort) && (this.closeAll());
-							   }}
-							   onBlur={()=>{
-							   		this.closeAll();
-							   }}
-					/>
-					<View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:mainColor, borderRadius:fixedWidth(20), paddingLeft:5}}>
-						<Image source={require('../../../assets/search.png')} style={{...styles.sortHeaderImageStyle, tintColor:'#fff'}}/>
+				<View style={{flexDirection:'row', width:width-30,paddingHorizontal:20, alignItems:'center', justifyContent: 'space-between'}}>
+					<View style={{flexDirection: 'row'}}>
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();	Keyboard.dismiss();this.setState({showFilter: !this.state.showFilter,showSort:false})}}>
+                            <Image source={require('../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();Keyboard.dismiss();this.setState({showSort: !this.state.showSort, showFilter:false})}}>
+                            <Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
+                        </TouchableOpacity>
+					</View>
+                    <View style={{flexDirection: 'row'}}>
+                        <TextInput multiline={false} maxLength={15} style={{...styles.searchStyle, marginRight: -10, paddingRight: 15}} onChangeText={v=>this.props.onChangeText(v)}
+                                   onFocus={() => {
+                                       this.props.onTouch();
+                                       (this.state.showFilter || this.state.showSort) && (this.closeAll());
+                                   }}
+                                   onBlur={()=>{
+                                        this.closeAll();
+                                   }}
+                        />
+                        <View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:mainColor, borderRadius:fixedWidth(10)}}>
+                            <Image source={require('../../../assets/search.png')} style={{...styles.sortHeaderImageStyle, resizeMode: 'contain', marginRight: 0, tintColor:'#fff'}}/>
+                        </View>
 					</View>
 				</View>
 				{
@@ -424,7 +428,7 @@ class Home extends HomeComponent {
 										this.onSetDefaultAccount(Key);
 									}}>
 										<View style={{...styles.accountSlideButton, backgroundColor: '#c8c7ed'}}>
-											<Text style={{fontSize:9,color:'#000'}}>{strings('set_default_button')}</Text>
+											<Text style={{fontSize:14,color:'#000'}}>{strings('set_default_button')}</Text>
 										</View>
 									</TouchableOpacity>
 							}
@@ -432,7 +436,7 @@ class Home extends HomeComponent {
 								this.onDeleteAccount(Key);
 							}}>
 								<View style={{...styles.accountSlideButton, backgroundColor: '#fe0000'}}>
-									<Text style={{fontSize:9,color:'#fff'}}>{strings('delete_button')}</Text>
+									<Text style={{fontSize:14,color:'#fff'}}>{strings('delete_button')}</Text>
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -452,12 +456,12 @@ class Home extends HomeComponent {
 				>
 					<View style={{...styles.accountContainer, justifyContent:'flex-start', elevation:3}}>
 						<Image source={accountImage} style={{width:fixedHeight(186), height:fixedHeight(186)}}/>
-						<View style={{flex:1}}>
-							<View style={{...styles.accountSubContainer, flex:3, alignItems:'flex-end'}}>
+						<View style={{flex:1, paddingVertical: 10}}>
+							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
 								<Text style={styles.accountSubTextFontStyle1}>{item.name}</Text>
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
-							<View style={{...styles.accountSubContainer, flex:2, alignItems:'flex-start'}}>
+							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
 								<Text style={styles.accountSubTextFontStyle2}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
 								<Text style={styles.accountSubTextFontStyle2}>AION</Text>
 							</View>
@@ -544,10 +548,10 @@ class Home extends HomeComponent {
 						</TouchableOpacity>
 					</View>
 					<View style={{flexDirection:'row', justifyContent:'flex-start'}}>
-						<Text style={{marginLeft:30,color:'#fff'}}>{strings('wallet.fiat_total')}:</Text>
+						<Text style={{marginLeft:30,color:'#fff', fontSize: 20}}>{strings('wallet.fiat_total')}:</Text>
 					</View>
 					<View style={{flexDirection:'row', justifyContent:'center'}}>
-						<Text style={{color:'#fff', fontSize:32}} numberOfLines={1}>{total_currency}{strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>
+						<Text style={{color:'#fff', fontSize:40}} numberOfLines={1}>{total_currency}{strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>
 					</View>
 
                     {/*accounts bar*/}
@@ -572,7 +576,9 @@ class Home extends HomeComponent {
                             }
                         />:<View style={{...styles.accountView, justifyContent:'center', alignItems:'center'}}>
                             <Image source={require('../../../assets/empty_account.png')} style={{height:80,width:80, tintColor:'gray', marginBottom:30}}/>
-                            <Text style={{fontSize:16,color:'gray'}}>{strings('wallet.import_accounts_hint')}</Text>
+                            <Text style={{fontSize:16,color:'gray'}}>
+								{Object.keys(this.props.accounts).length? strings('wallet.no_satisfied_accounts'): strings('wallet.import_accounts_hint')}
+                            </Text>
                         </View>
                     }
 
@@ -581,7 +587,7 @@ class Home extends HomeComponent {
 					<HomeCenterComponent
 						ref={ref=>this.HomeCenterRef=ref}
 						style={{...styles.shadow,justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
-							width:fixedWidth(970), position:'absolute', top: fixedHeight(466), right: fixedWidth(55), paddingVertical:30
+							width:fixedWidth(970), position:'absolute', top: fixedHeight(466), right: fixedWidth(55), paddingVertical:20
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}
@@ -665,7 +671,7 @@ export default connect(state => {
 
 const styles = StyleSheet.create({
     accountView:{
-        flex: 1, marginTop: fixedHeight(450), marginBottom: fixedHeight(156)
+        flex: 1, marginTop: fixedHeight(400), marginBottom: fixedHeight(156)
     },
 	accountContainer:{
 		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedHeight(10),
@@ -678,11 +684,11 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 18,
 	},
 	accountSubTextFontStyle1:{
-		fontSize:12,
+		fontSize:14,
 		color:'#000'
 	},
 	accountSubTextFontStyle2:{
-		fontSize:8,
+		fontSize:12,
 		color:'gray'
 	},
 	accountSlideButton:{
@@ -701,17 +707,19 @@ const styles = StyleSheet.create({
 		elevation:10,
 	},
 	sortHeaderImageStyle:{
-		width:30,
-		height:30,
-		marginRight:10,
+		width:25,
+		height:25,
+		marginRight:20,
 		tintColor:'blue'
 	},
 	searchStyle:{
 		borderWidth: 1/PixelRatio.get(),
-		borderColor:'#000',
+		borderColor:'gray',
 		height: 40,
 		width: fixedWidth(500),
-		borderRadius: fixedWidth(20),
+        borderTopLeftRadius: fixedWidth(10),
+        borderBottomLeftRadius: fixedWidth(10),
+        borderBottomRightRadius: 0,
 	},
 	listItem: {
 		height: 80,

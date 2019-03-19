@@ -177,7 +177,8 @@
         "title_import_from": "Import From:",
         "menu_master_key": "Seed phrases",
         "menu_private_key": "Private key",
-        "menu_ledger": "Ledger"
+        "menu_ledger": "Ledger",
+        "no_satisfied_accounts": "No satisfied accounts"
     },
     "language": {
         "title": "Language",
