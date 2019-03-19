@@ -10,7 +10,7 @@ import {
     Text,
     BackHandler
 } from 'react-native';
-import Web3WebView from 'react-native-web3-webview';
+import {WebView} from "react-native-webview";
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
@@ -203,13 +203,13 @@ class Dapp extends Component {
         }else{
             return (
                 <View style={{flex: 1}}>
-                    <Web3WebView
+                    <WebView
                         ref={ref=>this.webViewRef=ref}
                         source={{uri: this.uri}}
                         cacheEnabled={false}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
-                        injectedOnStartLoadingJavaScript={this.state.inject}
+                        injectedJavaScriptBeforeLoad={this.state.inject}
                         onNavigationStateChange={(navState)=>{
                             this.canGoBack = navState.canGoBack;
                         }}

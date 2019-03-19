@@ -2634,7 +2634,7 @@ fbjs-scripts@^1.0.0:
     semver "^5.1.0"
     through2 "^2.0.0"
 
-fbjs@^0.8.0, fbjs@^0.8.3, fbjs@^0.8.9:
+fbjs@^0.8.0, fbjs@^0.8.17, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -5702,11 +5702,12 @@ react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   dependencies:
     prop-types "^15.6.1"
 
-"react-native-web3-webview@https://github.com/Chengchcc/react-native-web3-webview.git":
-  version "1.2.8"
-  resolved "https://github.com/Chengchcc/react-native-web3-webview.git#54fbc4800f65f6c4bf5105f4dff1bc5534778d95"
+"react-native-webview@https://github.com/paulxuca/react-native-webview#upstream-injectjavascriptbeforedocumentload":
+  version "5.3.1"
+  resolved "https://github.com/paulxuca/react-native-webview#88d488f67e45c4b2fc71e4f2ee8fbd39db0de458"
   dependencies:
-    fbjs "^0.8.3"
+    escape-string-regexp "^1.0.5"
+    fbjs "^0.8.17"
 
 react-native@0.58.6:
   version "0.58.6"

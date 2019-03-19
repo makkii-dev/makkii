@@ -3,6 +3,7 @@ package com.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
 import com.chaion.rn.hwwallet.RNAionHwWalletPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
@@ -11,7 +12,6 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.web3webview.Web3WebviewPackage;
 import com.horcrux.svg.SvgPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -36,11 +36,11 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNCWebViewPackage(),
             new RNScreenshotHelperPackage(),
             new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
             new RNFetchBlobPackage(),
-            new Web3WebviewPackage(),
             new SvgPackage(),
             new RNI18nPackage(),
             new RNGestureHandlerPackage(),

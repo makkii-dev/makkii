@@ -148,11 +148,11 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-webview')
     implementation project(':react-native-screenshot-helper')
     implementation project(':react-native-aion-hw-wallet')
     implementation project(':react-native-randombytes')
     implementation project(':rn-fetch-blob')
-    implementation project(':react-native-web3-webview')
     implementation project(':react-native-svg')
     implementation project(':react-native-i18n')
     implementation project(':react-native-gesture-handler')
