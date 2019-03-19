@@ -135,7 +135,7 @@
         "collapse_button": "Collapse",
         "editable_button": "Edit",
         "save_button": "Save",
-        "complete_button": "Complete History"
+        "complete_button": "All History"
     },
     "import_private_key": {
         "title": "Private Key",
