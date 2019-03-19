@@ -14,6 +14,7 @@ import {
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
 import { SubTextInput, alert_ok } from '../../common.js';
+import {linkButtonColor} from '../../style_util';
 import {mainColor} from '../../style_util';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
@@ -21,15 +22,15 @@ import ContextMenu from '../../contextMenu';
 import {fixedHeight,fixedWidth} from '../../style_util';
 
 const CIRCLE_SIZE = 20;
-const SMALL_CIRCLE_SIZE = 10;
+const SMALL_CIRCLE_SIZE = 8;
 const SMALL_CIRCLE_COLOR = '#dfdfdf';
 const {width,height} = Dimensions.get('window');
 const draw_circle=()=>{
-	const max = (width-60-CIRCLE_SIZE*2)/(SMALL_CIRCLE_SIZE+20);
+	const max = (width-60-CIRCLE_SIZE*2)/(SMALL_CIRCLE_SIZE+16);
 	let ret=[];
 	for(let i=0;i<max;i++){
 		ret.push(
-			<View key={i+''} style={{width:SMALL_CIRCLE_SIZE,height:SMALL_CIRCLE_SIZE, borderRadius: SMALL_CIRCLE_SIZE/2 , backgroundColor: SMALL_CIRCLE_COLOR, marginHorizontal:10}}/>
+			<View key={i+''} style={{width:SMALL_CIRCLE_SIZE,height:SMALL_CIRCLE_SIZE, borderRadius: SMALL_CIRCLE_SIZE/2 , backgroundColor: SMALL_CIRCLE_COLOR, marginHorizontal:8}}/>
 		)
 	}
 	return ret;
@@ -112,15 +113,15 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:30, paddingTop:20,paddingBottom:20,alignItems:'center'}}>
-					<View style={{flex:1, backgroundColor:'#fff', alignItems:'center',width:width-60, borderRadius:10}}>
+				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20,alignItems:'center'}}>
+					<View style={{backgroundColor:'#fff', alignItems:'center',width:width-60, borderRadius:10}}>
 						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
 									borderTopEndRadius: 10, borderTopStartRadius:10,
 						}}>
 							<Text style={{fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
 						</View>
 						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
-							<View style={{alignItems: 'center', margin: 10, marginTop:30}} >
+							<View style={{alignItems: 'center', margin: 10, marginTop:20}} >
 								<QRCode
 									value={this.state.qrCodeValue}
 									size={200}
@@ -130,19 +131,19 @@ class Receive extends Component {
 								/>
 							</View>
 						</TouchableWithoutFeedback>
-						<TouchableOpacity style={{alignItems: 'center', margin: 10}}>
-							<Text style={{ color: 'blue', }} onPress={() => this.saveQRCode()}>
+						<TouchableOpacity style={{alignItems: 'center', margin: 10, marginBottom: 20}}>
+							<Text style={{ color: linkButtonColor, }} onPress={() => this.saveQRCode()}>
 								{strings('receive.button_save_receive_code')}
 							</Text>
 						</TouchableOpacity>
-						<View style={{height:CIRCLE_SIZE,flex:1, flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
+						<View style={{height:CIRCLE_SIZE, flexDirection:'row',justifyContent:'center', alignItems:'center'}}>
 							<View style={{height:CIRCLE_SIZE,width:CIRCLE_SIZE/2,borderTopRightRadius:CIRCLE_SIZE/2,borderBottomRightRadius:CIRCLE_SIZE/2, backgroundColor:mainColor}}/>
 							<View style={{flex:1,height:CIRCLE_SIZE, flexDirection:'row', justifyContent:'space-between', alignItems:'center'}}>
 								{draw_circle()}
 							</View>
 							<View style={{height:CIRCLE_SIZE,width:CIRCLE_SIZE/2,borderTopLeftRadius:CIRCLE_SIZE/2,borderBottomLeftRadius:CIRCLE_SIZE/2, backgroundColor:mainColor}}/>
 						</View>
-						<View style={{marginTop:10, paddingHorizontal:20,height:100,width:'100%', justifyContent:'flex-start'}}>
+						<View style={{paddingHorizontal:20, marginVertical: 20, height:100,width:'100%', justifyContent:'flex-start'}}>
 							<SubTextInput
 								title={strings('receive.label_modify_amount')}
 								style={{
@@ -161,7 +162,7 @@ class Receive extends Component {
 								}}
 								rightView={()=>
 									<TouchableOpacity onPress={()=>this.onRefresh()}>
-										<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:'blue'}} resizeMode={'contain'}/>
+										<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:linkButtonColor}} resizeMode={'contain'}/>
 									</TouchableOpacity>
 								}
 								unit={'AION'}

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {FlatList, View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,ImageBackground,Platform} from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
 import {EditableView} from "../../common";
+import {linkButtonColor} from '../../style_util';
 import {fetchRequest} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from 'react-native-root-toast';
@@ -200,10 +200,10 @@ class Account extends Component {
 					});
 				}}
 			>
-				<View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderColor:'gray', borderWidth:1/PixelRatio.get(), borderRadius:10,
-					width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',paddingHorizontal:5,paddingVertical:10}}>
+				<View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+					width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',padding: 10}}>
 					<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
-						<Text>{timestamp.substring(0,timestamp.length-2)} <Text style={{color:'blue'}}>{timestamp.substring(timestamp.length-2)}</Text></Text>
+						<Text>{timestamp}</Text>
 						<Text>{transaction.status}</Text>
 					</View>
 					<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
@@ -321,9 +321,8 @@ class Account extends Component {
 					</View>
 
 					{/*transaction history*/}
-					<View style={{...styles.shadow,width:width,height:60,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', paddingHorizontal:20,backgroundColor:'#fff',
-						borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'gray'}}>
-						<Image source={require('../../../assets/rectangle.png')} style={{width:5, height:30}}/>
+					<View style={{...styles.shadow,width:width,height:60,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', paddingHorizontal:20,backgroundColor:'#fff'}}>
+						<Image source={require('../../../assets/rectangle.png')} resizeMode={'contain'} style={{width:5, height:30}}/>
 						<Text style={{marginLeft:10, fontSize: 16, color:'#000'}}>{strings('account_view.transaction_history_label')}</Text>
 						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
 							<TouchableOpacity style={{flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
@@ -331,8 +330,8 @@ class Account extends Component {
 									this.props.navigation.navigate('signed_vault_transaction_history', {account: this.account.address})
 								}}
 							>
-								<Text style={{fontSize:12,color:'blue'}}>{strings('account_view.complete_button')}</Text>
-								<Image source={require('../../../assets/arrow_right.png')} style={{height:20,width:20,tintColor:'blue'}}/>
+								<Text style={{fontSize:12,color:linkButtonColor}}>{strings('account_view.complete_button')}</Text>
+								<Image source={require('../../../assets/arrow_right.png')} style={{height:20,width:20,tintColor:'gray'}}/>
 							</TouchableOpacity>
 						</View>
 					</View>

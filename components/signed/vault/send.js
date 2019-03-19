@@ -10,6 +10,7 @@ import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
+import {linkButtonColor} from '../../style_util';
 
 const {width, height} = Dimensions.get('window');
 
@@ -107,7 +108,7 @@ class Send extends Component {
 								keyboardType={'decimal-pad'}
 								rightView={()=>
 									<TouchableOpacity onPress={()=> this.sendAll()}>
-									<Text style={{color: 'blue'}}>{strings('send.button_send_all')}</Text>
+									<Text style={{color: linkButtonColor}}>{strings('send.button_send_all')}</Text>
 									</TouchableOpacity>}
 								unit={'AION'}
 
@@ -122,7 +123,7 @@ class Send extends Component {
 								showAdvanced: !this.state.showAdvanced,
 							})
 						}}>
-							<Text style={{color:'blue', marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+							<Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
 						</TouchableOpacity>
 
 

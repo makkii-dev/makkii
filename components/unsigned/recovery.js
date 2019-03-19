@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Image, View,Text,Keyboard, TouchableOpacity, Dimensions} from 'react-native';
 import {strings} from "../../locales/i18n";
-import {InputMultiLines, ActionButton, alert_ok} from '../common';
+import {InputMultiLines, ComponentButton, alert_ok} from '../common';
 import {validateMnemonic} from "../../libs/aion-hd-wallet";
 
 const {width,height} = Dimensions.get('window');
@@ -113,7 +113,7 @@ class Home extends Component {
                             }}
                         />
 					</View>
-					<ActionButton
+					<ComponentButton
 						title={strings('recovery.button_confirm')}
                         onPress={e=> {
                             if (!validateMnemonic(this.state.mnemonic)) {

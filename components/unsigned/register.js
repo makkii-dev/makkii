@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Alert, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
-import {ActionButton,PasswordInput, alert_ok} from '../common.js';
+import {ComponentButton,PasswordInput, alert_ok} from '../common.js';
 import {validatePassword, hashPassword, dbGet} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
@@ -77,7 +77,7 @@ class Home extends Component {
 						}}
 					/>
 					<View style={{marginTop: 40}}/>
-					<ActionButton
+					<ComponentButton
 						title={strings("register.button_register")}
 						onPress={e=>{
 							if (!validatePassword(this.state.password))

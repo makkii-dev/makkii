@@ -27,8 +27,10 @@ class About extends Component {
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,
+                width: width,
 				height: height,
 				alignItems:'center',
+				flex: 1,
 			}}>
 				<View style={{
 					marginBottom:40,
@@ -73,33 +75,41 @@ class About extends Component {
 						}}
 					/>
 				</View>
-				<View style={{marginBottom: 40}}>
-					<Text style={styles.center_text}>
+                <View style={{
+                	position: 'absolute',
+					bottom: 40,
+					alignItems: 'center'
+				}}>
+					<Text style={{marginBottom: 40}}>
 						Powered by Chaion
 					</Text>
-				</View>
-				<View>
-					<TouchableOpacity onPress={() => {
-						this.props.navigation.navigate('simple_webview', {
-							title: strings('terms_service.title'),
-							initialUrl: 'http://45.118.132.89/terms_services.html',
-						});
+                    <View style={{
+                    	flexDirection: 'row',
+						justifyContent: 'space-between',
+						marginBottom: 10,
 					}}>
-                        <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
-					</TouchableOpacity>
-					<Text style={styles.center_text}>
-						{strings('about.label_and')}
-					</Text>
-					<TouchableOpacity onPress={() => {
-						this.props.navigation.navigate("simple_webview", {
-                            title: strings('privacy_policy.title'),
-							initialUrl: 'http://45.118.132.89/privacy_policy.html',
-						});
-					}}>
-                        <Text style={{...styles.center_text, color: linkButtonColor}}>
-                             {strings('about.policy_label')}
+                        <TouchableOpacity onPress={() => {
+                            this.props.navigation.navigate('simple_webview', {
+                                title: strings('terms_service.title'),
+                                initialUrl: 'http://45.118.132.89/terms_services.html',
+                            });
+                        }}>
+                            <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
+                        </TouchableOpacity>
+                        <Text style={styles.center_text}>
+                            {strings('about.label_and')}
                         </Text>
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => {
+                            this.props.navigation.navigate("simple_webview", {
+                                title: strings('privacy_policy.title'),
+                                initialUrl: 'http://45.118.132.89/privacy_policy.html',
+                            });
+                        }}>
+                            <Text style={{...styles.center_text, color: linkButtonColor}}>
+                                 {strings('about.policy_label')}
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 					<Text style={styles.center_text}>
 						{strings('about.copyright_label')}
 					</Text>

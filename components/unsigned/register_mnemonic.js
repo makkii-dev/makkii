@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Clipboard, Dimensions, NativeModules, Platform, NativeEventEmitter } from 'react-native';
-import { ActionButton, InputMultiLines } from '../common.js';
+import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
 import styles from '../styles.js';
@@ -79,7 +79,7 @@ class Mnemonic extends Component {
                         }}
                     />
 				</View>
-                <ActionButton
+                <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_copy')}
                     onPress={e=>{
                         Clipboard.setString(this.props.user.mnemonic);
@@ -87,7 +87,7 @@ class Mnemonic extends Component {
                     }}
                 />
 				<View style={{marginBottom: 20}} />
-                <ActionButton
+                <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_done')}
                     onPress={e=>{
                         this.props.navigation.navigate('signed_vault');

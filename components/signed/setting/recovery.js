@@ -11,7 +11,7 @@ import screenshotHelper from 'react-native-screenshot-helper';
 import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-root-toast';
 
-import {InputMultiLines, ActionButton} from '../../common.js';
+import {InputMultiLines, ComponentButton} from '../../common.js';
 import styles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
@@ -91,7 +91,7 @@ class Recovery extends Component {
 						value={this.props.user.mnemonic}
 					/>
 				</View>
-                <ActionButton
+                <ComponentButton
                     title={strings('copy_button')}
                     onPress={e => {
                         Clipboard.setString(this.props.user.mnemonic);

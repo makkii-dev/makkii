@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Dimensions, Keyboard,TouchableOpacity,View, Alert} from 'react-native';
-import {PasswordInputWithTitle, ActionButton, alert_ok } from '../common.js';
+import {PasswordInputWithTitle, ComponentButton, alert_ok } from '../common.js';
 import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
@@ -68,7 +68,7 @@ class Password extends Component {
 						}}
                     />
 				</View>
-				<ActionButton
+				<ComponentButton
 					title={strings('recovery_password.button_reset')}
 					onPress={e=>{
 						if (!validatePassword(this.state.password)) {

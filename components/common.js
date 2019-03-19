@@ -5,27 +5,6 @@ import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
 import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable} from './style_util';
 const {width,height} = Dimensions.get('window');
-class ComponentButton extends Component{
-	render(){
-		return (
-			<TouchableOpacity onPress={this.props.onPress}>
-			    <Text style={{
-			    	backgroundColor: '#246ffa',
-			    	color: 'white',
-			    	paddingTop: 10,
-			    	paddingBottom: 10,
-			    	borderRadius: 5,
-			    	width: '100%',
-			    	textAlign: 'center',
-			    	fontWeight: 'bold',
-			    	fontSize: 18,
-			    }}>
-			   		{this.props.title}
-			    </Text>
-			</TouchableOpacity >
-		);
-	}
-}
 
 class ComponentTabBar extends Component{
 	static defaultProps={
@@ -205,7 +184,7 @@ class SubTextInput extends Component{
 	};
 	render(){
 		return(
-			<View style={{justifyContent:'center', alignItems:'center',width:width-100, flex:1, marginVertical: 10}}>
+			<View style={{justifyContent:'flex-start', alignItems:'center',width:width-100, flex:1, marginVertical: 10}}>
 				<View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'flex-start', height:20,flex:1}}>
 					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000', flex:1}}>{this.props.title}</Text>
 					{
@@ -264,7 +243,7 @@ class RightActionButton extends Component {
 }
 
 
-class ActionButton extends Component{
+class ComponentButton extends Component{
 	render(){
 		return (
 			<TouchableOpacity onPress={this.props.onPress}>
@@ -469,7 +448,6 @@ module.exports = {
 	PasswordInputWithTitle,
 	ImportListfooter,
 	TransactionItemCell,
-	ActionButton,
 	RightActionButton,
 	SubTextInput,
 	alert_ok,

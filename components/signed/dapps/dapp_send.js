@@ -18,6 +18,7 @@ import Toast from "react-native-root-toast";
 import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from "../../../utils";
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
+import {linkButtonColor} from '../../style_util';
 const {width,height} = Dimensions.get('window');
 class DappSend extends React.Component{
     static navigationOptions = ({ navigation }) => ({
@@ -219,7 +220,7 @@ class DappSend extends React.Component{
                             showAdvanced: !this.state.showAdvanced,
                         })
                     }}>
-                        <Text style={{color:'blue', marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+                        <Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
                     </TouchableOpacity>
 
 

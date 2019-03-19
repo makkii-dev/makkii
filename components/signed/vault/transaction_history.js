@@ -115,10 +115,10 @@ class TransactionHistory extends React.Component {
                     });
                 }}
             >
-                <View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderColor:'gray', borderWidth:1/PixelRatio.get(), borderRadius:10,
-                    width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',paddingHorizontal:5,paddingVertical:10}}>
+                <View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+                    width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}>
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
-                        <Text>{timestamp.substring(0,timestamp.length-2)} <Text style={{color:'blue'}}>{timestamp.substring(timestamp.length-2)}</Text></Text>
+                        <Text>{timestamp}</Text>
                         <Text>{transaction.status}</Text>
                     </View>
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>

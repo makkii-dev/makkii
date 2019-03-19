@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView, Dimensions, PixelRatio} from 'react-native';
 import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
+import {linkButtonColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 
 class Transaction extends Component {
@@ -38,9 +39,9 @@ class Transaction extends Component {
 			<ScrollView style={{backgroundColor:'#fff',height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:10}}>
 					<View style={{flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10,shadowColor:'#eee',shadowOffset:{width:10,height:10},
-						elevation:5, borderWidth:1/PixelRatio.get(),borderColor:'#eee', borderRadius: 10}}>
+						elevation:3/*borderWidth:1/PixelRatio.get(),borderColor:'#eee'*/, borderRadius: 10}}>
 						<TransactionItemCell
-							style={{height:120, marginTop:20}}
+							style={{height:100, marginTop:20}}
 							title={title1}
 							value={value1}
 							valueTextAlign={'left'}
@@ -48,7 +49,7 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:80}}
 							title={strings('transaction_detail.timestamp_label')}
-							value={<Text>{timestamp.substring(0,timestamp.length-2)+' '}<Text style={{fontWeight: 'bold'}}>{timestamp.substring(timestamp.length-2)}</Text></Text>}
+							value={timestamp}
 							valueTextAlign={'left'}
 						/>
 						<TransactionItemCell
@@ -87,7 +88,7 @@ class Transaction extends Component {
 						<TouchableOpacity
 							onPress={()=>this.onViewInExplorer()}
 						>
-							<Text style={{color:'blue'}}>{strings('transaction_detail.viewInExplorer_button')}</Text>
+							<Text style={{color: linkButtonColor}}>{strings('transaction_detail.viewInExplorer_button')}</Text>
 						</TouchableOpacity>
 					</View>
 				</View>

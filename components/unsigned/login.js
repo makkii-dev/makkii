@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground} from 'react-native';
 
-import {ComponentLogo,PasswordInput, ActionButton, alert_ok} from '../common.js';
+import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {accounts as accounts_action} from '../../actions/accounts';
@@ -80,7 +80,7 @@ class Login extends Component {
                                 }}
                             />
                             <View style={{marginTop: 40}}/>
-                            <ActionButton
+                            <ComponentButton
                                 onPress={e => {
                                     dbGet('user')
                                         .then(json=>{
