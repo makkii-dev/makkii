@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Alert, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Linking, Keyboard, PixelRatio} from 'react-native';
+import {
+	Alert,
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	ScrollView,
+	Dimensions,
+	StyleSheet,
+	Linking,
+	Keyboard,
+	PixelRatio,
+} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -11,6 +23,7 @@ import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
 import {linkButtonColor} from '../../style_util';
+
 
 const {width, height} = Dimensions.get('window');
 
@@ -79,87 +92,87 @@ class Send extends Component {
 	}
 	render(){
 		return (
-			<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
                 <View style={{flex:1}}>
-                    <ScrollView
-                        style={{width,height}}
-                        contentContainerStyle={{justifyContent: 'center'}}
-                        keyboardShouldPersistTaps='always'
-                    >
-						<View style={{...styles.containerView, marginTop:30}}>
-							<SubTextInput
-								title={strings('send.label_receiver')}
-								style={styles.text_input}
-								value={this.state.recipient}
-								multiline={true}
-								onChangeText={v=>this.setState({recipient:v})}
-								placeholder={strings('send.hint_recipient')}
-								rightView={()=>
-									<TouchableOpacity onPress={()=> this.scan()}>
-										<Image source={require('../../../assets/scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
-									</TouchableOpacity>}
-							/>
-
-							<SubTextInput
-								title={strings('send.label_amount')}
-								style={styles.text_input}
-								value={this.state.amount}
-								onChangeText={v=>this.setState({amount:v})}
-								keyboardType={'decimal-pad'}
-								rightView={()=>
-									<TouchableOpacity onPress={()=> this.sendAll()}>
-									<Text style={{color: linkButtonColor}}>{strings('send.button_send_all')}</Text>
-									</TouchableOpacity>}
-								unit={'AION'}
-
-							/>
-
-						</View>
-
-						{/*advanced button*/}
-
-						<TouchableOpacity activeOpacity={1} onPress={()=>{
-							this.setState({
-								showAdvanced: !this.state.showAdvanced,
-							})
-						}}>
-							<Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
-						</TouchableOpacity>
-
-
-						{
-							this.state.showAdvanced?<View style={styles.containerView}>
+					<ScrollView
+						contentContainerStyle={{justifyContent: 'center'}}
+						keyboardShouldPersistTaps='always'
+					>
+							<TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
+							<View style={{...styles.containerView, marginTop:30}}>
 								<SubTextInput
-									title={strings('send.label_gas_price')}
+									title={strings('send.label_receiver')}
 									style={styles.text_input}
-									value={this.state.gasPrice}
-									onChangeText={v=>this.setState({gasPrice:v})}
-									keyboardType={'decimal-pad'}
-									unit={'AMP'}
+									value={this.state.recipient}
+									multiline={true}
+									onChangeText={v=>this.setState({recipient:v})}
+									placeholder={strings('send.hint_recipient')}
+									rightView={()=>
+										<TouchableOpacity onPress={()=> this.scan()}>
+											<Image source={require('../../../assets/scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
+										</TouchableOpacity>}
 								/>
-								<SubTextInput
-									title={strings('send.label_gas_limit')}
-									style={styles.text_input}
-									value={this.state.gasLimit}
-									onChangeText={v=>this.setState({gasLimit:v})}
-									keyboardType={'decimal-pad'}
-								/>
-							</View>:null
-						}
 
-						{/*send button*/}
-						<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
-							<ComponentButton title={strings('send_button')}
-											 onPress={this.onTransfer.bind(this)}
-							/>
-						</View>
+								<SubTextInput
+									title={strings('send.label_amount')}
+									style={styles.text_input}
+									value={this.state.amount}
+									onChangeText={v=>this.setState({amount:v})}
+									keyboardType={'decimal-pad'}
+									rightView={()=>
+										<TouchableOpacity onPress={()=> this.sendAll()}>
+											<Text style={{color: linkButtonColor}}>{strings('send.button_send_all')}</Text>
+										</TouchableOpacity>}
+									unit={'AION'}
+
+								/>
+
+							</View>
+
+							{/*advanced button*/}
+
+							<TouchableOpacity activeOpacity={1} onPress={()=>{
+								this.setState({
+									showAdvanced: !this.state.showAdvanced,
+								})
+							}}>
+								<Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+							</TouchableOpacity>
+
+
+							{
+								this.state.showAdvanced?<View style={styles.containerView}>
+									<SubTextInput
+										title={strings('send.label_gas_price')}
+										style={styles.text_input}
+										value={this.state.gasPrice}
+										onChangeText={v=>this.setState({gasPrice:v})}
+										keyboardType={'decimal-pad'}
+										unit={'AMP'}
+									/>
+									<SubTextInput
+										title={strings('send.label_gas_limit')}
+										style={styles.text_input}
+										value={this.state.gasLimit}
+										onChangeText={v=>this.setState({gasLimit:v})}
+										keyboardType={'decimal-pad'}
+									/>
+								</View>:null
+							}
+
+							{/*send button*/}
+							<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+								<ComponentButton title={strings('send_button')}
+												 onPress={this.onTransfer.bind(this)}
+								/>
+							</View>
+							</TouchableOpacity>
+
                     </ScrollView>
 
                     <Loading ref={element => {
                         this.loadingView = element;
                     }}/>
                 </View>
-			</TouchableOpacity>
 		)
 	}
 

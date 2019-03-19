@@ -172,90 +172,91 @@ class DappSend extends React.Component{
 
     render(){
         return (
-            <TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
-            <View style={{flex:1,justifyContent:'center'}}>
+            <View style={{flex:1}}>
                 <ScrollView
-                    style={{width,height}}
                     contentContainerStyle={{justifyContent: 'center'}}
                 >
-                    <View style={{...styles.containerView, marginTop:30}}>
-                        <SubTextInput
-                            title={strings('send.label_sender')}
-                            style={styles.text_input}
-                            value={this.state.from}
-                            multiline={true}
-                            editable={false}
-                        />
+                    <TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
 
-                        <SubTextInput
-                            title={strings('send.label_receiver')}
-                            style={styles.text_input}
-                            value={this.state.to}
-                            multiline={true}
-                            editable={false}
-                            placeholder={strings('send.hint_recipient')}
-                        />
+                        <View style={{...styles.containerView, marginTop:30}}>
+                            <SubTextInput
+                                title={strings('send.label_sender')}
+                                style={styles.text_input}
+                                value={this.state.from}
+                                multiline={true}
+                                editable={false}
+                            />
 
-                        <SubTextInput
-                            title={strings('send.label_amount')}
-                            style={styles.text_input}
-                            value={this.state.amount}
-                            editable={false}
-                            unit={'AION'}
-                        />
-                        <SubTextInput
-                            title={strings('send.label_data')}
-                            style={styles.text_input}
-                            value={this.state.data}
-                            multiline={true}
-                            editable={false}
-                        />
+                            <SubTextInput
+                                title={strings('send.label_receiver')}
+                                style={styles.text_input}
+                                value={this.state.to}
+                                multiline={true}
+                                editable={false}
+                                placeholder={strings('send.hint_recipient')}
+                            />
 
-                    </View>
+                            <SubTextInput
+                                title={strings('send.label_amount')}
+                                style={styles.text_input}
+                                value={this.state.amount}
+                                editable={false}
+                                unit={'AION'}
+                            />
+                            <SubTextInput
+                                title={strings('send.label_data')}
+                                style={styles.text_input}
+                                value={this.state.data}
+                                multiline={true}
+                                editable={false}
+                            />
 
-                    {/*advanced button*/}
+                        </View>
 
-                    <TouchableOpacity activeOpacity={1} onPress={()=>{
-                        this.setState({
-                            showAdvanced: !this.state.showAdvanced,
-                        })
-                    }}>
-                        <Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+                        {/*advanced button*/}
+
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{
+                            this.setState({
+                                showAdvanced: !this.state.showAdvanced,
+                            })
+                        }}>
+                            <Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+                        </TouchableOpacity>
+
+
+                        {
+                            this.state.showAdvanced?<View style={styles.containerView}>
+                                <SubTextInput
+                                    title={strings('send.label_gas_price')}
+                                    style={styles.text_input}
+                                    value={this.state.gasPrice}
+                                    onChangeText={v=>this.setState({gasPrice:v})}
+                                    keyboardType={'decimal-pad'}
+                                    unit={'AMP'}
+                                />
+                                <SubTextInput
+                                    title={strings('send.label_gas_limit')}
+                                    style={styles.text_input}
+                                    value={this.state.gasLimit}
+                                    onChangeText={v=>this.setState({gasLimit:v})}
+                                    keyboardType={'decimal-pad'}
+                                />
+                            </View>:null
+                        }
+
+                        {/*send button*/}
+                        <View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+                            <ComponentButton title={strings('send_button')}
+                                             onPress={this.transfer.bind(this)}
+                            />
+                        </View>
                     </TouchableOpacity>
 
-
-                    {
-                        this.state.showAdvanced?<View style={styles.containerView}>
-                            <SubTextInput
-                                title={strings('send.label_gas_price')}
-                                style={styles.text_input}
-                                value={this.state.gasPrice}
-                                onChangeText={v=>this.setState({gasPrice:v})}
-                                keyboardType={'decimal-pad'}
-                                unit={'AMP'}
-                            />
-                            <SubTextInput
-                                title={strings('send.label_gas_limit')}
-                                style={styles.text_input}
-                                value={this.state.gasLimit}
-                                onChangeText={v=>this.setState({gasLimit:v})}
-                                keyboardType={'decimal-pad'}
-                            />
-                        </View>:null
-                    }
-
-                    {/*send button*/}
-                    <View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
-                        <ComponentButton title={strings('send_button')}
-                                         onPress={this.transfer.bind(this)}
-                        />
-                    </View>
                 </ScrollView>
                 <Loading ref={element => {
                     this.loadingView = element;
                 }}/>
             </View>
-            </TouchableOpacity>
         )
     }
 
