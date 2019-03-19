@@ -25,7 +25,7 @@ class DappSend extends React.Component{
         title: strings('send.title'),
         headerLeft:<View style={{marginLeft: 10}}>
             <TouchableOpacity onPress={()=>navigation.state.params.onGoback()}>
-                <Text>{strings('send.cancel')}</Text>
+                <Text style={{color:'#fff'}}>{strings('send.cancel')}</Text>
             </TouchableOpacity>
         </View>,
         headerRight:<View></View>
