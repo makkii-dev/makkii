@@ -79,7 +79,7 @@ class Home extends HomeComponent {
 				<View style={{
 					marginTop: 20,
 					width: width - 40,
-					borderRadius: 10,
+					borderRadius: 5,
 					backgroundColor: 'white',
 					elevation: 3,
 					paddingLeft: 10,

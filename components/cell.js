@@ -26,13 +26,9 @@ export default class AionCell extends Component {
                         left: 5,
                         resizeMode: 'contain'
                     }} />
-                    <View style={styles.cellItem}>
-                        <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
-                    </View>
-                    <View style={styles.cellItem}>
-                        <Image style={styles.icon}
-                               source={require('../assets/arrow_right.png')} />
-                    </View>
+                    <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
+                    <Image style={styles.icon}
+                           source={require('../assets/arrow_right.png')} />
                 </View>
             </TouchableOpacity>
         )
@@ -45,12 +41,9 @@ const styles = StyleSheet.create({
         color: 'black',
         fontWeight: 'normal',
     },
-    cellItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
     icon: {
+        position: 'absolute',
+        right: 0,
         width: 24,
         height: 24
     },
