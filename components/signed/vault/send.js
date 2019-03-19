@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Linking, Keyboard, PixelRatio} from 'react-native';
+import {Alert, View, Text, Image, TouchableOpacity, ScrollView, Dimensions, TextInput, StyleSheet, Linking, Keyboard, PixelRatio} from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
@@ -149,7 +149,7 @@ class Send extends Component {
 						{/*send button*/}
 						<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
 							<ComponentButton title={strings('send_button')}
-											 onPress={this.transfer.bind(this)}
+											 onPress={this.onTransfer.bind(this)}
 							/>
 						</View>
                     </ScrollView>
@@ -162,11 +162,26 @@ class Send extends Component {
 		)
 	}
 
-	transfer=() => {
-		console.log("transfer clicked.");
-		const {goBack} = this.props.navigation;
+	onTransfer=() => {
 		if (!this.validateFields()) return;
 
+		if (this.account.address == this.state.recipient) {
+			Alert.alert(
+				strings('alert_title_warning'),
+				strings('send.warning_send_to_itself'),
+				[
+					{text:strings('cancel_button'), onPress: ()=> {}},
+					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
+				],
+				{cancelable: false}
+				);
+		} else {
+			this.transfer();
+		}
+	}
+
+	transfer=() => {
+		const {goBack} = this.props.navigation;
 		let accountType = this.account.type;
 		let derivationIndex = this.account.derivationIndex;
 		let sender = this.account.address;

@@ -110,6 +110,7 @@
     "progress_sending_tx": "正在发送交易...",
     "toast_tx_sent": "交易已发送",
     "cancel": "取消",
+    "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？"
   },
   "transaction_detail": {
     "title": "交易详情",
