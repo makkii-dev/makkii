@@ -112,7 +112,8 @@
         "error_send_transaction": "Send transaction failed",
         "progress_sending_tx": "Sending transaction...",
         "toast_tx_sent": "Transaction is sent",
-        "cancel": "Cancel"
+        "cancel": "Cancel",
+        "warning_send_to_itself": "Sender and recipient are the same account, are you sure to continue?"
     },
     "transaction_detail": {
         "title": "TRANSACTION DETAIL",
