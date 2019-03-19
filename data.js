@@ -44,7 +44,7 @@ dapps.push({
 	uri: 'https://aion-roulette.netlify.com/',
 	author: 'KimCodeashian',
 	type:'dapp.type_game',
-	sreenShot: require('./assets/apps/app1/app1_sreenshot.png')
+	screenShot: require('./assets/apps/app1/app1_screenshot.png')
 });
 dapps.push({
 	name: 'dapp2',
@@ -53,7 +53,7 @@ dapps.push({
 	uri: 'http://www.baidu.com',
 	author: '',
 	type:'dapp.type_game',
-	sreenShot: require('./assets/apps/app1/app1_sreenshot.png')
+	screenShot: require('./assets/apps/app1/app1_screenshot.png')
 });
 
 export default data = {

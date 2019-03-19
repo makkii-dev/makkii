@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, Button, PixelRatio, TouchableOpacity, Dimensions} from 'react-native'
 import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
-import {fixedHeight, fixedWidth, mainColor} from "../../style_util";
+import {fixedHeight, fixedWidth, mainColor, mainBgColor} from "../../style_util";
 import {ComponentTabBar} from "../../common";
 import {HomeComponent} from "../HomeComponent";
 const {width} = Dimensions.get('window')
@@ -30,8 +30,8 @@ class Launch extends HomeComponent{
     }
     render(){
         return (
-            <View style={{flex:1, padding:10}}>
-                <View style={{...styles.shadow, flex:1,width:width-20, borderWidth: 1/PixelRatio.get(), borderColor: '#eee', marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
+            <View style={{flex:1, padding:10, backgroundColor:mainBgColor}}>
+                <View style={{...styles.shadow, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
                     <View style={{height:120,width:width-20, flexDirection:'row',paddingHorizontal:30}}>
                         <Image source={this.dapp.logo} style={{width:80,height:100, borderColor:'#eee', borderWidth:1,borderRadius:10}} resizeMode={'contain'}/>
                         <View style={{flex:1, justifyContent:'space-between', alignItems:'flex-start',marginLeft:20,paddingHorizontal:10}}>
@@ -54,10 +54,10 @@ class Launch extends HomeComponent{
                         </View>
                     </View>
                     <View style={{marginVertical:10,paddingLeft:20, width:width-20,alignItems:'flex-start'}}>
-                        <Text style={{color:'#33691e'}}>{strings('dapp.desc_label')+' :'}</Text>
+                        <Text>{strings('dapp.desc_label')+' :'}</Text>
                     </View>
-                    <View style={{flex:1, width:width-40,borderWidth:1, borderRadius:10, borderColor:'#33691e', padding:10}}>
-                        <Image source={this.dapp.sreenShot} style={{width:width-40, height:80}} resizeMode={'contain'}/>
+                    <View style={{flex:1, width:width-40,borderWidth:1, borderRadius:10, borderColor:'#33691e', padding:10, alignItems: 'center'}}>
+                        <Image source={this.dapp.screenShot} style={{width:width-40, height:80}} resizeMode={'contain'}/>
                         <Text style={{marginHorizontal:10, marginTop:20}}>{this.dapp.description}</Text>
                     </View>
                 </View>
@@ -92,7 +92,7 @@ export default connect(state => { return ({ dapps: state.dapps, setting: state.s
 const styles = StyleSheet.create({
     shadow:{
         shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
-        elevation:5,
+        elevation:3,
     },
     container: {
        flex: 1,
