@@ -73,8 +73,9 @@ class Recovery extends Component {
 				<View style={{
 					elevation: 3,
 					padding: 10,
-					borderRadius: 5,
-					height: 100,
+					height: 120,
+					borderTopLeftRadius:5,
+					borderTopRightRadius:5,
 					backgroundColor: 'white',
 					width: width - 40,
 					marginTop: 20,
@@ -82,13 +83,11 @@ class Recovery extends Component {
                     <InputMultiLines
 						style={{
 							borderWidth: 0,
-							fontSize: 18,
+							fontSize: 16,
 							fontWeight: 'normal',
 							textAlignVertical: 'top'
 						}}
 						editable={false}
-						borderRadius={5}
-						numberOfLines={3}
 						value={this.props.user.mnemonic}
 					/>
 				</View>
@@ -104,8 +103,8 @@ class Recovery extends Component {
 	}
 }
 
-export default connect(state => { 
-	return ({ 
-		user: state.user 
-	}); 
+export default connect(state => {
+	return ({
+		user: state.user
+	});
 })(Recovery);
