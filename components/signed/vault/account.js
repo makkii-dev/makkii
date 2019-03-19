@@ -57,7 +57,7 @@ class AccountNameComponent extends Component{
 	render(){
 		const {navigation, type} = this.props;
 		const accountImage = SwithType(type);
-		let style = {color:'#fff', width:140,textAlign:'center',includeFontPadding:false, textAlignVertical:'center', fontWeight: 'bold', fontSize:16};
+		let style = {color:'#fff', width:150,textAlign:'center',includeFontPadding:false, textAlignVertical:'center', fontWeight: 'bold', fontSize:16};
 		this.state.editable&&(style={...style, borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'#fff'});
 		return (
 			<View style={{...this.props.style, flexDirection:'row'}}>
@@ -274,7 +274,7 @@ class Account extends Component {
 		const {address, type, name ,transactions} = this.account;
 		const transactionsList =  Object.values(transactions).slice(0,5);
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
-		const accountBalanceTextFontSize = 32 - (accountBalanceText.length-10);
+		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
 		return (
 			<View style={{flex:1}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
