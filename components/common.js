@@ -54,7 +54,7 @@ class ComponentTabBar extends Component{
 					<View
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
-						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} />
+						<Image source={require('../assets/tab_wallet.png')} style={{width:24, height: 24, marginTop:2, opacity: 0.6, tintColor: wallet_tint_color}} resizeMode={'contain'}/>
 						<Text style={{fontSize: 8, color:wallet_tint_color }}>{strings('menuRef.title_wallet')}</Text>
 					</View>
 				</TouchableOpacity>
@@ -69,7 +69,7 @@ class ComponentTabBar extends Component{
 					<View
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
-						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} />
+						<Image source={require('../assets/tab_app.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: dapp_tint_color}} resizeMode={'contain'}/>
 						<Text style={{fontSize: 8, color:dapp_tint_color }}>{strings('menuRef.title_dapps')}</Text>
 					</View>
 				</TouchableOpacity>
@@ -84,7 +84,7 @@ class ComponentTabBar extends Component{
 					<View
 						style={{height:50,justifyContent:'center',alignItems:'center'}}
 					>
-						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} />
+						<Image source={require('../assets/tab_settings.png')} style={{width: 24, height: 24, marginTop:2,opacity: 0.6, tintColor: settings_tint_color}} resizeMode={'contain'}/>
 						<Text style={{fontSize: 8, color:settings_tint_color }}>{strings('menuRef.title_settings')}</Text>
 					</View>
 				</TouchableOpacity>
