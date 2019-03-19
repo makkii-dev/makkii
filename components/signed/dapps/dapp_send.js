@@ -27,7 +27,8 @@ class DappSend extends React.Component{
             <TouchableOpacity onPress={()=>navigation.state.params.onGoback()}>
                 <Text>{strings('send.cancel')}</Text>
             </TouchableOpacity>
-        </View>
+        </View>,
+        headerRight:<View></View>
     });
 
     onGoback=()=>{
