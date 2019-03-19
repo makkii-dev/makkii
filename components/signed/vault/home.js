@@ -32,7 +32,7 @@ import {SORT, FILTER, MENU} from "./home_contanst";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
-import {fixedWidth, fixedHeight, mainColor} from "../../style_util";
+import {fixedWidth, fixedHeight, mainColor, linkButtonColor} from "../../style_util";
 import PropTypes from 'prop-types';
 const {width, } = Dimensions.get('window');
 
@@ -110,16 +110,26 @@ class HomeCenterComponent extends  React.Component{
 	isShow=()=>this.state.showSort||this.state.showFilter;
 
 	render(){
-		const sortTintColor = this.state.showSort?'blue':'black';
-		const filterTintColor = this.state.showFilter?'blue':'black';
+		const sortTintColor = this.state.showSort?linkButtonColor:'black';
+		const filterTintColor = this.state.showFilter?linkButtonColor:'black';
 		return (
 			<View style={this.props.style}>
-				<View style={{flexDirection:'row', width:width-30,paddingHorizontal:20, alignItems:'center', justifyContent: 'space-between'}}>
+				<View style={{flexDirection:'row', width:width-80, alignItems:'center', justifyContent: 'space-between'}}>
 					<View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();	Keyboard.dismiss();this.setState({showFilter: !this.state.showFilter,showSort:false})}}>
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{
+                            this.props.onTouch();
+                            Keyboard.dismiss();
+                            this.state.showFilter&&this.props.closeFilter();
+                            this.setState({showFilter: !this.state.showFilter,showSort:false});
+                        }}>
                             <Image source={require('../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
                         </TouchableOpacity>
-                        <TouchableOpacity activeOpacity={1} onPress={()=>{this.props.onTouch();Keyboard.dismiss();this.setState({showSort: !this.state.showSort, showFilter:false})}}>
+                        <TouchableOpacity activeOpacity={1} onPress={()=>{
+                            this.props.onTouch();
+                            Keyboard.dismiss();
+                            this.state.showSort&&this.props.closeSort();
+                            this.setState({showSort: !this.state.showSort, showFilter:false});
+                        }}>
                             <Image source={require('../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
                         </TouchableOpacity>
 					</View>
@@ -148,11 +158,11 @@ class HomeCenterComponent extends  React.Component{
 								this.props.closeFilter(item.title);
 								this.closeAll();
 							}}>
-								<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center',paddingLeft:20}}>
+								<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center', marginVertical: 10}}>
 									{item.image ?
-										<Image source={item.image} style={{width:20,height:20}}/> : null}
+										<Image source={item.image} style={{width:20,height:20}} resizeMode={'contain'}/> : null}
 									<Text numberOfLines={1}
-										  style={{marginLeft:40,color:item.title===this.props.currentFilter?'blue':'black'}}>{strings(item.title)}</Text>
+										  style={{marginLeft:40,color:item.title===this.props.currentFilter?linkButtonColor:'black'}}>{strings(item.title)}</Text>
 								</View>
 							</TouchableOpacity>
 
@@ -171,11 +181,11 @@ class HomeCenterComponent extends  React.Component{
 								this.props.closeSort(item.title);
 								this.closeAll();
 							}}>
-								<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center',paddingLeft:20}}>
+								<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center', marginVertical: 10}}>
 									{item.image ?
-										<Image source={item.image} style={{width:20,height:20}}/> : null}
+										<Image source={item.image} style={{width:20,height:20}} resizeMode={'contain'}/> : null}
 									<Text numberOfLines={1}
-										  style={{marginLeft:40,color:item.title===this.props.currentSort?'blue':'black'}}>{strings(item.title)}</Text>
+										  style={{marginLeft:40,color:item.title===this.props.currentSort?linkButtonColor:'black'}}>{strings(item.title)}</Text>
 								</View>
 							</TouchableOpacity>
 
@@ -587,7 +597,7 @@ class Home extends HomeComponent {
 					<HomeCenterComponent
 						ref={ref=>this.HomeCenterRef=ref}
 						style={{...styles.shadow,justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
-							width:fixedWidth(970), position:'absolute', top: fixedHeight(466), right: fixedWidth(55), paddingVertical:20
+							width:width - 40, position:'absolute', top: fixedHeight(500), right: 20, padding:20
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}
@@ -640,13 +650,13 @@ class Home extends HomeComponent {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerPosition={{position:'absolute', top:80,right:10,width:150,height:180}}
-							imageStyle={{width: 20, height: 20, marginLeft:10,marginRight:20, resizeMode:'contain'}}
+							containerPosition={{position:'absolute', top:80,right:10,width:150}}
+							imageStyle={{width: 20, height: 20, marginRight:20, resizeMode:'contain'}}
 							fontStyle={{fontSize:12, color:'#000'}}
-							itemStyle={{width:150,height:30,flexDirection:'row',justifyContent:'flex-start', alignItems:'center'}}
+							itemStyle={{width:150,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
 							containerBackgroundColor={'#fff'}
 							ItemSeparatorComponent={()=><View style={styles.divider}/>}
-							ListHeaderComponent={()=><View style={{width:180,height:40, padding:10}}>
+							ListHeaderComponent={()=><View style={{width:180}}>
 								<Text style={{fontSize:16}}>{strings('wallet.title_import_from')}</Text>
 							</View>}
 						/>
@@ -698,9 +708,8 @@ const styles = StyleSheet.create({
 		width: fixedHeight(186),
 	},
 	divider: {
-		marginHorizontal: 10,
 		height: 1 / PixelRatio.get(),
-		backgroundColor: '#eee'
+		backgroundColor: '#dfdfdf'
 	},
 	shadow:{
 		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),

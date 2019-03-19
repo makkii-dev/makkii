@@ -67,7 +67,7 @@ export class PopWindow extends React.Component {
                             </View>
                             <FlatList
                                 {...this.props}
-                                style={{backgroundColor:this.props.containerBackgroundColor, borderRadius:5}}
+                                style={{backgroundColor:this.props.containerBackgroundColor, borderRadius:5, padding: 20}}
                                 data={this.props.data}
                                 renderItem={({item}) =>
                                     <TouchableOpacity activeOpacity={0.3} onPress={() => {
