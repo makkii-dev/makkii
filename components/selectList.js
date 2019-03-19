@@ -86,9 +86,6 @@ export default class SelectList extends  React.Component {
         )
     };
     render(){
-        const HeaderComponent = this.props.ListHeaderComponent?this.props.ListHeaderComponent:()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>;
-        const FooterComponent = this.props.ListFooterComponent?this.props.ListFooterComponent:()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>;
-
         return(
             <FlatList
                 {...this.props}
@@ -96,10 +93,8 @@ export default class SelectList extends  React.Component {
                 renderItem={this._renderItem}
                 keyExtractor={(item,index)=>index.toString()}
                 ItemSeparatorComponent={()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>}
-                ListFooterComponent={FooterComponent}
-                ListHeaderComponent={HeaderComponent}
             />
-
+// <View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>
         )
     }
 
