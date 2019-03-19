@@ -52,6 +52,7 @@ class WebViewComponent extends Component {
                     cacheEnabled={true}
                     renderLoading={()=>this.renderLoading()}
                     startInLoadingState={true}
+                    onLoadStart={()=>this.handleProcessBar(true)}
                     onLoadProgress={(e)=>{
                         this.setState({WebViewProgress: e.nativeEvent.progress});
                     }}

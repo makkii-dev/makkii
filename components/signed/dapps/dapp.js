@@ -218,6 +218,7 @@ class Dapp extends Component {
                         renderLoading={()=>this.renderLoading()}
                         injectedJavaScriptBeforeLoad={this.state.inject}
                         startInLoadingState={true}
+                        onLoadStart={()=>this.handleProcessBar(true)}
                         onLoadProgress={(e)=>{
                             this.setState({WebViewProgress: e.nativeEvent.progress});
                         }}

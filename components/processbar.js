@@ -37,10 +37,8 @@ class ProgressBar extends React.Component{
     }
 
     componentWillReceiveProps(props){
-        console.log('111', props.progress);
         if(props.progress !== this.state.progress){
-            if(props.progress>=0&&props.progress<=1){
-                console.log('++++', props.progress);
+            if(props.progress>=this.state.progress&&props.progress<=1){
                 this.setState({progress:props.progress},()=>{
                     if(this.state.progress ===1){
                         setTimeout(()=>this.props.onComplete(),500);
