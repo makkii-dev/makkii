@@ -28,7 +28,7 @@ import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
 import GeneralStatusBar from "../../GeneralStatusBar";
-import {SORT, FILTER, MENU} from "./constant";
+import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
