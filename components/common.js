@@ -29,7 +29,7 @@ class ComponentButton extends Component{
 
 class ComponentTabBar extends Component{
 	static defaultProps={
-		activeTintColor: '#6c7476',
+		activeTintColor: mainColor,
 		inactiveTintColor: '#adb0b5',
 	};
 	static propTypes= {
@@ -45,7 +45,9 @@ class ComponentTabBar extends Component{
 			<View style={{...this.props.style}}>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:80,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 0');
 						this.props.onPress[0]()
 					}}
 				>
@@ -58,7 +60,9 @@ class ComponentTabBar extends Component{
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:60,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 1');
 						this.props.onPress[1]()
 					}}
 				>
@@ -71,7 +75,9 @@ class ComponentTabBar extends Component{
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:80,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 2');
 						this.props.onPress[2]()
 					}}
 				>
@@ -167,9 +173,7 @@ class ImportListfooter extends React.PureComponent {
 			return (
 				<View style={{height:30,alignItems:'center',justifyContent:'flex-start',}}>
 					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
-					<Text style={{color:'#999999',fontSize:14,marginTop:5,marginBottom:5,}}>
-						No More Accounts
-					</Text>
+					<Text style={{color:'#000',fontSize:14, marginVertical: 5}}>{strings('no_more_data_label')}</Text>
 				</View>
 			);
 		} else if(this.props.footerState === 2) {
@@ -178,7 +182,7 @@ class ImportListfooter extends React.PureComponent {
 					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
 					<View style={styles.ImportList.footer}>
 						<ActivityIndicator style={{paddingRight: 10}}/>
-					<Text>Fetching accounts</Text>
+					<Text style={{color:'#000',fontSize:14}}>{strings('fetch_data_label')}</Text>
 				</View>
 				</View>
 			);
@@ -227,9 +231,9 @@ class TransactionItemCell extends React.PureComponent {
 	};
 	render(){
 		return(
-			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'space-between',alignItems:'flex-start'}}>
-				<Text style={{flex:3,fontSize:16, fontWeight:'bold', color:'#000'}}>{this.props.title}</Text>
-				<Text style={{flex:5,width:'100%',borderBottomColor:'#000',borderBottomWidth: 1/PixelRatio.get(),
+			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'center',alignItems:'flex-start'}}>
+				<Text style={{fontSize:16, fontWeight:'bold', color:'#000'}}>{this.props.title}</Text>
+				<Text style={{flex:1,width:'100%',borderBottomColor:'#000',borderBottomWidth: 1/PixelRatio.get(),
 					textAlign:this.props.valueTextAlign,textAlignVertical: 'bottom'}}>{this.props.value}</Text>
 			</View>
 		)

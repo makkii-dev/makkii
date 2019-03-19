@@ -158,7 +158,7 @@ class Home extends HomeComponent {
 					active={'settings'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_dapps_launch');},
 						()=>{this.props.navigation.navigate('signed_setting');},
 					]}
 				/>

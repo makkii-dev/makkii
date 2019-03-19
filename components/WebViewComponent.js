@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View} from 'react-native';
-import Web3WebView from 'react-native-web3-webview';
+import {WebView} from "react-native-webview";
 
 class WebViewComponent extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -24,7 +24,7 @@ class WebViewComponent extends Component {
     render(){
         return (
             <View style={{flex: 1}}>
-                <Web3WebView
+                <WebView
                     source={{uri: this.initialUrl}}
                     cacheEnabled={true}
                 />

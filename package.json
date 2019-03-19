@@ -29,7 +29,7 @@
     "react-native-root-toast": "^3.0.2",
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-svg": "^9.0.6",
-    "react-native-web3-webview": "https://github.com/Chengchcc/react-native-web3-webview.git",
+    "react-native-webview": "https://github.com/paulxuca/react-native-webview#upstream-injectjavascriptbeforedocumentload",
     "react-navigation": "^3.0.9",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",

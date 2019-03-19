@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {View} from 'react-native';
 import {strings} from '../../../locales/i18n';
-import Web3WebView from 'react-native-web3-webview';
+import {WebView} from "react-native-webview";
 import {connect} from 'react-redux';
 
 
@@ -22,7 +22,7 @@ class PrivacyPolicy extends Component {
 	render(){
 		return (
 			<View style={{flex: 1}}>
-				<Web3WebView
+				<WebView
 					source={{uri: 'http://45.118.132.89/privacy_policy.html'}}
 					cacheEnabled={true}
 				/>

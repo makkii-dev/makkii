@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, DeviceEventEmitter, ActivityIndicator, TouchableOpacity, Image, Platform} from 'react-native';
-import Web3WebView from 'react-native-web3-webview';
+import {
+    View,
+    DeviceEventEmitter,
+    ActivityIndicator,
+    TouchableOpacity,
+    Image,
+    Platform,
+    Text,
+    BackHandler
+} from 'react-native';
+import {WebView} from "react-native-webview";
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
@@ -17,8 +26,30 @@ class Dapp extends Component {
             }}>
                 <Image source={require("../../../assets/refresh.png")} style={{height:24,width:24,tintColor:'#fff'}} resizeMode={'contain'}/>
             </TouchableOpacity>
+        ),
+        headerLeft:(
+            <TouchableOpacity onPress={()=>{navigation.state.params.GoBack&&navigation.state.params.GoBack()}} style={{
+                width: 48,
+                height: 48,
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}>
+                <Image source={require('../../../assets/arrow_back.png')} style={{
+                    tintColor: 'white',
+                    width: 20,
+                    height: 20,
+                }} />
+            </TouchableOpacity>
         )
     });
+
+    onGoBack = ()=>{
+        if(this.canGoBack) {
+            this.webViewRef.goBack();
+        }else{
+            this.props.navigation.goBack();
+        }
+    };
 
 
     constructor(props) {
@@ -41,7 +72,10 @@ class Dapp extends Component {
             inject:'',
             loading:false,
         };
-        this.props.navigation.setParams({Reload:()=>this.onReload()})
+        this.props.navigation.setParams({
+            Reload:()=>this.onReload(),
+            GoBack: ()=>this.onGoBack(),
+        })
     }
     getInitState=()=>{
         console.log('getInitState');
@@ -100,16 +134,21 @@ class Dapp extends Component {
 
     componentWillUnmount(): void {
         this.listeners.forEach(d=>d.remove());
+        this.backHandler.remove();
     }
 
-    componentDidMount() {
+    componentWillMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoBack(); // works best when the goBack is async
+            return true;
+        });
         console.log('[route]' + this.props.navigation.state.routeName);
         if (Platform.OS==='android') {
             RNFS.readFileAssets('contentScript.bundle.js', 'utf8').then((content) => {
                 this.setState({
                     inject: content
                 }, () => {
-                    this.invoke = createInvoke(() => this.webViewRef);
+                    this.invoke = createInvoke(this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
                         .define('eth_signTransaction', this.EthsignTransaction)
                         .define('eth_sendTransaction', this.EthsendTransaction)
@@ -164,13 +203,16 @@ class Dapp extends Component {
         }else{
             return (
                 <View style={{flex: 1}}>
-                    <Web3WebView
+                    <WebView
                         ref={ref=>this.webViewRef=ref}
                         source={{uri: this.uri}}
                         cacheEnabled={false}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
-                        injectedOnStartLoadingJavaScript={this.state.inject}
+                        injectedJavaScriptBeforeLoad={this.state.inject}
+                        onNavigationStateChange={(navState)=>{
+                            this.canGoBack = navState.canGoBack;
+                        }}
                         onLoadEnd={()=>{
                             setTimeout(() => {
                                 this.updateCurrentNetwork && this.updateCurrentNetwork(this.props.setting.endpoint_wallet);

@@ -52,7 +52,7 @@ class Home extends HomeComponent {
 											paddingLeft: 60,
 										}}>
 										<Image
-											source={{uri: v.logo}}
+											source={v.logo}
 											style={{
 												width: 30,
 												height: 30,
@@ -91,7 +91,7 @@ class Home extends HomeComponent {
 					active={'dapp'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps');},
+						()=>{this.props.navigation.navigate('signed_dapps_launch');},
 						()=>{this.props.navigation.navigate('signed_setting');},
 					]}
 				/>

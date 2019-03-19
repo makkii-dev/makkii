@@ -5,7 +5,7 @@ import { createMessager } from './messager/index'
 const isBrowser = typeof window !== 'undefined'
 
 const { bind, define, listener, ready, fn, addEventListener, removeEventListener, isConnect } = createMessager(
-    (data: any) => { isBrowser && window.postMessageToNative && window.postMessageToNative(JSON.stringify(data)) }
+    (data: any) => { isBrowser && window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(data)) }
 );
 
 if (isBrowser) {
@@ -28,11 +28,8 @@ if (isBrowser) {
         };
         Object.defineProperty(window, 'originalPostMessage', descriptor)
     }
-    document.addEventListener('message', e => {
-        let data = JSON.parse(e.data);
-        if( typeof data === 'string')
-            data = JSON.parse(data);
-        listener(data);
+    document.addEventListener('FROM_RN', e => {
+        listener(e.data);
     })
 
 }

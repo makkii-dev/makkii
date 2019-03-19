@@ -38,7 +38,6 @@ class Send extends Component {
 		};
         this.addr=this.props.navigation.state.params.address;
 		this.account = this.props.accounts[this.addr];
-		console.log("selected account is: " + JSON.stringify(this.props.accounts[this.addr]));
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);

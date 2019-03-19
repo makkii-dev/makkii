@@ -37,18 +37,24 @@ for(let i = 0; i < 20; i++){
 
 let dapps = [];
 dapps.push({
-	name: 'dapp1',
-	logo: 'https://i0.wp.com/www.blockchaindk.com/wp-content/uploads/2017/11/Aion-Logo.png?fit=400%2C400&ssl=1',
-	description: 'desc1',
+	name: 'Pet Roulette',
+	logo: require('./assets/apps/app1/app1_logo.png'),
+	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
 	// uri: 'http://192.168.50.83:8082'
-	uri: 'https://aion-roulette.netlify.com/'
+	uri: 'https://aion-roulette.netlify.com/',
+	author: 'KimCodeashian',
+	type:'dapp.type_game',
+	sreenShot: require('./assets/apps/app1/app1_sreenshot.png')
 });
 dapps.push({
 	name: 'dapp2',
-	logo: 'https://www.macupdate.com/images/icons256/59967.png',
+	logo: {uri:'https://www.macupdate.com/images/icons256/59967.png'},
 	description: 'desc2',
-	uri: 'http://192.168.50.83:8080'
-});;
+	uri: 'http://www.baidu.com',
+	author: '',
+	type:'dapp.type_game',
+	sreenShot: require('./assets/apps/app1/app1_sreenshot.png')
+});
 
 export default data = {
 	accounts,

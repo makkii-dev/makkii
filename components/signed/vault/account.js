@@ -77,7 +77,7 @@ class AccountNameComponent extends Component{
 					/>
 				</View>
 				<TouchableOpacity onPress={()=>this.onPress()}>
-					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'flex-end'}} imageStyle={{borderRadius:20}}>
+					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'center', justifyContent:'center'}} imageStyle={{borderRadius:20}}>
 						<Text style={{marginLeft:30, marginRight:10,fontSize:12, color:'#fff', fontFamily: 'monospace'}}>
 							{this.state.editable?strings('account_view.save_button'):strings('account_view.editable_button')}</Text>
 					</ImageBackground>
@@ -196,7 +196,7 @@ class Account extends Component {
 					Keyboard.dismiss();
 					this.props.navigation.navigate('signed_vault_transaction',{
 						account:this.addr,
-						transactionHash: transaction.hash,
+						transaction: transaction,
 					});
 				}}
 			>
@@ -325,26 +325,35 @@ class Account extends Component {
 						borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'gray'}}>
 						<Image source={require('../../../assets/rectangle.png')} style={{width:5, height:30}}/>
 						<Text style={{marginLeft:20, fontSize: 16, color:'#000'}}>{strings('account_view.transaction_history_label')}</Text>
+						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
+							<TouchableOpacity style={{paddingHorizontal:10,flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
+								onPress={()=>{
+									this.props.navigation.navigate('signed_vault_transaction_history', {account: this.account.address})
+								}}
+							>
+								<Text style={{color:'blue'}}>{strings('account_view.complete_button')}</Text>
+								<Image source={require('../../../assets/arrow_right.png')} style={{height:20,width:20,tintColor:'blue'}}/>
+							</TouchableOpacity>
+						</View>
 					</View>
-					<FlatList
-						data={transactionsList}
-						style={{backgroundColor:'#fff'}}
-						keyExtractor={(item,index)=>index + ''}
-						renderItem={({item})=>this._renderTransaction(item)}
-						ListEmptyComponent={()=>
-							<View style={{width:width,height:180,justifyContent:'center',alignItems:'center'}}>
-								<Image source={require('../../../assets/empty_transactions.png')} style={{width:80,height:80, tintColor:'gray',marginBottom:20}}/>
-								<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
-							</View>
-						}
-						refreshControl={
-							<RefreshControl
-								refreshing={this.state.refreshing}
-								onRefresh={()=>this.onRefresh(this.account.address)}
-								title={'loading'}
-							/>
-						}
-					/>
+					{
+						transactionsList.length?<FlatList
+							data={transactionsList}
+							style={{backgroundColor:'#fff'}}
+							keyExtractor={(item,index)=>index + ''}
+							renderItem={({item})=>this._renderTransaction(item)}
+							refreshControl={
+								<RefreshControl
+									refreshing={this.state.refreshing}
+									onRefresh={()=>this.onRefresh(this.account.address)}
+									title={'loading'}
+								/>
+							}
+						/>:<View style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}>
+							<Image source={require('../../../assets/empty_transactions.png')} style={{width:80,height:80, tintColor:'gray',marginBottom:20}}/>
+							<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
+						</View>
+					}
 
 				</TouchableOpacity>
 			</View>

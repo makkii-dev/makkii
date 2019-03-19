@@ -2,9 +2,16 @@
 
 import { createMessager } from './messager/index'
 
-export default (getWebview: () => any) => {
+export default (getWebview) => {
     const { bind, define, listener, fn, addEventListener, removeEventListener, isConnect } = createMessager(
-        (data: any) => getWebview().postMessage(JSON.stringify(data))
+        (data: any) => {
+            const injectCode = `{ let evt = document.createEvent('events');\n`+
+                `evt.initEvent('FROM_RN',true,false);\n` +
+                `evt.data = ${JSON.stringify(data)};\n` +
+                `document.dispatchEvent(evt);\n`+
+                `}`;
+            getWebview&&getWebview.injectJavaScript(injectCode)
+        }
     );
     return {
         bind, define, fn,

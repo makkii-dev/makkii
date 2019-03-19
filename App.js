@@ -31,33 +31,34 @@ const store = createStore(combineReducers({
 }));
 
 // ui
-import Scan                  from './components/scan.js';
-import Splash                from './components/splash.js';
-import Login                 from './components/unsigned/login.js';
-import Register              from './components/unsigned/register.js';
-import RegisterMnemonic      from './components/unsigned/register_mnemonic.js';
-import Recovery              from './components/unsigned/recovery.js';
-import RecoveryPassword      from './components/unsigned/recovery_password.js';
-import Vault                 from './components/signed/vault/home.js';
-import VaultAccount          from './components/signed/vault/account.js';
-import VaultImportHdWallet   from './components/signed/vault/import_list';
-import VaultImportPrivateKey from './components/signed/vault/import_private_key.js';
-import VaultReceive          from './components/signed/vault/receive.js';
-import VaultSend             from './components/signed/vault/send.js';
-import VaultTransaction      from './components/signed/vault/transaction.js';
-import Dapps                 from './components/signed/dapps/home.js';
-import DappsDapp             from './components/signed/dapps/dapp.js';
-import DappsLaunch           from './components/signed/dapps/launch.js';
-import DappsSend 	         from './components/signed/dapps/dapp_send.js';
-import Setting               from './components/signed/setting/home.js';
-import SettingAbout          from './components/signed/setting/about.js';
-import SettingPassword       from './components/signed/setting/password.js';
-import SettingRecovery       from './components/signed/setting/recovery.js';
-import SettingServices       from './components/signed/setting/services.js';
-import SettingLanguage       from './components/signed/setting/language.js';
-import SettingAdvanced       from './components/signed/setting/advanced.js';
-import SettingCurrency       from './components/signed/setting/currency.js';
-import SimpleWebView         from './components/WebViewComponent';
+import Scan                  	from './components/scan.js';
+import Splash                	from './components/splash.js';
+import Login                 	from './components/unsigned/login.js';
+import Register              	from './components/unsigned/register.js';
+import RegisterMnemonic      	from './components/unsigned/register_mnemonic.js';
+import Recovery              	from './components/unsigned/recovery.js';
+import Vault                	from './components/signed/vault/home.js';
+import VaultAccount         	from './components/signed/vault/account.js';
+import VaultImportHdWallet   	from './components/signed/vault/import_list';
+import VaultImportPrivateKey 	from './components/signed/vault/import_private_key.js';
+import VaultReceive          	from './components/signed/vault/receive.js';
+import VaultSend             	from './components/signed/vault/send.js';
+import VaultTransaction      	from './components/signed/vault/transaction.js';
+import VaultTransactionHistory 	from './components/signed/vault/transaction_history.js';
+import Dapps                 	from './components/signed/dapps/home.js';
+import DappsDapp             	from './components/signed/dapps/dapp.js';
+import DappsLaunch           	from './components/signed/dapps/launch.js';
+import DappsSend 	         	from './components/signed/dapps/dapp_send.js';
+import Setting               	from './components/signed/setting/home.js';
+import SettingAbout          	from './components/signed/setting/about.js';
+import SettingPassword       	from './components/signed/setting/password.js';
+import SettingRecovery       	from './components/signed/setting/recovery.js';
+import SettingServices       	from './components/signed/setting/services.js';
+import SettingLanguage      	from './components/signed/setting/language.js';
+import SettingAdvanced       	from './components/signed/setting/advanced.js';
+import SettingCurrency       	from './components/signed/setting/currency.js';
+import RecoveryPassword      	from './components/unsigned/recovery_password.js';
+import SimpleWebView         	from './components/WebViewComponent';
 
 const navigationOptions = ({navigation}) => ({
     headerRight: (<View></View>),
@@ -181,6 +182,10 @@ const Routes = createAppContainer(createStackNavigator({
 		screen: VaultTransaction,
 		navigationOptions,
 	},
+	'signed_vault_transaction_history':{
+		screen: VaultTransactionHistory,
+		navigationOptions,
+	},
 	'signed_dapps': {
 		screen: Dapps,
 		navigationOptions: {
@@ -192,11 +197,19 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_dapps_dapp': {
 		screen: DappsDapp,
-		navigationOptions: navigationOptionsWithoutRight,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
 	},
 	'signed_dapps_launch': {
 		screen: DappsLaunch,
-		navigationOptions,
+		navigationOptions: {
+			headerLeft: null,
+			headerRight: null,
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
 	},
 	'signed_dapps_send': {
 		screen: DappsSend,
