@@ -8,10 +8,6 @@ import {
 } from 'react-native';
 
 export default class AionCell extends Component {
-    static defaultProps = {
-        topSeparator: true,
-        bottomSeparator: true,
-    }
     constructor(props) {
         super(props);
     }
@@ -21,30 +17,24 @@ export default class AionCell extends Component {
             titlePadLeft = 30;
         }
         return (
-            <View style={{
-                height: 50,
-            }}>
-                {this.props.topSeparator ? <View style={styles.cellSeparator}/> : null }
-                <TouchableOpacity onPress={this.props.onClick}>
-                    <View style={styles.cellContainer} >
-                        <Image source={this.props.leadIcon} style={{
-                            width: 15,
-                            height: 15,
-                            position: 'absolute',
-                            left: 5,
-                            resizeMode: 'contain'
-                        }} />
-                        <View style={styles.cellItem}>
-                            <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
-                        </View>
-                        <View style={styles.cellItem}>
-                            <Image style={styles.icon}
-                                   source={require('../assets/arrow_right.png')} />
-                        </View>
+            <TouchableOpacity onPress={this.props.onClick}>
+                <View style={styles.cellContainer} >
+                    <Image source={this.props.leadIcon} style={{
+                        width: 15,
+                        height: 15,
+                        position: 'absolute',
+                        left: 5,
+                        resizeMode: 'contain'
+                    }} />
+                    <View style={styles.cellItem}>
+                        <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
                     </View>
-                </TouchableOpacity>
-                {this.props.bottomSeparator? <View style={styles.cellSeparator} /> :null }
-            </View>
+                    <View style={styles.cellItem}>
+                        <Image style={styles.icon}
+                               source={require('../assets/arrow_right.png')} />
+                    </View>
+                </View>
+            </TouchableOpacity>
         )
     }
 }
@@ -60,22 +50,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center'
     },
-    cellSeparator: {
-        height: StyleSheet.hairlineWidth,
-        left: 0,
-        backgroundColor: 'lightgray',
-    },
     icon: {
         width: 24,
         height: 24
     },
     cellContainer: {
-        height: 50,
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        paddingLeft: 10,
-        paddingRight: 10
+        padding: 14
     }
 });

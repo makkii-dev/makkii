@@ -67,8 +67,6 @@ class About extends Component {
 					paddingRight: 10,
 				}} >
 					<AionCell
-						topSeparator={false}
-						bottomSeparator={false}
 						title={strings('about.version_update_button')}
 						onClick={() => {
 						    Toast.show(strings('about.version_latest'));

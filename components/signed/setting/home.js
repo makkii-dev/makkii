@@ -1,11 +1,12 @@
 import React, {} from 'react';
 import {connect} from 'react-redux';
-import {Alert, View,DeviceEventEmitter,Dimensions} from 'react-native';
+import {Alert, View,DeviceEventEmitter,Dimensions, FlatList, PixelRatio} from 'react-native';
 import AionCell from '../../cell.js';
 import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
 import {ComponentTabBar} from '../../common.js';
 import {HomeComponent} from "../HomeComponent";
+import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 
 const {width,height} = Dimensions.get('window');
@@ -58,57 +59,22 @@ class Home extends HomeComponent {
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >
-                    <AionCell
-                        title={strings('password.title')}
-						topSeparator={false}
-						leadIcon={require('../../../assets/icon_setting_password.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_password');
-                        }}
-                    />
-                    <AionCell
-                        title={strings('recovery_phrase.title')}
-						leadIcon={require('../../../assets/icon_setting_recovery.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_recovery');
-                        }}
-                    />
-                    <AionCell
-                        title={strings('service_configuration.title')}
-						leadIcon={require('../../../assets/icon_server.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_services');
-                        }}
-                    />
-                    <AionCell
-                        title={strings('language.title')}
-						leadIcon={require('../../../assets/icon_setting_i18n.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_language');
-                        }}
-                        />
-                    <AionCell
-						leadIcon={require('../../../assets/icon_currency.png')}
-                        title={strings('currency.title')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_currency');
-                        }}
-                        />
-                    <AionCell
-                        title={strings('advanced.title')}
-						leadIcon={require('../../../assets/icon_advance.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_advanced');
-                        }}
-                        />
-                    <AionCell
-                        title={strings('about.title')}
-						bottomSeparator={false}
-						leadIcon={require('../../../assets/icon_setting_about.png')}
-                        onClick={() => {
-                            this.props.navigation.navigate('signed_setting_about');
-                        }}
-                    />
+					<FlatList
+						data={SETTINGS}
+						renderItem={({item})=>
+							<AionCell
+								title={strings(item.title)}
+								leadIcon={item.icon}
+								onClick={() => {
+									this.props.navigation.navigate(item.route_url);
+								}}
+							/>
+						}
+						ItemSeparatorComponent={() =>
+                            <View style={{ height: 1 / PixelRatio.get(), backgroundColor: 'lightgray' }} />
+						}
+                        keyExtractor={(item, index) => index.toString()}
+					/>
 				</View>
 				<View style={{
 					marginTop: 20,
