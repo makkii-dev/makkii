@@ -96,7 +96,7 @@ class ComponentLogo extends Component{
 					height:50,
                     resizeMode: 'contain'
 				}}
-				source={require('../assets/app_logo.png')}
+				source={require('../assets/icon_app_logo.png')}
 			/>
 		);
 	}

@@ -150,7 +150,7 @@ class Send extends Component {
 						{/*send button*/}
 						<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
 							<ComponentButton title={strings('send_button')}
-											 onPress={this.transfer.bind(this)}
+											 onPress={this.onTransfer.bind(this)}
 							/>
 						</View>
                     </ScrollView>
@@ -163,11 +163,26 @@ class Send extends Component {
 		)
 	}
 
-	transfer=() => {
-		console.log("transfer clicked.");
-		const {goBack} = this.props.navigation;
+	onTransfer=() => {
 		if (!this.validateFields()) return;
 
+		if (sender == this.state.recipient) {
+			Alert.alert(
+				strings('alert_title_warning'),
+				strings('warning_send_to_itself'),
+				[
+					{text:strings('cancel_button'), onPress: ()=> {}},
+					{text:strings('ok_button'), onPress: () => {this.transfer()}}
+				],
+				{cancelable: false}
+				);
+		} else {
+			this.transfer();
+		}
+	}
+
+	transfer=() => {
+		const {goBack} = this.props.navigation;
 		let accountType = this.account.type;
 		let derivationIndex = this.account.derivationIndex;
 		let sender = this.account.address;
