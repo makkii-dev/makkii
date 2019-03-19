@@ -4,9 +4,10 @@ import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {fixedHeight, fixedWidth, mainColor} from "../../style_util";
 import {ComponentTabBar} from "../../common";
+import {HomeComponent} from "../HomeComponent";
 const {width} = Dimensions.get('window')
 
-class Launch extends Component{
+class Launch extends HomeComponent{
     static navigationOptions = ({ navigation }) => ({
         title: strings('menuRef.title_dapps'),
         headerTitleStyle: {
@@ -19,9 +20,6 @@ class Launch extends Component{
     constructor(props) {
         super(props);
         this.dapp = this.props.dapps[0];
-        console.log('title: '+this.dapp.name);
-        console.log('logo uri: '+this.dapp.logo);
-        console.log('description: '+ this.dapp.description);
     };
     onLaunch(){
         console.log('launch ');

@@ -45,7 +45,9 @@ class ComponentTabBar extends Component{
 			<View style={{...this.props.style}}>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:80,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 0');
 						this.props.onPress[0]()
 					}}
 				>
@@ -58,7 +60,9 @@ class ComponentTabBar extends Component{
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:60,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 1');
 						this.props.onPress[1]()
 					}}
 				>
@@ -71,7 +75,9 @@ class ComponentTabBar extends Component{
 				</TouchableOpacity>
 				<TouchableOpacity
 					activeOpacity={1}
+					style={{width:80,height:50, alignItems:'center', justifyContent:'center'}}
 					onPress={e=>{
+						console.log('click 2');
 						this.props.onPress[2]()
 					}}
 				>
