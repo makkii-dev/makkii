@@ -103,9 +103,7 @@ class About extends Component {
                                 initialUrl: 'http://45.118.132.89/privacy_policy.html',
                             });
                         }}>
-                            <Text style={{...styles.center_text, color: linkButtonColor}}>
-                                 {strings('about.policy_label')}
-                            </Text>
+                            <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>
                         </TouchableOpacity>
                     </View>
 					<Text style={styles.center_text}>
