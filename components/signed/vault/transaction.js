@@ -5,6 +5,7 @@ import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
 import {linkButtonColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
+import defaultStyles from '../../styles';
 
 class Transaction extends Component {
     static navigationOptions={
@@ -38,8 +39,7 @@ class Transaction extends Component {
 		return (
 			<ScrollView style={{backgroundColor:'#fff',height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:10}}>
-					<View style={{flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10,shadowColor:'#eee',shadowOffset:{width:10,height:10},
-						elevation:3/*borderWidth:1/PixelRatio.get(),borderColor:'#eee'*/, borderRadius: 10}}>
+					<View style={{...defaultStyles.shadow, flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10, borderRadius: 10}}>
 						<TransactionItemCell
 							style={{height:100, marginTop:20}}
 							title={title1}

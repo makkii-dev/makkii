@@ -18,8 +18,9 @@ import Toast from "react-native-root-toast";
 import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from "../../../utils";
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
+import defaultStyles from '../../styles';
 import {linkButtonColor} from '../../style_util';
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 class DappSend extends React.Component{
     static navigationOptions = ({ navigation }) => ({
         title: strings('send.title'),
@@ -324,6 +325,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1/ PixelRatio.get(),
     },
     containerView:{
+        ...defaultStyles.shadow,
         width:width-40,
         marginHorizontal:20,
         marginVertical: 10,
@@ -335,7 +337,6 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
         borderColor:'#eee',
         borderRadius:10,
-        shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
     }
 });
 

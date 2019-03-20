@@ -8,6 +8,7 @@ import BigNumber from "bignumber.js";
 import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
+import defaultStyles from '../../styles';
 
 const {width} = Dimensions.get('window');
 
@@ -115,7 +116,7 @@ class TransactionHistory extends React.Component {
                     });
                 }}
             >
-                <View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+                <View style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
                     width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}>
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
                         <Text>{timestamp}</Text>
@@ -194,12 +195,6 @@ class TransactionHistory extends React.Component {
     }
 
 }
-
-const styles=StyleSheet.create({
-    shadow:{
-        shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
-    }
-});
 
 export default connect(state => {
     return ({

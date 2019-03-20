@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {strings} from "../../locales/i18n";
+import defaultStyles from '../styles';
 
 const {width} = Dimensions.get('window');
 
@@ -38,12 +39,12 @@ class Password extends Component {
 				}}
 			>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginBottom: 40,
 					width: width - 80,
 					height: 220,
 					borderRadius: 10,
 					backgroundColor: 'white',
-					elevation: 3,
 					padding: 20,
 				}}>
 					<PasswordInputWithTitle

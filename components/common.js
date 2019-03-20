@@ -77,11 +77,12 @@ class ComponentLogo extends Component{
 		return(
 			<Image
 				style={{
+					...this.props.style,
 					width:50,
 					height:50,
 				}}
 				resizeMode={'contain'}
-				source={require('../assets/icon_app_logo.png')}
+				source={require('../assets/icon_app_logo2.png')}
 			/>
 		);
 	}
@@ -254,13 +255,17 @@ class RightActionButton extends Component {
 class ComponentButton extends Component{
 	render(){
 		return (
-			<TouchableOpacity onPress={this.props.onPress}>
+			<TouchableOpacity onPress={this.props.onPress}
+							  style={{
+								  ...this.props.style,
+								  backgroundColor: mainColor,
+								  borderRadius: 5,
+							  }}
+			>
 				<Text style={{
-					backgroundColor: mainColor,
 					color: 'white',
 					paddingTop: 10,
 					paddingBottom: 10,
-					borderRadius: 5,
 					width: '100%',
 					textAlign: 'center',
 					fontWeight: 'bold',

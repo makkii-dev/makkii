@@ -7,7 +7,8 @@ import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
 import {generateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import {strings} from "../../locales/i18n";
-import {mainColor} from '../style_util';
+import {mainColor, mainBgColor} from '../style_util';
+import defaultStyles from '../styles';
 
 const {width,height} = Dimensions.get('window');
 
@@ -37,6 +38,7 @@ class Home extends Component {
                 width:width,
 				height:height,
 				alignItems:'center',
+				backgroundColor: mainBgColor,
 			}}>
                 <View style={{
                 	position: 'absolute',
@@ -47,12 +49,12 @@ class Home extends Component {
 				}}>
 				</View>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginTop: 60,
 					width: width - 80,
 					height: 300,
 					borderRadius: 10,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 20,
 					paddingRight: 20,
 					paddingTop: 40,

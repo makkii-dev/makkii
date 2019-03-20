@@ -12,7 +12,7 @@ import QRCode from 'react-native-qrcode-svg';
 import Toast from 'react-native-root-toast';
 
 import {InputMultiLines, ComponentButton} from '../../common.js';
-import styles from '../../styles.js';
+import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
 
@@ -55,13 +55,13 @@ class Recovery extends Component {
 
 	render(){
 		return (
-			<View style={{...styles.container, backgroundColor: mainBgColor}}>
+			<View style={{...defaultStyles.container, backgroundColor: mainBgColor}}>
 				<View style={{
+				    ...defaultStyles.shadow,
 					width: width - 40,
                     height: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					justifyContent: 'center',
 					alignItems: 'center',
 				}}>
@@ -71,7 +71,7 @@ class Recovery extends Component {
 					/>
 				</View>
 				<View style={{
-					elevation: 3,
+				    ...defaultStyles.shadow,
 					padding: 10,
 					height: 120,
 					borderTopLeftRadius:5,

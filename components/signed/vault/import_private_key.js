@@ -6,6 +6,7 @@ import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
+import defaultStyles from '../../styles';
 
 const {width, height} = Dimensions.get('window');
 
@@ -93,7 +94,7 @@ class ImportPrivateKey extends Component {
 				}}>{strings('import_private_key.instruction_private_key')}</Text>
 
 				<View style={{
-					elevation: 3,
+				    ...defaultStyles.shadow,
 					padding: 10,
 					borderRadius: 5,
 					height: 150,

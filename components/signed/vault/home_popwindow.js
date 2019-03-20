@@ -2,6 +2,7 @@ import React from 'react';
 import {FlatList, Text, TouchableOpacity, View, Image, Animated} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import PropTypes from "prop-types";
+import defaultStyles from '../../styles';
 export class PopWindow extends React.Component {
 
     static propTypes={
@@ -56,7 +57,7 @@ export class PopWindow extends React.Component {
 
     render(){
         return (
-            <View  style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0, elevation:11}}>
+            <View  style={{...defaultStyles.shadow, position: 'absolute', top: 0, left: 0, bottom:0, right:0}}>
                 <TouchableOpacity activeOpacity={1}
                                   style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0, backgroundColor: this.props.backgroundColor}}
                                   onPress={() => this.props.onClose()}>
