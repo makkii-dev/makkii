@@ -14,10 +14,6 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.dapps);
-	}
 
 	render(){
 		return (
@@ -91,7 +87,7 @@ class Home extends HomeComponent {
 					active={'dapp'}
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps_launch');},
+						()=>{},
 						()=>{this.props.navigation.navigate('signed_setting');},
 					]}
 				/>

@@ -14,7 +14,6 @@ const {width,height} = Dimensions.get('window');
 
 class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => {
-	    const { state } = navigation;
 	    return {
 			title: navigation.getParam('title')
 	    };
@@ -22,14 +21,11 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
 
+	componentWillMount(){
 		this.update_locale();
 
 		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-		    console.log("locale changed");
 		    this.update_locale();
 		});
 	}
@@ -38,7 +34,7 @@ class Home extends HomeComponent {
 		this.props.navigation.setParams({
 			'title': strings('menuRef.title_settings'),
 		});
-	}
+	};
 
 	componentWillUnmount() {
 		this.listener.remove();
@@ -126,7 +122,7 @@ class Home extends HomeComponent {
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
 						()=>{this.props.navigation.navigate('signed_dapps_launch');},
-						()=>{this.props.navigation.navigate('signed_setting');},
+						()=>{},
 					]}
 				/>
 			</View>

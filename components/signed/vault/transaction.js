@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView, Dimensions, PixelRatio} from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Linking,
+	ScrollView,
+	Dimensions,
+	PixelRatio,
+	DeviceEventEmitter
+} from 'react-native';
 import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
 import {linkButtonColor} from "../../style_util";
@@ -8,9 +18,30 @@ const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
 
 class Transaction extends Component {
-    static navigationOptions={
-        title: strings('transaction_detail.title')
-    };
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: navigation.getParam('title')
+		};
+	};
+
+	componentWillMount(){
+		this.update_locale();
+
+		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
+			this.update_locale();
+		});
+	}
+
+	update_locale= () => {
+		this.props.navigation.setParams({
+			'title':  strings('transaction_detail.title'),
+		});
+	};
+
+	componentWillUnmount() {
+		this.listener.remove();
+	}
+
 	constructor(props){
 		super(props);
 		this.addr = this.props.navigation.state.params.account;
