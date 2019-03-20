@@ -627,7 +627,6 @@ class Home extends HomeComponent {
 					onPress={[
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_vault');
 						},
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});

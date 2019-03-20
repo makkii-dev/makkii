@@ -1,7 +1,16 @@
 import React from 'react';
 import {
     View,
-    FlatList, Image, Text, TouchableOpacity, PixelRatio, StyleSheet, ActivityIndicator, InteractionManager, Dimensions,
+    FlatList,
+    Image,
+    Text,
+    TouchableOpacity,
+    PixelRatio,
+    StyleSheet,
+    ActivityIndicator,
+    InteractionManager,
+    Dimensions,
+    DeviceEventEmitter,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
@@ -12,8 +21,10 @@ import {ImportListfooter} from "../../common";
 const {width,height} = Dimensions.get('window');
 
 class TransactionHistory extends React.Component {
-    static navigationOptions={
-        title: strings('account_view.transaction_history_label')
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: navigation.getParam('title')
+        };
     };
     state={
         transactions:{},
@@ -27,9 +38,22 @@ class TransactionHistory extends React.Component {
         this.account = this.props.navigation.state.params.account;
     }
 
+    update_locale= () => {
+        this.props.navigation.setParams({
+            'title': strings('account_view.transaction_history_label'),
+        });
+    };
+
+
+
     componentWillMount(){
         InteractionManager.runAfterInteractions(()=>{
             this.fetchAccountTransacions(this.account,this.state.currentPage)
+        });
+        this.update_locale();
+        this.listener = DeviceEventEmitter.addListener('locale_change', () => {
+            console.log("locale changed");
+            this.update_locale();
         });
         this.isMount = true;
     }
@@ -37,6 +61,7 @@ class TransactionHistory extends React.Component {
 
     componentWillUnmount(): void {
         this.isMount = false;
+        this.listener.remove();
     }
 
 
