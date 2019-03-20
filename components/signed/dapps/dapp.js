@@ -2,20 +2,22 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
     View,
+    Dimensions,
     DeviceEventEmitter,
     ActivityIndicator,
     TouchableOpacity,
     Image,
     Platform,
-    Text,
-    BackHandler
+    BackHandler,
+    PixelRatio
 } from 'react-native';
 import {WebView} from "react-native-webview";
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
+import {ProgressBar} from '../../processbar';
 import {alert_ok} from '../../common';
-
+const {width, height} = Dimensions.get('window');
 class Dapp extends Component {
 
     static navigationOptions = ({ navigation }) => ({
@@ -71,6 +73,8 @@ class Dapp extends Component {
         this.state={
             inject:'',
             loading:false,
+            WebViewProgress: 0,
+            showProgressBar: true,
         };
         this.props.navigation.setParams({
             Reload:()=>this.onReload(),
@@ -182,12 +186,17 @@ class Dapp extends Component {
     };
 
     onReload = ()=>{
+        this.handleProcessBar(true)
         this.webViewRef.reload();
+    };
+
+    handleProcessBar = (v) =>{
+        this.setState({WebViewProgress:0,showProgressBar:v})
     };
 
     renderLoading = () => {
         return (
-            <View style={{flex: 1,justifyContent: 'center', alignItems:'center'}}>
+            <View style={{flex: 1,justifyContent: 'center', alignItems:'center', backgroundColor:'#fff'}}>
                 <ActivityIndicator
                     animating={true}
                     color='red'
@@ -198,18 +207,21 @@ class Dapp extends Component {
     };
 
     render() {
-        if(this.state.inject === ''){
-            return this.renderLoading();
-        }else{
-            return (
-                <View style={{flex: 1}}>
-                    <WebView
+        return (
+            <View style={{flex: 1}}>
+                {
+                    this.state.inject !==''?<WebView
                         ref={ref=>this.webViewRef=ref}
                         source={{uri: this.uri}}
                         cacheEnabled={false}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
                         injectedJavaScriptBeforeLoad={this.state.inject}
+                        startInLoadingState={true}
+                        onLoadStart={()=>this.handleProcessBar(true)}
+                        onLoadProgress={(e)=>{
+                            this.setState({WebViewProgress: e.nativeEvent.progress});
+                        }}
                         onNavigationStateChange={(navState)=>{
                             this.canGoBack = navState.canGoBack;
                         }}
@@ -219,10 +231,19 @@ class Dapp extends Component {
                                 this.updateCurrentAddress && this.updateCurrentAddress(this.wallet);
                             }, 500);
                         }}
-                    />
-                </View>
-            )
-        }
+                    />:this.renderLoading()
+                }
+                {
+                    this.state.showProgressBar?<ProgressBar
+                        style={{position:'absolute',top:0,width:width,height:2}}
+                        width={width}
+                        progress={this.state.WebViewProgress}
+                        color={'red'}
+                        onComplete={()=>this.handleProcessBar(false)}
+                    />:null
+                }
+            </View>
+        )
     }
 }
 export default connect(state => {return ({dapps: state.dapps, setting: state.setting, accounts:state.accounts});})(Dapp);

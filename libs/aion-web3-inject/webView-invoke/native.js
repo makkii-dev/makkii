@@ -22,7 +22,6 @@ export default (getWebview) => {
                 data = JSON.parse(e.nativeEvent.data);
                 if( typeof data === 'string')
                     data = JSON.parse(data);
-                console.log('listener data ', typeof data, ' ', data);
             } catch (e) { }
             data && listener(data)
         },
