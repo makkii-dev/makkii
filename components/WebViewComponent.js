@@ -49,7 +49,8 @@ class WebViewComponent extends Component {
             <View style={{flex: 1}}>
                 <WebView
                     source={{uri: this.initialUrl}}
-                    cacheEnabled={true}
+                    useWebKit={true}
+                    cacheEnabled={false}
                     renderLoading={()=>this.renderLoading()}
                     startInLoadingState={true}
                     onLoadStart={()=>this.handleProcessBar(true)}
