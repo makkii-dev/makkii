@@ -8,12 +8,12 @@ import {ComponentTabBar} from '../../common.js';
 import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
+import defaultStyles from '../../styles';
 
 const {width,height} = Dimensions.get('window');
 
 class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => {
-	    const { state } = navigation;
 	    return {
 			title: navigation.getParam('title')
 	    };
@@ -21,14 +21,14 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
+	shouldComponentUpdate(nextProps) {
+		return nextProps.setting!==this.props.setting;
+	}
 
+	componentWillMount(){
 		this.update_locale();
 
 		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-		    console.log("locale changed");
 		    this.update_locale();
 		});
 	}
@@ -37,13 +37,14 @@ class Home extends HomeComponent {
 		this.props.navigation.setParams({
 			'title': strings('menuRef.title_settings'),
 		});
-	}
+	};
 
 	componentWillUnmount() {
 		this.listener.remove();
 	}
 
 	render(){
+		console.log('render setting')
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,
@@ -51,11 +52,11 @@ class Home extends HomeComponent {
 				alignItems: 'center'
 			}}>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginTop: 20,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >
@@ -77,11 +78,11 @@ class Home extends HomeComponent {
 					/>
 				</View>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginTop: 20,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >
@@ -125,7 +126,7 @@ class Home extends HomeComponent {
 					onPress={[
 						()=>{this.props.navigation.navigate('signed_vault');},
 						()=>{this.props.navigation.navigate('signed_dapps_launch');},
-						()=>{this.props.navigation.navigate('signed_setting');},
+						()=>{},
 					]}
 				/>
 			</View>

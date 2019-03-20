@@ -32,7 +32,8 @@ import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
-import {fixedWidth, fixedHeight, mainColor, linkButtonColor} from "../../style_util";
+import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
+import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
 const {width, } = Dimensions.get('window');
 
@@ -144,7 +145,10 @@ class HomeCenterComponent extends  React.Component{
                                    }}
                         />
                         <View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:mainColor, borderRadius:fixedWidth(10)}}>
-                            <Image source={require('../../../assets/search.png')} style={{...styles.sortHeaderImageStyle, resizeMode: 'contain', marginRight: 0, tintColor:'#fff'}}/>
+                            <Image source={require('../../../assets/search.png')}
+								   style={{...styles.sortHeaderImageStyle, marginRight: 0, tintColor:'#fff'}}
+								   resizeMode={'contain'}
+							/>
                         </View>
 					</View>
 				</View>
@@ -426,18 +430,19 @@ class Home extends HomeComponent {
 				isOpen={ Key === this.state.openRowKey }
 				swipeEnabled={ this.state.openRowKey === null&&this.state.swipeEnable}
 				preventSwipeRight={true}
-				maxSwipeDistance={item.isDefault? fixedHeight(186): fixedHeight(186)*2}
+				maxSwipeDistance={item.isDefault? fixedHeight(186): fixedHeight(186 + 250)}
 				onOpen={()=>this.onSwipeOpen(Key)}
 				onClose={() => this.onSwipeClose(Key)}
 				shouldBounceOnMount={true}
 				slideoutView={
-						<View style={{...styles.accountContainer, justifyContent:'flex-end'}}>
+						<View style={{...styles.accountContainer, backgroundColor:'transparent', justifyContent:'flex-end'}}>
+
 							{
 								item.isDefault?null:
 									<TouchableOpacity onPress={()=>{
 										this.onSetDefaultAccount(Key);
 									}}>
-										<View style={{...styles.accountSlideButton, backgroundColor: '#c8c7ed'}}>
+										<View style={{...styles.accountSlideButton, width: fixedHeight(250), backgroundColor: '#c8c7ed'}}>
 											<Text style={{fontSize:14,color:'#000'}}>{strings('set_default_button')}</Text>
 										</View>
 									</TouchableOpacity>
@@ -464,7 +469,7 @@ class Home extends HomeComponent {
 						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{address: item.address});
 					}}
 				>
-					<View style={{...styles.accountContainer, justifyContent:'flex-start', elevation:3}}>
+					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start'}}>
 						<Image source={accountImage} style={{width:fixedHeight(186), height:fixedHeight(186)}}/>
 						<View style={{flex:1, paddingVertical: 10}}>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
@@ -526,6 +531,12 @@ class Home extends HomeComponent {
 		})
 	}
 
+	onChangeText(t){
+		const {keyWords} = this.state;
+		if(keyWords!==t.trim()){
+			this.setState({keyWords:t.trim()});
+		}
+	}
 	onTouchCenter(){
 		this.setState({openRowKey:null,swipeEnable:false});
 	}
@@ -546,7 +557,7 @@ class Home extends HomeComponent {
 					this.HomeCenterRef&&this.HomeCenterRef.closeAll();
 					Keyboard.dismiss();
 				}}>
-				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1}} imageStyle={{width:width, height: fixedHeight(686)}}>
+				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1, backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
 					{/*title bar*/}
 					<View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:15, marginLeft:10,marginRight:10}}>
 						<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{
@@ -596,12 +607,12 @@ class Home extends HomeComponent {
 					{/*center bar*/}
 					<HomeCenterComponent
 						ref={ref=>this.HomeCenterRef=ref}
-						style={{...styles.shadow,justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
+						style={{...defaultStyles.shadow, borderRadius: fixedWidth(20),justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
 							width:width - 40, position:'absolute', top: fixedHeight(500), right: 20, padding:20
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}
-						onChangeText={(value)=>this.setState({keyWords:value})}
+						onChangeText={(value)=>this.onChangeText(value)}
 						onTouch={()=>this.onTouchCenter()}
 						currentFilter={this.state.filter}
 						currentSort={this.state.sortOrder}
@@ -627,7 +638,6 @@ class Home extends HomeComponent {
 					onPress={[
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_vault');
 						},
 						()=>{
 							this.state.openRowKey&&this.setState({openRowKey: null});
@@ -650,13 +660,13 @@ class Home extends HomeComponent {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerPosition={{position:'absolute', top:80,right:10,width:150}}
-							imageStyle={{width: 20, height: 20, marginRight:20, resizeMode:'contain'}}
+							containerPosition={{position:'absolute', top:80,right:10,width:180}}
+							imageStyle={{width: 20, height: 20, marginRight:20}}
 							fontStyle={{fontSize:12, color:'#000'}}
-							itemStyle={{width:150,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
+							itemStyle={{width:180,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
 							containerBackgroundColor={'#fff'}
 							ItemSeparatorComponent={()=><View style={styles.divider}/>}
-							ListHeaderComponent={()=><View style={{width:180}}>
+							ListHeaderComponent={()=><View style={{width:180, marginBottom: 10}}>
 								<Text style={{fontSize:16}}>{strings('wallet.title_import_from')}</Text>
 							</View>}
 						/>
@@ -683,10 +693,22 @@ const styles = StyleSheet.create({
     accountView:{
         flex: 1, marginTop: fixedHeight(400), marginBottom: fixedHeight(156)
     },
+	accountContainerWithShadow:{
+		...defaultStyles.shadow,
+		borderRadius:fixedHeight(10),
+		flexDirection:'row',
+		marginHorizontal: fixedWidth(55),
+		marginVertical: fixedHeight(32),
+		height:fixedHeight(186),
+		backgroundColor:'#fff',
+	},
 	accountContainer:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedHeight(10),
-		flexDirection:'row', marginHorizontal: fixedWidth(55), marginVertical: fixedHeight(32),
-		height:fixedHeight(186), backgroundColor:'#fff',
+		borderRadius:fixedHeight(10),
+		flexDirection:'row',
+		marginHorizontal: fixedWidth(55),
+		marginVertical: fixedHeight(32),
+		height:fixedHeight(186),
+		backgroundColor:'#fff',
 	},
 	accountSubContainer:{
 		flexDirection:'row',
@@ -702,7 +724,7 @@ const styles = StyleSheet.create({
 		color:'gray'
 	},
 	accountSlideButton:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedHeight(10),
+		borderRadius:fixedHeight(10),
 		justifyContent:'center', alignItems:'center',
 		height:fixedHeight(186),
 		width: fixedHeight(186),
@@ -710,10 +732,6 @@ const styles = StyleSheet.create({
 	divider: {
 		height: 1 / PixelRatio.get(),
 		backgroundColor: '#dfdfdf'
-	},
-	shadow:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
-		elevation:10,
 	},
 	sortHeaderImageStyle:{
 		width:25,

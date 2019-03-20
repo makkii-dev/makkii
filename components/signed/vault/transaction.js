@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, Text, StyleSheet, TouchableOpacity, Linking, ScrollView, Dimensions, PixelRatio} from 'react-native';
+import {
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Linking,
+	ScrollView,
+	Dimensions,
+	PixelRatio,
+	DeviceEventEmitter
+} from 'react-native';
 import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
-import {linkButtonColor} from "../../style_util";
+import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
+import defaultStyles from '../../styles';
 
 class Transaction extends Component {
-    static navigationOptions={
-        title: strings('transaction_detail.title')
-    };
+	static navigationOptions = ({ navigation }) => {
+		return {
+			title: strings('transaction_detail.title')
+		};
+	};
+
 	constructor(props){
 		super(props);
 		this.addr = this.props.navigation.state.params.account;
@@ -29,17 +43,16 @@ class Transaction extends Component {
 		})
 	}
 	render(){
+		console.log('render transaction');
 		const transaction = this.transaction;
-		console.log('tx ',this.transaction)
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
 		return (
-			<ScrollView style={{backgroundColor:'#fff',height,width}}>
+			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:10}}>
-					<View style={{flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10,shadowColor:'#eee',shadowOffset:{width:10,height:10},
-						elevation:3/*borderWidth:1/PixelRatio.get(),borderColor:'#eee'*/, borderRadius: 10}}>
+					<View style={{...defaultStyles.shadow, flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10, borderRadius: 10}}>
 						<TransactionItemCell
 							style={{height:100, marginTop:20}}
 							title={title1}

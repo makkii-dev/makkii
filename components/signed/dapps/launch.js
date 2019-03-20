@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, Button, PixelRatio, TouchableOpacity, Dimensions} from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
 import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
-import {fixedHeight, fixedWidth, mainColor, mainBgColor} from "../../style_util";
+import {fixedHeight, mainColor, mainBgColor} from "../../style_util";
 import {ComponentTabBar} from "../../common";
 import {HomeComponent} from "../HomeComponent";
 const {width} = Dimensions.get('window')
+import defaultStyles from '../../styles';
 
 class Launch extends HomeComponent{
     static navigationOptions = ({ navigation }) => ({
@@ -31,7 +32,7 @@ class Launch extends HomeComponent{
     render(){
         return (
             <View style={{flex:1, padding:10, backgroundColor:mainBgColor}}>
-                <View style={{...styles.shadow, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
+                <View style={{...defaultStyles.shadow, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
                     <View style={{height:120,width:width-20, flexDirection:'row',paddingHorizontal:30}}>
                         <Image source={this.dapp.logo} style={{width:80,height:100, borderColor:'#eee', borderWidth:1,borderRadius:10}} resizeMode={'contain'}/>
                         <View style={{flex:1, justifyContent:'space-between', alignItems:'flex-start',marginLeft:20,paddingHorizontal:10}}>
@@ -90,10 +91,6 @@ class Launch extends HomeComponent{
 export default connect(state => { return ({ dapps: state.dapps, setting: state.setting }); })(Launch);
 
 const styles = StyleSheet.create({
-    shadow:{
-        shadowColor:'#eee',shadowOffset:{width:10,height:10},borderRadius:fixedWidth(20),
-        elevation:3,
-    },
     container: {
        flex: 1,
        flexDirection: 'column',

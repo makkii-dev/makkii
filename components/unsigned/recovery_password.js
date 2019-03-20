@@ -4,7 +4,10 @@ import {PasswordInputWithTitle, ComponentButton, alert_ok } from '../common.js';
 import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
+import {delete_accounts} from '../../actions/accounts';
 import {strings} from "../../locales/i18n";
+import defaultStyles from '../styles';
+import {mainBgColor} from '../style_util';
 
 const {width} = Dimensions.get('window');
 
@@ -35,15 +38,16 @@ class Password extends Component {
 				style={{
 					flex: 1,
 					padding: 40,
+					backgroundColor: mainBgColor,
 				}}
 			>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginBottom: 40,
 					width: width - 80,
 					height: 220,
 					borderRadius: 10,
 					backgroundColor: 'white',
-					elevation: 3,
 					padding: 20,
 				}}>
 					<PasswordInputWithTitle

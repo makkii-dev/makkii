@@ -6,6 +6,8 @@ import {strings} from '../../../locales/i18n';
 import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
+import defaultStyles from '../../styles';
+import {mainBgColor} from '../../style_util';
 
 const {width, height} = Dimensions.get('window');
 
@@ -86,6 +88,7 @@ class ImportPrivateKey extends Component {
 			<View style={{
 			    flex: 1,
 				padding: 40,
+                backgroundColor: mainBgColor,
 			}}>
                 <Text style={{
                 	marginBottom: 20,
@@ -93,7 +96,7 @@ class ImportPrivateKey extends Component {
 				}}>{strings('import_private_key.instruction_private_key')}</Text>
 
 				<View style={{
-					elevation: 3,
+				    ...defaultStyles.shadow,
 					padding: 10,
 					borderRadius: 5,
 					height: 150,
@@ -108,6 +111,7 @@ class ImportPrivateKey extends Component {
 							borderWidth: 0,
 							fontSize: 18,
 							fontWeight: 'normal',
+							height: 200,
 							textAlignVertical: 'top'
 						}}
 						value={this.state.private_key}

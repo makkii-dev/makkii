@@ -7,6 +7,7 @@ import {validatePositiveInteger} from '../../../utils';
 import {setting} from "../../../actions/setting";
 import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
+import defaultStyles from '../../styles';
 
 const {width} = Dimensions.get('window');
 
@@ -58,11 +59,11 @@ class Advanced extends Component {
                 }}
             >
                 <View style={{
+                    ...defaultStyles.shadow,
                     marginTop: 20,
                     width: width - 40,
                     borderRadius: 5,
                     backgroundColor: 'white',
-                    elevation: 3,
                     padding: 20,
                 }} >
                     <TextInputWithTitle

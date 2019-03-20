@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {Dimensions, View, TouchableOpacity, Text, DeviceEventEmitter} from 'react-native';
+import {Dimensions, View, Text, DeviceEventEmitter} from 'react-native';
 import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
+import defaultStyles from '../../styles';
 
 const {width,height} = Dimensions.get('window');
 
@@ -48,7 +49,7 @@ class Language extends Component {
 
         DeviceEventEmitter.emit('locale_change');
         this.props.navigation.goBack();
-    }
+    };
 
     render() {
         return (
@@ -59,10 +60,10 @@ class Language extends Component {
                 paddingTop: 40
             }}>
                 <View style={{
+                    ...defaultStyles.shadow,
                     width: width - 40,
                     borderRadius: 5,
                     backgroundColor: 'white',
-                    elevation: 3,
                     paddingLeft: 20,
                     paddingRight: 20,
                 }} >

@@ -5,7 +5,7 @@ import Toast from 'react-native-root-toast';
 
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
-import styles from '../../styles.js';
+import defaultStyles from '../../styles.js';
 import {linkButtonColor, mainBgColor} from '../../style_util';
 
 const {width,height} = Dimensions.get('window');
@@ -42,8 +42,8 @@ class About extends Component {
 						style={{
 							width:50,
 							height:50,
-							resizeMode: 'contain'
 						}}
+						resizeMode={'contain'}
 						source={require('../../../assets/icon_app_logo.png')}
 					/>
 					<Text style={{
@@ -58,11 +58,11 @@ class About extends Component {
 					}}>{strings('about.version_label')} {this.props.setting.version}</Text>
 				</View>
 				<View style={{
+				    ...defaultStyles.shadow,
 				    marginBottom: 150,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >
@@ -92,9 +92,9 @@ class About extends Component {
                                 initialUrl: 'http://45.118.132.89/terms_services.html',
                             });
                         }}>
-                            <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
+                            <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
                         </TouchableOpacity>
-                        <Text style={styles.center_text}>
+                        <Text style={defaultStyles.center_text}>
                             {strings('about.label_and')}
                         </Text>
                         <TouchableOpacity onPress={() => {
@@ -103,10 +103,10 @@ class About extends Component {
                                 initialUrl: 'http://45.118.132.89/privacy_policy.html',
                             });
                         }}>
-                            <Text style={{...styles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>
+                            <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>
                         </TouchableOpacity>
                     </View>
-					<Text style={styles.center_text}>
+					<Text style={defaultStyles.center_text}>
 						{strings('about.copyright_label')}
 					</Text>
 				</View>

@@ -77,10 +77,11 @@ class ComponentLogo extends Component{
 		return(
 			<Image
 				style={{
+					...this.props.style,
 					width:50,
 					height:50,
-                    resizeMode: 'contain'
 				}}
+				resizeMode={'contain'}
 				source={require('../assets/icon_app_logo.png')}
 			/>
 		);
@@ -220,8 +221,16 @@ class TransactionItemCell extends React.PureComponent {
 }
 
 // ======================== v2 ========================================
-const Visible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/visible.png')} />
-const Invisible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/invisible.png')} />
+const Visible = () => <Image
+	style={{width:20,height:20}}
+	source={require('../assets/visible.png')}
+    resizeMode={'contain'}
+/>
+const Invisible = () => <Image
+	style={{width:20,height:20}}
+    resizeMode={'contain'}
+	source={require('../assets/invisible.png')}
+/>
 
 class RightActionButton extends Component {
     render() {
@@ -246,13 +255,17 @@ class RightActionButton extends Component {
 class ComponentButton extends Component{
 	render(){
 		return (
-			<TouchableOpacity onPress={this.props.onPress}>
+			<TouchableOpacity onPress={this.props.onPress}
+							  style={{
+								  ...this.props.style,
+								  backgroundColor: mainColor,
+								  borderRadius: 5,
+							  }}
+			>
 				<Text style={{
-					backgroundColor: mainColor,
 					color: 'white',
 					paddingTop: 10,
 					paddingBottom: 10,
-					borderRadius: 5,
 					width: '100%',
 					textAlign: 'center',
 					fontWeight: 'bold',
@@ -293,6 +306,7 @@ class PasswordInputWithTitle extends Component {
 							color: fontColor,
 							fontWeight: 'normal',
 							lineHeight: 20,
+							height: 50,
 							paddingRight: 45,
 							borderColor: 'lightgray',
 							borderBottomWidth: 1,
@@ -344,10 +358,10 @@ class PasswordInput extends Component {
 					style={{
 						width: 20,
 						height: 20,
-						resizeMode: 'contain',
 						position: 'absolute',
 						left: 0,
 					}}
+					resizeMode={'contain'}
 					source={require('../assets/icon_password.png')}
 				/>
 				<TextInput
@@ -407,6 +421,7 @@ class TextInputWithTitle extends Component {
 							color: fontColor,
 							fontWeight: 'normal',
 							lineHeight: 20,
+							height: 50,
 							paddingRight: 45,
 							borderColor: 'lightgray',
 							borderBottomWidth: 1,

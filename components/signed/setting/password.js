@@ -4,7 +4,7 @@ import { Dimensions, View, Text, Keyboard, TouchableOpacity} from 'react-native'
 import Toast from 'react-native-root-toast';
 
 import { PasswordInputWithTitle, RightActionButton, alert_ok } from '../../common.js';
-import styles from '../../styles.js';
+import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { validatePassword, hashPassword } from '../../../utils.js';
 import { user_update_password } from '../../../actions/user.js';
@@ -66,12 +66,12 @@ class Password extends Component {
 					paddingRight: 20,
 				}}
 			>
-                <Text style={{...styles.instruction, marginTop: 20, marginBottom: 20}}>{strings('password.password_format')}</Text>
+                <Text style={{...defaultStyles.instruction, marginTop: 20, marginBottom: 20}}>{strings('password.password_format')}</Text>
                 <View style={{
+                    ...defaultStyles.shadow,
                     width: width - 40,
                     borderRadius: 5,
                     backgroundColor: 'white',
-                    elevation: 3,
                     padding: 20,
                 }} >
                     <PasswordInputWithTitle

@@ -1,19 +1,32 @@
 import React from 'react';
 import {
     View,
-    FlatList, Image, Text, TouchableOpacity, PixelRatio, StyleSheet, ActivityIndicator, InteractionManager, Dimensions,
+    FlatList,
+    Image,
+    Text,
+    TouchableOpacity,
+    PixelRatio,
+    StyleSheet,
+    ActivityIndicator,
+    InteractionManager,
+    Dimensions,
+    DeviceEventEmitter,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
 import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
+import defaultStyles from '../../styles';
+import {mainBgColor} from '../../style_util';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class TransactionHistory extends React.Component {
-    static navigationOptions={
-        title: strings('account_view.transaction_history_label')
+    static navigationOptions = ({ navigation }) => {
+        return {
+            title: strings('account_view.transaction_history_label'),
+        };
     };
     state={
         transactions:{},
@@ -26,6 +39,8 @@ class TransactionHistory extends React.Component {
         super(props);
         this.account = this.props.navigation.state.params.account;
     }
+
+
 
     componentWillMount(){
         InteractionManager.runAfterInteractions(()=>{
@@ -43,9 +58,7 @@ class TransactionHistory extends React.Component {
     fetchAccountTransacions = (address, page=0, size=25)=>{
         let {currentPage,totalPages,transactions} = this.state;
         const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
-        console.log("request url: " + url);
         fetchRequest(url).then(res=>{
-            console.log('[fetch result]', res);
             let txs = {};
             if(!res.page){
                 this.isMount&&this.setState({
@@ -62,7 +75,6 @@ class TransactionHistory extends React.Component {
                 totalPages  = res.page.totalPages;
             }
             if(res.content&&res.content.length>0){
-                console.log('res content ', res.content);
                 res.content.forEach(value=>{
                     let tx={};
                     tx.hash = '0x'+value.transactionHash;
@@ -76,7 +88,6 @@ class TransactionHistory extends React.Component {
                 });
                 transactions = Object.assign({},transactions,txs);
             }
-            console.log('[txs] ', JSON.stringify(txs));
             this.isMount&&this.setState({
                     currentPage,
                     totalPages,
@@ -115,7 +126,7 @@ class TransactionHistory extends React.Component {
                     });
                 }}
             >
-                <View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+                <View style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
                     width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}>
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
                         <Text>{timestamp}</Text>
@@ -140,7 +151,6 @@ class TransactionHistory extends React.Component {
         this.setState({
             footerState: 2,
         },()=>{setTimeout(()=>this.fetchAccountTransacions(this.account, this.state.currentPage+1),500)});
-        console.log('after')
     }
 
 
@@ -164,7 +174,7 @@ class TransactionHistory extends React.Component {
         } else {
             const transactions = Object.values(this.state.transactions).sort((a, b) => a.timestamp > b.timestamp);
             return (
-                <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>
+                <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {
                         transactions.length ? <FlatList
                             data={transactions}
@@ -182,7 +192,9 @@ class TransactionHistory extends React.Component {
 
                         /> : <View style={{width: width, height: 180, justifyContent: 'center', alignItems: 'center'}}>
                             <Image source={require('../../../assets/empty_transactions.png')}
-                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}/>
+                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+                                   resizeMode={'contain'}
+                            />
                             <Text style={{color: 'gray'}}>{strings('account_view.empty_label')}</Text>
                         </View>
                     }
@@ -192,12 +204,6 @@ class TransactionHistory extends React.Component {
     }
 
 }
-
-const styles=StyleSheet.create({
-    shadow:{
-        shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
-    }
-});
 
 export default connect(state => {
     return ({

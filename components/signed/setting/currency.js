@@ -6,6 +6,7 @@ import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
+import defaultStyles from '../../styles';
 
 const {width} = Dimensions.get('window');
 
@@ -62,10 +63,10 @@ class Currency extends Component {
                 alignItems: 'center'
             }}>
                 <View style={{
+                    ...defaultStyles.shadow,
                     width: width - 40,
                     borderRadius: 5,
                     backgroundColor: 'white',
-                    elevation: 3,
                     paddingLeft: 20,
                     paddingRight: 20,
                 }} >
