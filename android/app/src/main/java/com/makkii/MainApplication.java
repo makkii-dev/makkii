@@ -3,8 +3,8 @@ package com.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.chaion.rn.hwwallet.RNAionHwWalletPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactNativeHost;
@@ -36,8 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNCWebViewPackage(),
             new RNScreenshotHelperPackage(),
+            new RNCWebViewPackage(),
             new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
             new RNFetchBlobPackage(),
