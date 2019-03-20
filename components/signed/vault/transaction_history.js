@@ -119,6 +119,8 @@ class TransactionHistory extends React.Component {
         const valueColor = isSender? 'red':'green';
         return (
             <TouchableOpacity
+                style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+                    width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}
                 onPress={e => {
                     this.props.navigation.navigate('signed_vault_transaction',{
                         account:this.account,
@@ -126,16 +128,13 @@ class TransactionHistory extends React.Component {
                     });
                 }}
             >
-                <View style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
-                    width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}>
-                    <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
-                        <Text>{timestamp}</Text>
-                        <Text>{transaction.status}</Text>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
-                        <Text>{transaction.hash.substring(0, 16) + '...' }</Text>
-                        <Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
-                    </View>
+                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
+                    <Text>{timestamp}</Text>
+                    <Text>{transaction.status}</Text>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
+                    <Text>{transaction.hash.substring(0, 16) + '...' }</Text>
+                    <Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
                 </View>
             </TouchableOpacity>
         )
@@ -186,6 +185,7 @@ class TransactionHistory extends React.Component {
                             }}
                             ListFooterComponent={() =>
                                 <ImportListfooter
+                                    hasSeparator={false}
                                     footerState={this.state.footerState}
                                 />
                             }

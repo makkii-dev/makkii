@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {
+    ActivityIndicator,
 	Alert,
 	DeviceEventEmitter,
 	Dimensions,
@@ -218,7 +219,7 @@ class Home extends HomeComponent {
 			showMenu: false,
 			sortOrder: SORT[0].title,
 			filter: FILTER[0].title,
-			totalBalance: new BigNumber(0),
+			totalBalance: undefined,
 			openRowKey: null,
 			swipeEnable: true,
 			scrollEnabled:true,
@@ -249,7 +250,7 @@ class Home extends HomeComponent {
 		}
 	}
 
-	componentDidMount(){
+	componentWillMount(){
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[route] ' + this.props.accounts);
@@ -258,6 +259,7 @@ class Home extends HomeComponent {
 		}
 		this.isMount = true;
 		this.listener = DeviceEventEmitter.addListener('updateAccountBalance',()=>this.fetchAccountsBalance());
+		this.fetchAccountsBalance();
 
 		Linking.getInitialURL().then(url => {
 			console.log("linking url: " + url);
@@ -548,7 +550,12 @@ class Home extends HomeComponent {
 		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
-		const total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
+		let total_currency = undefined;
+		console.log("this.props.setting.coinPrice"+ this.props.setting.coinPrice);
+		if (this.props.setting.coinPrice && this.state.totalBalance) {
+			total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
+		}
+		console.log("total_currency :" + total_currency );
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
 		const header_marginTop = Platform.OS === 'ios'?getStatusBarHeight(false):0;
 		return (
@@ -573,8 +580,19 @@ class Home extends HomeComponent {
 					<View style={{flexDirection:'row', justifyContent:'flex-start'}}>
 						<Text style={{marginLeft:30,color:'#fff', fontSize: 20}}>{strings('wallet.fiat_total')}:</Text>
 					</View>
-					<View style={{flexDirection:'row', justifyContent:'center'}}>
-						<Text style={{color:'#fff', fontSize:40}} numberOfLines={1}>{total_currency}{strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>
+					<View style={{alignItems:'center', justifyContent: 'center', height: 80}}>
+						{total_currency?
+							<Text style={{color: '#fff', fontSize: 40}}
+								  numberOfLines={1}>{total_currency} {strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>:
+                            <View style={{flexDirection: 'row'}}>
+                                <ActivityIndicator
+                                    animating={true}
+                                    color='white'
+                                    size={16}
+                                />
+                                <Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>{strings('label_loading')}</Text>
+							</View>
+						}
 					</View>
 
                     {/*accounts bar*/}
@@ -693,7 +711,7 @@ export default connect(state => {
 
 const styles = StyleSheet.create({
     accountView:{
-        flex: 1, marginTop: fixedHeight(400), marginBottom: fixedHeight(156)
+        flex: 1, marginTop: fixedHeight(300), marginBottom: fixedHeight(156)
     },
 	accountContainerWithShadow:{
 		...defaultStyles.shadow,

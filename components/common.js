@@ -148,18 +148,21 @@ class InputMultiLines extends Component{
 
 class ImportListfooter extends React.PureComponent {
 
+    static defaultProps = {
+        hasSeparator: true,
+    }
 	render() {
 		if (this.props.footerState === 1) {
 			return (
 				<View style={{height:30,alignItems:'center',justifyContent:'flex-start',}}>
-					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
+					{this.props.hasSeparator? <View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>: null}
 					<Text style={{color:'#000',fontSize:14, marginVertical: 5}}>{strings('no_more_data_label')}</Text>
 				</View>
 			);
 		} else if(this.props.footerState === 2) {
 			return (
 				<View>
-					<View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>
+					{this.props.hasSeparator? <View style={{backgroundColor:'lightgray',height:1/PixelRatio.get()}}/>: null}
 					<View style={styles.ImportList.footer}>
 						<ActivityIndicator style={{paddingRight: 10}}/>
 					<Text style={{color:'#000',fontSize:14}}>{strings('fetch_data_label')}</Text>

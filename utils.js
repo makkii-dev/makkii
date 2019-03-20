@@ -213,23 +213,25 @@ function getCoinPrice(currency='CNY',amount=1) {
 class listenCoinPrice{
     constructor(store) {
         this.store = store;
-        this.interval = store.getState().setting.exchange_refresh_interval;
-        this.currency = store.getState().setting.fiat_currency;
+    }
+
+    reset(exchange_refresh_interval, fiat_currency) {
+        this.interval = exchange_refresh_interval;
+        this.currency = fiat_currency;
     }
 
     setInterval(interval) {
         this.interval = interval;
-        this.stopListen();
         this.startListen();
     }
 
     setCurrency(currency) {
         this.currency = currency;
-        this.stopListen();
         this.startListen();
     }
 
     startListen() {
+        this.stopListen();
         const thusStore = this.store;
         getCoinPrice(this.currency).then(price => {
             let settings = thusStore.getState().setting;
@@ -253,7 +255,9 @@ class listenCoinPrice{
     }
 
     stopListen() {
-        clearInterval(this.listener);
+        if (this.listener) {
+            clearInterval(this.listener);
+        }
     }
 
 }

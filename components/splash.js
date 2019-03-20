@@ -24,11 +24,14 @@ class Splash extends Component {
 
 
 		dbGet('settings').then(json => {
-			this.props.dispatch(setting(JSON.parse(json)));
+		    let setting_json =JSON.parse(json);
+		    setting_json.coinPrice = undefined;
+			this.props.dispatch(setting(setting_json));
+			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
+			listenPrice.startListen();
 		}, err=> {
 			console.log("load setting failed: ", err);
 		});
-		listenPrice.startListen();
 
 		// load db user
 		dbGet('user')
