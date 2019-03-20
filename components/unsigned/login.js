@@ -7,7 +7,7 @@ import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {accounts as accounts_action} from '../../actions/accounts';
 import {dbGet,decrypt} from '../../utils.js';
-import {linkButtonColor, mainColor, mainBgColor} from '../style_util';
+import {fixedHeight, linkButtonColor, mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
 import GeneralStatusBar from '../GeneralStatusBar';
@@ -46,11 +46,10 @@ class Login extends Component {
 		return (
                 <ImageBackground
 					style={{
-                        height: height,
-                        width: width,
                         flex: 1,
                         backgroundColor: mainBgColor,
                     }}
+                    imageStyle={{width: width, height: fixedHeight(686)}}
                     source={require('../../assets/login_header_bg.png')}
 				>
 					<TouchableOpacity

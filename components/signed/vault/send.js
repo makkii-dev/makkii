@@ -109,7 +109,7 @@ class Send extends Component {
 									placeholder={strings('send.hint_recipient')}
 									rightView={()=>
 										<TouchableOpacity onPress={()=> this.scan()}>
-											<Image source={require('../../../assets/scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
+											<Image source={require('../../../assets/icon_scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
 										</TouchableOpacity>}
 								/>
 
