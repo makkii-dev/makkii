@@ -19,13 +19,16 @@ export default class AionCell extends Component {
         return (
             <TouchableOpacity onPress={this.props.onClick}>
                 <View style={styles.cellContainer} >
-                    <Image source={this.props.leadIcon} style={{
-                        width: 15,
-                        height: 15,
-                        position: 'absolute',
-                        left: 5,
-                        resizeMode: 'contain'
-                    }} />
+                    <Image
+                        source={this.props.leadIcon}
+                        style={{
+                            width: 15,
+                            height: 15,
+                            position: 'absolute',
+                            left: 5,
+                        }}
+                        resizeMode={'contain'}
+                    />
                     <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
                     <Image style={styles.icon}
                            source={require('../assets/arrow_right.png')} />

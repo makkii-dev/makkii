@@ -80,7 +80,11 @@ export default class SelectList extends  React.Component {
             >
                 <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
                     {element}
-                    {item.select&&<Image source={require('../assets/icon_checked.png')} style={{width:20,height:20,marginLeft:20,resizeMode: 'contain'}}/>}
+                    {item.select&&<Image
+                        source={require('../assets/icon_checked.png')}
+                        style={{width:20,height:20,marginLeft:20}}
+                        resizeMode={'contain'}
+                    />}
                 </View>
             </TouchableOpacity>
         )

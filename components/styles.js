@@ -6,6 +6,12 @@ const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
 
 export default styles = {
+	shadow:{
+		elevation:5,
+		shadowColor:'black',
+		shadowOffset:{width:5,height:5},
+		shadowOpacity: 0.3,
+	},
 	headerStyle: {
 		shadowOpacity: 0,
 		shadowOffset: { height: 0, width:0 },
@@ -135,6 +141,7 @@ export default styles = {
 			color: FONT_COLOR,
 			fontWeight: 'normal',
 			lineHeight: 20,
+            height: 50,
 			paddingRight: 45,
             paddingLeft: 30,
 			borderColor: 'lightgray',

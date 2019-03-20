@@ -118,7 +118,7 @@ class Receive extends Component {
 						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
 									borderTopEndRadius: 10, borderTopStartRadius:10,
 						}}>
-							<Text style={{fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
+							<Text style={{color:'black',fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
 						</View>
 						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
 							<View style={{alignItems: 'center', margin: 10, marginTop:20}} >

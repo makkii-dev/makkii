@@ -8,6 +8,7 @@ import {ComponentTabBar} from '../../common.js';
 import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
+import defaultStyles from '../../styles';
 
 const {width,height} = Dimensions.get('window');
 
@@ -51,11 +52,11 @@ class Home extends HomeComponent {
 				alignItems: 'center'
 			}}>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginTop: 20,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >
@@ -77,11 +78,11 @@ class Home extends HomeComponent {
 					/>
 				</View>
 				<View style={{
+				    ...defaultStyles.shadow,
 					marginTop: 20,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 10,
 					paddingRight: 10,
 				}} >

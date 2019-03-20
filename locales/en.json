@@ -34,7 +34,7 @@
         "button_scan": "Scan",
         "button_confirm": "Confirm",
         "warning_mnemonic": "It will cause all previous accounts data to be emptied and cannot be recovered. Are you sure you want to do this?",
-        "error_invalid_mnemonic": "Please input valid mnemonics"
+        "error_invalid_mnemonic": "Please input valid mnemonic"
     },
     "recovery_password": {
         "title": "Recovery Password",
@@ -87,7 +87,7 @@
         "title": "Receive",
         "receive_help_message": "Please ask sender to scan below QRCode.",
         "label_modify_amount": "Amount",
-        "instruction": "Pay me by scanning this QRCode",
+        "instruction": "Scan to pay me",
         "button_save_receive_code": "Download QRCode",
         "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
     },
@@ -257,7 +257,7 @@
     "cancel_button": "Cancel",
     "save_file_button": "Save to Phone",
     "error_invalid_qrcode": "Invalid QRCode",
-    "delete_button": "DELETE",
+    "delete_button": "Delete",
     "warning_delete_account": "Are you sure you want to delete this account?",
     "error_connect_remote_server": "Unable to connect to remote server",
     "message_no_more_data": "No More Data",

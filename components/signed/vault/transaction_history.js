@@ -17,8 +17,9 @@ import BigNumber from "bignumber.js";
 import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
+import defaultStyles from '../../styles';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class TransactionHistory extends React.Component {
     static navigationOptions = ({ navigation }) => {
@@ -124,7 +125,7 @@ class TransactionHistory extends React.Component {
                     });
                 }}
             >
-                <View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+                <View style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
                     width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}>
                     <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
                         <Text>{timestamp}</Text>
@@ -190,7 +191,9 @@ class TransactionHistory extends React.Component {
 
                         /> : <View style={{width: width, height: 180, justifyContent: 'center', alignItems: 'center'}}>
                             <Image source={require('../../../assets/empty_transactions.png')}
-                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}/>
+                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+                                   resizeMode={'contain'}
+                            />
                             <Text style={{color: 'gray'}}>{strings('account_view.empty_label')}</Text>
                         </View>
                     }
@@ -200,12 +203,6 @@ class TransactionHistory extends React.Component {
     }
 
 }
-
-const styles=StyleSheet.create({
-    shadow:{
-        shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
-    }
-});
 
 export default connect(state => {
     return ({

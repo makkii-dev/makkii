@@ -4,7 +4,8 @@ import { View, Text, Clipboard, Dimensions, NativeModules, Platform, NativeEvent
 import { ComponentButton, InputMultiLines } from '../common.js';
 import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
-import styles from '../styles.js';
+import defaultStyles from '../styles.js';
+import {mainBgColor} from '../style_util';
 import screenshotHelper from 'react-native-screenshot-helper';
 
 const {width,height} = Dimensions.get('window');
@@ -53,6 +54,7 @@ class Mnemonic extends Component {
 			<View style={{
 					flex: 1,
 					padding: 40,
+                	backgroundColor: mainBgColor,
 				}}
 			>
                 <Text style={{
@@ -60,7 +62,7 @@ class Mnemonic extends Component {
 					marginBottom: 20
 				}}>{strings('unsigned_register_mnemonic.hint')}</Text>
                 <View style={{
-                	elevation: 3,
+                    ...defaultStyles.shadow,
 					padding: 10,
                     borderRadius: 5,
 					height: 130,

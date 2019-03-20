@@ -6,6 +6,7 @@ import SelectList from '../../selectList.js';
 import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
+import defaultStyles from '../../styles';
 
 const {width,height} = Dimensions.get('window');
 
@@ -59,10 +60,10 @@ class Language extends Component {
                 paddingTop: 40
             }}>
                 <View style={{
+                    ...defaultStyles.shadow,
                     width: width - 40,
                     borderRadius: 5,
                     backgroundColor: 'white',
-                    elevation: 3,
                     paddingLeft: 20,
                     paddingRight: 20,
                 }} >

@@ -7,7 +7,8 @@ import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
 import {accounts as accounts_action} from '../../actions/accounts';
 import {dbGet,decrypt} from '../../utils.js';
-import {linkButtonColor, mainColor} from '../style_util';
+import {linkButtonColor, mainColor, mainBgColor} from '../style_util';
+import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
 import GeneralStatusBar from '../GeneralStatusBar';
 
@@ -48,31 +49,32 @@ class Login extends Component {
                         height: height,
                         width: width,
                         flex: 1,
+                        backgroundColor: mainBgColor,
                     }}
                     source={require('../../assets/login_header_bg.png')}
 				>
 					<TouchableOpacity
 						style={{
 							flex: 1,
-							alignItems: 'center'
+							alignItems: 'center',
 						}}
 						activeOpacity={1}
 						onPress={() => {Keyboard.dismiss()}}
                     >
                         <GeneralStatusBar backgroundColor={mainColor}/>
-                        <View style={{marginTop: 60}} />
-                        <ComponentLogo />
                         <View style={{
-                            marginTop: 60,
+                            ...defaultStyles.shadow,
+                            marginTop: 160,
                             width: width - 80,
-                            height: 250,
                             borderRadius: 10,
                             backgroundColor: 'white',
-                            elevation: 3,
-                            paddingLeft: 20,
-                            paddingRight: 20,
-                            paddingTop: 40,
+                            paddingHorizontal: 20,
                         }} >
+                            <View style={{alignItems: 'center', marginBottom: 60}}>
+                                <ComponentLogo style={{
+                                    marginTop: -25,
+                                }}/>
+                            </View>
                             <PasswordInput
                                 value={this.state.password}
                                 placeholder={strings('unsigned_login.hint_enter_password')}
@@ -82,8 +84,8 @@ class Login extends Component {
                                     });
                                 }}
                             />
-                            <View style={{marginTop: 40}}/>
                             <ComponentButton
+                                style={{marginTop: 30}}
                                 onPress={e => {
                                     dbGet('user')
                                         .then(json=>{
@@ -105,7 +107,6 @@ class Login extends Component {
                                 title={strings('unsigned_login.btn_login')}
                             />
                             <View style={{
-                                flex: 1,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 height: 40,

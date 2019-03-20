@@ -4,6 +4,8 @@ import {Image, View,Text,Keyboard, TouchableOpacity, Dimensions} from 'react-nat
 import {strings} from "../../locales/i18n";
 import {InputMultiLines, ComponentButton, alert_ok} from '../common';
 import {validateMnemonic} from "../../libs/aion-hd-wallet";
+import defaultStyles from '../styles';
+import {mainBgColor} from '../style_util';
 
 const {width,height} = Dimensions.get('window');
 
@@ -81,6 +83,7 @@ class Home extends Component {
 				<View style={{
 					flex: 1,
 					padding: 40,
+					backgroundColor: mainBgColor,
 				}}
 				>
                     <Text style={{
@@ -88,7 +91,7 @@ class Home extends Component {
 						fontSize: 16,
                     }}>{strings("recovery.label_prompt")}</Text>
 					<View style={{
-						elevation: 3,
+					    ...defaultStyles.shadow,
 						padding: 10,
 						borderRadius: 5,
 						height: 130,
@@ -102,6 +105,7 @@ class Home extends Component {
                             style={{
 								borderWidth: 0,
 								fontSize: 18,
+								height: 200,
 								fontWeight: 'normal',
 								textAlignVertical: 'top'
 							}}
@@ -117,7 +121,7 @@ class Home extends Component {
 						title={strings('recovery.button_confirm')}
                         onPress={e=> {
                             if (!validateMnemonic(this.state.mnemonic)) {
-								alert_ok(strings('recovery.error_invalid_mnemonic'))
+								alert_ok(strings('alert_title_error'), strings('recovery.error_invalid_mnemonic'))
                                 return;
 							}
 							this.props.navigation.navigate('unsigned_recovery_password', {

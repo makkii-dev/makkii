@@ -8,6 +8,7 @@ import {strings} from "../../../locales/i18n";
 import {mainnet_url, mastery_url} from '../../../utils';
 import SelectList from '../../selectList.js';
 import {mainBgColor} from '../../style_util';
+import defaultStyles from '../../styles';
 import {RightActionButton} from '../../common';
 
 const {width} = Dimensions.get('window');
@@ -58,10 +59,10 @@ class Services extends Component {
 				paddingTop: 40
 			}}>
 				<View style={{
+				    ...defaultStyles.shadow,
 					width: width - 40,
 					borderRadius: 5,
 					backgroundColor: 'white',
-					elevation: 3,
 					paddingLeft: 20,
 					paddingRight: 20,
 				}} >
