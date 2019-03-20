@@ -172,7 +172,7 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_vault_receive': {
 		screen: VaultReceive,
-		navigationOptions,
+		navigationOptions: navigationOptionsWithoutShadow,
 	},
 	'signed_vault_send': {
 		screen: VaultSend,

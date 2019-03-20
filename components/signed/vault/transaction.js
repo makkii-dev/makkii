@@ -51,10 +51,10 @@ class Transaction extends Component {
 		const value1 = ifSender? transaction.to: transaction.from;
 		return (
 			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
-				<View style={{flex:1,width:width,paddingHorizontal:10}}>
-					<View style={{...defaultStyles.shadow, flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10, borderRadius: 10}}>
+				<View style={{flex:1,width:width,paddingHorizontal:20}}>
+					<View style={{...defaultStyles.shadow, flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10, borderRadius: 10, backgroundColor: 'white'}}>
 						<TransactionItemCell
-							style={{height:100, marginTop:20}}
+							style={{height:100}}
 							title={title1}
 							value={value1}
 							valueTextAlign={'left'}

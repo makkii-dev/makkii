@@ -550,14 +550,16 @@ class Home extends HomeComponent {
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
 		const total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
+		const header_marginTop = Platform.OS === 'ios'?getStatusBarHeight(false):0;
 		return (
 			<View style={{flex:1}}>
+				{Platform.OS === 'android'? <GeneralStatusBar backgroundColor={mainColor}/>: null}
 				<TouchableOpacity style={{flex:1}}  activeOpacity={1} onPress={()=>{
 					this.state.openRowKey&&this.setState({openRowKey:null});
 					this.HomeCenterRef&&this.HomeCenterRef.closeAll();
 					Keyboard.dismiss();
 				}}>
-				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1,paddingTop:getStatusBarHeight(true), backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
+				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1,paddingTop:header_marginTop, backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
 					{/*title bar*/}
 					<View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:15, marginLeft:10,marginRight:10}}>
 						<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{

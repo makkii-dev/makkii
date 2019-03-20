@@ -277,13 +277,13 @@ class Account extends Component {
 		const transactionsList =  Object.values(transactions).slice(0,5);
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
-		const header_marginTop = Platform.OS==='ios'?getStatusBarHeight(false):0;
+		// const header_marginTop = Platform.OS==='ios'?getStatusBarHeight(false):0;
 		return (
 			<View style={{flex:1, backgroundColor: mainColor}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
 					{/*title bar*/}
 					<AccountNameComponent
-						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,marginTop:header_marginTop,
+						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,marginTop:getStatusBarHeight(false),
 							height:header_height, width:width,backgroundColor:mainColor}}
 						value={name}
 						type={type}
