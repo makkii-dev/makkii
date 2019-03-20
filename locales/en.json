@@ -87,7 +87,7 @@
         "title": "Receive",
         "receive_help_message": "Please ask sender to scan below QRCode.",
         "label_modify_amount": "Amount",
-        "instruction": "Pay me by scanning this QRCode",
+        "instruction": "Scan to pay me",
         "button_save_receive_code": "Download QRCode",
         "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
     },

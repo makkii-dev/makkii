@@ -531,6 +531,12 @@ class Home extends HomeComponent {
 		})
 	}
 
+	onChangeText(t){
+		const {keyWords} = this.state;
+		if(keyWords!==t.trim()){
+			this.setState({keyWords:t.trim()});
+		}
+	}
 	onTouchCenter(){
 		this.setState({openRowKey:null,swipeEnable:false});
 	}
@@ -606,7 +612,7 @@ class Home extends HomeComponent {
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}
-						onChangeText={(value)=>this.setState({keyWords:value})}
+						onChangeText={(value)=>this.onChangeText(value)}
 						onTouch={()=>this.onTouchCenter()}
 						currentFilter={this.state.filter}
 						currentSort={this.state.sortOrder}
@@ -654,10 +660,10 @@ class Home extends HomeComponent {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerPosition={{position:'absolute', top:80,right:10,width:150}}
+							containerPosition={{position:'absolute', top:80,right:10,width:180}}
 							imageStyle={{width: 20, height: 20, marginRight:20}}
 							fontStyle={{fontSize:12, color:'#000'}}
-							itemStyle={{width:150,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
+							itemStyle={{width:180,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
 							containerBackgroundColor={'#fff'}
 							ItemSeparatorComponent={()=><View style={styles.divider}/>}
 							ListHeaderComponent={()=><View style={{width:180, marginBottom: 10}}>

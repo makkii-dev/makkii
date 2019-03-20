@@ -20,27 +20,9 @@ import defaultStyles from '../../styles';
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {
 		return {
-			title: navigation.getParam('title')
+			title: strings('transaction_detail.title')
 		};
 	};
-
-	componentWillMount(){
-		this.update_locale();
-
-		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-			this.update_locale();
-		});
-	}
-
-	update_locale= () => {
-		this.props.navigation.setParams({
-			'title':  strings('transaction_detail.title'),
-		});
-	};
-
-	componentWillUnmount() {
-		this.listener.remove();
-	}
 
 	constructor(props){
 		super(props);
@@ -61,8 +43,8 @@ class Transaction extends Component {
 		})
 	}
 	render(){
+		console.log('render transaction');
 		const transaction = this.transaction;
-		console.log('tx ',this.transaction)
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');

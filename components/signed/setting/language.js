@@ -49,7 +49,7 @@ class Language extends Component {
 
         DeviceEventEmitter.emit('locale_change');
         this.props.navigation.goBack();
-    }
+    };
 
     render() {
         return (
