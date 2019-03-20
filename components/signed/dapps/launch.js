@@ -32,7 +32,7 @@ class Launch extends HomeComponent{
     render(){
         return (
             <View style={{flex:1, padding:10, backgroundColor:mainBgColor}}>
-                <View style={{...defaultStyles.shadow, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
+                <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
                     <View style={{height:120,width:width-20, flexDirection:'row',paddingHorizontal:30}}>
                         <Image source={this.dapp.logo} style={{width:80,height:100, borderColor:'#eee', borderWidth:1,borderRadius:10}} resizeMode={'contain'}/>
                         <View style={{flex:1, justifyContent:'space-between', alignItems:'flex-start',marginLeft:20,paddingHorizontal:10}}>

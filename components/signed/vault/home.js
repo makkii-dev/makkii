@@ -35,6 +35,7 @@ import {PopWindow} from "./home_popwindow";
 import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
+import {getStatusBarHeight} from '../../../utils';
 const {width, } = Dimensions.get('window');
 
 
@@ -547,17 +548,16 @@ class Home extends HomeComponent {
 		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
-
 		const total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
+		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
 		return (
 			<View style={{flex:1}}>
-				<GeneralStatusBar backgroundColor={mainColor}/>
 				<TouchableOpacity style={{flex:1}}  activeOpacity={1} onPress={()=>{
 					this.state.openRowKey&&this.setState({openRowKey:null});
 					this.HomeCenterRef&&this.HomeCenterRef.closeAll();
 					Keyboard.dismiss();
 				}}>
-				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1, backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
+				<ImageBackground source={require("../../../assets/vault_home_bg.png")} style={{flex:1,paddingTop:getStatusBarHeight(true), backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
 					{/*title bar*/}
 					<View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:15, marginLeft:10,marginRight:10}}>
 						<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{
@@ -660,7 +660,7 @@ class Home extends HomeComponent {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.closeMenu(select)}
 						 	data={Platform.OS==='android'?MENU:MENU.slice(0,2)}
-							containerPosition={{position:'absolute', top:80,right:10,width:180}}
+							containerPosition={{position:'absolute', top:popwindowTop,right:10,width:180}}
 							imageStyle={{width: 20, height: 20, marginRight:20}}
 							fontStyle={{fontSize:12, color:'#000'}}
 							itemStyle={{width:180,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}

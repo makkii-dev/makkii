@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,FlatList,Platform} from 'react-native';
-import {linkButtonColor} from '../../style_util';
-import {fetchRequest} from "../../../utils";
+import {fetchRequest,getStatusBarHeight} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import GeneralStatusBar from "../../GeneralStatusBar";
-import {mainColor, fixedWidthFont, mainBgColor} from "../../style_util";
+import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
-const {width} = Dimensions.get('window');
+const {width,height} = Dimensions.get('window');
 const header_height = Platform.OS==='ios'?64:56;
 
 const SwithType = type=>{
@@ -169,13 +168,15 @@ class Account extends Component {
 		});
 		this.isMount = false;
 	}
-	async componentDidMount(){
+	componentWillMount(){
+		this.fetchAccountTransacions(this.addr);
 		this.isMount = true;
 	}
 
 	async componentWillUnmount() {
 		this.isMount = false;
 	}
+
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
@@ -276,14 +277,14 @@ class Account extends Component {
 		const transactionsList =  Object.values(transactions).slice(0,5);
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
+		const header_marginTop = Platform.OS==='ios'?getStatusBarHeight(false):0;
 		return (
-			<View style={{flex:1, backgroundColor: mainBgColor}}>
+			<View style={{flex:1, backgroundColor: mainColor}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
-					<GeneralStatusBar backgroundColor={mainColor}/>
 					{/*title bar*/}
 					<AccountNameComponent
-						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,
-							height:header_height, width:width, backgroundColor:mainColor}}
+						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,marginTop:header_marginTop,
+							height:header_height, width:width,backgroundColor:mainColor}}
 						value={name}
 						type={type}
 						navigation={navigation}
@@ -336,27 +337,27 @@ class Account extends Component {
 							</TouchableOpacity>
 						</View>
 					</View>
-					{
-						transactionsList.length?<FlatList
-							data={transactionsList}
-							style={{backgroundColor:'#fff'}}
-							keyExtractor={(item,index)=>index + ''}
-							renderItem={({item})=>this._renderTransaction(item)}
-							refreshControl={
-								<RefreshControl
-									refreshing={this.state.refreshing}
-									onRefresh={()=>this.onRefresh(this.account.address)}
-									title={'loading'}
+					<FlatList
+						data={transactionsList}
+						style={{backgroundColor:mainBgColor}}
+						keyExtractor={(item,index)=>index + ''}
+						renderItem={({item})=>this._renderTransaction(item)}
+						ListEmptyComponent={()=>
+							<View style={{width:width,height:height-400,justifyContent:'center',alignItems:'center',backgroundColor:mainBgColor}}>
+								<Image source={require('../../../assets/empty_transactions.png')}
+									   style={{width:80,height:80, tintColor:'gray',marginBottom:20}}
+									   resizeMode={'contain'}
 								/>
-							}
-						/>:<View style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}>
-							<Image source={require('../../../assets/empty_transactions.png')}
-								   style={{width:80,height:80, tintColor:'gray',marginBottom:20}}
-								   resizeMode={'contain'}
+								<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
+							</View>}
+						refreshControl={
+							<RefreshControl
+								refreshing={this.state.refreshing}
+								onRefresh={()=>this.onRefresh(this.account.address)}
+								title={'loading'}
 							/>
-							<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
-						</View>
-					}
+						}
+					/>
 
 				</TouchableOpacity>
 			</View>
