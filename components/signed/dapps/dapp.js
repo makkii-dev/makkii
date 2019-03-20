@@ -214,6 +214,7 @@ class Dapp extends Component {
                         ref={ref=>this.webViewRef=ref}
                         source={{uri: this.uri}}
                         cacheEnabled={false}
+                        useWebKit={true}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
                         injectedJavaScriptBeforeLoad={this.state.inject}
