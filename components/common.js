@@ -82,7 +82,7 @@ class ComponentLogo extends Component{
 					height:50,
 				}}
 				resizeMode={'contain'}
-				source={require('../assets/icon_app_logo2.png')}
+				source={require('../assets/icon_app_logo.png')}
 			/>
 		);
 	}
@@ -306,6 +306,7 @@ class PasswordInputWithTitle extends Component {
 							color: fontColor,
 							fontWeight: 'normal',
 							lineHeight: 20,
+							height: 50,
 							paddingRight: 45,
 							borderColor: 'lightgray',
 							borderBottomWidth: 1,
@@ -420,6 +421,7 @@ class TextInputWithTitle extends Component {
 							color: fontColor,
 							fontWeight: 'normal',
 							lineHeight: 20,
+							height: 50,
 							paddingRight: 45,
 							borderColor: 'lightgray',
 							borderBottomWidth: 1,

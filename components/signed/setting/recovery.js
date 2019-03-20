@@ -79,6 +79,7 @@ class Recovery extends Component {
 					backgroundColor: 'white',
 					width: width - 40,
 					marginTop: 20,
+					marginBottom: -5,
 				}}>
                     <InputMultiLines
 						style={{

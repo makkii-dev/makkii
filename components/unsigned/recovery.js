@@ -105,6 +105,7 @@ class Home extends Component {
                             style={{
 								borderWidth: 0,
 								fontSize: 18,
+								height: 200,
 								fontWeight: 'normal',
 								textAlignVertical: 'top'
 							}}
