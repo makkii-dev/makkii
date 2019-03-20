@@ -63,7 +63,7 @@ export class PopWindow extends React.Component {
                     <View style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0}}>
                         <Animated.View  style={{...this.props.containerPosition, transform:[{scale:this.state.animation}]}}>
                             <View style={{alignItems: 'flex-end'}}>
-                                <Image source={require('../../../assets/arrow_up2.png')} style={{marginRight:15,width:20,height:10,tintColor: this.props.containerBackgroundColor}}/>
+                                <Image source={require('../../../assets/arrow_up.png')} style={{marginRight:15,width:20,height:10,tintColor: this.props.containerBackgroundColor}}/>
                             </View>
                             <FlatList
                                 {...this.props}
