@@ -22,11 +22,11 @@ import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs} from "../../../actions/accounts";
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
-import {linkButtonColor} from '../../style_util';
+import {linkButtonColor, mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
 
 
-const {width, height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 
 class Send extends Component {
@@ -93,7 +93,7 @@ class Send extends Component {
 	}
 	render(){
 		return (
-                <View style={{flex:1}}>
+                <View style={{flex:1, backgroundColor: mainBgColor}}>
 					<ScrollView
 						contentContainerStyle={{justifyContent: 'center'}}
 						keyboardShouldPersistTaps='always'

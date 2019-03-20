@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
-import {linkButtonColor} from "../../style_util";
+import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
 
@@ -68,7 +68,7 @@ class Transaction extends Component {
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
 		return (
-			<ScrollView style={{backgroundColor:'#fff',height,width}}>
+			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:10}}>
 					<View style={{...defaultStyles.shadow, flex:1,marginVertical:20,paddingVertical:10,paddingHorizontal:10, borderRadius: 10}}>
 						<TransactionItemCell

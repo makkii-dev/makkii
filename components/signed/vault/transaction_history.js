@@ -18,6 +18,7 @@ import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
 import defaultStyles from '../../styles';
+import {mainBgColor} from '../../style_util';
 
 const {width} = Dimensions.get('window');
 
@@ -190,7 +191,7 @@ class TransactionHistory extends React.Component {
         } else {
             const transactions = Object.values(this.state.transactions).sort((a, b) => a.timestamp > b.timestamp);
             return (
-                <View style={{flex: 1, justifyContent:'center',alignItems:'center'}}>
+                <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {
                         transactions.length ? <FlatList
                             data={transactions}
