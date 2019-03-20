@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground} from 'react-native';
+import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground,BackHandler} from 'react-native';
 
 import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
 import {hashPassword} from '../../utils.js';
@@ -16,14 +16,16 @@ const {width,height} = Dimensions.get('window');
 class Login extends Component {
 	constructor(props){
 		super(props);
-		this.state = { 
+		this.state = {
 			password: '',
 		}
 	}
 	async componentDidMount(){
 		console.log("mount login");
 		console.log('[route] ' + this.props.navigation.state.routeName);
-
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            BackHandler.exitApp();
+        });
 		Linking.getInitialURL().then(url => {
 			console.log("linking url: " + url);
 		});
@@ -32,11 +34,12 @@ class Login extends Component {
 	}
 	componentWillUnmount() {
 		console.log("unmount login");
+        this.backHandler.remove();
 		Linking.removeEventListener('url', this.handleOpenURL);
 	}
 	handleOpenURL = (event) => {
 		console.log("linking url=" + event.url);
-	}
+	};
 	render(){
 		const {dispatch} = this.props;
 		return (
@@ -134,8 +137,8 @@ class Login extends Component {
 	}
 }
 
-export default connect(state => { 
-	return { 
+export default connect(state => {
+	return {
 		user: state.user,
 	};
 })(Login);

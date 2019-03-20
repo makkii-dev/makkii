@@ -150,8 +150,8 @@
         "title": "Ledger"
     },
     "sort": {
-        "balance": "Balance first",
-        "transaction": "Transaction first"
+        "balance": " Order by balance",
+        "transaction": "Order by transaction"
     },
     "filter": {
         "all": "ALL",
