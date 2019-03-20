@@ -1,4 +1,4 @@
-import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll} from 'react-native';
+import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll,Dimensions,StatusBar} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
@@ -304,7 +304,29 @@ class listenTransaction{
     }
 
 }
+function isIphoneX() {
+    const dimen = Dimensions.get('window');
+    return (
+        Platform.OS === 'ios' &&
+        !Platform.isPad &&
+        !Platform.isTVOS &&
+        ((dimen.height === 812 || dimen.width === 812) || (dimen.height === 896 || dimen.width === 896))
+    );
+}
 
+function ifIphoneX(iphoneXStyle, regularStyle) {
+    if (isIphoneX()) {
+        return iphoneXStyle;
+    }
+    return regularStyle;
+}
+
+function getStatusBarHeight(safe) {
+    return Platform.select({
+        ios: ifIphoneX(safe ? 44 : 30, 20),
+        android: StatusBar.currentHeight
+    });
+}
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 
@@ -329,5 +351,6 @@ module.exports = {
     validateRecipient: validateRecipient,
     hexString2Array: hexString2Array,
     mainnet_url: mainnet_url,
-    mastery_url: mastery_url
+    mastery_url: mastery_url,
+    getStatusBarHeight:getStatusBarHeight,
 }

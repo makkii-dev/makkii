@@ -222,7 +222,7 @@ class DappSend extends React.Component{
                                 showAdvanced: !this.state.showAdvanced,
                             })
                         }}>
-                            <Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+                            <Text style={{color: linkButtonColor, marginTop:20,  marginHorizontal:20 }}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
                         </TouchableOpacity>
 
 
@@ -247,7 +247,7 @@ class DappSend extends React.Component{
                         }
 
                         {/*send button*/}
-                        <View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+                        <View style={{ marginHorizontal:20, marginTop:20, marginBottom: 40}}>
                             <ComponentButton title={strings('send_button')}
                                              onPress={this.transfer.bind(this)}
                             />
@@ -323,6 +323,7 @@ const styles = StyleSheet.create({
         borderColor: '#8c8a8a',
         textAlignVertical:'bottom',
         borderBottomWidth: 1/ PixelRatio.get(),
+        paddingVertical: 10,
     },
     containerView:{
         ...defaultStyles.shadow,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StatusBar, Platform} from 'react-native';
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+import {getStatusBarHeight} from '../utils';
+const STATUSBAR_HEIGHT = getStatusBarHeight(true);
 const GeneralStatusBar = ({ backgroundColor, ...props }) => (
     <View style={{height:STATUSBAR_HEIGHT,  backgroundColor }}>
         <StatusBar translucent={true} backgroundColor={backgroundColor} {...props} />

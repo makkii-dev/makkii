@@ -1,6 +1,6 @@
 import {Dimensions, PixelRatio, Platform, StatusBar, StyleSheet} from 'react-native';
 import {mainColor} from './style_util';
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : StatusBar.currentHeight;
+const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
 
 const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';

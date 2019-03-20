@@ -136,7 +136,7 @@ class Send extends Component {
 									showAdvanced: !this.state.showAdvanced,
 								})
 							}}>
-								<Text style={{color: linkButtonColor, marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
+								<Text style={{color: linkButtonColor, marginTop:20,  marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
 							</TouchableOpacity>
 
 
@@ -161,7 +161,7 @@ class Send extends Component {
 							}
 
 							{/*send button*/}
-							<View style={{ marginHorizontal:20, marginTop:10, marginBottom: 40}}>
+							<View style={{ marginHorizontal:20, marginTop:20, marginBottom: 40}}>
 								<ComponentButton title={strings('send_button')}
 												 onPress={this.onTransfer.bind(this)}
 								/>
@@ -327,7 +327,7 @@ class Send extends Component {
 		let gasLimit = new BigNumber(this.state.gasLimit);
 		let gasPrice = new BigNumber(this.state.gasPrice);
 		let totalBalance = new BigNumber(this.account.balance);
-		let totalAmount = totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9)));
+		let totalAmount =Math.max(0,totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
 
 		this.setState({
 			amount: totalAmount.toString()
@@ -360,6 +360,7 @@ const styles = StyleSheet.create({
 		borderColor: '#8c8a8a',
 		textAlignVertical:'bottom',
 		borderBottomWidth: 1/ PixelRatio.get(),
+		paddingVertical: 10,
 	},
 	containerView:{
 		...defaultStyles.shadow,
