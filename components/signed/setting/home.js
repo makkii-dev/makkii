@@ -20,6 +20,9 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 	}
+	shouldComponentUpdate(nextProps) {
+		return nextProps.setting!==this.props.setting;
+	}
 
 	componentWillMount(){
 		this.update_locale();
@@ -40,6 +43,7 @@ class Home extends HomeComponent {
 	}
 
 	render(){
+		console.log('render setting')
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,

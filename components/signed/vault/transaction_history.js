@@ -23,7 +23,7 @@ const {width,height} = Dimensions.get('window');
 class TransactionHistory extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: navigation.getParam('title')
+            title: strings('account_view.transaction_history_label'),
         };
     };
     state={
@@ -38,22 +38,11 @@ class TransactionHistory extends React.Component {
         this.account = this.props.navigation.state.params.account;
     }
 
-    update_locale= () => {
-        this.props.navigation.setParams({
-            'title': strings('account_view.transaction_history_label'),
-        });
-    };
-
 
 
     componentWillMount(){
         InteractionManager.runAfterInteractions(()=>{
             this.fetchAccountTransacions(this.account,this.state.currentPage)
-        });
-        this.update_locale();
-        this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-            console.log("locale changed");
-            this.update_locale();
         });
         this.isMount = true;
     }
@@ -61,16 +50,13 @@ class TransactionHistory extends React.Component {
 
     componentWillUnmount(): void {
         this.isMount = false;
-        this.listener.remove();
     }
 
 
     fetchAccountTransacions = (address, page=0, size=25)=>{
         let {currentPage,totalPages,transactions} = this.state;
         const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
-        console.log("request url: " + url);
         fetchRequest(url).then(res=>{
-            console.log('[fetch result]', res);
             let txs = {};
             if(!res.page){
                 this.isMount&&this.setState({
@@ -87,7 +73,6 @@ class TransactionHistory extends React.Component {
                 totalPages  = res.page.totalPages;
             }
             if(res.content&&res.content.length>0){
-                console.log('res content ', res.content);
                 res.content.forEach(value=>{
                     let tx={};
                     tx.hash = '0x'+value.transactionHash;
@@ -101,7 +86,6 @@ class TransactionHistory extends React.Component {
                 });
                 transactions = Object.assign({},transactions,txs);
             }
-            console.log('[txs] ', JSON.stringify(txs));
             this.isMount&&this.setState({
                     currentPage,
                     totalPages,
@@ -165,7 +149,6 @@ class TransactionHistory extends React.Component {
         this.setState({
             footerState: 2,
         },()=>{setTimeout(()=>this.fetchAccountTransacions(this.account, this.state.currentPage+1),500)});
-        console.log('after')
     }
 
 

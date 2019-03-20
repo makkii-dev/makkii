@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, View, TouchableOpacity, Text, DeviceEventEmitter} from 'react-native';
+import {Dimensions, View, Text, DeviceEventEmitter} from 'react-native';
 import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
@@ -48,7 +48,7 @@ class Language extends Component {
 
         DeviceEventEmitter.emit('locale_change');
         this.props.navigation.goBack();
-    }
+    };
 
     render() {
         return (
