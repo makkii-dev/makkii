@@ -5687,7 +5687,7 @@ react-native-safe-area-view@^0.13.0:
 
 "react-native-screenshot-helper@https://github.com/chaion/react-native-screenshot.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-screenshot.git#cc5eff51ea8a05aa762d808093ea722b5343ea73"
+  resolved "https://github.com/chaion/react-native-screenshot.git#c808666c7968ebc87c2bfd3e78b34f240c9d2084"
 
 react-native-svg@^9.0.6:
   version "9.2.4"
