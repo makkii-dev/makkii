@@ -1,6 +1,21 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,FlatList,Platform} from 'react-native';
+import {
+	View,
+	TouchableOpacity,
+	Text,
+	PixelRatio,
+	Image,
+	Clipboard,
+	RefreshControl,
+	Keyboard,
+	Dimensions,
+	StyleSheet,
+	TextInput,
+	FlatList,
+	Platform,
+	ActivityIndicator
+} from 'react-native';
 import {fetchRequest,getStatusBarHeight} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from 'react-native-root-toast';
@@ -160,6 +175,7 @@ class Account extends Component {
 		super(props);
 		this.state={
 			refreshing: false,
+			loading: true,
 		};
 		this.addr=this.props.navigation.state.params.address;
 		this.account = this.props.accounts[this.addr];
@@ -182,7 +198,7 @@ class Account extends Component {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
 	}
 
-	_renderTransaction(transaction){
+	renderSingleTransaction(transaction){
 		if(transaction.status === 'PENDING'){
 			console.log('try to get transaction '+transaction.hash+' status');
 			listenTx.addTransaction(transaction);
@@ -216,6 +232,7 @@ class Account extends Component {
 			</TouchableOpacity>
 		)
 	}
+
 	onChangeName = (newName) =>{
 		const {dispatch} = this.props;
 		const key = this.account.address;
@@ -257,33 +274,118 @@ class Account extends Component {
 			const {dispatch} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
 			dispatch(update_account_txs(address,txs,this.props.user.hashed_password));
-			if (this.isMount) {
-				this.setState({
-					refreshing: false,
-				})
-			}
+			this.isMount&&this.setState({
+				refreshing: false,
+				loading:false,
+			})
 		},error => {
 			console.log(error);
-			if (this.isMount) {
-				this.setState({
-					refreshing: false,
-				})
-			}
+			this.isMount&&this.setState({
+				refreshing: false,
+				loading:false,
+			})
 		})
 	};
+
+	renderEmpty(){
+		if(this.state.loading){
+			return(
+				<View style={{
+					width: width,
+					flex: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+					backgroundColor: mainBgColor
+				}}>
+					<ActivityIndicator
+						animating={true}
+						color='gray'
+						size="large"
+					/>
+				</View>
+			)
+
+		}else {
+			return (
+				<TouchableOpacity style={{flex: 1}} onPress={()=>{
+					this.setState({loading:true},()=>{
+						setTimeout(()=>this.fetchAccountTransacions(this.addr),500);
+					})
+				}}>
+					<View style={{
+						width: width,
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: mainBgColor
+					}}>
+						<Image source={require('../../../assets/empty_transactions.png')}
+							   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+							   resizeMode={'contain'}
+						/>
+						<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+							<Image source={require('../../../assets/refresh.png')}
+								   style={{width: 20, height: 20, tintColor: 'gray', marginHorizontal: 10}}
+								   resizeMode={'contain'}/>
+							<Text style={{color: 'gray'}}>{strings('account_view.empty_label')}</Text>
+						</View>
+					</View>
+				</TouchableOpacity>
+
+			)
+		}
+	}
+
+	renderTransactions(transactionsList){
+		if(this.state.loading){
+			return(
+				<View style={{
+					width: width,
+					flex: 1,
+					justifyContent: 'center',
+					alignItems: 'center',
+					backgroundColor: mainBgColor
+				}}>
+					<ActivityIndicator
+						animating={true}
+						color='gray'
+						size="large"
+					/>
+				</View>
+			)
+
+		}else {
+			return (
+				<FlatList
+					data={transactionsList}
+					style={{backgroundColor:mainBgColor}}
+					keyExtractor={(item,index)=>index + ''}
+					renderItem={({item})=>this.renderSingleTransaction(item)}
+					refreshControl={
+						<RefreshControl
+							refreshing={this.state.refreshing}
+							onRefresh={()=>this.onRefresh(this.account.address)}
+							title={'loading'}
+						/>
+					}
+				/>
+			)
+		}
+	}
+
 	render(){
 		const {navigation} = this.props;
 		const {address, type, name ,transactions} = this.account;
 		const transactionsList =  Object.values(transactions).slice(0,5);
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
-		const header_marginTop = Platform.OS==='ios'?getStatusBarHeight(false):0;
+		const header_paddingTop = Platform.OS==='ios'?getStatusBarHeight(false):0;
 		return (
-			<View style={{flex:1, backgroundColor: mainColor}}>
+			<View style={{flex:1, backgroundColor: mainBgColor, paddingTop:header_paddingTop}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
 					{/*title bar*/}
 					<AccountNameComponent
-						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,marginTop:header_marginTop,
+						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,
 							height:header_height, width:width,backgroundColor:mainColor}}
 						value={name}
 						type={type}
@@ -337,31 +439,13 @@ class Account extends Component {
 							</TouchableOpacity>
 						</View>
 					</View>
-					<FlatList
-						data={transactionsList}
-						style={{backgroundColor:mainBgColor}}
-						keyExtractor={(item,index)=>index + ''}
-						renderItem={({item})=>this._renderTransaction(item)}
-						ListEmptyComponent={()=>
-							<View style={{width:width,height:height-400,justifyContent:'center',alignItems:'center',backgroundColor:mainBgColor}}>
-								<Image source={require('../../../assets/empty_transactions.png')}
-									   style={{width:80,height:80, tintColor:'gray',marginBottom:20}}
-									   resizeMode={'contain'}
-								/>
-								<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
-							</View>}
-						refreshControl={
-							<RefreshControl
-								refreshing={this.state.refreshing}
-								onRefresh={()=>this.onRefresh(this.account.address)}
-								title={'loading'}
-							/>
-						}
-					/>
+					{
+						transactionsList.length>0?this.renderTransactions(transactionsList):this.renderEmpty()
+					}
 
 				</TouchableOpacity>
 			</View>
-		)
+		) 
 	}
 }
 
