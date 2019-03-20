@@ -12,7 +12,7 @@
   Your camera will only be used for reading QR codes. Camera images will never leave your device.
 
 * Storage Permission
-  Makki requires storage permission only to store qrcode to album.
+  Makkii requires storage permission only to store qrcode to album.
 
 ### User Data
 
