@@ -57,7 +57,7 @@ class AccountNameComponent extends Component{
 	render(){
 		const {navigation, type} = this.props;
 		const accountImage = SwithType(type);
-		let style = {color:'#fff', width:150,textAlign:'center',includeFontPadding:false, textAlignVertical:'center', fontWeight: 'bold', fontSize:16};
+		let style = {color:'#fff', width:150,textAlign:'center',includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16,};
 		this.state.editable&&(style={...style, borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'#fff'});
 		return (
 			<View style={{...this.props.style, flexDirection:'row'}}>
@@ -77,12 +77,12 @@ class AccountNameComponent extends Component{
 					/>
 				</View>
 				<TouchableOpacity onPress={()=>this.onPress()}>
-					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'center', justifyContent:'center'}} imageStyle={{borderRadius:20}}>
-						<Text style={{marginLeft:30, marginRight:10,fontSize:12, color:'#fff', fontFamily: 'monospace'}}>
+					<View style={{height:20,flexDirection:'row',backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center', alignItems:'center'}}>
+						<Image source={require('../../../assets/edit.png')} style={{height:10,width:10,marginRight:10}} resizeMode={'contain'}/>
+						<Text style={{fontSize:12, color:'#fff'}}>
 							{this.state.editable?strings('account_view.save_button'):strings('account_view.editable_button')}</Text>
-					</ImageBackground>
+					</View>
 				</TouchableOpacity>
-
 			</View>
 		)
 	}
@@ -110,7 +110,7 @@ class AddressComponent extends Component {
 							<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={()=>{Keyboard.dismiss();this.setState({showAllAddress:false})}}>
-							<View style={{height:24,backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:5,justifyContent:'center'}}>
+							<View style={{height:20,backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center'}}>
 								<Text style={styles.addressFontStyle}>{strings('account_view.collapse_button')}</Text>
 							</View>
 						</TouchableOpacity>
