@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {FlatList, View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,ImageBackground,Platform} from 'react-native';
+import {View, TouchableOpacity, Text, PixelRatio, Image,Clipboard, RefreshControl, Keyboard, Dimensions, StyleSheet,TextInput,ImageBackground,Platform} from 'react-native';
 import {EditableView} from "../../common";
 import {linkButtonColor} from '../../style_util';
 import {fetchRequest} from "../../../utils";
@@ -9,9 +9,10 @@ import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import GeneralStatusBar from "../../GeneralStatusBar";
-import {mainColor} from "../../style_util";
+import {mainColor, fixedWidthFont, mainBgColor} from "../../style_util";
+import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 const header_height = Platform.OS==='ios'?64:56;
 
 const SwithType = type=>{
@@ -78,7 +79,7 @@ class AccountNameComponent extends Component{
 				</View>
 				<TouchableOpacity onPress={()=>this.onPress()}>
 					<ImageBackground source={require('../../../assets/edit.png')} style={{height:20,alignItems:'center', justifyContent:'center'}} imageStyle={{borderRadius:20}}>
-						<Text style={{marginLeft:30, marginRight:10,fontSize:12, color:'#fff', fontFamily: 'monospace'}}>
+						<Text style={{marginLeft:30, marginRight:10,fontSize:12, color:'#fff', fontFamily: fixedWidthFont}}>
 							{this.state.editable?strings('account_view.save_button'):strings('account_view.editable_button')}</Text>
 					</ImageBackground>
 				</TouchableOpacity>
@@ -200,7 +201,7 @@ class Account extends Component {
 					});
 				}}
 			>
-				<View style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+				<View style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
 					width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',padding: 10}}>
 					<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
 						<Text>{timestamp}</Text>
@@ -276,7 +277,7 @@ class Account extends Component {
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
 		return (
-			<View style={{flex:1}}>
+			<View style={{flex:1, backgroundColor: mainBgColor}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
 					<GeneralStatusBar backgroundColor={mainColor}/>
 					{/*title bar*/}
@@ -321,7 +322,7 @@ class Account extends Component {
 					</View>
 
 					{/*transaction history*/}
-					<View style={{...styles.shadow,width:width,height:60,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', paddingHorizontal:20,backgroundColor:'#fff'}}>
+					<View style={{...defaultStyles.shadow,width:width,height:60,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', paddingHorizontal:20,backgroundColor:'#fff'}}>
 						<Image source={require('../../../assets/rectangle.png')} resizeMode={'contain'} style={{width:5, height:30}}/>
 						<Text style={{marginLeft:10, fontSize: 16, color:'#000'}}>{strings('account_view.transaction_history_label')}</Text>
 						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
@@ -349,7 +350,10 @@ class Account extends Component {
 								/>
 							}
 						/>:<View style={{width:width,flex:1,justifyContent:'center',alignItems:'center'}}>
-							<Image source={require('../../../assets/empty_transactions.png')} style={{width:80,height:80, tintColor:'gray',marginBottom:20}}/>
+							<Image source={require('../../../assets/empty_transactions.png')}
+								   style={{width:80,height:80, tintColor:'gray',marginBottom:20}}
+								   resizeMode={'contain'}
+							/>
 							<Text style={{color:'gray'}}>{strings('account_view.empty_label')}</Text>
 						</View>
 					}
@@ -373,9 +377,6 @@ const styles=StyleSheet.create({
 		fontSize:12,
 		color:'#fff',
 		includeFontPadding:false,
-		fontFamily:'monospace',
+		fontFamily:fixedWidthFont,
 	},
-	shadow:{
-		shadowColor:'#eee',shadowOffset:{width:10,height:10}, elevation:5
-	}
 });

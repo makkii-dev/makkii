@@ -9,7 +9,7 @@ import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class TransactionHistory extends React.Component {
     static navigationOptions={
@@ -182,7 +182,9 @@ class TransactionHistory extends React.Component {
 
                         /> : <View style={{width: width, height: 180, justifyContent: 'center', alignItems: 'center'}}>
                             <Image source={require('../../../assets/empty_transactions.png')}
-                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}/>
+                                   style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+                                   resizeMode={'contain'}
+                            />
                             <Text style={{color: 'gray'}}>{strings('account_view.empty_label')}</Text>
                         </View>
                     }

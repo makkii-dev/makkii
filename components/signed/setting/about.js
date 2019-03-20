@@ -42,8 +42,8 @@ class About extends Component {
 						style={{
 							width:50,
 							height:50,
-							resizeMode: 'contain'
 						}}
+						resizeMode={'contain'}
 						source={require('../../../assets/icon_app_logo.png')}
 					/>
 					<Text style={{

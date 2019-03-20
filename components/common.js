@@ -79,8 +79,8 @@ class ComponentLogo extends Component{
 				style={{
 					width:50,
 					height:50,
-                    resizeMode: 'contain'
 				}}
+				resizeMode={'contain'}
 				source={require('../assets/icon_app_logo.png')}
 			/>
 		);
@@ -220,8 +220,16 @@ class TransactionItemCell extends React.PureComponent {
 }
 
 // ======================== v2 ========================================
-const Visible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/visible.png')} />
-const Invisible = () => <Image style={{width:20,height:20,resizeMode: 'contain'}} source={require('../assets/invisible.png')} />
+const Visible = () => <Image
+	style={{width:20,height:20}}
+	source={require('../assets/visible.png')}
+    resizeMode={'contain'}
+/>
+const Invisible = () => <Image
+	style={{width:20,height:20}}
+    resizeMode={'contain'}
+	source={require('../assets/invisible.png')}
+/>
 
 class RightActionButton extends Component {
     render() {
@@ -344,10 +352,10 @@ class PasswordInput extends Component {
 					style={{
 						width: 20,
 						height: 20,
-						resizeMode: 'contain',
 						position: 'absolute',
 						left: 0,
 					}}
+					resizeMode={'contain'}
 					source={require('../assets/icon_password.png')}
 				/>
 				<TextInput

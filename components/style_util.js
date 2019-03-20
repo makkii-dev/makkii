@@ -1,4 +1,4 @@
-import {PixelRatio,Dimensions} from 'react-native';
+import {PixelRatio,Dimensions, Platform} from 'react-native';
 const dp2px = dp=>PixelRatio.getPixelSizeForLayoutSize(dp);
 const px2dp = px=>PixelRatio.roundToNearestPixel(px);
 const designSize = {width:1080,height:1920}; //假设设计尺寸为：1080*1920
@@ -28,6 +28,7 @@ const FONT_COLOR = '#777676';
 const MAIN_BG_COLOR = '#eeeeee';
 const RIGHT_BUTTON_COLOR_ENABLED = 'rgba(255, 255, 255, 1.0)';
 const RIGHT_BUTTON_COLOR_DISABLED = 'rgba(255, 255, 255, 0.3)';
+const fixedWidthFont = Platform.OS === 'ios'? 'Courier': 'monospace';
 
 module.exports = {
     fixedWidth,
@@ -39,4 +40,5 @@ module.exports = {
     mainBgColor: MAIN_BG_COLOR,
     rightBtnColorEnable: RIGHT_BUTTON_COLOR_ENABLED,
     rightBtnColorDisable: RIGHT_BUTTON_COLOR_DISABLED,
+    fixedWidthFont,
 };
