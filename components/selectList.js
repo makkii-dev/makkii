@@ -11,27 +11,16 @@ class SelectCell extends React.Component{
         onItemSelected: PropTypes.func.isRequired,
         select: PropTypes.bool.isRequired,
     };
-    state={
-        select:this.props.select
-    };
 
     shouldComponentUpdate(nextProps,nextState){
-        return (this.props.item !== nextProps.item || this.state.select !== nextProps.select);
+        return (this.props.item.key !== nextProps.item.key || this.props.select !== nextProps.select);
     }
 
-    componentWillReceiveProps(nextProps){
-        this.setState({
-            select: nextProps.select
-        })
-    }
 
     onPress(key){
-        this.setState({
-            select: !this.state.select,
-        },()=>{
-            this.props.onItemSelected(key,this.state.select)
-        })
+        this.props.onItemSelected(key,!this.props.select)
     }
+
     render(){
         const {item,cellLeftView} = this.props;
         const element = cellLeftView(item.value);
@@ -41,7 +30,7 @@ class SelectCell extends React.Component{
             >
                 <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
                     {element}
-                    {this.state.select&&<Image
+                    {this.props.select&&<Image
                         source={require('../assets/icon_checked.png')}
                         style={{width:20,height:20,marginLeft:20}}
                         resizeMode={'contain'}

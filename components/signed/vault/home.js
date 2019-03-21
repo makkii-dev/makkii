@@ -589,7 +589,7 @@ class Home extends HomeComponent {
                                 <ActivityIndicator
                                     animating={true}
                                     color='white'
-                                    size={16}
+									size="small"
                                 />
                                 <Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>{strings('label_loading')}</Text>
 							</View>
