@@ -73,7 +73,7 @@ class Recovery extends Component {
 				<View style={{
 				    ...defaultStyles.shadow,
 					padding: 10,
-					height: 120,
+					height: 100,
 					borderTopLeftRadius:5,
 					borderTopRightRadius:5,
 					backgroundColor: 'white',

@@ -550,10 +550,9 @@ class Home extends HomeComponent {
 		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
-		let total_currency = undefined;
-		console.log("this.props.setting.coinPrice"+ this.props.setting.coinPrice);
+		let total_currency = Object.keys(this.props.accounts).length===0?0:undefined;
 		if (this.props.setting.coinPrice && this.state.totalBalance) {
-			total_currency = (this.state.totalBalance.toNumber() * this.props.setting.coinPrice).toFixed(2);
+			total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
 		}
 		console.log("total_currency :" + total_currency );
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
@@ -581,9 +580,9 @@ class Home extends HomeComponent {
 						<Text style={{marginLeft:30,color:'#fff', fontSize: 20}}>{strings('wallet.fiat_total')}:</Text>
 					</View>
 					<View style={{alignItems:'center', justifyContent: 'center', height: 80}}>
-						{total_currency?
+						{typeof total_currency !=='undefined' ?
 							<Text style={{color: '#fff', fontSize: 40}}
-								  numberOfLines={1}>{total_currency} {strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>:
+								  numberOfLines={1}>{total_currency.toFixed(2)} {strings(`currency.${this.props.setting.fiat_currency}_unit`)}</Text>:
                             <View style={{flexDirection: 'row'}}>
                                 <ActivityIndicator
                                     animating={true}

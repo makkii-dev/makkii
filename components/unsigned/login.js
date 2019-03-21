@@ -91,10 +91,6 @@ class Login extends Component {
                                             let db_user = JSON.parse(json);
                                             if(db_user.hashed_password === hashPassword(this.state.password)){
                                                 dispatch(user(db_user.hashed_password, db_user.mnemonic));
-                                                dbGet('accounts').then(json=>{
-                                                    let accounts = JSON.parse(decrypt(json, db_user.hashed_password))
-                                                    this.props.dispatch(accounts_action(accounts));
-                                                },err=>{});
                                                 this.props.navigation.navigate('signed_vault');
                                             } else {
                                                 alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
