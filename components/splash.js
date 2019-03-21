@@ -80,13 +80,10 @@ class Splash extends Component {
 
 	}
 	render(){
-		console.log("splash render------");
 		return (
 			<ImageBackground
 				style={{
 					flex: 1,
-					// width: width,
-					// height: height,
                     alignItems: 'center',
 					paddingTop: 150,
 				}}

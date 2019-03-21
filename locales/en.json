@@ -178,7 +178,7 @@
         "menu_master_key": "Seed phrases",
         "menu_private_key": "Private key",
         "menu_ledger": "Ledger",
-        "no_satisfied_accounts": "No satisfied accounts"
+        "no_satisfied_accounts": "No matched accounts found"
     },
     "language": {
         "title": "Language",
