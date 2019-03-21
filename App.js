@@ -1,6 +1,6 @@
 // libs
 import React, {Component} from 'react';
-import {View, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity, Image, AppState} from 'react-native';
 import {createSwitchNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
@@ -334,10 +334,10 @@ Routes.router.getStateForAction = (action, state) => {
 import data from './data.js';
 store.dispatch(dapps(data.dapps));
 
-import {listenTransaction, listenCoinPrice} from './utils';
+import {listenTransaction, listenCoinPrice,listenAppState} from './utils';
 global.listenTx = new listenTransaction(store);
 global.listenPrice = new listenCoinPrice(store);
-
+global.listenApp = new listenAppState();
 export default class App extends Component {
 	render() {
 		return (

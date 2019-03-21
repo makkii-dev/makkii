@@ -1,4 +1,4 @@
-import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll,Dimensions,StatusBar} from 'react-native';
+import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll, Dimensions, StatusBar, AppState} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import fetch_blob from 'rn-fetch-blob';
@@ -7,6 +7,7 @@ import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
 import {setting} from "./actions/setting";
 import Toast from 'react-native-root-toast';
+import {user_update_timestamp} from "./actions/user";
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -306,6 +307,32 @@ class listenTransaction{
         }, 2000);
 
     }
+}
+
+class listenAppState{
+    constructor(){
+        this.timeOut = '30';
+        this.timestamp = Date.now('milli');
+    }
+    handleActive = null;
+    handleAppStateChange(nextAppState){
+        console.log('appState change');
+        if (nextAppState != null && nextAppState === 'active') {
+            // in active
+            const max_keep_signed = 60000*parseInt(this.timeOut);
+            console.log('max_keep_signed ', max_keep_signed);
+            const time_diff = Date.now('milli') - this.timestamp;
+            if (time_diff > max_keep_signed) {
+                this.handleActive&&this.handleActive();
+            }
+        } else if (nextAppState === 'background') {
+            this.timestamp = Date.now('milli');
+            console.log('update timestamp ', this.timestamp)
+        }
+    }
+    start(){
+        AppState.addEventListener('change',(nextAppState)=> this.handleAppStateChange(nextAppState));
+    }
 
 }
 function isIphoneX() {
@@ -357,4 +384,5 @@ module.exports = {
     mainnet_url: mainnet_url,
     mastery_url: mastery_url,
     getStatusBarHeight:getStatusBarHeight,
+    listenAppState:listenAppState,
 }

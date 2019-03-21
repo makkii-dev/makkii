@@ -2,7 +2,6 @@ import React, {} from 'react';
 import {connect} from 'react-redux';
 import {Alert, View,DeviceEventEmitter,Dimensions, FlatList, PixelRatio} from 'react-native';
 import AionCell from '../../cell.js';
-import {user_signout} from '../../../actions/user.js';
 import {strings} from '../../../locales/i18n';
 import {ComponentTabBar} from '../../common.js';
 import {HomeComponent} from "../HomeComponent";
@@ -10,7 +9,7 @@ import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 
-const {width,height} = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 class Home extends HomeComponent {
 	static navigationOptions = ({ navigation }) => {
@@ -98,8 +97,6 @@ class Home extends HomeComponent {
 								[
 									{text: strings('cancel_button'), onPress:()=>{}},
 									{text: strings('alert_ok_button'), onPress:()=>{
-											const { dispatch } = this.props;
-											dispatch(user_signout());
 											setTimeout(()=>{
 												this.props.navigation.navigate('unsigned_login');
 											},200);

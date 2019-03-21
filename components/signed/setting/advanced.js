@@ -144,7 +144,7 @@ class Advanced extends Component {
         _setting.login_session_timeout = this.state.login_session_timeout;
         _setting.exchange_refresh_interval = this.state.exchange_refresh_interval;
         dispatch(setting(_setting));
-
+        listenApp.timeOut = this.state.login_session_timeout;
 
         Toast.show(strings('toast_update_success'), {
             position: Toast.positions.CENTER,
