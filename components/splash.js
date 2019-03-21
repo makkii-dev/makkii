@@ -29,45 +29,55 @@ class Splash extends Component {
 			this.props.dispatch(setting(setting_json));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
+			// load db user
+			dbGet('user')
+				.then(json=>{
+					// load db accounts
+					dbGet('accounts')
+						.then(json=>{
+							let decrypted = decrypt(json, db_user.hashed_password);
+							dispatch(accounts(JSON.parse(decrypted)));
+						},err=>{
+							console.log(err);
+						});
+
+
+					let db_user = JSON.parse(json);
+					let max_keep_signed = 60000 * parseInt(this.props.setting.login_session_timeout);
+					let time_diff = Date.now() - db_user.timestamp;
+
+
+					if(time_diff < max_keep_signed) {
+						console.log('[splash] keep signin');
+
+						dispatch(user(db_user.hashed_password, db_user.mnemonic));
+						setTimeout(()=>{
+							navigate('signed_vault');
+						}, 1000);
+					} else {
+						console.log('[splash] timeout signin');
+						setTimeout(()=>{
+							navigate('unsigned_login');
+							//navigate('unsigned_recovery_scan');
+						}, 500);
+					}
+				}, err=>{
+					console.log('[splash] db.user null');
+					setTimeout(()=>{
+						navigate('unsigned_login');
+						//navigate('unsigned_recovery_scan');
+					}, 500);
+				});
+
 		}, err=> {
 			console.log("load setting failed: ", err);
-		});
-
-		// load db user
-		dbGet('user')
-		.then(json=>{
-			let db_user = JSON.parse(json);
-			let max_keep_signed = 60000 * parseInt(this.props.setting.login_session_timeout);
-			let time_diff = Date.now() - db_user.timestamp;
-			if(time_diff < max_keep_signed) {
-				console.log('[splash] keep signin');
-
-				// load db accounts
-				dbGet('accounts')
-				.then(json=>{
-					let decrypted = decrypt(json, db_user.hashed_password);
-					dispatch(accounts(JSON.parse(decrypted)));
-				},err=>{
-					console.log(err);
-				});
-				dispatch(user(db_user.hashed_password, db_user.mnemonic));
-				setTimeout(()=>{
-					navigate('signed_vault');
-				}, 1000);
-			} else {
-				console.log('[splash] timeout signin');
-				setTimeout(()=>{
-					navigate('unsigned_login');
-					//navigate('unsigned_recovery_scan');
-				}, 500);
-			}
-		}, err=>{
-			console.log('[splash] db.user null');
 			setTimeout(()=>{
 				navigate('unsigned_login');
 				//navigate('unsigned_recovery_scan');
 			}, 500);
 		});
+
+
 	}
 	render(){
 		return (
