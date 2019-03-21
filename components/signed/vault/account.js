@@ -379,7 +379,7 @@ class Account extends Component {
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
 		return (
-			<View style={{flex:1, backgroundColor: mainBgColor, paddingTop:getStatusBarHeight(false)}}>
+			<View style={{flex:1, backgroundColor: mainColor, paddingTop:getStatusBarHeight(false)}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
 					{/*title bar*/}
 					<AccountNameComponent
