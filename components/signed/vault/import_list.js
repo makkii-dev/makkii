@@ -97,7 +97,7 @@ class ImportHdWallet extends React.Component {
                 let i = this.state.lastIndex;
                 let sum = 0;
                 while (sum < n) {
-                    let getAcc = masterKey.deriveHardened(i);  
+                    let getAcc = masterKey.deriveHardened(i);
                     let acc = {};
                     acc.address = getAcc.address;
                     acc.private_key = getAcc.private_key;
@@ -199,7 +199,6 @@ class ImportHdWallet extends React.Component {
         this.setState({
             footerState: 2,
         },()=>{setTimeout(()=>this.fetchAccount(5),500)});
-        console.log('after')
     }
 
 
@@ -289,7 +288,7 @@ const styles=StyleSheet.create({
         width: width,
         flex:1,
         justifyContent: 'center',
-        backgroundColor: mainBgColor
+        backgroundColor: 'white'
     },
     itemContainer:{
         flex:1,

@@ -1,6 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {FlatList, TouchableOpacity, View, Image, StyleSheet} from 'react-native';
+
+
+class SelectCell extends React.Component{
+    static propTypes ={
+        item: PropTypes.object.isRequired,
+        itemHeight: PropTypes.number.isRequired,
+        cellLeftView: PropTypes.func.isRequired,
+        onItemSelected: PropTypes.func.isRequired,
+        select: PropTypes.bool.isRequired,
+    };
+    state={
+        select:this.props.select
+    };
+
+    shouldComponentUpdate(nextProps,nextState){
+        return (this.props.item !== nextProps.item || this.state.select !== nextProps.select);
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            select: nextProps.select
+        })
+    }
+
+    onPress(key){
+        this.setState({
+            select: !this.state.select,
+        },()=>{
+            this.props.onItemSelected(key,this.state.select)
+        })
+    }
+    render(){
+        const {item,cellLeftView} = this.props;
+        const element = cellLeftView(item.value);
+        return (
+            <TouchableOpacity
+                onPress={()=>this.onPress(item.key)}
+            >
+                <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
+                    {element}
+                    {this.state.select&&<Image
+                        source={require('../assets/icon_checked.png')}
+                        style={{width:20,height:20,marginLeft:20}}
+                        resizeMode={'contain'}
+                    />}
+                </View>
+            </TouchableOpacity>
+        )
+    }
+
+}
+
 export default class SelectList extends  React.Component {
     static propTypes= {
         data: PropTypes.object.isRequired,
@@ -15,90 +67,56 @@ export default class SelectList extends  React.Component {
         itemHeight:50,
         defaultKey: undefined,
     };
+    state={
+        needRefresh: false,
+    };
+
 
     constructor(props){
         super(props);
-        this.state={
-            data:{},
-        }
-    }
-    componentWillMount(): void {
-        const stateData = this.state.data;
-        const propsData = this.props.data;
-        let newData = {};
-        Object.keys(propsData).map(key=>{
-            newData[key]={'key':key,'value':propsData[key],'select':(key == this.props.defaultKey)}
-        });
-        this.setState({
-            data:Object.assign({},newData,stateData)
-        })
+        const {defaultKey} = this.props;
+        defaultKey&&(this.select={[defaultKey]:this.props.data[defaultKey]});
+        defaultKey||(this.select={})
     }
 
-    componentWillReceiveProps(nextProps): void {
-        const stateData = this.state.data;
-        const propsData = nextProps.data;
-        let newData = {};
-        Object.keys(propsData).map(key=>{
-            newData[key]={'key':key,'value':propsData[key],'select':(key == this.props.defaultKey)}
-        });
-        this.setState({
-            data:Object.assign({},newData,stateData)
-        })
-    }
 
-    onPress(key){
-        let newData = this.state.data;
+    onPress(key, select){
         if (!this.props.isMultiSelect){
-            Object.keys(newData).map(_key=>{
-                if(key!==_key)
-                    newData[_key].select=false;
-            })
+            select&&(this.select={[key]:this.props.data[key]});
+        }else{
+            select&&(this.select[key]=this.props.data[key]);
+            select||(delete this.select[key]);
         }
-        this.props.isMultiSelect&&(newData[key].select=!newData[key].select);
-        this.props.isMultiSelect||(newData[key].select=true);
-        this.setState({
-            data:Object.assign({},newData)
-        });
-
+        this.setState({needRefresh:!this.state.needRefresh});
         this.props.onItemSelected && this.props.onItemSelected();
     }
+
     getSelect(){
-        let ret_data={};
-        const stateData = this.state.data;
-        Object.keys(stateData).map(key=> {
-            if(stateData[key].select){
-                ret_data[key] = stateData[key].value;
-            }
-        });
-        return ret_data;
+        return this.select;
     }
-    _renderItem=({item})=>{
-        const element = this.props.cellLeftView(item.value);
-        return (
-            <TouchableOpacity
-                onPress={()=>this.onPress(item.key)}
-            >
-                <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingLeft:20, paddingRight: 20}}>
-                    {element}
-                    {item.select&&<Image
-                        source={require('../assets/icon_checked.png')}
-                        style={{width:20,height:20,marginLeft:20}}
-                        resizeMode={'contain'}
-                    />}
-                </View>
-            </TouchableOpacity>
-        )
-    };
+
     render(){
+        const propsData = this.props.data;
+        let data= {};
+        Object.keys(propsData).map(key=>{
+            data[key]={'key':key,'value':propsData[key]}
+        });
         return(
             <FlatList
                 {...this.props}
-                data={Object.values(this.state.data)}
-                renderItem={this._renderItem}
+                data={Object.values(data)}
+                renderItem={({item})=>
+                    <SelectCell
+                        item={item}
+                        itemHeight={this.props.itemHeight}
+                        onItemSelected={(key,select)=>this.onPress(key,select)}
+                        cellLeftView={this.props.cellLeftView}
+                        select={this.select[item.key]!==undefined}
+                    />
+                }
                 keyExtractor={(item,index)=>index.toString()}
                 ItemSeparatorComponent={()=><View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>}
             />
-// <View style={{backgroundColor:'lightgray',height:StyleSheet.hairlineWidth}}/>
         )
     }
 
