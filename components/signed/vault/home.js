@@ -251,6 +251,7 @@ class Home extends HomeComponent {
 	}
 
 	componentWillMount(){
+		super.componentWillMount();
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log('[route] ' + this.props.accounts);
@@ -282,6 +283,7 @@ class Home extends HomeComponent {
 	};
 
 	componentWillUnmount(): void {
+		super.componentWillUnmount();
 		console.log("unmount home");
 		Linking.removeEventListener('url', this.handleOpenURL);
 
@@ -615,7 +617,7 @@ class Home extends HomeComponent {
                                 />
                             }
                         />:<View style={{...styles.accountView, justifyContent:'center', alignItems:'center'}}>
-                            <Image source={require('../../../assets/empty_account.png')} style={{height:80,width:80, tintColor:'gray', marginBottom:30}}/>
+                            <Image source={require('../../../assets/empty_account.png')} style={{height:80,width:80, tintColor:'gray', marginBottom:30}} resizeMode={'contain'}/>
                             <Text style={{fontSize:16,color:'gray'}}>
 								{Object.keys(this.props.accounts).length? strings('wallet.no_satisfied_accounts'): strings('wallet.import_accounts_hint')}
                             </Text>

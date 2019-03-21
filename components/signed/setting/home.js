@@ -26,6 +26,7 @@ class Home extends HomeComponent {
 	}
 
 	componentWillMount(){
+		super.componentWillMount();
 		this.update_locale();
 
 		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
@@ -40,6 +41,7 @@ class Home extends HomeComponent {
 	};
 
 	componentWillUnmount() {
+		super.componentWillUnmount();
 		this.listener.remove();
 	}
 

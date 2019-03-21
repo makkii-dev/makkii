@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View, ImageBackground, Dimensions, Text, Image} from 'react-native';
+import {ImageBackground, Dimensions, Text} from 'react-native';
 import {user} from '../actions/user.js';
 import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
@@ -80,12 +80,13 @@ class Splash extends Component {
 
 	}
 	render(){
+		console.log("splash render------");
 		return (
 			<ImageBackground
 				style={{
 					flex: 1,
-					width: width,
-					height: height,
+					// width: width,
+					// height: height,
                     alignItems: 'center',
 					paddingTop: 150,
 				}}
