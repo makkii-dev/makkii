@@ -19,7 +19,7 @@ import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteg
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
-import {linkButtonColor} from '../../style_util';
+import {linkButtonColor, mainBgColor} from '../../style_util';
 const {width} = Dimensions.get('window');
 class DappSend extends React.Component{
     static navigationOptions = ({ navigation }) => ({
@@ -174,7 +174,7 @@ class DappSend extends React.Component{
 
     render(){
         return (
-            <View style={{flex:1}}>
+            <View style={{flex:1, backgroundColor: mainBgColor}}>
                 <ScrollView
                     contentContainerStyle={{justifyContent: 'center'}}
                 >

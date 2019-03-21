@@ -437,10 +437,11 @@ class Account extends Component {
 							</TouchableOpacity>
 						</View>
 					</View>
+					<View style={{flex: 1, backgroundColor: mainBgColor}}>
 					{
 						transactionsList.length>0?this.renderTransactions(transactionsList):this.renderEmpty()
 					}
-
+					</View>
 				</TouchableOpacity>
 			</View>
 		) 
