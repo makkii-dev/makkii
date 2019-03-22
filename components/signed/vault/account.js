@@ -16,7 +16,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest,getStatusBarHeight} from "../../../utils";
+import {fetchRequest,getStatusBarHeight, toUTF8Array} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
@@ -25,6 +25,7 @@ import GeneralStatusBar from "../../GeneralStatusBar";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
+import {alert_ok} from '../../common';
 const {width,height} = Dimensions.get('window');
 const header_height = Platform.OS==='ios'?64:56;
 
@@ -57,6 +58,10 @@ class AccountNameComponent extends Component{
 
 	onPress=()=>{
 		const {editable} = this.state;
+		if (this.state.value.trim().length == 0) {
+			alert_ok(strings('alert_title_error'), strings('account_view.error_empty_account_name'));
+			return;
+		}
 		this.setState({
 			editable: !editable,
 		},()=>{
@@ -85,7 +90,11 @@ class AccountNameComponent extends Component{
 						numberOfLines={1}
 						value={this.state.value}
 						editable={this.state.editable}
-						onChangeText={v=>this.setState({value:v})}
+						onChangeText={v=>{
+							if (toUTF8Array(v).length <= 15) {
+								this.setState({value: v})
+							}
+						}}
 						style={style}
 						maxLength={15}
 					/>
@@ -377,7 +386,7 @@ class Account extends Component {
 		const {address, type, name ,transactions} = this.account;
 		const transactionsList =  Object.values(transactions).slice(0,5);
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
-		const accountBalanceTextFontSize = Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5);
+		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		return (
 			<View style={{flex:1, backgroundColor: mainColor, paddingTop:getStatusBarHeight(false)}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
