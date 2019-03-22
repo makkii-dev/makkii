@@ -254,7 +254,6 @@ class Home extends HomeComponent {
 		super.componentWillMount();
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log('[route] ' + this.props.accounts);
 		if (Platform.OS === 'android') {
 			this.requestStoragePermission();
 		}
@@ -292,9 +291,8 @@ class Home extends HomeComponent {
 	}
 
 	fetchAccountsBalance = ()=> {
-		console.log('fetchAccountsBalance')
+		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
-		console.log("accounts：", accounts);
 		if (Object.keys(accounts).length === 0) {
 			if (this.isMount) {
 				this.setState({
