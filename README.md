@@ -5,7 +5,7 @@
 
 <img src="chaion-logo.svg" alt="Chaion Logo" width="300"/>
 Welcome to Makkii Wallet! Makkii wallet is a secure, convenient and trusted Crypto asset management tool.
-<img src="assets/iphone_cover.jpg" alt="iphone_show" width="500"/>
+<img src="assets/iphone_cover.jpg" alt="iphone_show" width="800"/>
 
 # Features
 * Generate wallet for Aion(m/44'/425'/0'/0').
