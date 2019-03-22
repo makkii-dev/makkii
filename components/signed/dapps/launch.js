@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, DeviceEventEmitter} from 'react-native'
 import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {fixedHeight, mainColor, mainBgColor} from "../../style_util";
@@ -9,6 +9,12 @@ const {width} = Dimensions.get('window')
 import defaultStyles from '../../styles';
 
 class Launch extends HomeComponent{
+
+    state={
+        needRefresh: false,
+    };
+
+
     static navigationOptions = ({ navigation }) => ({
         title: strings('menuRef.title_dapps'),
         headerTitleStyle: {
@@ -22,9 +28,6 @@ class Launch extends HomeComponent{
         super(props);
         this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
     };
-    shouldComponentUpdate(nextProps) {
-        return this.props.explorer_server!==nextProps.explorer_server || this.props.dapps!==nextProps.dapps;
-    }
 
     onLaunch(){
         console.log('launch ');
@@ -77,6 +80,7 @@ class Launch extends HomeComponent{
         )
     }
     render(){
+        this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
         return (
             <View style={{flex:1, padding:10, backgroundColor:mainBgColor}}>
                 {
