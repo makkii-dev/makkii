@@ -4,8 +4,9 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/chaion/wallet/issues)
 
 <img src="chaion-logo.svg" alt="Chaion Logo" width="300"/>
+Welcome to Makkii Wallet! Makkii wallet is a secure, convenient and trusted Crypto asset management tool.
+<img src="assets/iphone_cover.jpg" alt="iphone_show" width="800"/>
 
-Greeting! This is project wallet build from react native. Goal is serving aion ecosystem with extendable functionality. 
 # Features
 * Generate wallet for Aion(m/44'/425'/0'/0').
 * Support Ledger
