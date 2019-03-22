@@ -58,7 +58,7 @@ class AccountNameComponent extends Component{
 
 	onPress=()=>{
 		const {editable} = this.state;
-		if (this.state.value.trim().length == 0) {
+		if (this.state.value.trim().length === 0) {
 			alert_ok(strings('alert_title_error'), strings('account_view.error_empty_account_name'));
 			return;
 		}
@@ -404,7 +404,7 @@ class Account extends Component {
 						<Text style={{fontSize:accountBalanceTextFontSize, color:'#fff'}}>{accountBalanceText}</Text>
 						<AddressComponent address={address}/>
 					</View>
-					<View style={{width:width,height:60,backgroundColor:'rgba(36,111,250,.9)',
+					<View style={{width:width,height:60,backgroundColor:'rgba(255,255,255,0.1)',
 						flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
 						<TouchableOpacity
 							style={{width:width/2,height:60, justifyContent:'center', alignItems:'center'}}
@@ -453,7 +453,7 @@ class Account extends Component {
 					</View>
 				</TouchableOpacity>
 			</View>
-		) 
+		)
 	}
 }
 
