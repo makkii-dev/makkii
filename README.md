@@ -3,7 +3,7 @@
 [![license](https://img.shields.io/badge/license-GPL3-green.svg?style=flat)](https://github.com/chaion/Makkii/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/chaion/wallet/issues)
 
-<img src="chaion-logo.png" alt="drawing" width="500"/>
+<img src="chaion-logo.svg" alt="drawing" width="500"/>
 
 Greeting! This is project wallet build from react native. Goal is serving aion ecosystem with extendable functionality. 
 # Features
