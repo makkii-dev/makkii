@@ -262,6 +262,7 @@
   "error_invalid_qrcode": "无效的二维码",
   "delete_button": "删除",
   "warning_delete_account": "确定要删除这个账户吗?",
+  "warning_set_default_account": "默认账户会在Dapps中使用, 确定更换吗?",
   "error_connect_remote_server": "无法连接到远程服务器",
   "message_no_more_data": "暂无更多数据",
   "toast_double_press_exit": "再按一次退出应用",

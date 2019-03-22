@@ -389,11 +389,22 @@ class Home extends HomeComponent {
 
 	onSetDefaultAccount(key) {
 		const {dispatch} = this.props;
-		this.setState({
-			openRowKey:null
-		},()=>{
-			dispatch(account_default(key,this.props.user.hashed_password));
-		});
+		Alert.alert(
+			strings('alert_title_warning'),
+			strings('warning_set_default_account'),
+			[
+				{text: strings('cancel_button'),onPress:()=>{}},
+				{text: strings('ok_button'), onPress:()=>{
+						this.setState({
+							openRowKey:null
+						},()=>{
+							dispatch(account_default(key,this.props.user.hashed_password));
+						});
+					}}
+			],
+			{cancelable:false}
+		)
+
 	}
 
 	onImportLedger=()=> {
