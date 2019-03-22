@@ -15,7 +15,7 @@ class ImportPrivateKey extends Component {
 
 	static navigationOptions = ({navigation})=> {
 		return ({
-			title: strings('import_private_key.title'),	
+			title: strings('import_private_key.title'),
 			headerRight: (
 				<RightActionButton
 					onPress={() => {
@@ -63,8 +63,8 @@ class ImportPrivateKey extends Component {
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(Object.keys(this.props.accounts).length); 
-		const {dispatch} = this.props;	
+		console.log(Object.keys(this.props.accounts).length);
+		const {dispatch} = this.props;
 		this.props.navigation.setParams({
 			ImportAccount: this.ImportAccount,
 			dispatch: dispatch,
@@ -99,7 +99,6 @@ class ImportPrivateKey extends Component {
 				    ...defaultStyles.shadow,
 					padding: 10,
 					borderRadius: 5,
-					height: 150,
 					backgroundColor: 'white',
 					width: width - 80,
 					marginBottom: 40,
@@ -131,10 +130,10 @@ class ImportPrivateKey extends Component {
 	}
 }
 
-export default connect(state => { 
-	return ({ 
-		accounts: state.accounts, 
+export default connect(state => {
+	return ({
+		accounts: state.accounts,
 		user: state.user,
 		setting: state.setting,
-	}); 
+	});
 })(ImportPrivateKey);
