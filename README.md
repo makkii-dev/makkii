@@ -1,9 +1,18 @@
 # Makkii Wallet
 
-[![license](https://img.shields.io/github/license/aionnetwork/aion.svg)](https://github.com/aionnetwork/aionr/blob/dev/LICENSE)
+[![license](https://img.shields.io/badge/license-GPL3-green.svg?style=flat)](https://github.com/chaion/Makkii/LICENSE)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/chaion/wallet/issues)
 
+<img src="chaion-logo.png" alt="drawing" width="500"/>
+
 Greeting! This is project wallet build from react native. Goal is serving aion ecosystem with extendable functionality. 
+# Features
+* Generate wallet for Aion(m/44'/425'/0'/0').
+* Support Ledger
+* Create, manage accounts.
+* Send and receive transactions.
+* View transaction history.
+* DApp Market
 
 # Prerequisites
 * yarn or npm
