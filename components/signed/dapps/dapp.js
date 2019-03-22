@@ -152,7 +152,7 @@ class Dapp extends Component {
                 this.setState({
                     inject: content
                 }, () => {
-                    this.invoke = createInvoke(this.webViewRef);
+                    this.invoke = createInvoke(() => this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
                         .define('eth_signTransaction', this.EthsignTransaction)
                         .define('eth_sendTransaction', this.EthsendTransaction)
