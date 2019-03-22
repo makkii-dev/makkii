@@ -26,7 +26,7 @@ $ cd android; ./gradlew assembleRelease
 To keep up to date by joing the following channels:
 
 - [Chaion Forum](https://forum.chaion.net/)
-- [Chaion Telegram]()
+- [Chaion Telegram](https://t.me/Chaion)
 
 # License
 Makkii is released under the [GPL-V3 License](LICENSE)
