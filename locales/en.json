@@ -136,7 +136,8 @@
         "collapse_button": "Collapse",
         "editable_button": "Edit",
         "save_button": "Save",
-        "complete_button": "All History"
+        "complete_button": "All History",
+        "error_empty_account_name": "Account name can't be empty"
     },
     "import_private_key": {
         "title": "Private Key",
@@ -188,7 +189,7 @@
     },
     "advanced": {
         "title": "Advanced",
-        "label_default_account_name": "Default Account Name",
+        "label_default_account_name": "Default New Account Name",
         "label_login_session_timeout": "Login Session Timeout",
         "label_minute": "Mins",
         "label_fiat_currency": "Fiat Currency Display",
@@ -265,6 +266,6 @@
     "toast_invalid_mnemonic": "Invalid Mnemonic!",
     "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others.",
     "fetch_data_label": "fetching data ...",
-    "no_more_data_label": "-- No More data --",
+    "no_more_data_label": "-- No More Data --",
     "label_loading": "Loading..."
 }

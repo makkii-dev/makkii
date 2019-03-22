@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
 import {Dimensions, View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
 import {strings} from "../../../locales/i18n";
-import {validatePositiveInteger} from '../../../utils';
+import {validatePositiveInteger, toUTF8Array} from '../../../utils';
 import {setting} from "../../../actions/setting";
 import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
@@ -70,10 +70,12 @@ class Advanced extends Component {
                         title={strings('advanced.label_default_account_name')}
                         value={this.state.default_account_name}
                         onChange={text => {
-                            this.setState({
-                                default_account_name:text
-                            });
-                            this.updateEditStatus(text, this.state.login_session_timeout, this.state.exchange_refresh_interval);
+                            if (toUTF8Array(text).length <= 15) {
+                                this.setState({
+                                    default_account_name: text
+                                });
+                                this.updateEditStatus(text, this.state.login_session_timeout, this.state.exchange_refresh_interval);
+                            }
                         }}
                     />
                     <View style={{marginTop: 20}} />

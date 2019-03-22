@@ -157,7 +157,7 @@ class TransactionHistory extends React.Component {
     // loading page
     renderLoadingView() {
         return (
-            <View style={{flex:1,alignItems:'center', justifyContent:'center'}}>
+            <View style={{flex:1,alignItems:'center', justifyContent:'center', backgroundColor: mainBgColor}}>
                 <ActivityIndicator
                     animating={true}
                     color='red'
