@@ -29,7 +29,7 @@ $ yarn build-inject
 # android debug
 $ react-native run-android
 # build android package, apk is generated under android/app/outputs/apk/release/app-release.apk
-# follow the <a href=https://facebook.github.io/react-native/docs/signed-apk-android>Generating Signed APK</a>
+# follow the <a href=https://facebook.github.io/react-native/docs/signed-apk-android target="_blank">Generating Signed APK</a>
 $ cd android; ./gradlew assembleRelease
 </pre>
 
