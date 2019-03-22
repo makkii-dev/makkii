@@ -10,7 +10,7 @@ export default (getWebview) => {
                 `evt.data = ${JSON.stringify(data)};\n` +
                 `document.dispatchEvent(evt);\n`+
                 `}`;
-            getWebview&&getWebview.injectJavaScript(injectCode)
+            getWebview&&getWebview().injectJavaScript(injectCode)
         }
     );
     return {
