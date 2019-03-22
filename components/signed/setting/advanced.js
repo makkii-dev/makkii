@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
-import {Dimensions, View, StyleSheet, TouchableOpacity, Keyboard} from 'react-native';
+import {Dimensions, View, StyleSheet, TouchableOpacity, Keyboard, Image} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger, toUTF8Array} from '../../../utils';
 import {setting} from "../../../actions/setting";
@@ -69,6 +69,12 @@ class Advanced extends Component {
                     <TextInputWithTitle
                         title={strings('advanced.label_default_account_name')}
                         value={this.state.default_account_name}
+                        rightView={()=>
+                            <TouchableOpacity onPress={()=>Toast.show(strings('advanced.description_default_account_name'))
+                            }>
+                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
+                            </TouchableOpacity>
+                        }
                         onChange={text => {
                             if (toUTF8Array(text).length <= 15) {
                                 this.setState({
@@ -82,6 +88,12 @@ class Advanced extends Component {
                     <TextInputWithTitle
                         title={strings('advanced.label_login_session_timeout')}
                         value={this.state.login_session_timeout}
+                        rightView={()=>
+                            <TouchableOpacity onPress={()=>Toast.show(strings('advanced.description_login_session_timeout'))
+                            }>
+                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
+                            </TouchableOpacity>
+                        }
                         trailingText={strings('advanced.label_minute')}
                         keyboardType={'number-pad'}
                         onChange={text => {
@@ -111,16 +123,16 @@ class Advanced extends Component {
 
     updateEditStatus = (name, time, interval) => {
         let allFill = name.length > 0 && time.length > 0 && interval.length > 0;
-        let anyChange = (name != this.props.setting.default_account_name
-            || time != this.props.setting.login_session_timeout
-            || interval != this.props.setting.exchange_refresh_interval);
+        let anyChange = (name !== this.props.setting.default_account_name
+            || time !== this.props.setting.login_session_timeout
+            || interval !== this.props.setting.exchange_refresh_interval);
         this.props.navigation.setParams({
             isEdited: allFill && anyChange,
         });
     }
 
     updateAdvancedSettings = () => {
-        if (this.state.default_account_name.length == 0) {
+        if (this.state.default_account_name.length === 0) {
             alert_ok(strings('alert_title_error'), strings('advanced.error_default_account_name_empty'));
             return;
         }
@@ -138,7 +150,7 @@ class Advanced extends Component {
         const {dispatch} = this.props;
 
         let _setting = this.props.setting;
-        if (this.state.exchange_refresh_interval != _setting.exchange_refresh_interval) {
+        if (this.state.exchange_refresh_interval !== _setting.exchange_refresh_interval) {
             listenPrice.setInterval(this.state.exchange_refresh_interval);
         }
 

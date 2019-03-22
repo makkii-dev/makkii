@@ -35,8 +35,10 @@ for(let i = 0; i < 20; i++){
 	accounts_ledger[acc.address] = acc;
 }
 
-let dapps = [];
-dapps.push({
+let dapps = {};
+dapps.mastery=[];
+dapps.mainnet=[];
+dapps.mastery.push({
 	name: 'Pet Roulette',
 	logo: require('./assets/apps/app1/app1_logo.png'),
 	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
@@ -46,7 +48,7 @@ dapps.push({
 	type:'dapp.type_game',
 	screenShot: require('./assets/apps/app1/app1_screenshot.png')
 });
-dapps.push({
+dapps.mastery.push({
 	name: 'dapp2',
 	logo: {uri:'https://www.macupdate.com/images/icons256/59967.png'},
 	description: 'desc2',

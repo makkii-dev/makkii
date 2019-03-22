@@ -177,7 +177,9 @@
   "advanced": {
     "title": "高级",
     "label_default_account_name": "新账号默认名称",
-    "label_login_session_timeout": "登录超时时间",
+    "label_login_session_timeout": "后台在线时长",
+    "description_default_account_name": "新导入的账号的默认名字",
+    "description_login_session_timeout": "如果程序在后台超过指定的时间,再次打开会注销登录状态",
     "label_minute": "分钟",
     "label_fiat_currency": "法币显示",
     "label_exchange_refresh_interval": "汇率刷新间隔",
@@ -210,7 +212,8 @@
     "desc_label": "详情",
     "author_label": "作者",
     "type_label": "类别",
-    "type_game": "游戏"
+    "type_game": "游戏",
+    "unavailable_hint": "DApp在本Aion网络中不可用，请在设置中更改网络"
   },
   "dapp_send": {
     "error_not_set_default": "请先设置一个默认账户."

@@ -407,11 +407,16 @@ class TextInputWithTitle extends Component {
 	render(){
 		return (
 			<View>
-				<Text style={{
-					marginBottom: 5,
-					fontSize: 16,
-					fontWeight: 'bold'
-				}}>{this.props.title}</Text>
+				<View style={{flexDirection:'row', justifyContent:'space-between'}}>
+					<Text style={{
+						marginBottom: 5,
+						fontSize: 16,
+						fontWeight: 'bold'
+					}}>{this.props.title}</Text>
+					{
+						this.props.rightView?this.props.rightView():null
+					}
+				</View>
 				<View style={{
 					flexDirection: 'row',
 					height: 50,

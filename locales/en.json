@@ -190,7 +190,9 @@
     "advanced": {
         "title": "Advanced",
         "label_default_account_name": "Default New Account Name",
-        "label_login_session_timeout": "Login Session Timeout",
+        "label_login_session_timeout": "keep-login timeout in background",
+        "description_default_account_name": "Default name for the newly imported account",
+        "description_login_session_timeout": "App requires you to re-login if it stays in the background for more than the specified time.",
         "label_minute": "Mins",
         "label_fiat_currency": "Fiat Currency Display",
         "label_exchange_refresh_interval": "Exchange Rate Refresh Interval",
@@ -213,7 +215,8 @@
         "desc_label": "Description",
         "author_label": "By",
         "type_label": "Type",
-        "type_game": "Game"
+        "type_game": "Game",
+        "unavailable_hint": "DApp is unavailable in current Aion network, please change it in settings"
     },
     "dapp_send": {
         "error_not_set_default": "Please set your default account firstly."
