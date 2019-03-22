@@ -10,13 +10,8 @@ import defaultStyles from '../../styles';
 
 class Launch extends HomeComponent{
 
-    state={
-        needRefresh: false,
-    };
-
-
     static navigationOptions = ({ navigation }) => ({
-        title: strings('menuRef.title_dapps'),
+        title: navigation.getParam('title'),
         headerTitleStyle: {
             alignSelf: "center",
             textAlign: "center",
@@ -24,6 +19,26 @@ class Launch extends HomeComponent{
         },
         headerRight: (<View></View>)
     });
+    componentWillMount(){
+        super.componentWillMount();
+        this.update_locale();
+
+        this.listener = DeviceEventEmitter.addListener('locale_change', () => {
+            this.update_locale();
+        });
+    }
+
+    update_locale= () => {
+        this.props.navigation.setParams({
+            'title': strings('menuRef.title_dapps'),
+        });
+    };
+
+    componentWillUnmount() {
+        super.componentWillUnmount();
+        this.listener.remove();
+    }
+
     constructor(props) {
         super(props);
         this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
