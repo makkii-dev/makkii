@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {ActivityIndicator, Dimensions, View} from 'react-native';
+import {ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View} from 'react-native';
 import {WebView} from "react-native-webview";
 import {ProgressBar} from "./processbar";
 const {width} = Dimensions.get('window');
@@ -10,6 +10,21 @@ class WebViewComponent extends Component {
         const { state } = navigation;
         return {
             title: state.params.title,
+            headerLeft:(
+                <TouchableOpacity onPress={()=>{navigation.state.params.GoBack&&navigation.state.params.GoBack()}} style={{
+                    width: 48,
+                    height: 48,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                    <Image source={require('../assets/arrow_back.png')} style={{
+                        tintColor: 'white',
+                        width: 20,
+                        height: 20,
+                    }} />
+                </TouchableOpacity>
+            ),
+            headerRight: <View></View>
         };
     };
 
@@ -21,11 +36,22 @@ class WebViewComponent extends Component {
             WebViewProgress: 0,
             showProgressBar: true,
         };
+
+        this.props.navigation.setParams({
+            GoBack: ()=>this.onGoBack(),
+        })
+
     }
 
-    async componentDidMount(){
-        console.log('[route] ' + this.props.navigation.state.routeName);
-        console.log(this.props.setting);
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
+    componentWillMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoBack(); // works best when the goBack is async
+            return true;
+        });
     }
 
     handleProcessBar = (v) =>{
@@ -44,16 +70,29 @@ class WebViewComponent extends Component {
         );
     };
 
+    onGoBack = ()=>{
+        if(this.canGoBack) {
+            this.webViewRef.goBack();
+        }else{
+            this.props.navigation.goBack();
+        }
+    };
+
+
     render(){
         return (
             <View style={{flex: 1}}>
                 <WebView
                     source={{uri: this.initialUrl}}
+                    ref={ref=>this.webViewRef=ref}
                     useWebKit={true}
                     cacheEnabled={false}
                     renderLoading={()=>this.renderLoading()}
                     startInLoadingState={true}
                     onLoadStart={()=>this.handleProcessBar(true)}
+                    onNavigationStateChange={(navState)=>{
+                        this.canGoBack = navState.canGoBack;
+                    }}
                     onLoadProgress={(e)=>{
                         this.setState({WebViewProgress: e.nativeEvent.progress});
                     }}
