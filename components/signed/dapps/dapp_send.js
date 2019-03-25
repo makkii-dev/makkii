@@ -72,6 +72,8 @@ class DappSend extends React.Component{
     }
 
     transfer=() => {
+        Keyboard.dismiss();
+
         console.log("transfer clicked.");
         const {goBack} = this.props.navigation;
         const message  = this.message;

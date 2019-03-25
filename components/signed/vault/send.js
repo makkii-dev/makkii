@@ -178,6 +178,7 @@ class Send extends Component {
 	}
 
 	onTransfer=() => {
+        Keyboard.dismiss();
 		if (!this.validateFields()) return;
 
 		if (this.account.address == this.state.recipient) {
