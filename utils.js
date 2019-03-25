@@ -240,8 +240,9 @@ function getCoinPrice(currency='CNY',amount=1) {
 }
 
 class listenCoinPrice{
-    constructor(store) {
+    constructor(store, interval=24) {
         this.store = store;
+        this.interval = interval;
     }
 
     reset(exchange_refresh_interval, fiat_currency) {
