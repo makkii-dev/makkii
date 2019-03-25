@@ -48,12 +48,13 @@ dapps.mastery.push({
 	type:'dapp.type_game',
 	screenShot: require('./assets/apps/app1/app1_screenshot.png')
 });
-dapps.mastery.push({
-	name: 'dapp2',
-	logo: {uri:'https://www.macupdate.com/images/icons256/59967.png'},
-	description: 'desc2',
-	uri: 'http://www.baidu.com',
-	author: '',
+dapps.mainnet.push({
+	name: 'Pet Roulette',
+	logo: require('./assets/apps/app1/app1_logo.png'),
+	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
+	// uri: 'http://192.168.50.83:8082'
+	uri: 'http://45.118.132.89/dist/index.html',
+	author: 'KimCodeashian',
 	type:'dapp.type_game',
 	screenShot: require('./assets/apps/app1/app1_screenshot.png')
 });
