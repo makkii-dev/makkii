@@ -257,7 +257,10 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'simple_webview': {
 		screen: SimpleWebView,
-		navigationOptions,
+		navigationOptions: {
+			headerStyle: styles.headerStyle,
+			headerTitleStyle: styles.headerTitleStyle,
+		}
 	}
 }, {
 	initialRouteName: 'splash',
