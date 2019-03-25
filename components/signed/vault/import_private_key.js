@@ -105,12 +105,12 @@ class ImportPrivateKey extends Component {
 				}}>
 					<InputMultiLines
 						editable={true}
-						numberOfLines={8}
+						numberOfLines={10}
 						style={{
 							borderWidth: 0,
 							fontSize: 18,
 							fontWeight: 'normal',
-							height: 200,
+							height: 250,
 							textAlignVertical: 'top'
 						}}
 						value={this.state.private_key}
