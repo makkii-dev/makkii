@@ -43,7 +43,7 @@
         "label_confirm_password": "Confirm Password",
         "hint_enter_confirm_password": "Please enter password again",
         "button_reset": "Reset",
-        "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Sepcial characters include \"!?#\".",
+        "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Special characters include \"!?#\".",
         "error_dont_match": "Confirm password does not match password!"
     },
     "about": {
@@ -64,7 +64,7 @@
         "hint_enter_new_password": "Please enter new password",
         "confirm_password_label": "Confirm Password",
         "hint_enter_confirm_password": "Please enter new password again",
-        "password_format": "Password must be 8-16 characters and contains numbers, letters and sepcial characters.",
+        "password_format": "Password must be 8-16 characters that contains numbers, letters and special characters. Special characters include \"!?#\".",
         "hint_old_password": "Enter old password",
         "hint_new_password": "Enter new password",
         "hint_confirm_password": "Enter new password again"
@@ -190,7 +190,7 @@
     "advanced": {
         "title": "Advanced",
         "label_default_account_name": "Default New Account Name",
-        "label_login_session_timeout": "keep-login timeout in background",
+        "label_login_session_timeout": "Keep-login Timeout In Background",
         "description_default_account_name": "Default name for the newly imported account",
         "description_login_session_timeout": "App requires you to re-login if it stays in the background for more than the specified time.",
         "label_minute": "Mins",

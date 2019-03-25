@@ -158,7 +158,7 @@ class HomeCenterComponent extends  React.Component{
 					// filter list
 					this.state.showFilter?<FlatList
 						style={{marginTop:10}}
-						data={FILTER}
+						data={Platform.OS === 'android'? FILTER: FILTER.slice(0, -1)}
 						renderItem={({item}) =>
 							<TouchableOpacity activeOpacity={0.3} onPress={() => {
 								this.props.closeFilter(item.title);

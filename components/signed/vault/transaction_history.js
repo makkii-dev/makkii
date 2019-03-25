@@ -171,7 +171,7 @@ class TransactionHistory extends React.Component {
         if (this.state.isLoading) {
             return this.renderLoadingView();
         } else {
-            const transactions = Object.values(this.state.transactions).sort((a, b) => a.timestamp > b.timestamp);
+            const transactions = Object.values(this.state.transactions).sort((a, b) => b.timestamp - a.timestamp);
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {

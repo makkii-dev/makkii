@@ -72,7 +72,7 @@ class Currency extends Component {
                 }} >
                     <SelectList
                         ref={ref=>this.selectList=ref}
-                        itemHeight={50}
+                        itemHeight={55}
                         data={{ 'CNY': strings('currency.CNY'),
                             'USD': strings('currency.USD'),
                             'CAD': strings('currency.CAD')}}

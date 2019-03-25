@@ -37,7 +37,7 @@ class ImportPrivateKey extends Component {
 				account.private_key = this.state.private_key;
 				account.name = this.props.setting.default_account_name;
 				account.type = '[pk]';
-				acc.transactions = {'mainnet':{}, 'mastery':{}};
+				account.transactions = {'mainnet':{}, 'mastery':{}};
 				acc[account.address] = account;
 				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
 				setTimeout(() => {
@@ -105,12 +105,12 @@ class ImportPrivateKey extends Component {
 				}}>
 					<InputMultiLines
 						editable={true}
-						numberOfLines={8}
+						numberOfLines={10}
 						style={{
 							borderWidth: 0,
 							fontSize: 18,
 							fontWeight: 'normal',
-							height: 200,
+							height: 250,
 							textAlignVertical: 'top'
 						}}
 						value={this.state.private_key}

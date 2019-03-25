@@ -25,7 +25,9 @@ class Login extends Component {
 		console.log("mount login");
 		console.log('[route] ' + this.props.navigation.state.routeName);
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            BackHandler.exitApp();
+            if (this.props.navigation.isFocused()) {
+                BackHandler.exitApp();
+            }
         });
 		Linking.getInitialURL().then(url => {
 			console.log("linking url: " + url);
