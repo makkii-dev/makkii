@@ -72,7 +72,9 @@ class Advanced extends Component {
                         rightView={()=>
                             <TouchableOpacity onPress={()=>{
                                 Keyboard.dismiss();
-                                Toast.show(strings('advanced.description_default_account_name'))
+                                Toast.show(strings('advanced.description_default_account_name'),{
+                                    position: Toast.positions.CENTER,
+                                })
                             }}>
                                 <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
@@ -100,7 +102,9 @@ class Advanced extends Component {
                         rightView={()=>
                             <TouchableOpacity onPress={()=>{
                                 Keyboard.dismiss();
-                                Toast.show(strings('advanced.description_login_session_timeout'))
+                                Toast.show(strings('advanced.description_login_session_timeout'), {
+                                    position: Toast.positions.CENTER,
+                                })
                             }}>
                                 <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
