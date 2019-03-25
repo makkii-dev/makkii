@@ -84,7 +84,7 @@ class DappSend extends React.Component{
             sender = '0x' + sender;
         }
         let thisLoadingView = this.loadingView;
-        const {dispatch,user} = this.props;
+        const {dispatch, user, setting} = this.props;
         thisLoadingView.show(strings('send.progress_sending_tx'));
         web3.eth.getTransactionCount(sender, 'pending').then(count => {
             console.log('get transaction count: ' + count);
@@ -131,7 +131,7 @@ class DappSend extends React.Component{
                         pendingTx.data  = tx.data;
                         txs[hash]=pendingTx;
 
-                        dispatch(update_account_txs(sender, txs, user.hashed_password));
+                        dispatch(update_account_txs(sender, txs, setting.explorer_server, user.hashed_password));
                         thisLoadingView.hide();
                         DeviceEventEmitter.emit(message,{data: hash});
                         Toast.show(strings('send.toast_tx_sent'), {

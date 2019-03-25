@@ -301,7 +301,7 @@ class listenTransaction{
         let thusMap = this.txMap;
         const thusTimeOut = this.timeOut;
         const thusStore = this.store;
-        const {user}= this.store.getState();
+        const {user, setting}= this.store.getState();
         if(typeof thusMap[tx.hash] !== 'undefined')
             return;
         let removeTransaction = function(tx){
@@ -321,8 +321,8 @@ class listenTransaction{
                     if(res){
                         tx.status = res.status? 'CONFIRMED':'FAILED';
                         tx.blockNumber = res.blockNumber;
-                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, user.hashed_password));
-                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, user.hashed_password));
+                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, setting.explorer_server, user.hashed_password));
+                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, setting.explorer_server, user.hashed_password));
                         DeviceEventEmitter.emit('updateAccountBalance');
                         removeTransaction(tx);
                     }

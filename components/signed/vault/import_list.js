@@ -142,7 +142,7 @@ class ImportHdWallet extends React.Component {
             acc.balance = 0;
             acc.name = this.props.setting.default_account_name;
             acc.type = '[ledger]';
-            acc.transactions = {};
+            acc.transactions = {'mainnet':{}, 'mastery':{}};
             acc.derivationIndex = i;
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;

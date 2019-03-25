@@ -279,9 +279,9 @@ class Account extends Component {
 			}else{
 			    Toast.show(strings('message_no_more_data'));
 			}
-			const {dispatch} = this.props;
+			const {dispatch, user, setting} = this.props;
 			console.log('[txs] ', JSON.stringify(txs));
-			dispatch(update_account_txs(address,txs,this.props.user.hashed_password));
+			dispatch(update_account_txs(address,txs,setting.explorer_server, user.hashed_password));
 			this.isMount&&this.setState({
 				refreshing: false,
 				loading:false,
@@ -382,9 +382,9 @@ class Account extends Component {
 	}
 
 	render(){
-		const {navigation} = this.props;
+		const {navigation, setting} = this.props;
 		const {address, type, name ,transactions} = this.account;
-		const transactionsList =  Object.values(transactions).slice(0,5);
+		const transactionsList =  transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		return (
