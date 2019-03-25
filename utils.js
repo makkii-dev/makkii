@@ -271,7 +271,7 @@ class listenCoinPrice{
             console.log("get coin price error", error);
         });
 
-        this.listener = setInterval(function() {
+        this.listener = setInterval(() => {
              getCoinPrice(this.currency).then(price => {
                 let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
