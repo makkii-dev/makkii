@@ -47,11 +47,12 @@ function update_account_name(key, newName, hashed_password){
 	}
 }
 
- function update_account_txs(key, transactions, hashed_password){
+ function update_account_txs(key, transactions, network, hashed_password){
 	return {
 		type: UPDATE_ACCOUNT_TRANSACTIONS,
 		key,
 		transactions,
+		network,
 		hashed_password
 	}
 }

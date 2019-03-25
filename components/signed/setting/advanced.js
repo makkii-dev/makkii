@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Toast from 'react-native-root-toast';
 import {Dimensions, View, StyleSheet, TouchableOpacity, Keyboard, Image} from 'react-native';
 import {strings} from "../../../locales/i18n";
-import {validatePositiveInteger, toUTF8Array} from '../../../utils';
+import {validatePositiveInteger, strLen} from '../../../utils';
 import {setting} from "../../../actions/setting";
 import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
@@ -70,17 +70,26 @@ class Advanced extends Component {
                         title={strings('advanced.label_default_account_name')}
                         value={this.state.default_account_name}
                         rightView={()=>
-                            <TouchableOpacity onPress={()=>Toast.show(strings('advanced.description_default_account_name'))
-                            }>
+                            <TouchableOpacity onPress={()=>{
+                                Keyboard.dismiss();
+                                Toast.show(strings('advanced.description_default_account_name'))
+                            }}>
                                 <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
                         }
                         onChange={text => {
-                            if (toUTF8Array(text).length <= 15) {
+                            if (strLen(text) <= 15) {
                                 this.setState({
                                     default_account_name: text
                                 });
                                 this.updateEditStatus(text, this.state.login_session_timeout, this.state.exchange_refresh_interval);
+                            }else{
+                                Toast.show(
+                                    strings('account_name_hint'),
+                                    {
+                                        position:Toast.positions.CENTER,
+                                        duration:Toast.durations.LONG
+                                    });
                             }
                         }}
                     />
@@ -89,8 +98,10 @@ class Advanced extends Component {
                         title={strings('advanced.label_login_session_timeout')}
                         value={this.state.login_session_timeout}
                         rightView={()=>
-                            <TouchableOpacity onPress={()=>Toast.show(strings('advanced.description_login_session_timeout'))
-                            }>
+                            <TouchableOpacity onPress={()=>{
+                                Keyboard.dismiss();
+                                Toast.show(strings('advanced.description_login_session_timeout'))
+                            }}>
                                 <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
                         }
