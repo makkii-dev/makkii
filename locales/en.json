@@ -271,5 +271,6 @@
     "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others.",
     "fetch_data_label": "fetching data ...",
     "no_more_data_label": "-- No More Data --",
-    "label_loading": "Loading..."
+    "label_loading": "Loading...",
+    "account_name_hint": "Up to 7 Chinese characters or 15 English characters or numbers"
 }

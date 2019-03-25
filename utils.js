@@ -386,6 +386,22 @@ function getStatusBarHeight(safe) {
         android: StatusBar.currentHeight
     });
 }
+
+function strLen(str){
+    let len = 0;
+    for (let i=0; i<str.length; i++) {
+        let c = str.charCodeAt(i);
+        //单字节加1
+        if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+            len++;
+        }
+        else {
+            len+=2;
+        }
+    }
+    return len;
+}
+
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 
@@ -414,4 +430,5 @@ module.exports = {
     getStatusBarHeight:getStatusBarHeight,
     listenAppState:listenAppState,
     toUTF8Array: toUTF8Array,
+    strLen: strLen,
 }

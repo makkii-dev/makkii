@@ -16,16 +16,14 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest,getStatusBarHeight, toUTF8Array} from "../../../utils";
+import {fetchRequest,getStatusBarHeight, strLen} from "../../../utils";
 import {update_account_name, update_account_txs} from "../../../actions/accounts";
 import Toast from 'react-native-root-toast';
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
-import GeneralStatusBar from "../../GeneralStatusBar";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
-import {alert_ok} from '../../common';
 const {width,height} = Dimensions.get('window');
 const header_height = Platform.OS==='ios'?64:56;
 
@@ -59,7 +57,12 @@ class AccountNameComponent extends Component{
 	onPress=()=>{
 		const {editable} = this.state;
 		if (this.state.value.trim().length === 0) {
-			alert_ok(strings('alert_title_error'), strings('account_view.error_empty_account_name'));
+			Toast.show(
+				strings('account_view.error_empty_account_name'),
+				{
+					position:Toast.positions.CENTER,
+					duration:Toast.durations.LONG
+				});
 			return;
 		}
 		this.setState({
@@ -76,14 +79,14 @@ class AccountNameComponent extends Component{
 	render(){
 		const {navigation, type} = this.props;
 		const accountImage = SwithType(type);
-		let style = {color:'#fff', width:150,textAlign:'center',includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16,};
+		let style = {color:'#fff', width:'100%',textAlign:'center',includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16, alignSelf:'flex-start'};
 		this.state.editable&&(style={...style, borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'#fff'});
 		return (
 			<View style={{...this.props.style, flexDirection:'row'}}>
 				<TouchableOpacity onPress={()=>navigation.goBack()} style={{width: header_height, height: header_height, alignItems: 'flex-start', justifyContent: 'center'}}>
 					<Image source={require('../../../assets/arrow_back.png')} style={{tintColor: '#fff', width: 20, height: 20}}/>
 				</TouchableOpacity>
-				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', width:180}}>
 					<Image source={accountImage} style={{width:20,height:20, marginRight:10,tintColor:'#fff', borderRadius:5}} resizeMode={'contain'}/>
 					<TextInput
 						ref={ref=>this.inputRef=ref}
@@ -91,12 +94,18 @@ class AccountNameComponent extends Component{
 						value={this.state.value}
 						editable={this.state.editable}
 						onChangeText={v=>{
-							if (toUTF8Array(v).length <= 15) {
+							if (strLen(v) <= 15) {
 								this.setState({value: v})
+							}else{
+								Toast.show(
+									strings('account_name_hint'),
+									{
+										position:Toast.positions.CENTER,
+										duration:Toast.durations.LONG
+									});
 							}
 						}}
 						style={style}
-						maxLength={15}
 					/>
 				</View>
 				<TouchableOpacity onPress={()=>this.onPress()}>
@@ -261,10 +270,8 @@ class Account extends Component {
 		const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
 		console.log("request url: " + url);
 		fetchRequest(url).then(res=>{
-			console.log('[fetch result]', res);
 			let txs = {};
 			if(res&&res.content){
-				console.log('res content ', res.content);
 				res.content.forEach(value=>{
 					let tx={};
 					tx.hash = '0x'+value.transactionHash;
@@ -280,7 +287,6 @@ class Account extends Component {
 			    Toast.show(strings('message_no_more_data'));
 			}
 			const {dispatch, user, setting} = this.props;
-			console.log('[txs] ', JSON.stringify(txs));
 			dispatch(update_account_txs(address,txs,setting.explorer_server, user.hashed_password));
 			this.isMount&&this.setState({
 				refreshing: false,

@@ -270,5 +270,7 @@
   "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。",
   "fetch_data_label": "获取数据中 ...",
   "no_more_data_label": "-- 没有更多数据了 --",
-  "label_loading": "加载中..."
+  "label_loading": "加载中...",
+  "account_name_hint": "最多7个汉字或者15个英文字符或数字"
+
 }

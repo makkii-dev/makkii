@@ -305,7 +305,6 @@ class Home extends HomeComponent {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
-					console.log("getbalance: " + value.address);
 					web3.eth.getBalance(value.address).then(balance=>{
 						value.balance = new BigNumber(balance).shiftedBy(-18);
 						resolve(value)
@@ -319,7 +318,6 @@ class Home extends HomeComponent {
 				let newAccounts={};
 				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
-					console.log(account.balance);
 					totalBalance = totalBalance.plus(account.balance);
 					newAccounts[account.address] = account;
 				});
@@ -486,8 +484,8 @@ class Home extends HomeComponent {
 					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start'}}>
 						<Image source={accountImage} style={{width:fixedHeight(186), height:fixedHeight(186)}}/>
 						<View style={{flex:1, paddingVertical: 10}}>
-							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
-								<Text style={styles.accountSubTextFontStyle1}>{item.name}</Text>
+							<View style={{...styles.accountSubContainer, width:'100%',flex:1, alignItems:'center'}}>
+								<Text style={{...styles.accountSubTextFontStyle1, width:'70%'}} numberOfLines={1}>{item.name}</Text>
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
@@ -565,7 +563,6 @@ class Home extends HomeComponent {
 		if (this.props.setting.coinPrice && this.state.totalBalance) {
 			total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
 		}
-		console.log("total_currency :" + total_currency );
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
 		const header_marginTop = Platform.OS === 'ios'?getStatusBarHeight(false):0;
 		return (
