@@ -37,7 +37,7 @@ class ImportPrivateKey extends Component {
 				account.private_key = this.state.private_key;
 				account.name = this.props.setting.default_account_name;
 				account.type = '[pk]';
-				acc.transactions = {'mainnet':{}, 'mastery':{}};
+				account.transactions = {'mainnet':{}, 'mastery':{}};
 				acc[account.address] = account;
 				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
 				setTimeout(() => {

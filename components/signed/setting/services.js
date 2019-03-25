@@ -70,8 +70,8 @@ class Services extends Component {
 						ref={ref=>this.selectList=ref}
 						itemHeight={55}
 						data={{
-							'mainnet': 'Main Net',
-							'mastery': 'Test Net',
+							'mainnet': 'Mainnet',
+							'mastery': 'Mastery',
 							}}
 						cellLeftView={item=>{
 							return (
