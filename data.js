@@ -53,7 +53,7 @@ dapps.mainnet.push({
 	logo: require('./assets/apps/app1/app1_logo.png'),
 	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
 	// uri: 'http://192.168.50.83:8082'
-	uri: 'http://45.118.132.89/dist/index.html',
+	uri: 'https://www.chaion.net/DApp1/',
 	author: 'KimCodeashian',
 	type:'dapp.type_game',
 	screenShot: require('./assets/apps/app1/app1_screenshot.png')
