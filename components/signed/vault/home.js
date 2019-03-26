@@ -40,7 +40,7 @@ import {getStatusBarHeight} from '../../../utils';
 const {width, } = Dimensions.get('window');
 
 
-function sortAccounts(src,select){
+function sortAccounts(src,select, network){
 	let res = src;
 	switch (select) {
 		case SORT[0].title:
@@ -50,7 +50,7 @@ function sortAccounts(src,select){
 			break;
 		case SORT[1].title:
 			res =  res.sort((a,b)=>{
-				return Object.keys(b.transactions).length - Object.keys(a.transactions).length;
+				return Object.keys(b.transactions[network]).length - Object.keys(a.transactions[network]).length;
 			});
 			break;
 	}
@@ -556,7 +556,7 @@ class Home extends HomeComponent {
 
 
 	render(){
-		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
+		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder, this.props.setting.explorer_server);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
 		let total_currency = Object.keys(this.props.accounts).length===0?0:undefined;
