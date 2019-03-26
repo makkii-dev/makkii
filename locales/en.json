@@ -1,276 +1,276 @@
+
 {
-    "menuRef": {
-        "title_settings": "Settings",
-        "title_wallet": "Wallet",
-        "title_dapps": "DApps"
-    },
-    "unsigned_login": {
-        "error_login": "Login fail",
-        "error_incorrect_password": "Incorrect password",
-        "btn_login": "Login",
-        "btn_register": "Register",
-        "btn_recovery": "Recovery",
-        "hint_enter_password": "Please enter password"
-    },
-    "register": {
-        "title": "Register",
-        "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Sepcial characters include \"!?#\".",
-        "error_dont_match": "Confirm password does not match password!",
-        "warning_register_again": "Re-registration will cause all previous account data to be emptied and cannot be recovered. Are you sure you want to do this?",
-        "hint_enter_password": "Enter password",
-        "hint_enter_confirm_password": "Confirm password",
-        "button_register": "Register"
-    },
-    "unsigned_register_mnemonic": {
-        "title": "Mnemonic",
-        "hint": "Please keep your mnemonic safely!",
-        "btn_copy": "Copy",
-        "btn_done": "I'm done",
-        "toast_copy_mnemonic": "Mnemonic is copied to clipboard"
-    },
-    "recovery": {
-        "title": "Recovery",
-        "label_prompt": "Enter 12 characters mnemonic",
-        "button_scan": "Scan",
-        "button_confirm": "Confirm",
-        "warning_mnemonic": "It will cause all previous accounts data to be emptied and cannot be recovered. Are you sure you want to do this?",
-        "error_invalid_mnemonic": "Please input valid mnemonic"
-    },
-    "recovery_password": {
-        "title": "Recovery Password",
-        "label_password": "Password",
-        "hint_enter_password": "Please enter password",
-        "label_confirm_password": "Confirm Password",
-        "hint_enter_confirm_password": "Please enter password again",
-        "button_reset": "Reset",
-        "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters. Special characters include \"!?#\".",
-        "error_dont_match": "Confirm password does not match password!"
-    },
-    "about": {
-        "title": "About",
-        "version_label": "Version",
-        "version_update_button": "Version Update",
-        "terms_label": "Terms of Service",
-        "policy_label": "Privacy Policy",
-        "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
-        "version_latest": "Your version is already up to date.",
-        "label_and": "and"
-    },
-    "password": {
-        "title": "Password",
-        "current_password_label": "Current Password",
-        "hint_enter_current_password": "Please enter current password",
-        "new_password_label": "New Password",
-        "hint_enter_new_password": "Please enter new password",
-        "confirm_password_label": "Confirm Password",
-        "hint_enter_confirm_password": "Please enter new password again",
-        "password_format": "Password must be 8-16 characters that contains numbers, letters and special characters. Special characters include \"!?#\".",
-        "hint_old_password": "Enter old password",
-        "hint_new_password": "Enter new password",
-        "hint_confirm_password": "Enter new password again"
-    },
-    "service_configuration": {
-        "title": "Network Connection",
-        "endpoint_wallet": "Rpc Server",
-        "endpoint_dapps": "Dapps Server",
-        "endpoint_odex": "Odex Server",
-        "explorer_server": "Aion Explorer Server",
-        "hint_api_server": "Enter wallet api server uri",
-        "hint_dapp_server": "Enter dapps server uri",
-        "invalid_wallet_server_url": "Invalid wallet server url",
-        "invalid_dapp_server_url": "Invalid dapp server url"
-    },
-    "recovery_phrase": {
-        "title": "Recovery Phrase"
-    },
-    "receive": {
-        "title": "Receive",
-        "receive_help_message": "Please ask sender to scan below QRCode.",
-        "label_modify_amount": "Amount",
-        "instruction": "Scan to pay me",
-        "button_save_receive_code": "Download QRCode",
-        "no_permission_save_file": "Failed to save file, please grant storage permission in System Settings."
-    },
-    "send": {
-        "title": "Send",
-        "label_sender": "Sender",
-        "label_receiver": "Recipient",
-        "label_amount": "Amount",
-        "label_data": "data",
-        "label_gas_price": "Gas Price",
-        "label_gas_limit": "Gas Limit",
-        "show_advanced": "Advanced Options",
-        "hide_advanced": "Hide advanced options",
-        "error_format_recipient": "Invalid recipient address",
-        "error_format_sender": "Invalid sender address",
-        "error_format_amount": "Invalid amount",
-        "error_insufficient_amount": "Insufficient Amount",
-        "error_invalid_gas_price": "Gas Price is invalid",
-        "error_invalid_gas_limit": "Gas Limit is invalid",
-        "hint_recipient": "Please enter recipient address",
-        "button_send_all": "Send All",
-        "error_send_transaction": "Send transaction failed",
-        "progress_sending_tx": "Sending transaction...",
-        "toast_tx_sent": "Transaction is sent",
-        "cancel": "Cancel",
-        "warning_send_to_itself": "Sender and recipient are the same account, are you sure to continue?"
-    },
-    "transaction_detail": {
-        "title": "TRANSACTION DETAIL",
-        "receiver_label": "Receiver",
-        "sender_label": "Sender",
-        "timestamp_label": "Time",
-        "transactionHash_label": "Transaction ID",
-        "blockNumber_label": "Block#",
-        "amount_label": "Amount",
-        "status_label": "Status",
-        "sendAgain_button": "SEND AGAIN",
-        "viewInExplorer_button": "VIEW IN EXPLORER"
-    },
-    "account_view": {
-        "send_button": "SEND",
-        "receive_button": "RECEIVE",
-        "transaction_history_label": "Transaction History",
-        "empty_label": "No Transaction",
-        "show_all_button": "Show All",
-        "collapse_button": "Collapse",
-        "editable_button": "Edit",
-        "save_button": "Save",
-        "complete_button": "All History",
-        "error_empty_account_name": "Account name can't be empty"
-    },
-    "import_private_key": {
-        "title": "Private Key",
-        "instruction_private_key": "Enter private key",
-        "error_invalid_private_key": "Invalid private key"
-    },
-    "import_master_key": {
-        "title": "Seed Phrases"
-    },
-    "import_ledger": {
-        "title": "Ledger"
-    },
-    "sort": {
-        "balance": " Order by balance",
-        "transaction": "Order by transaction count"
-    },
-    "filter": {
-        "all": "ALL",
-        "masterKey": "Seed phrases",
-        "privateKey": "Private key",
-        "ledger": "Ledger"
-    },
-    "ledger": {
-        "toast_connecting": "Connecting to Ledger...",
-        "error_unknown_account_type": "Ledger internal error",
-        "error_general": "Ledger internal error",
-        "error_device_count": "No connected Ledger device",
-        "error_open_device": "Ledger internal error",
-        "error_permission_denied": "Please grant usb device permission",
-        "error_application_inactive": "Please activate Aion App on Ledger Device",
-        "error_user_rejected": "User cancelled this transaction",
-        "error_invalid_tx_payload": "Ledger internal error",
-        "error_wrong_device": "Wrong ledger device connected! Account not found!"
-    },
-    "wallet": {
-        "fiat_total": "Total",
-        "import_accounts_hint": "Please import accounts",
-        "title_import_from": "Import From:",
-        "menu_master_key": "Seed phrases",
-        "menu_private_key": "Private key",
-        "menu_ledger": "Ledger",
-        "no_satisfied_accounts": "No matched accounts found"
-    },
-    "language": {
-        "title": "Language",
-        "chinese": "简体中文",
-        "english": "English",
-        "auto": "Auto"
-    },
-    "advanced": {
-        "title": "Advanced",
-        "label_default_account_name": "Default New Account Name",
-        "label_login_session_timeout": "Keep-login Timeout In Background",
-        "description_default_account_name": "Default name for the newly imported account",
-        "description_login_session_timeout": "App requires you to re-login if it stays in the background for more than the specified time.",
-        "label_minute": "Mins",
-        "label_fiat_currency": "Fiat Currency Display",
-        "label_exchange_refresh_interval": "Exchange Rate Refresh Interval",
-        "label_hour": "Hours",
-        "error_default_account_name_empty": "Default account name is empty",
-        "error_invalid_login_session_timeout": "Invalid login session timeout",
-        "error_invalid_exchange_refresh_interval": "Invalid exchange rate refresh interval"
-    },
-    "currency": {
-        "title": "Fiat Currency",
-        "CNY": "CNY",
-        "USD": "USD",
-        "CAD": "CAD",
-        "CNY_unit": "RMB",
-        "USD_unit": "USD",
-        "CAD_unit": "CAD"
-    },
-    "dapp": {
-        "launch_button": "Launch",
-        "desc_label": "Description",
-        "author_label": "By",
-        "type_label": "Type",
-        "type_game": "Game",
-        "unavailable_hint": "DApp is unavailable in current Aion network, please change it in settings"
-    },
-    "dapp_send": {
-        "error_not_set_default": "Please set your default account firstly."
-    },
-    "privacy_policy": {
-        "title": "Privacy Policy"
-    },
-    "terms_service": {
-        "title": "Terms of Services"
-    },
-    "scan": {
-        "title": "Scan"
-    },
-    "setting": {
-        "confirm_logout": "Logging out will not delete data. You can still log in with this account."
-    },
-    "app_name": "Makkii",
-    "logout": "Sign Out",
-    "update_button": "Update",
+  "menuRef": {
+    "title_settings": "Settings",
+    "title_wallet": "Wallet",
+    "title_dapps": "DApps"
+  },
+  "unsigned_login": {
+    "error_login": "Login fail",
+    "error_incorrect_password": "Incorrect password",
+    "btn_login": "Login",
+    "btn_register": "Register",
+    "btn_recovery": "Recovery",
+    "hint_enter_password": "Please enter password"
+  },
+  "register": {
+    "title": "Register",
+    "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters \"!?#\".",
+    "error_dont_match": "Confirm password does not match password!",
+    "warning_register_again": "Re-registration will remove all the previous data which cannot be recovered. Are you sure to continue?",
+    "hint_enter_password": "Enter password",
+    "hint_enter_confirm_password": "Confirm password",
+    "button_register": "Register"
+  },
+  "unsigned_register_mnemonic": {
+    "title": "Mnemonic",
+    "hint": "Please keep your mnemonic safe!",
+    "btn_copy": "Copy",
+    "btn_done": "I'm done",
+    "toast_copy_mnemonic": "Mnemonic is copied to clipboard"
+  },
+  "recovery": {
+    "title": "Recovery",
+    "label_prompt": "Enter 12 words mnemonic",
+    "button_scan": "Scan",
+    "button_confirm": "Confirm",
+    "warning_mnemonic": "This action will remove all the previous data which cannot be recovered. Are you sure to continue?",
+    "error_invalid_mnemonic": "Please enter valid mnemonic"
+  },
+  "recovery_password": {
+    "title": "Recovery Password",
+    "label_password": "Password",
+    "hint_enter_password": "Please enter password",
+    "label_confirm_password": "Confirm Password",
+    "hint_enter_confirm_password": "Please enter password again",
+    "button_reset": "Reset",
+    "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters \"!?#\".",
+    "error_dont_match": "Confirm password does not match password!"
+  },
+  "about": {
+    "title": "About",
+    "version_label": "Version",
+    "version_update_button": "Version Update",
+    "terms_label": "Terms of Service",
+    "policy_label": "Privacy Policy",
+    "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
+    "version_latest": "Your version is already up to date.",
+    "label_and": "and"
+  },
+  "password": {
+    "title": "Password",
+    "current_password_label": "Current Password",
+    "hint_enter_current_password": "Please enter current password",
+    "new_password_label": "New Password",
+    "hint_enter_new_password": "Please enter new password",
+    "confirm_password_label": "Confirm Password",
+    "hint_enter_confirm_password": "Please enter new password again",
+    "password_format": "Password must be 8-16 characters that contains numbers, letters and special characters \"!?#\".",
+    "hint_old_password": "Enter old password",
+    "hint_new_password": "Enter new password",
+    "hint_confirm_password": "Enter new password again"
+  },
+  "service_configuration": {
+    "title": "Network Connection",
+    "endpoint_wallet": "Rpc Server",
+    "endpoint_dapps": "Dapps Server",
+    "endpoint_odex": "Odex Server",
+    "explorer_server": "Aion Explorer Server",
+    "hint_api_server": "Enter wallet api server uri",
+    "hint_dapp_server": "Enter dapps server uri",
+    "invalid_wallet_server_url": "Invalid wallet server uri",
+    "invalid_dapp_server_url": "Invalid dapp server uri"
+  },
+  "recovery_phrase": {
+    "title": "Recovery Phrase"
+  },
+  "receive": {
+    "title": "Receive",
+    "label_modify_amount": "Amount",
+    "instruction": "Scan to pay me",
+    "button_save_receive_code": "Download QR code",
+    "no_permission_save_file": "Failed to save file. Please grant storage permission in System Settings."
+  },
+  "send": {
+    "title": "Send",
+    "label_sender": "Sender",
+    "label_receiver": "Recipient",
+    "label_amount": "Amount",
+    "label_data": "Data",
+    "label_gas_price": "Gas Price",
+    "label_gas_limit": "Gas Limit",
+    "show_advanced": "Advanced Options",
+    "hide_advanced": "Hide Advanced Options",
+    "error_format_recipient": "Invalid recipient address",
+    "error_format_sender": "Invalid sender address",
+    "error_format_amount": "Invalid amount",
+    "error_insufficient_amount": "Insufficient amount",
+    "error_invalid_gas_price": "Gas Price is invalid",
+    "error_invalid_gas_limit": "Gas Limit is invalid",
+    "hint_recipient": "Please enter recipient address",
+    "button_send_all": "Send All",
+    "error_send_transaction": "Sending transaction failed",
+    "progress_sending_tx": "Sending transaction...",
+    "toast_tx_sent": "Transaction is sent",
+    "cancel": "Cancel",
+    "warning_send_to_itself": "Sender and recipient are the same. Are you sure to continue?"
+  },
+  "transaction_detail": {
+    "title": "Transaction Detail",
+    "receiver_label": "Receiver",
+    "sender_label": "Sender",
+    "timestamp_label": "Time",
+    "transactionHash_label": "Transaction ID",
+    "blockNumber_label": "Block#",
+    "amount_label": "Amount",
+    "status_label": "Status",
+    "sendAgain_button": "SEND AGAIN",
+    "viewInExplorer_button": "VIEW IN EXPLORER"
+  },
+  "account_view": {
+    "send_button": "SEND",
+    "receive_button": "RECEIVE",
+    "transaction_history_label": "Transaction History",
+    "empty_label": "No Transaction",
+    "show_all_button": "Show All",
+    "collapse_button": "Collapse",
+    "editable_button": "Edit",
     "save_button": "Save",
-    "copy_button": "Copy",
-    "send_button": "Send",
-    "refresh_button": "Refresh",
-    "set_default_button": "Set Default",
-    "import_button": "Import",
-    "toast_update_success": "Update successfully",
-    "alert_title_error": "Error",
-    "alert_title_warning": "Warning",
-    "invalid_old_password": "Old password is incorrect",
-    "invalid_new_password": "New password is invalid",
-    "inconsistent_passwords": "Confirmed password and new password are different",
-    "same_old_new_passwords": "New password must be different from old password",
-    "toast_copy_success": "Copied to clipboard successfully",
-    "invalid_amount": "Invalid amount",
-    "error_save_qrcode_image": "Failed to save qrcode image.",
-    "toast_save_image_success": "Image was saved to {{path}}",
-    "toast_save_image_to_album": "Image was saved to album",
-    "permission_storage_title": "Makkii Storage Permission",
-    "permission_storage_message": "Makkii App needs access to your external storage to save some data.",
-    "ok_button": "Ok",
-    "alert_ok_button": "Ok",
-    "cancel_button": "Cancel",
-    "save_file_button": "Save to Phone",
-    "error_invalid_qrcode": "Invalid QRCode",
-    "delete_button": "Delete",
-    "warning_delete_account": "Are you sure you want to delete this account?",
-    "warning_set_default_account": "Default account will be used in Dapps, are you sure you want to change it?",
-    "error_connect_remote_server": "Unable to connect to remote server",
-    "message_no_more_data": "No More Data",
-    "toast_double_press_exit": "Press Back again to quit app",
-    "toast_invalid_mnemonic": "Invalid Mnemonic!",
-    "toast_mnemonic_share_warning": "Mnemonic Phrase is very important, DO NOT share with others.",
-    "fetch_data_label": "fetching data ...",
-    "no_more_data_label": "-- No More Data --",
-    "label_loading": "Loading...",
-    "account_name_hint": "Up to 7 Chinese characters or 15 English characters or numbers"
+    "complete_button": "All History",
+    "error_empty_account_name": "Account name can't be empty"
+  },
+  "import_private_key": {
+    "title": "Private Key",
+    "instruction_private_key": "Enter private key",
+    "error_invalid_private_key": "Invalid private key"
+  },
+  "import_master_key": {
+    "title": "Seed Phrase"
+  },
+  "import_ledger": {
+    "title": "Ledger"
+  },
+  "sort": {
+    "balance": " Order by balance",
+    "transaction": "Order by transaction count"
+  },
+  "filter": {
+    "all": "ALL",
+    "masterKey": "Seed phrase",
+    "privateKey": "Private key",
+    "ledger": "Ledger"
+  },
+  "ledger": {
+    "toast_connecting": "Connecting to Ledger...",
+    "error_unknown_account_type": "Ledger internal error",
+    "error_general": "Ledger internal error",
+    "error_device_count": "No connected Ledger device",
+    "error_open_device": "Ledger internal error",
+    "error_permission_denied": "Please grant usb device permission",
+    "error_application_inactive": "Please activate Aion App on Ledger Device",
+    "error_user_rejected": "User cancelled this transaction",
+    "error_invalid_tx_payload": "Ledger internal error",
+    "error_wrong_device": "Wrong ledger device connected! The account cannot be found!"
+  },
+  "wallet": {
+    "fiat_total": "Total",
+    "import_accounts_hint": "Please import accounts",
+    "title_import_from": "Import From:",
+    "menu_master_key": "Seed phrase",
+    "menu_private_key": "Private key",
+    "menu_ledger": "Ledger",
+    "no_satisfied_accounts": "No matched accounts found"
+  },
+  "language": {
+    "title": "Language",
+    "chinese": "简体中文",
+    "english": "English",
+    "auto": "Auto"
+  },
+  "advanced": {
+    "title": "Advanced",
+    "label_default_account_name": "Default New Account Name",
+    "label_login_session_timeout": "Keep-login Timeout In Background",
+    "description_default_account_name": "Default name for the newly imported account",
+    "description_login_session_timeout": "App will ask you to re-login if it stays in the background for more than the specified time.",
+    "label_minute": "Mins",
+    "label_fiat_currency": "Fiat Currency Display",
+    "label_exchange_refresh_interval": "Exchange Rate Refresh Interval",
+    "label_hour": "Hours",
+    "error_default_account_name_empty": "Default account name is empty",
+    "error_invalid_login_session_timeout": "Invalid login session timeout",
+    "error_invalid_exchange_refresh_interval": "Invalid exchange rate refresh interval"
+  },
+  "currency": {
+    "title": "Fiat Currency",
+    "CNY": "CNY",
+    "USD": "USD",
+    "CAD": "CAD",
+    "CNY_unit": "RMB",
+    "USD_unit": "USD",
+    "CAD_unit": "CAD"
+  },
+  "dapp": {
+    "launch_button": "Launch",
+    "desc_label": "Description",
+    "author_label": "By",
+    "type_label": "Type",
+    "type_game": "Game",
+    "unavailable_hint": "DApp is unavailable in current Aion network. Please change it in settings."
+  },
+  "dapp_send": {
+    "error_not_set_default": "Please set your default account"
+  },
+  "privacy_policy": {
+    "title": "Privacy Policy"
+  },
+  "terms_service": {
+    "title": "Terms of Services"
+  },
+  "scan": {
+    "title": "Scan"
+  },
+  "setting": {
+    "confirm_logout": "Logging out will not delete data. You can still log in with this account."
+  },
+  "app_name": "Makkii",
+  "logout": "Sign Out",
+  "update_button": "Update",
+  "save_button": "Save",
+  "copy_button": "Copy",
+  "send_button": "Send",
+  "refresh_button": "Refresh",
+  "set_default_button": "Set Default",
+  "import_button": "Import",
+  "toast_update_success": "Update successfully",
+  "alert_title_error": "Error",
+  "alert_title_warning": "Warning",
+  "invalid_old_password": "Old password is incorrect",
+  "invalid_new_password": "New password is invalid",
+  "inconsistent_passwords": "Confirmed password and new password are different",
+  "same_old_new_passwords": "New password must be different from old password",
+  "toast_copy_success": "Copied to clipboard successfully",
+  "invalid_amount": "Invalid amount",
+  "error_save_qrcode_image": "Failed to save QR code image",
+  "toast_save_image_success": "Image was saved to {{path}}",
+  "toast_save_image_to_album": "Image was saved to your album",
+  "permission_storage_title": "Makkii Storage Permission",
+  "permission_storage_message": "Makkii App needs access to your external storage to save some data.",
+  "ok_button": "OK",
+  "alert_ok_button": "OK",
+  "cancel_button": "Cancel",
+  "save_file_button": "Save to Phone",
+  "error_invalid_qrcode": "Invalid QR Code",
+  "delete_button": "Delete",
+  "warning_delete_account": "Are you sure you want to delete this account?",
+  "warning_set_default_account": "Default account will be used in Dapps. Are you sure to continue?",
+  "error_connect_remote_server": "Unable to connect to remote server",
+  "message_no_more_data": "No More Data",
+  "toast_double_press_exit": "Press Back again to quit app",
+  "toast_invalid_mnemonic": "Invalid Mnemonic!",
+  "toast_mnemonic_share_warning": "Mnemonic Phrase is very important. DO NOT share with others!",
+  "fetch_data_label": "Fetching Data ...",
+  "no_more_data_label": "-- No More Data --",
+  "label_loading": "Loading...",
+  "account_name_hint": "Up to 15 alphanumeric and puntucation characters, or 7 other characters"
 }

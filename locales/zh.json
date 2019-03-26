@@ -1,3 +1,4 @@
+
 {
   "menuRef": {
     "title_settings": "设置",
@@ -8,22 +9,22 @@
     "error_login": "登录失败",
     "error_incorrect_password": "密码不正确",
     "btn_login": "登录",
-    "btn_register": "一键注册",
+    "btn_register": "注册",
     "btn_recovery": "恢复",
     "hint_enter_password": "请输入密码"
   },
   "register": {
     "title": "注册",
-    "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
-    "error_dont_match": "两次密码不一致!",
-    "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
+    "error_password": "密码必须是8-16位的数字， 字母和特殊字符组合。特殊字符仅限!?#",
+    "error_dont_match": "两次密码不一致！",
+    "warning_register_again": "重新注册会导致之前的所有账号数据清空且无法恢复，你确定要这样做吗？",
     "hint_enter_password": "输入密码",
     "hint_enter_confirm_password": "再次输入密码",
     "button_register": "注册"
   },
   "unsigned_register_mnemonic": {
     "title": "助记词",
-    "hint": "请妥善保存您的助记词!",
+    "hint": "请妥善保存您的助记词！",
     "btn_copy": "复制助记词",
     "btn_done": "完成",
     "toast_copy_mnemonic": "助记词已复制到粘贴板"
@@ -33,7 +34,7 @@
     "label_prompt": "输入12个助记词",
     "button_scan": "扫一扫",
     "button_confirm": "确定",
-    "warning_mnemonic": "这会导致之前的所有账号数据清空且无法恢复,你确定要这样做吗?",
+    "warning_mnemonic": "这会导致之前的所有账号数据清空且无法恢复，你确定要这样做吗？",
     "error_invalid_mnemonic": "请输入有效的助记符"
   },
   "recovery_password": {
@@ -43,7 +44,7 @@
     "label_confirm_password": "确认密码",
     "hint_enter_confirm_password": "请再次输入密码",
     "button_reset": "重置",
-    "error_password": "密码必须是8-16位的数字, 字母和特殊字符组合。特殊字符包括!?#",
+    "error_password": "密码必须是8-16位的数字，字母和特殊字符组合。特殊字符仅限!?#",
     "error_dont_match": "两次密码不一致!"
   },
   "about": {
@@ -63,7 +64,7 @@
     "hint_enter_current_password": "请输入原密码",
     "hint_enter_new_password": "请输入新密码",
     "hint_enter_confirm_password": "请再次输入新密码",
-    "password_format": "密码必须是8-16位的数字、字母、特殊字符组合",
+    "password_format": "密码必须是8-16位的数字、字母、特殊字符组合。特殊字符仅限！？#",
     "hint_old_password": "请输入原密码",
     "hint_new_password": "请输入新密码",
     "hint_confirm_password": "请再次输入新密码"
@@ -84,7 +85,6 @@
   },
   "receive": {
     "title": "收款",
-    "receive_help_message": "请将下面收款码",
     "label_modify_amount": "修改金额",
     "instruction": "扫二维码向我付钱",
     "button_save_receive_code": "保存收款码",
@@ -96,8 +96,8 @@
     "label_receiver": "收款方",
     "label_amount": "金额",
     "label_data": "数据",
-    "label_gas_price": "Gas Price",
-    "label_gas_limit": "Gas Limit",
+    "label_gas_price": "燃料单价",
+    "label_gas_limit": "燃料上限",
     "show_advanced": "高级选项",
     "hide_advanced": "隐藏高级选项",
     "error_format_recipient": "收款方地址格式不正确",
@@ -107,7 +107,7 @@
     "hint_recipient": "请填写收款地址",
     "button_send_all": "全部",
     "error_send_transaction": "发送交易失败",
-    "progress_sending_tx": "正在发送交易...",
+    "progress_sending_tx": "正在发送交易……",
     "toast_tx_sent": "交易已发送",
     "cancel": "取消",
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？"
@@ -148,11 +148,11 @@
     "title": "Ledger冷钱包"
   },
   "ledger": {
-    "toast_connecting": "正在连接Ledger设备...",
+    "toast_connecting": "正在连接Ledger设备……",
     "error_unknown_account_type" : "Ledger内部错误",
     "error_general": "Ledger内部错误",
     "error_device_count": "请连接Ledger设备",
-    "error_open_device": "Ledger internal error",
+    "error_open_device": "Ledger内部错误",
     "error_permission_denied": "请授权USB设备",
     "error_application_inactive": "请打开Ledger设备上的AION应用",
     "error_user_rejected": "很抱歉，您取消了交易",
@@ -179,7 +179,7 @@
     "label_default_account_name": "新账号默认名称",
     "label_login_session_timeout": "后台在线时长",
     "description_default_account_name": "新导入的账号的默认名字",
-    "description_login_session_timeout": "如果程序在后台超过指定的时间,再次打开会注销登录状态",
+    "description_login_session_timeout": "如果程序在后台超过指定的时间，再次打开会注销登录状态",
     "label_minute": "分钟",
     "label_fiat_currency": "法币显示",
     "label_exchange_refresh_interval": "汇率刷新间隔",
@@ -213,10 +213,10 @@
     "author_label": "作者",
     "type_label": "类别",
     "type_game": "游戏",
-    "unavailable_hint": "DApp在本Aion网络中不可用，请在设置中更改网络"
+    "unavailable_hint": "DApp在當前Aion网络中不可用，请在设置中更改网络"
   },
   "dapp_send": {
-    "error_not_set_default": "请先设置一个默认账户."
+    "error_not_set_default": "请先设置一个默认账户。"
   },
   "privacy_policy": {
     "title": "隐私政策"
@@ -228,7 +228,7 @@
     "title": "扫一扫"
   },
   "setting": {
-    "confirm_logout": "退出后不会删除任何历史数据，下次登录依然可以使用本账号．"
+    "confirm_logout": "退出后不会删除任何历史数据，下次登录依然可以使用本账号。"
   },
   "app_name": "Makkii",
   "logout": "退出",
@@ -248,9 +248,9 @@
   "same_old_new_passwords": "新密码不能和旧密码相同",
   "toast_copy_success": "已复制到剪切板",
   "invalid_amount": "无效的金额",
-  "error_invalid_gas_price": "Gas Price不正确",
-  "error_invalid_gas_limit": "Gas Limit不正确",
-  "error_save_qrcode_image": "保存二维码图片失败",
+  "error_invalid_gas_price": "燃料单价不正确",
+  "error_invalid_gas_limit": "燃料上限不正确",
+  "error_save_qrcode_image": "保存二维码失败",
   "toast_save_image_success": "图片已保存至{{path}}",
   "toast_save_image_to_album": "图片已保存至相册",
   "permission_storage_title": "Makkii应用存储权限",
@@ -262,15 +262,14 @@
   "error_invalid_qrcode": "无效的二维码",
   "delete_button": "删除",
   "warning_delete_account": "确定要删除这个账户吗?",
-  "warning_set_default_account": "默认账户会在Dapps中使用, 确定更换吗?",
+  "warning_set_default_account": "默认账户会在Dapps中使用，确定更换吗？",
   "error_connect_remote_server": "无法连接到远程服务器",
   "message_no_more_data": "暂无更多数据",
-  "toast_double_press_exit": "再按一次退出应用",
+  "toast_double_press_exit": "再按一次返回退出应用",
   "toast_invalid_mnemonic": "无效的助记词",
-  "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人。",
-  "fetch_data_label": "获取数据中 ...",
+  "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人！",
+  "fetch_data_label": "获取数据中……",
   "no_more_data_label": "-- 没有更多数据了 --",
-  "label_loading": "加载中...",
-  "account_name_hint": "最多7个汉字或者15个英文字符或数字"
-
+  "label_loading": "加载中……",
+  "account_name_hint": "最多15个英文、数字、符号，或7个其他语言字符"
 }
