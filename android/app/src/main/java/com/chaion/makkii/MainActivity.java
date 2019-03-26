@@ -1,4 +1,4 @@
-package com.makkii;
+package com.chaion.makkii;
 
 import com.facebook.react.ReactActivity;
 
