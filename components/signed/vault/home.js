@@ -41,6 +41,7 @@ const {width, } = Dimensions.get('window');
 
 
 function sortAccounts(src,select, network){
+	console.log('network ', network);
 	let res = src;
 	switch (select) {
 		case SORT[0].title:
@@ -50,7 +51,13 @@ function sortAccounts(src,select, network){
 			break;
 		case SORT[1].title:
 			res =  res.sort((a,b)=>{
-				return Object.keys(b.transactions[network]).length - Object.keys(a.transactions[network]).length;
+				const a_transactions =  a.transactions[network];
+				const b_transactions =  b.transactions[network];
+				if(a_transactions&&b_transactions){
+					return Object.keys(b.transactions[network]).length - Object.keys(a.transactions[network]).length;
+				}else {
+					return 1;
+				}
 			});
 			break;
 	}
