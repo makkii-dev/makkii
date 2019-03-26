@@ -152,7 +152,7 @@
     },
     "sort": {
         "balance": " Order by balance",
-        "transaction": "Order by transaction"
+        "transaction": "Order by transaction count"
     },
     "filter": {
         "all": "ALL",

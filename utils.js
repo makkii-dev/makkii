@@ -226,7 +226,7 @@ function fetchRequest(url, method='GET', headers={}) {
 
 }
 function getCoinPrice(currency='CNY',amount=1) {
-    const url = `http://45.118.132.89:8080/price?crypto=AION&fiat=${currency}`;
+    const url = `https://www.chaion.net/makkii/price?crypto=AION&fiat=${currency}`;
     return new Promise((resolve, reject) => {
         fetchRequest(url,'GET').then(res=>{
             console.log('[res] ',res);
