@@ -89,7 +89,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate('simple_webview', {
                                 title: strings('terms_service.title'),
-                                initialUrl: 'http://45.118.132.89/terms_services.html',
+                                initialUrl: 'https://www.chaion.net/terms_services.html',
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
@@ -100,7 +100,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("simple_webview", {
                                 title: strings('privacy_policy.title'),
-                                initialUrl: 'http://45.118.132.89/privacy_policy.html',
+                                initialUrl: 'https://www.chaion.net/privacy_policy.html',
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>
