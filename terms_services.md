@@ -2,7 +2,7 @@
 
 Welcome! Chaion (Shanghai) Information Technology Co., Ltd.. (“we,” “our,” or “us”) provides its services through mobile applications (collectively  “Makkii Wallet”).
 
-Before using our Services, please read the Terms of Service (the “Terms” or the “Agreement”) carefully, along with any other policies or notices on Makkii Wallet’s mobile applications, and our Privacy Policy located at http://45.118.132.89/privacy_policy.html. Together, these materials contain terms, rules, and guidelines related to your use of Makkii Wallet.
+Before using our Services, please read the Terms of Service (the “Terms” or the “Agreement”) carefully, along with any other policies or notices on Makkii Wallet’s mobile applications, and our Privacy Policy located at https://chaion.net/privacy_policy.html. Together, these materials contain terms, rules, and guidelines related to your use of Makkii Wallet.
 
 ### OVERVIEW
 
@@ -16,7 +16,7 @@ We know that Terms can be long and confusing, so we will do our best to keep thi
 
 ### HOW YOU ACCEPT THIS POLICY
 
-By creating or importing a locally hosted wallet (a “Wallet”), you acknowledge that you have read, understood, and agreed to these Terms, as well as the accompanying Privacy Policy located at http://45.118.132.89/privacy_policy.html.
+By creating or importing a locally hosted wallet (a “Wallet”), you acknowledge that you have read, understood, and agreed to these Terms, as well as the accompanying Privacy Policy located at https://chaion.net/privacy_policy.html.
 
 We reserve the right to change these Terms at any time. Any such changes with respect to your use of Makkii Wallet will take effect immediately when posted on our mobile application. Your continued use of Makkii Wallet following any such change will signify your acceptance to be bound by the then current Terms. Please check the effective date above to determine if there have been any changes since you have last reviewed these Terms. 
 
@@ -67,7 +67,7 @@ If, to the extent permitted by Makkii Wallet, you grant express permission to a 
 
 ### INTELLECTUAL PROPERTY
 
-Makkii Wallet was developed under a GPL open source license. Information regarding Makkii Wallet’s current software can be found at https://github.com/chaion/wallet. Since software development is community-based, it can be accessed, used, and shared, in modified or unmodified form, by anyone. Please be aware that GPL is a copyleft license, which means that any derivative works can only be distributed under the same license terms as the original software. If you have any questions, you should review GNU’s terms and conditions at https://www.gnu.org/licenses/gpl-3.0.en.html.  
+Makkii Wallet was developed under a GPL open source license. Information regarding Makkii Wallet’s current software can be found at https://github.com/chaion/makkii. Since software development is community-based, it can be accessed, used, and shared, in modified or unmodified form, by anyone. Please be aware that GPL is a copyleft license, which means that any derivative works can only be distributed under the same license terms as the original software. If you have any questions, you should review GNU’s terms and conditions at https://www.gnu.org/licenses/gpl-3.0.en.html.  
 
 Makkii Wallet also contains copyrighted material and trademarks including, but not limited to, text and graphics (the “Content”), which is protected by copyright law, registered and unregistered trademarks, and other intellectual property rights. Unless otherwise provided, we exclusively own the Content. Your use of the Services does not grant you any right, title, or interest in the Content. You agree that you will not copy, transmit, distribute, sell, license, create derivative works from, or, in any other way, exploit any of the Content, in whole or in part.
 
