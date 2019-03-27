@@ -86,7 +86,7 @@ export default styles = {
   	},
     instruction: {
         fontSize: 16,
-        lineHeight: 16,
+        lineHeight: 20,
         color: FONT_COLOR,
     },
     input_multi_lines: {
