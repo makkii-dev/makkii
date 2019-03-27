@@ -331,6 +331,7 @@ class listenTransaction{
         let start = Date.now();
         thusMap[tx.hash]=setInterval(function(){
             if (Date.now() - start > thusTimeOut) {
+                delete thusPendingMap[tx.hash];
                 removeTransaction(tx);
             }
             web3.eth.getTransactionReceipt(tx.hash).then(
