@@ -10,6 +10,7 @@ import {
 	Keyboard,
     Image,
 	Dimensions,
+	ScrollView,
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
@@ -113,7 +114,8 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<View style={{flex:1, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20,alignItems:'center'}}>
+				<ScrollView style={{width, height, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20}}
+							contentContainerStyle={{alignItems:'center'}}>
 					<View style={{backgroundColor:'#fff', alignItems:'center',width:width-60, borderRadius:10}}>
 						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
 									borderTopEndRadius: 10, borderTopStartRadius:10,
@@ -180,7 +182,7 @@ class Receive extends Component {
 							this.contextMenu = element;
 						}}
 					/>
-				</View>
+				</ScrollView>
 			</TouchableOpacity>
 		)
 	}
