@@ -20,8 +20,8 @@ import {mainColor} from '../../style_util';
 import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
 import ContextMenu from '../../contextMenu';
-import {fixedHeight,fixedWidth} from '../../style_util';
-
+import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+const MyScrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const CIRCLE_SIZE = 20;
 const SMALL_CIRCLE_SIZE = 8;
 const SMALL_CIRCLE_COLOR = '#dfdfdf';
@@ -114,7 +114,10 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<View style={{width, height, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20, alignItems:'center'}}>
+				<MyScrollView style={{backgroundColor:mainColor}}
+							keyboardShouldPersistTaps={'always'}
+				>
+				<View style={{flex:1,backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20, alignItems:'center'}}>
 					<View style={{backgroundColor:'#fff',width:width-60, borderRadius:10}}
 						  contentContainerStyle={{alignItems:'center'}}>
 						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
@@ -156,6 +159,7 @@ class Receive extends Component {
 									borderBottomWidth: 1,
 								}}
 								value={ this.state.amount}
+								placeholder={strings('receive.amount_placeholder')}
 								keyboardType={'decimal-pad'}
 								onChangeText={e => {
 									this.setState({
@@ -183,7 +187,9 @@ class Receive extends Component {
 						}}
 					/>
 				</View>
+				</MyScrollView>
 			</TouchableOpacity>
+
 		)
 	}
 }

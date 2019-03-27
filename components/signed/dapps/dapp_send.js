@@ -6,7 +6,7 @@ import {
     Text,
     BackHandler,
     ScrollView,
-    Keyboard, StyleSheet, Dimensions, PixelRatio
+    Keyboard, StyleSheet, Dimensions, PixelRatio,Platform
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
@@ -20,6 +20,9 @@ import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
 import {linkButtonColor, mainBgColor} from '../../style_util';
+import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+
+const MyScrollView = Platform.OS === 'ios'?KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
 class DappSend extends React.Component{
     static navigationOptions = ({ navigation }) => ({
@@ -177,7 +180,7 @@ class DappSend extends React.Component{
     render(){
         return (
             <View style={{flex:1, backgroundColor: mainBgColor}}>
-                <ScrollView
+                <MyScrollView
                     contentContainerStyle={{justifyContent: 'center'}}
                 >
                     <TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={()=> {Keyboard.dismiss()}}>
@@ -256,7 +259,7 @@ class DappSend extends React.Component{
                         </View>
                     </TouchableOpacity>
 
-                </ScrollView>
+                </MyScrollView>
                 <Loading ref={element => {
                     this.loadingView = element;
                 }}/>

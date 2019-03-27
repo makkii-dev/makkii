@@ -88,7 +88,8 @@
     "label_modify_amount": "修改金额",
     "instruction": "扫二维码向我付钱",
     "button_save_receive_code": "保存收款码",
-    "no_permission_save_file": "保存失败，请在系统设置中授予外部存储权限"
+    "no_permission_save_file": "保存失败，请在系统设置中授予外部存储权限",
+    "amount_placeholder": "按右边蓝色图标刷新二维码"
   },
   "send": {
     "title": "转账",

@@ -1,6 +1,8 @@
 package com.chaion.makkii;
 
 import com.facebook.react.ReactActivity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 
 public class MainActivity extends ReactActivity {
 
@@ -12,4 +14,16 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "Makkii";
     }
+
+    // disable font scaling;
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config=new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config,res.getDisplayMetrics());
+        return res;
+    }
+
+
 }

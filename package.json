@@ -25,6 +25,7 @@
     "react-native-fs": "^2.13.3",
     "react-native-gesture-handler": "^1.0.15",
     "react-native-i18n": "^2.0.15",
+    "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-root-toast": "^3.0.2",
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",

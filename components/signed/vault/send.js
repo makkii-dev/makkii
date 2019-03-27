@@ -12,6 +12,7 @@ import {
 	Linking,
 	Keyboard,
 	PixelRatio,
+	Platform
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
@@ -24,8 +25,8 @@ import {update_account_txs} from "../../../actions/accounts";
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
 import {linkButtonColor, mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-
-
+import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
 
 
@@ -94,7 +95,7 @@ class Send extends Component {
 	render(){
 		return (
                 <View style={{flex:1, backgroundColor: mainBgColor}}>
-					<ScrollView
+					<MyscrollView
 						contentContainerStyle={{justifyContent: 'center'}}
 						keyboardShouldPersistTaps='always'
 					>
@@ -168,7 +169,7 @@ class Send extends Component {
 							</View>
 							</TouchableOpacity>
 
-                    </ScrollView>
+                    </MyscrollView>
 
                     <Loading ref={element => {
                         this.loadingView = element;
