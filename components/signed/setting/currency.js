@@ -49,8 +49,6 @@ class Currency extends Component {
             listenPrice.setCurrency(newCurrency);
         }
 
-        this.props.setting.fiat_currency = newCurrency;
-        dispatch(setting(this.props.setting));
         this.props.navigation.goBack();
     }
 

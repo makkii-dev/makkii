@@ -240,7 +240,7 @@ function getCoinPrice(currency='CNY',amount=1) {
 }
 
 class listenCoinPrice{
-    constructor(store, interval=24) {
+    constructor(store, interval=30) {
         this.store = store;
         this.interval = interval;
     }
@@ -266,17 +266,27 @@ class listenCoinPrice{
         getCoinPrice(this.currency).then(price => {
             let settings = thusStore.getState().setting;
             settings.coinPrice = price;
+            if (this.currency) {
+                settings.fiat_currency = this.currency;
+            }
             DeviceEventEmitter.emit('updateAccountBalance');
             thusStore.dispatch(setting(settings));
         }, error => {
             console.log("get coin price error", error);
+            Toast.show(strings('error_connect_remote_server'), {
+                position: Toast.positions.CENTER,
+            })
         });
 
         this.listener = setInterval(() => {
              getCoinPrice(this.currency).then(price => {
                 let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
+                if (this.currency) {
+                    settings.fiat_currency = this.currency;
+                }
                 DeviceEventEmitter.emit('updateAccountBalance');
+
                 thusStore.dispatch(setting(settings));
             }, error => {
                 console.log("get coin price error", error);
@@ -295,16 +305,22 @@ class listenCoinPrice{
 class listenTransaction{
     constructor(store, timeOut=60*1000){
         this.txMap={};
+        this.pendingMap = {};
         this.timeOut = timeOut;
         this.store = store;
     }
+    hasPending() {
+        return Object.keys(this.pendingMap).length > 0;
+    }
     addTransaction(tx){
         let thusMap = this.txMap;
+        let thusPendingMap = this.pendingMap;
         const thusTimeOut = this.timeOut;
         const thusStore = this.store;
         const {user, setting}= this.store.getState();
         if(typeof thusMap[tx.hash] !== 'undefined')
             return;
+        this.pendingMap[tx.hash] = tx;
         let removeTransaction = function(tx){
             if(typeof thusMap[tx.hash] !== 'undefined'){
                 console.log('clear listener');
@@ -315,16 +331,32 @@ class listenTransaction{
         let start = Date.now();
         thusMap[tx.hash]=setInterval(function(){
             if (Date.now() - start > thusTimeOut) {
+                delete thusPendingMap[tx.hash];
                 removeTransaction(tx);
             }
             web3.eth.getTransactionReceipt(tx.hash).then(
                 res=>{
                     if(res){
-                        tx.status = res.status? 'CONFIRMED':'FAILED';
                         tx.blockNumber = res.blockNumber;
-                        thusStore.dispatch(update_account_txs(tx.from,{[tx.hash]:tx}, setting.explorer_server, user.hashed_password));
-                        thusStore.dispatch(update_account_txs(tx.to,{[tx.hash]:tx}, setting.explorer_server, user.hashed_password));
-                        DeviceEventEmitter.emit('updateAccountBalance');
+                        if (res.status !== 'FAILED') {
+                            if (thusMap[tx.hash]) {
+                                let blockNumberInterval = setInterval(() => {
+                                    web3.eth.getBlockNumber().then(
+                                        number => {
+                                            if (number > tx.blockNumber + 6) {
+                                                delete thusPendingMap[tx.hash];
+
+                                                tx.status = res.status ? 'CONFIRMED' : 'FAILED';
+                                                thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                DeviceEventEmitter.emit('updateAccountBalance');
+                                                clearInterval(blockNumberInterval);
+                                            }
+                                        }
+                                    )
+                                }, 1000 * 5);
+                            }
+                        }
                         removeTransaction(tx);
                     }
                 },
@@ -333,7 +365,7 @@ class listenTransaction{
                     removeTransaction(tx);
                 }
             )
-        }, 2000);
+        }, 5 * 1000);
 
     }
 }

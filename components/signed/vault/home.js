@@ -41,7 +41,6 @@ const {width, } = Dimensions.get('window');
 
 
 function sortAccounts(src,select, network){
-	console.log('network ', network);
 	let res = src;
 	switch (select) {
 		case SORT[0].title:
@@ -222,6 +221,7 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 		this.menuRef=null;
+		this.isFetchingAccountBalance = false;
 		this.state={
 			showMenu: false,
 			sortOrder: SORT[0].title,
@@ -300,7 +300,12 @@ class Home extends HomeComponent {
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
-		if (Object.keys(accounts).length === 0) {
+		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
+		    if (this.state.refreshing) {
+				Toast.show(strings('wallet.toast_has_pending_transactions'), {
+					position: Toast.positions.CENTER,
+				})
+			}
 			if (this.isMount) {
 				this.setState({
 					refreshing: false,
@@ -308,6 +313,7 @@ class Home extends HomeComponent {
 			}
 			return;
 		}
+		this.isFetchingAccountBalance = true;
 		let executors=[];
 		Object.values(accounts).map(value => {
 			executors.push(
@@ -325,17 +331,22 @@ class Home extends HomeComponent {
 				let newAccounts={};
 				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
-					totalBalance = totalBalance.plus(account.balance);
-					newAccounts[account.address] = account;
+					// check if delete
+					if (this.props.accounts[account.address]){
+						totalBalance = totalBalance.plus(account.balance);
+						newAccounts[account.address] = account;
+					}
 				});
 				console.log('totalBalance', totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
+				this.isFetchingAccountBalance = false;
 				this.isMount&&this.setState({
 					refreshing: false,
 					totalBalance,
 				})
 			},errors=>{
 				console.log(errors);
+				this.isFetchingAccountBalance = false;
 				this.isMount&&this.setState({
 					refreshing: false,
 				}, () => {
@@ -384,7 +395,7 @@ class Home extends HomeComponent {
 						},()=>setTimeout(()=>
 						{
 							dispatch(delete_account(key,this.props.user.hashed_password));
-							DeviceEventEmitter.emit('updateAccountBalance');
+							setTimeout(()=>DeviceEventEmitter.emit('updateAccountBalance'),1000);
 						}, 500));
 					}}
 				],
@@ -444,6 +455,15 @@ class Home extends HomeComponent {
 				accountImage = require('../../../assets/account_mk.png');
 		}
 		const defaultImage = I18n.locale.indexOf('zh')>=0? require('../../../assets/default_zh.png'):require('../../../assets/default_en.png');
+		const txs = item.transactions[this.props.setting.explorer_server];
+		if (txs) {
+			Object.values(txs).map((tx) => {
+				if (tx.status === 'PENDING') {
+					console.log('try to get transaction ' + tx.hash + ' status');
+					listenTx.addTransaction(tx);
+				}
+			});
+		}
 		return (
 			<SwipeableRow
 				isOpen={ Key === this.state.openRowKey }

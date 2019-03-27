@@ -93,6 +93,7 @@ class AccountNameComponent extends Component{
 						numberOfLines={1}
 						value={this.state.value}
 						editable={this.state.editable}
+						selectionColor={'#000'}
 						onChangeText={v=>{
 							if (strLen(v) <= 15) {
 								this.setState({value: v})
