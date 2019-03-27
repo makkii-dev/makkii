@@ -6,11 +6,11 @@ import DeviceInfo from 'react-native-device-info';
 
 const init = { 
 	lang: 'auto',
-	version: '0.1.0-rc0',
+	version: '0.1.0',
 	theme: 'white',
 	default_account_name: 'Default Account',
 	login_session_timeout: '30',
-	exchange_refresh_interval: "24",
+	exchange_refresh_interval: "30",
 	fiat_currency: "CNY",
 	coinPrice: undefined,
 

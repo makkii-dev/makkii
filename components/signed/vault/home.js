@@ -300,7 +300,12 @@ class Home extends HomeComponent {
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
-		if (Object.keys(accounts).length === 0) {
+		if (listenTx.hasPending() || Object.keys(accounts).length === 0) {
+		    if (this.state.refreshing) {
+				Toast.show(strings('wallet.toast_has_pending_transactions'), {
+					position: Toast.positions.CENTER,
+				})
+			}
 			if (this.isMount) {
 				this.setState({
 					refreshing: false,
@@ -444,6 +449,15 @@ class Home extends HomeComponent {
 				accountImage = require('../../../assets/account_mk.png');
 		}
 		const defaultImage = I18n.locale.indexOf('zh')>=0? require('../../../assets/default_zh.png'):require('../../../assets/default_en.png');
+		const txs = item.transactions[this.props.setting.explorer_server];
+		if (txs) {
+			Object.values(txs).map((tx) => {
+				if (tx.status === 'PENDING') {
+					console.log('try to get transaction ' + tx.hash + ' status');
+					listenTx.addTransaction(tx);
+				}
+			});
+		}
 		return (
 			<SwipeableRow
 				isOpen={ Key === this.state.openRowKey }

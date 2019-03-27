@@ -47,7 +47,7 @@ if(!Date.prototype.Format){
         let o = {
             "M+": this.getMonth() + 1, //month 
             "d+": this.getDate(), //day 
-            "h+": this.getHours() % 12, //hour 
+            "h+": this.getHours() % 12 == 0? 12: this.getHours() % 12, //hour 
             "m+": this.getMinutes(), //minute 
             "s+": this.getSeconds(), //seconds 
             "q+": Math.floor((this.getMonth() + 3) / 3), //quarter 
@@ -60,7 +60,7 @@ if(!Date.prototype.Format){
                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (("00" + o[k]).substring(("" + o[k]).length)));
             }
         }
-        fmt = this.getHours() > 12 ? fmt + ' PM' : fmt + ' AM';
+        fmt = this.getHours() >= 12 ? fmt + ' PM' : fmt + ' AM';
         return fmt;
     };
 }

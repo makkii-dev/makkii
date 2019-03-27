@@ -113,7 +113,8 @@
     "progress_sending_tx": "Sending transaction...",
     "toast_tx_sent": "Transaction is sent",
     "cancel": "Cancel",
-    "warning_send_to_itself": "Sender and recipient are the same. Are you sure to continue?"
+    "warning_send_to_itself": "Sender and recipient are the same. Are you sure to continue?",
+    "warning_send_zero": "You are sending 0 AION. Are you sure to continue?"
   },
   "transaction_detail": {
     "title": "Transaction Detail",
@@ -179,7 +180,8 @@
     "menu_master_key": "Seed phrase",
     "menu_private_key": "Private key",
     "menu_ledger": "Ledger",
-    "no_satisfied_accounts": "No matched accounts found"
+    "no_satisfied_accounts": "No matched accounts found",
+    "toast_has_pending_transactions": "There are pending transactions, please wait."
   },
   "language": {
     "title": "Language",

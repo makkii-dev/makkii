@@ -181,16 +181,35 @@ class Send extends Component {
         Keyboard.dismiss();
 		if (!this.validateFields()) return;
 
-		if (this.account.address == this.state.recipient) {
+		if (this.account.address == this.state.recipient)
+
+		{
 			Alert.alert(
 				strings('alert_title_warning'),
 				strings('send.warning_send_to_itself'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
-					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
+					{text:strings('alert_ok_button'), onPress: () => {this.transfer1()}}
 				],
 				{cancelable: false}
 				);
+		} else {
+			this.transfer1();
+		}
+	}
+
+	transfer1=() => {
+		let amount = new BigNumber(this.state.amount);
+		if (amount == 0) {
+			Alert.alert(
+				strings('alert_title_warning'),
+				strings('send.warning_send_zero'),
+				[
+					{text:strings('cancel_button'), onPress: ()=> {}},
+					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
+				],
+				{cancelable: false}
+			);
 		} else {
 			this.transfer();
 		}
@@ -293,6 +312,8 @@ class Send extends Component {
 			alert_ok(strings('alert_title_error'), strings('send.error_format_amount'));
 			return false;
 		}
+
+
 		// 2. < total balance
 		console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
 		console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));

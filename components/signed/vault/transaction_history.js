@@ -171,7 +171,9 @@ class TransactionHistory extends React.Component {
         if (this.state.isLoading) {
             return this.renderLoadingView();
         } else {
-            const transactions = Object.values(this.state.transactions).sort((a, b) => b.timestamp - a.timestamp);
+
+            let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server]
+            const transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {
@@ -208,5 +210,6 @@ class TransactionHistory extends React.Component {
 export default connect(state => {
     return ({
         setting: state.setting,
+        accounts: state.accounts,
     });
 })(TransactionHistory);
