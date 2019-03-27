@@ -388,7 +388,7 @@ class Home extends HomeComponent {
 			strings('alert_title_warning'),
 			strings('warning_delete_account'),
 			[
-				{text: strings('cancel_button'),onPress:()=>{}},
+				{text: strings('cancel_button'),onPress:()=>this.setState({openRowKey: null})},
 				{text: strings('delete_button'), onPress:()=>{
 						this.setState({
 							openRowKey: null,
@@ -409,7 +409,7 @@ class Home extends HomeComponent {
 			strings('alert_title_warning'),
 			strings('warning_set_default_account'),
 			[
-				{text: strings('cancel_button'),onPress:()=>{}},
+				{text: strings('cancel_button'),onPress:()=>this.setState({openRowKey: null})},
 				{text: strings('ok_button'), onPress:()=>{
 						this.setState({
 							openRowKey:null

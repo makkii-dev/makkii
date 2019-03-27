@@ -4,7 +4,7 @@ dapps.mainnet=[];
 dapps.mastery.push({
 	name: 'Pet Roulette',
 	logo: require('./assets/apps/app1/app1_logo.png'),
-	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
+	description: '\tWhen 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
 	// uri: 'http://192.168.50.83:8082'
 	uri: 'https://aion-roulette.netlify.com/',
 	author: 'KimCodeashian',
@@ -14,7 +14,7 @@ dapps.mastery.push({
 dapps.mainnet.push({
 	name: 'Pet Roulette',
 	logo: require('./assets/apps/app1/app1_logo.png'),
-	description: '		When 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
+	description: '\tWhen 7 bets have been placed - an animal will be randomly selected and a payout will occur.Winners who guessed correctly will split the amount in the AION pool! If no winner, total AION pool will rollover',
 	// uri: 'http://192.168.50.83:8082'
 	uri: 'https://www.chaion.net/DApp1/',
 	author: 'KimCodeashian',

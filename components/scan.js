@@ -42,7 +42,7 @@ class Scan extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			toast: Date.now(), 
+			toast: Date.now(),
 			torch: false,
 		}
 	}
@@ -71,25 +71,25 @@ class Scan extends Component {
 
 		return (
 	  		<View style={{wdith:'100%',height:'100%'}}>
-  				<RNCamera 
+  				<RNCamera
 	  			    style={{
-			            flex: 1, 
+			            flex: 1,
 			            flexDirection: 'column',
     					justifyContent: 'center',
-			        }} 
+			        }}
 			       	flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
-	  				captureAudio={false}  
+	  				captureAudio={false}
 	  				onBarCodeRead={e=>{
 	  					if(
 	  						this.props.navigation.state.params &&
-	  						this.props.navigation.state.params['validate'] && 
+	  						this.props.navigation.state.params['validate'] &&
 	  						this.props.navigation.state.params['success']
   						){
 	  						let res = this.props.navigation.state.params['validate'](e);
 	  						if (res.pass) {
 	  							this.props.navigation.navigate(this.props.navigation.state.params['success'], { scanned: e.data });
 	  						} else {
-	  							// slow down toast log 
+	  							// slow down toast log
 	  							let now = Date.now();
 	  							if(now - this.state.toast > 1000){
 	  								Toast.show(res.err);
@@ -107,19 +107,19 @@ class Scan extends Component {
 	  					flex: 1,
 						backgroundColor: 'rgba(0,0,0,0.8)',
 						width: '100%',
-  					}}></View>
+  					}}/>
   					<View style={{
   						height: 250,
   						flexDirection: 'row',
-  						justifyContent: 'center', 
+  						justifyContent: 'center',
   					}}>
   						<View style={{
   							flex: 1,
   							backgroundColor: 'rgba(0,0,0,0.8)',
-  						}}></View>
+  						}}/>
   						<View style={{
   							width: 250,
-  							justifyContent: 'center', 
+  							justifyContent: 'center',
   							alignItems: 'center',
   							// borderWidth: 2,
   							// borderColor: 'rgba(255,255,255,0.9)'
@@ -132,17 +132,14 @@ class Scan extends Component {
   						<View style={{
   							flex: 1,
   							backgroundColor: 'rgba(0,0,0,0.8)',
-  						}}></View>
+  						}}/>
   					</View>
   					<View style={{
   						flex: 1,
   						width: '100%',
 						backgroundColor: 'rgba(0,0,0,0.8)',
-					}}></View>
-	  			</RNCamera>	
-	  			<View style={{
-	  				position: 'absolute',
-	  			}}></View>
+					}}/>
+	  			</RNCamera>
         	</View>
 		);
 	}
@@ -150,4 +147,4 @@ class Scan extends Component {
 
 export default connect(state => {
 	return state;
-})(Scan); 
+})(Scan);
