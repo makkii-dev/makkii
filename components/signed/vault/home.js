@@ -384,7 +384,7 @@ class Home extends HomeComponent {
 						},()=>setTimeout(()=>
 						{
 							dispatch(delete_account(key,this.props.user.hashed_password));
-							DeviceEventEmitter.emit('updateAccountBalance');
+							setTimeout(()=>DeviceEventEmitter.emit('updateAccountBalance'),1000);
 						}, 500));
 					}}
 				],
