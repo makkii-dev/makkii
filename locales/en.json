@@ -89,7 +89,8 @@
     "label_modify_amount": "Amount",
     "instruction": "Scan to pay me",
     "button_save_receive_code": "Download QR code",
-    "no_permission_save_file": "Failed to save file. Please grant storage permission in System Settings."
+    "no_permission_save_file": "Failed to save file. Please grant storage permission in System Settings.",
+    "amount_placeholder": "Press blue icon to refresh Qr code"
   },
   "send": {
     "title": "Send",

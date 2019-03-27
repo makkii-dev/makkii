@@ -157,6 +157,7 @@ class Receive extends Component {
 									borderBottomWidth: 1,
 								}}
 								value={ this.state.amount}
+								placeholder={strings('receive.amount_placeholder')}
 								keyboardType={'decimal-pad'}
 								onChangeText={e => {
 									this.setState({
