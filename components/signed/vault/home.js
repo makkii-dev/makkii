@@ -41,7 +41,6 @@ const {width, } = Dimensions.get('window');
 
 
 function sortAccounts(src,select, network){
-	console.log('network ', network);
 	let res = src;
 	switch (select) {
 		case SORT[0].title:
@@ -222,6 +221,7 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 		this.menuRef=null;
+		this.isFetchingAccountBalance = false;
 		this.state={
 			showMenu: false,
 			sortOrder: SORT[0].title,
@@ -300,7 +300,7 @@ class Home extends HomeComponent {
 	fetchAccountsBalance = ()=> {
 		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
-		if (listenTx.hasPending() || Object.keys(accounts).length === 0) {
+		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
 				Toast.show(strings('wallet.toast_has_pending_transactions'), {
 					position: Toast.positions.CENTER,
@@ -313,6 +313,7 @@ class Home extends HomeComponent {
 			}
 			return;
 		}
+		this.isFetchingAccountBalance = true;
 		let executors=[];
 		Object.values(accounts).map(value => {
 			executors.push(
@@ -335,12 +336,14 @@ class Home extends HomeComponent {
 				});
 				console.log('totalBalance', totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
+				this.isFetchingAccountBalance = false;
 				this.isMount&&this.setState({
 					refreshing: false,
 					totalBalance,
 				})
 			},errors=>{
 				console.log(errors);
+				this.isFetchingAccountBalance = false;
 				this.isMount&&this.setState({
 					refreshing: false,
 				}, () => {
