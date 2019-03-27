@@ -331,8 +331,11 @@ class Home extends HomeComponent {
 				let newAccounts={};
 				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
-					totalBalance = totalBalance.plus(account.balance);
-					newAccounts[account.address] = account;
+					// check if delete
+					if (this.props.accounts[account.address]){
+						totalBalance = totalBalance.plus(account.balance);
+						newAccounts[account.address] = account;
+					}
 				});
 				console.log('totalBalance', totalBalance);
 				dispatch(accounts_add(newAccounts, this.props.user.hashed_password));
