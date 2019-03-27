@@ -114,9 +114,9 @@ class Receive extends Component {
 	render(){
 		return (
 			<TouchableOpacity style={{flex:1}} activeOpacity={1} onPress={() => {Keyboard.dismiss()}}>
-				<ScrollView style={{width, height, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20}}
-							contentContainerStyle={{alignItems:'center'}}>
-					<View style={{backgroundColor:'#fff', alignItems:'center',width:width-60, borderRadius:10}}>
+				<View style={{width, height, backgroundColor:mainColor, paddingHorizontal:30, paddingTop: 20,paddingBottom:20, alignItems:'center'}}>
+					<View style={{backgroundColor:'#fff',width:width-60, borderRadius:10}}
+						  contentContainerStyle={{alignItems:'center'}}>
 						<View style={{height:60, width:width-60,alignItems:'center', justifyContent:'center', backgroundColor:'#dfdfdf',
 									borderTopEndRadius: 10, borderTopStartRadius:10,
 						}}>
@@ -182,7 +182,7 @@ class Receive extends Component {
 							this.contextMenu = element;
 						}}
 					/>
-				</ScrollView>
+				</View>
 			</TouchableOpacity>
 		)
 	}
