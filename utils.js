@@ -337,23 +337,24 @@ class listenTransaction{
                 res=>{
                     if(res){
                         tx.blockNumber = res.blockNumber;
-                        if (res.status != 'FAILED') {
-                            let blockNumberInterval = setInterval(() => {
-                                web3.eth.getBlockNumber().then(
-                                    number => {
-                                        console.log("best block number: " + number);
-                                        if (number > tx.blockNumber + 6) {
-                                            delete thusPendingMap[tx.hash];
+                        if (res.status !== 'FAILED') {
+                            if (thusMap[tx.hash]) {
+                                let blockNumberInterval = setInterval(() => {
+                                    web3.eth.getBlockNumber().then(
+                                        number => {
+                                            if (number > tx.blockNumber + 6) {
+                                                delete thusPendingMap[tx.hash];
 
-                                            tx.status = res.status? 'CONFIRMED':'FAILED';
-                                            thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                                            thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                                            DeviceEventEmitter.emit('updateAccountBalance');
-                                            clearInterval(blockNumberInterval);
+                                                tx.status = res.status ? 'CONFIRMED' : 'FAILED';
+                                                thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                DeviceEventEmitter.emit('updateAccountBalance');
+                                                clearInterval(blockNumberInterval);
+                                            }
                                         }
-                                    }
-                                )
-                            }, 1000 * 2);
+                                    )
+                                }, 1000 * 5);
+                            }
                         }
                         removeTransaction(tx);
                     }
@@ -363,7 +364,7 @@ class listenTransaction{
                     removeTransaction(tx);
                 }
             )
-        }, 2000);
+        }, 5 * 1000);
 
     }
 }
