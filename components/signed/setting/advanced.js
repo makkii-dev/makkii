@@ -106,7 +106,7 @@ class Advanced extends Component {
                                     position: Toast.positions.CENTER,
                                 })
                             }}>
-                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
+                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
                         }
                         trailingText={strings('advanced.label_minute')}
