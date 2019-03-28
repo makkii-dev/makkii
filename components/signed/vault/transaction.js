@@ -77,6 +77,12 @@ class Transaction extends Component {
 							title={strings('transaction_detail.transactionHash_label')}
 							value={transaction.hash}
 							valueTextAlign={'left'}
+							rightView={()=><TouchableOpacity onPress={()=>{
+								Clipboard.setString(transaction.hash);
+								AppToast.show(strings('toast_copy_success'));
+							}}>
+								<Image source={require('../../../assets/copy.png')} style={{width:20,height:20,tintColor:'#000'}} resizeMode={'contain'}/>
+							</TouchableOpacity>}
 						/>
 						<TransactionItemCell
 							style={{height:80}}
