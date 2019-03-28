@@ -28,6 +28,17 @@ class PendingComponent extends React.Component {
         this.mount = false;
         this.interval&&clearInterval(this.interval);
     }
+    
+    componentWillUpdate(nextProps){
+        if(this.props.status !== nextProps.status) {
+            if (nextProps.status === 'PENDING') {
+                this.interval = setInterval(() => {
+                    const {waiting} = this.state;
+                    this.mount && this.setState({waiting: (waiting + 1) % 5})
+                }, 500)
+            }
+        }
+    }
 
     render(){
         if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED'){
