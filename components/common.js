@@ -15,7 +15,7 @@ class ComponentTabBar extends Component{
 		activeTintColor: PropTypes.string,
 		inactiveTintColor: PropTypes.string,
 		active: PropTypes.string.isRequired,
-	}
+	};
 	render(){
 		const wallet_tint_color =  this.props.active === 'wallet'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		const dapp_tint_color =  this.props.active === 'dapp'?  this.props.activeTintColor:this.props.inactiveTintColor;
@@ -150,7 +150,7 @@ class ImportListfooter extends React.PureComponent {
 
     static defaultProps = {
         hasSeparator: true,
-    }
+    };
 	render() {
 		if (this.props.footerState === 1) {
 			return (
@@ -209,15 +209,26 @@ class SubTextInput extends Component{
 }
 
 class TransactionItemCell extends React.PureComponent {
+	static propTypes={
+		rightView: PropTypes.func,
+		valueTextAlign: PropTypes.string.isRequired,
+	};
 	static defaultProps={
 		valueTextAlign: 'right',
 	};
 	render(){
 		return(
-			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'center',alignItems:'flex-start'}}>
-				<Text style={{fontSize:16, fontWeight:'bold', color:'#000'}}>{this.props.title}</Text>
-				<Text style={{flex:1,width:'100%',borderBottomColor:'#000',borderBottomWidth: 1/PixelRatio.get(),
-					textAlign:this.props.valueTextAlign,textAlignVertical: 'bottom',paddingBottom: 5}}>{this.props.value}</Text>
+			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'space-between',alignItems:'center'}}>
+				<View style={{flexDirection: 'row', justifyContent:'space-between', alignItems:'flex-start',width:'100%', height:20}}>
+					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000'}}>{this.props.title}</Text>
+					{
+						this.props.rightView&&this.props.rightView()
+					}
+				</View>
+				<TextInput style={{width:'100%',borderBottomColor:'#000',borderBottomWidth:1/PixelRatio.get(),
+					textAlign:this.props.valueTextAlign,paddingBottom: 5}}
+						   editable={false} multiline={true}
+				>{this.props.value}</TextInput>
 			</View>
 		)
 	}
