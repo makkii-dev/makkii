@@ -92,7 +92,7 @@ class Scan extends Component {
 	  							// slow down toast log
 	  							let now = Date.now();
 	  							if(now - this.state.toast > 1000){
-	  								Toast.show(res.err);
+	  								AppToast.show(res.err);
 	  								this.setState({
 	  									toast: now
 	  								})

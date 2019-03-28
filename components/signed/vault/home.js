@@ -302,7 +302,7 @@ class Home extends HomeComponent {
 		const {dispatch,accounts} = this.props;
 		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
-				Toast.show(strings('wallet.toast_has_pending_transactions'), {
+				AppToast.show(strings('wallet.toast_has_pending_transactions'), {
 					position: Toast.positions.CENTER,
 				})
 			}
@@ -350,7 +350,7 @@ class Home extends HomeComponent {
 				this.isMount&&this.setState({
 					refreshing: false,
 				}, () => {
-					Toast.show(strings("error_connect_remote_server"));
+					AppToast.show(strings("error_connect_remote_server"));
 				})
 			}
 		)

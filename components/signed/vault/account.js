@@ -57,7 +57,7 @@ class AccountNameComponent extends Component{
 	onPress=()=>{
 		const {editable} = this.state;
 		if (this.state.value.trim().length === 0) {
-			Toast.show(
+			AppToast.show(
 				strings('account_view.error_empty_account_name'),
 				{
 					position:Toast.positions.CENTER,
@@ -98,7 +98,7 @@ class AccountNameComponent extends Component{
 							if (strLen(v) <= 15) {
 								this.setState({value: v})
 							}else{
-								Toast.show(
+								AppToast.show(
 									strings('account_name_hint'),
 									{
 										position:Toast.positions.CENTER,
@@ -139,7 +139,7 @@ class AddressComponent extends Component {
 					<View style={{marginHorizontal:10,justifyContent:'space-between', alignItems:'center'}}>
 						<TouchableOpacity onPress={()=>{
 							Clipboard.setString(address);
-							Toast.show(strings('toast_copy_success'));
+							AppToast.show(strings('toast_copy_success'));
 						}}>
 							<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
 						</TouchableOpacity>
@@ -158,7 +158,7 @@ class AddressComponent extends Component {
 						style={styles.addressFontStyle}>{address.substring(0, 10) + '...' + address.substring(58)}</Text>
 					<TouchableOpacity onPress={() => {
 						Clipboard.setString(address);
-						Toast.show(strings('toast_copy_success'));
+						AppToast.show(strings('toast_copy_success'));
 					}}>
 						<Image source={require("../../../assets/copy.png")}
 							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
@@ -285,7 +285,7 @@ class Account extends Component {
 					txs[tx.hash]=tx;
 				});
 			}else{
-			    Toast.show(strings('message_no_more_data'));
+			    AppToast.show(strings('message_no_more_data'));
 			}
 			const {dispatch, user, setting} = this.props;
 			dispatch(update_account_txs(address,txs,setting.explorer_server, user.hashed_password));

@@ -33,7 +33,7 @@ class Mnemonic extends Component {
 			screenshotHelper.disableTakeScreenshot();
         } else {
 			this.subscription = NativeModule.addListener('screenshot_taken',() => {
-				Toast.show(strings('toast_mnemonic_share_warning'), {
+				AppToast.show(strings('toast_mnemonic_share_warning'), {
 					duration: Toast.durations.LONG,
 					position: Toast.positions.CENTER
 				});
@@ -85,7 +85,7 @@ class Mnemonic extends Component {
                     title={strings('unsigned_register_mnemonic.btn_copy')}
                     onPress={e=>{
                         Clipboard.setString(this.props.user.mnemonic);
-                        Toast.show(strings('unsigned_register_mnemonic.toast_copy_mnemonic'));
+                        AppToast.show(strings('unsigned_register_mnemonic.toast_copy_mnemonic'));
                     }}
                 />
 				<View style={{marginBottom: 20}} />

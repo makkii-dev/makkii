@@ -37,7 +37,7 @@ class Recovery extends Component {
 			screenshotHelper.disableTakeScreenshot();
 		} else {
 			this.subscription = NativeModule.addListener('screenshot_taken',() => {
-				Toast.show(strings('toast_mnemonic_share_warning'), {
+				AppToast.show(strings('toast_mnemonic_share_warning'), {
 					duration: Toast.durations.LONG,
 					position: Toast.positions.CENTER
 				});
@@ -96,7 +96,7 @@ class Recovery extends Component {
                     title={strings('copy_button')}
                     onPress={e => {
                         Clipboard.setString(this.props.user.mnemonic);
-                        Toast.show(strings('toast_copy_success'));
+                        AppToast.show(strings('toast_copy_success'));
                     }}
                 />
 			</View>

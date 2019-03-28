@@ -29,7 +29,7 @@ export class HomeComponent extends Component {
 
     prepare() {
         this.backClickCount = 1;
-        Toast.show(strings('toast_double_press_exit'), {
+        AppToast.show(strings('toast_double_press_exit'), {
             onHidden:()=>this.backClickCount&&(this.backClickCount = 0),
         });
     }

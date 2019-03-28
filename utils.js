@@ -239,6 +239,18 @@ function getCoinPrice(currency='CNY',amount=1) {
     })
 }
 
+class AppToast {
+    constructor() {
+        this.toast = null;
+    }
+    show(message, options = {position: Toast.positions.BOTTOM, duration: Toast.durations.SHORT}){
+        if(this.toast){
+            Toast.hide(this.toast);
+        }
+        this.toast= Toast.show(message,options);
+    }
+}
+
 class listenCoinPrice{
     constructor(store, interval=30) {
         this.store = store;
@@ -273,7 +285,7 @@ class listenCoinPrice{
             thusStore.dispatch(setting(settings));
         }, error => {
             console.log("get coin price error", error);
-            Toast.show(strings('error_connect_remote_server'), {
+            AppToast.show(strings('error_connect_remote_server'), {
                 position: Toast.positions.CENTER,
             })
         });
@@ -361,7 +373,7 @@ class listenTransaction{
                     }
                 },
                 err=>{
-                    Toast.show(strings('error_connect_remote_server'));
+                    AppToast.show(strings('error_connect_remote_server'));
                     removeTransaction(tx);
                 }
             )
@@ -443,7 +455,6 @@ module.exports = {
     decrypt: decrypt,
     dbGet: dbGet,
     validatePassword: validatePassword,
-    validateUrl: validateUrl,
     hashPassword: hashPassword,
     getLedgerMessage: getLedgerMessage,
     validatePrivateKey: validatePrivateKey,
@@ -453,7 +464,6 @@ module.exports = {
     validatePositiveInteger: validatePositiveInteger,
     validateAddress: validateAddress,
     fetchRequest: fetchRequest,
-    getCoinPrice: getCoinPrice,
     listenTransaction:listenTransaction,
     listenCoinPrice: listenCoinPrice,
     validateRecipient: validateRecipient,
@@ -462,6 +472,6 @@ module.exports = {
     mastery_url: mastery_url,
     getStatusBarHeight:getStatusBarHeight,
     listenAppState:listenAppState,
-    toUTF8Array: toUTF8Array,
     strLen: strLen,
-}
+    AppToast: AppToast,
+};
