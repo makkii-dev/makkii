@@ -125,7 +125,7 @@ class Receive extends Component {
 						}}>
 							<Text style={{color:'black',fontSize:20, fontWeight: 'bold'}}>{strings('receive.instruction')}</Text>
 						</View>
-						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()}>
+						<TouchableWithoutFeedback onLongPress={() => this.longPressCode()} onPress={()=>Keyboard.dismiss()}>
 							<View style={{alignItems: 'center', margin: 10, marginTop:20}} >
 								<QRCode
 									value={this.state.qrCodeValue}
@@ -157,6 +157,7 @@ class Receive extends Component {
 									color: '#777676',
 									borderColor: '#8c8a8a',
 									borderBottomWidth: 1,
+									paddingBottom: 5,
 								}}
 								value={ this.state.amount}
 								placeholder={strings('receive.amount_placeholder')}
