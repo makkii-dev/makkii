@@ -212,7 +212,7 @@
     "CNY": "CNY",
     "USD": "USD",
     "CAD": "CAD",
-    "CNY_unit": "RMB",
+    "CNY_unit": "CNY",
     "USD_unit": "USD",
     "CAD_unit": "CAD"
   },
