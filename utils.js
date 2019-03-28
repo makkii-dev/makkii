@@ -373,7 +373,7 @@ class listenTransaction{
                     }
                 },
                 err=>{
-                    AppToast.show(strings('error_connect_remote_server'));
+                    Toast.show(strings('error_connect_remote_server'));
                     removeTransaction(tx);
                 }
             )
