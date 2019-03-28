@@ -97,7 +97,8 @@ const navigationOptionsWithoutShadow = ({navigation}) => ({
 		</TouchableOpacity>
 	),
 	headerStyle: styles.headerStyleWithoutShadow,
-	headerTitleStyle: styles.headerTitleStyle
+	headerTitleStyle: styles.headerTitleStyle,
+	headerTitleAllowFontScaling: false,
 });
 
 const navigationOptionsWithoutRight = ({navigation}) => ({
@@ -116,7 +117,8 @@ const navigationOptionsWithoutRight = ({navigation}) => ({
 		</TouchableOpacity>
 	),
 	headerStyle: styles.headerStyle,
-	headerTitleStyle: styles.headerTitleStyle
+	headerTitleStyle: styles.headerTitleStyle,
+	headerTitleAllowFontScaling: false,
 });
 
 const Routes = createAppContainer(createStackNavigator({
@@ -193,6 +195,7 @@ const Routes = createAppContainer(createStackNavigator({
             headerRight: null,
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
         }
 	},
 	'signed_dapps_dapp': {
@@ -200,6 +203,7 @@ const Routes = createAppContainer(createStackNavigator({
 		navigationOptions: {
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
 		}
 	},
 	'signed_dapps_launch': {
@@ -209,6 +213,7 @@ const Routes = createAppContainer(createStackNavigator({
 			headerRight: null,
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
 		}
 	},
 	'signed_dapps_send': {
@@ -216,6 +221,7 @@ const Routes = createAppContainer(createStackNavigator({
 		navigationOptions: {
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
 		}
 	},
 	'signed_setting': {
@@ -225,6 +231,7 @@ const Routes = createAppContainer(createStackNavigator({
             headerRight: null,
             headerStyle: styles.headerStyle,
             headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
         }
 	},
 	'signed_setting_about': {
@@ -260,6 +267,7 @@ const Routes = createAppContainer(createStackNavigator({
 		navigationOptions: {
 			headerStyle: styles.headerStyle,
 			headerTitleStyle: styles.headerTitleStyle,
+			headerTitleAllowFontScaling: false,
 		}
 	}
 }, {
