@@ -81,7 +81,7 @@ class Services extends Component {
 						defaultKey={this.props.setting.explorer_server}
 						onItemSelected={() => {
 							this.props.navigation.setParams({
-								isEdited: this.props.setting.explorer_server != Object.keys(this.selectList.getSelect())[0],
+								isEdited: this.props.setting.explorer_server !== Object.keys(this.selectList.getSelect())[0],
 							});
 						}}
 					/>
