@@ -15,7 +15,7 @@ class ComponentTabBar extends Component{
 		activeTintColor: PropTypes.string,
 		inactiveTintColor: PropTypes.string,
 		active: PropTypes.string.isRequired,
-	}
+	};
 	render(){
 		const wallet_tint_color =  this.props.active === 'wallet'?  this.props.activeTintColor:this.props.inactiveTintColor;
 		const dapp_tint_color =  this.props.active === 'dapp'?  this.props.activeTintColor:this.props.inactiveTintColor;
@@ -150,7 +150,7 @@ class ImportListfooter extends React.PureComponent {
 
     static defaultProps = {
         hasSeparator: true,
-    }
+    };
 	render() {
 		if (this.props.footerState === 1) {
 			return (
@@ -209,17 +209,26 @@ class SubTextInput extends Component{
 }
 
 class TransactionItemCell extends React.PureComponent {
+	static propTypes={
+		rightView: PropTypes.func,
+		valueTextAlign: PropTypes.string.isRequired,
+	};
 	static defaultProps={
 		valueTextAlign: 'right',
 	};
 	render(){
 		return(
 			<View style={{...this.props.style,backgroundColor: '#fff', padding:10,width:'100%',justifyContent:'space-between',alignItems:'flex-start'}}>
-				<Text style={{fontSize:16, fontWeight:'bold', color:'#000'}}>{this.props.title}</Text>
-				<TextInput style={{width:'100%',borderBottomColor:'#000',borderBottomWidth:1/PixelRatio.get(),
+				<View style={{flexDirection: 'row', justifyContent:'flex-start', alignItems:'flex-start', height:20,flex:1}}>
+					<Text style={{fontSize: 16,fontWeight: 'bold', color:'#000', flex:1}}>{this.props.title}</Text>
+					{
+						this.props.rightView&&this.props.rightView()
+					}
+				</View>
+				<Text style={{width:'100%',borderBottomColor:'#000',borderBottomWidth:1/PixelRatio.get(),
 					textAlign:this.props.valueTextAlign, textAlignVertical: 'bottom',paddingBottom: 5}}
 						   editable={false} multiline={true}
-				>{this.props.value}</TextInput>
+				>{this.props.value}</Text>
 			</View>
 		)
 	}
