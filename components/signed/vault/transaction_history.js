@@ -5,12 +5,9 @@ import {
     Image,
     Text,
     TouchableOpacity,
-    PixelRatio,
-    StyleSheet,
     ActivityIndicator,
     InteractionManager,
     Dimensions,
-    DeviceEventEmitter,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
@@ -19,6 +16,7 @@ import {connect} from "react-redux";
 import {ImportListfooter} from "../../common";
 import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
+import PendingComponent from "./pendingComponent";
 
 const {width} = Dimensions.get('window');
 
@@ -130,7 +128,7 @@ class TransactionHistory extends React.Component {
             >
                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
                     <Text>{timestamp}</Text>
-                    <Text>{transaction.status}</Text>
+                    <PendingComponent status={transaction.status}/>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
                     <Text>{transaction.hash.substring(0, 16) + '...' }</Text>

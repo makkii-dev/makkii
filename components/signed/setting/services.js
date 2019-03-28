@@ -81,7 +81,7 @@ class Services extends Component {
 						defaultKey={this.props.setting.explorer_server}
 						onItemSelected={() => {
 							this.props.navigation.setParams({
-								isEdited: this.props.setting.explorer_server != Object.keys(this.selectList.getSelect())[0],
+								isEdited: this.props.setting.explorer_server !== Object.keys(this.selectList.getSelect())[0],
 							});
 						}}
 					/>
@@ -120,7 +120,7 @@ class Services extends Component {
 		// _setting.endpoint_odex = this.state.endpoint_odex;
 		dispatch(setting(_setting));
 
-        Toast.show(strings('toast_update_success'), {
+		AppToast.show(strings('toast_update_success'), {
 			position: Toast.positions.CENTER,
 			onHidden: () => {
 				DeviceEventEmitter.emit('updateAccountBalance');

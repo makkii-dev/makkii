@@ -96,9 +96,9 @@ class Receive extends Component {
                 saveImage(base64, 'receive_qrcode_' + Date.now() + ".png").then(imagePath => {
                     console.log("image path:" + imagePath);
                     if (Platform.OS === 'android') {
-						Toast.show(strings('toast_save_image_success', {path: imagePath}));
+						AppToast.show(strings('toast_save_image_success', {path: imagePath}));
 					} else {
-                        Toast.show(strings('toast_save_image_to_album'));
+                        AppToast.show(strings('toast_save_image_to_album'));
 					}
                 }, error => {
                     console.log(error);

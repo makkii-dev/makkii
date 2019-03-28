@@ -407,7 +407,7 @@ class TextInputWithTitle extends Component {
 	render(){
 		return (
 			<View>
-				<View style={{flexDirection:'row', justifyContent:'space-between'}}>
+				<View style={{flexDirection:'row', width:'100%', justifyContent:'space-between'}}>
 					<Text style={{
 						marginBottom: 5,
 						fontSize: 16,

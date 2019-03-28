@@ -69,7 +69,7 @@ class About extends Component {
 					<AionCell
 						title={strings('about.version_update_button')}
 						onClick={() => {
-						    Toast.show(strings('about.version_latest'));
+						    AppToast.show(strings('about.version_latest'));
 						}}
 					/>
 				</View>

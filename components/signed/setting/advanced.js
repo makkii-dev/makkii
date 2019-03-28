@@ -72,11 +72,11 @@ class Advanced extends Component {
                         rightView={()=>
                             <TouchableOpacity onPress={()=>{
                                 Keyboard.dismiss();
-                                Toast.show(strings('advanced.description_default_account_name'),{
+                                AppToast.show(strings('advanced.description_default_account_name'),{
                                     position: Toast.positions.CENTER,
                                 })
                             }}>
-                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, marginHorizontal:10, tintColor: 'gray'}} resizeMode={'contain'}/>
+                                <Image source={require('../../../assets/question.png')} style={{width:20, height:20, tintColor: 'gray'}} resizeMode={'contain'}/>
                             </TouchableOpacity>
                         }
                         onChange={text => {
@@ -86,7 +86,7 @@ class Advanced extends Component {
                                 });
                                 this.updateEditStatus(text, this.state.login_session_timeout, this.state.exchange_refresh_interval);
                             }else{
-                                Toast.show(
+                                AppToast.show(
                                     strings('account_name_hint'),
                                     {
                                         position:Toast.positions.CENTER,
@@ -102,7 +102,7 @@ class Advanced extends Component {
                         rightView={()=>
                             <TouchableOpacity onPress={()=>{
                                 Keyboard.dismiss();
-                                Toast.show(strings('advanced.description_login_session_timeout'), {
+                                AppToast.show(strings('advanced.description_login_session_timeout'), {
                                     position: Toast.positions.CENTER,
                                 })
                             }}>
@@ -175,7 +175,7 @@ class Advanced extends Component {
         dispatch(setting(_setting));
         listenApp.timeOut = this.state.login_session_timeout;
 
-        Toast.show(strings('toast_update_success'), {
+        AppToast.show(strings('toast_update_success'), {
             position: Toast.positions.CENTER,
             onHidden: () => {
                 this.props.navigation.goBack();

@@ -154,7 +154,7 @@ class Password extends Component {
 		dispatch(user_update_password(newHashedPassword));
 		dispatch(accounts_save(newHashedPassword));
         console.log("update password successfully.");
-        Toast.show(strings('toast_update_success'), {
+        AppToast.show(strings('toast_update_success'), {
 			position: Toast.positions.CENTER,
         	onHidden: () => {
 				this.props.navigation.goBack();

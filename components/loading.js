@@ -13,7 +13,7 @@ const {width, height} = Dimensions.get('window');
 export default class Loading extends Component {
     static propTypes = {
         isShow: PropTypes.bool
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -28,7 +28,7 @@ export default class Loading extends Component {
             <View style={styles.container}>
                 <View style={styles.progressContainer}>
                     <ActivityIndicator animating={true} size='large' color='white'/>
-                    {this.state.message && <Text style={styles.defaultText}>{this.state.message}</Text>}
+                    {this.state.message && <Text style={styles.defaultText} numberOfLines={1}>{this.state.message}</Text>}
                 </View>
             </View>
         ): (null)
@@ -64,7 +64,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'rgba(0,0,0,.8)',
         padding: 20,
-        maxWidth: width / 2,
     },
     defaultText: {
         color: '#FFF',

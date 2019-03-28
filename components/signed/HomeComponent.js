@@ -21,19 +21,16 @@ export class HomeComponent extends Component {
     handleBackButton=() => {
         if (this.props.navigation.isFocused()) {
                 console.log("count: " + this.backClickCount);
-                this.backClickCount == 1? BackHandler.exitApp(): this.prepare();
+                this.backClickCount === 1? BackHandler.exitApp(): this.prepare();
                 return true;
         }
         return false;
-    }
+    };
 
     prepare() {
         this.backClickCount = 1;
-        let thus = this;
-        Toast.show(strings('toast_double_press_exit'));
-        setTimeout(function() {
-            console.log("timeout");
-            thus.backClickCount = 0;
-        }, 1000);
+        AppToast.show(strings('toast_double_press_exit'), {
+            onHidden:()=>this.backClickCount&&(this.backClickCount = 0),
+        });
     }
 }
