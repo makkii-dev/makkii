@@ -285,7 +285,7 @@ class listenCoinPrice{
             thusStore.dispatch(setting(settings));
         }, error => {
             console.log("get coin price error", error);
-            AppToast.show(strings('error_connect_remote_server'), {
+            Toast.show(strings('error_connect_remote_server'), {
                 position: Toast.positions.CENTER,
             })
         });
