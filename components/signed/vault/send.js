@@ -182,7 +182,7 @@ class Send extends Component {
         Keyboard.dismiss();
 		if (!this.validateFields()) return;
 
-		if (this.account.address == this.state.recipient)
+		if (this.account.address === this.state.recipient)
 
 		{
 			Alert.alert(
@@ -197,11 +197,11 @@ class Send extends Component {
 		} else {
 			this.transfer1();
 		}
-	}
+	};
 
 	transfer1=() => {
 		let amount = new BigNumber(this.state.amount);
-		if (amount == 0) {
+		if (amount === 0) {
 			Alert.alert(
 				strings('alert_title_warning'),
 				strings('send.warning_send_zero'),
