@@ -8,14 +8,13 @@ import {
 	Linking,
 	ScrollView,
 	Dimensions,
-	PixelRatio,
-	DeviceEventEmitter
 } from 'react-native';
 import {TransactionItemCell, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
 import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
+import PendingComponent from "./pendingComponent";
 
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -87,7 +86,7 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:80}}
 							title={strings('transaction_detail.status_label')}
-							value={transaction.status}
+							value={<PendingComponent status={transaction.status}/>}
 							valueTextAlign={'left'}
 						/>
 					</View>
