@@ -24,6 +24,7 @@ import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
+import PendingComponent from './pendingComponent';
 const {width,height} = Dimensions.get('window');
 const header_height = Platform.OS==='ios'?64:56;
 
@@ -241,7 +242,7 @@ class Account extends Component {
 			>
                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
                     <Text>{timestamp}</Text>
-                    <Text>{transaction.status}</Text>
+                    <PendingComponent status={transaction.status}/>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
                     <Text>{transaction.hash.substring(0, 16) + '...' }</Text>

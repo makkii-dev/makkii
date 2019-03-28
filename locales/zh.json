@@ -124,7 +124,10 @@
     "amount_label": "金额",
     "status_label": "状态",
     "sendAgain_button": "重新发送",
-    "viewInExplorer_button": "在Explorer中查看更多"
+    "viewInExplorer_button": "在Explorer中查看更多",
+    "PENDING": "确认中",
+    "FAILED": "失败",
+    "CONFIRMED": "已确认"
   },
   "account_view": {
     "send_button": "转账",
