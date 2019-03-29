@@ -353,7 +353,7 @@ class Send extends Component {
 		let totalAmount =Math.max(0,totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
 
 		this.setState({
-			amount: totalAmount.toString()
+			amount: totalAmount.toNotExString()
 		});
 
 	};
