@@ -113,7 +113,9 @@ class TransactionHistory extends React.Component {
 
         const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
         const isSender = transaction.from === this.account;
-        const value = isSender? '-'+new BigNumber(transaction.value).toNotExString(): '+'+new BigNumber(transaction.value).toNotExString();
+        const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+        const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
+        const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
         const valueColor = isSender? 'red':'green';
         return (
             <TouchableOpacity

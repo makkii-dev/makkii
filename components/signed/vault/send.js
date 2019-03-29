@@ -266,7 +266,7 @@ class Send extends Component {
 						pendingTx.timestamp = tx.timestamp.toNumber()/1000;
 						pendingTx.from = sender;
 						pendingTx.to = tx.to;
-						pendingTx.value = amount - 0;
+						pendingTx.value = new BigNumber(amount);
 						pendingTx.status = 'PENDING';
 						txs[hash]=pendingTx;
 
