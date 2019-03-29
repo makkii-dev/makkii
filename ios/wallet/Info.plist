@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,8 +39,12 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Makkii needs to use your camera to scan qrcode</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Makkii needs to know your location to provide consulation service for you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string>Makkii needs to know your location to provide consulation service for you</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Makkii needs to use your microphone to provide voice service for you</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Makkii will save image to your album</string>
 	<key>NSPhotoLibraryUsageDescription</key>
