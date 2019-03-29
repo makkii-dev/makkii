@@ -1478,6 +1478,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.chaion.makkii;
 				PRODUCT_NAME = Makkii;
 				PROVISIONING_PROFILE_SPECIFIER = chaion.development.profile;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1517,6 +1518,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.chaion.makkii;
 				PRODUCT_NAME = Makkii;
 				PROVISIONING_PROFILE_SPECIFIER = chaion.distribution.profile;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
