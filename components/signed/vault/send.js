@@ -350,7 +350,7 @@ class Send extends Component {
 		let gasLimit = new BigNumber(this.state.gasLimit);
 		let gasPrice = new BigNumber(this.state.gasPrice);
 		let totalBalance = new BigNumber(this.account.balance);
-		let totalAmount =Math.max(0,totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
+		let totalAmount =BigNumber.max(new BigNumber(0),totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
 
 		this.setState({
 			amount: totalAmount.toNotExString()
