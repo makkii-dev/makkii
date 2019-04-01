@@ -6,9 +6,7 @@ import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils.js';
 import {strings} from "../locales/i18n";
-import GeneralStatusBar from "./GeneralStatusBar";
 import {ComponentLogo} from "./common";
-import {mainColor} from './style_util';
 
 const {width,height} = Dimensions.get('window');
 
@@ -47,14 +45,14 @@ class Splash extends Component {
 					setTimeout(()=>{
 						navigate('unsigned_login');
 						//navigate('unsigned_recovery_scan');
-					}, 500);
+					}, 1000);
 
 				}, err=>{
 					console.log('[splash] db.user null');
 					setTimeout(()=>{
 						navigate('unsigned_login');
 						//navigate('unsigned_recovery_scan');
-					}, 500);
+					}, 1000);
 				});
 
 		}, err=> {
@@ -63,7 +61,7 @@ class Splash extends Component {
 			setTimeout(()=>{
 				navigate('unsigned_login');
 				//navigate('unsigned_recovery_scan');
-			}, 500);
+			}, 1000);
 		});
 	}
 
@@ -78,7 +76,6 @@ class Splash extends Component {
 				}}
 				source={require('../assets/splash_bg.png')}
 			>
-				<GeneralStatusBar backgroundColor={mainColor}/>
                 <ComponentLogo/>
                 <Text style={{
                     fontSize: 24,

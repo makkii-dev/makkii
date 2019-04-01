@@ -5,12 +5,10 @@ import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackgrou
 import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import {accounts as accounts_action} from '../../actions/accounts';
 import {dbGet,decrypt} from '../../utils.js';
 import {fixedHeight, linkButtonColor, mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
-import GeneralStatusBar from '../GeneralStatusBar';
 
 const {width,height} = Dimensions.get('window');
 
@@ -62,7 +60,6 @@ class Login extends Component {
 						activeOpacity={1}
 						onPress={() => {Keyboard.dismiss()}}
                     >
-                        <GeneralStatusBar backgroundColor={mainColor}/>
                         <View style={{
                             ...defaultStyles.shadow,
                             marginTop: 160,

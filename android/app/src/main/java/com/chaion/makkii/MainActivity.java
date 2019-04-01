@@ -3,6 +3,10 @@ package com.chaion.makkii;
 import com.facebook.react.ReactActivity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Bundle;
+import android.view.View;
+import android.graphics.Color;
+import android.os.Build;
 
 public class MainActivity extends ReactActivity {
 
@@ -25,5 +29,15 @@ public class MainActivity extends ReactActivity {
         return res;
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
 
 }
