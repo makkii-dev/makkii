@@ -661,7 +661,7 @@ class Home extends HomeComponent {
 					<HomeCenterComponent
 						ref={ref=>this.HomeCenterRef=ref}
 						style={{...defaultStyles.shadow, borderRadius: fixedWidth(20),justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
-							width:width - 40, position:'absolute', top: fixedHeight(500)+ StatusBar.currentHeight, right: 20, padding:20
+							width:width - 40, position:'absolute', top: fixedHeight(500)+ (Platform.OS==='ios'?0:StatusBar.currentHeight), right: 20, padding:20
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}
