@@ -300,39 +300,44 @@ Routes.router.getStateForAction = (action, state) => {
     	switch(action.type){
     		case 'Navigation/COMPLETE_TRANSITION':
     			// condition routes from login, register and recovery
-    			switch(state.routes[state.routes.length - 1].routeName){
-					case 'unsigned_login':
-						console.log("before unsigned login routes:", state.routes);
-						newRoutes = [
-							state.routes[state.routes.length - 1]
-						];
-						newIndex = 0;
-						return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
-                    case 'signed_vault':
-                        newRoutes = [
-                            state.routes[state.routes.length - 1]
-                        ];
-                        newIndex = 0;
-                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
-                    default:
-                        return defaultGetStateForAction(action, state);
+                if (state.routes & state.routes.length > 0) {
+        			switch(state.routes[state.routes.length - 1].routeName){
+    					case 'unsigned_login':
+    						console.log("before unsigned login routes:", state.routes);
+    						newRoutes = [
+    							state.routes[state.routes.length - 1]
+    						];
+    						newIndex = 0;
+    						return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                        case 'signed_vault':
+                            newRoutes = [
+                                state.routes[state.routes.length - 1]
+                            ];
+                            newIndex = 0;
+                            return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                        default:
+                            return defaultGetStateForAction(action, state);
+                    }
                 }
     		case 'Navigation/BACK':
-                switch(state.routes[state.routes.length - 1].routeName){
-                    case 'unsigned_login':
-                        newRoutes = [
-                            state.routes[state.routes.length - 1]
-                        ];
-                        newIndex = 0;
-                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
-                    default:
-                        newRoutes = state.routes.filter(
-                            r =>
-                                r.routeName !== 'scan' &&
-                                r.routeName !== 'splash'
-                        );
-                        newIndex = newRoutes.length - 1;
-                        return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+
+                if (state.routes & state.routes.length > 0) {
+                    switch(state.routes[state.routes.length - 1].routeName){
+                        case 'unsigned_login':
+                            newRoutes = [
+                                state.routes[state.routes.length - 1]
+                            ];
+                            newIndex = 0;
+                            return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                        default:
+                            newRoutes = state.routes.filter(
+                                r =>
+                                    r.routeName !== 'scan' &&
+                                    r.routeName !== 'splash'
+                            );
+                            newIndex = newRoutes.length - 1;
+                            return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+                    }
                 }
     		default:
     			return defaultGetStateForAction(action, state);
