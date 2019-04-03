@@ -266,7 +266,7 @@ class Send extends Component {
 						pendingTx.timestamp = tx.timestamp.toNumber()/1000;
 						pendingTx.from = sender;
 						pendingTx.to = tx.to;
-						pendingTx.value = amount - 0;
+						pendingTx.value = new BigNumber(amount);
 						pendingTx.status = 'PENDING';
 						txs[hash]=pendingTx;
 
@@ -350,10 +350,10 @@ class Send extends Component {
 		let gasLimit = new BigNumber(this.state.gasLimit);
 		let gasPrice = new BigNumber(this.state.gasPrice);
 		let totalBalance = new BigNumber(this.account.balance);
-		let totalAmount =Math.max(0,totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
+		let totalAmount =BigNumber.max(new BigNumber(0),totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
 
 		this.setState({
-			amount: totalAmount.toString()
+			amount: totalAmount.toNotExString()
 		});
 
 	};

@@ -18,7 +18,8 @@ import {
 	Linking,
 	Platform,
 	Keyboard,
-	ImageBackground
+	ImageBackground,
+	StatusBar
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
@@ -28,7 +29,6 @@ import {ComponentTabBar, alert_ok} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
-import GeneralStatusBar from "../../GeneralStatusBar";
 import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
@@ -591,10 +591,9 @@ class Home extends HomeComponent {
 			total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
 		}
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
-		const header_marginTop = Platform.OS === 'ios'?getStatusBarHeight(false):0;
+		const header_marginTop = getStatusBarHeight(false);
 		return (
 			<View style={{flex:1}}>
-				{Platform.OS === 'android'? <GeneralStatusBar backgroundColor={mainColor}/>: null}
 				<TouchableOpacity style={{flex:1}}  activeOpacity={1} onPress={()=>{
 					this.state.openRowKey&&this.setState({openRowKey:null});
 					this.HomeCenterRef&&this.HomeCenterRef.closeAll();
@@ -662,7 +661,7 @@ class Home extends HomeComponent {
 					<HomeCenterComponent
 						ref={ref=>this.HomeCenterRef=ref}
 						style={{...defaultStyles.shadow, borderRadius: fixedWidth(20),justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
-							width:width - 40, position:'absolute', top: fixedHeight(500), right: 20, padding:20
+							width:width - 40, position:'absolute', top: fixedHeight(500)+ (Platform.OS==='ios'?20:StatusBar.currentHeight), right: 20, padding:20
 						}}
 						closeFilter={(item)=>this.closeFilter(item)}
 						closeSort={(item)=>this.closeSort(item)}

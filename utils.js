@@ -244,10 +244,14 @@ class AppToast {
         this.toast = null;
     }
     show(message, options = {position: Toast.positions.BOTTOM, duration: Toast.durations.SHORT}){
+        this.close();
+        this.toast= Toast.show(message,options);
+    }
+    close(){
         if(this.toast){
             Toast.hide(this.toast);
+            this.toast = null;
         }
-        this.toast= Toast.show(message,options);
     }
 }
 

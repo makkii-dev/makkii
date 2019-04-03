@@ -411,6 +411,11 @@ class PasswordInput extends Component {
 }
 
 class TextInputWithTitle extends Component {
+
+	static defaultProps={
+		onFocus:()=>{},
+	};
+
 	constructor(props){
 		super(props);
 	};
@@ -439,18 +444,18 @@ class TextInputWithTitle extends Component {
 							fontSize: 16,
 							color: fontColor,
 							fontWeight: 'normal',
-							lineHeight: 20,
-							height: 50,
 							paddingRight: 45,
 							borderColor: 'lightgray',
 							borderBottomWidth: 1,
 							flex: 1,
+							paddingVertical:10,
 						}}
 						placeholder={this.props.placeholder}
 						keyboardType={this.props.keyboardType}
 						onChangeText={e=>{
 							this.props.onChange(e);
 						}}
+						onFocus={()=>this.props.onFocus()}
 						value={this.props.value}
 					/>
 					{this.props.trailingText ?

@@ -94,6 +94,7 @@ class Advanced extends Component {
                                     });
                             }
                         }}
+                        onFocus={()=>AppToast.close()}
                     />
                     <View style={{marginTop: 20}} />
                     <TextInputWithTitle
@@ -117,6 +118,7 @@ class Advanced extends Component {
                             });
                             this.updateEditStatus(this.state.default_account_name ,text, this.state.exchange_refresh_interval);
                         }}
+                        onFocus={()=>AppToast.close()}
                     />
                     <View style={{marginTop: 20}} />
                     <TextInputWithTitle
@@ -130,6 +132,7 @@ class Advanced extends Component {
                             });
                             this.updateEditStatus(this.state.default_account_name, this.state.login_session_timeout, text);
                         }}
+                        onFocus={()=>AppToast.close()}
                     />
                 </View>
             </TouchableOpacity>
