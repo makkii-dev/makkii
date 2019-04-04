@@ -351,6 +351,7 @@ import data from './data.js';
 store.dispatch(dapps(data.dapps));
 
 import {listenTransaction, listenCoinPrice,listenAppState} from './utils';
+import PopupCustom from './components/Popupcustom';
 global.listenTx = new listenTransaction(store);
 global.listenPrice = new listenCoinPrice(store);
 global.listenApp = new listenAppState();
@@ -358,7 +359,8 @@ export default class App extends Component {
 	render() {
 		return (
 			<Provider store={store}>
-				<Routes />
+				<PopupCustom ref={ref=>{global.popCustom=ref}}/>
+				<Routes/>
 			</Provider>
 		);
 	}

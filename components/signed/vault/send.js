@@ -185,14 +185,14 @@ class Send extends Component {
 		if (this.account.address === this.state.recipient)
 
 		{
-			Alert.alert(
+			popCustom.show(
 				strings('alert_title_warning'),
 				strings('send.warning_send_to_itself'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
 					{text:strings('alert_ok_button'), onPress: () => {this.transfer1()}}
 				],
-				{cancelable: false}
+				false
 				);
 		} else {
 			this.transfer1();
@@ -202,14 +202,14 @@ class Send extends Component {
 	transfer1=() => {
 		let amount = new BigNumber(this.state.amount);
 		if (amount === 0) {
-			Alert.alert(
+			popCustom.show(
 				strings('alert_title_warning'),
 				strings('send.warning_send_zero'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
 					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
 				],
-				{cancelable: false}
+				false
 			);
 		} else {
 			this.transfer();

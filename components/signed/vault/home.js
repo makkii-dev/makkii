@@ -384,7 +384,7 @@ class Home extends HomeComponent {
 
 	onDeleteAccount(key){
 		const { dispatch } = this.props;
-		Alert.alert(
+		popCustom.show(
 			strings('alert_title_warning'),
 			strings('warning_delete_account'),
 			[
@@ -399,13 +399,13 @@ class Home extends HomeComponent {
 						}, 500));
 					}}
 				],
-			{cancelable:false}
+			false
 		)
 	}
 
 	onSetDefaultAccount(key) {
 		const {dispatch} = this.props;
-		Alert.alert(
+		popCustom.show(
 			strings('alert_title_warning'),
 			strings('warning_set_default_account'),
 			[
@@ -418,7 +418,7 @@ class Home extends HomeComponent {
 						});
 					}}
 			],
-			{cancelable:false}
+			false
 		)
 
 	}

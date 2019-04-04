@@ -93,7 +93,7 @@ class Home extends HomeComponent {
 						leadIcon={require('../../../assets/icon_signout.png')}
                         title={strings('logout')}
                         onClick={() => {
-                        	Alert.alert(
+							popCustom.show(
                         		'',
 								strings('setting.confirm_logout'),
 								[

@@ -80,7 +80,7 @@ class Password extends Component {
 						} else if (this.state.password !== this.state.password_confirm) {
 							alert_ok(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
 						} else {
-							Alert.alert(
+							popCustom.show(
 								strings('alert_title_warning'),
 								strings('recovery.warning_mnemonic'),
 								[

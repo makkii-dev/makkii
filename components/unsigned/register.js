@@ -19,14 +19,14 @@ class Home extends Component {
 		};
 	}
 	constructor(props){
-		super(props); 
-		this.state = { 
-			password: '',            
+		super(props);
+		this.state = {
+			password: '',
 			password_confirm: '',
 			// alert once if there is data loaded from db when user wanna register new account
 			// user will lose data if register new one
 			alerted: false,
-		}; 
+		};
 	}
 	async componentDidMount(){
 	}
@@ -90,7 +90,7 @@ class Home extends Component {
 								const hashed_password = hashPassword(this.state.password);
 								const mnemonic = generateMnemonic();
 								dbGet('user').then(userJson=>{
-									Alert.alert(
+									popCustom.show(
 										strings('alert_title_warning'),
 										strings("register.warning_register_again"),
 										[

@@ -179,7 +179,7 @@ class ImportHdWallet extends React.Component {
                 errInfo: err.toString(),
             });
             console.log('fetch accounts error:' + err);
-            Alert.alert(strings('alert_title_error'),
+            popCustom.show(strings('alert_title_error'),
                 getLedgerMessage(err.code),
                 [
                     {

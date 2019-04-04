@@ -468,7 +468,7 @@ class TextInputWithTitle extends Component {
 }
 
 function alert_ok(title, msg) {
-	Alert.alert(title, msg, [
+	popCustom.show(title, msg, [
 		{
 			text: strings('alert_ok_button'), onPress: ()=> {}
 		}

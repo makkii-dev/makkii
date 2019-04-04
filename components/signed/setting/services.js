@@ -92,17 +92,17 @@ class Services extends Component {
 
 	updateServiceConfiguration=() => {
 		// if (!validateUrl(this.state.endpoint_wallet)) {
-		// 	Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_wallet_server_url'));
+		// 	popCustom.show(strings('alert_title_error'), strings('service_configuration.invalid_wallet_server_url'));
 		// 	return;
 		// }
 
 		// if (!validateUrl(this.state.endpoint_dapps)) {
-		// 	Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
+		// 	popCustom.show(strings('alert_title_error'), strings('service_configuration.invalid_dapp_server_url'));
 		// 	return;
 		// }
 		//
 		// if (!validateUrl(this.state.endpoint_odex)) {
-		// 	Alert.alert(strings('alert_title_error'), strings('service_configuration.invalid_odex_server_url'));
+		// 	popCustom.show(strings('alert_title_error'), strings('service_configuration.invalid_odex_server_url'));
 		// 	return;
 		// }
 
