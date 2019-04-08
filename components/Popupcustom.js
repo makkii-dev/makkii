@@ -171,7 +171,6 @@ const styles = StyleSheet.create({
     },
     titlePopup: {
         fontSize: 17,
-        fontFamily: 'OpenSans-Semibold',
         fontWeight: 'bold',
         textAlign: 'center'
     },
@@ -189,7 +188,6 @@ const styles = StyleSheet.create({
     },
     textButton: {
         fontSize: 16,
-        fontFamily: 'OpenSans-Semibold',
         color: mainColor
     },
     contentField: {
@@ -204,7 +202,6 @@ const styles = StyleSheet.create({
     },
     contentPopup: {
         fontSize: 14,
-        fontFamily: Platform.OS === 'ios' ? 'OpenSans' : 'OpenSans-Regular',
         color: '#000',
         textAlign: 'center'
     },
