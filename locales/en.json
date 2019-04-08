@@ -222,7 +222,7 @@
     "author_label": "By",
     "type_label": "Type",
     "type_game": "Game",
-    "unavailable_hint": "DApp is unavailable in current Aion network. Please change it in settings."
+    "unavailable_hint": "DApps are coming soon!"
   },
   "dapp_send": {
     "error_not_set_default": "Please set your default account"

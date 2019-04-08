@@ -94,7 +94,7 @@ class Home extends HomeComponent {
                         title={strings('logout')}
                         onClick={() => {
 							popCustom.show(
-                        		'',
+                        		strings('alert_title_warning'),
 								strings('setting.confirm_logout'),
 								[
 									{text: strings('cancel_button'), onPress:()=>{}},

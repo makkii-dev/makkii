@@ -6,7 +6,7 @@ import DeviceInfo from 'react-native-device-info';
 
 const init = { 
 	lang: 'auto',
-	version: '0.1.0',
+	version: '0.1.1',
 	theme: 'white',
 	default_account_name: 'Aion Account',
 	login_session_timeout: '30',
