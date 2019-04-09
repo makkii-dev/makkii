@@ -224,7 +224,7 @@
     "author_label": "作者",
     "type_label": "类别",
     "type_game": "游戏",
-    "unavailable_hint": "DApp在當前Aion网络中不可用，请在设置中更改网络"
+    "unavailable_hint": "应用正在路上,敬请期待!"
   },
   "dapp_send": {
     "error_not_set_default": "请先设置一个默认账户。"
