@@ -203,6 +203,11 @@
     "USD_unit": "美元",
     "CAD_unit": "加元"
   },
+  "pinCode": {
+    "title": "数字口令",
+    "switch_button": "开启数字口令",
+    "modify_button": "修改数字口令"
+  },
   "sort": {
     "balance": "余额优先",
     "transaction": "交易数量优先"

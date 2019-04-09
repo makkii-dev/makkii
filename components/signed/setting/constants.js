@@ -5,6 +5,11 @@ const SETTINGS = [
         'route_url': 'signed_setting_password'
     },
     {
+        'title': 'pinCode.title',
+        'icon': require('../../../assets/icon_setting_pinCode.png'),
+        'route_url': 'signed_setting_pinCode'
+    },
+    {
         'title': 'recovery_phrase.title',
         'icon': require('../../../assets/icon_setting_recovery.png'),
         'route_url':'signed_setting_recovery'

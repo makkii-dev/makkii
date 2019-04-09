@@ -57,8 +57,10 @@ import SettingServices       	from './components/signed/setting/services.js';
 import SettingLanguage      	from './components/signed/setting/language.js';
 import SettingAdvanced       	from './components/signed/setting/advanced.js';
 import SettingCurrency       	from './components/signed/setting/currency.js';
+import SettingPinCode           from './components/signed/setting/pinCode.js';
 import RecoveryPassword      	from './components/unsigned/recovery_password.js';
 import SimpleWebView         	from './components/WebViewComponent';
+import PinCodeView              from './components/pinCodeView';
 
 const navigationOptions = ({navigation}) => ({
     headerRight: (<View></View>),
@@ -122,6 +124,12 @@ const navigationOptionsWithoutRight = ({navigation}) => ({
 });
 
 const Routes = createAppContainer(createStackNavigator({
+	'unlock': {
+		screen: PinCodeView,
+		navigationOptions: {
+			header: null
+		}
+	},
 	'splash':   {
 		screen:Splash,
 		navigationOptions: {
@@ -262,6 +270,10 @@ const Routes = createAppContainer(createStackNavigator({
 		screen: SettingAdvanced,
 		navigationOptions: navigationOptionsWithoutRight,
 	},
+	'signed_setting_pinCode': {
+		screen: SettingPinCode,
+		navigationOptions
+	},
 	'simple_webview': {
 		screen: SimpleWebView,
 		navigationOptions: {
@@ -300,7 +312,7 @@ Routes.router.getStateForAction = (action, state) => {
     	switch(action.type){
     		case 'Navigation/COMPLETE_TRANSITION':
     			// condition routes from login, register and recovery
-                if (state.routes & state.routes.length > 0) {
+                if (state.routes && state.routes.length > 0) {
         			switch(state.routes[state.routes.length - 1].routeName){
     					case 'unsigned_login':
     						console.log("before unsigned login routes:", state.routes);
@@ -318,7 +330,9 @@ Routes.router.getStateForAction = (action, state) => {
                         default:
                             return defaultGetStateForAction(action, state);
                     }
-                }
+                }else {
+					return defaultGetStateForAction(action, state);
+				}
     		case 'Navigation/BACK':
 
                 if (state.routes & state.routes.length > 0) {
@@ -333,12 +347,15 @@ Routes.router.getStateForAction = (action, state) => {
                             newRoutes = state.routes.filter(
                                 r =>
                                     r.routeName !== 'scan' &&
-                                    r.routeName !== 'splash'
+                                    r.routeName !== 'splash' &&
+									r.routeName !== 'unlock'
                             );
                             newIndex = newRoutes.length - 1;
                             return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
                     }
-                }
+                }else {
+					return defaultGetStateForAction(action, state);
+				}
     		default:
     			return defaultGetStateForAction(action, state);
     	}

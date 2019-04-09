@@ -33,6 +33,8 @@ class Splash extends Component {
 			dbGet('user')
 				.then(json=>{
 					// load db accounts
+					const db_user = JSON.parse(json);
+					console.log('db_user: ', db_user);
 					dbGet('accounts')
 						.then(json=>{
 							let decrypted = decrypt(json, db_user.hashed_password);
@@ -40,10 +42,9 @@ class Splash extends Component {
 						},err=>{
 							console.log(err);
 						});
-					const db_user = JSON.parse(json);
-					dispatch(user(db_user.hashed_password, db_user.mnemonic));
+					dispatch(user(db_user.hashed_password, db_user.mnemonic, db_user.hashed_pinCode || ''));
 					setTimeout(()=>{
-						navigate('unsigned_login');
+						navigate('signed_vault');
 						//navigate('unsigned_recovery_scan');
 					}, 1000);
 

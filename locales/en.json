@@ -216,6 +216,11 @@
     "USD_unit": "USD",
     "CAD_unit": "CAD"
   },
+  "pinCode": {
+    "title": "Pin Code",
+    "switch_button": "Use Pin Code",
+    "modify_button": "Modify Pin Code"
+  },
   "dapp": {
     "launch_button": "Launch",
     "desc_label": "Description",

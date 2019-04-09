@@ -4,7 +4,7 @@ import {AsyncStorage} from 'react-native';
 import {setLocale} from '../locales/i18n';
 import DeviceInfo from 'react-native-device-info';
 
-const init = { 
+const init = {
 	lang: 'auto',
 	version: '0.1.0',
 	theme: 'white',
@@ -13,9 +13,9 @@ const init = {
 	exchange_refresh_interval: "30",
 	fiat_currency: "CNY",
 	coinPrice: undefined,
-
+	pinCodeEnabled: false,
 	tx_fee: 10000,
-    tx_confirm: 6,  
+    tx_confirm: 6,
     endpoint_wallet: 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780',
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net',
@@ -33,7 +33,7 @@ export default function setting(state = init, action){
 				setLocale(action.setting.lang);
 			}
 			return Object.assign({}, action.setting);
-		default: 
+		default:
 			return state;
 	}
 };

@@ -138,13 +138,9 @@ export default class PopupCustom extends Component {
                     >
                         <View style={styles.popupCustom}>
                             <View style={[styles.contentField, contentPaddingVertical]}>
-                                {image &&
-                                <Image style={{ alignSelf: 'center', marginBottom: 20 }} source={image} />
-                                }
+                                {image && <Image style={{ alignSelf: 'center', marginBottom: 20 }} source={image} />}
                                 <Text style={[styles.titlePopup, titleColor]}>{title}</Text>
-                                {content &&
-                                renderContent
-                                }
+                                {content && renderContent}
                             </View>
                             <View style={styles.buttonField}>
                                 {this._renderButons()}

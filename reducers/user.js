@@ -4,10 +4,12 @@ import {encrypt} from '../utils.js';
 import {
 	USER,
 	USER_UPDATE_PASSWORD,
+	USER_UPDATE_PINCODE,
 } from '../actions/user.js';
 
 const init = {
-	timestamp: 0,
+	hashed_password: '',
+	hashed_pinCode: '',
 	mnemonic: '',          // encrypted
 };
 
@@ -18,6 +20,7 @@ export default function user(state = init, action){
 		case USER:
 			new_state = Object.assign({}, {
 	        	hashed_password: action.hashed_password,
+				hashed_pinCode: action.hashed_pinCode || '',
 	        	mnemonic: action.mnemonic
 	      	});
 	      	should_update_db = true;
@@ -28,7 +31,12 @@ export default function user(state = init, action){
 	    	});
 	    	should_update_db = true;
 	    	break;
-
+		case USER_UPDATE_PINCODE:
+			new_state = Object.assign({}, state, {
+				hashed_pinCode: action.hashed_pinCode
+			});
+			should_update_db = true;
+			break;
 		default:
 			new_state = state;
 			break;
