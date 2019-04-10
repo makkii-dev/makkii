@@ -399,7 +399,7 @@ class Home extends HomeComponent {
 						}, 500));
 					}}
 				],
-			false
+			{cancelable:false}
 		)
 	}
 
@@ -418,7 +418,7 @@ class Home extends HomeComponent {
 						});
 					}}
 			],
-			false
+			{cancelable:false}
 		)
 
 	}

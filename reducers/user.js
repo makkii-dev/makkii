@@ -20,7 +20,7 @@ export default function user(state = init, action){
 		case USER:
 			new_state = Object.assign({}, {
 	        	hashed_password: action.hashed_password,
-				hashed_pinCode: action.hashed_pinCode || '',
+				hashed_pinCode: action.hashed_pinCode,
 	        	mnemonic: action.mnemonic
 	      	});
 	      	should_update_db = true;

@@ -192,7 +192,7 @@ class Send extends Component {
 					{text:strings('cancel_button'), onPress: ()=> {}},
 					{text:strings('alert_ok_button'), onPress: () => {this.transfer1()}}
 				],
-				false
+				{cancelable:false}
 				);
 		} else {
 			this.transfer1();
@@ -209,7 +209,7 @@ class Send extends Component {
 					{text:strings('cancel_button'), onPress: ()=> {}},
 					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
 				],
-				false
+				{cancelable:false}
 			);
 		} else {
 			this.transfer();

@@ -206,7 +206,10 @@
   "pinCode": {
     "title": "数字口令",
     "switch_button": "开启数字口令",
-    "modify_button": "修改数字口令"
+    "modify_button": "修改数字口令",
+    "verify_title": "验证登录密码",
+    "verify_desc": "请输入登录密码确认本人操作",
+    "pinCode_prompt": "开启数字口令时需要重新设置口令"
   },
   "sort": {
     "balance": "余额优先",

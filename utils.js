@@ -392,7 +392,8 @@ class listenAppState{
         this.timestamp = Date.now('milli');
     }
     handleActive = null;
-    handleAppStateChange(nextAppState){
+    handleTimeOut = null;
+    _handleAppStateChange=(nextAppState)=>{
         console.log('appState change');
         if (nextAppState != null && nextAppState === 'active') {
             // in active
@@ -400,15 +401,23 @@ class listenAppState{
             console.log('max_keep_signed ', max_keep_signed);
             const time_diff = Date.now('milli') - this.timestamp;
             if (time_diff > max_keep_signed) {
+                this.handleTimeOut&&this.handleTimeOut();
+            }else{
                 this.handleActive&&this.handleActive();
             }
         } else if (nextAppState === 'background') {
             this.timestamp = Date.now('milli');
             console.log('update timestamp ', this.timestamp)
         }
-    }
+    };
     start(){
-        AppState.addEventListener('change',(nextAppState)=> this.handleAppStateChange(nextAppState));
+        console.log('start listen app state');
+        AppState.addEventListener('change',this._handleAppStateChange);
+    }
+    stop(cb=()=>{}){
+        console.log('stop listen app state');
+        AppState.removeEventListener('change',this._handleAppStateChange);
+        cb();
     }
 
 }
@@ -454,6 +463,16 @@ function strLen(str){
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 
+function navigateUnlock(route_url, pinCodeEnabled, navigateFunc){
+    if(pinCodeEnabled){
+        navigateFunc('unlock',{
+            targetScreen:route_url
+        })
+    }else {
+        navigateFunc(route_url);
+    }
+
+}
 module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
@@ -478,4 +497,5 @@ module.exports = {
     listenAppState:listenAppState,
     strLen: strLen,
     AppToast: AppToast,
+    navigateUnlock:navigateUnlock
 };

@@ -334,8 +334,7 @@ Routes.router.getStateForAction = (action, state) => {
 					return defaultGetStateForAction(action, state);
 				}
     		case 'Navigation/BACK':
-
-                if (state.routes & state.routes.length > 0) {
+				if (state.routes && state.routes.length > 0) {
                     switch(state.routes[state.routes.length - 1].routeName){
                         case 'unsigned_login':
                             newRoutes = [

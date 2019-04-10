@@ -219,7 +219,10 @@
   "pinCode": {
     "title": "Pin Code",
     "switch_button": "Use Pin Code",
-    "modify_button": "Modify Pin Code"
+    "modify_button": "Modify Pin Code",
+    "verify_title": "Login Password",
+    "verify_desc": "Enter login password to verify",
+    "pinCode_prompt": "You need reset pin code when reopening pin code"
   },
   "dapp": {
     "launch_button": "Launch",

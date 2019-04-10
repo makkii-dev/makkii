@@ -26,15 +26,11 @@ class Splash extends Component {
 			this.props.dispatch(setting(setting_json));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
-			listenApp.handleActive = ()=>navigate('unsigned_login');
-			listenApp.timeOut = setting_json.login_session_timeout;
-			listenApp.start();
 			// load db user
 			dbGet('user')
 				.then(json=>{
 					// load db accounts
 					const db_user = JSON.parse(json);
-					console.log('db_user: ', db_user);
 					dbGet('accounts')
 						.then(json=>{
 							let decrypted = decrypt(json, db_user.hashed_password);
@@ -42,9 +38,9 @@ class Splash extends Component {
 						},err=>{
 							console.log(err);
 						});
-					dispatch(user(db_user.hashed_password, db_user.mnemonic, db_user.hashed_pinCode || ''));
+					dispatch(user(db_user.hashed_password, db_user.mnemonic, db_user.hashed_pinCode!==undefined?db_user.hashed_pinCode:''));
 					setTimeout(()=>{
-						navigate('signed_vault');
+						navigate('unsigned_login');
 						//navigate('unsigned_recovery_scan');
 					}, 1000);
 
@@ -65,7 +61,6 @@ class Splash extends Component {
 			}, 1000);
 		});
 	}
-
 
 	render(){
 		return (

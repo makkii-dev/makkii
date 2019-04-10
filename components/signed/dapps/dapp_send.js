@@ -14,7 +14,6 @@ import Loading from '../../loading';
 import {AionTransaction} from "../../../libs/aion-hd-wallet";
 import {Ed25519Key} from "../../../libs/aion-hd-wallet/src/key/Ed25519Key";
 import {update_account_txs} from "../../../actions/accounts";
-import Toast from "react-native-root-toast";
 import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from "../../../utils";
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";

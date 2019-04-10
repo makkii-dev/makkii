@@ -50,6 +50,8 @@ class Mnemonic extends Component {
 	}
 
 	render(){
+		const {setting} = this.props;
+		const {navigate} = this.props.navigation;
 		return (
 			<View style={{
 					flex: 1,
@@ -92,7 +94,11 @@ class Mnemonic extends Component {
                 <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_done')}
                     onPress={e=>{
-                        this.props.navigation.navigate('signed_vault');
+                        listenApp.handleTimeOut = ()=>navigate('unsigned_login');
+						listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
+						listenApp.timeOut = setting.login_session_timeout;
+                        listenApp.start();
+                        navigate('signed_vault');
                     }}
                 />
 			</View>
@@ -100,4 +106,4 @@ class Mnemonic extends Component {
 	}
 }
 
-export default connect(state=>{return {user: state.user};})(Mnemonic);
+export default connect(state=>{return {user: state.user,setting:state.setting};})(Mnemonic);

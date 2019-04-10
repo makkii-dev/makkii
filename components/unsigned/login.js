@@ -42,7 +42,8 @@ class Login extends Component {
 		console.log("linking url=" + event.url);
 	};
 	render(){
-		const {dispatch} = this.props;
+		const {dispatch,setting} = this.props;
+		const {navigate} = this.props.navigation;
 		return (
                 <ImageBackground
 					style={{
@@ -88,9 +89,13 @@ class Login extends Component {
                                     dbGet('user')
                                         .then(json=>{
                                             let db_user = JSON.parse(json);
+                                            console.log('setting', setting);
                                             if(db_user.hashed_password === hashPassword(this.state.password)){
-                                                dispatch(user(db_user.hashed_password, db_user.mnemonic));
-                                                this.props.navigation.navigate('signed_vault');
+                                                listenApp.handleTimeOut = ()=>navigate('unsigned_login');
+                                                listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
+                                                listenApp.timeOut = setting.login_session_timeout;
+                                                listenApp.start();
+                                                navigate('signed_vault');
                                             } else {
                                                 alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
                                             }
@@ -135,5 +140,6 @@ class Login extends Component {
 export default connect(state => {
 	return {
 		user: state.user,
+        setting: state.setting,
 	};
 })(Login);

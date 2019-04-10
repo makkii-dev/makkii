@@ -1,6 +1,6 @@
 // atomic update for sigin and register routines
 const USER = 'USER';
-function user(hashed_password, mnemonic, hashed_pinCode){
+function user(hashed_password, mnemonic, hashed_pinCode=''){
 	return {
 		type: USER,
 		hashed_password,

@@ -7,7 +7,7 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    Image
+    Image, BackHandler
 } from 'react-native';
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
@@ -37,12 +37,30 @@ class PinCodeView extends React.Component {
         super(props);
         this.isModifyPinCode =  this.props.navigation.getParam('isModifyPinCode', false);
         this.onUnlockSuccess  = this.props.navigation.getParam('onUnlockSuccess', ()=>{});
+        this.targetScreen = this.props.navigation.getParam('targetScreen');
+        this.cancel = this.props.navigation.getParam('cancel', true);
         this.state={
             pinCode: '',
-            // 0: unlock; 1: create pinCode; 2: confirm pinCode
-            pinState: this.props.user.hashed_pinCode===''?1:0,
+            pinState: 0,
         };
     }
+    onGoback(){
+        this.cancel&&this.props.navigation.goBack();
+    }
+    componentWillMount(): void {
+        this.setState({
+            // 0: unlock; 1: create pinCode; 2: confirm pinCode
+            pinState: this.props.user.hashed_pinCode===''?1:0,
+        });
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoback(); // works best when the goBack is async
+            return true;
+        });
+    }
+    componentWillUnmount(): void {
+        this.backHandler.remove();
+    }
+
     renderDots(numberOfDots) {
         const dots = [];
         const { pinCode } = this.state;
@@ -95,7 +113,6 @@ class PinCodeView extends React.Component {
             return false;
         }else {
             const hashed_pinCode = hashPassword(pinCode);
-            console.log('save hashed_pinCode: ', hashed_pinCode);
             dispatch(user_update_pincode(hashed_pinCode));
             return true;
         }
@@ -115,7 +132,12 @@ class PinCodeView extends React.Component {
                         pinState: 1,
                     })
                 }else {
-                    this.onUnlockSuccess();
+                    setTimeout(()=>{
+                        this.onUnlockSuccess();
+                        console.log('this.targetScreen', this.targetScreen);
+                        this.targetScreen&&this.props.navigation.navigate(this.targetScreen);
+                        this.targetScreen||this.props.navigation.goBack();
+                    },100);
                 }
             }else {
                 this.handleErrorCode()
@@ -123,7 +145,12 @@ class PinCodeView extends React.Component {
         }else if (pinState === 1) {
             this.handleCreateCode()
         }else if (pinState === 2) {
-            this.handleComformCode() &&this.onUnlockSuccess();
+            this.handleComformCode() &&setTimeout(()=>{
+                this.onUnlockSuccess();
+                console.log('this.targetScreen', this.targetScreen);
+                this.targetScreen&&this.props.navigation.navigate(this.targetScreen);
+                this.targetScreen||this.props.navigation.goBack();
+            },100);
         }
     };
 
@@ -145,23 +172,27 @@ class PinCodeView extends React.Component {
     };
 
     renderItem = ({item}) => {
+        const itemBorder = item==='cancel'&&this.cancel===false?{}:{
+            borderRadius : 75 / 2,
+            borderWidth: 0.5,
+            borderColor: mainColor};
         return (
             <TouchableOpacity
-                style={[styles.keyboardViewItem, {backgroundColor: mainColor}]}
+                disabled={item==='cancel'&&this.cancel===false}
+                style={[styles.keyboardViewItem,itemBorder, {backgroundColor: mainColor}]}
                 onPress={() => {
                     if(item!== 'cancel' && item !== 'delete'){
                         this.onPressNumber(item)
                     } else if (item === 'delete'){
                         this.onPressDelete()
                     } else {
-                        console.log('cancel');
-                        this.props.navigation.goBack();
+                        this.cancel&&this.props.navigation.goBack(); // can cancel
                     }
                 }}
                 >
-                <View style={[styles.keyboardViewItem,{backgroundColor: mainBgColor}]}>
+                <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: mainBgColor}]}>
                     { item !== 'cancel'&&item!=='delete'&&(<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>)}
-                    { item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>) }
+                    { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>) }
                     { item === 'delete'&& (<Image source={require('../assets/delete_button.png')} style={{width:20, height:20}} resizeMode={'contain'}/>)}
                 </View>
             </TouchableOpacity>
@@ -252,9 +283,6 @@ const styles = StyleSheet.create({
         width : 75,
         marginHorizontal : 20,
         marginVertical : 5,
-        borderRadius : 75 / 2,
-        borderColor: mainColor,
-        borderWidth: 0.5,
     },
     keyboardViewItemText: {
         fontSize  : 22,

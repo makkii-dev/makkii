@@ -9,6 +9,7 @@ import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
+import {navigateUnlock} from '../../../utils';
 
 const {width} = Dimensions.get('window');
 
@@ -46,7 +47,15 @@ class Home extends HomeComponent {
 	}
 
 	render(){
-		console.log('render setting')
+		console.log('render setting');
+		const {navigate} = this.props.navigation;
+		const navigate2=(route_url)=>{
+			navigateUnlock(
+				route_url,
+				this.props.setting.pinCodeEnabled,
+				navigate
+			)
+		};
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,
@@ -73,7 +82,11 @@ class Home extends HomeComponent {
 									title={strings(item.title)}
 									leadIcon={item.icon}
 									onClick={() => {
-										this.props.navigation.navigate(item.route_url);
+										if(item.title==='recovery_phrase.title'){
+											navigate2(item.route_url);
+										}else {
+											navigate(item.route_url);
+										}
 									}}
 								/>
 							}

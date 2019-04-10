@@ -1,4 +1,4 @@
-import { SETTING } from '../actions/setting.js';
+import { SETTING, SETTING_UPDATE_PINCODE_ENABLED } from '../actions/setting.js';
 import Web3 from "aion-web3";
 import {AsyncStorage} from 'react-native';
 import {setLocale} from '../locales/i18n';
@@ -23,17 +23,31 @@ const init = {
 }
 
 export default function setting(state = init, action){
+	let new_state;
+	let should_update_db = false;
 	switch(action.type){
 		case SETTING:
 			web3.setProvider(new Web3.providers.HttpProvider(action.setting.endpoint_wallet))
-			AsyncStorage.setItem('settings', JSON.stringify(action.setting));
 			if (action.setting.lang === 'auto') {
 				setLocale(DeviceInfo.getDeviceLocale());
 			} else {
 				setLocale(action.setting.lang);
 			}
-			return Object.assign({}, action.setting);
+			new_state =  Object.assign({}, action.setting);
+			should_update_db = true;
+			break;
+		case SETTING_UPDATE_PINCODE_ENABLED:
+			new_state = Object.assign({}, state, {pinCodeEnabled: action.enabled});
+			should_update_db = true;
+			break;
 		default:
-			return state;
+			new_state = state;
 	}
+	if(should_update_db){
+		AsyncStorage.setItem(
+			'settings',
+			JSON.stringify(new_state)
+		);
+	}
+	return new_state;
 };
