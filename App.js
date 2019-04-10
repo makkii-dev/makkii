@@ -1,7 +1,7 @@
 // libs
 import React, {Component} from 'react';
 import {View, TouchableOpacity, Image, AppState} from 'react-native';
-import {createSwitchNavigator, createStackNavigator, createAppContainer} from 'react-navigation';
+import {NavigationActions, createStackNavigator, createAppContainer} from 'react-navigation';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 
@@ -332,6 +332,15 @@ Routes.router.getStateForAction = (action, state) => {
                     }
                 }else {
 					return defaultGetStateForAction(action, state);
+				}
+			case 'Navigation/NAVIGATE':
+				switch(state.routes[state.routes.length - 1].routeName){
+					case 'unlock':
+						newRoutes = state.routes.slice(0,state.routes.length-1);
+						newIndex = newRoutes.length;
+						return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});
+					default:
+						return defaultGetStateForAction(action, state);
 				}
     		case 'Navigation/BACK':
 				if (state.routes && state.routes.length > 0) {

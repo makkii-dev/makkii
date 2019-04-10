@@ -105,7 +105,7 @@ class PinCodeView extends React.Component {
         })
     }
 
-    handleComformCode(){
+    handleConfirmCode(){
         const {dispatch} = this.props;
         const { pinCode } = this.state;
         if (pinCode !== this.createPinCode){
