@@ -40,8 +40,8 @@ class Splash extends Component {
 						});
 					dispatch(user(db_user.hashed_password, db_user.mnemonic, db_user.hashed_pinCode!==undefined?db_user.hashed_pinCode:''));
 					setTimeout(()=>{
-						navigate('signed_vault');
-						//navigate('unsigned_login');
+						// navigate('signed_vault');
+						navigate('unsigned_login');
 					}, 1000);
 
 				}, err=>{
