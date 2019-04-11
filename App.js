@@ -45,6 +45,7 @@ import VaultReceive          	from './components/signed/vault/receive.js';
 import VaultSend             	from './components/signed/vault/send.js';
 import VaultTransaction      	from './components/signed/vault/transaction.js';
 import VaultTransactionHistory 	from './components/signed/vault/transaction_history.js';
+import VaultChangeAccountName   from './components/signed/vault/change_account_name.js';
 import Dapps                 	from './components/signed/dapps/home.js';
 import DappsDapp             	from './components/signed/dapps/dapp.js';
 import DappsLaunch           	from './components/signed/dapps/launch.js';
@@ -60,7 +61,7 @@ import SettingCurrency       	from './components/signed/setting/currency.js';
 import SettingPinCode           from './components/signed/setting/pinCode.js';
 import RecoveryPassword      	from './components/unsigned/recovery_password.js';
 import SimpleWebView         	from './components/WebViewComponent';
-import PinCodeView              from './components/pinCodeView';
+import PinCodeScreen            from './components/pinCodeScreen';
 
 const navigationOptions = ({navigation}) => ({
     headerRight: (<View></View>),
@@ -125,7 +126,7 @@ const navigationOptionsWithoutRight = ({navigation}) => ({
 
 const Routes = createAppContainer(createStackNavigator({
 	'unlock': {
-		screen: PinCodeView,
+		screen: PinCodeScreen,
 		navigationOptions: {
 			header: null
 		}
@@ -170,7 +171,23 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_vault_account': {
 		screen: VaultAccount,
-		navigationOptions,
+		navigationOptions: ({navigation}) =>({
+			headerLeft: (
+				<TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+					width: 48,
+					height: 48,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
+					<Image source={require('./assets/arrow_back.png')} style={{
+						tintColor: 'white',
+						width: 20,
+						height: 20,
+					}} />
+				</TouchableOpacity>
+			),
+			headerStyle: styles.headerStyleWithoutShadow,
+		}),
 	},
 	'signed_vault_import_list': {
 		screen: VaultImportHdWallet,
@@ -195,6 +212,10 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_vault_transaction_history':{
 		screen: VaultTransactionHistory,
 		navigationOptions,
+	},
+	'signed_vault_change_account_name':{
+		screen: VaultChangeAccountName,
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_dapps': {
 		screen: Dapps,

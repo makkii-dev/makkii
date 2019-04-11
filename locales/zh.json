@@ -139,7 +139,9 @@
     "editable_button": "编辑",
     "save_button": "保存",
     "complete_button": "完整历史",
-    "error_empty_account_name": "账户名不能为空"
+    "error_empty_account_name": "账户名不能为空",
+    "menu_change_name": "更改账户名称",
+    "menu_export_private_key": "导出私钥"
   },
   "import_private_key": {
     "title": "私钥",

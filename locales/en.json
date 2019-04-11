@@ -142,7 +142,9 @@
     "editable_button": "Edit",
     "save_button": "Save",
     "complete_button": "All History",
-    "error_empty_account_name": "Account name can't be empty"
+    "error_empty_account_name": "Account name can't be empty",
+    "menu_change_name": "Edit account name",
+    "menu_export_private_key": "Export private Key"
   },
   "import_private_key": {
     "title": "Private Key",

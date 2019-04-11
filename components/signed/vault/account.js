@@ -11,22 +11,21 @@ import {
 	Keyboard,
 	Dimensions,
 	StyleSheet,
-	TextInput,
 	FlatList,
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest,getStatusBarHeight, strLen} from "../../../utils";
-import {update_account_name, update_account_txs} from "../../../actions/accounts";
-import Toast from 'react-native-root-toast';
+import {fetchRequest,getStatusBarHeight} from "../../../utils";
+import {update_account_txs} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
-import PropTypes from 'prop-types';
 import PendingComponent from './pendingComponent';
-const {width,height} = Dimensions.get('window');
-const header_height = Platform.OS==='ios'?64:56;
+import {PopWindow} from "./home_popwindow";
+import {ACCOUNT_MENU} from "./constants";
+import {Header} from 'react-navigation';
+const {width} = Dimensions.get('window');
 
 const SwithType = type=>{
 	let  accountImage=null;
@@ -43,85 +42,12 @@ const SwithType = type=>{
 	return accountImage;
 };
 
-class AccountNameComponent extends Component{
-	static propTypes={
-		value: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired,
-		endInput: PropTypes.func.isRequired,
-	};
-
-	state = {
-		editable: false,
-		value: this.props.value,
-	};
-
-	onPress=()=>{
-		const {editable} = this.state;
-		if (this.state.value.trim().length === 0) {
-			AppToast.show(
-				strings('account_view.error_empty_account_name'),
-				{
-					position:Toast.positions.CENTER,
-					duration:Toast.durations.LONG
-				});
-			return;
-		}
-		this.setState({
-			editable: !editable,
-		},()=>{
-			if (this.state.editable){
-				this.inputRef.focus();
-			}else {
-				this.inputRef.blur();
-				this.props.endInput(this.state.value);
-			}
-		})
-	};
-	render(){
-		const {navigation, type} = this.props;
-		const accountImage = SwithType(type);
-		let style = {color:'#fff', width:'100%',textAlign:'center',includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16, alignSelf:'flex-start'};
-		this.state.editable&&(style={...style, borderBottomWidth:1/PixelRatio.get(), borderBottomColor:'#fff'});
-		return (
-			<View style={{...this.props.style, flexDirection:'row'}}>
-				<TouchableOpacity onPress={()=>navigation.goBack()} style={{width: header_height, height: header_height, alignItems: 'flex-start', justifyContent: 'center'}}>
-					<Image source={require('../../../assets/arrow_back.png')} style={{tintColor: '#fff', width: 20, height: 20}}/>
-				</TouchableOpacity>
-				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', width:180}}>
-					<Image source={accountImage} style={{width:20,height:20, marginRight:10,tintColor:'#fff', borderRadius:5}} resizeMode={'contain'}/>
-					<TextInput
-						ref={ref=>this.inputRef=ref}
-						numberOfLines={1}
-						value={this.state.value}
-						editable={this.state.editable}
-						selectionColor={'#000'}
-						onChangeText={v=>{
-							if (strLen(v) <= 15) {
-								this.setState({value: v})
-							}else{
-								AppToast.show(
-									strings('account_name_hint'),
-									{
-										position:Toast.positions.CENTER,
-										duration:Toast.durations.LONG
-									});
-							}
-						}}
-						style={style}
-					/>
-				</View>
-				<TouchableOpacity onPress={()=>this.onPress()}>
-					<View style={{height:20,flexDirection:'row',backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center', alignItems:'center'}}>
-						<Image source={require('../../../assets/edit.png')} style={{height:10,width:10,marginRight:10}} resizeMode={'contain'}/>
-						<Text style={{fontSize:12, color:'#fff'}}>
-
-							{this.state.editable?strings('account_view.save_button'):strings('account_view.editable_button')}</Text>
-					</View>
-				</TouchableOpacity>
-			</View>
-		)
-	}
-}
+const ImageHeader = ({type, title})=>(
+	<View style={{flexDirection:'row', flex:1,justifyContent:'center',paddingHorizontal:20,alignItems:'center'}}>
+		<Image source={SwithType(type)} style={{width:20,height:20, marginRight:20,tintColor:'#fff', borderRadius:5, }} resizeMode={'contain'}/>
+		<Text style={{color:'#fff', includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16}}>{title}</Text>
+	</View>
+);
 
 class AddressComponent extends Component {
 	state={
@@ -184,11 +110,24 @@ class AddressComponent extends Component {
 	}
 }
 
+
 class Account extends Component {
 
 	static navigationOptions = ({ navigation }) => {
-	    return {
-	        header: null,
+	    const title = navigation.getParam('title');
+	    const type = navigation.getParam('type','[local]' );
+	    const showMenu  = navigation.getParam('showMenu', ()=>{});
+		return {
+	    	headerTitle: <ImageHeader title={title} type={type}/>,
+			headerRight: (<TouchableOpacity
+				style={{width: 48,
+					height: 48,
+					alignItems: 'center',
+					justifyContent: 'center',}}
+				onPress={()=>{showMenu()}}
+			>
+				<Image source={require('../../../assets/icon_account_menu.png')} style={{width:30,height:30, tintColor:'#fff'}} resizeMode={'contain'}/>
+			</TouchableOpacity>),
 	    };
     };
 	constructor(props){
@@ -196,13 +135,14 @@ class Account extends Component {
 		this.state={
 			refreshing: false,
 			loading: true,
+			showMenu: false,
 		};
 		this.addr=this.props.navigation.state.params.address;
 		this.account = this.props.accounts[this.addr];
-		this.props.navigation.setParams({
-			title: this.account.name
-		});
 		this.isMount = false;
+		this.updateTitle({
+			showMenu: ()=>this.openMenu(),
+		});
 	}
 	componentWillMount(){
 		this.fetchAccountTransacions(this.addr);
@@ -254,13 +194,13 @@ class Account extends Component {
 		)
 	}
 
-	onChangeName = (newName) =>{
-		const {dispatch} = this.props;
-		const key = this.account.address;
-		dispatch(update_account_name(key,newName,this.props.user.hashed_password));
+	updateTitle = (args={}) =>{
+		const {type, name} = this.props.accounts[this.addr];
 		this.props.navigation.setParams({
-			title: newName
-		});
+			title: name,
+			type: type,
+			...args
+		})
 	};
 
 	onRefresh =(address)=>{
@@ -268,6 +208,31 @@ class Account extends Component {
 			refreshing: true,
 		});
 		this.fetchAccountTransacions(address);
+	};
+	openMenu = () => {
+		this.setState({
+			showMenu:true
+		})
+	};
+
+	onCloseMenu = (select) => {
+		const {navigation} = this.props;
+		this.setState({
+			showMenu:false
+		},()=>{
+			switch(select){
+				case ACCOUNT_MENU[0].title:
+					navigation.navigate('signed_vault_change_account_name',{
+						address: this.account.address,
+						onUpdateFinish: this.updateTitle,
+					});
+					break;
+				case ACCOUNT_MENU[1].title:
+
+					break;
+				default:
+			}
+		})
 	};
 
 	fetchAccountTransacions = (address, page=0, size=25)=>{
@@ -393,22 +358,14 @@ class Account extends Component {
 
 	render(){
 		const {navigation, setting} = this.props;
-		const {address, type, name ,transactions} = this.account;
+		const {address, transactions} = this.account;
 		const transactionsList =  transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
+		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
 		return (
-			<View style={{flex:1, backgroundColor: mainColor, paddingTop:getStatusBarHeight(false)}}>
+			<View style={{flex:1, backgroundColor: mainColor}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
-					{/*title bar*/}
-					<AccountNameComponent
-						style={{flexDirection:'row', justifyContent:'space-between', alignItems:'center', paddingHorizontal:10,
-							height:header_height, width:width,backgroundColor:mainColor}}
-						value={name}
-						type={type}
-						navigation={navigation}
-						endInput={(v)=>this.onChangeName(v)}
-					/>
 
 					<View style={{justifyContent:'space-between', alignItems:'center', height:130, paddingVertical:20, backgroundColor:mainColor}}>
 						<Text style={{fontSize:accountBalanceTextFontSize, color:'#fff'}}>{accountBalanceText}</Text>
@@ -462,6 +419,22 @@ class Account extends Component {
 					}
 					</View>
 				</TouchableOpacity>
+				{/*Menu Pop window*/}
+				{
+					this.state.showMenu?
+						<PopWindow
+							backgroundColor={'rgba(52,52,52,0.54)'}
+							onClose={(select)=>this.onCloseMenu(select)}
+							data={ACCOUNT_MENU}
+							containerPosition={{position:'absolute', top:popwindowTop,right:5,width:150}}
+							imageStyle={{width: 20, height: 20, marginRight:10}}
+							fontStyle={{fontSize:12, color:'#000'}}
+							itemStyle={{width:150,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
+							containerBackgroundColor={'#fff'}
+							ItemSeparatorComponent={()=><View style={styles.divider}/>}
+						/>
+						:null
+				}
 			</View>
 		)
 	}
@@ -481,5 +454,9 @@ const styles=StyleSheet.create({
 		color:'#fff',
 		includeFontPadding:false,
 		fontFamily:fixedWidthFont,
+	},
+	divider: {
+		height: 0.5,
+		backgroundColor: '#dfdfdf'
 	},
 });

@@ -1,8 +1,9 @@
 import React from 'react';
-import {FlatList, Text, TouchableOpacity, View, Image, Animated} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View, Image, Animated, Modal} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import PropTypes from "prop-types";
 import defaultStyles from '../../styles';
+
 export class PopWindow extends React.Component {
 
     static propTypes={
@@ -57,7 +58,13 @@ export class PopWindow extends React.Component {
 
     render(){
         return (
-            <View  style={{...defaultStyles.shadow, position: 'absolute', top: 0, left: 0, bottom:0, right:0}}>
+
+            <Modal
+                animationType="none"
+                transparent
+                visible={true}
+                onRequestClose={() => { }}
+            >
                 <TouchableOpacity activeOpacity={1}
                                   style={{position: 'absolute', top: 0, left: 0, bottom:0, right:0, backgroundColor: this.props.backgroundColor}}
                                   onPress={() => this.props.onClose()}>
@@ -68,7 +75,7 @@ export class PopWindow extends React.Component {
                             </View>
                             <FlatList
                                 {...this.props}
-                                style={{backgroundColor:this.props.containerBackgroundColor, borderRadius:5, padding: 20}}
+                                style={{backgroundColor:this.props.containerBackgroundColor, borderRadius:5, paddingHorizontal: 20, paddingVertical:10}}
                                 data={this.props.data}
                                 renderItem={({item}) =>
                                     <TouchableOpacity activeOpacity={0.3} onPress={() => {
@@ -92,8 +99,7 @@ export class PopWindow extends React.Component {
                         </Animated.View>
                     </View>
                 </TouchableOpacity>
-
-            </View>
+            </Modal>
         )
 
     }

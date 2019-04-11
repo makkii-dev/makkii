@@ -590,7 +590,7 @@ class Home extends HomeComponent {
 		if (this.props.setting.coinPrice && this.state.totalBalance) {
 			total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
 		}
-		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):80;
+		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):60;
 		const header_marginTop = getStatusBarHeight(false);
 		return (
 			<View style={{flex:1}}>

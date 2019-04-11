@@ -43,8 +43,20 @@ const MENU = [
     },
 ];
 
+const ACCOUNT_MENU = [
+    {
+        title: 'account_view.menu_change_name',
+        image: require('../../../assets/icon_account_edit.png'),
+    },
+    {
+        title: 'account_view.menu_export_private_key',
+        image: require('../../../assets/icon_account_export.png'),
+    }
+];
+
 module.exports={
     SORT: SORT,
     FILTER: FILTER,
     MENU: MENU,
+    ACCOUNT_MENU:ACCOUNT_MENU,
 };

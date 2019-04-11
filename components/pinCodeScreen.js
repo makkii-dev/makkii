@@ -16,7 +16,7 @@ import {user_update_pincode} from '../actions/user'
 const {width,height} = Dimensions.get('window');
 const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];
 const MaxPinCodeLength = 6;
-class PinCodeView extends React.Component {
+class PinCodeScreen extends React.Component {
 
     /***********************************************************
      * 1. create pin Code process:
@@ -261,7 +261,7 @@ class PinCodeView extends React.Component {
 
 export default connect(state => { return ({
     user:state.user,
-}); })(PinCodeView);
+}); })(PinCodeScreen);
 
 const styles = StyleSheet.create({
     desText: {

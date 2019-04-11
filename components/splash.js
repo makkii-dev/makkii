@@ -40,15 +40,14 @@ class Splash extends Component {
 						});
 					dispatch(user(db_user.hashed_password, db_user.mnemonic, db_user.hashed_pinCode!==undefined?db_user.hashed_pinCode:''));
 					setTimeout(()=>{
-						navigate('unsigned_login');
-						//navigate('unsigned_recovery_scan');
+						navigate('signed_vault');
+						//navigate('unsigned_login');
 					}, 1000);
 
 				}, err=>{
 					console.log('[splash] db.user null');
 					setTimeout(()=>{
 						navigate('unsigned_login');
-						//navigate('unsigned_recovery_scan');
 					}, 1000);
 				});
 
@@ -57,7 +56,6 @@ class Splash extends Component {
 			listenPrice.startListen();
 			setTimeout(()=>{
 				navigate('unsigned_login');
-				//navigate('unsigned_recovery_scan');
 			}, 1000);
 		});
 	}
