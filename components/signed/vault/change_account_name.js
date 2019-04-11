@@ -18,7 +18,7 @@ class ChangeAccountNameScreen extends  React.Component {
         const updateAccountName =  navigation.getParam('updateAccountName', ()=>{});
         const isEdited = navigation.getParam('isEdited', false);
         return ({
-            title: strings('account_view.menu_change_name'),
+            title: strings('change_account_name.title'),
             headerRight: (
                 <RightActionButton
                     onPress={() => {

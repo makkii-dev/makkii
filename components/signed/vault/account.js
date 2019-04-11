@@ -15,7 +15,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest,getStatusBarHeight} from "../../../utils";
+import {fetchRequest, getStatusBarHeight, hashPassword} from "../../../utils";
 import {update_account_txs} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
@@ -217,6 +217,7 @@ class Account extends Component {
 
 	onCloseMenu = (select) => {
 		const {navigation} = this.props;
+		const {pinCodeEnabled} = this.props.setting;
 		this.setState({
 			showMenu:false
 		},()=>{
@@ -229,6 +230,40 @@ class Account extends Component {
 					break;
 				case ACCOUNT_MENU[1].title:
 
+					pinCodeEnabled||popCustom.show(
+						strings('alert_title_warning'),
+						strings('account_view.warning_export_private_key'),
+						[
+							{
+								text: strings('cancel_button'),
+								onPress:()=>{
+									popCustom.hide()
+								}
+							},
+							{
+								text: strings('alert_ok_button'),
+								onPress:(text)=>{
+									const hashed_password = hashPassword(text);
+									if(hashed_password === this.props.user.hashed_password){
+										popCustom.hide();
+										navigation.navigate('signed_vault_export_private_key',{
+											privateKey: this.account.private_key
+										})
+									}else{
+										popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
+									}
+								}
+							}
+						],
+						{
+							cancelable: false,
+							type:'input'
+						}
+					);
+					pinCodeEnabled&&navigation.navigate('unlock',{
+						targetScreen: 'signed_vault_export_private_key',
+						targetScreenArgs:{privateKey: this.account.private_key}
+					});
 					break;
 				default:
 			}
@@ -358,7 +393,7 @@ class Account extends Component {
 
 	render(){
 		const {navigation, setting} = this.props;
-		const {address, transactions} = this.account;
+		const {address, transactions, type} = this.account;
 		const transactionsList =  transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
 		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
@@ -425,11 +460,11 @@ class Account extends Component {
 						<PopWindow
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.onCloseMenu(select)}
-							data={ACCOUNT_MENU}
-							containerPosition={{position:'absolute', top:popwindowTop,right:5,width:150}}
+							data={type==='[ledger]'?ACCOUNT_MENU.slice(0,1):ACCOUNT_MENU}
+							containerPosition={{position:'absolute', top:popwindowTop,right:5}}
 							imageStyle={{width: 20, height: 20, marginRight:10}}
 							fontStyle={{fontSize:12, color:'#000'}}
-							itemStyle={{width:150,flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
+							itemStyle={{flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
 							containerBackgroundColor={'#fff'}
 							ItemSeparatorComponent={()=><View style={styles.divider}/>}
 						/>

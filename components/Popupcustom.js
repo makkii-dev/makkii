@@ -198,17 +198,7 @@ export default class PopupCustom extends Component {
         const contentMarginTop = type === 'input'
             ? { marginTop: 8 }
             : { marginTop: 20 };
-        const renderContent = type === 'input'
-            ? (
-                <Text
-                    numberOfLines={1}
-                    ellipsizeMode="middle"
-                    style={[styles.contentPopup, contentMarginTop]}
-                >
-                    {content}
-                </Text>
-            )
-            : <Text style={[styles.contentPopup, contentMarginTop]}>{content}</Text>;
+        const renderContent =  <Text style={[styles.contentPopup, contentMarginTop]}>{content}</Text>;
         return (
             <Modal
                 animationType="none"

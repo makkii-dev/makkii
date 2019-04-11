@@ -144,7 +144,8 @@
     "complete_button": "All History",
     "error_empty_account_name": "Account name can't be empty",
     "menu_change_name": "Edit account name",
-    "menu_export_private_key": "Export private Key"
+    "menu_export_private_key": "Export Private Key",
+    "warning_export_private_key": "Exporting private key is very dangerous, please enter password to verify."
   },
   "import_private_key": {
     "title": "Private Key",
@@ -156,6 +157,14 @@
   },
   "import_ledger": {
     "title": "Ledger"
+  },
+  "export_private_key": {
+    "title": "Export Private Key",
+    "button_save_image": "Save Image",
+    "warning": "Make sure your environment is secure, and no one sees your screen"
+  },
+  "change_account_name": {
+    "title": "Edit Account Name"
   },
   "sort": {
     "balance": " Order by balance",

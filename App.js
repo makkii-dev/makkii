@@ -46,6 +46,7 @@ import VaultSend             	from './components/signed/vault/send.js';
 import VaultTransaction      	from './components/signed/vault/transaction.js';
 import VaultTransactionHistory 	from './components/signed/vault/transaction_history.js';
 import VaultChangeAccountName   from './components/signed/vault/change_account_name.js';
+import VaultExportPRivateKey    from './components/signed/vault/export_private_key.js';
 import Dapps                 	from './components/signed/dapps/home.js';
 import DappsDapp             	from './components/signed/dapps/dapp.js';
 import DappsLaunch           	from './components/signed/dapps/launch.js';
@@ -216,6 +217,10 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_vault_change_account_name':{
 		screen: VaultChangeAccountName,
 		navigationOptions: navigationOptionsWithoutRight,
+	},
+	'signed_vault_export_private_key':{
+		screen: VaultExportPRivateKey,
+		navigationOptions
 	},
 	'signed_dapps': {
 		screen: Dapps,

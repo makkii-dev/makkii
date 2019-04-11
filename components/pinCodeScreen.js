@@ -38,6 +38,7 @@ class PinCodeScreen extends React.Component {
         this.isModifyPinCode =  this.props.navigation.getParam('isModifyPinCode', false);
         this.onUnlockSuccess  = this.props.navigation.getParam('onUnlockSuccess', ()=>{});
         this.targetScreen = this.props.navigation.getParam('targetScreen');
+        this.targetScreenArgs = this.props.navigation.getParam('targetScreenArgs',{});
         this.cancel = this.props.navigation.getParam('cancel', true);
         this.state={
             pinCode: '',
@@ -135,7 +136,7 @@ class PinCodeScreen extends React.Component {
                     setTimeout(()=>{
                         this.onUnlockSuccess();
                         console.log('this.targetScreen', this.targetScreen);
-                        this.targetScreen&&this.props.navigation.navigate(this.targetScreen);
+                        this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                         this.targetScreen||this.props.navigation.goBack();
                     },100);
                 }
@@ -145,10 +146,10 @@ class PinCodeScreen extends React.Component {
         }else if (pinState === 1) {
             this.handleCreateCode()
         }else if (pinState === 2) {
-            this.handleComformCode() &&setTimeout(()=>{
+            this.handleConfirmCode() &&setTimeout(()=>{
                 this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
-                this.targetScreen&&this.props.navigation.navigate(this.targetScreen);
+                this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                 this.targetScreen||this.props.navigation.goBack();
             },100);
         }
