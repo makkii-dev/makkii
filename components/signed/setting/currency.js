@@ -71,9 +71,12 @@ class Currency extends Component {
                     <SelectList
                         ref={ref=>this.selectList=ref}
                         itemHeight={55}
-                        data={{ 'CNY': strings('currency.CNY'),
+                        data={{
+                            'CNY': strings('currency.CNY'),
                             'USD': strings('currency.USD'),
-                            'CAD': strings('currency.CAD')}}
+                            'CAD': strings('currency.CAD'),
+                            'BTC': strings('currency.BTC'),
+                        }}
                         cellLeftView={item=>{
                             return (
                                 <Text style={{flex: 1}}>{item}</Text>

@@ -223,9 +223,11 @@
     "CNY": "CNY",
     "USD": "USD",
     "CAD": "CAD",
+    "BTC": "BTC",
     "CNY_unit": "CNY",
     "USD_unit": "USD",
-    "CAD_unit": "CAD"
+    "CAD_unit": "CAD",
+    "BTC_unit": "BTC"
   },
   "pinCode": {
     "title": "Pin Code",

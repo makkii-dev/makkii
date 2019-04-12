@@ -210,9 +210,11 @@
     "CNY": "人民币",
     "USD": "美元",
     "CAD": "加拿大元",
+    "BTC": "比特币",
     "CNY_unit": "元",
     "USD_unit": "美元",
-    "CAD_unit": "加元"
+    "CAD_unit": "加元",
+    "BTC_unit": "比特币"
   },
   "pinCode": {
     "title": "数字口令",
