@@ -9,7 +9,7 @@ import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
-import {navigateUnlock} from '../../../utils';
+import {navigationSafely} from '../../../utils';
 
 const {width} = Dimensions.get('window');
 
@@ -47,15 +47,9 @@ class Home extends HomeComponent {
 	}
 
 	render(){
-		console.log('render setting');
-		const {navigate} = this.props.navigation;
-		const navigate2=(route_url)=>{
-			navigateUnlock(
-				route_url,
-				this.props.setting.pinCodeEnabled,
-				navigate
-			)
-		};
+		const {navigation} = this.props;
+		const {pinCodeEnabled} = this.props.setting;
+		const {hashed_password} = this.props.user;
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,
@@ -83,9 +77,16 @@ class Home extends HomeComponent {
 									leadIcon={item.icon}
 									onClick={() => {
 										if(item.title==='recovery_phrase.title'){
-											navigate2(item.route_url);
+											navigationSafely(
+												pinCodeEnabled,
+												hashed_password,
+												navigation,
+												{
+													url:item.route_url,
+												}
+											);
 										}else {
-											navigate(item.route_url);
+											navigation.navigate(item.route_url);
 										}
 									}}
 								/>
@@ -155,6 +156,7 @@ class Home extends HomeComponent {
 
 export default connect(state => {
 	return {
-		setting: state.setting
+		setting: state.setting,
+		user: state.user,
 	};
 })(Home);

@@ -15,7 +15,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest, getStatusBarHeight, hashPassword} from "../../../utils";
+import {fetchRequest, getStatusBarHeight, navigationSafely} from "../../../utils";
 import {update_account_txs} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
@@ -218,6 +218,7 @@ class Account extends Component {
 	onCloseMenu = (select) => {
 		const {navigation} = this.props;
 		const {pinCodeEnabled} = this.props.setting;
+		const {hashed_password} = this.props.user;
 		this.setState({
 			showMenu:false
 		},()=>{
@@ -229,41 +230,14 @@ class Account extends Component {
 					});
 					break;
 				case ACCOUNT_MENU[1].title:
-
-					pinCodeEnabled||popCustom.show(
-						strings('alert_title_warning'),
-						strings('account_view.warning_export_private_key'),
-						[
-							{
-								text: strings('cancel_button'),
-								onPress:()=>{
-									popCustom.hide()
-								}
-							},
-							{
-								text: strings('alert_ok_button'),
-								onPress:(text)=>{
-									const hashed_password = hashPassword(text);
-									if(hashed_password === this.props.user.hashed_password){
-										popCustom.hide();
-										navigation.navigate('signed_vault_export_private_key',{
-											privateKey: this.account.private_key
-										})
-									}else{
-										popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
-									}
-								}
-							}
-						],
+					navigationSafely(
+						pinCodeEnabled,
+						hashed_password,
+						navigation,
 						{
-							cancelable: false,
-							type:'input'
-						}
-					);
-					pinCodeEnabled&&navigation.navigate('unlock',{
-						targetScreen: 'signed_vault_export_private_key',
-						targetScreenArgs:{privateKey: this.account.private_key}
-					});
+							url:'signed_vault_export_private_key',
+							args:{privateKey: this.account.private_key},
+						});
 					break;
 				default:
 			}

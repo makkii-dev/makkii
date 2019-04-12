@@ -145,7 +145,6 @@
     "error_empty_account_name": "Account name can't be empty",
     "menu_change_name": "Edit account name",
     "menu_export_private_key": "Export Private Key",
-    "warning_export_private_key": "Exporting private key is very dangerous, please enter password to verify."
   },
   "import_private_key": {
     "title": "Private Key",
@@ -299,5 +298,6 @@
   "fetch_data_label": "Fetching Data ...",
   "no_more_data_label": "-- No More Data --",
   "label_loading": "Loading...",
-  "account_name_hint": "Up to 15 alphanumeric and puntucation characters, or 7 other characters"
+  "account_name_hint": "Up to 15 alphanumeric and puntucation characters, or 7 other characters",
+  "warning_dangerous_operation": "Require password to verify."
 }

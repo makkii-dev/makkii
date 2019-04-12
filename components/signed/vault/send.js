@@ -16,7 +16,14 @@ import {
 } from 'react-native';
 import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
-import { getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger, validateRecipient} from '../../../utils';
+import {
+	getLedgerMessage,
+	navigationSafely,
+	validateAddress,
+	validateAmount,
+	validatePositiveInteger,
+	validateRecipient
+} from '../../../utils';
 import {AionTransaction } from '../../../libs/aion-hd-wallet/index.js';
 import { Ed25519Key } from '../../../libs/aion-hd-wallet/src/key/Ed25519Key';
 import Loading from '../../loading';
@@ -207,14 +214,28 @@ class Send extends Component {
 				strings('send.warning_send_zero'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
-					{text:strings('alert_ok_button'), onPress: () => {this.transfer()}}
+					{text:strings('alert_ok_button'), onPress: () => {this.beforeTransfer()}}
 				],
 				{cancelable:false}
 			);
 		} else {
-			this.transfer();
+			this.beforeTransfer();
 		}
-	}
+	};
+
+	beforeTransfer = ()=>{
+		const {navigation} = this.props;
+		const {pinCodeEnabled} = this.props.setting;
+		const {hashed_password} = this.props.user;
+		navigationSafely(
+			pinCodeEnabled,
+			hashed_password,
+			navigation,
+			{
+				onVerifySuccess: this.transfer
+			}
+		);
+	};
 
 	transfer=() => {
 		const {goBack} = this.props.navigation;

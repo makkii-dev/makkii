@@ -134,7 +134,7 @@ class PinCodeScreen extends React.Component {
                     })
                 }else {
                     setTimeout(()=>{
-                        this.onUnlockSuccess();
+                        this.onUnlockSuccess&&this.onUnlockSuccess();
                         console.log('this.targetScreen', this.targetScreen);
                         this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                         this.targetScreen||this.props.navigation.goBack();
@@ -147,7 +147,7 @@ class PinCodeScreen extends React.Component {
             this.handleCreateCode()
         }else if (pinState === 2) {
             this.handleConfirmCode() &&setTimeout(()=>{
-                this.onUnlockSuccess();
+                this.onUnlockSuccess&&this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                 this.targetScreen||this.props.navigation.goBack();

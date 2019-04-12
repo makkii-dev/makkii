@@ -142,7 +142,6 @@
     "error_empty_account_name": "账户名不能为空",
     "menu_change_name": "更改账户名称",
     "menu_export_private_key": "导出私钥",
-    "warning_export_private_key": "导出私钥十分危险,输入登录密码验证是否本人操作。"
   },
   "import_private_key": {
     "title": "私钥",
@@ -298,5 +297,6 @@
   "fetch_data_label": "获取数据中……",
   "no_more_data_label": "-- 没有更多数据了 --",
   "label_loading": "加载中……",
-  "account_name_hint": "最多15个英文、数字、符号，或7个其他语言字符"
+  "account_name_hint": "最多15个英文、数字、符号，或7个其他语言字符",
+  "warning_dangerous_operation": "此操作需要输入登录密码验证是否本人操作。"
 }

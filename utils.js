@@ -463,14 +463,52 @@ function strLen(str){
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 
-function navigateUnlock(route_url, pinCodeEnabled, navigateFunc){
-    if(pinCodeEnabled){
-        navigateFunc('unlock',{
-            targetScreen:route_url
-        })
-    }else {
-        navigateFunc(route_url);
-    }
+function navigationSafely(pinCodeEnabled, hashed_password,navigation,
+                          route={
+                                    url: '',
+                                    args:{},
+                                    onVerifySuccess:undefined,
+                                }) {
+    const newRoute = {
+        url: '',
+        args:{},
+        onVerifySuccess:undefined,
+        ...route
+    };
+    pinCodeEnabled||popCustom.show(
+        strings('alert_title_warning'),
+        strings('warning_dangerous_operation'),
+        [
+            {
+                text: strings('cancel_button'),
+                onPress:()=>{
+                    popCustom.hide()
+                }
+            },
+            {
+                text: strings('alert_ok_button'),
+                onPress:(text)=>{
+                    const _hashed_password = hashPassword(text);
+                    if(_hashed_password === hashed_password){
+                        popCustom.hide();
+                        newRoute.onVerifySuccess&&newRoute.onVerifySuccess();
+                        newRoute.onVerifySuccess||navigation.navigate(newRoute.url,newRoute.args)
+                    }else{
+                        popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
+                    }
+                }
+            }
+        ],
+        {
+            cancelable: false,
+            type:'input'
+        }
+    );
+    pinCodeEnabled&&navigation.navigate('unlock',{
+        targetScreen: newRoute.url,
+        targetScreenArgs: newRoute.args,
+        onUnlockSuccess: newRoute.onVerifySuccess
+    });
 
 }
 module.exports = {
@@ -497,5 +535,5 @@ module.exports = {
     listenAppState:listenAppState,
     strLen: strLen,
     AppToast: AppToast,
-    navigateUnlock:navigateUnlock
+    navigationSafely,
 };
