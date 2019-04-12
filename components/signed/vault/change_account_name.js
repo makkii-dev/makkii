@@ -38,24 +38,26 @@ class ChangeAccountNameScreen extends  React.Component {
         this.onUpdateFinish = navigation.getParam('onUpdateFinish',()=>{});
         this.account = this.props.accounts[this.addr];
         this.state={
-            textValue: this.account.name
+            textValue: this.account.name,
+            editable: true,
         };
         navigation.setParams({
             updateAccountName:this.updateAccountName,
         })
     }
     updateAccountName=()=>{
-        Keyboard.dismiss();
         const {dispatch, navigation} = this.props;
         const {textValue} = this.state;
         const key = this.account.address;
-        dispatch(update_account_name(key,textValue,this.props.user.hashed_password));
-        AppToast.show(strings('toast_update_success'), {
-            position: Toast.positions.CENTER,
-            onHidden: () => {
-                this.onUpdateFinish();
-                navigation.goBack();
-            }
+        this.setState({editable:false},()=>{
+            dispatch(update_account_name(key,textValue,this.props.user.hashed_password));
+            AppToast.show(strings('toast_update_success'), {
+                position: Toast.positions.CENTER,
+                onHidden: () => {
+                    this.onUpdateFinish();
+                    navigation.goBack();
+                }
+            });
         });
     };
 
@@ -66,7 +68,7 @@ class ChangeAccountNameScreen extends  React.Component {
                 textValue: text,
             }, () => {
                 navigation.setParams({
-                    isEdited: this.state.textValue !== this.account.name
+                    isEdited: this.state.textValue !== this.account.name&&text.trim()!=='',
                 })
             })
         }else {
@@ -79,13 +81,14 @@ class ChangeAccountNameScreen extends  React.Component {
     };
 
     render(){
-        const {textValue} = this.state;
+        const {textValue, editable} = this.state;
         return(
             <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={()=>{Keyboard.dismiss()}}>
                 <View style={styles.container}>
                     <TextInput
                         style={styles.textInputStyle}
                         value={textValue}
+                        editable={editable}
                         multiline={false}
                         autoFocus
                         onChangeText={this.onChangeText}
