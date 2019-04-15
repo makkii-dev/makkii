@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground,BackHandler} from 'react-native';
+import {Platform, View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground,BackHandler, NativeModules} from 'react-native';
 
 import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
 import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import {dbGet,decrypt} from '../../utils.js';
+import {dbGet,decrypt, getLatestVersion, generateUpdateMessage} from '../../utils.js';
 import {fixedHeight, linkButtonColor, mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
+import DeviceInfo from 'react-native-device-info';
+import RNFS from 'react-native-fs';
 
 const {width,height} = Dimensions.get('window');
 
@@ -32,12 +34,95 @@ class Login extends Component {
 		});
 
 		Linking.addEventListener('url', this.handleOpenURL);
+
+		let versionCode = DeviceInfo.getBuildNumber();
+		console.log("current version code: " + versionCode);
+		let lang = this.props.setting.lang;
+		if (lang === 'auto') {
+            lang = DeviceInfo.getDeviceLocale().substring(0, 2);
+        }
+		getLatestVersion(Platform.OS, versionCode, lang).then(version=> {
+		    console.log("latest version: ", version);
+            if (versionCode != version.versionCode && version.mandatory) {
+                this.popupUpdateDialog(version);
+            }
+        }, err=>{
+		    // ignore error condition just like there is no mandatory version.
+		    console.log("get latest version error:", err);
+        });
 	}
+	popupUpdateDialog=(version) => {
+        popCustom.show(strings('version_upgrade.alert_title_new_version'),
+           generateUpdateMessage(version), [
+            {
+                text: strings('alert_button_upgrade'),
+                onPress: () => {
+                    if (Platform.OS === 'android') {
+                        this.upgradeForAndroid(version);
+                    } else {
+                        this.upgradeForiOS();
+                    }
+                }
+            }
+        ], {
+            canHide: false,
+            cancelable: false,
+        });
+    }
 	componentWillUnmount() {
 		console.log("unmount login");
         this.backHandler.remove();
 		Linking.removeEventListener('url', this.handleOpenURL);
 	}
+	tryDownload=(version, filePath) => {
+        let download = RNFS.downloadFile({
+            fromUrl: version.url,
+            toFile: filePath,
+            progress: res => {
+                let progress = res.bytesWritten / res.contentLength;
+                console.log("progress: " + progress);
+                popCustom.setProgress(progress);
+            },
+            progressDivider: 1
+        });
+        download.promise.then(result => {
+            this.popupUpdateDialog(version);
+            console.log("download result: ", result);
+            if (result.statusCode == 200) {
+                console.log("install apk: " + DeviceInfo.getAPILevel() + " " + DeviceInfo.getBundleId());
+                NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
+            } else {
+                AppToast.show(strings('version_upgrade.toast_download_fail'));
+            }
+        }, error => {
+            console.log("download error: ", error);
+            AppToast.show(strings('version_upgrade.toast_download_fail'));
+            this.popupUpdateDialog(version);
+        });
+
+        popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
+            type: 'progress',
+            cancelable: false,
+            canHide: false,
+            callback: ()=> {},
+            progress: 0.01,
+        });
+    }
+	upgradeForAndroid = (version) => {
+        var index = version.url.lastIndexOf('\/');
+        let filename = version.url.substring(index + 1, version.url.length);
+
+        let filePath = RNFS.CachesDirectoryPath + '/' + filename;
+        console.log("download to " + filePath);
+
+        this.tryDownload(version, filePath);
+    }
+    upgradeForiOS = () => {
+	    Linking.openURL("https://itunes.apple.com/us/app/makkii/id1457952857?ls=1&mt=8").catch(error => {
+            console.log("open app store url failed: ", error);
+            AppToast.show(strings('version_upgrade.toast_to_appstore_fail'));
+        });
+    }
 	handleOpenURL = (event) => {
 		console.log("linking url=" + event.url);
 	};

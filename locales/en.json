@@ -259,6 +259,15 @@
   "setting": {
     "confirm_logout": "Logging out will not delete data. You can still log in with this account."
   },
+  "version_upgrade": {
+    "alert_title_new_version":  "New Version",
+    "label_version": "Version",
+    "label_updates": "Updates",
+    "label_downloading": "Downloading",
+    "toast_download_fail": "Download failure",
+    "toast_get_latest_version_fail": "Check latest version failed",
+    "toast_to_appstore_fail": "Go to App Store failed"
+  },
   "app_name": "Makkii",
   "logout": "Sign Out",
   "update_button": "Update",
@@ -271,6 +280,7 @@
   "toast_update_success": "Update successfully",
   "alert_title_error": "Error",
   "alert_title_warning": "Warning",
+  "alert_button_upgrade": "Upgrade",
   "invalid_old_password": "Old password is incorrect",
   "invalid_new_password": "New password is invalid",
   "inconsistent_passwords": "Confirmed password and new password are different",

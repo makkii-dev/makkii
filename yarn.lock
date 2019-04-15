@@ -5641,6 +5641,10 @@ react-native-i18n@^2.0.15:
   dependencies:
     i18n-js "3.0.11"
 
+"react-native-install-apk@https://github.com/leoaion/react-native-install-apk.git":
+  version "1.0.0"
+  resolved "https://github.com/leoaion/react-native-install-apk.git#1b7db80127eb3193321cfd65b3e9e812dbf1ea07"
+
 react-native-iphone-x-helper@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.0.tgz#9f8a376eb00bc712115abff4420318a0063fa796"
