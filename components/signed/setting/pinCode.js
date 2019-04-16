@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {hashPassword} from '../../../utils';
+import {navigationSafely} from '../../../utils';
 import {setting_update_pincode_enabled} from '../../../actions/setting';
 import {user_update_pincode} from '../../../actions/user';
 const {width} = Dimensions.get('window');
@@ -32,54 +32,42 @@ class PinCode extends React.Component {
             pinCodeEnabled:pinCodeEnabled!==undefined?pinCodeEnabled:false
         }
     }
+    
+    onVerifySuccess = ()=>{
+        const {dispatch } = this.props;
+        const {pinCodeEnabled}  = this.state;
+        const {navigate} = this.props.navigation;
+        if(!pinCodeEnabled===false){
+            // close pin code
+            dispatch(user_update_pincode(''));
+            listenApp.handleActive = null;
+            this.setState({pinCodeEnabled:!pinCodeEnabled},()=>{
+                dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
+            })
+        }else{
+            navigate('unlock',{
+                onUnlockSuccess:()=>{
+                    this.setState({pinCodeEnabled:!pinCodeEnabled},()=>{
+                        dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
+                        listenApp.handleActive = ()=>navigate('unlock',{cancel:false});
+                    });
+                }
+            })
+        }
+    };
 
     handleToggleSwitch(){
-        const {dispatch } = this.props;
-        const {navigate} = this.props.navigation;
-        popCustom.show(
-            strings('pinCode.verify_title'),
-            strings('pinCode.verify_desc'),
-            [
-                {
-                    text: strings('cancel_button'),
-                    onPress:()=>{
-                        popCustom.hide()
-                    }
-                },
-                {
-                    text: strings('alert_ok_button'),
-                    onPress: (text)=>{
-                        const hashed_password = hashPassword(text);
-                        if(hashed_password === this.props.user.hashed_password){
-                            popCustom.hide();
-                            if(!this.state.pinCodeEnabled===false){
-                                dispatch(user_update_pincode(''));
-                                listenApp.handleActive = null;
-                                this.setState({pinCodeEnabled:!this.state.pinCodeEnabled},()=>{
-                                    dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
-                                })
-                            }else{
-                                navigate('unlock',{
-                                    onUnlockSuccess:()=>{
-                                        this.setState({pinCodeEnabled:!this.state.pinCodeEnabled},()=>{
-                                            dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
-                                            listenApp.handleActive = ()=>navigate('unlock',{cancel:false});
-                                        });
-                                    }
-                                })
-                            }
-                        }else {
-                            popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
-                        }
-                    }
-                }
-            ],
+        const {navigation} = this.props;
+        const {pinCodeEnabled} = this.props.setting;
+        const {hashed_password} = this.props.user;
+        navigationSafely(
+            pinCodeEnabled,
+            hashed_password,
+            navigation,
             {
-                type:'input',
-                cancelable: false,
-                canHide: false,
+                onVerifySuccess: this.onVerifySuccess,
             }
-        )
+        );
     }
 
     render(){
