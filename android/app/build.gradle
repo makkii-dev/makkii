@@ -101,7 +101,7 @@ android {
         applicationId "com.chaion.makkii"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
+        versionCode 9
         versionName "0.1.1"
         ndk {
             abiFilters "armeabi-v7a", "x86"
@@ -150,6 +150,7 @@ android {
 dependencies {
     implementation project(':react-native-local-barcode-recognizer')
     implementation project(':react-native-image-picker')
+    implementation project(':react-native-install-apk')
     implementation project(':react-native-screenshot-helper')
     implementation project(':react-native-webview')
     implementation project(':react-native-aion-hw-wallet')

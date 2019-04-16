@@ -2,7 +2,6 @@ import React, {Component} from 'react'
 import {
     Animated,
     Modal,
-    Platform,
     StyleSheet,
     Text,
     TouchableOpacity,
@@ -10,9 +9,11 @@ import {
     View,
     Image,
     TextInput,
-    Keyboard
+    Keyboard,
+    Platform,
 } from 'react-native'
 import {mainColor, mainBgColor} from './style_util';
+import {ProgressBar} from "./processbar";
 // import PropTypes from 'prop-types'
 
 export default class PopupCustom extends Component {
@@ -35,6 +36,9 @@ export default class PopupCustom extends Component {
         errorMsg: '',
         offsetY: new Animated.Value(0),
         cancelable: false,
+        progress:0,
+        canHide: true,
+        callback: ()=>{},
     };
 
     componentWillMount() {
@@ -89,6 +93,9 @@ export default class PopupCustom extends Component {
         let Args={};
         Args.cancelable = otherArgs.cancelable !==undefined?otherArgs.cancelable:true;
         Args.type = otherArgs.type || 'normal';
+        Args.canHide = otherArgs.canHide !== undefined ? otherArgs.canHide : true;
+        Args.callback = otherArgs.callback !== undefined? otherArgs.callback: ()=>{};
+        Args.progress = otherArgs.progress !== undefined? otherArgs.progress: 0;
         this.setState({
             visible: true,
             content,
@@ -103,6 +110,7 @@ export default class PopupCustom extends Component {
             visible: false,
             errorMsg: '',
             valueInput: '',
+            canHide: true,
         })
     }
 
@@ -110,7 +118,8 @@ export default class PopupCustom extends Component {
         const {
             buttons,
             type,
-            valueInput
+            valueInput,
+            canHide,
         } = this.state;
 
         return buttons.map((btn, index) => {
@@ -124,6 +133,7 @@ export default class PopupCustom extends Component {
                 disable = true;
                 styleTextDisable = { color: '#8A8D97' };
             }
+            let hide = (index !== 0 || buttons.length == 1) && !canHide && type !== 'input';
             const lineBetween = index > 0
                 ? <View style={styles.line}/>
                 : <View/>;
@@ -142,7 +152,7 @@ export default class PopupCustom extends Component {
                         disabled={disable}
                         onPress={() => {
                             btn.onPress(valueInput);
-                            type==='normal'&&this.hide();
+                            hide || this.hide();
                         }}
                     >
                         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
@@ -182,9 +192,17 @@ export default class PopupCustom extends Component {
         )
     };
 
+    setProgress = (progress) => {
+        if (this.state.type === 'progress') {
+            this.setState({
+                progress: progress,
+            });
+        }
+    }
+
     render() {
         const {
-            visible, title, content,type,errorMsg,valueInput,buttons
+            visible, title, content,type,errorMsg,valueInput,buttons,callback,cancelable,offsetY,progress
         } = this.state;
         const contentPaddingVertical = type === 'input'
             ? {
@@ -207,14 +225,14 @@ export default class PopupCustom extends Component {
                 onRequestClose={() => { }}
             >
                 <TouchableWithoutFeedback onPress={() => {
-                    this.state.cancelable&&this.hide()
+                    cancelable&&this.hide()
                 }}
                 >
                     <Animated.View
                         style={[styles.overlayPopup, {
                             transform: [
                                 {
-                                    translateY: this.state.offsetY
+                                    translateY: offsetY
                                 }
                             ]
                         }]}
@@ -222,7 +240,7 @@ export default class PopupCustom extends Component {
                         <View style={styles.popupCustom}>
                             <View style={[styles.contentField, contentPaddingVertical]}>
                                 <Text style={[styles.titlePopup, titleColor]}>{title}</Text>
-                                {content && renderContent}
+                                {content !== '' && renderContent}
                                 {errorMsg !== '' && <Text style={styles.errorText}>{errorMsg}</Text>}
                                 {
                                     type === 'input'
@@ -239,11 +257,18 @@ export default class PopupCustom extends Component {
                                         {this.renderIconClear()}
                                     </View>
                                 }
+                                {
+                                    type === 'progress'
+                                    &&<View style={{marginTop: 10, flexDirection: 'row', width: 250}}>
+                                        <ProgressBar style={{height: 20}} width={200} progress={progress} color={mainColor} onComplete={callback}/>
+                                        <Text style={{marginLeft: 10, width: 40, textAlign: 'right'}}>{Math.round(progress * 100)}%</Text>
+                                    </View>
+                                }
                             </View>
                             {buttons.length>0
                                 &&
                             <View style={{alignItems:'center', justifyContent:'center'}}>
-                                <View style={{width:'90%', height:0.5, backgroundColor:mainColor}}/>
+                                <View style={{width:250, height:0.5, backgroundColor:mainColor}}/>
                                 <View style={styles.buttonField}>
                                     {this._renderButons()}
                                 </View>

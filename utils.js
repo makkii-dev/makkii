@@ -227,6 +227,26 @@ function getCoinPrice(currency='CNY',amount=1) {
     })
 }
 
+function getLatestVersion(platform, currentVersionCode, language) {
+    const url = "http://45.118.132.89:8080/appVersion/latest" +
+        "?versionCode=" + currentVersionCode +
+        "&platform=" + platform +
+        "&lang=" + language;
+    console.log("request get latest version: " + url);
+
+    return fetchRequest(url, 'GET');
+}
+function generateUpdateMessage(version) {
+    let message = strings('version_upgrade.label_version') + ': ' + version.version;
+    if (version.updatesMap) {
+        let keys = Object.keys(version.updatesMap);
+        if (keys.length > 0) {
+            message = message + '\n' + strings('version_upgrade.label_updates') + ': \n' + version.updatesMap[keys[0]];
+        }
+    }
+    return message;
+}
+
 class AppToast {
     constructor() {
         this.toast = null;
@@ -524,4 +544,6 @@ module.exports = {
     strLen: strLen,
     AppToast: AppToast,
     navigationSafely,
+    getLatestVersion: getLatestVersion,
+    generateUpdateMessage: generateUpdateMessage,
 };

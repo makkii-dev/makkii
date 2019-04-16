@@ -3,6 +3,8 @@ include ':react-native-local-barcode-recognizer'
 project(':react-native-local-barcode-recognizer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-local-barcode-recognizer/android')
 include ':react-native-image-picker'
 project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
+include ':react-native-install-apk'
+project(':react-native-install-apk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-install-apk/android')
 include ':react-native-screenshot-helper'
 project(':react-native-screenshot-helper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screenshot-helper/android')
 include ':react-native-webview'
