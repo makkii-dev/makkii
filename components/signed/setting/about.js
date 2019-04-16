@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import { Image, View, Text, Dimensions, TouchableOpacity, Platform, NativeModules} from 'react-native';
+import { Linking, Image, View, Text, Dimensions, TouchableOpacity, Platform, NativeModules} from 'react-native';
 
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
