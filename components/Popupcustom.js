@@ -133,7 +133,10 @@ export default class PopupCustom extends Component {
                 disable = true;
                 styleTextDisable = { color: '#8A8D97' };
             }
-            let hide = (index !== 0 || buttons.length == 1) && !canHide && type !== 'input';
+            let hide = false;
+            if ((index !== 0 || buttons.length === 1) && !canHide && type === 'input'){
+                hide = true;
+            }
             const lineBetween = index > 0
                 ? <View style={styles.line}/>
                 : <View/>;

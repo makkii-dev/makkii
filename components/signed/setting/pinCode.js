@@ -76,7 +76,8 @@ class PinCode extends React.Component {
             ],
             {
                 type:'input',
-                cancelable: false
+                cancelable: false,
+                canHide: false,
             }
         )
     }

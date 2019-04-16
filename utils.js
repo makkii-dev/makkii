@@ -509,7 +509,8 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
         ],
         {
             cancelable: false,
-            type:'input'
+            type:'input',
+            canHide: false,
         }
     );
     pinCodeEnabled&&navigation.navigate('unlock',{
