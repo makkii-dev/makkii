@@ -3,6 +3,8 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import cn.jystudio.local.barcode.recognizer.LocalBarcodeRecognizerPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.heyao216.react_native_installapk.InstallApkPackager;
 import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
@@ -37,6 +39,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new LocalBarcodeRecognizerPackage(),
+            new ImagePickerPackage(),
             new InstallApkPackager(),
             new RNScreenshotHelperPackage(),
             new RNCWebViewPackage(),

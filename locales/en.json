@@ -430,7 +430,10 @@
     "title": "Terms of Services"
   },
   "scan": {
-    "title": "Scan"
+    "title": "Scan",
+    "add_photos_button": "Add from album",
+    "decode_label": "decoding...",
+    "decode_fail": "decode fail"
   },
   "setting": {
     "confirm_logout": "Logging out will not delete data. You can still log in with this account."

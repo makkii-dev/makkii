@@ -5641,6 +5641,11 @@ react-native-i18n@^2.0.15:
   dependencies:
     i18n-js "3.0.11"
 
+react-native-image-picker@^0.28.1:
+  version "0.28.1"
+  resolved "http://registry.npm.taobao.org/react-native-image-picker/download/react-native-image-picker-0.28.1.tgz#1127460522e0c9741fc62f3d040271d298fb6a6e"
+  integrity sha1-ESdGBSLgyXQfxi89BAJx0pj7am4=
+
 "react-native-install-apk@https://github.com/leoaion/react-native-install-apk.git":
   version "1.0.0"
   resolved "https://github.com/leoaion/react-native-install-apk.git#1b7db80127eb3193321cfd65b3e9e812dbf1ea07"
@@ -5657,6 +5662,10 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
   dependencies:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
+
+"react-native-local-barcode-recognizer@https://github.com/chaion/react-native-local-barcode-recognizer.git":
+  version "0.0.2"
+  resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#d0f4acdda93f601d04f6f724daef8f33bc2c37b5"
 
 react-native-qrcode-svg@^5.1.2:
   version "5.1.2"

@@ -148,6 +148,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-local-barcode-recognizer')
+    implementation project(':react-native-image-picker')
     implementation project(':react-native-install-apk')
     implementation project(':react-native-screenshot-helper')
     implementation project(':react-native-webview')

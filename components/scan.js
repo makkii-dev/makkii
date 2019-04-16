@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,Image,TouchableOpacity} from 'react-native';
+import {View,Image,ImageBackground,TouchableOpacity, TouchableWithoutFeedback,StyleSheet, Animated,Text,Platform} from 'react-native';
 import {RNCamera} from 'react-native-camera';
-import Toast from 'react-native-root-toast';
 import {strings} from "../locales/i18n";
+import {mainColor} from './style_util';
+import ImagePicker from 'react-native-image-picker'
+import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
 
 class Scan extends Component {
     static navigationOptions = ({navigation}) => {
@@ -37,10 +39,11 @@ class Scan extends Component {
                 </TouchableOpacity>
 			)
 		};
-	}
+	};
 
 	constructor(props){
 		super(props);
+		this.animatedValue = new Animated.Value(-120);
 		this.state = {
 			toast: Date.now(),
 			torch: false,
@@ -62,13 +65,67 @@ class Scan extends Component {
 		this.props.navigation.setParams({
 			torch: !currentTorch,
 		})
-	}
+	};
 
-	async componentDidMount(){
+	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
+		this.scannerLineMove();
 	}
-	render(){
 
+	scannerLineMove() {
+		this.animatedValue.setValue(-120);
+		Animated.timing(this.animatedValue, {
+			toValue: 120,
+			duration: 2000,
+			sInteraction: false
+		}).start(() => this.scannerLineMove());
+	}
+
+	openImageLibrary = ()=>{
+		const options = {
+			title: 'QRCode Image',
+			storageOptions: {
+				skipBackup: true,
+				path: 'images'
+			}
+		};
+
+		ImagePicker.launchImageLibrary(options, (res) => {
+			if (res.error) {
+			 	console.log('error ', res.error);
+			} else{
+				this.getQrcode(res.data);
+			}
+		});
+	};
+
+	getQrcode = (data)=>{
+		if (data) {
+			const { validate, success} = this.props.navigation.state.params;
+			LocalBarcodeRecognizer.decode(data,{codeTypes:['qr']}).then(result=> {
+				console.log('result', result);
+				if(result===''){
+					throw('error')
+				}
+				let res = validate({data:result});
+				if (res.pass) {
+					this.props.navigation.navigate(success, { scanned: result });
+				} else {
+					AppToast.show(res.err);
+				}
+			}).catch(error=>{
+				AppToast.show(strings('scan.decode_fail'));
+			})
+		}
+	};
+
+	render(){
+		const animatedStyle = {
+			transform: [
+				{translateY: this.animatedValue}
+			]
+		};
+		const { validate, success} = this.props.navigation.state.params;
 		return (
 	  		<View style={{wdith:'100%',height:'100%'}}>
   				<RNCamera
@@ -80,14 +137,10 @@ class Scan extends Component {
 			       	flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
 	  				captureAudio={false}
 	  				onBarCodeRead={e=>{
-	  					if(
-	  						this.props.navigation.state.params &&
-	  						this.props.navigation.state.params['validate'] &&
-	  						this.props.navigation.state.params['success']
-  						){
-	  						let res = this.props.navigation.state.params['validate'](e);
+	  					if(validate&&success){
+	  						let res = validate(e);
 	  						if (res.pass) {
-	  							this.props.navigation.navigate(this.props.navigation.state.params['success'], { scanned: e.data });
+	  							this.props.navigation.navigate(success, { scanned: e.data });
 	  						} else {
 	  							// slow down toast log
 	  							let now = Date.now();
@@ -103,44 +156,31 @@ class Scan extends Component {
 	  					}
 	  				}}
 	  			>
-	  				<View style={{
-	  					flex: 1,
-						backgroundColor: 'rgba(0,0,0,0.8)',
-						width: '100%',
-  					}}/>
-  					<View style={{
-  						height: 250,
-  						flexDirection: 'row',
-  						justifyContent: 'center',
-  					}}>
-  						<View style={{
-  							flex: 1,
-  							backgroundColor: 'rgba(0,0,0,0.8)',
-  						}}/>
-  						<View style={{
-  							width: 250,
-  							justifyContent: 'center',
-  							alignItems: 'center',
-  							// borderWidth: 2,
-  							// borderColor: 'rgba(255,255,255,0.9)'
-   						}}>
-  							<Image style={{
-	  							width: 250,
-	  							height: 250,
-	  						}} source={require('../assets/scan_border.png')} />
-  						</View>
-  						<View style={{
-  							flex: 1,
-  							backgroundColor: 'rgba(0,0,0,0.8)',
-  						}}/>
-  					</View>
-  					<View style={{
-  						flex: 1,
-  						width: '100%',
-						backgroundColor: 'rgba(0,0,0,0.8)',
-					}}/>
+					{/*up view*/}
+  					<View style={styles.backgroundStyle}/>
+  					<View style={styles.centerView}>
+						{/*left view*/}
+						<View style={styles.backgroundStyle}/>
+						<ImageBackground style={[styles.scanImage,{alignItems: 'center',justifyContent:'center'}]} imageStyle={styles.scanImage} source={require('../assets/scan_border.png')}>
+							<Animated.View style={[animatedStyle]}>
+								<Image style={{width:240,tintColor:mainColor}} source={require('../assets/scanBar.png')} resizeMode={'contain'}/>
+							</Animated.View>
+						</ImageBackground>
+						{/*right view*/}
+						<View style={styles.backgroundStyle}/>
+					</View>
+					{/*down view*/}
+					<View style={styles.backgroundStyle}/>
 	  			</RNCamera>
+				{/* add from album*/}
+				<TouchableWithoutFeedback onPress={this.openImageLibrary}>
+					<View style={styles.buttonStyle}>
+						<Image source={require('../assets/icon_album.png')} style={{height:20,width:20, tintColor:'#fff'}} resizeMode={'contain'}/>
+						<Text style={{marginLeft:10, color:'#fff', fontSize:16}}>{strings('scan.add_photos_button')}</Text>
+					</View>
+				</TouchableWithoutFeedback>
         	</View>
+
 		);
 	}
 }
@@ -148,3 +188,32 @@ class Scan extends Component {
 export default connect(state => {
 	return state;
 })(Scan);
+
+const styles = StyleSheet.create({
+	backgroundStyle:{
+		flex: 1,
+		backgroundColor: 'rgba(0,0,0,0.8)',
+	},
+	centerView:{
+		height:250,
+		flexDirection: 'row',
+		justifyContent: 'center',
+	},
+	scanImage:{
+		height:250,
+		width:250,
+	},
+	scanLine:{
+		height:1,
+		width:230,
+		backgroundColor: mainColor
+	},
+	buttonStyle:{
+		backgroundColor: mainColor,
+		height:50,
+		width: '100%',
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'center'
+	}
+});

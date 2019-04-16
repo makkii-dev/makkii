@@ -1,13 +1,11 @@
 import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll, Dimensions, StatusBar, AppState} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
-import fetch_blob from 'rn-fetch-blob';
 import RNFS from 'react-native-fs';
 import {strings} from './locales/i18n';
 import {update_account_txs} from "./actions/accounts";
 import {setting} from "./actions/setting";
 import Toast from 'react-native-root-toast';
-import {user_update_timestamp} from "./actions/user";
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -170,35 +168,25 @@ function generateQRCode(amount, address) {
 }
 
 function saveImage(base64, imageFileName) {
-    const dirs = fetch_blob.fs.dirs;
-    if (Platform.OS === 'android') {
-        const filePath = dirs.PictureDir + "/" + imageFileName;
-        return new Promise((resolve, reject)=>{
-            RNFS.writeFile(filePath, base64, 'base64').then(() => {
-                resolve(filePath);
-            }, error => {
-                console.log("save image failed: ", error);
+    const storeLocation = `${RNFS.PicturesDirectoryPath}`;
+    const filePath = `${storeLocation}/${imageFileName}`;
+    return new Promise((resolve, reject)=> {
+        RNFS.writeFile(filePath, base64, 'base64').then(() => {
+            const filePath_ = Platform.OS === 'ios'? filePath: 'file://'+filePath;
+            CameraRoll.saveToCameraRoll(filePath_).then(result => {
+                deleteFile(filePath);
+                resolve(result);
+            }).catch(error => {
+                deleteFile(filePath);
+                console.log("save image fail: " + error);
                 reject(error);
             });
-        })
-    } else {
-        const filePath = dirs.DocumentDir + "/" + imageFileName;
-        return new Promise((resolve, reject)=> {
-            RNFS.writeFile(filePath, base64, 'base64').then(() => {
-                CameraRoll.saveToCameraRoll(filePath).then(result => {
-                    deleteFile(filePath);
-                    resolve(result);
-                }).catch(error => {
-                    deleteFile(filePath);
-                    console.log("save image fail: " + error);
-                    reject(error);
-                });
-            }, error => {
-                console.log("save image failed: ", error);
-                reject(error);
-            });
+        }, error => {
+            console.log("save image failed: ", error);
+            reject(error);
         });
-    }
+    });
+
 }
 
 function deleteFile(filePath) {
@@ -521,7 +509,8 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
         ],
         {
             cancelable: false,
-            type:'input'
+            type:'input',
+            canHide: false,
         }
     );
     pinCodeEnabled&&navigation.navigate('unlock',{

@@ -14,7 +14,6 @@ import {
 	PixelRatio,
 	Platform
 } from 'react-native';
-import Toast from 'react-native-root-toast';
 import { strings } from '../../../locales/i18n';
 import {
 	getLedgerMessage,
