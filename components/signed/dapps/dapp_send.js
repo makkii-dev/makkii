@@ -14,7 +14,13 @@ import Loading from '../../loading';
 import {AionTransaction} from "../../../libs/aion-hd-wallet";
 import {Ed25519Key} from "../../../libs/aion-hd-wallet/src/key/Ed25519Key";
 import {update_account_txs} from "../../../actions/accounts";
-import {getLedgerMessage, validateAddress, validateAmount, validatePositiveInteger} from "../../../utils";
+import {
+    getLedgerMessage,
+    sendTransaction,
+    validateAddress,
+    validateAmount,
+    validatePositiveInteger
+} from "../../../utils";
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
@@ -81,96 +87,59 @@ class DappSend extends React.Component{
         const message  = this.message;
         if (!this.validateFields()) return;
 
-        let accountType = this.account.type;
-        let derivationIndex = this.account.derivationIndex;
         let sender = this.account.address;
         if (!sender.startsWith('0x')) {
             sender = '0x' + sender;
         }
-        let thisLoadingView = this.loadingView;
         const {dispatch, user, setting} = this.props;
-        thisLoadingView.show(strings('send.progress_sending_tx'));
-        web3.eth.getTransactionCount(sender, 'pending').then(count => {
-            console.log('get transaction count: ' + count);
+        this.loadingView.show(strings('send.progress_sending_tx'));
+        const { gasPrice, gasLimit, recipient,amount, data} = this.state;
+        let tx = {
+            sender: sender,
+            gasPrice: gasPrice * 1e9,
+            gas: gasLimit - 0,
+            to: recipient,
+            data: data,
+            value: new BigNumber(amount).shiftedBy(18),
+            type: 1,
+        };
+        sendTransaction(tx,this.account,'AION',setting.explorer_server).then(res=>{
+            const {pending, signedTransaction} = res;
+            console.log('pending ', pending);
+            pending.on('transactionHash', (hash)=>{
+                console.log("transaction sent: hash=" + hash);
 
-            let amount = this.state.amount;
-            let tx = new AionTransaction({
-                sender: sender,
-                nonce: count,
-                gasPrice: this.state.gasPrice * 1e9,
-                gas: this.state.gasLimit - 0,
-                to: this.state.to,
-                value: new BigNumber(amount).shiftedBy(18),
-                data: this.state.data,
-                type: 1,
-            });
-            console.log("tx to send:" , tx);
-            try {
-                let promise;
-                if (accountType == '[ledger]') {
-                    console.log("sign tx for " + accountType + " account(index=" + derivationIndex + ")");
-                    try {
-                        promise = tx.signByLedger(derivationIndex);
-                    } catch (e) {
-                        console.log("sign by ledger throw error: ", e);
-                        thisLoadingView.hide();
-                        alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
-                        return;
-                    }
-                } else {
-                    promise = tx.signByECKey(Ed25519Key.fromSecretKey(this.account.private_key));
-                }
-                promise.then(()=> {
-                    web3.eth.sendSignedTransaction(tx.getEncoded()).on('transactionHash', function(hash) {
-                        console.log("transaction sent: hash=" + hash);
-
-                        let txs = {};
-                        let pendingTx={};
-                        pendingTx.hash = hash;
-                        pendingTx.timestamp = tx.timestamp.toNumber()/1000;
-                        pendingTx.from = sender;
-                        pendingTx.to = tx.to;
-                        pendingTx.value = amount - 0;
-                        pendingTx.status = 'PENDING';
-                        pendingTx.data  = tx.data;
-                        txs[hash]=pendingTx;
-
-                        dispatch(update_account_txs(sender, txs, setting.explorer_server, user.hashed_password));
-                        thisLoadingView.hide();
-                        DeviceEventEmitter.emit(message,{data: hash});
-                        AppToast.show(strings('send.toast_tx_sent'), {
-                            onHidden: () => {
-                                goBack();
-                            }
-                        })
-                    }).on('error', function(error) {
-                        console.log("send singed tx failed? ", error);
-                        thisLoadingView.hide();
-                        alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
-                        DeviceEventEmitter.emit(message,{error: true, data:error});
+                let txs = {};
+                let pendingTx={};
+                pendingTx.hash = hash;
+                pendingTx.timestamp = signedTransaction.timestamp.toNumber()/1000;
+                pendingTx.from = sender;
+                pendingTx.to = signedTransaction.to;
+                pendingTx.value = new BigNumber(amount);
+                pendingTx.status = 'PENDING';
+                txs[hash]=pendingTx;
+                DeviceEventEmitter.emit(message,{data: hash});
+                dispatch(update_account_txs(sender, txs, setting.explorer_server, user.hashed_password));
+                this.loadingView.hide();
+                AppToast.show(strings('send.toast_tx_sent'), {
+                    onHidden: () => {
                         goBack();
-                    });
-                }, error=> {
-                    console.log("sign ledger tx error:", error);
-                    thisLoadingView.hide();
-                    alert_ok(strings('alert_title_error'), getLedgerMessage(error.message));
-                    DeviceEventEmitter.emit(message,{error: true, data:error});
-                    goBack();
-                });
-            } catch (error) {
-                console.log("send signed tx error:", error);
-                thisLoadingView.hide();
+                    }
+                })
+            }).on('error', error=>{
+                throw error
+            });
+        }).catch(error=>{
+            console.log('send Transaction failed ', error);
+            this.loadingView.hide();
+            if(error.message && this.account.type === '[ledger]'){
+                alert_ok(strings('alert_title_error'), getLedgerMessage(error.message));
+            }else{
                 alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
-                DeviceEventEmitter.emit(message,{error: true, data:error});
-                goBack();
             }
-        }, error => {
-            console.log('get transaction count failed:', error);
-            thisLoadingView.hide();
-            alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
             DeviceEventEmitter.emit(message,{error: true, data:error});
-            goBack();
         });
+
         this.setState({
             isSend: true,
         })

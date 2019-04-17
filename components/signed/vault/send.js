@@ -249,7 +249,8 @@ class Send extends Component {
 			value: new BigNumber(amount).shiftedBy(18),
 			type: 1,
 		};
-		sendTransaction(tx,this.account,'AION').then(res=>{
+		sendTransaction(tx,this.account,'AION',setting.explorer_server).then(res=>{
+			const {pending, signedTransaction} = res;
 			console.log('pending ', pending);
 			pending.on('transactionHash', (hash)=>{
 				console.log("transaction sent: hash=" + hash);

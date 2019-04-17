@@ -4,7 +4,7 @@ import Toast from "react-native-root-toast";
 import {strings} from "../locales/i18n";
 import {AionTransaction} from "../libs/aion-hd-wallet";
 import {Ed25519Key} from "../libs/aion-hd-wallet/src/key/Ed25519Key";
-
+import {CONTRACT_ABI} from './token';
 /***
  *
  * @param tx object
@@ -12,11 +12,11 @@ import {Ed25519Key} from "../libs/aion-hd-wallet/src/key/Ed25519Key";
  * @param symbol
  * @returns {*}
  */
-function sendTransaction(tx, wallet, symbol){
+function sendTransaction(tx, wallet, symbol,network){
     if (symbol==='AION'){
         return sendAionTransaction(tx, wallet)
     }else {
-        return sendTokenTransaction(tx, wallet, symbol)
+        return sendTokenTransaction(tx, wallet, symbol,network)
     }
 }
 
@@ -49,8 +49,16 @@ function sendAionTransaction(tx, wallet){
     })
 }
 
-function sendTokenTransaction(tx, wallet, symbol){
-
+function sendTokenTransaction(tx, wallet, symbol, network){
+    const tokens = wallet.tokens[network];
+    const {contractAddr} = tokens[symbol];
+    const token_contract = web3.eth.Contract(CONTRACT_ABI, contractAddr);
+    const methodsData = token_contract.methods.send(tx.to,tx.value,"").encodeABI();
+    let newtx = {
+        ...tx,
+        data: methodsData,
+    };
+    return sendAionTransaction(newtx,wallet)
 }
 
 
