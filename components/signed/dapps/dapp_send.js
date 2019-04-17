@@ -11,8 +11,6 @@ import {
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
 import Loading from '../../loading';
-import {AionTransaction} from "../../../libs/aion-hd-wallet";
-import {Ed25519Key} from "../../../libs/aion-hd-wallet/src/key/Ed25519Key";
 import {update_account_txs} from "../../../actions/accounts";
 import {
     getLedgerMessage,

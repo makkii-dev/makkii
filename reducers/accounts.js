@@ -9,7 +9,8 @@ import {
 	UPDATE_ACCOUNT_NAME,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
-	UPDATE_ACCOUNT_TRANSACTIONS
+	UPDATE_ACCOUNT_TRANSACTIONS,
+	UPDATE_ACCOUNT_TOKENS,
 } from '../actions/accounts.js';
 
 function ifSetDefault(state){
@@ -55,6 +56,13 @@ export default function accounts(state = init, action){
 				let new_transactions = {};
 				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
 				state[action.key].transactions[action.network] = new_transactions;
+			}
+			new_state = Object.assign({}, state);
+			should_update_db = true;
+			break;
+		case UPDATE_ACCOUNT_TOKENS:
+			if (typeof state[action.key] !== 'undefined') {
+				state[action.key].tokens[action.network] = action.tokens;
 			}
 			new_state = Object.assign({}, state);
 			should_update_db = true;
