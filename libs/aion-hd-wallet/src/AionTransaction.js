@@ -3,13 +3,26 @@ import blake2b from 'blake2b';
 import {Crypto} from "./utils/crypto";
 import {AionRlp} from './utils/rlp';
 import wallet from 'react-native-aion-hw-wallet';
-import {hexString2Array} from '../.././../utils';
 
 const sigToBytes = (signature, publicKey) => {
     let fullSignature = new Uint8Array((signature.length + publicKey.length));
     fullSignature.set(publicKey, 0);
     fullSignature.set(signature, publicKey.length);
     return fullSignature;
+};
+
+const hexString2Array=(str)=>{
+    if (str.startsWith('0x')) {
+        str = str.substring(2);
+    }
+
+    let result = [];
+    while (str.length >= 2) {
+        result.push(parseInt(str.substring(0, 2), 16));
+        str = str.substring(2, str.length);
+    }
+
+    return result;
 };
 
 export class AionTransaction {
@@ -148,12 +161,12 @@ export class AionTransaction {
             this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
             resolve();
         });
-    }
+    };
 
     signByLedger = (index) => {
         return new Promise((resolve, reject) => {
             wallet.getAccount(index).then(account => {
-                if (account.address != this.sender) {
+                if (account.address !== this.sender) {
                     reject(new Error('error.wrong_device'));
                     return;
                 }

@@ -6,7 +6,7 @@ import {strings} from '../locales/i18n';
 import {update_account_txs} from "../actions/accounts";
 import {setting} from "../actions/setting";
 import Toast from 'react-native-root-toast';
-import Transaction from './transaction';
+import TransactionUtil from './transaction';
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
@@ -431,7 +431,8 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
 
 
 module.exports = {
-    ...Transaction,
+    sendTransaction:TransactionUtil.sendTransaction,
+    listenTransaction:TransactionUtil.listenTransaction,
     encrypt: encrypt,
     decrypt: decrypt,
     dbGet: dbGet,

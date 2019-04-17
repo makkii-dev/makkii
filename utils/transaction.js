@@ -2,7 +2,16 @@ import {update_account_txs} from "../actions/accounts";
 import {DeviceEventEmitter} from "react-native";
 import Toast from "react-native-root-toast";
 import {strings} from "../locales/i18n";
+import {AionTransaction} from "../libs/aion-hd-wallet";
+import {Ed25519Key} from "../libs/aion-hd-wallet/src/key/Ed25519Key";
 
+/***
+ *
+ * @param tx object
+ * @param wallet
+ * @param symbol
+ * @returns {*}
+ */
 function sendTransaction(tx, wallet, symbol){
     if (symbol==='AION'){
         return sendAionTransaction(tx, wallet)
@@ -12,9 +21,31 @@ function sendTransaction(tx, wallet, symbol){
 }
 
 function sendAionTransaction(tx, wallet){
+    const {type, derivationIndex, private_key} = wallet;
     return new Promise((resolve, reject) => {
-
-
+        web3.eth.getTransactionCount(tx.sender, 'pending').then(count => {
+            console.log('get transaction count: ' + count);
+            let pendingTx = new AionTransaction({
+                ...tx,
+                nonce: count,
+            });
+            let promise;
+            try {
+                console.log('wallet type: ', type);
+                promise = type === '[ledger]'? pendingTx.signByLedger(derivationIndex) : pendingTx.signByECKey(Ed25519Key.fromSecretKey(private_key));
+            }catch(e){
+                console.log('sign transaction failed');
+                throw (e)
+            }
+            promise.then(()=>{
+                let pending = web3.eth.sendSignedTransaction(pendingTx.getEncoded());
+                resolve({pending,signedTransaction:pendingTx});
+            }).catch(err=>{
+                throw err
+            })
+        }).catch(err=>{
+            reject(err)
+        })
     })
 }
 
@@ -97,6 +128,6 @@ class listenTransaction{
 
 
 module.exports={
-    sendTransaction,
-    listenTransaction
+    sendTransaction:sendTransaction,
+    listenTransaction:listenTransaction
 };
