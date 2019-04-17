@@ -4,19 +4,16 @@ import {
     FlatList,
     Image,
     Text,
-    TouchableOpacity,
     ActivityIndicator,
     InteractionManager,
-    Dimensions,
+    Dimensions, Keyboard,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
 import {fetchRequest} from "../../../utils";
 import {connect} from "react-redux";
-import {ImportListfooter} from "../../common";
-import defaultStyles from '../../styles';
+import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
-import PendingComponent from "./pendingComponent";
 
 const {width} = Dimensions.get('window');
 
@@ -105,41 +102,6 @@ class TransactionHistory extends React.Component {
         })
     };
 
-    _renderTransaction(transaction){
-        if(transaction.status === 'PENDING'){
-            console.log('try to get transaction '+transaction.hash+' status');
-            listenTx.addTransaction(transaction);
-        }
-
-        const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-        const isSender = transaction.from === this.account;
-        const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
-        const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
-        const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
-        const valueColor = isSender? 'red':'green';
-        return (
-            <TouchableOpacity
-                style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
-                    width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between', padding:10}}
-                onPress={e => {
-                    this.props.navigation.navigate('signed_vault_transaction',{
-                        account:this.account,
-                        transaction: transaction,
-                    });
-                }}
-            >
-                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
-                    <Text>{timestamp}</Text>
-                    <PendingComponent status={transaction.status}/>
-                </View>
-                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
-                    <Text>{transaction.hash.substring(0, 16) + '...' }</Text>
-                    <Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
-                </View>
-            </TouchableOpacity>
-        )
-    }
-
 
     _onEndReached(){
         // if not in fetching account
@@ -172,7 +134,7 @@ class TransactionHistory extends React.Component {
             return this.renderLoadingView();
         } else {
 
-            let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server]
+            let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server];
             const transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
@@ -181,7 +143,16 @@ class TransactionHistory extends React.Component {
                             data={transactions}
                             style={{backgroundColor: '#fff'}}
                             keyExtractor={(item, index) => index + ''}
-                            renderItem={({item}) => this._renderTransaction(item)}
+                            renderItem={({item})=><TransactionItem
+                                transaction={item}
+                                currentAddr={this.account}
+                                onPress={()=>{
+                                    Keyboard.dismiss();
+                                    this.props.navigation.navigate('signed_vault_transaction',{
+                                        account:this.addr,
+                                        transaction: item,
+                                    });
+                                }}/>}
                             onEndReached={() => {
                                 this._onEndReached()
                             }}

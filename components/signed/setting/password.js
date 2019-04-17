@@ -6,7 +6,7 @@ import Toast from 'react-native-root-toast';
 import { PasswordInputWithTitle, RightActionButton, alert_ok } from '../../common.js';
 import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
-import { validatePassword, hashPassword } from '../../../utils.js';
+import { validatePassword, hashPassword } from '../../../utils';
 import { user_update_password } from '../../../actions/user.js';
 import { accounts_save } from '../../../actions/accounts.js';
 import { strings } from '../../../locales/i18n';

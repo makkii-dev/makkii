@@ -3,9 +3,8 @@ import {connect} from 'react-redux';
 import {Platform, View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground,BackHandler, NativeModules} from 'react-native';
 
 import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
-import {hashPassword} from '../../utils.js';
 import {user} from '../../actions/user.js';
-import {dbGet,decrypt, getLatestVersion, generateUpdateMessage} from '../../utils.js';
+import {dbGet,hashPassword, getLatestVersion, generateUpdateMessage} from '../../utils';
 import {fixedHeight, linkButtonColor, mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";

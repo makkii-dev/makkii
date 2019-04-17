@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, Keyboard,TouchableOpacity,View, Alert} from 'react-native';
 import {PasswordInputWithTitle, ComponentButton, alert_ok } from '../common.js';
 import {connect} from 'react-redux';
-import {hashPassword,validatePassword} from '../../utils.js';
+import {hashPassword,validatePassword} from '../../utils';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from '../../actions/accounts';
 import {strings} from "../../locales/i18n";

@@ -12,13 +12,12 @@ import {
 	Dimensions,
 	ScrollView,
 } from 'react-native';
-import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
 import { SubTextInput, alert_ok } from '../../common.js';
 import {linkButtonColor} from '../../style_util';
 import {mainColor} from '../../style_util';
 import {strings} from "../../../locales/i18n";
-import { generateQRCode, validateAmount, saveImage } from '../../../utils.js';
+import { generateQRCode, validateAmount, saveImage } from '../../../utils';
 import ContextMenu from '../../contextMenu';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 const MyScrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;

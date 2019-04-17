@@ -4,7 +4,7 @@ import {ImageBackground, Dimensions, Text} from 'react-native';
 import {user} from '../actions/user.js';
 import {setting} from "../actions/setting.js";
 import {accounts} from '../actions/accounts.js';
-import {dbGet,decrypt} from '../utils.js';
+import {dbGet,decrypt} from '../utils';
 import {strings} from "../locales/i18n";
 import {ComponentLogo} from "./common";
 

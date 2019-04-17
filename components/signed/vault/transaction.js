@@ -11,12 +11,11 @@ import {
 	ScrollView,
 	Dimensions,
 } from 'react-native';
-import {TransactionItemCell, ComponentButton} from '../../common'
+import {TransactionItemCell,PendingComponent, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
 import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
-import PendingComponent from "./pendingComponent";
 
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -44,7 +43,6 @@ class Transaction extends Component {
 		})
 	}
 	render(){
-		console.log('render transaction');
 		const transaction = this.transaction;
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const ifSender = this.addr === transaction.from;

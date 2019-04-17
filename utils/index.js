@@ -2,41 +2,15 @@ import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll, Dimensions, Stat
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
-import {strings} from './locales/i18n';
-import {update_account_txs} from "./actions/accounts";
-import {setting} from "./actions/setting";
+import {strings} from '../locales/i18n';
+import {update_account_txs} from "../actions/accounts";
+import {setting} from "../actions/setting";
 import Toast from 'react-native-root-toast';
-
+import Transaction from './transaction';
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
 
-function toUTF8Array(str) {
-    var utf8 = [];
-    for (var i=0; i < str.length; i++) {
-        var charcode = str.charCodeAt(i);
-        if (charcode < 0x80) utf8.push(charcode);
-        else if (charcode < 0x800) {
-            utf8.push(0xc0 | (charcode >> 6),
-                0x80 | (charcode & 0x3f));
-        }
-        else if (charcode < 0xd800 || charcode >= 0xe000) {
-            utf8.push(0xe0 | (charcode >> 12),
-                0x80 | ((charcode>>6) & 0x3f),
-                0x80 | (charcode & 0x3f));
-        }
-        // surrogate pair
-        else {
-            i++;
-            charcode = ((charcode&0x3ff)<<10)|(str.charCodeAt(i)&0x3ff)
-            utf8.push(0xf0 | (charcode >>18),
-                0x80 | ((charcode>>12) & 0x3f),
-                0x80 | ((charcode>>6) & 0x3f),
-                0x80 | (charcode & 0x3f));
-        }
-    }
-    return utf8;
-}
 
 function hexString2Array(str) {
     if (str.startsWith('0x')) {
@@ -69,14 +43,14 @@ function dbSet(key, value){
 function dbGet(key){
     return new Promise((resolve, reject)=>{
         AsyncStorage
-        .getItem(key)
-        .then(json=>{
-            if(json){
-                resolve(json);
-            } else {
-                reject('[dbGet] db.' + key + ' null');
-            }
-        });
+            .getItem(key)
+            .then(json=>{
+                if(json){
+                    resolve(json);
+                } else {
+                    reject('[dbGet] db.' + key + ' null');
+                }
+            });
     });
 }
 
@@ -214,7 +188,8 @@ function fetchRequest(url, method='GET', headers={}) {
 
 }
 function getCoinPrice(currency='CNY',amount=1) {
-    const url = `https://www.chaion.net/makkii/price?crypto=AION&fiat=${currency}`;
+    // const url = `https://www.chaion.net/makkii/price?crypto=AION&fiat=${currency}`;
+    const url = `http://45.118.132.89:8080/price?crypto=AION&fiat=${currency}`;
     return new Promise((resolve, reject) => {
         fetchRequest(url,'GET').then(res=>{
             console.log('[res] ',res);
@@ -303,7 +278,7 @@ class listenCoinPrice{
         });
 
         this.listener = setInterval(() => {
-             getCoinPrice(this.currency).then(price => {
+            getCoinPrice(this.currency).then(price => {
                 let settings = thusStore.getState().setting;
                 settings.coinPrice = price;
                 if (this.currency) {
@@ -314,7 +289,7 @@ class listenCoinPrice{
                 thusStore.dispatch(setting(settings));
             }, error => {
                 console.log("get coin price error", error);
-             });
+            });
         }, this.interval * 60 * 1000);
     }
 
@@ -326,73 +301,6 @@ class listenCoinPrice{
 
 }
 
-class listenTransaction{
-    constructor(store, timeOut=60*1000){
-        this.txMap={};
-        this.pendingMap = {};
-        this.timeOut = timeOut;
-        this.store = store;
-    }
-    hasPending() {
-        return Object.keys(this.pendingMap).length > 0;
-    }
-    addTransaction(tx){
-        let thusMap = this.txMap;
-        let thusPendingMap = this.pendingMap;
-        const thusTimeOut = this.timeOut;
-        const thusStore = this.store;
-        const {user, setting}= this.store.getState();
-        if(typeof thusMap[tx.hash] !== 'undefined')
-            return;
-        this.pendingMap[tx.hash] = tx;
-        let removeTransaction = function(tx){
-            if(typeof thusMap[tx.hash] !== 'undefined'){
-                console.log('clear listener');
-                clearInterval(thusMap[tx.hash]);
-                delete thusMap[tx.hash];
-            }
-        };
-        let start = Date.now();
-        thusMap[tx.hash]=setInterval(function(){
-            if (Date.now() - start > thusTimeOut) {
-                delete thusPendingMap[tx.hash];
-                removeTransaction(tx);
-            }
-            web3.eth.getTransactionReceipt(tx.hash).then(
-                res=>{
-                    if(res){
-                        tx.blockNumber = res.blockNumber;
-                        if (res.status !== 'FAILED') {
-                            if (thusMap[tx.hash]) {
-                                let blockNumberInterval = setInterval(() => {
-                                    web3.eth.getBlockNumber().then(
-                                        number => {
-                                            if (number > tx.blockNumber + 6) {
-                                                delete thusPendingMap[tx.hash];
-
-                                                tx.status = res.status ? 'CONFIRMED' : 'FAILED';
-                                                thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                                                thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                                                DeviceEventEmitter.emit('updateAccountBalance');
-                                                clearInterval(blockNumberInterval);
-                                            }
-                                        }
-                                    )
-                                }, 1000 * 5);
-                            }
-                        }
-                        removeTransaction(tx);
-                    }
-                },
-                err=>{
-                    Toast.show(strings('error_connect_remote_server'));
-                    removeTransaction(tx);
-                }
-            )
-        }, 5 * 1000);
-
-    }
-}
 
 class listenAppState{
     constructor(){
@@ -473,10 +381,10 @@ const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651
 
 function navigationSafely(pinCodeEnabled, hashed_password,navigation,
                           route={
-                                    url: '',
-                                    args:{},
-                                    onVerifySuccess:undefined,
-                                }) {
+                              url: '',
+                              args:{},
+                              onVerifySuccess:undefined,
+                          }) {
     const newRoute = {
         url: '',
         args:{},
@@ -520,7 +428,10 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
     });
 
 }
+
+
 module.exports = {
+    ...Transaction,
     encrypt: encrypt,
     decrypt: decrypt,
     dbGet: dbGet,
@@ -534,7 +445,6 @@ module.exports = {
     validatePositiveInteger: validatePositiveInteger,
     validateAddress: validateAddress,
     fetchRequest: fetchRequest,
-    listenTransaction:listenTransaction,
     listenCoinPrice: listenCoinPrice,
     validateRecipient: validateRecipient,
     hexString2Array: hexString2Array,

@@ -21,10 +21,10 @@ import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
-import PendingComponent from './pendingComponent';
 import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
+import {TransactionItem} from '../../common';
 const {width} = Dimensions.get('window');
 
 const SwithType = type=>{
@@ -156,42 +156,6 @@ class Account extends Component {
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
-	}
-
-	renderSingleTransaction(transaction){
-		if(transaction.status === 'PENDING'){
-			console.log('try to get transaction '+transaction.hash+' status');
-			listenTx.addTransaction(transaction);
-		}
-
-		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const isSender = transaction.from === this.addr;
-		const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
-		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
-		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
-		const valueColor = isSender? 'red':'green';
-		return (
-			<TouchableOpacity
-				style={{...defaultStyles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
-					width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',padding: 10}}
-				onPress={e => {
-					Keyboard.dismiss();
-					this.props.navigation.navigate('signed_vault_transaction',{
-						account:this.addr,
-						transaction: transaction,
-					});
-				}}
-			>
-                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
-                    <Text>{timestamp}</Text>
-                    <PendingComponent status={transaction.status}/>
-                </View>
-                <View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
-                    <Text>{transaction.hash.substring(0, 16) + '...' }</Text>
-                    <Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
-                </View>
-			</TouchableOpacity>
-		)
 	}
 
 	updateTitle = (args={}) =>{
@@ -352,7 +316,16 @@ class Account extends Component {
 					data={transactionsList}
 					style={{backgroundColor:mainBgColor}}
 					keyExtractor={(item,index)=>index + ''}
-					renderItem={({item})=>this.renderSingleTransaction(item)}
+					renderItem={({item})=><TransactionItem
+						transaction={item}
+						currentAddr={this.addr}
+						onPress={()=>{
+							Keyboard.dismiss();
+							this.props.navigation.navigate('signed_vault_transaction',{
+								account:this.addr,
+								transaction: item,
+							});
+						}}/>}
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}

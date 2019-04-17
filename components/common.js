@@ -4,6 +4,7 @@ import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
 import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable} from './style_util';
+import BigNumber from 'bignumber.js';
 const {width,height} = Dimensions.get('window');
 
 class ComponentTabBar extends Component{
@@ -475,6 +476,94 @@ function alert_ok(title, msg) {
 	]);
 }
 
+class PendingComponent extends React.Component {
+	static propTypes ={
+		status: PropTypes.string.isRequired,
+	};
+	state={
+		waiting:0,
+	};
+
+	constructor(props){
+		super(props);
+	}
+
+	componentWillMount() {
+		this.mount = true;
+		if(this.props.status === 'PENDING') {
+			this.interval = setInterval(() => {
+				const {waiting} = this.state;
+				this.mount && this.setState({waiting: (waiting + 1) % 5})
+			}, 500)
+		}
+	}
+	componentWillUnmount() {
+		this.mount = false;
+		this.interval&&clearInterval(this.interval);
+	}
+
+	componentWillUpdate(nextProps){
+		if(this.props.status !== nextProps.status) {
+			if (nextProps.status === 'PENDING') {
+				this.interval = setInterval(() => {
+					const {waiting} = this.state;
+					this.mount && this.setState({waiting: (waiting + 1) % 5})
+				}, 500)
+			}
+		}
+	}
+
+	render(){
+		if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED'){
+			return <Text style={{textAlign: 'left'}}>{strings(`transaction_detail.${this.props.status}`)}</Text>
+		}else{
+			const tail = '.'.repeat(this.state.waiting);
+			return <Text style={{textAlign: 'left'}}>{strings(`transaction_detail.${this.props.status}`)+tail}</Text>
+		}
+	}
+}
+
+
+class TransactionItem extends React.PureComponent{
+	static propTypes ={
+		transaction: PropTypes.object.isRequired,
+		onPress: PropTypes.func.isRequired,
+        currentAddr: PropTypes.string.isRequired,
+	};
+
+
+	render(){
+		const {transaction, onPress,currentAddr} = this.props;
+		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
+		const isSender = transaction.from === currentAddr;
+		const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
+		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
+		const valueColor = isSender? 'red':'green';
+		if(transaction.status === 'PENDING'){
+			console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
+			listenTx.addTransaction(transaction);
+		}
+
+		return (
+			<TouchableOpacity
+				style={{...styles.shadow,marginHorizontal:20,marginVertical:10, borderRadius:10,
+					width:width-40,height:80,backgroundColor:'#fff', justifyContent:'space-between',padding: 10}}
+				onPress={onPress}
+			>
+				<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-start'}}>
+					<Text>{timestamp}</Text>
+					<PendingComponent status={transaction.status}/>
+				</View>
+				<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
+					<Text>{transaction.hash.substring(0, 16) + '...' }</Text>
+					<Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
+				</View>
+			</TouchableOpacity>
+		)
+	}
+}
+
 
 module.exports = {
 	ComponentButton,
@@ -490,4 +579,6 @@ module.exports = {
 	RightActionButton,
 	SubTextInput,
 	alert_ok,
+	TransactionItem,
+	PendingComponent
 };
