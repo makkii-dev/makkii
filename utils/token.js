@@ -1,6 +1,6 @@
 // Declare ABI for token contract
 import {fetchRequest} from './others';
-import BigNumber from "./transaction";
+import BigNumber from "bignumber.js";
 const CONTRACT_ABI = [
     {
         outputs: [
