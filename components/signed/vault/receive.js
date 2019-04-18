@@ -12,7 +12,6 @@ import {
 	Dimensions,
 	ScrollView,
 } from 'react-native';
-import Toast from 'react-native-root-toast';
 import QRCode from 'react-native-qrcode-svg';
 import { SubTextInput, alert_ok } from '../../common.js';
 import {linkButtonColor} from '../../style_util';
@@ -173,6 +172,10 @@ class Receive extends Component {
 									</TouchableOpacity>
 								}
 								unit={'AION'}
+								changeUnit={() => {
+									console.log("choose unit");
+									this.props.navigation.navigate('signed_select_coin');
+								}}
 							/>
 						</View>
 					</View>

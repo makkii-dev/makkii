@@ -63,6 +63,8 @@ import SettingPinCode           from './components/signed/setting/pinCode.js';
 import RecoveryPassword      	from './components/unsigned/recovery_password.js';
 import SimpleWebView         	from './components/WebViewComponent';
 import PinCodeScreen            from './components/pinCodeScreen';
+import SelectCoin               from './components/signed/vault/select_coin';
+import AddToken                 from './components/signed/vault/add_token';
 
 const navigationOptions = ({navigation}) => ({
     headerRight: (<View></View>),
@@ -205,6 +207,14 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_vault_send': {
 		screen: VaultSend,
 		navigationOptions,
+	},
+	'signed_select_coin': {
+		screen: SelectCoin,
+		navigationOptions: navigationOptionsWithoutRight,
+	},
+	'signed_add_token': {
+        screen: AddToken,
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'signed_vault_transaction': {
 		screen: VaultTransaction,

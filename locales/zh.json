@@ -142,6 +142,7 @@
     "error_empty_account_name": "账户名不能为空",
     "menu_change_name": "更改账户名称",
     "menu_export_private_key": "导出私钥",
+    "menu_switch_token": "切换代币"
   },
   "import_private_key": {
     "title": "私钥",
@@ -203,6 +204,22 @@
     "error_default_account_name_empty": "默认账号名称不能为空",
     "error_invalid_login_session_timeout": "登录超时时间不正确",
     "error_invalid_exchange_refresh_interval": "汇率刷新时间间隔不正确"
+  },
+  "select_coin": {
+    "title": "选择代币",
+    "btn_add_token": "添加"
+  },
+  "add_token": {
+    "title": "代币",
+    "btn_add_token": "添加",
+    "label_contract_address": "合约地址",
+    "label_token_name": "代币名称",
+    "label_symbol": "代币符号",
+    "label_decimals": "小数位数",
+    "hint_contract_address": "0x...",
+    "hint_token_name": "请填写代币名称",
+    "hint_symbol": "请填写代币符号",
+    "hint_decimals": "请填写小数位数"
   },
   "currency": {
     "title": "兑换汇率",
