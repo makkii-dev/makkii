@@ -3,7 +3,7 @@ import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
-import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable} from './style_util';
+import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
 import BigNumber from 'bignumber.js';
 const {width,height} = Dimensions.get('window');
 
@@ -186,6 +186,7 @@ class SubTextInput extends Component{
 		title: PropTypes.string.isRequired,
 		rightView: PropTypes.func,
 		unit: PropTypes.string,
+		changeUnit: PropTypes.func,
 	};
 	render(){
 		return(
@@ -201,7 +202,14 @@ class SubTextInput extends Component{
 						{...this.props}
 					/>
 					{
-						this.props.unit&&<Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
+						this.props.unit && !this.props.changeUnit && <Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
+					}
+					{
+						this.props.unit && this.props.changeUnit &&
+						<TouchableOpacity style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={this.props.changeUnit}>
+                            <Text style={{fontSize:12, marginLeft:10, color: linkButtonColor}}>{this.props.unit}</Text>
+                            <Image source={require('../assets/expand.png')} style={{width: 20, height: 20, tintColor:linkButtonColor}}/>
+						</TouchableOpacity>
 					}
 				</View>
 			</View>

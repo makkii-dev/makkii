@@ -203,6 +203,9 @@ class Account extends Component {
 							args:{privateKey: this.account.private_key},
 						});
 					break;
+				case ACCOUNT_MENU[2].title:
+				    navigation.navigate('signed_select_coin', {});
+					break;
 				default:
 			}
 		})

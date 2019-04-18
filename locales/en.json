@@ -143,8 +143,9 @@
     "save_button": "Save",
     "complete_button": "All History",
     "error_empty_account_name": "Account name can't be empty",
-    "menu_change_name": "Edit account name",
+    "menu_change_name": "Edit Account Name",
     "menu_export_private_key": "Export Private Key",
+    "menu_switch_token": "Switch Token"
   },
   "import_private_key": {
     "title": "Private Key",
@@ -216,6 +217,22 @@
     "error_default_account_name_empty": "Default account name is empty",
     "error_invalid_login_session_timeout": "Invalid login session timeout",
     "error_invalid_exchange_refresh_interval": "Invalid exchange rate refresh interval"
+  },
+  "select_coin": {
+    "title": "Select Token",
+    "btn_add_token": "Add"
+  },
+  "add_token": {
+    "title": "Custom Token",
+    "btn_add_token": "Add",
+    "label_contract_address": "Contract Address",
+    "label_token_name": "Token Name",
+    "label_symbol": "Symbol",
+    "label_decimals": "Decimals",
+    "hint_contract_address": "0x...",
+    "hint_token_name": "Please enter token name",
+    "hint_symbol": "Please enter symbol",
+    "hint_decimals": "Please enter decimal"
   },
   "currency": {
     "title": "Exchange Rates",

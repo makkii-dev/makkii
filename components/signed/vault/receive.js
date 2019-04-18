@@ -172,6 +172,10 @@ class Receive extends Component {
 									</TouchableOpacity>
 								}
 								unit={'AION'}
+								changeUnit={() => {
+									console.log("choose unit");
+									this.props.navigation.navigate('signed_select_coin');
+								}}
 							/>
 						</View>
 					</View>
