@@ -140,16 +140,52 @@ function fetchAccountTokens(address, network){
     });
 }
 
-function fetchAccountTokenBalance(address, contract_address){
+function fetchAccountTokenBalance(contract_address,address=""){
+    const token_contract = new web3.eth.Contract(CONTRACT_ABI, contract_address);
+
+    // fetch account balance
     return new Promise((resolve, reject) => {
-        const token_contract = web3.eth.Contract(CONTRACT_ABI, contract_address);
-        token_contract.methods.balanceOf(address).call({}).then(res=>{
-            resolve(res)
-        }).catch(err=>{
-            reject(err)
+        token_contract.methods.balanceOf(address).call({}).then(balance => {
+            const ret = {token: obj, balance: balance};
+            resolve(ret)
+        }).catch(err => {
+            reject(new Error('get account ' + address + 'balance failed'))
+        });
+    })
+}
+
+function fetchTokenDetail(contract_address){
+    const token_contract = new web3.eth.Contract(CONTRACT_ABI, contract_address);
+    return new Promise((resolve, reject) => {
+        // fetch token symbol
+        token_contract.methods.symbol().call({}).then(symbol=>{
+            resolve({contractAddr:contract_address,symbol:symbol})
+        }).catch(()=>{
+            reject(new Error('get token symbol failed'))
+        })
+    }).then(obj=>{
+        return new Promise((resolve, reject) => {
+            // fetch token name
+            token_contract.methods.name().call({}).then(name=>{
+                obj = Object.assign(obj,{name:name});
+                resolve(obj)
+            }).catch(err=>{
+                reject(new Error('get token name failed'))
+            });
+        })
+    }).then(obj=>{
+        return new Promise((resolve, reject) => {
+            // fetch token decimals
+            token_contract.methods.decimals().call({}).then(decimals=>{
+                obj = Object.assign(obj,{tokenDecimal:decimals});
+                resolve(obj)
+            }).catch(err=>{
+                reject(new Error('get token decimals failed'))
+            });
         })
     });
 }
+
 function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=0, size=25){
     return new Promise((resolve, reject) => {
         const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&tokenAddress=${symbolAddress}&page=${page}&size=${size}`;
@@ -179,5 +215,6 @@ module.exports = {
     CONTRACT_ABI,
     fetchAccountTokens,
     fetchAccountTokenBalance,
-    fetchAccountTokenTransferHistory
+    fetchAccountTokenTransferHistory,
+    fetchTokenDetail
 };

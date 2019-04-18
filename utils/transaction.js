@@ -55,7 +55,7 @@ function sendAionTransaction(tx, wallet){
 function sendTokenTransaction(tx, wallet, symbol, network){
     const tokens = wallet.tokens[network];
     const {contractAddr} = tokens[symbol];
-    const token_contract = web3.eth.Contract(CONTRACT_ABI, contractAddr);
+    const token_contract = new web3.eth.Contract(CONTRACT_ABI, contractAddr);
     const methodsData = token_contract.methods.send(tx.to,tx.value,"").encodeABI();
     let newtx = {
         ...tx,

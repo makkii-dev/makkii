@@ -423,6 +423,7 @@ module.exports = {
     fetchAccountTokens: TokenUtil.fetchAccountTokens,
     fetchAccountTokenBalance: TokenUtil.fetchAccountTokenBalance,
     fetchAccountTokenTransferHistory: TokenUtil.fetchAccountTokenTransferHistory,
+    fetchTokenDetail: TokenUtil.fetchTokenDetail,
     encrypt: encrypt,
     decrypt: decrypt,
     dbGet: dbGet,
