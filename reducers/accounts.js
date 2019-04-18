@@ -1,5 +1,5 @@
 import {AsyncStorage} from 'react-native';
-import {encrypt} from '../utils.js';
+import {encrypt} from '../utils';
 
 import {
 	ACCOUNTS,

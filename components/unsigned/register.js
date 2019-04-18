@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {View, Alert, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
 import {ComponentButton,PasswordInput, alert_ok} from '../common.js';
-import {validatePassword, hashPassword, dbGet} from '../../utils.js';
+import {validatePassword, hashPassword, dbGet} from '../../utils';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from "../../actions/accounts";
 import {generateMnemonic} from '../../libs/aion-hd-wallet/index.js';
