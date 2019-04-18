@@ -3,10 +3,11 @@ import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
-import {update_account_txs} from "../actions/accounts";
 import {setting} from "../actions/setting";
 import Toast from 'react-native-root-toast';
 import TransactionUtil from './transaction';
+import TokenUtil from './token';
+import {fetchRequest} from './others';
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
@@ -171,22 +172,7 @@ function deleteFile(filePath) {
     });
 }
 
-function fetchRequest(url, method='GET', headers={}) {
-    return new Promise((resolve, reject) => {
-        fetch(url,{
-            method,
-            headers,
-        }).then((response)=>response.json())
-            .then((responseJson)=>{
-                resolve(responseJson)
-            })
-            .catch(err=>{
-                console.log('[fetch request error] ', err);
-                reject(err);
-            })
-    })
 
-}
 function getCoinPrice(currency='CNY',amount=1) {
     // const url = `https://www.chaion.net/makkii/price?crypto=AION&fiat=${currency}`;
     const url = `http://45.118.132.89:8080/price?crypto=AION&fiat=${currency}`;
@@ -433,6 +419,10 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
 module.exports = {
     sendTransaction:TransactionUtil.sendTransaction,
     listenTransaction:TransactionUtil.listenTransaction,
+    fetchAccountTransactionHistory: TransactionUtil.fetchAccountTransactionHistory,
+    fetchAccountTokens: TokenUtil.fetchAccountTokens,
+    fetchAccountTokenBalance: TokenUtil.fetchAccountTokenBalance,
+    fetchAccountTokenTransferHistory: TokenUtil.fetchAccountTokenTransferHistory,
     encrypt: encrypt,
     decrypt: decrypt,
     dbGet: dbGet,

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
-import {fetchRequest} from "../../../utils";
+import {fetchAccountTokenTransferHistory,fetchAccountTransactionHistory} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
@@ -25,7 +25,6 @@ class TransactionHistory extends React.Component {
     };
     state={
         transactions:{},
-        totalPages:0,
         currentPage:0,
         footerState:0,
         isLoading: true,
@@ -39,7 +38,7 @@ class TransactionHistory extends React.Component {
 
     componentWillMount(){
         InteractionManager.runAfterInteractions(()=>{
-            this.fetchAccountTransacions(this.account,this.state.currentPage)
+            this.fetchAccountTransactions(this.account,this.state.currentPage)
         });
         this.isMount = true;
     }
@@ -50,56 +49,37 @@ class TransactionHistory extends React.Component {
     }
 
 
-    fetchAccountTransacions = (address, page=0, size=25)=>{
-        let {currentPage,totalPages,transactions} = this.state;
-        const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
-        fetchRequest(url).then(res=>{
-            let txs = {};
-            if(!res.page){
-                this.isMount&&this.setState({
+    fetchAccountTransactions = (address, page=0, size=25)=>{
+        let {currentPage,transactions} = this.state;
+        const {explorer_server} = this.props.setting;
+        console.log('get transactions page: '+page+' size: '+size);
+        fetchAccountTransactionHistory(address,explorer_server,page,size).then(txs=>{
+            if(Object.keys(txs).length===0) {
+                this.isMount && this.setState({
                     currentPage,
-                    totalPages,
                     transactions,
                     isLoading: false,
-                    footerState:1
+                    footerState: 1
                 });
                 return;
             }
-            if(res.page){
-                currentPage = res.page.number;
-                totalPages  = res.page.totalPages;
-            }
-            if(res.content&&res.content.length>0){
-                res.content.forEach(value=>{
-                    let tx={};
-                    tx.hash = '0x'+value.transactionHash;
-                    tx.timestamp = value.transactionTimestamp/1000;
-                    tx.from = '0x'+value.fromAddr;
-                    tx.to = '0x'+value.toAddr;
-                    tx.value = this.props.setting.explorer_server==='mastery'?new BigNumber(value.value,10).toNumber():new BigNumber(value.value,16).shiftedBy(-18).toNumber();
-                    tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
-                    tx.blockNumber = value.blockNumber;
-                    txs[tx.hash]=tx;
-                });
-                transactions = Object.assign({},transactions,txs);
-            }
+            transactions = Object.assign({},transactions,txs);
             this.isMount&&this.setState({
-                    currentPage,
-                    totalPages,
-                    transactions,
-                    isLoading: false,
-                    footerState:Object.values(transactions).length>=25?0:1
-                })
-        },error => {
+                currentPage:page,
+                transactions,
+                isLoading: false,
+                footerState:Object.keys(transactions).length>=25?0:1
+            })
+        }).catch(error=>{
             console.log(error);
             this.isMount&&this.setState({
                 currentPage,
-                totalPages,
                 transactions,
                 isLoading: false,
                 footerState:0
             })
-        })
+        });
+
     };
 
 
@@ -111,7 +91,7 @@ class TransactionHistory extends React.Component {
         // set footer state
         this.setState({
             footerState: 2,
-        },()=>{setTimeout(()=>this.fetchAccountTransacions(this.account, this.state.currentPage+1),500)});
+        },()=>{setTimeout(()=>this.fetchAccountTransactions(this.account, this.state.currentPage+1),500)});
     }
 
 

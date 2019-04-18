@@ -15,7 +15,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchRequest, getStatusBarHeight, navigationSafely} from "../../../utils";
+import {fetchAccountTransactionHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
 import {update_account_txs} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
@@ -145,7 +145,7 @@ class Account extends Component {
 		});
 	}
 	componentWillMount(){
-		this.fetchAccountTransacions(this.addr);
+		this.fetchAccountTransactions(this.addr);
 		this.isMount = true;
 	}
 
@@ -171,7 +171,7 @@ class Account extends Component {
 		this.setState({
 			refreshing: true,
 		});
-		this.fetchAccountTransacions(address);
+		this.fetchAccountTransactions(address,0,10);
 	};
 	openMenu = () => {
 		this.setState({
@@ -208,39 +208,26 @@ class Account extends Component {
 		})
 	};
 
-	fetchAccountTransacions = (address, page=0, size=25)=>{
-		const url = `https://${this.props.setting.explorer_server}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
-		console.log("request url: " + url);
-		fetchRequest(url).then(res=>{
-			let txs = {};
-			if(res&&res.content){
-				res.content.forEach(value=>{
-					let tx={};
-					tx.hash = '0x'+value.transactionHash;
-					tx.timestamp = value.transactionTimestamp/1000;
-					tx.from = '0x'+value.fromAddr;
-					tx.to = '0x'+value.toAddr;
-					tx.value = this.props.setting.explorer_server==='mastery'?new BigNumber(value.value,10).toNumber():new BigNumber(value.value,16).shiftedBy(-18).toNumber();
-					tx.status = value.txError === ''? 'CONFIRMED':'FAILED';
-					tx.blockNumber = value.blockNumber;
-					txs[tx.hash]=tx;
-				});
-			}else{
-			    AppToast.show(strings('message_no_more_data'));
+	fetchAccountTransactions = (address, page=0, size=25)=>{
+		const {explorer_server} = this.props.setting;
+		fetchAccountTransactionHistory(address,explorer_server,page,size).then(txs=>{
+			if (Object.keys(txs).length===0){
+				AppToast.show(strings('message_no_more_data'));
+				throw Error('get no transactions')
 			}
-			const {dispatch, user, setting} = this.props;
-			dispatch(update_account_txs(address,txs,setting.explorer_server, user.hashed_password));
+			const {dispatch, user} = this.props;
+			dispatch(update_account_txs(address,txs,explorer_server, user.hashed_password));
 			this.isMount&&this.setState({
 				refreshing: false,
 				loading:false,
 			})
-		},error => {
+		}).catch(error=>{
 			console.log(error);
 			this.isMount&&this.setState({
 				refreshing: false,
 				loading:false,
 			})
-		})
+		});
 	};
 
 	renderEmpty(){
@@ -265,7 +252,7 @@ class Account extends Component {
 			return (
 				<TouchableOpacity style={{flex: 1}} onPress={()=>{
 					this.setState({loading:true},()=>{
-						setTimeout(()=>this.fetchAccountTransacions(this.addr),500);
+						setTimeout(()=>this.fetchAccountTransactions(this.addr),500);
 					})
 				}}>
 					<View style={{

@@ -1,5 +1,6 @@
 // Declare ABI for token contract
-import {fetchRequest} from './index';
+import {fetchRequest} from './others';
+import BigNumber from "./transaction";
 const CONTRACT_ABI = [
     {
         outputs: [
@@ -117,25 +118,28 @@ const CONTRACT_ABI = [
 ];
 
 function fetchAccountTokens(address, network){
-    const url = `https://${network}-api.aion.network/aion/dashboard/getAccountDetails?accountAddress=${address}`;
-    fetchRequest(url,'GET').then(json=>{
-        let res = {};
-        if(json.content.length>0){
-            const {tokens} =json.content[0];
-            tokens.forEach(token=>{
-                res[token.symbol] ={
-                    symbol : token.symbol,
-                    contractAddr: token.contractAddr,
-                    name: token.name,
-                    tokenDecimal: token.tokenDecimal,
-                }
-            })
-        }
-        resolve(res)
-    }).catch(err=>{
-        reject(err)
-    })
+    return new Promise((resolve, reject) => {
+        const url = `https://${network}-api.aion.network/aion/dashboard/getAccountDetails?accountAddress=${address}`;
+        fetchRequest(url, 'GET').then(json => {
+            let res = {};
+            if (json.content.length > 0) {
+                const {tokens} = json.content[0];
+                tokens.forEach(token => {
+                    res[token.symbol] = {
+                        symbol: token.symbol,
+                        contractAddr: token.contractAddr,
+                        name: token.name,
+                        tokenDecimal: token.tokenDecimal,
+                    }
+                })
+            }
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    });
 }
+
 function fetchAccountTokenBalance(address, contract_address){
     return new Promise((resolve, reject) => {
         const token_contract = web3.eth.Contract(CONTRACT_ABI, contract_address);
@@ -146,9 +150,34 @@ function fetchAccountTokenBalance(address, contract_address){
         })
     });
 }
+function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=0, size=25){
+    return new Promise((resolve, reject) => {
+        const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&tokenAddress=${symbolAddress}&page=${page}&size=${size}`;
+        fetchRequest(url,"GET").then(res=>{
+            const {content} = res;
+            let txs = {};
+            content.forEach(t=>{
+                let tx={};
+                tx.hash = '0x'+t.transactionHash;
+                tx.timestamp = t.transferTimestamp;
+                tx.from = '0x'+t.fromAddr;
+                tx.to = '0x'+t.toAddr;
+                tx.value = new BigNumber(t.value,10).toNumber();
+                tx.status = 'CONFIRMED';
+                tx.blockNumber = t.blockNumber;
+                txs[tx.hash]=tx;
+            });
+            resolve(res)
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
+
 
 module.exports = {
     CONTRACT_ABI,
     fetchAccountTokens,
-    fetchAccountTokenBalance
+    fetchAccountTokenBalance,
+    fetchAccountTokenTransferHistory
 };

@@ -5,11 +5,14 @@ import {strings} from "../locales/i18n";
 import {AionTransaction} from "../libs/aion-hd-wallet";
 import {Ed25519Key} from "../libs/aion-hd-wallet/src/key/Ed25519Key";
 import {CONTRACT_ABI} from './token';
+import {fetchRequest} from './others';
+import BigNumber from "bignumber.js";
 /***
  *
  * @param tx object
  * @param wallet
  * @param symbol
+ * @param network
  * @returns {*}
  */
 function sendTransaction(tx, wallet, symbol,network){
@@ -133,9 +136,33 @@ class listenTransaction{
     }
 }
 
+function fetchAccountTransactionHistory(address, network, page=0, size=25){
+    return new Promise((resolve, reject) => {
+        const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+        fetchRequest(url,"GET").then(res=>{
+            const {content} = res;
+            let txs = {};
+            content.forEach(t=>{
+                let tx={};
+                tx.hash = '0x'+t.transactionHash;
+                tx.timestamp = t.transactionTimestamp/1000;
+                tx.from = '0x'+t.fromAddr;
+                tx.to = '0x'+t.toAddr;
+                tx.value = network==='mastery'?new BigNumber(t.value,10).toNumber():new BigNumber(t.value,16).shiftedBy(-18).toNumber();
+                tx.status = t.txError === ''? 'CONFIRMED':'FAILED';
+                tx.blockNumber = t.blockNumber;
+                txs[tx.hash]=tx;
+            });
+            resolve(txs);
+        }).catch(err=>{
+            reject(err)
+        })
+    })
+}
 
 
 module.exports={
     sendTransaction:sendTransaction,
-    listenTransaction:listenTransaction
+    listenTransaction:listenTransaction,
+    fetchAccountTransactionHistory:fetchAccountTransactionHistory
 };
