@@ -147,7 +147,9 @@
   "import_private_key": {
     "title": "私钥",
     "instruction_private_key": "请输入私钥",
-    "error_invalid_private_key": "私钥不正确"
+    "error_invalid_private_key": "私钥不正确",
+    "already_existed": "账号已存在"
+
   },
   "import_master_key": {
     "title": "助记词短语"

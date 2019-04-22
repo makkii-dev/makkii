@@ -150,7 +150,8 @@
   "import_private_key": {
     "title": "Private Key",
     "instruction_private_key": "Enter private key",
-    "error_invalid_private_key": "Invalid private key"
+    "error_invalid_private_key": "Invalid private key",
+    "already_existed": "Already existed"
   },
   "import_master_key": {
     "title": "Seed Phrase"
