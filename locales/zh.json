@@ -413,9 +413,14 @@
     "title": "数字口令",
     "switch_button": "开启数字口令",
     "modify_button": "修改数字口令",
+    "touchID_button": "开启指纹解锁",
+    "touchID_dialog_title": "请验证指纹",
+    "touchID_dialog_desc": "触摸指纹传感器来解锁您的钱包。",
+    "touchID_dialog_failed": "验证失败",
+    "not_support_TouchID_label": "本机不支持指纹解锁。",
     "verify_title": "验证登录密码",
     "verify_desc": "请输入登录密码确认本人操作",
-    "pinCode_prompt": "开启数字口令时需要重新设置口令"
+    "pinCode_prompt": "开启数字口令时需要重新设置口令,开启指纹解锁之前必须开启数字口令。"
   },
   "sort": {
     "balance": "余额优先",

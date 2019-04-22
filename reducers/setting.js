@@ -14,6 +14,7 @@ const init = {
 	fiat_currency: "CNY",
 	coinPrice: undefined,
 	pinCodeEnabled: false,
+	touchIDEnabled: false,
 	tx_fee: 10000,
     tx_confirm: 6,
     endpoint_wallet: 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780',
@@ -37,7 +38,7 @@ export default function setting(state = init, action){
 			should_update_db = true;
 			break;
 		case SETTING_UPDATE_PINCODE_ENABLED:
-			new_state = Object.assign({}, state, {pinCodeEnabled: action.enabled});
+			new_state = Object.assign({}, state, {pinCodeEnabled: action.pinCodeEnabled, touchIDEnabled: action.touchIDEnabled});
 			should_update_db = true;
 			break;
 		default:

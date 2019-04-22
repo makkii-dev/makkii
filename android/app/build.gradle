@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-touch-id')
     implementation project(':react-native-local-barcode-recognizer')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-install-apk')

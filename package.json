@@ -33,6 +33,7 @@
     "react-native-root-toast": "^3.0.2",
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-svg": "^9.0.6",
+    "react-native-touch-id": "^4.4.1",
     "react-native-webview": "https://github.com/paulxuca/react-native-webview#upstream-injectjavascriptbeforedocumentload",
     "react-navigation": "^3.4.1",
     "react-redux": "^6.0.0",

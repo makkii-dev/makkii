@@ -426,9 +426,14 @@
     "title": "Pin Code",
     "switch_button": "Use Pin Code",
     "modify_button": "Modify Pin Code",
+    "touchID_button": "Use fingerprint ",
+    "touchID_dialog_title": "Authentication Required",
+    "touchID_dialog_desc": "Touch fingerprint sensor to unlock your wallet.",
+    "touchID_dialog_failed": "Authentication Failed",
+    "not_support_TouchID_label": "This device is not supported fingerprint.",
     "verify_title": "Login Password",
     "verify_desc": "Enter login password to verify",
-    "pinCode_prompt": "You need reset pin code when reopening pin code"
+    "pinCode_prompt": "You need reset pin code when reopening pin code, Using fingerprint requires you enabled pin code firstly."
   },
   "dapp": {
     "launch_button": "Launch",

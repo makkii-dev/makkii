@@ -49,6 +49,8 @@
 	<string>Makkii will save image to your album</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Makkii will save image to your album</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enable Face ID allows you quick and secure accsess to your wallet</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

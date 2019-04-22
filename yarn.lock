@@ -5727,6 +5727,11 @@ react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   dependencies:
     prop-types "^15.6.1"
 
+react-native-touch-id@^4.4.1:
+  version "4.4.1"
+  resolved "http://registry.npm.taobao.org/react-native-touch-id/download/react-native-touch-id-4.4.1.tgz#8b1bb2d04c30bac36bb9696d2d723e719c4a8b08"
+  integrity sha1-ixuy0EwwusNruWltLXI+cZxKiwg=
+
 "react-native-webview@https://github.com/paulxuca/react-native-webview#upstream-injectjavascriptbeforedocumentload":
   version "5.3.1"
   resolved "https://github.com/paulxuca/react-native-webview#88d488f67e45c4b2fc71e4f2ee8fbd39db0de458"
