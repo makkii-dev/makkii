@@ -56,6 +56,7 @@ class Receive extends Component {
 		this.state={
 			amount: '0',
 			qrCodeValue: generateQRCode('0', this.addr),
+			unit: this.props.navigation.getParam('symbol'),
 		}
 
 	}
@@ -109,6 +110,13 @@ class Receive extends Component {
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		console.log(this.props.setting);
+	}
+	coinSelected=(tokenSymbol)=>{
+		let superCoinSelected = this.props.navigation.getParam('coinSelected');
+		superCoinSelected(tokenSymbol);
+		this.setState({
+			unit: tokenSymbol
+		})
 	}
 	render(){
 		return (
@@ -171,10 +179,13 @@ class Receive extends Component {
 										<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:linkButtonColor}} resizeMode={'contain'}/>
 									</TouchableOpacity>
 								}
-								unit={'AION'}
+								unit={this.state.unit}
 								changeUnit={() => {
 									console.log("choose unit");
-									this.props.navigation.navigate('signed_select_coin');
+									this.props.navigation.navigate('signed_select_coin', {
+										address: this.addr,
+										coinSelected: this.coinSelected,
+									});
 								}}
 							/>
 						</View>

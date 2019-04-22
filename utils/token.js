@@ -130,6 +130,8 @@ function fetchAccountTokens(address, network){
                         contractAddr: token.contractAddr,
                         name: token.name,
                         tokenDecimal: token.tokenDecimal,
+                        balance: new BigNumber(0),
+                        tokenTxs: {}
                     }
                 })
             }
@@ -146,8 +148,7 @@ function fetchAccountTokenBalance(contract_address,address=""){
     // fetch account balance
     return new Promise((resolve, reject) => {
         token_contract.methods.balanceOf(address).call({}).then(balance => {
-            const ret = {token: obj, balance: balance};
-            resolve(ret)
+            resolve(new BigNumber(balance))
         }).catch(err => {
             reject(new Error('get account ' + address + 'balance failed'))
         });
@@ -195,15 +196,15 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=
             content.forEach(t=>{
                 let tx={};
                 tx.hash = '0x'+t.transactionHash;
-                tx.timestamp = t.transferTimestamp;
+                tx.timestamp = t.transferTimestamp * 1000;
                 tx.from = '0x'+t.fromAddr;
                 tx.to = '0x'+t.toAddr;
-                tx.value = new BigNumber(t.value,10).toNumber();
+                tx.value = new BigNumber(t.tknValue,10).toNumber();
                 tx.status = 'CONFIRMED';
                 tx.blockNumber = t.blockNumber;
                 txs[tx.hash]=tx;
             });
-            resolve(res)
+            resolve(txs)
         }).catch(err=>{
             reject(err)
         })

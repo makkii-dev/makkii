@@ -537,11 +537,12 @@ class TransactionItem extends React.PureComponent{
 		transaction: PropTypes.object.isRequired,
 		onPress: PropTypes.func.isRequired,
         currentAddr: PropTypes.string.isRequired,
+		symbol: PropTypes.string.isRequired,
 	};
 
 
 	render(){
-		const {transaction, onPress,currentAddr} = this.props;
+		const {transaction, onPress,currentAddr,symbol} = this.props;
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
 		const isSender = transaction.from === currentAddr;
 		const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
@@ -550,7 +551,7 @@ class TransactionItem extends React.PureComponent{
 		const valueColor = isSender? 'red':'green';
 		if(transaction.status === 'PENDING'){
 			console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
-			listenTx.addTransaction(transaction);
+			listenTx.addTransaction(transaction, symbol);
 		}
 
 		return (
@@ -565,7 +566,7 @@ class TransactionItem extends React.PureComponent{
 				</View>
 				<View style={{flexDirection:'row', justifyContent:'space-between', alignItems:'flex-end'}}>
 					<Text>{transaction.hash.substring(0, 16) + '...' }</Text>
-					<Text style={{color:valueColor}}>{value} <Text>AION</Text></Text>
+					<Text style={{color:valueColor}}>{value} <Text>{symbol}</Text></Text>
 				</View>
 			</TouchableOpacity>
 		)

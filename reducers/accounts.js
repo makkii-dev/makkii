@@ -11,6 +11,7 @@ import {
 	DEL_ACCOUNTS,
 	UPDATE_ACCOUNT_TRANSACTIONS,
 	UPDATE_ACCOUNT_TOKENS,
+    UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 } from '../actions/accounts.js';
 
 function ifSetDefault(state){
@@ -52,7 +53,7 @@ export default function accounts(state = init, action){
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
 				// only keep 10 latest txs
-				let transactions = Object.assign({},action.transactions, state[action.key].transactions[action.network]);
+				let transactions = Object.assign({}, state[action.key].transactions[action.network],action.transactions);
 				let new_transactions = {};
 				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
 				state[action.key].transactions[action.network] = new_transactions;
@@ -60,11 +61,29 @@ export default function accounts(state = init, action){
 			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
+		case UPDATE_ACCOUNT_TOKEN_TRANSACTIONS:
+		    if (typeof state[action.key] !== 'undefined') {
+		    	console.log("tokenTxs: ", state[action.key].tokens[action.network][action.symbol].tokenTxs);
+				let transactions = Object.assign({}, state[action.key].tokens[action.network][action.symbol].tokenTxs, action.transactions);
+				let new_transactions = {};
+				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
+				state[action.key].tokens[action.network][action.symbol].tokenTxs = new_transactions;
+			}
+		    new_state = Object.assign({}, state);
+		    should_update_db = true;
+		    break;
 		case UPDATE_ACCOUNT_TOKENS:
 			if (typeof state[action.key] !== 'undefined') {
-				state[action.key].tokens[action.network] = action.tokens;
+				let tokenExist = state[action.key].tokens !== undefined && state[action.key].tokens[action.network] !== undefined;
+				if (!tokenExist) {
+					state[action.key].tokens = {};
+				}
+				let tokens = Object.assign({}, tokenExist? state[action.key].tokens[action.network]: {}, action.tokens);
+
+				state[action.key].tokens[action.network] = tokens;
 			}
 			new_state = Object.assign({}, state);
+			console.log("should_update_db");
 			should_update_db = true;
 			break;
 		case DEL_ACCOUNT:

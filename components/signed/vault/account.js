@@ -15,8 +15,10 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchAccountTransactionHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
-import {update_account_txs} from "../../../actions/accounts";
+import {fetchAccountTransactionHistory, fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
+import {fetchAccountTokens} from '../../../utils';
+import Loading from '../../loading';
+import {update_account_txs, update_account_tokens} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
@@ -25,6 +27,7 @@ import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
 import {TransactionItem} from '../../common';
+
 const {width} = Dimensions.get('window');
 
 const SwithType = type=>{
@@ -132,27 +135,42 @@ class Account extends Component {
     };
 	constructor(props){
 		super(props);
+		this.addr=this.props.navigation.state.params.address;
+		this.account = this.props.accounts[this.addr];
+		this.isMount = false;
 		this.state={
 			refreshing: false,
 			loading: true,
 			showMenu: false,
+			tokenSymbol: 'AION',
+			tokenBalance: new BigNumber(this.account.balance).toNotExString(),
 		};
-		this.addr=this.props.navigation.state.params.address;
-		this.account = this.props.accounts[this.addr];
-		this.isMount = false;
 		this.updateTitle({
 			showMenu: ()=>this.openMenu(),
 		});
 	}
 	componentWillMount(){
 		this.fetchAccountTransactions(this.addr);
+		// load account's token list
+		fetchAccountTokens(this.addr, this.props.setting.explorer_server).then(res=> {
+			console.log("fetch account tokens: " ,res);
+			const {dispatch, user} = this.props;
+			let newTokens;
+			if (this.props.accounts[this.account.address].tokens) {
+				newTokens = Object.assign({}, res, this.props.accounts[this.account.address].tokens[this.props.setting.explorer_server]);
+			} else {
+				newTokens = res;
+			}
+			dispatch(update_account_tokens(this.addr, newTokens, this.props.setting.explorer_server, user.hashed_password));
+		}, err=> {
+			console.log("fetch token list failed: ", e);
+		});
 		this.isMount = true;
 	}
 
 	async componentWillUnmount() {
 		this.isMount = false;
 	}
-
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
@@ -204,33 +222,103 @@ class Account extends Component {
 						});
 					break;
 				case ACCOUNT_MENU[2].title:
-				    navigation.navigate('signed_select_coin', {});
+				    navigation.navigate('signed_select_coin', {
+				    	address: this.account.address,
+						coinSelected: this.coinSelected,
+				    });
 					break;
 				default:
 			}
 		})
 	};
+	coinSelected = (symbol)=> {
+	    if (this.state.tokenSymbol !== symbol) {
+			if (symbol === 'AION') {
+				this.setState({
+					tokenBalance: new BigNumber(this.account.balance).toNotExString(),
+					tokenSymbol: symbol
+				})
+			} else {
+			    const callback = () => {
+			    	this.loadingView.hide();
+				}
+				this.loadingView.show(strings('select_coin.progress_switching_coin'));
+				let tokens = this.props.accounts[this.account.address].tokens[this.props.setting.explorer_server];
+				fetchAccountTokenBalance(tokens[symbol].contractAddr, this.account.address).then(res => {
+					console.log("fetched token balance: " + res);
 
-	fetchAccountTransactions = (address, page=0, size=25)=>{
-		const {explorer_server} = this.props.setting;
-		fetchAccountTransactionHistory(address,explorer_server,page,size).then(txs=>{
-			if (Object.keys(txs).length===0){
-				AppToast.show(strings('message_no_more_data'));
-				throw Error('get no transactions')
+					const {dispatch, user} = this.props;
+					tokens[symbol].balance = res.shiftedBy(-(tokens[symbol].tokenDecimal - 0));
+					console.log("/18:" + tokens[symbol].balance);
+					dispatch(update_account_tokens(this.account.address, tokens, this.props.setting.explorer_server, user.hashed_password));
+
+					this.fetchAccountTransactions(this.account.address, 0, 5, symbol, {
+						tokenBalance: tokens[symbol].balance.toNotExString(),
+						tokenSymbol: symbol
+					}, callback);
+				}).catch(err => {
+					console.log("fetch token balance error", err);
+					this.setState();
+					this.fetchAccountTransactions(this.account.address, 0, 5, symbol, {
+						tokenBalance: tokens[symbol].balance ? tokens[symbol].balance.toNotExString() : '--.-',
+						tokenSymbol: symbol
+					},callback);
+				});
+
 			}
-			const {dispatch, user} = this.props;
-			dispatch(update_account_txs(address,txs,explorer_server, user.hashed_password));
-			this.isMount&&this.setState({
-				refreshing: false,
-				loading:false,
-			})
-		}).catch(error=>{
-			console.log(error);
-			this.isMount&&this.setState({
-				refreshing: false,
-				loading:false,
-			})
-		});
+		}
+	}
+
+	fetchAccountTransactions = (address, page=0, size=5, tokenSymbol=this.state.tokenSymbol,obj={}, callback=()=>{})=>{
+		const {explorer_server} = this.props.setting;
+		const {accounts,dispatch,user} = this.props;
+		if (tokenSymbol === 'AION') {
+			fetchAccountTransactionHistory(address, explorer_server, page, size).then(txs => {
+				if (Object.keys(txs).length === 0) {
+					AppToast.show(strings('message_no_more_data'));
+					throw Error('get no transactions')
+				}
+				dispatch(update_account_txs(address, txs, explorer_server, user.hashed_password));
+				this.isMount && this.setState({
+					refreshing: false,
+					loading: false,
+					...obj
+				})
+			}).catch(error => {
+				console.log(error);
+				this.isMount && this.setState({
+					refreshing: false,
+					loading: false,
+					...obj
+				})
+			});
+		} else {
+		    let tokens = accounts[address].tokens[explorer_server];
+			const {contractAddr, tokenTxs} = tokens[tokenSymbol];
+			fetchAccountTokenTransferHistory(address, contractAddr, explorer_server, page, size).then(txs => {
+				if (Object.keys(txs).length === 0) {
+					AppToast.show(strings('message_no_more_data'));
+					throw Error('get no transactions')
+				}
+
+				console.log("token txs: ", txs);
+				tokens[tokenSymbol].tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
+				console.log("tokentxs; ", tokens[tokenSymbol].tokenTxs);
+				dispatch(update_account_tokens(this.account.address, tokens, this.props.setting.explorer_server, user.hashed_password));
+				this.isMount && this.setState({
+					refreshing: false,
+					loading: false,
+					...obj
+				}, callback)
+			}).catch(error => {
+				console.log(error);
+				this.isMount && this.setState({
+					refreshing: false,
+					loading: false,
+					...obj
+				}, callback)
+			});
+		}
 	};
 
 	renderEmpty(){
@@ -309,11 +397,13 @@ class Account extends Component {
 					renderItem={({item})=><TransactionItem
 						transaction={item}
 						currentAddr={this.addr}
+						symbol={this.state.tokenSymbol}
 						onPress={()=>{
 							Keyboard.dismiss();
 							this.props.navigation.navigate('signed_vault_transaction',{
 								account:this.addr,
 								transaction: item,
+                                symbol: this.state.tokenSymbol
 							});
 						}}/>}
 					refreshControl={
@@ -329,10 +419,17 @@ class Account extends Component {
 	}
 
 	render(){
-		const {navigation, setting} = this.props;
+		const {navigation, setting, accounts} = this.props;
 		const {address, transactions, type} = this.account;
-		const transactionsList =  transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
-		const accountBalanceText = new BigNumber(this.account.balance).toNotExString()+ ' AION';
+		let transactionsList;
+		if (this.state.tokenSymbol === 'AION') {
+			transactionsList = transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
+		} else {
+		    let tokenTxs = accounts[address].tokens[setting.explorer_server][this.state.tokenSymbol].tokenTxs;
+            transactionsList = tokenTxs? Object.values(tokenTxs).slice(0,5):[];
+            console.log("transactionList: ", transactionsList);
+		}
+		const accountBalanceText = this.state.tokenBalance + ' ' + this.state.tokenSymbol;
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
 		return (
@@ -351,6 +448,8 @@ class Account extends Component {
 								Keyboard.dismiss();
 								navigation.navigate('signed_vault_send', {
 									address: this.addr,
+									symbol: this.state.tokenSymbol,
+									coinSelected: this.coinSelected,
 								});
 							}}
 						>
@@ -363,6 +462,8 @@ class Account extends Component {
 								Keyboard.dismiss();
 								navigation.navigate('signed_vault_receive', {
 									address: this.addr,
+                                    symbol: this.state.tokenSymbol,
+									coinSelected: this.coinSelected,
 								});
 							}}
 						>
@@ -377,7 +478,10 @@ class Account extends Component {
 						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
 							<TouchableOpacity style={{flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
 								onPress={()=>{
-									this.props.navigation.navigate('signed_vault_transaction_history', {account: this.account.address})
+									this.props.navigation.navigate('signed_vault_transaction_history', {
+										account: this.account.address,
+										symbol: this.state.tokenSymbol,
+									})
 								}}
 							>
 								<Text style={{fontSize:12,color:linkButtonColor}}>{strings('account_view.complete_button')}</Text>
@@ -407,6 +511,9 @@ class Account extends Component {
 						/>
 						:null
 				}
+				<Loading ref={element => {
+					this.loadingView = element;
+				}}/>
 			</View>
 		)
 	}

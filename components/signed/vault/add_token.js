@@ -26,7 +26,8 @@ class AddToken extends Component {
                 <RightActionButton
                     btnTitle={strings('add_token.btn_add_token')}
                     onPress={() => {
-                        navigation.state.params.addToken();
+                        const addToken = navigation.state.params.addToken;
+                        addToken();
                     }}
                     disabled={!navigation.state.params || !navigation.state.params.isEdited}
                 ></RightActionButton>
@@ -57,11 +58,23 @@ class AddToken extends Component {
             this.setState({
                 contractAddress: scannedData,
             });
+            this.updateEditStatus(this.state.contractAddress, this.state.tokenName, this.state.symbol, this.state.decimals);
         }
     }
 
     addToken=() => {
-        // TODO:
+        const {tokenAdded} = this.props.navigation.state.params;
+        const {symbol, tokenName, decimals, contractAddress} = this.state;
+        tokenAdded(
+            {[symbol]: {
+                symbol: symbol,
+                contractAddr: contractAddress,
+                name: tokenName,
+                tokenDecimal: decimals,
+                balance: new BigNumber(0),
+                tokenTxs: {},
+            }});
+        this.props.navigation.goBack();
     }
 
     scan=() => {
@@ -82,9 +95,13 @@ class AddToken extends Component {
         && tokenName.length != 0
         && symbol.length != 0
         && decimals.length != 0;
-        this.props.navigation.setParams({
-            isEdited: allFilled
-        })
+        console.log("current isEdit:" + this.props.navigation.getParam('isEdited'));
+        console.log("allFilled: " + allFilled);
+        if (allFilled != this.props.navigation.getParam('isEdited')) {
+            this.props.navigation.setParams({
+                isEdited: allFilled
+            })
+        }
     }
 
     render() {
@@ -183,6 +200,8 @@ const styles = StyleSheet.create({
 export default connect( state => {
     return {
         accounts: state.accounts,
+        user: state.user,
+        setting: state.setting,
     };
 
 })(AddToken);

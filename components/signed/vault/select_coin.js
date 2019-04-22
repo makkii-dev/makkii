@@ -5,6 +5,7 @@ import {View, FlatList, StyleSheet, PixelRatio, TouchableOpacity, Dimensions, Te
 import defaultStyles from '../../styles';
 import {RightActionButton} from '../../common';
 import {mainBgColor} from '../../style_util';
+import {update_account_tokens} from '../../../actions/accounts';
 
 const {width} = Dimensions.get('window');
 
@@ -22,15 +23,32 @@ class SelectCoin extends Component {
                 <RightActionButton
                     btnTitle={strings('select_coin.btn_add_token')}
                     onPress={() => {
-                        navigation.navigate('signed_add_token');
+                        navigation.navigate('signed_add_token', {
+                            address: navigation.getParam('address'),
+                            tokenAdded: navigation.getParam('tokenAdded'),
+                        });
                     }}
-                ></RightActionButton>
+                />
             )
         });
     };
 
     constructor(props) {
         super(props);
+        this.state = {
+            tokens: this.props.accounts[this.props.navigation.getParam('address')].tokens[this.props.setting.explorer_server],
+        };
+        this.props.navigation.setParams({
+            tokenAdded: this.tokenAdded,
+        });
+    }
+
+    tokenAdded= (token) => {
+        const {dispatch, navigation, setting, user} = this.props;
+        dispatch(update_account_tokens(navigation.getParam('address'), token, setting.explorer_server, user.hashed_password));
+        this.setState({
+            tokens: this.props.accounts[this.props.navigation.getParam('address')].tokens[this.props.setting.explorer_server],
+        })
     }
 
     render() {
@@ -50,7 +68,7 @@ class SelectCoin extends Component {
                     paddingRight: 20,
                 }}>
                     <FlatList
-                        data={['AION','Token1','Token2']}
+                        data={[{symbol: 'AION', name: 'AION'}, ...Object.values(this.state.tokens)]}
                         renderItem={({item}) =>
                             <TouchableOpacity activeOpacity={0.3}
                                               style={{
@@ -60,13 +78,17 @@ class SelectCoin extends Component {
                                                   height: 30
                                               }}
                                               onPress={() => {
-                                                console.log("selected: " + item);
+                                                console.log("selected: " + item.name);
+                                                const {coinSelected} = this.props.navigation.state.params;
+                                                coinSelected(item.symbol);
+                                                this.props.navigation.goBack();
                                               }
                             }>
-                                <Text numberOfLines={1}>item</Text>
+                                <Text numberOfLines={1}>{item.name}</Text>
                             </TouchableOpacity>
                         }
                         ItemSeparatorComponent={() => <View style={styles.divider}/>}
+                        keyExtractor={(item, index) => item.symbol}
                     />
                 </View>
             </View>
@@ -84,5 +106,7 @@ const styles = StyleSheet.create({
 export default connect( state => {
     return {
         setting: state.setting,
+        accounts: state.accounts,
+        user: state.user,
     };
 })(SelectCoin);

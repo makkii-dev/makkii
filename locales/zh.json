@@ -209,7 +209,8 @@
   },
   "select_coin": {
     "title": "选择代币",
-    "btn_add_token": "添加"
+    "btn_add_token": "添加",
+    "progress_switching_coin": "切换中"
   },
   "add_token": {
     "title": "代币",

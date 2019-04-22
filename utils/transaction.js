@@ -1,4 +1,4 @@
-import {update_account_txs} from "../actions/accounts";
+import {update_account_txs, update_account_token_txs} from "../actions/accounts";
 import {DeviceEventEmitter} from "react-native";
 import Toast from "react-native-root-toast";
 import {strings} from "../locales/i18n";
@@ -56,7 +56,8 @@ function sendTokenTransaction(tx, wallet, symbol, network){
     const tokens = wallet.tokens[network];
     const {contractAddr} = tokens[symbol];
     const token_contract = new web3.eth.Contract(CONTRACT_ABI, contractAddr);
-    const methodsData = token_contract.methods.send(tx.to,tx.value,"").encodeABI();
+    console.log("tokenValue", tx.tokenValue.toNumber());
+    const methodsData = token_contract.methods.send(tx.tokenTo,tx.tokenValue.toFixed(0).toString(),"").encodeABI();
     let newtx = {
         ...tx,
         data: methodsData,
@@ -75,27 +76,28 @@ class listenTransaction{
     hasPending() {
         return Object.keys(this.pendingMap).length > 0;
     }
-    addTransaction(tx){
+    addTransaction(tx, symbol='AION'){
         let thusMap = this.txMap;
         let thusPendingMap = this.pendingMap;
         const thusTimeOut = this.timeOut;
         const thusStore = this.store;
         const {user, setting}= this.store.getState();
-        if(typeof thusMap[tx.hash] !== 'undefined')
+        const hashKey = tx.hash + "|" + symbol;
+        if(typeof thusMap[hashKey] !== 'undefined')
             return;
         console.log('getting transaction ' + tx.hash + ' status');
-        this.pendingMap[tx.hash] = tx;
+        this.pendingMap[hashKey] = tx;
         let removeTransaction = function(tx){
-            if(typeof thusMap[tx.hash] !== 'undefined'){
+            if(typeof thusMap[hashKey] !== 'undefined'){
                 console.log('clear listener');
-                clearInterval(thusMap[tx.hash]);
-                delete thusMap[tx.hash];
+                clearInterval(thusMap[hashKey]);
+                delete thusMap[hashKey];
             }
         };
         let start = Date.now();
-        thusMap[tx.hash]=setInterval(function(){
+        thusMap[hashKey]=setInterval(function(){
             if (Date.now() - start > thusTimeOut) {
-                delete thusPendingMap[tx.hash];
+                delete thusPendingMap[hashKey];
                 console.log('timeout');
                 removeTransaction(tx);
             }
@@ -103,24 +105,43 @@ class listenTransaction{
                 res=>{
                     if(res){
                         tx.blockNumber = res.blockNumber;
-                        if (res.status !== 'FAILED') {
-                            if (thusMap[tx.hash]) {
+                        if (res.status === true) {
+                            if (thusMap[hashKey]) {
                                 let blockNumberInterval = setInterval(() => {
                                     web3.eth.getBlockNumber().then(
                                         number => {
                                             console.log('blockbumber: ', number);
                                             if (number > tx.blockNumber + 6) {
-                                                delete thusPendingMap[tx.hash];
+                                                delete thusPendingMap[hashKey];
 
-                                                tx.status = res.status ? 'CONFIRMED' : 'FAILED';
-                                                thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                                                thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                tx.status = 'CONFIRMED';
+                                                if (symbol === 'AION') {
+                                                    thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                    thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                                } else {
+                                                    thusStore.dispatch(update_account_token_txs(tx.from, {[tx.hash]: tx}, symbol, setting.explorer_server, user.hashed_password));
+                                                    thusStore.dispatch(update_account_token_txs(tx.to, {[tx.hash]: tx}, symbol, setting.explorer_server, user.hashed_password));
+                                                }
                                                 DeviceEventEmitter.emit('updateAccountBalance');
                                                 clearInterval(blockNumberInterval);
                                             }
                                         }
                                     )
                                 }, 1000 * 5);
+                            }
+                        } else {
+                            if (thusMap[hashKey]) {
+                                delete thusPendingMap[hashKey];
+
+                                tx.status = 'FAILED';
+                                if (symbol === 'AION') {
+                                    thusStore.dispatch(update_account_txs(tx.from, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                    thusStore.dispatch(update_account_txs(tx.to, {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                                } else {
+                                    thusStore.dispatch(update_account_token_txs(tx.from, {[tx.hash]: tx}, symbol, setting.explorer_server, user.hashed_password));
+                                    thusStore.dispatch(update_account_token_txs(tx.to, {[tx.hash]: tx}, symbol, setting.explorer_server, user.hashed_password));
+                                }
+                                DeviceEventEmitter.emit('updateAccountBalance');
                             }
                         }
                         removeTransaction(tx);

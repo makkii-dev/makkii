@@ -3,6 +3,7 @@ const ACCOUNTS_ADD = 'ADD_ACCOUNTS';
 const ACCOUNTS_SAVE = 'ACCOUNTS_SAVE';
 const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
 const UPDATE_ACCOUNT_TRANSACTIONS = 'UPDATE_ACCOUNT_TRANSACTIONS';
+const UPDATE_ACCOUNT_TOKEN_TRANSACTIONS = 'UPDATE_ACCOUNT_TOKEN_TRANSACTIONS';
 const UPDATE_ACCOUNT_TOKENS = 'UPDATE_ACCOUNT_TOKENS';
 const ACCOUNT_DEFAULT = "ACCOUNT_DEFAULT";
 const DEL_ACCOUNT = 'DEL_ACCOUNT';
@@ -58,6 +59,17 @@ function update_account_txs(key, transactions, network, hashed_password){
 	}
 }
 
+function update_account_token_txs(key, transactions, symbol, network, hashed_password) {
+	return {
+		type: UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
+		key,
+		transactions,
+		symbol,
+		network,
+		hashed_password
+	}
+}
+
 function update_account_tokens(key, tokens, network, hashed_password) {
 	return {
 		type: UPDATE_ACCOUNT_TOKENS,
@@ -66,8 +78,8 @@ function update_account_tokens(key, tokens, network, hashed_password) {
 		network,
 		hashed_password
 	}
-
 }
+
 
 function delete_account(key, hashed_password) {
 	return {
@@ -91,6 +103,7 @@ module.exports={
 	ACCOUNT_DEFAULT,
 	UPDATE_ACCOUNT_NAME,
 	UPDATE_ACCOUNT_TRANSACTIONS,
+    UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 	UPDATE_ACCOUNT_TOKENS,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
@@ -101,6 +114,7 @@ module.exports={
 	update_account_name,
 	update_account_txs,
 	update_account_tokens,
+	update_account_token_txs,
 	delete_account,
 	delete_accounts,
 };
