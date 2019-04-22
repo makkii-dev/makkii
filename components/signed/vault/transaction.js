@@ -91,7 +91,7 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:80}}
 							title={strings('transaction_detail.amount_label')}
-							value={new BigNumber(transaction.value).toNotExString()+' AION'}
+							value={new BigNumber(transaction.value).toNotExString()+' ' + this.props.navigation.getParam('symbol')}
 							valueTextAlign={'left'}
 
 						/>

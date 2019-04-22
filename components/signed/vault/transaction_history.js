@@ -53,8 +53,17 @@ class TransactionHistory extends React.Component {
         let {currentPage,transactions} = this.state;
         const {explorer_server} = this.props.setting;
         console.log('get transactions page: '+page+' size: '+size);
-        fetchAccountTransactionHistory(address,explorer_server,page,size).then(txs=>{
-            if(Object.keys(txs).length===0) {
+        let symbol = this.props.navigation.getParam('symbol');
+        let promise;
+        if (symbol === 'AION') {
+            promise = fetchAccountTransactionHistory(address, explorer_server, page, size);
+        } else {
+            let token = this.props.accounts[address].tokens[explorer_server][symbol];
+            console.log("token: ", token);
+            promise = fetchAccountTokenTransferHistory(address, token.contractAddr, explorer_server, page, size);
+        }
+        promise.then(txs => {
+            if (Object.keys(txs).length === 0) {
                 this.isMount && this.setState({
                     currentPage,
                     transactions,
@@ -63,23 +72,22 @@ class TransactionHistory extends React.Component {
                 });
                 return;
             }
-            transactions = Object.assign({},transactions,txs);
-            this.isMount&&this.setState({
-                currentPage:page,
+            transactions = Object.assign({}, transactions, txs);
+            this.isMount && this.setState({
+                currentPage: page,
                 transactions,
                 isLoading: false,
-                footerState:Object.keys(transactions).length>=25?0:1
+                footerState: Object.keys(transactions).length >= 25 ? 0 : 1
             })
-        }).catch(error=>{
+        }).catch(error => {
             console.log(error);
-            this.isMount&&this.setState({
+            this.isMount && this.setState({
                 currentPage,
                 transactions,
                 isLoading: false,
-                footerState:0
+                footerState: 0
             })
         });
-
     };
 
 
@@ -113,9 +121,15 @@ class TransactionHistory extends React.Component {
         if (this.state.isLoading) {
             return this.renderLoadingView();
         } else {
-
-            let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server];
-            const transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
+            let symbol = this.props.navigation.getParam('symbol');
+            let transactions;
+            if (this.props.navigation.getParam('symbol') === 'AION') {
+                let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server];
+                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
+            } else {
+                let propTxs = this.props.accounts[this.account].tokens[this.props.setting.explorer_server][symbol].tokenTxs;
+                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
+            }
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {
@@ -124,6 +138,7 @@ class TransactionHistory extends React.Component {
                             style={{backgroundColor: '#fff'}}
                             keyExtractor={(item, index) => index + ''}
                             renderItem={({item})=><TransactionItem
+                                symbol={symbol}
                                 transaction={item}
                                 currentAddr={this.account}
                                 onPress={()=>{

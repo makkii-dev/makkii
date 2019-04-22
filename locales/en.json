@@ -220,7 +220,8 @@
   },
   "select_coin": {
     "title": "Select Token",
-    "btn_add_token": "Add"
+    "btn_add_token": "Add",
+    "progress_switching_coin": "Switching token"
   },
   "add_token": {
     "title": "Custom Token",
