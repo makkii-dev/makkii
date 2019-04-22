@@ -7,7 +7,7 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    Image, BackHandler
+    Image, BackHandler,Platform
 } from 'react-native';
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
@@ -179,10 +179,11 @@ class PinCodeScreen extends React.Component {
     };
 
     onPressTouchId = ()=>{
-        const {touchIDEnabled} = this.props.setting;
-        if (touchIDEnabled===false||this.isModifyPinCode ){
+        const {touchIDEnabled=false} = this.props.setting;
+        if (touchIDEnabled===false||this.isModifyPinCode===true ){
             return;
         }
+        console.log('render authentication dialog ', touchIDEnabled, ' ,', this.isModifyPinCode);
         const optionalConfigObject = {
             title: strings('pinCode.touchID_dialog_title'), // Android
             imageColor: '#e00606', // Android
@@ -307,7 +308,6 @@ export default connect(state => { return ({
 
 const styles = StyleSheet.create({
     desText: {
-        fontFamily: 'OpenSans-Bold',
     },
     pinField: {
         flexDirection: 'row',
@@ -315,7 +315,6 @@ const styles = StyleSheet.create({
     },
     warningField: {
         color: 'red',
-        fontFamily: 'OpenSans-Semibold',
         fontSize: 16
     },
     keyboardViewItem: {
@@ -327,8 +326,6 @@ const styles = StyleSheet.create({
         marginVertical : 5,
     },
     keyboardViewItemText: {
-        fontSize  : 22,
-        fontWeight: '900',
-        fontFamily: 'OpenSans-Semibold',
+        fontSize  : 20,
     },
 });

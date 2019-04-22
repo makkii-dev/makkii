@@ -7,6 +7,7 @@ import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
 import {SubTextInput} from '../../common';
 import {validateAddress} from '../../../utils';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
