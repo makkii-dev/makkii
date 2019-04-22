@@ -14,6 +14,7 @@ import defaultStyles from '../../styles';
 import {navigationSafely} from '../../../utils';
 import {setting_update_pincode_enabled} from '../../../actions/setting';
 import {user_update_pincode} from '../../../actions/user';
+import TouchID from 'react-native-touch-id';
 const {width} = Dimensions.get('window');
 
 
@@ -27,22 +28,23 @@ class PinCode extends React.Component {
 
     constructor(props){
         super(props);
-        const {pinCodeEnabled}  = this.props.setting;
+        const {pinCodeEnabled, touchIDEnabled}  = this.props.setting;
         this.state={
-            pinCodeEnabled:pinCodeEnabled!==undefined?pinCodeEnabled:false
+            pinCodeEnabled:pinCodeEnabled!==undefined?pinCodeEnabled:false,
+            touchIDEnabled: touchIDEnabled!==undefined?touchIDEnabled:false,
         }
     }
-    
+
     onVerifySuccess = ()=>{
         const {dispatch } = this.props;
         const {pinCodeEnabled}  = this.state;
         const {navigate} = this.props.navigation;
         if(!pinCodeEnabled===false){
             // close pin code
-            dispatch(user_update_pincode(''));
-            listenApp.handleActive = null;
-            this.setState({pinCodeEnabled:!pinCodeEnabled},()=>{
-                dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
+            this.setState({pinCodeEnabled:!pinCodeEnabled,touchIDEnabled:false},()=>{
+                listenApp.handleActive = null;
+                dispatch(user_update_pincode(''));
+                dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled,false));
             })
         }else{
             navigate('unlock',{
@@ -70,9 +72,31 @@ class PinCode extends React.Component {
         );
     }
 
+    handleToggleTouchIDSwitch(){
+        const {dispatch } = this.props;
+        const {pinCodeEnabled,touchIDEnabled}  = this.state;
+        if(!touchIDEnabled === false){
+            this.setState({touchIDEnabled:!touchIDEnabled},()=>{
+                dispatch(setting_update_pincode_enabled(pinCodeEnabled,false));
+            })
+        }else{
+            const optionalConfigObject = {
+                unifiedErrors: true,// use unified error messages (default false)
+                passcodeFallback: false, // if true is passed, it will allow isSupported to return an error if the device is not enrolled in touch id/face id etc. Otherwise, it will just tell you what method is supported, even if the user is not enrolled.  (default false)
+            };
+            TouchID.isSupported(optionalConfigObject).then(biometryType => {
+                this.setState({touchIDEnabled:!touchIDEnabled},()=>{
+                    dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
+                })
+            }).catch(error=>{
+                AppToast.show(strings('pinCode.not_support_TouchID_label'))
+            })
+        }
+    }
+
     render(){
         const {navigate} = this.props.navigation;
-        const {pinCodeEnabled} = this.state;
+        const {pinCodeEnabled,touchIDEnabled} = this.state;
         const disableTextStyle = pinCodeEnabled?{}: { color: '#8A8D97' };
         return (
             <View style={{flex:1, backgroundColor:mainBgColor,alignItems:'center', paddingHorizontal: 20}}>
@@ -80,8 +104,16 @@ class PinCode extends React.Component {
                 <View style={styles.CellView}>
                     <Text style={[styles.textStyle]}>{strings('pinCode.switch_button')}</Text>
                     <Switch
-                        value={this.state.pinCodeEnabled}
+                        value={pinCodeEnabled}
                         onValueChange={()=>this.handleToggleSwitch()}
+                    />
+                </View>
+                <View style={styles.CellView}>
+                    <Text style={[styles.textStyle]}>{strings('pinCode.touchID_button')}</Text>
+                    <Switch
+                        disabled={!pinCodeEnabled}
+                        value={touchIDEnabled}
+                        onValueChange={()=>this.handleToggleTouchIDSwitch()}
                     />
                 </View>
                 <TouchableOpacity

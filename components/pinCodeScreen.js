@@ -12,9 +12,13 @@ import {
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
 import {getStatusBarHeight, hashPassword} from '../utils';
-import {user_update_pincode} from '../actions/user'
+import {user_update_pincode} from '../actions/user';
+import TouchID from 'react-native-touch-id';
+import {strings} from "../locales/i18n";
+
 const {width,height} = Dimensions.get('window');
 const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];
+const KeyboardDataWithTouchID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete", "blank", "finger", "blank"];
 const MaxPinCodeLength = 6;
 class PinCodeScreen extends React.Component {
 
@@ -52,6 +56,8 @@ class PinCodeScreen extends React.Component {
         this.setState({
             // 0: unlock; 1: create pinCode; 2: confirm pinCode
             pinState: this.props.user.hashed_pinCode===''?1:0,
+        },()=>{
+            this.onPressTouchId();
         });
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.onGoback(); // works best when the goBack is async
@@ -172,34 +178,68 @@ class PinCodeScreen extends React.Component {
         })
     };
 
+    onPressTouchId = ()=>{
+        const {touchIDEnabled} = this.props.setting;
+        if (touchIDEnabled===false||this.isModifyPinCode ){
+            return;
+        }
+        const optionalConfigObject = {
+            title: strings('pinCode.touchID_dialog_title'), // Android
+            imageColor: '#e00606', // Android
+            imageErrorColor: '#ff0000', // Android
+            sensorDescription: strings('pinCode.touchID_dialog_desc'), // Android
+            sensorErrorDescription: strings('pinCode.touchID_dialog_failed'), // Android
+            cancelText: strings('cancel_button'), // Android
+            unifiedErrors: true, // use unified error messages (default false)
+            passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
+        };
+        TouchID.authenticate('', optionalConfigObject)
+            .then(success => {
+                this.onUnlockSuccess&&this.onUnlockSuccess();
+                console.log('this.targetScreen', this.targetScreen);
+                this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
+                this.targetScreen||this.props.navigation.goBack();
+            })
+            .catch(error => {
+                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
+                    AppToast.show('Authentication Failed ' + error);
+                }
+            });
+    };
+
     renderItem = ({item}) => {
-        const itemBorder = item==='cancel'&&this.cancel===false?{}:{
+        const disabled = item==="blank"||(item==='cancel'&&this.cancel===false);
+        const itemBorder = disabled?{}:{
             borderRadius : 75 / 2,
             borderWidth: 0.5,
             borderColor: mainColor};
         return (
             <TouchableOpacity
-                disabled={item==='cancel'&&this.cancel===false}
+                disabled={disabled}
                 style={[styles.keyboardViewItem,itemBorder, {backgroundColor: mainColor}]}
                 onPress={() => {
-                    if(item!== 'cancel' && item !== 'delete'){
+                    if(item!== 'cancel' && item !== 'delete' && item!=='finger'){
                         this.onPressNumber(item)
                     } else if (item === 'delete'){
                         this.onPressDelete()
-                    } else {
+                    } else if (item === 'cancel'){
                         this.cancel&&this.props.navigation.goBack(); // can cancel
+                    } else if (item === 'finger') {
+                        this.onPressTouchId()
                     }
                 }}
                 >
                 <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: mainBgColor}]}>
-                    { item !== 'cancel'&&item!=='delete'&&(<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>)}
+                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>)}
                     { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>) }
                     { item === 'delete'&& (<Image source={require('../assets/delete_button.png')} style={{width:20, height:20}} resizeMode={'contain'}/>)}
+                    { item === 'finger'&& (<Image source={require('../assets/icon_touch_id.png')} style={{width:48, height:48}} resizeMode={'contain'}/>)}
                 </View>
             </TouchableOpacity>
         )
     };
     renderContent(unlockDescription,warningPincodeFail){
+        const {touchIDEnabled} = this.props.setting;
         const animationShake = this.animatedValue.interpolate({
             inputRange: [0, 0.3, 0.7, 1],
             outputRange: [0, -20, 20, 0],
@@ -233,7 +273,7 @@ class PinCodeScreen extends React.Component {
                         vertical={true}
                         numColumns={3}
                         renderItem={this.renderItem}
-                        data={KeyboardData}
+                        data={touchIDEnabled&&!this.isModifyPinCode?KeyboardDataWithTouchID:KeyboardData}
                         keyExtractor={(val, index) => index.toString()}
                     />
                 </View>
@@ -262,6 +302,7 @@ class PinCodeScreen extends React.Component {
 
 export default connect(state => { return ({
     user:state.user,
+    setting: state.setting,
 }); })(PinCodeScreen);
 
 const styles = StyleSheet.create({
@@ -288,5 +329,6 @@ const styles = StyleSheet.create({
     keyboardViewItemText: {
         fontSize  : 22,
         fontWeight: '900',
+        fontFamily: 'OpenSans-Semibold',
     },
 });

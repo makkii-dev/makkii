@@ -1,4 +1,6 @@
 rootProject.name = 'wallet'
+include ':react-native-touch-id'
+project(':react-native-touch-id').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-touch-id/android')
 include ':react-native-local-barcode-recognizer'
 project(':react-native-local-barcode-recognizer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-local-barcode-recognizer/android')
 include ':react-native-image-picker'
