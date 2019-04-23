@@ -9,6 +9,7 @@ import {
 	UPDATE_ACCOUNT_NAME,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
+	DEL_ACCOUNT_TOKEN,
 	UPDATE_ACCOUNT_TRANSACTIONS,
 	UPDATE_ACCOUNT_TOKENS,
     UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
@@ -78,12 +79,10 @@ export default function accounts(state = init, action){
 				if (!tokenExist) {
 					state[action.key].tokens = {};
 				}
-				let tokens = Object.assign({}, tokenExist? state[action.key].tokens[action.network]: {}, action.tokens);
 
-				state[action.key].tokens[action.network] = tokens;
+				state[action.key].tokens[action.network] = Object.assign({}, tokenExist ? state[action.key].tokens[action.network] : {}, action.tokens);
 			}
 			new_state = Object.assign({}, state);
-			console.log("should_update_db");
 			should_update_db = true;
 			break;
 		case DEL_ACCOUNT:
@@ -93,6 +92,12 @@ export default function accounts(state = init, action){
 			break;
 		case DEL_ACCOUNTS:
 			new_state = Object.assign({},init);
+			should_update_db = true;
+			break;
+		case DEL_ACCOUNT_TOKEN:
+			let tokens = state[action.key].tokens[action.network];
+			delete tokens[action.symbol];
+			new_state = Object.assign({},state);
 			should_update_db = true;
 			break;
 		default:

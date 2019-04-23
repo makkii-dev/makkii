@@ -112,7 +112,7 @@ export default  class SwipeableRow extends React.PureComponent{
             onPanResponderGrant: this._handlePanResponderGrant.bind(this),
             onPanResponderMove: this._handlePanResponderMove.bind(this),
             onPanResponderRelease: this._handlePanResponderEnd.bind(this),
-            onPanResponderTerminationRequest: this._onPanResponderTerminationRequest.bind(this),
+            onPanResponderTerminationRequest: this._handlePanResponderEnd.bind(this),
             onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
         });
     }
@@ -139,7 +139,7 @@ export default  class SwipeableRow extends React.PureComponent{
             this.close();
         }
     }
-    
+
 
     close() {
         this.props.onClose();
@@ -148,15 +148,18 @@ export default  class SwipeableRow extends React.PureComponent{
 
     _handleMoveShouldSetPanResponderCapture(evt, gestureState) {
         // Decides whether a swipe is responded to by this component or its child
-        if(!this.props.swipeEnabled && !this.props.isOpen){
-            return false;
-        }
+        // if(!this.props.swipeEnabled && !this.props.isOpen){
+        //     return false;
+        // }
         return this._isValidSwipe(gestureState);
     }
 
     _handlePanResponderGrant(evt, gestureState) {}
 
     _handlePanResponderMove(evt, gestureState) {
+        if(this.props.swipeEnabled === false || this.props.isOpen === true){
+            return;
+        }
         if (this._isSwipingExcessivelyRightFromClosedPosition(gestureState)) {
             return;
         }
@@ -292,6 +295,9 @@ export default  class SwipeableRow extends React.PureComponent{
     }
 
     _handlePanResponderEnd(evt, gestureState) {
+        if(this.props.swipeEnabled === false || this.props.isOpen === true){
+            return;
+        }
         const horizontalDistance = gestureState.dx;
         if (this._shouldAnimateRemainder(gestureState)) {
             if (horizontalDistance < 0) {

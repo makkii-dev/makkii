@@ -2,10 +2,9 @@ import {strings} from '../../../locales/i18n';
 import {Dimensions, View, TouchableOpacity, Keyboard, PixelRatio, StyleSheet, Image, ScrollView, Platform} from 'react-native';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import {RightActionButton} from '../../common';
+import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {SubTextInput} from '../../common';
 import {validateAddress} from '../../../utils';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
@@ -30,10 +29,10 @@ class AddToken extends Component {
                         addToken();
                     }}
                     disabled={!navigation.state.params || !navigation.state.params.isEdited}
-                ></RightActionButton>
+                />
             )
         })
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -54,7 +53,7 @@ class AddToken extends Component {
 
     async componentWillReceiveProps(props) {
         let scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData != '') {
+        if (scannedData !== '') {
             this.setState({
                 contractAddress: scannedData,
             });
@@ -91,13 +90,13 @@ class AddToken extends Component {
     }
 
     updateEditStatus=(contractAddress, tokenName, symbol, decimals)=>{
-        let allFilled = contractAddress.length != 0
-        && tokenName.length != 0
-        && symbol.length != 0
-        && decimals.length != 0;
+        let allFilled = contractAddress.length !== 0
+        && tokenName.length !== 0
+        && symbol.length !== 0
+        && decimals.length !== 0;
         console.log("current isEdit:" + this.props.navigation.getParam('isEdited'));
         console.log("allFilled: " + allFilled);
-        if (allFilled != this.props.navigation.getParam('isEdited')) {
+        if (allFilled !== this.props.navigation.getParam('isEdited')) {
             this.props.navigation.setParams({
                 isEdited: allFilled
             })
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
         borderRadius:10,
         // flex: 1,
     }
-})
+});
 
 export default connect( state => {
     return {

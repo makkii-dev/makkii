@@ -7,7 +7,8 @@ import Loading from '../../loading';
 import SwipeableRow from '../../swipeCell';
 import {RightActionButton} from '../../common';
 import {mainBgColor, fixedHeight} from '../../style_util';
-import {update_account_tokens} from '../../../actions/accounts';
+import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
+import BigNumber from 'bignumber.js';
 
 const {width} = Dimensions.get('window');
 
@@ -48,7 +49,7 @@ class SelectCoin extends Component {
     tokenAdded= (token) => {
         const {dispatch, navigation, setting, user} = this.props;
         dispatch(update_account_tokens(navigation.getParam('address'), token, setting.explorer_server, user.hashed_password));
-    }
+    };
 
     onSwipeOpen(Key: any) {
         this.setState({
@@ -79,15 +80,9 @@ class SelectCoin extends Component {
                             let address = this.props.navigation.getParam('address');
                             let explorer_server = this.props.setting.explorer_server;
                             const tokens = this.props.accounts[address].tokens[explorer_server];
-                            console.log("balance: ", tokens[key].balance);
-                            if (tokens[key].balance !== undefined && !tokens[key].balance.eq(new BigNumber(0))) {
-                                AppToast.show(strings('select_coin.toast_delete_token_not_empty'), {
-                                    position: 0
-                                });
-                                return;
-                            }
-                            this.loadingView.show('');
 
+                            this.loadingView.show();
+                            // fetch account balance
                             fetchAccountTokenBalance(tokens[key].contractAddr, address)
                             .then(res => {
                                 if (!res.eq(new BigNumber(0))) {
@@ -97,9 +92,7 @@ class SelectCoin extends Component {
                                     });
                                     return;
                                 }
-                                let newTokens = Object.assign({}, tokens);
-                                delete newTokens[key];
-                                this.props.dispatch(update_account_tokens(address, newTokens,
+                                dispatch(delete_account_token(address, key,
                                     explorer_server,
                                     this.props.user.hashed_password));
                                 this.loadingView.hide();
@@ -147,7 +140,7 @@ class SelectCoin extends Component {
                               </View>
                           }
                           isOpen={item.symbol === this.state.openRowKey}
-                          swipeEnabled={this.state.openRowKey === null && index != 0}
+                          swipeEnabled={this.state.openRowKey === null && index !== 0}
                           preventSwipeRight={true}
                           shouldBounceOnMount={true}
             >
@@ -178,13 +171,12 @@ class SelectCoin extends Component {
                 </TouchableOpacity>
             </SwipeableRow>
         )
-    }
+    };
 
     render() {
         let address = this.props.navigation.getParam('address');
         let explorer_server = this.props.setting.explorer_server;
         let tokens = this.props.accounts[address].tokens[explorer_server];
-        console.log("tokens: ", tokens);
         return (
             <TouchableOpacity
                 activeOpacity={1}

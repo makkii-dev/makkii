@@ -8,6 +8,7 @@ const UPDATE_ACCOUNT_TOKENS = 'UPDATE_ACCOUNT_TOKENS';
 const ACCOUNT_DEFAULT = "ACCOUNT_DEFAULT";
 const DEL_ACCOUNT = 'DEL_ACCOUNT';
 const DEL_ACCOUNTS = 'DEL_ACCOUNTS';
+const DEL_ACCOUNT_TOKEN = 'DEL_ACCOUNT_TOKEN';
 
 function accounts(accounts){
 	return {
@@ -89,6 +90,16 @@ function delete_account(key, hashed_password) {
 	}
 }
 
+function delete_account_token(key, symbol, network, hashed_password){
+	return {
+		type: DEL_ACCOUNT_TOKEN,
+		key,
+		symbol,
+		network,
+		hashed_password
+	}
+}
+
 function delete_accounts(hashed_password){
 	return {
 		type: DEL_ACCOUNTS,
@@ -107,6 +118,7 @@ module.exports={
 	UPDATE_ACCOUNT_TOKENS,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
+	DEL_ACCOUNT_TOKEN,
 	accounts,
 	accounts_add,
 	accounts_save,
@@ -117,4 +129,5 @@ module.exports={
 	update_account_token_txs,
 	delete_account,
 	delete_accounts,
+	delete_account_token,
 };
