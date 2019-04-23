@@ -135,10 +135,11 @@ function getLedgerMessage(errorCode) {
     }
 }
 
-function generateQRCode(amount, address) {
+function generateQRCode(amount, address, coin='AION') {
     let obj ={};
     obj['receiver'] = address;
     obj['amount'] = amount;
+    obj['coin'] = coin;
     return JSON.stringify(obj);
 }
 

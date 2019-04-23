@@ -112,7 +112,8 @@
     "toast_tx_sent": "交易已发送",
     "cancel": "取消",
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？",
-    "warning_send_zero": "您的发送金额为０，请确认是否继续？"
+    "warning_send_zero": "您的发送金额为０，请确认是否继续？",
+    "toast_unsupported_token": "不支持的Token: {{token}}"
   },
   "transaction_detail": {
     "title": "交易详情",
@@ -208,7 +209,10 @@
   "select_coin": {
     "title": "选择代币",
     "btn_add_token": "添加",
-    "progress_switching_coin": "切换中"
+    "progress_switching_coin": "切换中",
+    "warning_delete_token": "确定要删除这个代币?",
+    "toast_delete_token_not_empty": "仅有余额为０的代币可被删除",
+    "toast_get_token_balance_fail": "获取代币余额失败"
   },
   "add_token": {
     "title": "代币",

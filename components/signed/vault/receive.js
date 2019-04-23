@@ -70,7 +70,7 @@ class Receive extends Component {
 
 		// refresh
 		this.setState({
-			qrCodeValue: generateQRCode(this.state.amount, this.addr),
+			qrCodeValue: generateQRCode(this.state.amount, this.addr, this.state.unit),
 		})
 	}
 	longPressCode() {

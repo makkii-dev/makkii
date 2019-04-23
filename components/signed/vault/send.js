@@ -86,14 +86,30 @@ class Send extends Component {
 				})
 			} else {
 	    		let receiverCode = JSON.parse(scannedData);
-	    		if (receiverCode.receiver) {
+	    		if (receiverCode.coin !== undefined) {
+	    			if (receiverCode.coin !== 'AION') {
+						console.log("tokens: " + Object.keys(this.props.accounts[this.addr].tokens[this.props.setting.explorer_server]));
+						console.log("receiver.coin: " + receiverCode.coin);
+						if (this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][receiverCode.coin] === undefined) {
+							AppToast.show(strings('send.toast_unsupported_token', {token: receiverCode.coin}));
+							return;
+						}
+						this.coinSelected(receiverCode.coin);
+					} else {
+	    				this.coinSelected('AION')
+					}
+				} else {
+	    			// to be compatible with previous version, if no coin is specified in qr code, then it is AION.
+	    		    this.coinSelected('AION');
+				}
+	    		if (receiverCode.receiver !== undefined && receiverCode.amount !== undefined) {
 	    			this.setState({
 						recipient: receiverCode.receiver,
-					})
-				}
-	    		if (receiverCode.amount) {
-	    			this.setState({
 						amount: receiverCode.amount,
+					})
+				} else if (receiverCode.receiver !== undefined && receiverCode.amount === undefined) {
+					this.setState({
+						recipient: receiverCode.receiver,
 					})
 				}
 			}
