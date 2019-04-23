@@ -29,6 +29,7 @@ class ImportPrivateKey extends Component {
 	};
 
 	ImportAccount= (hashed_password) => {
+		Keyboard.dismiss();
 	    if (validatePrivateKey(this.state.private_key)) {
     		AionAccount.importAccount(this.state.private_key).then(address => {
 				let acc = {};
@@ -39,12 +40,16 @@ class ImportPrivateKey extends Component {
 				account.type = '[pk]';
 				account.transactions = {'mainnet':{}, 'mastery':{}};
 				acc[account.address] = account;
-				this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
-				setTimeout(() => {
-					DeviceEventEmitter.emit('updateAccountBalance');
-				}, 500);
-				// this.props.navigation.navigate('signed_vault');
-                this.props.navigation.goBack();
+				if(this.props.accounts[account.address]!==undefined){
+					AppToast.show(strings('import_private_key.already_existed',),{position:0})
+				}else {
+					this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
+					setTimeout(() => {
+						DeviceEventEmitter.emit('updateAccountBalance');
+					}, 500);
+					this.props.navigation.goBack();
+
+				}
 			}, error=> {
     			console.log("error: " + error);
 				alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
