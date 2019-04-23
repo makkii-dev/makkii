@@ -424,9 +424,9 @@
     "ZAR_unit":"ZAR"
   },
   "pinCode": {
-    "title": "Pin Code",
-    "switch_button": "Use Pin Code",
-    "modify_button": "Modify Pin Code",
+    "title": "PIN Code",
+    "switch_button": "Use PIN Code",
+    "modify_button": "Modify PIN Code",
     "touchID_button": "Use fingerprint ",
     "touchID_dialog_title": "Authentication Required",
     "touchID_dialog_desc": "Touch fingerprint sensor to unlock your wallet.",
@@ -434,7 +434,12 @@
     "not_support_TouchID_label": "This device is not supported fingerprint.",
     "verify_title": "Login Password",
     "verify_desc": "Enter login password to verify",
-    "pinCode_prompt": "You need reset pin code when reopening pin code, Using fingerprint requires you enabled pin code firstly."
+    "pinCode_prompt": "You need reset PIN code when reopening pin code, Using fingerprint requires you enabled PIN code firstly.",
+    "pinCode_invalid": "Incorrect PIN code",
+    "pinCode_not_match": "Your entries not match",
+    "pinCode_enter": "Enter your PIN code to unlock",
+    "pinCode_create": "1- Enter a new PIN code",
+    "pinCode_confirm": "2- Confirm your PIN code"
   },
   "dapp": {
     "launch_button": "Launch",

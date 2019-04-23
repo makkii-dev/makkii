@@ -422,7 +422,12 @@
     "not_support_TouchID_label": "本机不支持指纹解锁。",
     "verify_title": "验证登录密码",
     "verify_desc": "请输入登录密码确认本人操作",
-    "pinCode_prompt": "开启数字口令时需要重新设置口令,开启指纹解锁之前必须开启数字口令。"
+    "pinCode_prompt": "开启数字口令时需要重新设置口令,开启指纹解锁之前必须开启数字口令。",
+    "pinCode_invalid": "数字口令不正确",
+    "pinCode_not_match": "2次输入不匹配",
+    "pinCode_enter": "输入PIN code 解锁",
+    "pinCode_create": "1- 输入新的数字口令",
+    "pinCode_confirm": "2- 确认你的数字口令"
   },
   "sort": {
     "balance": "余额优先",

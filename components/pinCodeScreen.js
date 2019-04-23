@@ -20,6 +20,7 @@ const {width,height} = Dimensions.get('window');
 const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];
 const KeyboardDataWithTouchID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete", "blank", "finger", "blank"];
 const MaxPinCodeLength = 6;
+const isSmallScreen = height < 569
 class PinCodeScreen extends React.Component {
 
     /***********************************************************
@@ -47,6 +48,7 @@ class PinCodeScreen extends React.Component {
         this.state={
             pinCode: '',
             pinState: 0,
+            errorMsg: null,
         };
     }
     onGoback(){
@@ -89,7 +91,7 @@ class PinCodeScreen extends React.Component {
         return dots
     }
 
-    handleErrorCode(){
+    handleErrorCode(errorMsg){
         Animated.spring(
             this.animatedValue,
             {
@@ -100,7 +102,7 @@ class PinCodeScreen extends React.Component {
             }
         ).start();
         this.isShake=!this.isShake;
-        this.setState({pinCode: ''})
+        this.setState({pinCode: '',errorMsg})
     }
 
     handleCreateCode(){
@@ -116,7 +118,7 @@ class PinCodeScreen extends React.Component {
         const {dispatch} = this.props;
         const { pinCode } = this.state;
         if (pinCode !== this.createPinCode){
-            this.handleErrorCode();
+            this.handleErrorCode('pinCode_not_match');
             return false;
         }else {
             const hashed_pinCode = hashPassword(pinCode);
@@ -147,7 +149,7 @@ class PinCodeScreen extends React.Component {
                     },100);
                 }
             }else {
-                this.handleErrorCode()
+                this.handleErrorCode('pinCode_invalid')
             }
         }else if (pinState === 1) {
             this.handleCreateCode()
@@ -165,6 +167,7 @@ class PinCodeScreen extends React.Component {
     onPressNumber =(number)=>{
         this.state.pinCode.length<=MaxPinCodeLength&&(this.setState({
             pinCode: this.state.pinCode + number,
+            errorMsg: null,
         },()=>{
             if(this.state.pinCode.length === MaxPinCodeLength){
                 this.checkPinCode();
@@ -174,7 +177,8 @@ class PinCodeScreen extends React.Component {
 
     onPressDelete = ()=>{
         this.setState({
-            pinCode: this.state.pinCode.slice(0, this.state.pinCode.length-1)
+            pinCode: this.state.pinCode.slice(0, this.state.pinCode.length-1),
+            errorMsg: null,
         })
     };
 
@@ -231,8 +235,8 @@ class PinCodeScreen extends React.Component {
                 }}
                 >
                 <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: mainBgColor}]}>
-                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>)}
-                    { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{item}</Text>) }
+                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color : '#000', fontSize:36}]}>{item}</Text>)}
+                    { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) }
                     { item === 'delete'&& (<Image source={require('../assets/delete_button.png')} style={{width:20, height:20}} resizeMode={'contain'}/>)}
                     { item === 'finger'&& (<Image source={require('../assets/icon_touch_id.png')} style={{width:48, height:48}} resizeMode={'contain'}/>)}
                 </View>
@@ -247,11 +251,9 @@ class PinCodeScreen extends React.Component {
             useNativeDriver: true
         });
         return (
-            <View style={{ alignItems: 'center', justifyContent: 'center', marginVertical: 30 }}>
+            <View style={{ alignItems: 'center'}}>
                 <Text style={styles.desText}>{unlockDescription}</Text>
-                {warningPincodeFail &&
                 <Text style={styles.warningField}>{warningPincodeFail}</Text>
-                }
                 <Animated.View
                     style={[styles.pinField, {
                         transform: [
@@ -263,7 +265,7 @@ class PinCodeScreen extends React.Component {
                 >
                     {this.renderDots(MaxPinCodeLength)}
                 </Animated.View>
-                <View style={{marginTop:35, alignItems:'center'}}>
+                <View style={{marginTop:20, alignItems:'center'}}>
                     <FlatList
                         contentContainerStyle={{
                             flexDirection: 'column',
@@ -283,18 +285,22 @@ class PinCodeScreen extends React.Component {
     }
 
     render(){
-        const {pinState} = this.state;
-        let descr;
+        const {pinState,errorMsg} = this.state;
+        let unlockDescription;
+        let warningPincodeFail;
         if (pinState === 0){
-            descr = 'unlock'
+            unlockDescription = strings('pinCode.pinCode_enter')
         }else if (pinState === 1) {
-            descr = 'create'
+            unlockDescription = strings('pinCode.pinCode_create')
         }else {
-            descr = 'confirm'
+            unlockDescription = strings('pinCode.pinCode_confirm')
+        }
+        if(errorMsg&&errorMsg!==''){
+            warningPincodeFail = strings(`pinCode.${errorMsg}`);
         }
         return (
           <View style={{flex:1, paddingTop:getStatusBarHeight(true),backgroundColor:mainBgColor, alignItems:'center'}}>
-              {this.renderContent(descr)}
+              {this.renderContent(unlockDescription,warningPincodeFail)}
           </View>
         )
     }
@@ -308,6 +314,8 @@ export default connect(state => { return ({
 
 const styles = StyleSheet.create({
     desText: {
+        fontSize: isSmallScreen ? 14 : 22,
+        marginTop: 20
     },
     pinField: {
         flexDirection: 'row',
@@ -315,7 +323,9 @@ const styles = StyleSheet.create({
     },
     warningField: {
         color: 'red',
-        fontSize: 16
+        fontSize: 16,
+        marginVertical: 10,
+        height:20,
     },
     keyboardViewItem: {
         alignItems : 'center',
@@ -326,6 +336,7 @@ const styles = StyleSheet.create({
         marginVertical : 5,
     },
     keyboardViewItemText: {
+        fontFamily:Platform.OS === 'ios' ? 'Courier' : 'monospace',
         fontSize  : 20,
     },
 });
