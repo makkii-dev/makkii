@@ -5,8 +5,9 @@ import React, {Component} from 'react';
 import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {validateAddress} from '../../../utils';
+import {validateAddress, fetchTokenDetail} from '../../../utils';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import Loading from '../../loading';
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -40,8 +41,9 @@ class AddToken extends Component {
             contractAddress: '',
             tokenName: '',
             symbol: '',
-            decimals: '18',
+            decimals: '',
         };
+        this.address = props.navigation.getParam('address');
     }
 
     componentWillMount() {
@@ -52,18 +54,25 @@ class AddToken extends Component {
     }
 
     async componentWillReceiveProps(props) {
+        let oldData = this.props.navigation.getParam('scanned');
         let scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== '') {
+        if (scannedData !== '' && oldData !== scannedData) {
             this.setState({
                 contractAddress: scannedData,
             });
-            this.updateEditStatus(this.state.contractAddress, this.state.tokenName, this.state.symbol, this.state.decimals);
+            this.fetchTokenDetail(scannedData);
         }
     }
 
     addToken=() => {
         const {tokenAdded} = this.props.navigation.state.params;
         const {symbol, tokenName, decimals, contractAddress} = this.state;
+        if (this.props.accounts[this.address].tokens[this.props.setting.explorer_server][symbol] !== undefined) {
+            AppToast.show(strings('add_token.toast_token_exists'), {
+                position: 0,
+            });
+            return;
+        }
         tokenAdded(
             {[symbol]: {
                 symbol: symbol,
@@ -89,18 +98,41 @@ class AddToken extends Component {
         });
     }
 
-    updateEditStatus=(contractAddress, tokenName, symbol, decimals)=>{
-        let allFilled = contractAddress.length !== 0
-        && tokenName.length !== 0
-        && symbol.length !== 0
-        && decimals.length !== 0;
-        console.log("current isEdit:" + this.props.navigation.getParam('isEdited'));
-        console.log("allFilled: " + allFilled);
-        if (allFilled !== this.props.navigation.getParam('isEdited')) {
+    // updateEditStatus=(contractAddress, tokenName, symbol, decimals)=>{
+    //     let allFilled = contractAddress.length !== 0
+    //     && tokenName.length !== 0
+    //     && symbol.length !== 0
+    //     && decimals.length !== 0;
+    //     console.log("current isEdit:" + this.props.navigation.getParam('isEdited'));
+    //     console.log("allFilled: " + allFilled);
+    //     if (allFilled !== this.props.navigation.getParam('isEdited')) {
+    //         this.props.navigation.setParams({
+    //             isEdited: allFilled
+    //         })
+    //     }
+    // }
+
+    fetchTokenDetail=(address) => {
+        this.loadingView.show();
+        fetchTokenDetail(address).then(symbol => {
+            this.setState({
+                contractAddress: address,
+                tokenName: symbol.name,
+                symbol: symbol.symbol,
+                decimals: symbol.tokenDecimal
+            });
             this.props.navigation.setParams({
-                isEdited: allFilled
-            })
-        }
+                isEdited: true
+            });
+            this.loadingView.hide();
+        }).catch(err=> {
+            console.log("fetch token detail for address: " + address + " failed.");
+            AppToast.show(strings('add_token.toast_fetch_token_detail_fail'));
+            this.props.navigation.setParams({
+                isEdited: false
+            });
+            this.loadingView.hide();
+        });
     }
 
     render() {
@@ -118,8 +150,18 @@ class AddToken extends Component {
                                 value={this.state.contractAddress}
                                 multiline={true}
                                 onChangeText={v=>{
-                                    this.setState({contractAddress: v});
-                                    this.updateEditStatus(v, this.state.tokenName, this.state.symbol, this.state.decimals);
+                                    this.setState({contractAddress: v},
+                                        () => {
+                                            if (validateAddress(v)) {
+                                                this.fetchTokenDetail(v);
+                                            } else {
+                                                this.props.navigation.setParams({
+                                                    isEdited: false
+                                                })
+                                            }
+                                            // this.updateEditStatus(v, this.state.tokenName, this.state.symbol, this.state.decimals);
+                                        });
+
                                 }}
                                 placeholder={strings('add_token.hint_contract_address')}
                                 rightView={()=>
@@ -132,37 +174,43 @@ class AddToken extends Component {
                                 style={styles.text_input}
                                 value={this.state.tokenName}
                                 multiline={false}
-                                onChangeText={v=>{
-                                    this.setState({tokenName: v});
-                                    this.updateEditStatus(this.state.contractAddress, v, this.state.symbol, this.state.decimals);
-                                }}
-                                placeholder={strings('add_token.hint_token_name')}
+                                editable={false}
+                                // onChangeText={v=>{
+                                //     this.setState({tokenName: v});
+                                //     this.updateEditStatus(this.state.contractAddress, v, this.state.symbol, this.state.decimals);
+                                // }}
+                                // placeholder={strings('add_token.hint_token_name')}
                             />
                             <SubTextInput
                                 title={strings('add_token.label_symbol')}
                                 style={styles.text_input}
                                 value={this.state.symbol}
                                 multiline={false}
-                                onChangeText={v=>{
-                                    this.setState({symbol: v});
-                                    this.updateEditStatus(this.state.contractAddress, this.state.tokenName, v, this.state.decimals);
-                                }}
-                                placeholder={strings('add_token.hint_symbol')}
+                                editable={false}
+                                // onChangeText={v=>{
+                                //     this.setState({symbol: v});
+                                //     this.updateEditStatus(this.state.contractAddress, this.state.tokenName, v, this.state.decimals);
+                                // }}
+                                // placeholder={strings('add_token.hint_symbol')}
                             />
                             <SubTextInput
                                 title={strings('add_token.label_decimals')}
                                 style={styles.text_input}
                                 value={this.state.decimals}
                                 multiline={false}
-                                onChangeText={v=>{
-                                    this.setState({symbol: v});
-                                    this.updateEditStatus(this.state.contractAddress, this.state.tokenName, this.state.symbol, v);
-                                }}
-                                placeholder={strings('add_token.hint_decimals')}
+                                editable={false}
+                                // onChangeText={v=>{
+                                //     this.setState({symbol: v});
+                                //     this.updateEditStatus(this.state.contractAddress, this.state.tokenName, this.state.symbol, v);
+                                // }}
+                                // placeholder={strings('add_token.hint_decimals')}
                             />
                         </View>
                     </TouchableOpacity>
                 </MyscrollView>
+                <Loading ref={element=> {
+                    this.loadingView = element;
+                }}/>
             </View>
         )
     }
