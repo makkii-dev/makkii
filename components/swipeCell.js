@@ -1,16 +1,8 @@
-
 import React from 'react';
-import {
-    Animated,
-    PanResponder,
-    View,
-    StyleSheet,
-    Text
-} from 'react-native';
+import {Animated, PanResponder, StyleSheet, View} from 'react-native';
 
 
-import PropTypes from  'prop-types';
-
+import PropTypes from 'prop-types';
 
 
 const emptyFunction = ()=>{};
@@ -27,7 +19,7 @@ const HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD = 0.3;
 // Factor to divide by to get slow speed; i.e. 4 means 1/4 of full speed
 const SLOW_SPEED_SWIPE_FACTOR = 4;
 // Time, in milliseconds, of how long the animated swipe should be
-const SWIPE_DURATION = 300;
+const SWIPE_DURATION = 50;
 
 /**
  * On SwipeableListView mount, the 1st item will bounce to show users it's
@@ -157,7 +149,7 @@ export default  class SwipeableRow extends React.PureComponent{
     _handlePanResponderGrant(evt, gestureState) {}
 
     _handlePanResponderMove(evt, gestureState) {
-        if(this.props.swipeEnabled === false || this.props.isOpen === true){
+        if(this.props.swipeEnabled === false&&!this.props.isOpen){
             return;
         }
         if (this._isSwipingExcessivelyRightFromClosedPosition(gestureState)) {
@@ -243,7 +235,7 @@ export default  class SwipeableRow extends React.PureComponent{
          * at the same speed the user swiped (or the speed threshold)
          */
         const duration = Math.abs(
-            (this.props.maxSwipeDistance - Math.abs(distMoved)) / speed,
+            (this.props.maxSwipeDistance - Math.abs(distMoved)) / speed/1.5,
         );
         const maxSwipeDistance = this.props.maxSwipeDistance;
         this._animateTo(-maxSwipeDistance, duration);
@@ -258,13 +250,8 @@ export default  class SwipeableRow extends React.PureComponent{
     }
 
     _animateBounceBack(duration) {
-        /**
-         * When swiping right, we want to bounce back past closed position on release
-         * so users know they should swipe right to get content.
-         */
-        const swipeBounceBackDistance = RIGHT_SWIPE_BOUNCE_BACK_DISTANCE;
         this._animateTo(
-            -swipeBounceBackDistance,
+            -RIGHT_SWIPE_BOUNCE_BACK_DISTANCE,
             duration,
             this._animateToClosedPositionDuringBounce(),
         );
@@ -295,7 +282,7 @@ export default  class SwipeableRow extends React.PureComponent{
     }
 
     _handlePanResponderEnd(evt, gestureState) {
-        if(this.props.swipeEnabled === false || this.props.isOpen === true){
+        if(this.props.swipeEnabled === false &&!this.props.isOpen ){
             return;
         }
         const horizontalDistance = gestureState.dx;
