@@ -238,7 +238,9 @@
     "hint_contract_address": "0x...",
     "hint_token_name": "Please enter token name",
     "hint_symbol": "Please enter symbol",
-    "hint_decimals": "Please enter decimal"
+    "hint_decimals": "Please enter decimal",
+    "toast_fetch_token_detail_fail": "Token contract address is invalid.",
+    "toast_token_exists": "This token already exists."
   },
   "currency": {
     "title": "Exchange Rates",

@@ -226,7 +226,9 @@
     "hint_contract_address": "0x...",
     "hint_token_name": "请填写代币名称",
     "hint_symbol": "请填写代币符号",
-    "hint_decimals": "请填写小数位数"
+    "hint_decimals": "请填写小数位数",
+    "toast_fetch_token_detail_fail": "错误的代币合约地址",
+    "toast_token_exists": "添加失败，该代币已存在"
   },
   "currency": {
     "title": "兑换汇率",
