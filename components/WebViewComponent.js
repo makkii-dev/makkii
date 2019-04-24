@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View} from 'react-native';
-import {WebView} from "react-native-webview";
+import {WebView} from "@paulxuca/react-native-webview";
 import {ProgressBar} from "./processbar";
 const {width} = Dimensions.get('window');
 

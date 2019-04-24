@@ -3,12 +3,12 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import cn.jystudio.local.barcode.recognizer.LocalBarcodeRecognizerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.heyao216.react_native_installapk.InstallApkPackager;
 import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.chaion.rn.hwwallet.RNAionHwWalletPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactNativeHost;
@@ -40,12 +40,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNCWebViewPackage(),
             new FingerprintAuthPackage(),
             new LocalBarcodeRecognizerPackage(),
             new ImagePickerPackage(),
             new InstallApkPackager(),
             new RNScreenshotHelperPackage(),
-            new RNCWebViewPackage(),
             new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
             new RNFetchBlobPackage(),

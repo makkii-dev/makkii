@@ -11,7 +11,7 @@ import {
     BackHandler,
     PixelRatio
 } from 'react-native';
-import {WebView} from "react-native-webview";
+import {WebView} from "@paulxuca/react-native-webview";
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
@@ -57,6 +57,7 @@ class Dapp extends Component {
     constructor(props) {
         super(props);
         this.uri = this.props.navigation.state.params.uri;
+        // this.uri = `file://${RNFS.ExternalStorageDirectoryPath}/Download/browser/aaa.html`;
         this.wallet = null;
         Object.values(this.props.accounts).map(v=>{
             if (v.isDefault)
@@ -219,6 +220,7 @@ class Dapp extends Component {
                         renderLoading={()=>this.renderLoading()}
                         injectedJavaScriptBeforeLoad={this.state.inject}
                         startInLoadingState={true}
+                        originWhitelist={["*"]}
                         onLoadStart={()=>this.handleProcessBar(true)}
                         onLoadProgress={(e)=>{
                             this.setState({WebViewProgress: e.nativeEvent.progress});
