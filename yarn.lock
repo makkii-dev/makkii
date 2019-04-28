@@ -647,14 +647,6 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@paulxuca/react-native-webview@^5.7.3":
-  version "5.7.3"
-  resolved "https://registry.npmjs.org/@paulxuca/react-native-webview/-/react-native-webview-5.7.3.tgz#2b809b808b561d5bd07a412652f78984dd22d41e"
-  integrity sha512-DrUsIoiUltLKTNqO7zvHruHW4aFou4CSTXvSOs8566YmAm4jaKQ5KVjw1THvi6Udmdy90lARQo5SVKvC0igM/Q==
-  dependencies:
-    escape-string-regexp "1.0.5"
-    invariant "2.2.4"
-
 "@react-navigation/core@3.2.0":
   version "3.2.0"
   resolved "http://registry.npm.taobao.org/@react-navigation/core/download/@react-navigation/core-3.2.0.tgz#329dfe54f305ee22ed750d51cb09c5d18562d56f"
@@ -5739,6 +5731,13 @@ react-native-touch-id@^4.4.1:
   version "4.4.1"
   resolved "http://registry.npm.taobao.org/react-native-touch-id/download/react-native-touch-id-4.4.1.tgz#8b1bb2d04c30bac36bb9696d2d723e719c4a8b08"
   integrity sha1-ixuy0EwwusNruWltLXI+cZxKiwg=
+
+"react-native-webview@https://github.com/paulxuca/react-native-webview.git#upstream-injectjavascriptbeforedocumentload":
+  version "5.7.0"
+  resolved "https://github.com/paulxuca/react-native-webview.git#716c2f4d9c7e0172ea95236fb2514a63fc069909"
+  dependencies:
+    escape-string-regexp "1.0.5"
+    invariant "2.2.4"
 
 react-native@0.58.6:
   version "0.58.6"

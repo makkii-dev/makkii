@@ -36,7 +36,7 @@
 		D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AF271158B41A1A99E2B7C /* libTouchID.a */; };
 		E271862803BA4005B73DCBD3 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88757E7900954B85A61D4755 /* libRNFS.a */; };
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
-		E57C8FB7F6524BC9AE8F9014 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EF124F2585842FF86E084BE /* libRNCWebView.a */; };
+		607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF87723D22141F8AD5965D7 /* libRNCWebView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -490,8 +490,8 @@
 		E51256701EE941A0A8C8D7A8 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		F5DFDF34D7A842928DDC1BD9 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		FD5C7EED60074CA8B34AA8A3 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
-		35CB564F358E40C5978E11CD /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/@paulxuca/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		9EF124F2585842FF86E084BE /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		EFF87723D22141F8AD5965D7 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -525,7 +525,7 @@
 				BCE98375299041C2842429C4 /* libRNImagePicker.a in Frameworks */,
 				8A7CE7039A9548A7B8B49B54 /* libRNReactNativeLocalBarcodeRecognizer.a in Frameworks */,
 				D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */,
-				E57C8FB7F6524BC9AE8F9014 /* libRNCWebView.a in Frameworks */,
+				607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -852,7 +852,7 @@
 				8896BC84326E4B409D7547DC /* RNImagePicker.xcodeproj */,
 				84B513E06EEC450DA4A9FD20 /* RNReactNativeLocalBarcodeRecognizer.xcodeproj */,
 				D8ECDC55A1AC49ADBF903BDB /* TouchID.xcodeproj */,
-				35CB564F358E40C5978E11CD /* RNCWebView.xcodeproj */,
+				CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1519,7 +1519,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
-					"$(SRCROOT)/../node_modules/@paulxuca/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1566,7 +1566,7 @@
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
-					"$(SRCROOT)/../node_modules/@paulxuca/react-native-webview/ios",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -1,6 +1,6 @@
 rootProject.name = 'wallet'
-include ':@paulxuca_react-native-webview'
-project(':@paulxuca_react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/@paulxuca/react-native-webview/android')
+include ':react-native-webview'
+project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
 include ':react-native-touch-id'
 project(':react-native-touch-id').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-touch-id/android')
 include ':react-native-local-barcode-recognizer'

@@ -11,7 +11,7 @@ import {
     BackHandler,
     PixelRatio
 } from 'react-native';
-import {WebView} from "@paulxuca/react-native-webview";
+import {WebView} from "react-native-webview";
 import createInvoke from '../../../libs/aion-web3-inject/webView-invoke/native';
 import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
@@ -150,7 +150,7 @@ class Dapp extends Component {
         if (Platform.OS==='android') {
             RNFS.readFileAssets('contentScript.bundle.js', 'utf8').then((content) => {
                 this.setState({
-                    inject: content
+                    inject: content+'true;'
                 }, () => {
                     this.invoke = createInvoke(() => this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
@@ -166,7 +166,7 @@ class Dapp extends Component {
             const path = `${RNFS.MainBundlePath}/contentScript.bundle.js`;
             RNFS.readFile(path, 'utf8').then((content) => {
                 this.setState({
-                    inject: content
+                    inject: content+'true;'
                 }, () => {
                     this.invoke = createInvoke(() => this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
@@ -217,7 +217,7 @@ class Dapp extends Component {
                         useWebKit={true}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
-                        injectedJavaScriptBeforeLoad={this.state.inject}
+                        injectedJavaScriptBeforeDocumentLoad={this.state.inject}
                         startInLoadingState={true}
                         originWhitelist={["*"]}
                         allowFileAccess={true}
