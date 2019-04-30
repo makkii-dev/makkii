@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "postinstall": "cd libs/aion-web3-inject; yarn",
+    "postinstall": "cd libs/aion-web3-inject; yarn; cd ../../node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js"
   },
   "dependencies": {
@@ -34,7 +34,7 @@
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-svg": "^9.0.6",
     "react-native-touch-id": "^4.4.1",
-    "react-native-webview": "https://github.com/paulxuca/react-native-webview#upstream-injectjavascriptbeforedocumentload",
+    "react-native-webview": "https://github.com/chaion/react-native-webview.git#upstream-injectjavascriptbeforedocumentload",
     "react-navigation": "^3.4.1",
     "react-redux": "^6.0.0",
     "redux": "^4.0.1",

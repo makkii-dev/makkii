@@ -57,6 +57,7 @@ class Dapp extends Component {
     constructor(props) {
         super(props);
         this.uri = this.props.navigation.state.params.uri;
+        // this.uri = `file://${RNFS.ExternalStorageDirectoryPath}/Download/browser/dist/index.html`;
         this.wallet = null;
         Object.values(this.props.accounts).map(v=>{
             if (v.isDefault)
@@ -146,11 +147,10 @@ class Dapp extends Component {
             this.onGoBack(); // works best when the goBack is async
             return true;
         });
-        console.log('[route]' + this.props.navigation.state.routeName);
         if (Platform.OS==='android') {
             RNFS.readFileAssets('contentScript.bundle.js', 'utf8').then((content) => {
                 this.setState({
-                    inject: content
+                    inject: content+'true;'
                 }, () => {
                     this.invoke = createInvoke(() => this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
@@ -166,7 +166,7 @@ class Dapp extends Component {
             const path = `${RNFS.MainBundlePath}/contentScript.bundle.js`;
             RNFS.readFile(path, 'utf8').then((content) => {
                 this.setState({
-                    inject: content
+                    inject: content+'true;'
                 }, () => {
                     this.invoke = createInvoke(() => this.webViewRef);
                     this.invoke.define('getInitState', this.getInitState)
@@ -217,8 +217,10 @@ class Dapp extends Component {
                         useWebKit={true}
                         onMessage={this.onMessage}
                         renderLoading={()=>this.renderLoading()}
-                        injectedJavaScriptBeforeLoad={this.state.inject}
+                        injectedJavaScriptBeforeDocumentLoad={this.state.inject}
                         startInLoadingState={true}
+                        originWhitelist={["*"]}
+                        allowFileAccess={true}
                         onLoadStart={()=>this.handleProcessBar(true)}
                         onLoadProgress={(e)=>{
                             this.setState({WebViewProgress: e.nativeEvent.progress});

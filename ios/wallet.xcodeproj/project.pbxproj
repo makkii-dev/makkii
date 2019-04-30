@@ -5,7 +5,6 @@
 	};
 	objectVersion = 51;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -27,7 +26,6 @@
 		392FDBC7FABE43E5AFC6DE93 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B39D87A3FF4D67BD29B6CE /* libRNGestureHandler.a */; };
 		47D7FC0942C9437BB76BD0AF /* libRNFetchBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FF20366C8124618977CB4B4 /* libRNFetchBlob.a */; };
 		4FAA076F303545BEA6C8B7BE /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A19D477B5154FF5B7E2297F /* libRNCamera.a */; };
-		75F5574624584781973DC2EF /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D2A7EA0F78D54EEE99A5FB7D /* libRNCWebView.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8A7CE7039A9548A7B8B49B54 /* libRNReactNativeLocalBarcodeRecognizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C33897D3D75F4F15A13DE821 /* libRNReactNativeLocalBarcodeRecognizer.a */; };
 		9B4AD300C0514015BC6D03A9 /* libRNSVG.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D882BCE1419468E94D36537 /* libRNSVG.a */; };
@@ -38,6 +36,7 @@
 		D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AF271158B41A1A99E2B7C /* libTouchID.a */; };
 		E271862803BA4005B73DCBD3 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88757E7900954B85A61D4755 /* libRNFS.a */; };
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
+		607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF87723D22141F8AD5965D7 /* libRNCWebView.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -243,13 +242,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
 			remoteInfo = RCTCameraRoll;
-		};
-		1C508EAD2240F05E00B1EC0A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 195D8CC9A9574BE59A273CD8 /* RNCWebView.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNCWebView;
 		};
 		1C508EFA2241E0A800B1EC0A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -462,7 +454,6 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = wallet/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = wallet/main.m; sourceTree = "<group>"; };
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
-		195D8CC9A9574BE59A273CD8 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
 		1C4C5600222D12AA002A7DCA /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		1C508AF3222F7D6E00B1EC0A /* RCTCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTCameraRoll.xcodeproj; path = "../node_modules/react-native/Libraries/CameraRoll/RCTCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		1C508BD42230BA4200B1EC0A /* contentScript.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = contentScript.bundle.js; path = wallet/contentScript.bundle.js; sourceTree = "<group>"; };
@@ -494,12 +485,13 @@
 		C33897D3D75F4F15A13DE821 /* libRNReactNativeLocalBarcodeRecognizer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNReactNativeLocalBarcodeRecognizer.a; sourceTree = "<group>"; };
 		C5B39D87A3FF4D67BD29B6CE /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = "<group>"; };
 		C6D0D40E2B8F4455994A8915 /* libRNDeviceInfo-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNDeviceInfo-tvOS.a"; sourceTree = "<group>"; };
-		D2A7EA0F78D54EEE99A5FB7D /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
 		D80C8E9AD43448DC9149736A /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		D8ECDC55A1AC49ADBF903BDB /* TouchID.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TouchID.xcodeproj; path = "../node_modules/react-native-touch-id/TouchID.xcodeproj"; sourceTree = "<group>"; };
 		E51256701EE941A0A8C8D7A8 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		F5DFDF34D7A842928DDC1BD9 /* libRNRandomBytes-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNRandomBytes-tvOS.a"; sourceTree = "<group>"; };
 		FD5C7EED60074CA8B34AA8A3 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
+		CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		EFF87723D22141F8AD5965D7 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -530,10 +522,10 @@
 				E271862803BA4005B73DCBD3 /* libRNFS.a in Frameworks */,
 				4FAA076F303545BEA6C8B7BE /* libRNCamera.a in Frameworks */,
 				FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */,
-				75F5574624584781973DC2EF /* libRNCWebView.a in Frameworks */,
 				BCE98375299041C2842429C4 /* libRNImagePicker.a in Frameworks */,
 				8A7CE7039A9548A7B8B49B54 /* libRNReactNativeLocalBarcodeRecognizer.a in Frameworks */,
 				D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */,
+				607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -782,14 +774,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1C508EAA2240F05E00B1EC0A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1C508EAE2240F05E00B1EC0A /* libRNCWebView.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		1C508EC52241E0A800B1EC0A /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -865,10 +849,10 @@
 				207813AE6F244ECB85A47A38 /* RNFS.xcodeproj */,
 				026C83C250AA4BF89B9E97AC /* RNCamera.xcodeproj */,
 				50C2B6DE4F914C6D83A4E788 /* RNDeviceInfo.xcodeproj */,
-				195D8CC9A9574BE59A273CD8 /* RNCWebView.xcodeproj */,
 				8896BC84326E4B409D7547DC /* RNImagePicker.xcodeproj */,
 				84B513E06EEC450DA4A9FD20 /* RNReactNativeLocalBarcodeRecognizer.xcodeproj */,
 				D8ECDC55A1AC49ADBF903BDB /* TouchID.xcodeproj */,
+				CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1017,10 +1001,6 @@
 				{
 					ProductGroup = 1C4C559E222D0549002A7DCA /* Products */;
 					ProjectRef = 026C83C250AA4BF89B9E97AC /* RNCamera.xcodeproj */;
-				},
-				{
-					ProductGroup = 1C508EAA2240F05E00B1EC0A /* Products */;
-					ProjectRef = 195D8CC9A9574BE59A273CD8 /* RNCWebView.xcodeproj */;
 				},
 				{
 					ProductGroup = 1C4C55A0222D054A002A7DCA /* Products */;
@@ -1282,13 +1262,6 @@
 			remoteRef = 1C508AF7222F7D6E00B1EC0A /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		1C508EAE2240F05E00B1EC0A /* libRNCWebView.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNCWebView.a;
-			remoteRef = 1C508EAD2240F05E00B1EC0A /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 		1C508EFB2241E0A800B1EC0A /* libRNScreenshotHelper.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1542,11 +1515,11 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1589,11 +1562,11 @@
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)/../node_modules/react-native-camera/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-device-info/ios/RNDeviceInfo",
-					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 					"$(SRCROOT)/../node_modules/react-native-screenshot-helper/ios",
 					"$(SRCROOT)/../node_modules/react-native-image-picker/ios",
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
+					"$(SRCROOT)/../node_modules/react-native-webview/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
