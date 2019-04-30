@@ -519,6 +519,7 @@
   "toast_double_press_exit": "Press Back again to quit app",
   "toast_invalid_mnemonic": "Invalid Mnemonic!",
   "toast_mnemonic_share_warning": "Mnemonic Phrase is very important. DO NOT share with others!",
+  "toast_private_key_warning": "Private key is very sensitive and import. DO NOT share with others!",
   "fetch_data_label": "Fetching Data ...",
   "no_more_data_label": "-- No More Data --",
   "label_loading": "Loading...",
