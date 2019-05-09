@@ -150,10 +150,20 @@ class Send extends Component {
 									multiline={true}
 									onChangeText={v=>this.setState({recipient:v})}
 									placeholder={strings('send.hint_recipient')}
-									rightView={()=>
-										<TouchableOpacity onPress={()=> this.scan()}>
-											<Image source={require('../../../assets/icon_scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
-										</TouchableOpacity>}
+									rightView={() =>
+										<View style={{flexDirection: 'row'}}>
+											<TouchableOpacity onPress={() => this.scan()} style={{marginRight: 10}}>
+												<Image source={require('../../../assets/icon_scan.png')}
+													   style={{width: 20, height: 20, tintColor: '#000'}}
+													   resizeMode={'contain'}/>
+											</TouchableOpacity>
+											<TouchableOpacity onPress={() => this.selectFromAddressBook()}>
+												<Image source={require('../../../assets/address_book_btn.png')}
+													   style={{width: 20, height: 20, tintColor: '#000'}}
+													   resizeMode={'contain'}/>
+											</TouchableOpacity>
+										</View>
+									}
 								/>
 
 								<SubTextInput
@@ -437,6 +447,17 @@ class Send extends Component {
 			});
 		}
 	};
+	selectFromAddressBook=() => {
+		this.props.navigation.navigate('signed_setting_address_book', {
+			type: 'select',
+			addressSelected: this.addressSelected,
+		});
+	}
+	addressSelected=(address) => {
+		this.setState({
+			recipient: address,
+		});
+	}
 	scan=() => {
 		this.props.navigation.navigate('scan', {
 			success: 'signed_vault_send',
@@ -449,7 +470,7 @@ class Send extends Component {
 				}
 			},
 		});
-	};
+	}
 }
 
 const styles = StyleSheet.create({

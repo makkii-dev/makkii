@@ -8,6 +8,7 @@ import {RightActionButton,SubTextInput} from '../../common';
 import defaultStyles from '../../styles';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Toast from 'react-native-root-toast';
+import {add_address, update_address} from '../../../actions/user';
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -65,22 +66,36 @@ class AddAddress extends Component {
     }
 
     addAddress=() => {
-        const {addressAdded} = this.props.navigation.state.params;
         const {name, address} = this.state;
         let address_book = this.props.user.address_book;
-        if (Object.keys(address_book).indexOf(address) >= 0) {
+        if ((this.address === undefined && Object.keys(address_book).indexOf(address) >= 0) ||
+            (this.address != undefined && address !== this.address && Object.keys(address_book).indexOf(address) >= 0)) {
             AppToast.show(strings('add_address.error_address_exists'), {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.CENTER,
             });
             return;
         }
-        Object.keys(address_book);
-        addressAdded({
-            name: name,
-            address: address,
-            oldAddress: this.address,
+
+        const {dispatch} = this.props;
+        if (this.address === undefined) {
+            dispatch(add_address({name: name, address: address}));
+        } else {
+            dispatch(update_address({oldAddress: this.address, name: name, address: address}));
+        }
+        AppToast.show(strings('add_address.toast_address_saved'), {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.CENTER
         });
+
+        const {addressAdded} = this.props.navigation.state.params;
+        if (addressAdded !== undefined) {
+            addressAdded({
+                name: name,
+                address: address,
+                oldAddress: this.address,
+            });
+        }
         this.props.navigation.goBack();
     }
 
@@ -107,6 +122,7 @@ class AddAddress extends Component {
     }
 
     render() {
+        let addressEditable = !(this.name === undefined && this.address !== undefined);
         return (
             <View style={{flex: 1, backgroundColor: mainBgColor}}>
                 <MyscrollView
@@ -131,15 +147,20 @@ class AddAddress extends Component {
                                 style={styles.text_input}
                                 value={this.state.address}
                                 multiline={true}
+                                editable={addressEditable}
                                 onChangeText={v=>{
                                     this.setState({address: v});
                                     this.updateEditStatus(this.state.name, v);
                                 }}
                                 placeholder={strings('add_address.hint_address')}
-                                rightView={()=>
-                                    <TouchableOpacity onPress={()=> this.scan()}>
-                                        <Image source={require('../../../assets/icon_scan.png')} style={{width: 20, height: 20,tintColor:'#000'}} resizeMode={'contain'} />
-                                    </TouchableOpacity>}
+                                rightView={() =>
+                                    addressEditable?
+                                    <TouchableOpacity onPress={() => this.scan()}>
+                                        <Image source={require('../../../assets/icon_scan.png')}
+                                               style={{width: 20, height: 20, tintColor: '#000'}}
+                                               resizeMode={'contain'}/>
+                                    </TouchableOpacity>:null
+                                }
                             />
                         </View>
                     </TouchableOpacity>

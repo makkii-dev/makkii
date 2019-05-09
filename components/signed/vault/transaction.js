@@ -48,6 +48,13 @@ class Transaction extends Component {
 		const ifSender = this.addr === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
+		let inAddressBook, addressName;
+		if (Object.keys(this.props.user.address_book).indexOf(value1) >= 0) {
+			inAddressBook = true;
+			addressName = this.props.user.address_book[value1].name;
+		} else {
+			inAddressBook = false;
+		}
 		return (
 			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:20}}>
@@ -55,14 +62,30 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:100}}
 							title={title1}
-							value={value1}
+							value={inAddressBook?addressName+"("+value1+")":value1}
 							valueTextAlign={'left'}
-							rightView={()=><TouchableOpacity onPress={()=>{
-								Clipboard.setString(value1);
-								AppToast.show(strings('toast_copy_success'));
-							}}>
-								<Image source={require('../../../assets/copy.png')} style={{width:20,height:20,tintColor:'#000'}} resizeMode={'contain'}/>
-							</TouchableOpacity>}
+							rightView={() =>
+                                <View style={{flexDirection: 'row'}}>
+                                    <TouchableOpacity onPress={() => {
+                                        Clipboard.setString(value1);
+                                        AppToast.show(strings('toast_copy_success'));
+                                    }}>
+                                        <Image source={require('../../../assets/copy.png')}
+                                               style={{width: 20, height: 20, tintColor: '#000'}} resizeMode={'contain'}/>
+                                    </TouchableOpacity>
+									{
+										inAddressBook?null:
+											<TouchableOpacity onPress={() => {
+												this.props.navigation.navigate('signed_setting_add_address', {
+													address: value1,
+												});
+											}} style={{marginLeft: 10}}>
+												<Image source={require('../../../assets/icon_add_address.png')}
+													   style={{width: 20, height: 20, tintColor: '#000'}} resizeMode={'contain'}/>
+											</TouchableOpacity>
+									}
+								</View>
+							}
 						/>
 						<TransactionItemCell
 							style={{height:80}}
@@ -124,7 +147,8 @@ class Transaction extends Component {
 export default connect(state => {
 	return ({
 		accounts: state.accounts,
-		setting: state.setting
+		setting: state.setting,
+		user: state.user,
 	}); })(Transaction);
 
 const style =  StyleSheet.create({

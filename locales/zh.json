@@ -474,7 +474,8 @@
   "address_book": {
     "title": "地址簿",
     "btn_add": "添加",
-    "warning_delete_address": "确定要删除这个地址项?"
+    "warning_delete_address": "确定要删除这个地址项?",
+    "label_address_book_empty": "您还没有添加过地址项"
   },
   "add_address": {
     "title": "地址",
@@ -483,7 +484,8 @@
     "label_address": "地址",
     "hint_name": "请输入地址名称",
     "hint_address": "0x...",
-    "error_address_exists": "地址簿中已存在该地址"
+    "error_address_exists": "地址簿中已存在该地址",
+    "toast_address_saved": "已保存到地址簿"
   },
   "version_upgrade": {
     "alert_title_new_version":  "新版本",
