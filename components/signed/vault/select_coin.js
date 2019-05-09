@@ -71,8 +71,8 @@ class SelectCoin extends Component {
             strings('alert_title_warning'),
             strings('select_coin.warning_delete_token'),
             [
-                {text: strings('cancel_button'),onPress:()=>this.setState({openRowKey: null})},
-                {text: strings('delete_button'), onPress:()=>{
+                { text: strings('cancel_button'), onPress:()=>this.setState({openRowKey: null})},
+                { text: strings('delete_button'), onPress:()=>{
                         this.setState({
                             openRowKey: null,
                         },()=>setTimeout(()=>
@@ -190,13 +190,13 @@ class SelectCoin extends Component {
                     this.setState({openRowKey: null})
                 }}
             >
-                    <FlatList
-                        style={{width: width}}
-                        data={[{symbol: 'AION', name: 'AION'}, ...Object.values(tokens)]}
-                        renderItem={this.render_item}
-                        ItemSeparatorComponent={() => <View style={styles.divider}/>}
-                        keyExtractor={(item, index) => item.symbol}
-                    />
+                <FlatList
+                    style={{width: width}}
+                    data={[{symbol: 'AION', name: 'AION'}, ...Object.values(tokens)]}
+                    renderItem={this.render_item}
+                    ItemSeparatorComponent={() => <View style={styles.divider}/>}
+                    keyExtractor={(item, index) => item.symbol}
+                />
                 <Loading ref={element => {
                     this.loadingView = element;
                 }}/>

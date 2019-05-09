@@ -5,7 +5,11 @@ import {
     StyleSheet,
     Dimensions,
     NativeModules,
-    TouchableOpacity, Clipboard, Platform, PermissionsAndroid
+    NativeEventEmitter,
+    TouchableOpacity,
+    Clipboard,
+    Platform,
+    PermissionsAndroid
 } from 'react-native';
 
 import defaultStyles from '../../styles.js';

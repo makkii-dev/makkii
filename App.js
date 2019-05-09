@@ -60,11 +60,14 @@ import SettingLanguage      	from './components/signed/setting/language.js';
 import SettingAdvanced       	from './components/signed/setting/advanced.js';
 import SettingCurrency       	from './components/signed/setting/currency.js';
 import SettingPinCode           from './components/signed/setting/pinCode.js';
+import SettingAddressBook       from './components/signed/setting/address_book.js';
+import SettingAddAddress        from './components/signed/setting/add_address.js';
 import RecoveryPassword      	from './components/unsigned/recovery_password.js';
 import SimpleWebView         	from './components/WebViewComponent';
 import PinCodeScreen            from './components/pinCodeScreen';
 import SelectCoin               from './components/signed/vault/select_coin';
 import AddToken                 from './components/signed/vault/add_token';
+
 
 const navigationOptions = ({navigation}) => ({
     headerRight: (<View></View>),
@@ -309,6 +312,14 @@ const Routes = createAppContainer(createStackNavigator({
 	'signed_setting_pinCode': {
 		screen: SettingPinCode,
 		navigationOptions
+	},
+	'signed_setting_address_book': {
+		screen: SettingAddressBook,
+		navigationOptions: navigationOptionsWithoutRight,
+	},
+    'signed_setting_add_address': {
+		screen: SettingAddAddress,
+		navigationOptions: navigationOptionsWithoutRight,
 	},
 	'simple_webview': {
 		screen: SimpleWebView,

@@ -30,6 +30,11 @@ const SETTINGS = [
         'route_url':'signed_setting_currency'
     },
     {
+        'title': 'address_book.title',
+        'icon': require('../../../assets/icon_address_book.png'),
+        'route_url':'signed_setting_address_book'
+    },
+    {
         'title': 'advanced.title',
         'icon': require('../../../assets/icon_advance.png'),
         'route_url':'signed_setting_advanced'
