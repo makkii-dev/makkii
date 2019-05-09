@@ -40,6 +40,7 @@ class Transaction extends Component {
 			address: transaction.from,
 			value: transaction.value + '',
 			recipient: transaction.to,
+            symbol: this.props.navigation.getParam('symbol'),
 		})
 	}
 	render(){
