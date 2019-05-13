@@ -471,6 +471,22 @@
   "setting": {
     "confirm_logout": "退出后不会删除任何历史数据，下次登录依然可以使用本账号。"
   },
+  "address_book": {
+    "title": "地址簿",
+    "btn_add": "添加",
+    "warning_delete_address": "确定要删除这个地址项?",
+    "label_address_book_empty": "您还没有添加过地址项"
+  },
+  "add_address": {
+    "title": "地址",
+    "btn_save": "保存",
+    "label_name": "名称",
+    "label_address": "地址",
+    "hint_name": "请输入地址名称",
+    "hint_address": "0x...",
+    "error_address_exists": "地址簿中已存在该地址",
+    "toast_address_saved": "已保存到地址簿"
+  },
   "version_upgrade": {
     "alert_title_new_version":  "新版本",
     "label_version": "版本号",
@@ -519,6 +535,7 @@
   "toast_double_press_exit": "再按一次返回退出应用",
   "toast_invalid_mnemonic": "无效的助记词",
   "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人！",
+  "toast_private_key_warning": "切勿泄露您的私钥给他人！",
   "fetch_data_label": "获取数据中……",
   "no_more_data_label": "-- 没有更多数据了 --",
   "label_loading": "加载中……",

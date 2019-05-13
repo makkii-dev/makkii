@@ -4,7 +4,12 @@ import {
     Text,
     StyleSheet,
     Dimensions,
-    TouchableOpacity, Clipboard, Platform, PermissionsAndroid
+    NativeModules,
+    NativeEventEmitter,
+    TouchableOpacity,
+    Clipboard,
+    Platform,
+    PermissionsAndroid
 } from 'react-native';
 
 import defaultStyles from '../../styles.js';
@@ -13,7 +18,10 @@ import {strings} from "../../../locales/i18n";
 import QRCode from "react-native-qrcode-svg";
 import {alert_ok, ComponentButton, InputMultiLines} from "../../common";
 import {saveImage} from "../../../utils";
+import screenshotHelper from 'react-native-screenshot-helper';
 
+var nativeBridge = NativeModules.RNScreenshotHelper;
+const NativeModule = new NativeEventEmitter(nativeBridge);
 const {width} = Dimensions.get('window');
 
 class ExportPrivateKey extends React.Component{
@@ -29,6 +37,28 @@ class ExportPrivateKey extends React.Component{
         const {navigation} = this.props;
         this.privateKey = navigation.getParam('privateKey','');
     }
+
+    componentDidMount() {
+        if (Platform.OS === 'android') {
+            screenshotHelper.disableTakeScreenshot();
+        } else {
+            this.subscription = NativeModule.addListener('screenshot_taken', () => {
+                AppToast.show(strings('toast_private_key_warning'), {
+                    duration: Toast.durations.LONG,
+                    position: Toast.positions.CENTER,
+                });
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        if (Platform.OS === 'android') {
+            screenshotHelper.enableTakeScreenshot();
+        } else {
+            this.subscription.remove();
+        }
+    }
+
     async saveQRCode() {
         if (this.qrcodeRef) {
             if (Platform.OS === 'android') {

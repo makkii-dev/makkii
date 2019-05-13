@@ -482,6 +482,22 @@
     "toast_get_latest_version_fail": "Check latest version failed",
     "toast_to_appstore_fail": "Go to App Store failed"
   },
+  "address_book": {
+    "title": "Address Book",
+    "btn_add": "Add",
+    "warning_delete_address": "Are you sure you want to delete this address?",
+    "label_address_book_empty": "You haven't any addresses."
+  },
+  "add_address": {
+    "title": "Address",
+    "btn_save": "Save",
+    "label_name": "Name",
+    "label_address": "Address",
+    "hint_name": "Please enter name",
+    "hint_address": "0x...",
+    "error_address_exists": "This address already exists in address book.",
+    "toast_address_saved": "Saved to address book."
+  },
   "app_name": "Makkii",
   "logout": "Sign Out",
   "update_button": "Update",
@@ -519,6 +535,7 @@
   "toast_double_press_exit": "Press Back again to quit app",
   "toast_invalid_mnemonic": "Invalid Mnemonic!",
   "toast_mnemonic_share_warning": "Mnemonic Phrase is very important. DO NOT share with others!",
+  "toast_private_key_warning": "Private key is very sensitive and import. DO NOT share with others!",
   "fetch_data_label": "Fetching Data ...",
   "no_more_data_label": "-- No More Data --",
   "label_loading": "Loading...",
