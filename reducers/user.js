@@ -28,7 +28,7 @@ export default function user(state = init, action){
 	        	mnemonic: action.mnemonic,
 				address_book: action.address_book,
 	      	});
-			keyStore.creatByMnemonic(action.mnemonic,'');
+			keyStore.createByMnemonic(action.mnemonic,'');
 	      	should_update_db = true;
 	      	break;
 	    case USER_UPDATE_PASSWORD:

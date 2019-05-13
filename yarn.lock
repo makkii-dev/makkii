@@ -5667,8 +5667,9 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
   version "0.0.2"
   resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#d0f4acdda93f601d04f6f724daef8f33bc2c37b5"
 
-"react-native-makkii-core@file:/home/chengchen/Workspace/chaion/react-native-makkii-core":
+"react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git":
   version "1.0.0"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#1f5858f7e16acd5c997ab1582c4561a8990976c6"
 
 react-native-qrcode-svg@^5.1.2:
   version "5.1.2"
