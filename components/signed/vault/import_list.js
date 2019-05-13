@@ -18,7 +18,8 @@ import {accounts_add} from "../../../actions/accounts";
 import SelectList from '../../selectList';
 import {ImportListfooter, RightActionButton} from "../../common";
 import {strings} from '../../../locales/i18n';
-import {getLedgerMessage} from "../../../utils";
+import {getLedgerMessage, range} from "../../../utils";
+import keyStore from 'react-native-makkii-core';
 import {mainBgColor} from '../../style_util';
 
 const {width} = Dimensions.get('window');
@@ -92,26 +93,28 @@ class ImportHdWallet extends React.Component {
         //fetch n Accounts from MasterKey;
         return new Promise((resolve, reject) => {
             try{
-                let masterKey = AionAccount.recoverAccount(this.props.user.mnemonic)
                 let accounts = {};
-                let i = this.state.lastIndex;
-                let sum = 0;
-                while (sum < n) {
-                    let getAcc = masterKey.deriveHardened(i);
-                    let acc = {};
-                    acc.address = getAcc.address;
-                    acc.private_key = getAcc.private_key;
-                    acc.balance = 0;
-                    acc.name = this.props.setting.default_account_name;
-                    acc.type = '[local]';
-                    acc.transactions = {};
-                    if (!this.isAccountIsAlreadyImport(acc.address)) {
-                        sum = sum + 1;
-                        accounts[acc.address] = acc
-                    }
-                    i = i + 1;
-                }
-                resolve({'accountsList': accounts, 'lastIndex':this.state.lastIndex + n })
+                const start = this.state.lastIndex;
+                let promises = [];
+                range(start, start+n, 1).forEach(index=>
+                    promises.push(keyStore.getKey(425,0,0,index))
+                );
+                Promise.all(promises).then(accs=>{
+                    accs.forEach(getAcc=>{
+                        let acc = {};
+                        acc.address = getAcc.address;
+                        acc.private_key = getAcc.private_key;
+                        acc.balance = 0;
+                        acc.name = this.props.setting.default_account_name;
+                        acc.type = '[local]';
+                        acc.transactions = {};
+                        if (!this.isAccountIsAlreadyImport(acc.address)) {
+                            accounts[acc.address] = acc
+                        }
+                    });
+                    resolve({'accountsList': accounts, 'lastIndex':this.state.lastIndex + n })
+                })
+
             }catch (e) {
                 reject(e)
             }

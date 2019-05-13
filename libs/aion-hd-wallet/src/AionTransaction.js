@@ -3,6 +3,7 @@ import blake2b from 'blake2b';
 import {Crypto} from "./utils/crypto";
 import {AionRlp} from './utils/rlp';
 import wallet from 'react-native-aion-hw-wallet';
+import keyStore from "react-native-makkii-core";
 
 const sigToBytes = (signature, publicKey) => {
     let fullSignature = new Uint8Array((signature.length + publicKey.length));
@@ -42,6 +43,7 @@ export class AionTransaction {
      * Signature with public key appended
      */
     fullSignature;
+    encoded;
 
     /**
      *
@@ -99,6 +101,7 @@ export class AionTransaction {
      * @returns {*}
      */
     getEncodedRaw = ()=>{
+
         let encodedTx = {};
         encodedTx.nonce = AionRlp.encode(this.nonce);
         encodedTx.to = AionRlp.encode(this.to);
@@ -125,6 +128,11 @@ export class AionTransaction {
      * @returns {*}
      */
     getEncoded = ()=>{
+
+        if(this.encoded){
+            return this.encoded;
+        }
+
         let encodedTx = {};
         encodedTx.nonce = AionRlp.encode(this.nonce);
         encodedTx.to = AionRlp.encode(this.to);
@@ -154,12 +162,48 @@ export class AionTransaction {
         return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
-    signByECKey = (ecKey) => {
+    signByECKey = (private_key, coinType) => {
         return new Promise((resolve, reject) => {
             let rawHash = this.getRawHash();
-            this.signature = ecKey.sign(rawHash);
-            this.fullSignature = sigToBytes(this.signature, ecKey.publicKey);
-            resolve();
+            let tx = {
+                nonce : this.nonce,
+                amount: this.valueHex,
+                gasLimit: this.gas,
+                gasPrice: this.gasPrice,
+                to: this.to,
+                private_key: private_key,
+            };
+            this.data!==null&& (tx = {...tx,data:this.data});
+            keyStore.signTransaction(tx, coinType).then(res=>{
+                const {encoded, signature} = res;
+                if(!encoded.startsWith('0x')){
+                    this.encoded = '0x'+encoded;
+                }else{
+                    this.encoded = encoded;
+                }
+                this.signature = hexString2Array(signature);
+                private_key = private_key.startsWith('0x')?private_key.substring(2):private_key;
+                this.fullSignature = sigToBytes(this.signature, hexString2Array(private_key.substring(64)));
+                resolve(this.encoded);
+            }).catch(e=>{
+                console.log('sign error => ', e);
+                reject(e)
+            });
+
+            // keyStore.recoveKeyPairByPrivateKey(private_key,coinType).then(keyPair=>{
+            //     keyStore.sign(Crypto.toHex(rawHash), keyPair.private_key, 425).then(signature=>{
+            //         this.signature = hexString2Array(signature);
+            //         this.fullSignature = sigToBytes(this.signature, hexString2Array(keyPair.public_key));
+            //         resolve();
+            //     }).catch(e=>{
+            //         console.log('sign error => ', e);
+            //         reject(e)
+            //     })
+            // }).catch(e=>{
+            //     console.log('sign error => ', e);
+            //     reject(e)
+            // })
+
         });
     };
 

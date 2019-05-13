@@ -3,7 +3,6 @@ import {DeviceEventEmitter} from "react-native";
 import Toast from "react-native-root-toast";
 import {strings} from "../locales/i18n";
 import {AionTransaction} from "../libs/aion-hd-wallet";
-import {Ed25519Key} from "../libs/aion-hd-wallet/src/key/Ed25519Key";
 import {CONTRACT_ABI} from './token';
 import {fetchRequest} from './others';
 import BigNumber from "bignumber.js";
@@ -35,16 +34,21 @@ function sendAionTransaction(tx, wallet){
             let promise;
             try {
                 console.log('wallet type: ', type);
-                promise = type === '[ledger]'? pendingTx.signByLedger(derivationIndex) : pendingTx.signByECKey(Ed25519Key.fromSecretKey(private_key));
+                promise = type === '[ledger]'? pendingTx.signByLedger(derivationIndex) : pendingTx.signByECKey(private_key,425);
             }catch(e){
                 console.log('sign transaction failed');
                 throw (e)
             }
-            promise.then(()=>{
-                let pending = web3.eth.sendSignedTransaction(pendingTx.getEncoded());
+            promise.then(encoded =>{
+                if(!encoded){
+                    console.log('try get pending tx encoded');
+                    encoded = pendingTx.getEncoded();
+                }
+                console.log('encoded => ',encoded);
+                let pending = web3.eth.sendSignedTransaction(encoded);
                 resolve({pending,signedTransaction:pendingTx});
             }).catch(err=>{
-                throw err
+                reject(err)
             })
         }).catch(err=>{
             reject(err)

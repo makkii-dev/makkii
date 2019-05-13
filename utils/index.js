@@ -365,7 +365,7 @@ function strLen(str){
 
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
-// const mastery_url = 'http://192.168.50.83:8545';
+// const mastery_url = 'http://192.168.50.105:8545';
 function navigationSafely(pinCodeEnabled, hashed_password,navigation,
                           route={
                               url: '',
@@ -416,6 +416,13 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
 
 }
 
+function range(start, end, step) {
+    let arr = [];
+    for(let i=start; i < end; i++){
+        if(i%step===0){arr.push(i)}
+    }
+    return arr;
+}
 
 module.exports = {
     sendTransaction:TransactionUtil.sendTransaction,
@@ -450,4 +457,5 @@ module.exports = {
     navigationSafely,
     getLatestVersion: getLatestVersion,
     generateUpdateMessage: generateUpdateMessage,
+    range
 };

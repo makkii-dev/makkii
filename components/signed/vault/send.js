@@ -238,7 +238,7 @@ class Send extends Component {
 				strings('send.warning_send_to_itself'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
-					{text:strings('alert_ok_button'), onPress: () => {this.transfer1()}}
+					{text:strings('alert_ok_button'), onPress: () => {setTimeout(this.transfer1, 200)}}
 				],
 				{cancelable:false}
 				);
@@ -249,13 +249,13 @@ class Send extends Component {
 
 	transfer1=() => {
 		let amount = new BigNumber(this.state.amount);
-		if (amount === 0) {
+		if (amount.isZero()) {
 			popCustom.show(
 				strings('alert_title_warning'),
 				strings('send.warning_send_zero'),
 				[
 					{text:strings('cancel_button'), onPress: ()=> {}},
-					{text:strings('alert_ok_button'), onPress: () => {this.beforeTransfer()}}
+					{text:strings('alert_ok_button'), onPress: () => {setTimeout(this.beforeTransfer, 200)}}
 				],
 				{cancelable:false}
 			);
@@ -311,11 +311,9 @@ class Send extends Component {
 		};
 		sendTransaction(tx,this.account,this.state.unit,setting.explorer_server).then(res=>{
 			const {pending, signedTransaction} = res;
-			console.log('pending ', pending);
 			return new Promise((resolve, reject)=> {
 				pending.on('transactionHash', (hash) => {
 					console.log("transaction sent: hash=" + hash);
-
 					let txs = {};
 					let pendingTx = {};
 					pendingTx.hash = hash;

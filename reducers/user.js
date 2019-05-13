@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native';
+import keyStore from "react-native-makkii-core";
 
 import {
 	USER,
@@ -22,6 +23,7 @@ export default function user(state = init, action){
 				hashed_pinCode: action.hashed_pinCode,
 	        	mnemonic: action.mnemonic
 	      	});
+			keyStore.creatByMnemonic(action.mnemonic,'');
 	      	should_update_db = true;
 	      	break;
 	    case USER_UPDATE_PASSWORD:
