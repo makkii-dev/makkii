@@ -5,7 +5,7 @@ import React, {Component} from 'react';
 import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {validateAddress, fetchTokenDetail} from '../../../utils';
+import {accountKey, validateAddress, fetchTokenDetail} from '../../../utils';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
 
@@ -43,7 +43,7 @@ class AddToken extends Component {
             symbol: '',
             decimals: '',
         };
-        this.address = props.navigation.getParam('address');
+        this.account = props.navigation.getParam('account');
     }
 
     componentWillMount() {
@@ -67,7 +67,12 @@ class AddToken extends Component {
     addToken=() => {
         const {tokenAdded} = this.props.navigation.state.params;
         const {symbol, tokenName, decimals, contractAddress} = this.state;
-        if (this.props.accounts[this.address].tokens[this.props.setting.explorer_server][symbol] !== undefined) {
+        const {accounts, setting, navigation} = this.props;
+        let account_key = accountKey(this.account.symbol, this.account.address);
+        let tokens = accounts[account_key].tokens;
+        if (tokens !== undefined &&
+            tokens[setting.explorer_server] !== undefined &&
+            tokens[setting.explorer_server][symbol] !== undefined) {
             AppToast.show(strings('add_token.toast_token_exists'), {
                 position: 0,
             });
@@ -82,14 +87,14 @@ class AddToken extends Component {
                 balance: new BigNumber(0),
                 tokenTxs: {},
             }});
-        this.props.navigation.goBack();
+        navigation.goBack();
     }
 
     scan=() => {
         this.props.navigation.navigate('scan', {
             success: 'signed_add_token',
             validate: function(data) {
-                let pass = validateAddress(data.data);
+                let pass = validateAddress(data.data, this.account.symbol);
                 return {
                     pass: pass,
                     err: pass? '': strings('error_invalid_qrcode')
@@ -152,7 +157,7 @@ class AddToken extends Component {
                                 onChangeText={v=>{
                                     this.setState({contractAddress: v},
                                         () => {
-                                            if (validateAddress(v)) {
+                                            if (validateAddress(v, this.account.symbol)) {
                                                 this.fetchTokenDetail(v);
                                             } else {
                                                 this.props.navigation.setParams({

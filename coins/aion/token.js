@@ -1,5 +1,5 @@
 // Declare ABI for token contract
-import {fetchRequest} from './others';
+import {fetchRequest} from '../../utils/others';
 import BigNumber from "bignumber.js";
 const CONTRACT_ABI = [
     {
@@ -190,6 +190,7 @@ function fetchTokenDetail(contract_address){
 function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=0, size=25){
     return new Promise((resolve, reject) => {
         const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&tokenAddress=${symbolAddress}&page=${page}&size=${size}`;
+        console.log("get account token transactions: " + url);
         fetchRequest(url,"GET").then(res=>{
             const {content} = res;
             let txs = {};

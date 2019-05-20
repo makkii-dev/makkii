@@ -164,7 +164,7 @@
     "warning": "确保你的环境是安全的, 且没有人能看到你的屏幕。"
   },
   "change_account_name": {
-    "title": "更改账户名称"
+    "title": "账户名称"
   },
   "ledger": {
     "toast_connecting": "正在连接Ledger设备……",
@@ -495,6 +495,12 @@
     "toast_download_fail": "下载失败",
     "toast_get_latest_version_fail": "检查新版本失败",
     "toast_to_appstore_fail": "跳转App Store失败"
+  },
+  "vault_import_coin": {
+    "title": "选择币种"
+  },
+  "vault_import_source": {
+    "title": "添加方式"
   },
   "app_name": "Makkii",
   "logout": "退出",

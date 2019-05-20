@@ -26,7 +26,7 @@ class Transaction extends Component {
 
 	constructor(props){
 		super(props);
-		this.addr = this.props.navigation.state.params.account;
+		this.account = this.props.navigation.state.params.account;
 		this.transaction = this.props.navigation.state.params.transaction;
 	}
 	onViewInExplorer(){
@@ -37,16 +37,16 @@ class Transaction extends Component {
 		const {navigation} = this.props;
 		const transaction = this.transaction;
 		navigation.navigate('signed_vault_send',{
-			address: transaction.from,
+			account: this.account,
 			value: transaction.value + '',
 			recipient: transaction.to,
-            symbol: this.props.navigation.getParam('symbol'),
+            tokenSymbol: this.props.navigation.getParam('symbol'),
 		})
 	}
 	render(){
 		const transaction = this.transaction;
 		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const ifSender = this.addr === transaction.from;
+		const ifSender = this.account.address === transaction.from;
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
 		let inAddressBook, addressName;

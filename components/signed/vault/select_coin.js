@@ -2,13 +2,14 @@ import {strings} from '../../../locales/i18n';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import {View, FlatList, StyleSheet, PixelRatio, TouchableOpacity, Dimensions, Text, Image} from 'react-native';
-import {fetchAccountTokenBalance} from '../../../utils';
+import {fetchAccountTokenBalance, accountKey} from '../../../utils';
 import Loading from '../../loading';
 import SwipeableRow from '../../swipeCell';
 import {RightActionButton} from '../../common';
 import {mainBgColor, fixedHeight} from '../../style_util';
 import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
+import {COINS} from './constants';
 
 const {width} = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ class SelectCoin extends Component {
                     btnTitle={strings('select_coin.btn_add_token')}
                     onPress={() => {
                         navigation.navigate('signed_add_token', {
-                            address: navigation.getParam('address'),
+                            account: navigation.getParam('account'),
                             tokenAdded: navigation.getParam('tokenAdded'),
                         });
                     }}
@@ -38,6 +39,8 @@ class SelectCoin extends Component {
 
     constructor(props) {
         super(props);
+        this.account = this.props.navigation.state.params.account;
+        this.account_key = accountKey(this.account.symbol, this.account.address);
         this.state = {
             openRowKey: null,
         };
@@ -48,7 +51,7 @@ class SelectCoin extends Component {
 
     tokenAdded= (token) => {
         const {dispatch, navigation, setting, user} = this.props;
-        dispatch(update_account_tokens(navigation.getParam('address'), token, setting.explorer_server, user.hashed_password));
+        dispatch(update_account_tokens(this.account_key, token, setting.explorer_server, user.hashed_password));
     };
 
     onSwipeOpen(Key: any) {
@@ -66,7 +69,7 @@ class SelectCoin extends Component {
     onDeleteToken(key) {
         console.log("delete key: " + key);
 
-        const { dispatch } = this.props;
+        const { dispatch, accounts, setting, user } = this.props;
         popCustom.show(
             strings('alert_title_warning'),
             strings('select_coin.warning_delete_token'),
@@ -77,13 +80,12 @@ class SelectCoin extends Component {
                             openRowKey: null,
                         },()=>setTimeout(()=>
                         {
-                            let address = this.props.navigation.getParam('address');
-                            let explorer_server = this.props.setting.explorer_server;
-                            const tokens = this.props.accounts[address].tokens[explorer_server];
+                            let explorer_server = setting.explorer_server;
+                            const tokens = accounts[this.account_key].tokens[explorer_server];
 
                             this.loadingView.show();
                             // fetch account balance
-                            fetchAccountTokenBalance(tokens[key].contractAddr, address)
+                            fetchAccountTokenBalance(tokens[key].contractAddr, this.account.address)
                             .then(res => {
                                 if (!res.eq(new BigNumber(0))) {
                                     this.loadingView.hide();
@@ -92,9 +94,9 @@ class SelectCoin extends Component {
                                     });
                                     return;
                                 }
-                                dispatch(delete_account_token(address, key,
+                                dispatch(delete_account_token(account_key, key,
                                     explorer_server,
-                                    this.props.user.hashed_password));
+                                    user.hashed_password));
                                 this.loadingView.hide();
                             }).catch(err => {
                                 this.loadingView.hide();
@@ -174,9 +176,18 @@ class SelectCoin extends Component {
     };
 
     render() {
-        let address = this.props.navigation.getParam('address');
-        let explorer_server = this.props.setting.explorer_server;
-        let tokens = this.props.accounts[address].tokens[explorer_server];
+        const {setting, accounts} = this.props;
+        let explorer_server = setting.explorer_server;
+        let tokens = accounts[this.account_key].tokens;
+        let tokenArray;
+        if (tokens !== undefined) {
+            tokenArray = Object.values(tokens[explorer_server]);
+        } else {
+            tokenArray = [];
+        }
+
+        let coinName = COINS[this.account.symbol].name;
+        let coinSymbol = this.account.symbol;
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -192,7 +203,7 @@ class SelectCoin extends Component {
             >
                 <FlatList
                     style={{width: width}}
-                    data={[{symbol: 'AION', name: 'AION'}, ...Object.values(tokens)]}
+                    data={[{symbol: coinSymbol, name: coinName}, ...tokenArray]}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={() => <View style={styles.divider}/>}
                     keyExtractor={(item, index) => item.symbol}

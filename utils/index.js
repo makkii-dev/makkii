@@ -6,12 +6,16 @@ import {strings} from '../locales/i18n';
 import {setting} from "../actions/setting";
 import Toast from 'react-native-root-toast';
 import TransactionUtil from './transaction';
-import TokenUtil from './token';
+import TokenUtil from '../coins/aion/token';
 import {fetchRequest} from './others';
+import {getCoinPrices} from "../coins/api";
+
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
-
+function accountKey(symbol, address) {
+    return symbol + '+' + address;
+}
 
 function hexString2Array(str) {
     if (str.startsWith('0x')) {
@@ -55,6 +59,15 @@ function dbGet(key){
     });
 }
 
+function formatAddress(address) {
+    let pre = address.startsWith('0x')? 2: 0;
+    if (address.length > 20 + pre) {
+        return address.substring(0, 10 + pre) + '...' + address.substring(address.length - 10);
+    } else {
+        return address;
+    }
+}
+
 function validatePassword(password) {
     let reg = /^[A-Za-z0-9!?#]{8,16}$/;
     return reg.test(password);
@@ -65,17 +78,43 @@ function validateUrl(url) {
     return reg.test(url);
 }
 
-function validatePrivateKey(privateKey) {
-    privateKey = privateKey.startsWith('0x')? privateKey.substring(2): privateKey;
-    let reg = /^[0-9a-fA-F]{128}$/;
-    return reg.test(privateKey);
+function validatePrivateKey(privateKey, symbol='AION') {
+    if (symbol === 'AION') {
+        privateKey = privateKey.startsWith('0x') ? privateKey.substring(2) : privateKey;
+        let reg = /^[0-9a-fA-F]{128}$/;
+        return reg.test(privateKey);
+    } else if (symbol === 'BTC') {
+        // TODO:
+    } else if (symbol === 'EOS') {
+        // TODO:
+    } else if (symbol === 'LTC') {
+        // TODO:
+    } else if (symbol === 'TRX') {
+        // TODO:
+    }
+    return true;
 }
 
-function validateAddress(address) {
-    // do not verify prefix a0
-    let reg = /^[0-9a-fA-F]{64}$/;
-    address = address.startsWith('0x')? address.substring(2): address;
-    return reg.test(address);
+function validateAddress(address, symbol = 'AION') {
+    if (symbol === 'AION') {
+        // do not verify prefix a0
+        let reg = /^[0-9a-fA-F]{64}$/;
+        address = address.startsWith('0x') ? address.substring(2) : address;
+        return reg.test(address);
+    } else if (symbol === 'BTC') {
+
+    } else if (symbol === 'EOS') {
+
+    } else if (symbol === 'ETH') {
+        let reg = /^[0-9a-fA-F]{40}$/;
+        address = address.startsWith('0x') ? address.substring(2) : address;
+        return reg.test(address);
+    } else if (symbol === 'LTC') {
+
+    } else if (symbol === 'TRX') {
+
+    }
+    return true;
 }
 
 function validateAmount(amount) {
@@ -88,8 +127,8 @@ function validatePositiveInteger(input) {
     return reg.test(input);
 }
 
-function validateRecipient(recipientQRCode) {
-    if (validateAddress(recipientQRCode)) {
+function validateRecipient(recipientQRCode, symbol='AION') {
+    if (validateAddress(recipientQRCode, symbol)) {
         return true;
     }
     try {
@@ -97,7 +136,7 @@ function validateRecipient(recipientQRCode) {
         if (!receiverObj.receiver) {
             return false;
         }
-        if (!validateAddress(receiverObj.receiver)) {
+        if (!validateAddress(receiverObj.receiver, symbol)) {
             return false;
         }
         if (receiverObj.amount) {
@@ -249,33 +288,42 @@ class listenCoinPrice{
     startListen() {
         this.stopListen();
         const thusStore = this.store;
-        getCoinPrice(this.currency).then(price => {
+        console.log("this.currency:" + this.currency);
+        getCoinPrices(this.currency).then(prices => {
+            console.log("prices:", prices);
             let settings = thusStore.getState().setting;
-            settings.coinPrice = price;
+            for (var item in prices) {
+                console.log("item:", item);
+                settings.coinPrices[prices[item].crypto] = prices[item].price;
+                console.log(settings.coinPrices);
+                if (item.crypto === 'AION')
+                    settings.coinPrice = price;
+            }
             if (this.currency) {
                 settings.fiat_currency = this.currency;
             }
             DeviceEventEmitter.emit('updateAccountBalance');
             thusStore.dispatch(setting(settings));
         }, error => {
-            console.log("get coin price error", error);
+            console.log("get coin price errors:", error);
             Toast.show(strings('error_connect_remote_server'), {
                 position: Toast.positions.CENTER,
             })
         });
 
         this.listener = setInterval(() => {
-            getCoinPrice(this.currency).then(price => {
+            getCoinPrices(this.currency).then(prices => {
                 let settings = thusStore.getState().setting;
-                settings.coinPrice = price;
-                if (this.currency) {
-                    settings.fiat_currency = this.currency;
+                for (var item in prices) {
+                    settings.coinPrices[item.crypto] = item.price;
+                    if (item.crypto === 'AION')
+                        settings.coinPrice = price;
                 }
                 DeviceEventEmitter.emit('updateAccountBalance');
 
                 thusStore.dispatch(setting(settings));
             }, error => {
-                console.log("get coin price error", error);
+                console.log("get coin price errors:", error);
             });
         }, this.interval * 60 * 1000);
     }
@@ -457,5 +505,7 @@ module.exports = {
     navigationSafely,
     getLatestVersion: getLatestVersion,
     generateUpdateMessage: generateUpdateMessage,
-    range
+    range,
+    accountKey,
+    formatAddress,
 };

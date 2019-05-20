@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	Alert,
 	View,
 	Text,
 	Image,
@@ -23,6 +22,7 @@ import {
 	validatePositiveInteger,
 	validateRecipient,
 	sendTransaction,
+    accountKey,
 } from '../../../utils';
 import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
@@ -30,6 +30,7 @@ import {update_account_txs, update_account_token_txs} from "../../../actions/acc
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
 import {linkButtonColor, mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
+import {COINS} from './constants';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -50,19 +51,29 @@ class Send extends Component {
 	};
 	constructor(props){
 		super(props);
-		let symbol = this.props.navigation.getParam('symbol');
+		this.account = this.props.navigation.state.params.account;
+		this.addr = this.account.address;
+		this.account_key = accountKey(this.account.symbol, this.addr);
+		let tokenSymbol = this.props.navigation.getParam('tokenSymbol');
+		let gasPrice = COINS[this.account.symbol].defaultGasPrice;
+		let gasLimit;
+		if (COINS[this.account.symbol].tokenSupport && tokenSymbol !== this.account.symbol) {
+			gasLimit = COINS[this.account.symbol].defaultGasLimitForContract;
+		} else {
+			gasLimit = COINS[this.account.symbol].defaultGasLimit;
+		}
 		this.state={
-		    unit: symbol,
+		    unit: tokenSymbol,
 			showAdvanced: false,
 			amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
 			recipient: this.props.navigation.state.params.recipient? this.props.navigation.state.params.recipient: '',
-			gasPrice: '10',
-			gasLimit: symbol==='AION'? '21000':'90000',
+			gasPrice: gasPrice,
+			gasLimit: gasLimit,
 		};
-        this.addr=this.props.navigation.state.params.address;
-		this.account = this.props.accounts[this.addr];
-		if (symbol !== 'AION') {
-			this.decimals = this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][symbol].tokenDecimal + 0;
+        if (COINS[this.account.symbol].tokenSupport) {
+			if (tokenSymbol !== this.account.symbol) {
+				this.decimals = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][tokenSymbol].tokenDecimal + 0;
+			}
 		}
 	}
 	async componentDidMount(){
@@ -78,30 +89,37 @@ class Send extends Component {
 	}
 
 	async componentWillReceiveProps(props) {
+		const {accounts, setting} = this.props;
+
 	    let scannedData = props.navigation.getParam('scanned', '');
 	    if (scannedData !== '') {
-	    	if (validateAddress(scannedData)) {
+	    	if (validateAddress(scannedData, this.account.symbol)) {
+				// only address is in qrcode
 	    		this.setState({
 					recipient: scannedData,
 				})
 			} else {
 	    		let receiverCode = JSON.parse(scannedData);
-	    		if (receiverCode.coin !== undefined) {
-	    			if (receiverCode.coin !== 'AION') {
-						console.log("tokens: " + Object.keys(this.props.accounts[this.addr].tokens[this.props.setting.explorer_server]));
-						console.log("receiver.coin: " + receiverCode.coin);
-						if (this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][receiverCode.coin] === undefined) {
-							AppToast.show(strings('send.toast_unsupported_token', {token: receiverCode.coin}));
+
+	    		// process token in qrcode
+	    		let token = receiverCode.coin;
+	    		if (token !== undefined) {
+	    			if (token !== this.account.symbol) {
+	    				// token
+						if (accounts[this.account_key].tokens[setting.explorer_server][token] === undefined) {
+							AppToast.show(strings('send.toast_unsupported_token', {token: token}));
 							return;
 						}
-						this.coinSelected(receiverCode.coin);
+						this.coinSelected(token);
 					} else {
-	    				this.coinSelected('AION')
+	    				// native coin
+	    				this.coinSelected(this.account.symbol);
 					}
 				} else {
-	    			// to be compatible with previous version, if no coin is specified in qr code, then it is AION.
-	    		    this.coinSelected('AION');
+	    		    // if no coin/token is specified, by default it is the native coin.
+	    		    this.coinSelected(this.account.symbol);
 				}
+
 	    		if (receiverCode.receiver !== undefined && receiverCode.amount !== undefined) {
 	    			this.setState({
 						recipient: receiverCode.receiver,
@@ -120,20 +138,28 @@ class Send extends Component {
 		let superCoinSelected = this.props.navigation.getParam('coinSelected');
 		superCoinSelected(tokenSymbol);
 		if (tokenSymbol !== this.state.unit) {
-			if (tokenSymbol !== 'AION') {
-				this.decimals = this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][tokenSymbol].tokenDecimal + 0;
-				this.setState({
-					unit: tokenSymbol,
-					gasLimit: '90000',
-				})
-			} else {
-				this.setState({
-					unit: tokenSymbol,
-					gasLimit: '21000',
-				})
-			}
+            if (COINS[this.account.symbol].tokenSupport && tokenSymbol !== this.account.symbol) {
+                this.decimals = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][tokenSymbol].tokenDecimal + 0;
+                this.setState({
+                    unit: tokenSymbol,
+                    gasLimit: COINS[this.account.symbol].defaultGasLimitForContract,
+                })
+            } else {
+                this.setState({
+                    unit: tokenSymbol,
+                    gasLimit: COINS[this.account.symbol].defaultGasLimit,
+                })
+            }
 		}
 	}
+
+	toChangeToken=()=> {
+		this.props.navigation.navigate('signed_select_coin', {
+			account: this.account,
+			coinSelected: this.coinSelected,
+		});
+	}
+
 	render(){
 		return (
                 <View style={{flex:1, backgroundColor: mainBgColor}}>
@@ -173,17 +199,11 @@ class Send extends Component {
 									onChangeText={v=>this.setState({amount:v})}
 									keyboardType={'decimal-pad'}
 									rightView={()=>
-										<TouchableOpacity onPress={()=> this.sendAll()}>
+										<TouchableOpacity onPress={this.sendAll}>
 											<Text style={{color: linkButtonColor}}>{strings('send.button_send_all')}</Text>
 										</TouchableOpacity>}
 									unit={this.state.unit}
-									changeUnit={() => {
-										this.props.navigation.navigate('signed_select_coin', {
-											address: this.addr,
-											coinSelected: this.coinSelected,
-										});
-									}}
-
+									changeUnit={COINS[this.account.symbol].tokenSupport? this.toChangeToken: undefined}
 								/>
 
 							</View>
@@ -207,7 +227,7 @@ class Send extends Component {
 										value={this.state.gasPrice}
 										onChangeText={v=>this.setState({gasPrice:v})}
 										keyboardType={'decimal-pad'}
-										unit={'AMP'}
+										unit={COINS[this.account.symbol].gasPriceUnit}
 									/>
 									<SubTextInput
 										title={strings('send.label_gas_limit')}
@@ -301,12 +321,18 @@ class Send extends Component {
 		let tokenAmountValue = new BigNumber(0);
 		let to;
 		let tokenTo;
-		if (this.state.unit ==='AION') {
-			amountValue = new BigNumber(amount).shiftedBy(18);
-			to = recipient;
+		if (this.state.unit === this.account.symbol) {
+		    if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
+				amountValue = new BigNumber(amount).shiftedBy(18);
+				to = recipient;
+			} else {
+		    	// TODO: handle other coins
+		    	console.log("unsupported symbol");
+		    	return;
+			}
 		} else {
 			tokenAmountValue = new BigNumber(amount).shiftedBy(this.decimals);
-			to = accounts[sender].tokens[setting.explorer_server][this.state.unit].contractAddr;
+			to = accounts[this.account_key].tokens[setting.explorer_server][this.state.unit].contractAddr;
 			tokenTo = recipient;
 		}
 		let tx = {
@@ -320,48 +346,41 @@ class Send extends Component {
 			type: 1,
 		};
 		sendTransaction(tx,this.account,this.state.unit,setting.explorer_server).then(res=>{
-			const {pending, signedTransaction} = res;
-			return new Promise((resolve, reject)=> {
-				pending.on('transactionHash', (hash) => {
-					console.log("transaction sent: hash=" + hash);
-					let txs = {};
-					let pendingTx = {};
-					pendingTx.hash = hash;
-					pendingTx.timestamp = signedTransaction.timestamp.toNumber() / 1000;
-					pendingTx.from = sender;
-					pendingTx.to = signedTransaction.to;
-					pendingTx.value = new BigNumber(amount);
-					pendingTx.status = 'PENDING';
-					txs[hash] = pendingTx;
+			const {hash, signedTransaction} = res;
+            console.log("transaction sent: hash=" + hash);
+            let txs = {};
+            let pendingTx = {};
+            pendingTx.hash = hash;
+            pendingTx.timestamp = signedTransaction.timestamp.toNumber() / 1000;
+            pendingTx.from = sender;
+            pendingTx.to = signedTransaction.to;
+            pendingTx.value = new BigNumber(amount);
+            pendingTx.status = 'PENDING';
+            txs[hash] = pendingTx;
 
-					dispatch(update_account_txs(sender, txs, setting.explorer_server, user.hashed_password));
-					dispatch(update_account_txs(tx.to, txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, sender), txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, tx.to), txs, setting.explorer_server, user.hashed_password));
 
-					if (this.state.unit !== 'AION') {
-                        let tokenTxs = {};
-                        let pendingTokenTxs = {};
-                        pendingTokenTxs.hash = hash;
-                        pendingTokenTxs.timestamp = signedTransaction.timestamp.toNumber() / 1000;
-                        pendingTokenTxs.from = sender;
-                        pendingTokenTxs.to = tokenTo;
-                        pendingTokenTxs.value = new BigNumber(amount);
-                        pendingTokenTxs.status = 'PENDING';
-                        tokenTxs[hash] = pendingTokenTxs;
-                        dispatch(update_account_token_txs(sender, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
-                        dispatch(update_account_token_txs(tokenTo, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
-                    }
+            if (this.state.unit !== this.account.symbol) {
+                let tokenTxs = {};
+                let pendingTokenTxs = {};
+                pendingTokenTxs.hash = hash;
+                pendingTokenTxs.timestamp = signedTransaction.timestamp.toNumber() / 1000;
+                pendingTokenTxs.from = sender;
+                pendingTokenTxs.to = tokenTo;
+                pendingTokenTxs.value = new BigNumber(amount);
+                pendingTokenTxs.status = 'PENDING';
+                tokenTxs[hash] = pendingTokenTxs;
+                dispatch(update_account_token_txs(sender, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
+                dispatch(update_account_token_txs(tokenTo, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
+            }
 
-					this.loadingView.hide();
-					AppToast.show(strings('send.toast_tx_sent'), {
-						onHidden: () => {
-							goBack();
-						}
-					})
-				}).on('error', error => {
-					console.log("error", error);
-					reject(error);
-				});
-			});
+            this.loadingView.hide();
+            AppToast.show(strings('send.toast_tx_sent'), {
+                onHidden: () => {
+                    goBack();
+                }
+            })
 		}).catch(error=>{
 			console.log('send Transaction failed ', error);
 			this.loadingView.hide();
@@ -405,7 +424,7 @@ class Send extends Component {
 		let gasPrice = new BigNumber(this.state.gasPrice);
 		let balance = new BigNumber(this.account.balance);
 		let amount = new BigNumber(this.state.amount);
-        if (this.state.unit === 'AION') {
+        if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
 			console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
 			console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
 			console.log("total balance: " + this.account.balance);
@@ -419,7 +438,7 @@ class Send extends Component {
 				alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
 				return false;
         	}
-        	let totalCoins = this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][this.state.unit].balance
+        	let totalCoins = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance
         	if (amount.isGreaterThan(totalCoins)) {
 				alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
 				return false;
@@ -430,7 +449,7 @@ class Send extends Component {
 	};
 
 	sendAll=() => {
-		if (this.state.unit === 'AION') {
+		if (this.state.unit === this.account.symbol) {
 			let gasLimit = new BigNumber(this.state.gasLimit);
 			let gasPrice = new BigNumber(this.state.gasPrice);
 			let totalBalance = new BigNumber(this.account.balance);
@@ -441,7 +460,7 @@ class Send extends Component {
 			});
 		} else {
 		    this.setState({
-				amount:this.props.accounts[this.addr].tokens[this.props.setting.explorer_server][this.state.unit].balance.toNotExString(),
+				amount:this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance.toNotExString(),
 			});
 		}
 	};
@@ -461,7 +480,7 @@ class Send extends Component {
 			success: 'signed_vault_send',
 			validate: function(data) {
 				console.log("scanned: " + data.data);
-				let pass = validateRecipient(data.data);
+				let pass = validateRecipient(data.data, this.account.symbol);
 				return {
 					pass: pass,
 					err: pass? '': strings('error_invalid_qrcode')

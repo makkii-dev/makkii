@@ -8,6 +8,7 @@ import {
 	ADD_ADDRESS,
 	UPDATE_ADDRESS,
 	DELETE_ADDRESS,
+	UPDATE_INDEX,
 } from '../actions/user.js';
 
 const init = {
@@ -15,6 +16,7 @@ const init = {
 	hashed_pinCode: '',
 	mnemonic: '',          // encrypted
     address_book: {},
+	hd_index: {},
 };
 
 export default function user(state = init, action){
@@ -27,6 +29,7 @@ export default function user(state = init, action){
 				hashed_pinCode: action.hashed_pinCode,
 	        	mnemonic: action.mnemonic,
 				address_book: action.address_book,
+				hd_index: action.hd_index,
 	      	});
 			keyStore.createByMnemonic(action.mnemonic,'');
 	      	should_update_db = true;
@@ -69,6 +72,11 @@ export default function user(state = init, action){
 		case DELETE_ADDRESS:
 		    delete state.address_book[action.address];
 		    new_state = Object.assign({}, state);
+			should_update_db = true;
+			break;
+		case UPDATE_INDEX:
+		    state.hd_index[action.symbol] = action.index;
+			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
 		default:

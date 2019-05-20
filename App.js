@@ -40,6 +40,8 @@ import Recovery              	from './components/unsigned/recovery.js';
 import Vault                	from './components/signed/vault/home.js';
 import VaultAccount         	from './components/signed/vault/account.js';
 import VaultImportHdWallet   	from './components/signed/vault/import_list';
+import VaultImportCoin          from './components/signed/vault/import_coin';
+import VaultImportFrom          from './components/signed/vault/import_from';
 import VaultImportPrivateKey 	from './components/signed/vault/import_private_key.js';
 import VaultReceive          	from './components/signed/vault/receive.js';
 import VaultSend             	from './components/signed/vault/send.js';
@@ -194,6 +196,14 @@ const Routes = createAppContainer(createStackNavigator({
 			),
 			headerStyle: styles.headerStyleWithoutShadow,
 		}),
+	},
+	'signed_vault_import_coin': {
+        screen: VaultImportCoin,
+        navigationOptions,
+	},
+	'signed_vault_import_from': {
+		screen: VaultImportFrom,
+		navigationOptions,
 	},
 	'signed_vault_import_list': {
 		screen: VaultImportHdWallet,
@@ -362,7 +372,6 @@ Routes.router.getStateForAction = (action, state) => {
                 if (state.routes && state.routes.length > 0) {
         			switch(state.routes[state.routes.length - 1].routeName){
     					case 'unsigned_login':
-    						console.log("before unsigned login routes:", state.routes);
     						newRoutes = [
     							state.routes[state.routes.length - 1]
     						];

@@ -9,8 +9,7 @@ import {
     Dimensions, Keyboard,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
-import BigNumber from "bignumber.js";
-import {fetchAccountTokenTransferHistory,fetchAccountTransactionHistory} from "../../../utils";
+import {fetchAccountTokenTransferHistory,fetchAccountTransactionHistory, accountKey} from "../../../utils";
 import {connect} from "react-redux";
 import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
@@ -32,9 +31,8 @@ class TransactionHistory extends React.Component {
     constructor(props){
         super(props);
         this.account = this.props.navigation.state.params.account;
+        this.account_key = accountKey(this.account.symbol, this.account.address);
     }
-
-
 
     componentWillMount(){
         InteractionManager.runAfterInteractions(()=>{
@@ -49,18 +47,20 @@ class TransactionHistory extends React.Component {
     }
 
 
-    fetchAccountTransactions = (address, page=0, size=25)=>{
+    fetchAccountTransactions = (account, page=0, size=25)=>{
         let {currentPage,transactions} = this.state;
         const {explorer_server} = this.props.setting;
         console.log('get transactions page: '+page+' size: '+size);
         let symbol = this.props.navigation.getParam('symbol');
+        console.log("account:", account);
+        console.log("symbol:" + symbol);
         let promise;
-        if (symbol === 'AION') {
-            promise = fetchAccountTransactionHistory(address, explorer_server, page, size);
+        if (symbol === this.account.symbol) {
+            promise = fetchAccountTransactionHistory(this.account.address, explorer_server, page, size);
         } else {
-            let token = this.props.accounts[address].tokens[explorer_server][symbol];
+            let token = this.props.accounts[this.account_key].tokens[explorer_server][symbol];
             console.log("token: ", token);
-            promise = fetchAccountTokenTransferHistory(address, token.contractAddr, explorer_server, page, size);
+            promise = fetchAccountTokenTransferHistory(this.account.address, token.contractAddr, explorer_server, page, size);
         }
         promise.then(txs => {
             if (Object.keys(txs).length === 0) {
@@ -123,11 +123,11 @@ class TransactionHistory extends React.Component {
         } else {
             let symbol = this.props.navigation.getParam('symbol');
             let transactions;
-            if (this.props.navigation.getParam('symbol') === 'AION') {
-                let propTxs = this.props.accounts[this.account].transactions[this.props.setting.explorer_server];
+            if (symbol === this.account.symbol) {
+                let propTxs = this.props.accounts[this.account_key].transactions[this.props.setting.explorer_server];
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
             } else {
-                let propTxs = this.props.accounts[this.account].tokens[this.props.setting.explorer_server][symbol].tokenTxs;
+                let propTxs = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][symbol].tokenTxs;
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
             }
             return (
@@ -140,12 +140,13 @@ class TransactionHistory extends React.Component {
                             renderItem={({item})=><TransactionItem
                                 symbol={symbol}
                                 transaction={item}
-                                currentAddr={this.account}
+                                currentAddr={this.account.address}
                                 onPress={()=>{
                                     Keyboard.dismiss();
                                     this.props.navigation.navigate('signed_vault_transaction',{
-                                        account:this.addr,
+                                        account:this.account,
                                         transaction: item,
+                                        symbol: this.props.navigation.getParam('symbol'),
                                     });
                                 }}/>}
                             onEndReached={() => {

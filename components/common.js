@@ -202,10 +202,10 @@ class SubTextInput extends Component{
 						{...this.props}
 					/>
 					{
-						this.props.unit && !this.props.changeUnit && <Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
+						this.props.unit !== undefined && this.props.changeUnit === undefined && <Text style={{fontSize:12, marginLeft:10}}>{this.props.unit}</Text>
 					}
 					{
-						this.props.unit && this.props.changeUnit &&
+						this.props.unit !== undefined && this.props.changeUnit !== undefined &&
 						<TouchableOpacity style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={this.props.changeUnit}>
                             <Text style={{fontSize:12, marginLeft:10, color: linkButtonColor}}>{this.props.unit}</Text>
                             <Image source={require('../assets/expand.png')} style={{width: 20, height: 20, tintColor:linkButtonColor}}/>

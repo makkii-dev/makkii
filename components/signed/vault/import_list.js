@@ -47,6 +47,7 @@ class ImportHdWallet extends React.Component {
         }else{
             this.fetchAccount = this.fetchAccountFromLedger;
         }
+        this.symbol = this.props.navigation.getParam('symbol');
         this.selectList=null;
         this.state={
             isLoading: true,

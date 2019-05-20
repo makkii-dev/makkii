@@ -13,6 +13,7 @@ const init = {
 	exchange_refresh_interval: "30",
 	fiat_currency: "CNY",
 	coinPrice: undefined,
+    coinPrices: {},
 	pinCodeEnabled: false,
 	touchIDEnabled: false,
 	tx_fee: 10000,
@@ -21,6 +22,7 @@ const init = {
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net',
 	explorer_server: 'mainnet',
+
 }
 
 export default function setting(state = init, action){

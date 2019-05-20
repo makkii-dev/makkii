@@ -20,6 +20,8 @@ import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils';
 import ContextMenu from '../../contextMenu';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {COINS} from './constants';
+
 const MyScrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const CIRCLE_SIZE = 20;
 const SMALL_CIRCLE_SIZE = 8;
@@ -52,11 +54,13 @@ class Receive extends Component {
 	constructor(props){
 		super(props);
 		this.qrcodeRef = null;
-		this.addr=this.props.navigation.state.params.address;
+		this.account = this.props.navigation.state.params.account;
+		this.addr=this.account.address;
+		let tokenSymbol = this.props.navigation.getParam('tokenSymbol');
 		this.state={
 			amount: '0',
-			qrCodeValue: generateQRCode('0', this.addr),
-			unit: this.props.navigation.getParam('symbol'),
+			qrCodeValue: generateQRCode('0', this.addr, tokenSymbol),
+			unit: tokenSymbol,
 		}
 
 	}
@@ -117,6 +121,12 @@ class Receive extends Component {
 		this.setState({
 			unit: tokenSymbol
 		})
+	}
+	toChangeToken=() => {
+		this.props.navigation.navigate('signed_select_coin', {
+			account: this.account,
+			coinSelected: this.coinSelected,
+		});
 	}
 	render(){
 		return (
@@ -180,13 +190,7 @@ class Receive extends Component {
 									</TouchableOpacity>
 								}
 								unit={this.state.unit}
-								changeUnit={() => {
-									console.log("choose unit");
-									this.props.navigation.navigate('signed_select_coin', {
-										address: this.addr,
-										coinSelected: this.coinSelected,
-									});
-								}}
+								changeUnit={COINS[this.account.symbol].tokenSupport?this.toChangeToken:undefined}
 							/>
 						</View>
 					</View>

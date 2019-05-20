@@ -1,12 +1,13 @@
 // atomic update for sigin and register routines
 const USER = 'USER';
-function user(hashed_password, mnemonic, hashed_pinCode='', address_book={}){
+function user(hashed_password, mnemonic, hashed_pinCode='', address_book={}, hd_index={}){
 	return {
 		type: USER,
 		hashed_password,
 		hashed_pinCode,
 		mnemonic,
-		address_book
+		address_book,
+		hd_index
 	};
 }
 
@@ -50,6 +51,15 @@ function delete_address(address) {
 	}
 }
 
+const UPDATE_INDEX = "UPDATE_INDEX";
+function update_index(symbol, index) {
+	return {
+		type: UPDATE_INDEX,
+		symbol,
+		index
+	}
+}
+
 module.exports = {
 	USER,
 	user,
@@ -63,4 +73,6 @@ module.exports = {
 	update_address: update_address,
 	DELETE_ADDRESS: DELETE_ADDRESS,
 	delete_address: delete_address,
+	UPDATE_INDEX: UPDATE_INDEX,
+	update_index: update_index,
 };

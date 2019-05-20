@@ -29,14 +29,18 @@ import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
 import {SORT, FILTER, MENU} from "./constants";
-import {getLedgerMessage} from "../../../utils";
+import {formatAddress, getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
 import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
-import {getStatusBarHeight} from '../../../utils';
-const {width, } = Dimensions.get('window');
+import {accountKey, getStatusBarHeight} from '../../../utils';
+import {COINS} from './constants';
+import {getBalance} from '../../../coins/api';
+
+
+const {width} = Dimensions.get('window');
 
 
 function sortAccounts(src,select, network){
@@ -317,7 +321,7 @@ class Home extends HomeComponent {
 		Object.values(accounts).map(value => {
 			executors.push(
 				new Promise((resolve, reject) => {
-					web3.eth.getBalance(value.address).then(balance=>{
+					getBalance(value.symbol, value.address).then(balance=>{
 						value.balance = new BigNumber(balance).shiftedBy(-18);
 						resolve(value)
 					},error => {
@@ -330,10 +334,15 @@ class Home extends HomeComponent {
 				let newAccounts={};
 				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
+				    console.log("account:",account);
+					let account_key = accountKey(account.symbol, account.address);
 					// check if delete
-					if (this.props.accounts[account.address]){
-						totalBalance = totalBalance.plus(account.balance);
-						newAccounts[account.address] = account;
+					if (this.props.accounts[account_key]){
+						console.log("account.balance:", account.balance);
+						console.log("setting:", this.props.setting.coinPrices);
+						console.log("coinprice:" + this.props.setting.coinPrices[account.symbol]);
+						totalBalance = totalBalance.plus(account.balance.multipliedBy(new BigNumber(this.props.setting.coinPrices[account.symbol])));
+						newAccounts[account_key] = account;
 					}
 				});
 				console.log('totalBalance', totalBalance);
@@ -443,16 +452,17 @@ class Home extends HomeComponent {
 	};
 
 	_renderListItem=(item) => {
-		const Key = item.address;
-		let accountImage = '';
-		switch (item.type) {
-			case '[ledger]':
-				accountImage = require('../../../assets/account_le.png');break;
-			case '[pk]':
-				accountImage = require('../../../assets/account_pk.png');break;
-			default:
-				accountImage = require('../../../assets/account_mk.png');
-		}
+		const Key = accountKey(item.symbol, item.address);
+		// let accountImage = '';
+		// switch (item.type) {
+		// 	case '[ledger]':
+		// 		accountImage = require('../../../assets/account_le.png');break;
+		// 	case '[pk]':
+		// 		accountImage = require('../../../assets/account_pk.png');break;
+		// 	default:
+		// 		accountImage = require('../../../assets/account_mk.png');
+		// }
+
 		const defaultImage = I18n.locale.indexOf('zh')>=0? require('../../../assets/default_zh.png'):require('../../../assets/default_en.png');
 		const txs = item.transactions[this.props.setting.explorer_server];
 		if (txs) {
@@ -503,19 +513,19 @@ class Home extends HomeComponent {
 					    	return;
 						}
                         this.state.openRowKey&&this.setState({openRowKey:null});
-						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{address: item.address});
+						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{account: item});
 					}}
 				>
 					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start'}}>
-						<Image source={accountImage} style={{width:fixedHeight(186), height:fixedHeight(186)}}/>
+						<Image source={COINS[item.symbol].icon} style={{width:fixedHeight(40), height:fixedHeight(40)}}/>
 						<View style={{flex:1, paddingVertical: 10}}>
 							<View style={{...styles.accountSubContainer, width:'100%',flex:1, alignItems:'center'}}>
 								<Text style={{...styles.accountSubTextFontStyle1, width:'70%'}} numberOfLines={1}>{item.name}</Text>
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
-								<Text style={styles.accountSubTextFontStyle2}>{ item.address.substring(0, 10) + '...' + item.address.substring(54)}</Text>
-								<Text style={styles.accountSubTextFontStyle2}>AION</Text>
+								<Text style={styles.accountSubTextFontStyle2}>{formatAddress(item.address)}</Text>
+								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
 							</View>
 						</View>
 						{
@@ -585,8 +595,11 @@ class Home extends HomeComponent {
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
 		let total_currency = Object.keys(this.props.accounts).length===0?0:undefined;
-		if (this.props.setting.coinPrice && this.state.totalBalance) {
-			total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
+		// if (this.props.setting.coinPrice && this.state.totalBalance) {
+		// 	total_currency = this.state.totalBalance.toNumber() * this.props.setting.coinPrice;
+		// }
+        if (this.state.totalBalance) {
+        	total_currency = this.state.totalBalance.toNumber();
 		}
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+60):60;
 		const header_marginTop = getStatusBarHeight(false);
@@ -603,7 +616,8 @@ class Home extends HomeComponent {
 						<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{
 							this.HomeCenterRef&&this.HomeCenterRef.closeAll();
 							Keyboard.dismiss();
-							this.setState({openRowKey:null, showMenu:true})
+							this.setState({openRowKey:null/*, showMenu:true*/})
+							this.props.navigation.navigate('signed_vault_import_coin');
 						}}>
 							<Image source={require('../../../assets/ic_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
 						</TouchableOpacity>

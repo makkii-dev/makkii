@@ -56,7 +56,7 @@ class Splash extends Component {
 
 		}, err=> {
 			console.log("load setting failed: ", err);
-			listenPrice.startListen();
+			listenPrice.setCurrency(this.props.setting.fiat_currency);
 			setTimeout(()=>{
 				navigate('unsigned_login');
 			}, 1000);

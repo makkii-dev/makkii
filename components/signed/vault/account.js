@@ -16,9 +16,9 @@ import {
 	ActivityIndicator
 } from 'react-native';
 import {fetchAccountTransactionHistory, fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
-import {fetchAccountTokens} from '../../../utils';
+import {formatAddress, fetchAccountTokens, accountKey} from '../../../utils';
 import Loading from '../../loading';
-import {update_account_txs, update_account_tokens} from "../../../actions/accounts";
+import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
@@ -27,6 +27,7 @@ import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
 import {TransactionItem} from '../../common';
+import {COINS} from './constants';
 
 const {width} = Dimensions.get('window');
 
@@ -56,16 +57,50 @@ class AddressComponent extends Component {
 	state={
 		showAllAddress: false
 	};
+	render_address66(address) {
+		return (
+			<View>
+				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
+                    address.substring(4, 10)+' '+
+                    address.substring(10,16)+' '+
+                    address.substring(16,22)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(22,26)+' '+
+                    address.substring(26,32)+' '+
+                    address.substring(32,38)+' '+
+                    address.substring(38,44)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(44,48)+' '+
+                    address.substring(48,54)+' '+
+                    address.substring(54,60)+' '+
+                    address.substring(60,66)}</Text>
+			</View>
+		)
+	}
+	render_address42(address) {
+		return (
+			<View>
+				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
+                    address.substring(4, 8)+' '+
+                    address.substring(8,12)+' '+
+                    address.substring(12, 16) + ' ' +
+                    address.substring(16,21)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(21,25)+' '+
+                    address.substring(25,29)+' '+
+                    address.substring(29,33)+' '+
+                    address.substring(33,37)+ ' ' +
+                    address.substring(37, 42)}</Text>
+			</View>
+		)
+
+	}
 	render() {
 		const {address} = this.props;
+        this.expandable = (address.length == 66 || address.length == 42);
 		if(this.state.showAllAddress) {
 			return (
 				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',width:width}}>
-					<View>
-						<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+address.substring(4, 10)+' '+address.substring(10,16)+' '+address.substring(16,22)}</Text>
-						<Text style={styles.addressFontStyle}>{address.substring(22,26)+' '+address.substring(26,32)+' '+address.substring(32,38)+' '+address.substring(38,44)}</Text>
-						<Text style={styles.addressFontStyle}>{address.substring(44,48)+' '+address.substring(48,54)+' '+address.substring(54,60)+' '+address.substring(60,66)}</Text>
-					</View>
+					{address.length === 66? this.render_address66(address):
+						address.length == 42? this.render_address42(address): null
+					}
 					<View style={{marginHorizontal:10,justifyContent:'space-between', alignItems:'center'}}>
 						<TouchableOpacity onPress={()=>{
 							Clipboard.setString(address);
@@ -85,7 +120,7 @@ class AddressComponent extends Component {
 			return (
 				<View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width}}>
 					<Text
-						style={styles.addressFontStyle}>{address.substring(0, 10) + '...' + address.substring(58)}</Text>
+						style={styles.addressFontStyle}>{formatAddress(address)}</Text>
 					<TouchableOpacity onPress={() => {
 						Clipboard.setString(address);
 						AppToast.show(strings('toast_copy_success'));
@@ -93,20 +128,23 @@ class AddressComponent extends Component {
 						<Image source={require("../../../assets/copy.png")}
 							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
 					</TouchableOpacity>
-					<TouchableOpacity onPress={() => {
-						Keyboard.dismiss();
-						this.setState({showAllAddress: true})
-					}}>
-						<View style={{
-							height: 24,
-							backgroundColor: 'rgba(255,255,255,0.1)',
-							borderRadius: 10,
-							paddingHorizontal: 5,
-							justifyContent: 'center'
+					{this.expandable ?
+						<TouchableOpacity onPress={() => {
+							Keyboard.dismiss();
+							this.setState({showAllAddress: true})
 						}}>
-							<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
-						</View>
-					</TouchableOpacity>
+							<View style={{
+								height: 24,
+								backgroundColor: 'rgba(255,255,255,0.1)',
+								borderRadius: 10,
+								paddingHorizontal: 5,
+								justifyContent: 'center'
+							}}>
+								<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
+							</View>
+						</TouchableOpacity>
+						:null
+					}
 				</View>
 			);
 		}
@@ -135,36 +173,42 @@ class Account extends Component {
     };
 	constructor(props){
 		super(props);
-		this.addr=this.props.navigation.state.params.address;
-		this.account = this.props.accounts[this.addr];
+		this.account = this.props.navigation.state.params.account;
+		this.addr= this.account.address;
+		this.account_key = accountKey(this.account.symbol, this.account.address);
 		this.isMount = false;
 		this.state={
 			refreshing: false,
 			loading: true,
 			showMenu: false,
-			tokenSymbol: 'AION',
+			tokenSymbol: this.account.symbol,
 			tokenBalance: new BigNumber(this.account.balance).toNotExString(),
 		};
-		this.updateTitle({
+		this.props.navigation.setParams({
+			title: this.account.name,
+			type: this.account.type,
 			showMenu: ()=>this.openMenu(),
-		});
+		})
 	}
 	componentWillMount(){
 		this.fetchAccountTransactions(this.addr);
-		// load account's token list
-		fetchAccountTokens(this.addr, this.props.setting.explorer_server).then(res=> {
-			console.log("fetch account tokens: " ,res);
-			const {dispatch, user} = this.props;
-			let newTokens;
-			if (this.props.accounts[this.account.address].tokens) {
-				newTokens = Object.assign({}, res, this.props.accounts[this.account.address].tokens[this.props.setting.explorer_server]);
-			} else {
-				newTokens = res;
-			}
-			dispatch(update_account_tokens(this.addr, newTokens, this.props.setting.explorer_server, user.hashed_password));
-		}, err=> {
-			console.log("fetch token list failed: ", e);
-		});
+		if (COINS[this.account.symbol].tokenSupport) {
+			// load account's token list
+			let explorer_server = this.props.setting.explorer_server;
+			fetchAccountTokens(this.addr, explorer_server).then(res => {
+				console.log("fetch account tokens: ", res);
+				const {dispatch, user} = this.props;
+				let newTokens;
+				if (this.props.accounts[this.account_key].tokens) {
+					newTokens = Object.assign({}, res, this.props.accounts[this.account_key].tokens[explorer_server]);
+				} else {
+					newTokens = res;
+				}
+				dispatch(update_account_tokens(this.account_key, newTokens, this.props.setting.explorer_server, user.hashed_password));
+			}, err => {
+				console.log("fetch token list failed: ", e);
+			});
+		}
 		this.isMount = true;
 	}
 
@@ -176,12 +220,12 @@ class Account extends Component {
 		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
 	}
 
-	updateTitle = (args={}) =>{
-		const {type, name} = this.props.accounts[this.addr];
+	updateAccountName = (newName) =>{
+	    const {dispatch} = this.props;
+	    dispatch(update_account_name(this.account_key, newName, this.props.user.hashed_password));
+		const {name} = this.props.accounts[this.account_key];
 		this.props.navigation.setParams({
 			title: name,
-			type: type,
-			...args
 		})
 	};
 
@@ -207,8 +251,8 @@ class Account extends Component {
 			switch(select){
 				case ACCOUNT_MENU[0].title:
 					navigation.navigate('signed_vault_change_account_name',{
-						address: this.account.address,
-						onUpdateFinish: this.updateTitle,
+					    name: this.account.name,
+						onUpdate: this.updateAccountName,
 					});
 					break;
 				case ACCOUNT_MENU[1].title:
@@ -223,7 +267,7 @@ class Account extends Component {
 					break;
 				case ACCOUNT_MENU[2].title:
 				    navigation.navigate('signed_select_coin', {
-				    	address: this.account.address,
+				    	account: this.account,
 						coinSelected: this.coinSelected,
 				    });
 					break;
@@ -231,6 +275,25 @@ class Account extends Component {
 			}
 		})
 	};
+
+	toSend=()=> {
+		Keyboard.dismiss();
+		this.props.navigation.navigate('signed_vault_send', {
+			account: this.account,
+			tokenSymbol: this.state.tokenSymbol,
+			coinSelected: this.coinSelected,
+		});
+	}
+
+	toReceive=()=> {
+		Keyboard.dismiss();
+		this.props.navigation.navigate('signed_vault_receive', {
+		    account: this.account,
+			tokenSymbol: this.state.tokenSymbol,
+			coinSelected: this.coinSelected,
+		});
+	}
+
 	coinSelected = (symbol)=> {
 	    if (this.state.tokenSymbol !== symbol) {
 			if (symbol === 'AION') {
@@ -243,14 +306,14 @@ class Account extends Component {
 			    	this.loadingView.hide();
 				}
 				this.loadingView.show(strings('select_coin.progress_switching_coin'));
-				let tokens = this.props.accounts[this.account.address].tokens[this.props.setting.explorer_server];
+				let tokens = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server];
 				fetchAccountTokenBalance(tokens[symbol].contractAddr, this.account.address).then(res => {
 					console.log("fetched token balance: " + res);
 
 					const {dispatch, user} = this.props;
 					tokens[symbol].balance = res.shiftedBy(-(tokens[symbol].tokenDecimal - 0));
 					console.log("/18:" + tokens[symbol].balance);
-					dispatch(update_account_tokens(this.account.address, tokens, this.props.setting.explorer_server, user.hashed_password));
+					dispatch(update_account_tokens(this.account_key, tokens, this.props.setting.explorer_server, user.hashed_password));
 
 					this.fetchAccountTransactions(this.account.address, 0, 5, symbol, {
 						tokenBalance: tokens[symbol].balance.toNotExString(),
@@ -272,13 +335,13 @@ class Account extends Component {
 	fetchAccountTransactions = (address, page=0, size=5, tokenSymbol=this.state.tokenSymbol,obj={}, callback=()=>{})=>{
 		const {explorer_server} = this.props.setting;
 		const {accounts,dispatch,user} = this.props;
-		if (tokenSymbol === 'AION') {
+		if (tokenSymbol === this.account.symbol) {
 			fetchAccountTransactionHistory(address, explorer_server, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
-				dispatch(update_account_txs(address, txs, explorer_server, user.hashed_password));
+				dispatch(update_account_txs(this.account_key, txs, explorer_server, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
@@ -293,7 +356,7 @@ class Account extends Component {
 				})
 			});
 		} else {
-		    let tokens = accounts[address].tokens[explorer_server];
+		    let tokens = accounts[this.account_key].tokens[explorer_server];
 			const {contractAddr, tokenTxs} = tokens[tokenSymbol];
 			fetchAccountTokenTransferHistory(address, contractAddr, explorer_server, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
@@ -301,10 +364,8 @@ class Account extends Component {
 					throw Error('get no transactions')
 				}
 
-				console.log("token txs: ", txs);
 				tokens[tokenSymbol].tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
-				console.log("tokentxs; ", tokens[tokenSymbol].tokenTxs);
-				dispatch(update_account_tokens(this.account.address, tokens, this.props.setting.explorer_server, user.hashed_password));
+				dispatch(update_account_tokens(this.account_key, tokens, this.props.setting.explorer_server, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
@@ -401,7 +462,7 @@ class Account extends Component {
 						onPress={()=>{
 							Keyboard.dismiss();
 							this.props.navigation.navigate('signed_vault_transaction',{
-								account:this.addr,
+								account:this.account,
 								transaction: item,
                                 symbol: this.state.tokenSymbol
 							});
@@ -420,18 +481,27 @@ class Account extends Component {
 
 	render(){
 		const {navigation, setting, accounts} = this.props;
-		const {address, transactions, type} = this.account;
+		const {address, transactions, type, symbol} = this.account;
 		let transactionsList;
-		if (this.state.tokenSymbol === 'AION') {
+		if (this.state.tokenSymbol === this.account.symbol) {
 			transactionsList = transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
 		} else {
-		    let tokenTxs = accounts[address].tokens[setting.explorer_server][this.state.tokenSymbol].tokenTxs;
+		    let tokenTxs = accounts[this.account_key].tokens[setting.explorer_server][this.state.tokenSymbol].tokenTxs;
             transactionsList = tokenTxs? Object.values(tokenTxs).slice(0,5):[];
             console.log("transactionList: ", transactionsList);
 		}
 		const accountBalanceText = this.state.tokenBalance + ' ' + this.state.tokenSymbol;
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
+		type==='[ledger]'?ACCOUNT_MENU.slice(0,1):ACCOUNT_MENU
+		var menuArray = [ACCOUNT_MENU[0]];
+		if (type !== '[ledger]') {
+			menuArray.push(ACCOUNT_MENU[1]);
+		}
+		if (COINS[symbol].tokenSupport) {
+			menuArray.push(ACCOUNT_MENU[2]);
+		}
+
 		return (
 			<View style={{flex:1, backgroundColor: mainColor}}>
 				<TouchableOpacity  activeOpacity={1} style={{flex:1}} onPress={()=>Keyboard.dismiss()}>
@@ -444,28 +514,14 @@ class Account extends Component {
 						flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
 						<TouchableOpacity
 							style={{width:width/2,height:60, justifyContent:'center', alignItems:'center'}}
-							onPress={()=>{
-								Keyboard.dismiss();
-								navigation.navigate('signed_vault_send', {
-									address: this.addr,
-									symbol: this.state.tokenSymbol,
-									coinSelected: this.coinSelected,
-								});
-							}}
+							onPress={this.toSend}
 						>
 							<Text style={{fontSize:16,color:'#fff'}}>{strings('account_view.send_button')}</Text>
 						</TouchableOpacity>
 						<Image source={require('../../../assets/separate.png')} style={{height:40,width:2,tintColor:'#fff'}}/>
 						<TouchableOpacity
 							style={{width:width/2,height:60, justifyContent:'center', alignItems:'center'}}
-							onPress={()=>{
-								Keyboard.dismiss();
-								navigation.navigate('signed_vault_receive', {
-									address: this.addr,
-                                    symbol: this.state.tokenSymbol,
-									coinSelected: this.coinSelected,
-								});
-							}}
+							onPress={this.toReceive}
 						>
 							<Text style={{fontSize:16,color:'#fff'}}>{strings('account_view.receive_button')}</Text>
 						</TouchableOpacity>
@@ -479,7 +535,7 @@ class Account extends Component {
 							<TouchableOpacity style={{flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
 								onPress={()=>{
 									this.props.navigation.navigate('signed_vault_transaction_history', {
-										account: this.account.address,
+										account: this.account,
 										symbol: this.state.tokenSymbol,
 									})
 								}}
@@ -501,7 +557,7 @@ class Account extends Component {
 						<PopWindow
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.onCloseMenu(select)}
-							data={type==='[ledger]'?ACCOUNT_MENU.slice(0,1):ACCOUNT_MENU}
+							data={menuArray}
 							containerPosition={{position:'absolute', top:popwindowTop,right:5}}
 							imageStyle={{width: 20, height: 20, marginRight:10}}
 							fontStyle={{fontSize:12, color:'#000'}}

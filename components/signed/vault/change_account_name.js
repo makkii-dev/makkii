@@ -34,11 +34,15 @@ class ChangeAccountNameScreen extends  React.Component {
     constructor(props){
         super(props);
         const {navigation} = this.props;
-        this.addr=navigation.getParam('address');
-        this.onUpdateFinish = navigation.getParam('onUpdateFinish',()=>{});
-        this.account = this.props.accounts[this.addr];
+        this.oldName = navigation.getParam('name', '');
+        this.targetUri = navigation.getParam('targetUri', '');
+
+        // this.addr=navigation.getParam('address');
+        this.onUpdate = navigation.getParam('onUpdate',()=>{});
+        // this.account = this.props.accounts[this.addr];
         this.state={
-            textValue: this.account.name,
+            // textValue: this.account.name,
+            textValue: this.oldName,
             editable: true,
         };
         navigation.setParams({
@@ -48,16 +52,16 @@ class ChangeAccountNameScreen extends  React.Component {
     updateAccountName=()=>{
         const {dispatch, navigation} = this.props;
         const {textValue} = this.state;
-        const key = this.account.address;
+        // const key = this.account.address;
         this.setState({editable:false},()=>{
-            dispatch(update_account_name(key,textValue,this.props.user.hashed_password));
-            AppToast.show(strings('toast_update_success'), {
-                position: Toast.positions.CENTER,
-                onHidden: () => {
-                    this.onUpdateFinish();
-                    navigation.goBack();
-                }
-            });
+            // dispatch(update_account_name(key,textValue,this.props.user.hashed_password));
+            this.onUpdate(textValue);
+            if (this.targetUri === '') {
+                navigation.goBack();
+            } else {
+                console.log("targetUri" + this.targetUri);
+                navigation.navigate(this.targetUri);
+            }
         });
     };
 
@@ -68,7 +72,7 @@ class ChangeAccountNameScreen extends  React.Component {
                 textValue: text,
             }, () => {
                 navigation.setParams({
-                    isEdited: this.state.textValue !== this.account.name&&text.trim()!=='',
+                    isEdited: this.state.textValue !== this.oldName&&text.trim()!=='',
                 })
             })
         }else {

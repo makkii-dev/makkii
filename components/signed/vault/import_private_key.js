@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Dimensions, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
-import { validatePrivateKey } from '../../../utils';
+import { validatePrivateKey, accountKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
-import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
+import keyStore from 'react-native-makkii-core';
 
 const {width, height} = Dimensions.get('window');
 
@@ -19,7 +19,7 @@ class ImportPrivateKey extends Component {
 			headerRight: (
 				<RightActionButton
 					onPress={() => {
-						navigation.state.params.ImportAccount(navigation.state.params.hashed_password);
+						navigation.state.params.ImportAccount();
 					}}
 					disabled={!navigation.state.params || !navigation.state.params.isEdited}
                     btnTitle={strings('import_button')}
@@ -28,39 +28,60 @@ class ImportPrivateKey extends Component {
         });
 	};
 
-	ImportAccount= (hashed_password) => {
-		Keyboard.dismiss();
-	    if (validatePrivateKey(this.state.private_key)) {
-    		AionAccount.importAccount(this.state.private_key).then(address => {
-				let acc = {};
-				let account = {};
-				account.address = address.address;
-				account.private_key = this.state.private_key;
-				account.name = this.props.setting.default_account_name;
-				account.type = '[pk]';
-				account.transactions = {'mainnet':{}, 'mastery':{}};
-				acc[account.address] = account;
-				if(this.props.accounts[account.address]!==undefined){
-					AppToast.show(strings('import_private_key.already_existed',),{position:0})
-				}else {
-					this.props.navigation.state.params.dispatch(accounts_add(acc, hashed_password));
-					setTimeout(() => {
-						DeviceEventEmitter.emit('updateAccountBalance');
-					}, 500);
-					this.props.navigation.goBack();
+	setAccountName=(newName)=> {
+	    console.log("set account name=>", newName);
 
-				}
+		let acc = {};
+		acc.address = this.getAcc.address;
+		acc.private_key = this.getAcc.private_key;
+		acc.balance = 0;
+		acc.name = newName;
+		acc.type = '[pk]';
+		acc.transactions = {};
+		acc.symbol = this.symbol;
+
+		let key = accountKey(this.symbol, acc.address);
+		if(this.props.accounts[key]!==undefined){
+			AppToast.show(strings('import_private_key.already_existed',),{position:0})
+		}else {
+			this.props.navigation.state.params.dispatch(accounts_add({
+				[key]: acc
+			}, this.props.user.hashed_password));
+			setTimeout(() => {
+				DeviceEventEmitter.emit('updateAccountBalance');
+			}, 500);
+
+		}
+	}
+
+	ImportAccount= () => {
+		Keyboard.dismiss();
+	    if (validatePrivateKey(this.state.private_key, this.symbol)) {
+	    	let coinType = keyStore.CoinType.fromCoinSymbol(this.symbol);
+	    	console.log('coinType:' + coinType);
+	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType).then(address => {
+                console.log("recover keypair from private key: ", address);
+                this.getAcc = address;
+
+                this.props.navigation.navigate('signed_vault_change_account_name', {
+                	oldName: '',
+					onUpdate: this.setAccountName,
+					targetUri: 'signed_vault',
+				});
+
 			}, error=> {
     			console.log("error: " + error);
 				alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
 			});
 		} else {
-	    	alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'))
+	    	alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
 		}
 	};
 
 	constructor(props){
 		super(props);
+
+		this.symbol = this.props.navigation.getParam('symbol');
 		this.state = {
 			private_key: ''
 		};
@@ -68,12 +89,11 @@ class ImportPrivateKey extends Component {
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(Object.keys(this.props.accounts).length);
+
 		const {dispatch} = this.props;
 		this.props.navigation.setParams({
 			ImportAccount: this.ImportAccount,
 			dispatch: dispatch,
-			hashed_password: this.props.user.hashed_password,
             isEdited: false
 		});
 	}

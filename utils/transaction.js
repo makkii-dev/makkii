@@ -3,9 +3,11 @@ import {DeviceEventEmitter} from "react-native";
 import Toast from "react-native-root-toast";
 import {strings} from "../locales/i18n";
 import {AionTransaction} from "../libs/aion-hd-wallet";
-import {CONTRACT_ABI} from './token';
+import {CONTRACT_ABI} from '../coins/aion/token';
 import {fetchRequest} from './others';
 import BigNumber from "bignumber.js";
+import {getTransactionCount, sendSignedTransaction} from '../coins/api';
+
 /***
  *
  * @param tx object
@@ -15,7 +17,7 @@ import BigNumber from "bignumber.js";
  * @returns {*}
  */
 function sendTransaction(tx, wallet, symbol,network){
-    if (symbol==='AION'){
+    if (symbol===wallet.symbol){
         return sendAionTransaction(tx, wallet)
     }else {
         return sendTokenTransaction(tx, wallet, symbol,network)
@@ -25,8 +27,8 @@ function sendTransaction(tx, wallet, symbol,network){
 function sendAionTransaction(tx, wallet){
     const {type, derivationIndex, private_key} = wallet;
     return new Promise((resolve, reject) => {
-        web3.eth.getTransactionCount(tx.sender, 'pending').then(count => {
-            console.log('get transaction count: ' + count);
+        getTransactionCount(wallet.symbol, tx.sender).then(count => {
+            console.log('get transaction count: ', count);
             let pendingTx = new AionTransaction({
                 ...tx,
                 nonce: count,
@@ -45,8 +47,9 @@ function sendAionTransaction(tx, wallet){
                     encoded = pendingTx.getEncoded();
                 }
                 console.log('encoded => ',encoded);
-                let pending = web3.eth.sendSignedTransaction(encoded);
-                resolve({pending,signedTransaction:pendingTx});
+                sendSignedTransaction(wallet.symbol, encoded).then(hash => {
+                    resolve({hash, signedTransaction:pendingTx});
+                });
             }).catch(err=>{
                 reject(err)
             })

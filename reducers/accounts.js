@@ -64,7 +64,6 @@ export default function accounts(state = init, action){
 			break;
 		case UPDATE_ACCOUNT_TOKEN_TRANSACTIONS:
 		    if (typeof state[action.key] !== 'undefined') {
-		    	console.log("tokenTxs: ", state[action.key].tokens[action.network][action.symbol].tokenTxs);
 				let transactions = Object.assign({}, state[action.key].tokens[action.network][action.symbol].tokenTxs, action.transactions);
 				let new_transactions = {};
 				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
