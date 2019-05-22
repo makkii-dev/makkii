@@ -2216,9 +2216,9 @@ can-promise@0.0.1:
     window-or-global "^1.0.1"
 
 caniuse-lite@^1.0.30000844:
-  version "1.0.30000969"
-  resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30000969.tgz#7664f571f2072657bde70b00a1fc1ba41f1942a9"
-  integrity sha1-dmT1cfIHJle95wsAofwbpB8ZQqk=
+  version "1.0.30000971"
+  resolved "https://registry.npm.taobao.org/caniuse-lite/download/caniuse-lite-1.0.30000971.tgz#d1000e4546486a6977756547352bc96a4cfd2b13"
+  integrity sha1-0QAORUZIaml3dWVHNSvJakz9KxM=
 
 capture-exit@^1.2.0:
   version "1.2.0"
@@ -2376,7 +2376,7 @@ combined-stream@^1.0.6, combined-stream@~1.0.6:
 
 commander@2.15.1:
   version "2.15.1"
-  resolved "https://registry.npm.taobao.org/commander/download/commander-2.15.1.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcommander%2Fdownload%2Fcommander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
+  resolved "https://registry.npm.taobao.org/commander/download/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
   integrity sha1-30boZ9D8Kuxmo0ZitAapzK//Ww8=
 
 commander@^2.9.0:
@@ -2823,9 +2823,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.47:
-  version "1.3.135"
-  resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.135.tgz#f5799b95f2bcd8de17cde47d63392d83a4477041"
-  integrity sha1-9XmblfK82N4XzeR9Yzktg6RHcEE=
+  version "1.3.136"
+  resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.136.tgz#758a156109077536780cfa8207b1aeaa99843e33"
+  integrity sha1-dYoVYQkHdTZ4DPqCB7GuqpmEPjM=
 
 elliptic@^6.0.0, elliptic@^6.4.0:
   version "6.4.1"
@@ -3459,7 +3459,7 @@ glob@7.0.6:
 
 glob@7.1.2:
   version "7.1.2"
-  resolved "https://registry.npm.taobao.org/glob/download/glob-7.1.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fglob%2Fdownload%2Fglob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
+  resolved "https://registry.npm.taobao.org/glob/download/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
   integrity sha1-wZyd+aAocC1nhhI4SmVSQExjbRU=
   dependencies:
     fs.realpath "^1.0.0"
@@ -6289,7 +6289,7 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
 
 "react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-makkii-core.git#44b8be515a3c93923ac24ea6c6b34eb183810527"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#41ebccfa7e21ae709e2d6194985b3066e83d09de"
   dependencies:
     "@tronscan/client" "^0.2.48"
 

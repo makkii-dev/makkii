@@ -172,6 +172,7 @@ export class AionTransaction {
                 gasPrice: this.gasPrice,
                 to: this.to,
                 private_key: private_key,
+                timestamp: this.timestampHex,
             };
             this.data!==null&& (tx = {...tx,data:this.data});
             keyStore.signTransaction(tx, 425).then(res=>{
