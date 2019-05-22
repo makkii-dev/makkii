@@ -468,7 +468,7 @@ class Home extends HomeComponent {
 		if (txs) {
 			Object.values(txs).map((tx) => {
 				if (tx.status === 'PENDING') {
-					listenTx.addTransaction(tx);
+					listenTx.addTransaction(tx, item.symbol);
 				}
 			});
 		}

@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import blake2b from 'blake2b';
-import {Crypto} from "./utils/crypto";
-import {AionRlp} from './utils/rlp';
+import {AionRlp} from '../../libs/aion-hd-wallet/src/utils/rlp';
 import wallet from 'react-native-aion-hw-wallet';
 import keyStore from "react-native-makkii-core";
+import {toHex} from '../../utils';
 
 const sigToBytes = (signature, publicKey) => {
     let fullSignature = new Uint8Array((signature.length + publicKey.length));
@@ -93,7 +93,7 @@ export class AionTransaction {
         if (!valueHex) {
             return;
         }
-        this[field] = Crypto.toHex(valueHex);
+        this[field] = toHex(valueHex);
     }
 
     /**
@@ -155,14 +155,14 @@ export class AionTransaction {
             encodedTx.type,
             encodedTx.fullSignature,
         ]);
-        return Crypto.toHex(encoded);
+        return toHex(encoded);
     };
 
     getRawHash = () => {
         return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
-    signByECKey = (private_key, coinType) => {
+    signByECKey = (private_key) => {
         return new Promise((resolve, reject) => {
             let rawHash = this.getRawHash();
             let tx = {
@@ -174,7 +174,7 @@ export class AionTransaction {
                 private_key: private_key,
             };
             this.data!==null&& (tx = {...tx,data:this.data});
-            keyStore.signTransaction(tx, coinType).then(res=>{
+            keyStore.signTransaction(tx, 425).then(res=>{
                 const {encoded, signature} = res;
                 if(!encoded.startsWith('0x')){
                     this.encoded = '0x'+encoded;

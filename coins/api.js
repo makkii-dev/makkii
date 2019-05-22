@@ -1,33 +1,86 @@
-import {aion_getBalance, aion_getTransactionCount, aion_sendSignedTransaction} from './aion/aion_json_rpc';
-import {eth_getBalance, eth_getTransactionCount, eth_sendSignedTransaction} from './eth/ether_json_rpc';
 import ApiCaller from '../utils/http_caller';
 import {COINS} from './support_coin_list';
+import {toHex} from '../utils';
 
-export function getBalance(coinType, address) {
-    if (coinType.toUpperCase() === 'ETH') {
-        return eth_getBalance(address);
-    } else if (coinType.toUpperCase() === 'AION') {
-        return aion_getBalance(address);
+function getBlockByNumber(coinType, blockNumber) {
+    let coin = COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getBlockByNumber !== undefined) {
+        return coin.api.getBlockByNumber(toHex(blockNumber), false, coin.network);
+    } else {
+        throw new Error("No getBlockByNumber impl for coin " + coinType);
+    }
+}
+function getTransactionExplorerUrl(coinType, hash) {
+    let coin = COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getTransactionUrlInExplorer !== undefined) {
+        return coin.api.getTransactionUrlInExplorer(hash, coin.network);
+    } else {
+        throw new Error('No getTransactionExplorerUrl impl for coin ' + coinType);
     }
 }
 
-export function getTransactionCount(coinType, address) {
-    if (coinType.toUpperCase() === 'ETH') {
-        return eth_getTransactionCount(address, 'pending');
-    } else if (coinType.toUpperCase() === 'AION') {
-        return aion_getTransactionCount(address, 'pending');
+function getTransactionsByAddress(coinType,address,page=0,size=5){
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getTransactionUrlInExplorer !== undefined) {
+        return coin.api.getTransactionsByAddress(address, page, size, coin.network);
+    } else {
+        throw new Error('No getTransactionsByAddress impl for coin ' + coinType);
     }
 }
 
-export function sendSignedTransaction(coinType, signedTx) {
-    if (coinType.toUpperCase() === 'ETH') {
-        return eth_sendSignedTransaction(signedTx);
-    } else if (coinType.toUpperCase() === 'AION') {
-        return aion_sendSignedTransaction(signedTx);
+function getBlockNumber(coinType) {
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.blockNumber !== undefined) {
+        return coin.api.blockNumber(coin.network);
+    } else {
+        throw new Error('No blockNumber impl for coin ' + coinType);
     }
 }
 
-export function getCoinPrices(currency) {
+function getTransactionReceipt(coinType, hash) {
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getTransactionReceipt !== undefined) {
+        return coin.api.getTransactionReceipt(hash, coin.network);
+    } else {
+        throw new Error('No getTransactionReceipt impl for coin ' + coinType);
+    }
+}
+
+function getBalance(coinType, address) {
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getBalance !== undefined) {
+        return coin.api.getBalance(address, 'latest', coin.network);
+    } else {
+        throw new Error('No getBalance impl for coin ' + coinType);
+    }
+}
+
+function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data=undefined) {
+    let coin =  COINS[account.symbol.toUpperCase()];
+    if (coin.api !== undefined && coin.api.sendTransaction !== undefined) {
+        return coin.api.sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data, coin.network);
+    } else {
+        throw new Error('No sendTransaction impl for coin ' + coinType);
+    }
+}
+
+function validateAddress(address, coinType = 'AION') {
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.validateAddress !== undefined) {
+        return coin.api.validateAddress(address);
+    } else {
+        throw new Error('No sendTransaction impl for coin ' + coinType);
+    }
+}
+
+function sameAddress(coinType, address1, address2) {
+    if (coinType === 'AION' || coinType === 'ETH') {
+        return address1.toLowerCase() === address2.toLowerCase();
+    }
+    return true;
+}
+
+function getCoinPrices(currency) {
     let cryptos = Object.keys(COINS).join(',');
     const url = `http://45.118.132.89:8080/prices?cryptos=${cryptos}&fiat=${currency}`;
     console.log("[http req]fetch coin prices: " + url);
@@ -41,3 +94,16 @@ export function getCoinPrices(currency) {
         });
     });
 }
+
+module.exports = {
+    getBlockByNumber,
+    getTransactionExplorerUrl,
+    getTransactionsByAddress,
+    getBlockNumber,
+    getTransactionReceipt,
+    getBalance,
+    sendTransaction,
+    validateAddress,
+    sameAddress,
+    getCoinPrices,
+};

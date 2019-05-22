@@ -1,5 +1,5 @@
 import bip39 from 'bip39';
-import {Crypto} from '../utils/crypto';
+import {Crypto} from '../../../../utils/crypto/crypto';
 import {Ed25519Key} from './Ed25519Key';
 const ED25519_KEY = "ed25519 seed";
 const DEFAULT_PASSPHRASE = '';

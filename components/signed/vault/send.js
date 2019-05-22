@@ -17,13 +17,11 @@ import { strings } from '../../../locales/i18n';
 import {
 	getLedgerMessage,
 	navigationSafely,
-	validateAddress,
 	validateAmount,
 	validatePositiveInteger,
-	validateRecipient,
-	sendTransaction,
     accountKey,
 } from '../../../utils';
+import {sendTransaction, validateAddress} from "../../../coins/api";
 import Loading from '../../loading';
 import BigNumber from 'bignumber.js';
 import {update_account_txs, update_account_token_txs} from "../../../actions/accounts";
@@ -70,11 +68,6 @@ class Send extends Component {
 			gasPrice: gasPrice,
 			gasLimit: gasLimit,
 		};
-        if (COINS[this.account.symbol].tokenSupport) {
-			if (tokenSymbol !== this.account.symbol) {
-				this.decimals = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][tokenSymbol].tokenDecimal + 0;
-			}
-		}
 	}
 	async componentDidMount(){
 		Linking.addEventListener('url', this._handleOpenURL);
@@ -139,7 +132,6 @@ class Send extends Component {
 		superCoinSelected(tokenSymbol);
 		if (tokenSymbol !== this.state.unit) {
             if (COINS[this.account.symbol].tokenSupport && tokenSymbol !== this.account.symbol) {
-                this.decimals = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][tokenSymbol].tokenDecimal + 0;
                 this.setState({
                     unit: tokenSymbol,
                     gasLimit: COINS[this.account.symbol].defaultGasLimitForContract,
@@ -158,6 +150,30 @@ class Send extends Component {
 			account: this.account,
 			coinSelected: this.coinSelected,
 		});
+	}
+
+	validateRecipient=(recipientQRCode, symbol='AION') => {
+		if (validateAddress(recipientQRCode, symbol)) {
+			return true;
+		}
+		try {
+			let receiverObj = JSON.parse(recipientQRCode);
+			if (!receiverObj.receiver) {
+				return false;
+			}
+			if (!validateAddress(receiverObj.receiver, symbol)) {
+				return false;
+			}
+			if (receiverObj.amount) {
+				if (!validateAmount(receiverObj.amount)) {
+					return false;
+				}
+			}
+		} catch (error) {
+			console.log("recipient qr code is not a json");
+			return false;
+		}
+		return true;
 	}
 
 	render(){
@@ -310,69 +326,24 @@ class Send extends Component {
 
 	transfer=() => {
 		const {goBack} = this.props.navigation;
-		let sender = this.account.address;
-		if (!sender.startsWith('0x')) {
-			sender = '0x' + sender;
-		}
-		const {dispatch, user, setting, accounts} = this.props;
+		const {dispatch, user, setting} = this.props;
 		this.loadingView.show(strings('send.progress_sending_tx'));
-		const { gasPrice, gasLimit, recipient,amount} = this.state;
-		let amountValue = new BigNumber(0);
-		let tokenAmountValue = new BigNumber(0);
-		let to;
-		let tokenTo;
-		if (this.state.unit === this.account.symbol) {
-		    if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
-				amountValue = new BigNumber(amount).shiftedBy(18);
-				to = recipient;
-			} else {
-		    	// TODO: handle other coins
-		    	console.log("unsupported symbol");
-		    	return;
-			}
-		} else {
-			tokenAmountValue = new BigNumber(amount).shiftedBy(this.decimals);
-			to = accounts[this.account_key].tokens[setting.explorer_server][this.state.unit].contractAddr;
-			tokenTo = recipient;
-		}
-		let tx = {
-			sender: sender,
-			gasPrice: gasPrice * 1e9,
-			gas: gasLimit - 0,
-			to: to,
-			tokenTo: tokenTo,
-			value: amountValue,
-			tokenValue: tokenAmountValue,
-			type: 1,
-		};
-		sendTransaction(tx,this.account,this.state.unit,setting.explorer_server).then(res=>{
-			const {hash, signedTransaction} = res;
-            console.log("transaction sent: hash=" + hash);
-            let txs = {};
-            let pendingTx = {};
-            pendingTx.hash = hash;
-            pendingTx.timestamp = signedTransaction.timestamp.toNumber() / 1000;
-            pendingTx.from = sender;
-            pendingTx.to = signedTransaction.to;
-            pendingTx.value = new BigNumber(amount);
-            pendingTx.status = 'PENDING';
-            txs[hash] = pendingTx;
+		const { gasPrice, gasLimit, recipient, amount} = this.state;
 
-            dispatch(update_account_txs(accountKey(this.account.symbol, sender), txs, setting.explorer_server, user.hashed_password));
-            dispatch(update_account_txs(accountKey(this.account.symbol, tx.to), txs, setting.explorer_server, user.hashed_password));
+		sendTransaction(this.account, this.state.unit, recipient, new BigNumber(amount), gasPrice * 1e9, gasLimit - 0).then(res=> {
+			const {pendingTx, pendingTokenTx} = res;
+            console.log("transaction sent: ", pendingTx);
+            console.log("token tx sent: ", pendingTokenTx);
 
-            if (this.state.unit !== this.account.symbol) {
-                let tokenTxs = {};
-                let pendingTokenTxs = {};
-                pendingTokenTxs.hash = hash;
-                pendingTokenTxs.timestamp = signedTransaction.timestamp.toNumber() / 1000;
-                pendingTokenTxs.from = sender;
-                pendingTokenTxs.to = tokenTo;
-                pendingTokenTxs.value = new BigNumber(amount);
-                pendingTokenTxs.status = 'PENDING';
-                tokenTxs[hash] = pendingTokenTxs;
-                dispatch(update_account_token_txs(sender, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
-                dispatch(update_account_token_txs(tokenTo, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
+            let txs = {[pendingTx.hash]: pendingTx};
+
+            dispatch(update_account_txs(this.account_key, txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, setting.explorer_server, user.hashed_password));
+
+            if (pendingTokenTx != undefined) {
+                let tokenTxs = { [pendingTokenTx.hash]: pendingTokenTx};
+                dispatch(update_account_token_txs(this.account_key, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
+                dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
             }
 
             this.loadingView.hide();
@@ -394,7 +365,7 @@ class Send extends Component {
 
 	validateFields=() => {
 		// validate recipient
-		if (!validateAddress(this.state.recipient)) {
+		if (!validateAddress(this.state.recipient, this.account.symbol)) {
 			alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
 			return false;
 		}
@@ -476,11 +447,13 @@ class Send extends Component {
 		});
 	}
 	scan=() => {
+		let thus = this;
 		this.props.navigation.navigate('scan', {
 			success: 'signed_vault_send',
 			validate: function(data) {
 				console.log("scanned: " + data.data);
-				let pass = validateRecipient(data.data, this.account.symbol);
+				console.log("this.account.symbol:", thus.account.symbol);
+				let pass = thus.validateRecipient(data.data, thus.account.symbol);
 				return {
 					pass: pass,
 					err: pass? '': strings('error_invalid_qrcode')

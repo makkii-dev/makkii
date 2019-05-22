@@ -15,7 +15,8 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchAccountTransactionHistory, fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
+import {fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
+import {getTransactionsByAddress} from '../../../coins/api';
 import {formatAddress, fetchAccountTokens, accountKey} from '../../../utils';
 import Loading from '../../loading';
 import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
@@ -327,7 +328,6 @@ class Account extends Component {
 						tokenSymbol: symbol
 					},callback);
 				});
-
 			}
 		}
 	}
@@ -336,7 +336,7 @@ class Account extends Component {
 		const {explorer_server} = this.props.setting;
 		const {accounts,dispatch,user} = this.props;
 		if (tokenSymbol === this.account.symbol) {
-			fetchAccountTransactionHistory(address, explorer_server, page, size).then(txs => {
+			getTransactionsByAddress(this.account.symbol, address, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
@@ -356,6 +356,7 @@ class Account extends Component {
 				})
 			});
 		} else {
+			// currently only support aion token
 		    let tokens = accounts[this.account_key].tokens[explorer_server];
 			const {contractAddr, tokenTxs} = tokens[tokenSymbol];
 			fetchAccountTokenTransferHistory(address, contractAddr, explorer_server, page, size).then(txs => {
@@ -459,6 +460,7 @@ class Account extends Component {
 						transaction={item}
 						currentAddr={this.addr}
 						symbol={this.state.tokenSymbol}
+						account={this.account}
 						onPress={()=>{
 							Keyboard.dismiss();
 							this.props.navigation.navigate('signed_vault_transaction',{
@@ -483,12 +485,17 @@ class Account extends Component {
 		const {navigation, setting, accounts} = this.props;
 		const {address, transactions, type, symbol} = this.account;
 		let transactionsList;
+		let compareFn = (a, b) => {
+		    if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+		    if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+		    if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+		    return b.timestamp - a.timestamp;
+		};
 		if (this.state.tokenSymbol === this.account.symbol) {
 			transactionsList = transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
 		} else {
 		    let tokenTxs = accounts[this.account_key].tokens[setting.explorer_server][this.state.tokenSymbol].tokenTxs;
-            transactionsList = tokenTxs? Object.values(tokenTxs).slice(0,5):[];
-            console.log("transactionList: ", transactionsList);
+            transactionsList = tokenTxs? Object.values(tokenTxs).sort(compareFn).slice(0,5):[];
 		}
 		const accountBalanceText = this.state.tokenBalance + ' ' + this.state.tokenSymbol;
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);

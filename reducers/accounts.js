@@ -56,7 +56,13 @@ export default function accounts(state = init, action){
 				// only keep 10 latest txs
 				let transactions = Object.assign({}, state[action.key].transactions[action.network],action.transactions);
 				let new_transactions = {};
-				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
+				let compareFn = (a, b) => {
+					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+					if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+					if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+					return b.timestamp - a.timestamp;
+				};
+				Object.values(transactions).sort(compareFn).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
 				state[action.key].transactions[action.network] = new_transactions;
 			}
 			new_state = Object.assign({}, state);

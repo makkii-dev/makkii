@@ -5,7 +5,8 @@ import React, {Component} from 'react';
 import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {accountKey, validateAddress, fetchTokenDetail} from '../../../utils';
+import {accountKey, fetchTokenDetail} from '../../../utils';
+import {validateAddress} from "../../../coins/api";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
 

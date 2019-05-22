@@ -5,6 +5,8 @@ import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
 import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
 import BigNumber from 'bignumber.js';
+import {sameAddress} from "../coins/api";
+
 const {width,height} = Dimensions.get('window');
 
 class ComponentTabBar extends Component{
@@ -534,6 +536,7 @@ class PendingComponent extends React.Component {
 
 class TransactionItem extends React.PureComponent{
 	static propTypes ={
+		account: PropTypes.object.isRequired,
 		transaction: PropTypes.object.isRequired,
 		onPress: PropTypes.func.isRequired,
         currentAddr: PropTypes.string.isRequired,
@@ -542,16 +545,16 @@ class TransactionItem extends React.PureComponent{
 
 
 	render(){
-		const {transaction, onPress,currentAddr,symbol} = this.props;
-		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const isSender = transaction.from === currentAddr;
+		const {transaction, onPress,currentAddr,symbol, account} = this.props;
+        const timestamp = transaction.timestamp === undefined? '': new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
+		const isSender = sameAddress(account.symbol, transaction.from, currentAddr);
 		const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
 		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
 		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
 		const valueColor = isSender? 'red':'green';
 		if(transaction.status === 'PENDING'){
 			console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
-			listenTx.addTransaction(transaction, symbol);
+			listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
 		}
 
 		return (

@@ -431,7 +431,9 @@ Routes.router.getStateForAction = (action, state) => {
 import data from './data.js';
 store.dispatch(dapps(data.dapps));
 
-import {listenTransaction, listenCoinPrice,listenAppState} from './utils';
+import {listenAppState} from './utils';
+import {listenCoinPrice} from './utils/listeners';
+import {listenTransaction} from './utils/listeners';
 import PopupCustom from './components/Popupcustom';
 global.listenTx = new listenTransaction(store);
 global.listenPrice = new listenCoinPrice(store);

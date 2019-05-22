@@ -1,7 +1,7 @@
 import {strings} from '../../../locales/i18n';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import {validateAddress} from '../../../utils';
+import {validateAddress} from "../../../coins/api";
 import {mainBgColor} from '../../style_util';
 import {Platform, View, TouchableOpacity, Iamge, StyleSheet, Keyboard, Image, PixelRatio, Dimensions, ScrollView} from 'react-native';
 import {RightActionButton,SubTextInput} from '../../common';

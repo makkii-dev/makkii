@@ -15,10 +15,10 @@ import {update_account_txs} from "../../../actions/accounts";
 import {
     getLedgerMessage,
     sendTransaction,
-    validateAddress,
     validateAmount,
     validatePositiveInteger
 } from "../../../utils";
+import { validateAddress } from '../../../coins/api';
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
@@ -235,13 +235,13 @@ class DappSend extends React.Component{
 
     validateFields=() => {
         // validate recipient
-        if (!validateAddress(this.state.from)) {
+        if (!validateAddress(this.state.from, this.account.symbol)) {
             alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
             return false;
         }
 
         // validate recipient
-        if (!validateAddress(this.state.to)) {
+        if (!validateAddress(this.state.to, this.account.symbol)) {
             alert_ok(strings('alert_title_error'), strings('send.error_format_sender'));
             return false;
         }

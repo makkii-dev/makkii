@@ -9,7 +9,8 @@ import {
     Dimensions, Keyboard,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
-import {fetchAccountTokenTransferHistory,fetchAccountTransactionHistory, accountKey} from "../../../utils";
+import {fetchAccountTokenTransferHistory, accountKey} from "../../../utils";
+import {getTransactionsByAddress} from "../../../coins/api";
 import {connect} from "react-redux";
 import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
@@ -56,7 +57,7 @@ class TransactionHistory extends React.Component {
         console.log("symbol:" + symbol);
         let promise;
         if (symbol === this.account.symbol) {
-            promise = fetchAccountTransactionHistory(this.account.address, explorer_server, page, size);
+            promise = getTransactionsByAddress(this.account.symbol, this.account.address, page, size);
         } else {
             let token = this.props.accounts[this.account_key].tokens[explorer_server][symbol];
             console.log("token: ", token);
@@ -123,12 +124,18 @@ class TransactionHistory extends React.Component {
         } else {
             let symbol = this.props.navigation.getParam('symbol');
             let transactions;
+            let compareFn = (a, b) => {
+                if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+                if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+                if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+                return b.timestamp - a.timestamp;
+            };
             if (symbol === this.account.symbol) {
                 let propTxs = this.props.accounts[this.account_key].transactions[this.props.setting.explorer_server];
-                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
+                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             } else {
                 let propTxs = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][symbol].tokenTxs;
-                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort((a, b) => b.timestamp - a.timestamp);
+                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             }
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
@@ -138,6 +145,7 @@ class TransactionHistory extends React.Component {
                             style={{backgroundColor: '#fff'}}
                             keyExtractor={(item, index) => index + ''}
                             renderItem={({item})=><TransactionItem
+                                account={this.account}
                                 symbol={symbol}
                                 transaction={item}
                                 currentAddr={this.account.address}

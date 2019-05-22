@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {TransactionItemCell,PendingComponent, ComponentButton} from '../../common'
 import {strings} from "../../../locales/i18n";
+import {sameAddress, getTransactionExplorerUrl} from "../../../coins/api";
 import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
@@ -30,7 +31,7 @@ class Transaction extends Component {
 		this.transaction = this.props.navigation.state.params.transaction;
 	}
 	onViewInExplorer(){
-		const url = `https://${this.props.setting.explorer_server}.aion.network/#/transaction/${this.transaction.hash}`;
+		const url = getTransactionExplorerUrl(this.account.symbol, this.transaction.hash);
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
 	sendAgain(){
@@ -45,8 +46,8 @@ class Transaction extends Component {
 	}
 	render(){
 		const transaction = this.transaction;
-		const timestamp = new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const ifSender = this.account.address === transaction.from;
+		const timestamp = transaction.timestamp === undefined? '': new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
+		const ifSender = sameAddress(this.account.address, transaction.from);
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
 		let inAddressBook, addressName;

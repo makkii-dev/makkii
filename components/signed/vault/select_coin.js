@@ -180,7 +180,7 @@ class SelectCoin extends Component {
         let explorer_server = setting.explorer_server;
         let tokens = accounts[this.account_key].tokens;
         let tokenArray;
-        if (tokens !== undefined) {
+        if (tokens !== undefined && tokens[explorer_server] !== undefined) {
             tokenArray = Object.values(tokens[explorer_server]);
         } else {
             tokenArray = [];

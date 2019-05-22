@@ -1,14 +1,11 @@
-import {AsyncStorage, DeviceEventEmitter, Platform, CameraRoll, Dimensions, StatusBar, AppState} from 'react-native';
+import {AsyncStorage, Platform, CameraRoll, Dimensions, StatusBar, AppState} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
-import {setting} from "../actions/setting";
 import Toast from 'react-native-root-toast';
-import TransactionUtil from './transaction';
 import TokenUtil from '../coins/aion/token';
 import {fetchRequest} from './others';
-import {getCoinPrices} from "../coins/api";
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -95,28 +92,6 @@ function validatePrivateKey(privateKey, symbol='AION') {
     return true;
 }
 
-function validateAddress(address, symbol = 'AION') {
-    if (symbol === 'AION') {
-        // do not verify prefix a0
-        let reg = /^[0-9a-fA-F]{64}$/;
-        address = address.startsWith('0x') ? address.substring(2) : address;
-        return reg.test(address);
-    } else if (symbol === 'BTC') {
-
-    } else if (symbol === 'EOS') {
-
-    } else if (symbol === 'ETH') {
-        let reg = /^[0-9a-fA-F]{40}$/;
-        address = address.startsWith('0x') ? address.substring(2) : address;
-        return reg.test(address);
-    } else if (symbol === 'LTC') {
-
-    } else if (symbol === 'TRX') {
-
-    }
-    return true;
-}
-
 function validateAmount(amount) {
     let reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]+)?))$/;
     return reg.test(amount);
@@ -125,30 +100,6 @@ function validateAmount(amount) {
 function validatePositiveInteger(input) {
     let reg= /^[1-9][0-9]*$/;
     return reg.test(input);
-}
-
-function validateRecipient(recipientQRCode, symbol='AION') {
-    if (validateAddress(recipientQRCode, symbol)) {
-        return true;
-    }
-    try {
-        let receiverObj = JSON.parse(recipientQRCode);
-        if (!receiverObj.receiver) {
-            return false;
-        }
-        if (!validateAddress(receiverObj.receiver, symbol)) {
-            return false;
-        }
-        if (receiverObj.amount) {
-            if (!validateAmount(receiverObj.amount)) {
-                return false;
-            }
-        }
-    } catch (error) {
-        console.log("recipient qr code is not a json");
-        return false;
-    }
-    return true;
 }
 
 function hashPassword(password) {
@@ -264,77 +215,6 @@ class AppToast {
     }
 }
 
-class listenCoinPrice{
-    constructor(store, interval=30) {
-        this.store = store;
-        this.interval = interval;
-    }
-
-    reset(exchange_refresh_interval, fiat_currency) {
-        this.interval = exchange_refresh_interval;
-        this.currency = fiat_currency;
-    }
-
-    setInterval(interval) {
-        this.interval = interval;
-        this.startListen();
-    }
-
-    setCurrency(currency) {
-        this.currency = currency;
-        this.startListen();
-    }
-
-    startListen() {
-        this.stopListen();
-        const thusStore = this.store;
-        console.log("this.currency:" + this.currency);
-        getCoinPrices(this.currency).then(prices => {
-            console.log("prices:", prices);
-            let settings = thusStore.getState().setting;
-            for (var item in prices) {
-                console.log("item:", item);
-                settings.coinPrices[prices[item].crypto] = prices[item].price;
-                console.log(settings.coinPrices);
-                if (item.crypto === 'AION')
-                    settings.coinPrice = price;
-            }
-            if (this.currency) {
-                settings.fiat_currency = this.currency;
-            }
-            DeviceEventEmitter.emit('updateAccountBalance');
-            thusStore.dispatch(setting(settings));
-        }, error => {
-            console.log("get coin price errors:", error);
-            Toast.show(strings('error_connect_remote_server'), {
-                position: Toast.positions.CENTER,
-            })
-        });
-
-        this.listener = setInterval(() => {
-            getCoinPrices(this.currency).then(prices => {
-                let settings = thusStore.getState().setting;
-                for (var item in prices) {
-                    settings.coinPrices[item.crypto] = item.price;
-                    if (item.crypto === 'AION')
-                        settings.coinPrice = price;
-                }
-                DeviceEventEmitter.emit('updateAccountBalance');
-
-                thusStore.dispatch(setting(settings));
-            }, error => {
-                console.log("get coin price errors:", error);
-            });
-        }, this.interval * 60 * 1000);
-    }
-
-    stopListen() {
-        if (this.listener) {
-            clearInterval(this.listener);
-        }
-    }
-
-}
 
 
 class listenAppState{
@@ -472,10 +352,36 @@ function range(start, end, step) {
     return arr;
 }
 
+function appendHexStart(str) {
+    let str1 = str.startsWith('0x')? str.substring(2): str;
+    let str2 = str1.length % 2 ? '0' + str1: str1;
+    return '0x' + str2;
+}
+
+function toHex(value) {
+    if (!value) {
+        return '0x00';
+    } else if (typeof value === 'string') {
+        return appendHexStart(value);
+    } else if (value instanceof Buffer) {
+        return appendHexStart(value.toString('hex'));
+    } else if (typeof value === 'number') {
+        return appendHexStart(value.toString(16));
+    } else if (value instanceof Uint8Array) {
+        return appendHexStart(Buffer.from(value).toString('hex'));
+    } else if (BigNumber.isBigNumber(value)) {
+        return appendHexStart(value.toString(16));
+    } else {
+        throw value;
+    }
+}
+
+function fromHexString(str) {
+    let strNo0x = str.startsWith('0x')? str.substring(2): str;
+    return parseInt(strNo0x, 16);
+}
+
 module.exports = {
-    sendTransaction:TransactionUtil.sendTransaction,
-    listenTransaction:TransactionUtil.listenTransaction,
-    fetchAccountTransactionHistory: TransactionUtil.fetchAccountTransactionHistory,
     fetchAccountTokens: TokenUtil.fetchAccountTokens,
     fetchAccountTokenBalance: TokenUtil.fetchAccountTokenBalance,
     fetchAccountTokenTransferHistory: TokenUtil.fetchAccountTokenTransferHistory,
@@ -491,10 +397,7 @@ module.exports = {
     validateAmount: validateAmount,
     saveImage: saveImage,
     validatePositiveInteger: validatePositiveInteger,
-    validateAddress: validateAddress,
     fetchRequest: fetchRequest,
-    listenCoinPrice: listenCoinPrice,
-    validateRecipient: validateRecipient,
     hexString2Array: hexString2Array,
     mainnet_url: mainnet_url,
     mastery_url: mastery_url,
@@ -508,4 +411,7 @@ module.exports = {
     range,
     accountKey,
     formatAddress,
+    appendHexStart,
+    toHex,
+    fromHexString,
 };

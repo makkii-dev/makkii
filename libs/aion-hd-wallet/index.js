@@ -1,5 +1,5 @@
 import {AionAccount} from "./src/AionAccount";
-import {AionTransaction} from "./src/AionTransaction";
+import {AionTransaction} from "../../coins/aion/AionTransaction";
 import bip39 from 'bip39';
 
 const generateMnemonic = () => {

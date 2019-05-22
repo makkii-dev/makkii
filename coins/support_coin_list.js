@@ -1,3 +1,6 @@
+import aion_api from './aion';
+import eth_api from './eth';
+
 export const COINS = {
     'AION': {
         name: 'AION',
@@ -8,6 +11,8 @@ export const COINS = {
         defaultGasPrice: '10',
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '90000',
+        network: 'mastery',
+        api: aion_api,
     },
     'BTC': {
         name: 'BITCOIN',
@@ -24,6 +29,8 @@ export const COINS = {
         gasPriceUnit: 'Gwei',
         defaultGasPrice: '20',
         defaultGasLimit: '21000',
+        network: 'ropsten',
+        api: eth_api
     },
     'EOS': {
         name: 'EOS',

@@ -1,6 +1,6 @@
 import {MasterKey} from "./key/MasterKey";
 import {Ed25519Key} from "./key/Ed25519Key";
-import {Crypto} from "./utils/crypto";
+import {Crypto} from "../../../utils/crypto/crypto";
 
 export class AionAccount {
 
