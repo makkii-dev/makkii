@@ -107,12 +107,13 @@ class Scan extends Component {
 				if(result===''){
 					throw('error')
 				}
-				let res = validate({data:result});
-				if (res.pass) {
-					this.props.navigation.navigate(success, { scanned: result });
-				} else {
-					AppToast.show(res.err);
-				}
+				validate({data:result}, (result, message='') => {
+					if (result) {
+						this.props.navigation.navigate(success, { scanned: result });
+					} else {
+						AppToast.show(message);
+					}
+				});
 			}).catch(error=>{
 				AppToast.show(strings('scan.decode_fail'));
 			})
@@ -138,19 +139,20 @@ class Scan extends Component {
 	  				captureAudio={false}
 	  				onBarCodeRead={e=>{
 	  					if(validate&&success){
-	  						let res = validate(e);
-	  						if (res.pass) {
-	  							this.props.navigation.navigate(success, { scanned: e.data });
-	  						} else {
-	  							// slow down toast log
-	  							let now = Date.now();
-	  							if(now - this.state.toast > 1000){
-	  								AppToast.show(res.err);
-	  								this.setState({
-	  									toast: now
-	  								})
-	  							}
-	  						}
+	  						validate(e, (result, message='') => {
+	  							if (result) {
+									this.props.navigation.navigate(success, { scanned: e.data });
+								} else {
+									// slow down toast log
+									let now = Date.now();
+									if(now - this.state.toast > 1000){
+										AppToast.show(message);
+										this.setState({
+											toast: now
+										})
+									}
+								}
+							});
 	  					} else {
 	  						this.props.navigation.goBack();
 	  					}

@@ -29,15 +29,15 @@ import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
 import {SORT, FILTER, MENU} from "./constants";
-import {formatAddress, getLedgerMessage} from "../../../utils";
+import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
 import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
 import {accountKey, getStatusBarHeight} from '../../../utils';
-import {COINS} from './constants';
-import {getBalance} from '../../../coins/api';
+import {COINS} from '../../../coins/support_coin_list';
+import {getBalance, formatAddress1Line} from '../../../coins/api';
 
 
 const {width} = Dimensions.get('window');
@@ -322,7 +322,7 @@ class Home extends HomeComponent {
 			executors.push(
 				new Promise((resolve, reject) => {
 					getBalance(value.symbol, value.address).then(balance=>{
-						value.balance = new BigNumber(balance).shiftedBy(-18);
+						value.balance = balance;
 						resolve(value)
 					},error => {
 						reject(error)
@@ -524,7 +524,7 @@ class Home extends HomeComponent {
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
-								<Text style={styles.accountSubTextFontStyle2}>{formatAddress(item.address)}</Text>
+								<Text style={styles.accountSubTextFontStyle2}>{formatAddress1Line(item.symbol, item.address)}</Text>
 								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
 							</View>
 						</View>

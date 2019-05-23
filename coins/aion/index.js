@@ -4,6 +4,7 @@ import transaction from './transaction';
 
 module.exports = {
     validateAddress: core.validateAddress,
+    formatAddress1Line: core.formatAddress1Line,
     getBlockByNumber: jsonrpc.getBlockByNumber,
     blockNumber: jsonrpc.blockNumber,
     getBalance: jsonrpc.getBalance,

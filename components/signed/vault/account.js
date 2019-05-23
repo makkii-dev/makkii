@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 import {fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
 import {getTransactionsByAddress} from '../../../coins/api';
-import {formatAddress, fetchAccountTokens, accountKey} from '../../../utils';
+import {fetchAccountTokens, accountKey} from '../../../utils';
 import Loading from '../../loading';
 import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
@@ -28,7 +28,8 @@ import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
 import {TransactionItem} from '../../common';
-import {COINS} from './constants';
+import {COINS} from '../../../coins/support_coin_list';
+import {formatAddress1Line} from '../../../coins/api';
 
 const {width} = Dimensions.get('window');
 
@@ -56,7 +57,8 @@ const ImageHeader = ({type, title})=>(
 
 class AddressComponent extends Component {
 	state={
-		showAllAddress: false
+		showAllAddress: false,
+		symbol: undefined,
 	};
 	render_address66(address) {
 		return (
@@ -94,8 +96,13 @@ class AddressComponent extends Component {
 
 	}
 	render() {
-		const {address} = this.props;
+		const {address, symbol} = this.props;
         this.expandable = (address.length == 66 || address.length == 42);
+        let address1Line = address;
+        try {
+			address1Line  = formatAddress1Line(symbol, address);
+		} catch (err) {
+		}
 		if(this.state.showAllAddress) {
 			return (
 				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',width:width}}>
@@ -121,7 +128,7 @@ class AddressComponent extends Component {
 			return (
 				<View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width}}>
 					<Text
-						style={styles.addressFontStyle}>{formatAddress(address)}</Text>
+						style={styles.addressFontStyle}>{address1Line}</Text>
 					<TouchableOpacity onPress={() => {
 						Clipboard.setString(address);
 						AppToast.show(strings('toast_copy_success'));
@@ -515,7 +522,7 @@ class Account extends Component {
 
 					<View style={{justifyContent:'space-between', alignItems:'center', height:130, paddingVertical:20, backgroundColor:mainColor}}>
 						<Text style={{fontSize:accountBalanceTextFontSize, color:'#fff'}}>{accountBalanceText}</Text>
-						<AddressComponent address={address}/>
+						<AddressComponent address={address} symbol={this.account.symbol}/>
 					</View>
 					<View style={{width:width,height:60,backgroundColor:'rgba(255,255,255,0.1)',
 						flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>

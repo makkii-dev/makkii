@@ -56,15 +56,6 @@ function dbGet(key){
     });
 }
 
-function formatAddress(address) {
-    let pre = address.startsWith('0x')? 2: 0;
-    if (address.length > 20 + pre) {
-        return address.substring(0, 10 + pre) + '...' + address.substring(address.length - 10);
-    } else {
-        return address;
-    }
-}
-
 function validatePassword(password) {
     let reg = /^[A-Za-z0-9!?#]{8,16}$/;
     return reg.test(password);
@@ -410,7 +401,6 @@ module.exports = {
     generateUpdateMessage: generateUpdateMessage,
     range,
     accountKey,
-    formatAddress,
     appendHexStart,
     toHex,
     fromHexString,

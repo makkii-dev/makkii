@@ -58,12 +58,9 @@ class Home extends Component {
 	scan=()=> {
 		this.props.navigation.navigate('scan',{
 			success:'unsigned_recovery',
-			validate:function(data){
+			validate:function(data, callback){
 				let pass = validateMnemonic(data.data);
-				return {
-					pass: pass,
-					err: pass ? '' : strings('toast_invalid_mnemonic')
-				};
+				callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
 			}
 		});
 	}

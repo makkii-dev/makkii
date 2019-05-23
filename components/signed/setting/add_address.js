@@ -103,22 +103,26 @@ class AddAddress extends Component {
         this.props.navigation.navigate('scan', {
             success: 'signed_setting_add_address',
             validate: function(data) {
-                let pass = validateAddress(data.data);
-                return {
-                    pass: pass,
-                    err: pass? '': strings('error_invalid_qrcode')
-                }
+                validateAddress(data.data).then(result => {
+                    if (result) {
+                        callback(true);
+                    } else {
+                        callback(false, strings('error_invalid_qrcode'));
+                    }
+                });
             }
         });
     }
 
     updateEditStatus=(name, address)=> {
-        let allValid = validateAddress(address) && name.length !== 0 && (name !== this.name || address !== this.address);
-        if (allValid !== this.props.navigation.getParam('isEdited')) {
-            this.props.navigation.setParams({
-                isEdited: allValid,
-            });
-        }
+        validateAddress(address).then(isValidAddress => {
+            let allValid = isValidAddress && name.length !== 0 && (name !== this.name || address !== this.address);
+            if (allValid !== this.props.navigation.getParam('isEdited')) {
+                this.props.navigation.setParams({
+                    isEdited: allValid,
+                });
+            }
+        });
     }
 
     render() {

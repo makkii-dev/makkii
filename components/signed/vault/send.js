@@ -28,7 +28,7 @@ import {update_account_txs, update_account_token_txs} from "../../../actions/acc
 import {ComponentButton,SubTextInput, alert_ok} from '../../common';
 import {linkButtonColor, mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {COINS} from './constants';
+import {COINS} from '../../../coins/support_coin_list';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -86,44 +86,46 @@ class Send extends Component {
 
 	    let scannedData = props.navigation.getParam('scanned', '');
 	    if (scannedData !== '') {
-	    	if (validateAddress(scannedData, this.account.symbol)) {
-				// only address is in qrcode
-	    		this.setState({
-					recipient: scannedData,
-				})
-			} else {
-	    		let receiverCode = JSON.parse(scannedData);
-
-	    		// process token in qrcode
-	    		let token = receiverCode.coin;
-	    		if (token !== undefined) {
-	    			if (token !== this.account.symbol) {
-	    				// token
-						if (accounts[this.account_key].tokens[setting.explorer_server][token] === undefined) {
-							AppToast.show(strings('send.toast_unsupported_token', {token: token}));
-							return;
-						}
-						this.coinSelected(token);
-					} else {
-	    				// native coin
-	    				this.coinSelected(this.account.symbol);
-					}
-				} else {
-	    		    // if no coin/token is specified, by default it is the native coin.
-	    		    this.coinSelected(this.account.symbol);
-				}
-
-	    		if (receiverCode.receiver !== undefined && receiverCode.amount !== undefined) {
-	    			this.setState({
-						recipient: receiverCode.receiver,
-						amount: receiverCode.amount,
-					})
-				} else if (receiverCode.receiver !== undefined && receiverCode.amount === undefined) {
+	    	validateAddress(scannedData, this.account.symbol).then(isValidAddress => {
+	    		if (isValidAddress) {
+					// only address is in qrcode
 					this.setState({
-						recipient: receiverCode.receiver,
+						recipient: scannedData,
 					})
+				} else {
+					let receiverCode = JSON.parse(scannedData);
+
+					// process token in qrcode
+					let token = receiverCode.coin;
+					if (token !== undefined) {
+						if (token !== this.account.symbol) {
+							// token
+							if (accounts[this.account_key].tokens[setting.explorer_server][token] === undefined) {
+								AppToast.show(strings('send.toast_unsupported_token', {token: token}));
+								return;
+							}
+							this.coinSelected(token);
+						} else {
+							// native coin
+							this.coinSelected(this.account.symbol);
+						}
+					} else {
+						// if no coin/token is specified, by default it is the native coin.
+						this.coinSelected(this.account.symbol);
+					}
+
+					if (receiverCode.receiver !== undefined && receiverCode.amount !== undefined) {
+						this.setState({
+							recipient: receiverCode.receiver,
+							amount: receiverCode.amount,
+						})
+					} else if (receiverCode.receiver !== undefined && receiverCode.amount === undefined) {
+						this.setState({
+							recipient: receiverCode.receiver,
+						})
+					}
 				}
-			}
+			});
 		}
 	}
 
@@ -153,30 +155,43 @@ class Send extends Component {
 	}
 
 	validateRecipient=(recipientQRCode, symbol='AION') => {
-		if (validateAddress(recipientQRCode, symbol)) {
-			return true;
-		}
-		try {
-			let receiverObj = JSON.parse(recipientQRCode);
-			if (!receiverObj.receiver) {
-				return false;
-			}
-			if (!validateAddress(receiverObj.receiver, symbol)) {
-				return false;
-			}
-			if (receiverObj.amount) {
-				if (!validateAmount(receiverObj.amount)) {
-					return false;
+	    return new Promise((resolve, reject) => {
+			validateAddress(recipientQRCode, symbol).then(isValidAddress => {
+				if (isValidAddress) {
+					resolve(true);
+				} else {
+					try {
+						let receiverObj = JSON.parse(recipientQRCode);
+						if (!receiverObj.receiver) {
+						    resolve(false);
+						    return;
+						}
+                        validateAddress(receiverObj.receiver, symbol).then(isValidAddress => {
+                        	if (!isValidAddress) {
+                        		resolve(false);
+                        		return;
+							} else {
+								if (receiverObj.amount) {
+									if (!validateAmount(receiverObj.amount)) {
+										resolve(false);
+										return;
+									}
+								}
+								resolve(true);
+							}
+						});
+					} catch (error) {
+						console.log("recipient qr code is not a json");
+						resolve(false);
+						return;
+					}
 				}
-			}
-		} catch (error) {
-			console.log("recipient qr code is not a json");
-			return false;
-		}
-		return true;
+			});
+		});
 	}
 
 	render(){
+		let showAdvancedOption = COINS[this.account.symbol].txFeeSupport;
 		return (
                 <View style={{flex:1, backgroundColor: mainBgColor}}>
 					<MyscrollView
@@ -225,35 +240,44 @@ class Send extends Component {
 							</View>
 
 							{/*advanced button*/}
+                            {
+                                showAdvancedOption ?
+                                    <View>
+                                    <TouchableOpacity activeOpacity={1} onPress={() => {
+                                        this.setState({
+                                            showAdvanced: !this.state.showAdvanced,
+                                        })
+                                    }}>
+                                        <Text style={{
+                                            color: linkButtonColor,
+                                            marginTop: 20,
+                                            marginHorizontal: 20
+                                        }}>{strings(this.state.showAdvanced ? 'send.hide_advanced' : 'send.show_advanced')}</Text>
+                                    </TouchableOpacity>
 
-							<TouchableOpacity activeOpacity={1} onPress={()=>{
-								this.setState({
-									showAdvanced: !this.state.showAdvanced,
-								})
-							}}>
-								<Text style={{color: linkButtonColor, marginTop:20,  marginHorizontal:20}}>{strings(this.state.showAdvanced ?'send.hide_advanced':'send.show_advanced')}</Text>
-							</TouchableOpacity>
 
-
-							{
-								this.state.showAdvanced?<View style={styles.containerView}>
-									<SubTextInput
-										title={strings('send.label_gas_price')}
-										style={styles.text_input}
-										value={this.state.gasPrice}
-										onChangeText={v=>this.setState({gasPrice:v})}
-										keyboardType={'decimal-pad'}
-										unit={COINS[this.account.symbol].gasPriceUnit}
-									/>
-									<SubTextInput
-										title={strings('send.label_gas_limit')}
-										style={styles.text_input}
-										value={this.state.gasLimit}
-										onChangeText={v=>this.setState({gasLimit:v})}
-										keyboardType={'decimal-pad'}
-									/>
-								</View>:null
-							}
+                                    {
+                                        this.state.showAdvanced ? <View style={styles.containerView}>
+                                            <SubTextInput
+                                                title={strings('send.label_gas_price')}
+                                                style={styles.text_input}
+                                                value={this.state.gasPrice}
+                                                onChangeText={v => this.setState({gasPrice: v})}
+                                                keyboardType={'decimal-pad'}
+                                                unit={COINS[this.account.symbol].gasPriceUnit}
+                                            />
+                                            <SubTextInput
+                                                title={strings('send.label_gas_limit')}
+                                                style={styles.text_input}
+                                                value={this.state.gasLimit}
+                                                onChangeText={v => this.setState({gasLimit: v})}
+                                                keyboardType={'decimal-pad'}
+                                            />
+                                        </View> : null
+                                    }
+									</View>
+                                :null
+                            }
 
 							{/*send button*/}
 							<View style={{ marginHorizontal:20, marginTop:20, marginBottom: 40}}>
@@ -274,23 +298,23 @@ class Send extends Component {
 
 	onTransfer=() => {
         Keyboard.dismiss();
-		if (!this.validateFields()) return;
-
-		if (this.account.address === this.state.recipient)
-
-		{
-			popCustom.show(
-				strings('alert_title_warning'),
-				strings('send.warning_send_to_itself'),
-				[
-					{text:strings('cancel_button'), onPress: ()=> {}},
-					{text:strings('alert_ok_button'), onPress: () => {setTimeout(this.transfer1, 200)}}
-				],
-				{cancelable:false}
-				);
-		} else {
-			this.transfer1();
-		}
+        this.validateFields().then(result => {
+        	if (result) {
+				if (this.account.address === this.state.recipient) {
+					popCustom.show(
+						strings('alert_title_warning'),
+						strings('send.warning_send_to_itself'),
+						[
+							{text:strings('cancel_button'), onPress: ()=> {}},
+							{text:strings('alert_ok_button'), onPress: () => {setTimeout(this.transfer1, 200)}}
+						],
+						{cancelable:false}
+					);
+				} else {
+					this.transfer1();
+				}
+			}
+		});
 	};
 
 	transfer1=() => {
@@ -364,67 +388,82 @@ class Send extends Component {
 	};
 
 	validateFields=() => {
-		// validate recipient
-		if (!validateAddress(this.state.recipient, this.account.symbol)) {
-			alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
-			return false;
-		}
+		return new Promise((resolve, reject) => {
+            validateAddress(this.state.recipient, this.account.symbol).then(isValidAddress => {
+            	if (!isValidAddress) {
+					alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
+            		resolve(false);
+				} else {
+					// validate amount
+					// 1. amount format
+					if (!validateAmount(this.state.amount)) {
+						alert_ok(strings('alert_title_error'), strings('send.error_format_amount'));
+						resolve(false);
+						return;
+					}
 
-		// validate amount
-		// 1. amount format
-		if (!validateAmount(this.state.amount)) {
-			alert_ok(strings('alert_title_error'), strings('send.error_format_amount'));
-			return false;
-		}
+					// validate gas price
+					if (!validateAmount(this.state.gasPrice)) {
+						alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
+						resolve(false);
+						return;
+					}
 
-		// validate gas price
-		if (!validateAmount(this.state.gasPrice)) {
-			alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
-			return false;
-		}
-
-		// validate gas limit
-		if (!validatePositiveInteger(this.state.gasLimit)) {
-			alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
-			return false;
-		}
+					// validate gas limit
+					if (!validatePositiveInteger(this.state.gasLimit)) {
+						alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
+						resolve(false);
+						return
+					}
 
 
-		// 2. < total balance
-		let gasLimit = new BigNumber(this.state.gasLimit);
-		let gasPrice = new BigNumber(this.state.gasPrice);
-		let balance = new BigNumber(this.account.balance);
-		let amount = new BigNumber(this.state.amount);
-        if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
-			console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
-			console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
-			console.log("total balance: " + this.account.balance);
+					// 2. < total balance
+					let gasLimit = new BigNumber(this.state.gasLimit);
+					let gasPrice = new BigNumber(this.state.gasPrice);
+					let balance = new BigNumber(this.account.balance);
+					let amount = new BigNumber(this.state.amount);
+					if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
+						console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
+						console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
+						console.log("total balance: " + this.account.balance);
 
-			if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
-				alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-				return false;
-			}
-		} else {
-        	if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
-				alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-				return false;
-        	}
-        	let totalCoins = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance
-        	if (amount.isGreaterThan(totalCoins)) {
-				alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-				return false;
-			}
-		}
+						if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
+							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
+							resovel(false);
+							return;
+						}
+					} else {
+						if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
+							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
+							resolve(false);
+							return;
+						}
+						let totalCoins = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance
+						if (amount.isGreaterThan(totalCoins)) {
+							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
+							resolve(false);
+							return;
+						}
+					}
 
-		return true;
+					resolve(true);
+				}
+			});
+		});
+
 	};
 
 	sendAll=() => {
 		if (this.state.unit === this.account.symbol) {
-			let gasLimit = new BigNumber(this.state.gasLimit);
-			let gasPrice = new BigNumber(this.state.gasPrice);
-			let totalBalance = new BigNumber(this.account.balance);
-			let totalAmount = BigNumber.max(new BigNumber(0), totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
+			let totalAmount;
+			if (COINS[this.account.symbol].txFeeSupport) {
+				let gasLimit = new BigNumber(this.state.gasLimit);
+				let gasPrice = new BigNumber(this.state.gasPrice);
+				let totalBalance = new BigNumber(this.account.balance);
+				totalAmount = BigNumber.max(new BigNumber(0), totalBalance.minus(gasLimit.multipliedBy(gasPrice).dividedBy(BigNumber(10).pow(9))));
+			} else {
+				totalAmount = new BigNumber(this.account.balance);
+			}
 
 			this.setState({
 				amount: totalAmount.toNotExString()
@@ -450,14 +489,16 @@ class Send extends Component {
 		let thus = this;
 		this.props.navigation.navigate('scan', {
 			success: 'signed_vault_send',
-			validate: function(data) {
+			validate: function(data, callback) {
 				console.log("scanned: " + data.data);
 				console.log("this.account.symbol:", thus.account.symbol);
-				let pass = thus.validateRecipient(data.data, thus.account.symbol);
-				return {
-					pass: pass,
-					err: pass? '': strings('error_invalid_qrcode')
-				}
+				thus.validateRecipient(data.data, thus.account.symbol).then(result=> {
+					if (result) {
+						callback(true);
+					} else {
+						callback(false, strings('error_invalid_qrcode'));
+					}
+				});
 			},
 		});
 	}

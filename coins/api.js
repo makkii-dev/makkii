@@ -21,7 +21,7 @@ function getTransactionExplorerUrl(coinType, hash) {
 
 function getTransactionsByAddress(coinType,address,page=0,size=5){
     let coin =  COINS[coinType.toUpperCase()];
-    if (coin.api !== undefined && coin.api.getTransactionUrlInExplorer !== undefined) {
+    if (coin.api !== undefined && coin.api.getTransactionsByAddress !== undefined) {
         return coin.api.getTransactionsByAddress(address, page, size, coin.network);
     } else {
         throw new Error('No getTransactionsByAddress impl for coin ' + coinType);
@@ -49,7 +49,7 @@ function getTransactionReceipt(coinType, hash) {
 function getBalance(coinType, address) {
     let coin =  COINS[coinType.toUpperCase()];
     if (coin.api !== undefined && coin.api.getBalance !== undefined) {
-        return coin.api.getBalance(address, 'latest', coin.network);
+        return coin.api.getBalance(address, coin.network);
     } else {
         throw new Error('No getBalance impl for coin ' + coinType);
     }
@@ -67,7 +67,7 @@ function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data=un
 function validateAddress(address, coinType = 'AION') {
     let coin =  COINS[coinType.toUpperCase()];
     if (coin.api !== undefined && coin.api.validateAddress !== undefined) {
-        return coin.api.validateAddress(address);
+        return coin.api.validateAddress(address, coin.network);
     } else {
         throw new Error('No sendTransaction impl for coin ' + coinType);
     }
@@ -78,6 +78,14 @@ function sameAddress(coinType, address1, address2) {
         return address1.toLowerCase() === address2.toLowerCase();
     }
     return true;
+}
+
+function formatAddress1Line(coinType, address) {
+    let coin = COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.formatAddress1Line !== undefined) {
+        return coin.api.formatAddress1Line(address);
+    }
+    return address;
 }
 
 function getCoinPrices(currency) {
@@ -106,4 +114,5 @@ module.exports = {
     validateAddress,
     sameAddress,
     getCoinPrices,
+    formatAddress1Line,
 };

@@ -53,15 +53,15 @@ const blockNumber = (network='mainnet') => new Promise((resolve, reject) => {
     });
 });
 
-const getBalance = (address, blockTag, network='mainnet') => new Promise((resolve, reject) => {
-    let params = [address.toLowerCase(), checkBlockTag(blockTag)];
+const getBalance = (address, network='mainnet') => new Promise((resolve, reject) => {
+    let params = [address.toLowerCase(), 'latest'];
     let requestData = processRequest('eth_getBalance', params);
     let promise = ApiCaller.post(getEndpoint(network), requestData, true, {'Content-Type': 'application/json'});
-    console.log("[eth http req] eth_getBalance[" + address + ", " + blockTag + "]");
+    console.log("[eth http req] eth_getBalance[" + address + ",  'latest']");
     promise.then((res)=>{
         console.log("[eth http resp] ",res.data);
         if (res.data.error) reject(res.data.error);
-        else resolve(res.data.result);
+        else resolve(new BigNumber(res.data.result).shiftedBy(-18));
     });
 });
 const getTransactionCount = (address, blockTag, network) => new Promise((resolve, reject) => {

@@ -94,12 +94,14 @@ class AddToken extends Component {
     scan=() => {
         this.props.navigation.navigate('scan', {
             success: 'signed_add_token',
-            validate: function(data) {
-                let pass = validateAddress(data.data, this.account.symbol);
-                return {
-                    pass: pass,
-                    err: pass? '': strings('error_invalid_qrcode')
-                }
+            validate: function(data, callback) {
+                validateAddress(data.data, this.account.symbol).then(result => {
+                    if (result) {
+                        callback(true);
+                    } else {
+                        callback(false, strings('error_invalid_qrcode'));
+                    }
+                });
             }
         });
     }
@@ -158,13 +160,15 @@ class AddToken extends Component {
                                 onChangeText={v=>{
                                     this.setState({contractAddress: v},
                                         () => {
-                                            if (validateAddress(v, this.account.symbol)) {
-                                                this.fetchTokenDetail(v);
-                                            } else {
-                                                this.props.navigation.setParams({
-                                                    isEdited: false
-                                                })
-                                            }
+                                            validateAddress(v, this.account.symbol).then(result=> {
+                                               if (result) {
+                                                   this.fetchTokenDetail(v);
+                                               } else {
+                                                   this.props.navigation.setParams({
+                                                       isEdited: false
+                                                   })
+                                               }
+                                            });
                                             // this.updateEditStatus(v, this.state.tokenName, this.state.symbol, this.state.decimals);
                                         });
 

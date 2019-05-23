@@ -1,5 +1,6 @@
 import aion_api from './aion';
 import eth_api from './eth';
+import tron_api from './tron';
 
 export const COINS = {
     'AION': {
@@ -7,6 +8,7 @@ export const COINS = {
         symbol: 'AION',
         icon: require('../assets/coin_aion.png'),
         tokenSupport: true,
+        txFeeSupport: true,
         gasPriceUnit: 'AMP',
         defaultGasPrice: '10',
         defaultGasLimit: '21000',
@@ -26,6 +28,7 @@ export const COINS = {
         symbol: 'ETH',
         icon: require('../assets/coin_eth.png'),
         tokenSupport: false,
+        txFeeSupport: true,
         gasPriceUnit: 'Gwei',
         defaultGasPrice: '20',
         defaultGasLimit: '21000',
@@ -51,6 +54,8 @@ export const COINS = {
         symbol: 'TRX',
         icon: require('../assets/coin_trx.png'),
         tokenSupport: false,
-        gasPriceUnit: '',
+        txFeeSupport: false,
+        network: 'shasta',
+        api: tron_api,
     }
 };

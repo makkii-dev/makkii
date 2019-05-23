@@ -12,6 +12,7 @@ import {
     PermissionsAndroid
 } from 'react-native';
 
+import Toast from 'react-native-root-toast';
 import defaultStyles from '../../styles.js';
 import {mainBgColor, linkButtonColor, fontColor} from "../../style_util";
 import {strings} from "../../../locales/i18n";

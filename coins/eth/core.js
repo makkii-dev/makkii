@@ -1,20 +1,22 @@
 import {keccak256} from '../../utils/crypto/crypto';
 
-function validateAddress(address) {
-    if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
-        // Check if it has the basic requirements of an address
-        return false;
-    }
+function validateAddress(address, network='mainnet') {
+    return new Promise((resolve, reject) => {
+        if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
+            // Check if it has the basic requirements of an address
+            resolve(false);
+        }
 
-    if (/^0x[0-9a-f]{40}$/.test(address) || /^0x?[0-9A-F]{40}$/.test(address)) {
-        // If it's all small caps or all all caps, return true
-        return true;
-    }
+        if (/^0x[0-9a-f]{40}$/.test(address) || /^0x?[0-9A-F]{40}$/.test(address)) {
+            // If it's all small caps or all all caps, return true
+            resolve(true);
+        }
 
-    // Otherwise check each case
-    let result = verifyChecksum(address);
-    console.log("eth " + address + " checksum validation failed.");
-    return result;
+        // Otherwise check each case
+        let result = verifyChecksum(address);
+        console.log("eth " + address + " checksum validation failed.");
+        resolve(result);
+    });
 }
 
 function verifyChecksum(address) {
@@ -34,6 +36,12 @@ function verifyChecksum(address) {
     return true;
 }
 
+function formatAddress1Line(address) {
+    let pre = address.startsWith('0x')? 2: 0;
+    return address.substring(0, 10 + pre) + '...' + address.substring(address.length - 10);
+}
+
 module.exports = {
     validateAddress,
+    formatAddress1Line,
 }
