@@ -76,6 +76,7 @@ class ImportFrom extends Component {
             [accountKey(this.symbol, acc.address)]: acc
         }, this.props.user.hashed_password));
 
+        console.log("index:" + this.getAcc.index);
         dispatch(update_index(this.symbol, this.getAcc.index + 1));
 
         setTimeout(() => {

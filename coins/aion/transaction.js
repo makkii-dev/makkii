@@ -65,7 +65,9 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
     });
 }
 
-function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data, network='mainnet') {
+function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
+    let gasPrice = extra_params['gasPrice'];
+    let gasLimit = extra_params['gasLimit'];
     if (account.symbol === symbol) {
         return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network);
     } else {

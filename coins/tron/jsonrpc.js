@@ -20,13 +20,14 @@ const getBalance = (address, network = 'mainnet') => new Promise((resolve, rejec
     console.log("[tron http req] body:",body);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
+        console.log("typeof: " + typeof res.data);
         if (network === 'shasta') {
-            if (res.data === {}) {
-                reject("empty response");
-            } else if (res.data.Error !== undefined) {
+            if (res.data.Error !== undefined) {
                 reject(res.data.Error);
-            } else {
+            } else if (res.data.balance !== undefined) {
                 resolve(new BigNumber(res.data.balance).shiftedBy(-6));
+            } else {
+                resolve(new BigNumber(0));
             }
         } else {
 
@@ -52,6 +53,34 @@ const validateAddress=(address, network='mainnet') => new Promise((resolve, reje
     });
 });
 
+const getLatestBlock=(network='mainnet') => new Promise((resolve, reject)=> {
+    const url = getEndpoint(network) + '/wallet/getnowblock';
+    let promise = ApiCaller.post(url, {}, true, {'Content-Type': 'application/json'});
+    console.log("[tron http req] " + url);
+    promise.then((res)=> {
+        console.log("[tron http resp] ", res.data);
+        if (network === 'shasta') {
+            resolve(res.data);
+        } else {
+
+        }
+    });
+});
+
+const broadcastTransaction=(tx, network='mainnet') => new Promise((resolve, reject)=> {
+    const url = getEndpoint(network) + '/wallet/broadcasttransaction';
+    let promise = ApiCaller.post(url, tx, true, {'Content-Type': 'application/json'});
+    console.log("[tron http req] " + url);
+    promise.then((res)=> {
+        console.log("[tron http resp] ", res.data);
+        if (network === 'shasta') {
+            resolve(res.data);
+        } else {
+
+        }
+    });
+});
+
 const getTransactionsByAddress= (address, page, size, network='mainnet') => new Promise((resolve, reject)=> {
     resolve({});
 });
@@ -61,4 +90,5 @@ module.exports = {
     getBalance,
     getTransactionsByAddress,
     validateAddress,
+    getLatestBlock,
 }

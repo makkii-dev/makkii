@@ -353,8 +353,8 @@ class Send extends Component {
 		const {dispatch, user, setting} = this.props;
 		this.loadingView.show(strings('send.progress_sending_tx'));
 		const { gasPrice, gasLimit, recipient, amount} = this.state;
-
-		sendTransaction(this.account, this.state.unit, recipient, new BigNumber(amount), gasPrice * 1e9, gasLimit - 0).then(res=> {
+		let extra_params = COINS[this.account.symbol].txFeeSupport? {'gasPrice': gasPrice * 1e9, 'gasLimit': gasLimit - 0}: {};
+		sendTransaction(this.account, this.state.unit, recipient, new BigNumber(amount), extra_params).then(res=> {
 			const {pendingTx, pendingTokenTx} = res;
             console.log("transaction sent: ", pendingTx);
             console.log("token tx sent: ", pendingTokenTx);
@@ -429,7 +429,7 @@ class Send extends Component {
 
 						if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
 							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-							resovel(false);
+							resolve(false);
 							return;
 						}
 					} else {

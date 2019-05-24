@@ -11,7 +11,7 @@ const getEtherscanBaseUrl=(network)=> {
         return `https://api-${network}.etherscan.io/api`
     }
 }
-function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data, network='mainnet') {
+function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
     return new Promise((resolve, reject) => {
         getTransactionCount(account.address, 'latest', network).then(count=> {
             console.log("private key:" + account.private_key);
@@ -19,8 +19,8 @@ function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data, n
                 chainID: toHex(3),
                 amount: toHex(value.shiftedBy(18)),
                 nonce: toHex(count),
-                gasLimit: toHex(gasLimit),
-                gasPrice: toHex(gasPrice),
+                gasLimit: toHex(extra_params['gasLimit']),
+                gasPrice: toHex(extra_params['gasPrice']),
                 to: toHex(to),
                 private_key: account.private_key,
             };

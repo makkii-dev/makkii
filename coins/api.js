@@ -55,10 +55,10 @@ function getBalance(coinType, address) {
     }
 }
 
-function sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data=undefined) {
+function sendTransaction(account, symbol, to, value, extra_params, data=undefined) {
     let coin =  COINS[account.symbol.toUpperCase()];
     if (coin.api !== undefined && coin.api.sendTransaction !== undefined) {
-        return coin.api.sendTransaction(account, symbol, to, value, gasPrice, gasLimit, data, coin.network);
+        return coin.api.sendTransaction(account, symbol, to, value, extra_params, data, coin.network);
     } else {
         throw new Error('No sendTransaction impl for coin ' + coinType);
     }
@@ -88,6 +88,14 @@ function formatAddress1Line(coinType, address) {
     return address;
 }
 
+function validateBalanceSufficiency(coinType, account, symbol, amount, extra_params) {
+    let coin = COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.validateBalanceSufficiency !== undefined) {
+        return coin.api.validateBalanceSufficiency(account, symbol, amount, extra_params);
+    }
+    return true;
+}
+
 function getCoinPrices(currency) {
     let cryptos = Object.keys(COINS).join(',');
     const url = `http://45.118.132.89:8080/prices?cryptos=${cryptos}&fiat=${currency}`;
@@ -115,4 +123,5 @@ module.exports = {
     sameAddress,
     getCoinPrices,
     formatAddress1Line,
+    validateBalanceSufficiency,
 };

@@ -41,7 +41,12 @@ function formatAddress1Line(address) {
     return address.substring(0, 10 + pre) + '...' + address.substring(address.length - 10);
 }
 
+function validateBalanceSufficiency(account, symbol, amount, extra_params) {
+    return true;
+}
+
 module.exports = {
     validateAddress,
     formatAddress1Line,
+    validateBalanceSufficiency,
 }
