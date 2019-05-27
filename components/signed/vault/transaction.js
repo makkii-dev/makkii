@@ -47,7 +47,7 @@ class Transaction extends Component {
 	render(){
 		const transaction = this.transaction;
 		const timestamp = transaction.timestamp === undefined? '': new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const ifSender = sameAddress(this.account.address, transaction.from);
+		const ifSender = sameAddress(this.account.symbol, this.account.address, transaction.from);
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
 		let inAddressBook, addressName;

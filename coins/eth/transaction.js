@@ -1,4 +1,4 @@
-import {getTransactionCount, sendSignedTransaction} from "./jsonrpc";
+import {getTransactionReceipt, getTransactionCount, sendSignedTransaction} from "./jsonrpc";
 import {appendHexStart, toHex} from '../../utils';
 import keyStore from "react-native-makkii-core";
 import ApiCaller from "../../utils/http_caller";
@@ -86,8 +86,22 @@ function getTransactionUrlInExplorer(txHash, network='mainnet') {
     }
 }
 
+function getTransactionStatus(txHash, network='mainnet') {
+    return new Promise((resolve, reject) => {
+        getTransactionReceipt(txHash, network).then(receipt => {
+            resolve({
+                status: receipt.status === '0x01'? true: false,
+                blockNumber: receipt.blockNumber,
+            });
+        }).catch(err => {
+           reject(err);
+        });
+    });
+}
+
 module.exports = {
     sendTransaction,
     getTransactionsByAddress,
     getTransactionUrlInExplorer,
+    getTransactionStatus,
 }

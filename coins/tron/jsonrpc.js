@@ -20,7 +20,6 @@ const getBalance = (address, network = 'mainnet') => new Promise((resolve, rejec
     console.log("[tron http req] body:",body);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
-        console.log("typeof: " + typeof res.data);
         if (network === 'shasta') {
             if (res.data.Error !== undefined) {
                 reject(res.data.Error);
@@ -81,14 +80,44 @@ const broadcastTransaction=(tx, network='mainnet') => new Promise((resolve, reje
     });
 });
 
-const getTransactionsByAddress= (address, page, size, network='mainnet') => new Promise((resolve, reject)=> {
-    resolve({});
+const getTransactionById=(hash, network='mainnet') => new Promise((resolve, reject) => {
+    const url = getEndpoint(network) + '/walletsolidity/gettransactionbyid';
+    let promise = ApiCaller.post(url, {
+        value: hash
+    }, true, {'Content-Type': 'application/json'});
+    console.log("[tron http req] " + url);
+    promise.then((res) => {
+        console.log("[tron http resp]", res.data);
+        if (network === 'shasta') {
+            resolve(res.data);
+        } else {
+
+        }
+    });
+});
+
+const getTransactionInfoById=(hash, network='mainnet') => new Promise((resolve, reject) => {
+    const url = getEndpoint(network) + '/walletsolidity/gettransactioninfobyid';
+    let promise = ApiCaller.post(url, {
+        value: hash
+    }, true, {'Content-Type': 'application/json'});
+    console.log("[tron http req] " + url);
+    promise.then((res) => {
+        console.log("[tron http resp]", res.data);
+        if (network === 'shasta') {
+            resolve(res.data);
+        } else {
+
+        }
+    });
 });
 
 
 module.exports = {
     getBalance,
-    getTransactionsByAddress,
     validateAddress,
     getLatestBlock,
+    broadcastTransaction,
+    getTransactionById,
+    getTransactionInfoById,
 }

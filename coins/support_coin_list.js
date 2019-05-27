@@ -33,7 +33,7 @@ export const COINS = {
         defaultGasPrice: '20',
         defaultGasLimit: '21000',
         network: 'ropsten',
-        api: eth_api
+        api: eth_api,
     },
     'EOS': {
         name: 'EOS',
