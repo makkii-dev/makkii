@@ -37,12 +37,12 @@ function getBlockNumber(coinType) {
     }
 }
 
-function getTransactionReceipt(coinType, hash) {
+function getTransactionStatus(coinType, hash) {
     let coin =  COINS[coinType.toUpperCase()];
-    if (coin.api !== undefined && coin.api.getTransactionReceipt !== undefined) {
-        return coin.api.getTransactionReceipt(hash, coin.network);
+    if (coin.api !== undefined && coin.api.getTransactionStatus !== undefined) {
+        return coin.api.getTransactionStatus(hash, coin.network);
     } else {
-        throw new Error('No getTransactionReceipt impl for coin ' + coinType);
+        throw new Error('No getTransactionStatus impl for coin ' + coinType);
     }
 }
 
@@ -72,6 +72,8 @@ function validateAddress(address, coinType = 'AION') {
 function sameAddress(coinType, address1, address2) {
     if (coinType === 'AION' || coinType === 'ETH') {
         return address1.toLowerCase() === address2.toLowerCase();
+    } else if (coinType === 'TRX') {
+        return address1 === address2;
     }
     return true;
 }
@@ -84,8 +86,8 @@ function formatAddress1Line(coinType, address) {
     return address;
 }
 
-function validateBalanceSufficiency(coinType, account, symbol, amount, extra_params) {
-    let coin = COINS[coinType.toUpperCase()];
+function validateBalanceSufficiency(account, symbol, amount, extra_params) {
+    let coin = COINS[account.symbol.toUpperCase()];
     if (coin.api !== undefined && coin.api.validateBalanceSufficiency !== undefined) {
         return coin.api.validateBalanceSufficiency(account, symbol, amount, extra_params);
     }
@@ -112,7 +114,7 @@ module.exports = {
     getTransactionExplorerUrl,
     getTransactionsByAddress,
     getBlockNumber,
-    getTransactionReceipt,
+    getTransactionStatus,
     getBalance,
     sendTransaction,
     validateAddress,

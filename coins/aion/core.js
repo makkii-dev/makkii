@@ -1,4 +1,5 @@
-import {validateAmount} from '../../utils/index';
+import {validateAmount, validatePositiveInteger} from '../../utils/index';
+import BigNumber from 'bignumber.js';
 
 function validateAddress(address, network='mainnet') {
     return new Promise((resolve, reject) => {

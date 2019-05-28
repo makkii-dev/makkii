@@ -30,6 +30,8 @@ import {linkButtonColor, mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
 import {COINS} from '../../../coins/support_coin_list';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {validateBalanceSufficiency} from '../../../coins/api';
+
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
 
@@ -351,9 +353,11 @@ class Send extends Component {
 	transfer=() => {
 		const {goBack} = this.props.navigation;
 		const {dispatch, user, setting} = this.props;
-		this.loadingView.show(strings('send.progress_sending_tx'));
 		const { gasPrice, gasLimit, recipient, amount} = this.state;
 		let extra_params = COINS[this.account.symbol].txFeeSupport? {'gasPrice': gasPrice * 1e9, 'gasLimit': gasLimit - 0}: {};
+
+		this.loadingView.show(strings('send.progress_sending_tx'));
+		console.log("function:", sendTransaction);
 		sendTransaction(this.account, this.state.unit, recipient, new BigNumber(amount), extra_params).then(res=> {
 			const {pendingTx, pendingTokenTx} = res;
             console.log("transaction sent: ", pendingTx);
@@ -394,59 +398,19 @@ class Send extends Component {
 					alert_ok(strings('alert_title_error'), strings('send.error_format_recipient'));
             		resolve(false);
 				} else {
-					// validate amount
-					// 1. amount format
-					if (!validateAmount(this.state.amount)) {
-						alert_ok(strings('alert_title_error'), strings('send.error_format_amount'));
-						resolve(false);
-						return;
+            		let extra_params = {};
+            		if (COINS[this.account.symbol].txFeeSupport) {
+            			extra_params['gasPrice'] = this.state.gasPrice;
+            			extra_params['gasLimit'] = this.state.gasLimit;
 					}
-
-					// validate gas price
-					if (!validateAmount(this.state.gasPrice)) {
-						alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
-						resolve(false);
-						return;
-					}
-
-					// validate gas limit
-					if (!validatePositiveInteger(this.state.gasLimit)) {
-						alert_ok(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
-						resolve(false);
-						return
-					}
-
-
-					// 2. < total balance
-					let gasLimit = new BigNumber(this.state.gasLimit);
-					let gasPrice = new BigNumber(this.state.gasPrice);
-					let balance = new BigNumber(this.account.balance);
-					let amount = new BigNumber(this.state.amount);
-					if (this.state.unit === 'AION' || this.state.unit === 'ETH') {
-						console.log("gasPrice(" + this.state.gasPrice + ") * gasLimit(" + this.state.gasLimit + "):" + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit));
-						console.log("amount+gasfee:" + (parseFloat(this.state.amount) + parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit) / Math.pow(10, 9)));
-						console.log("total balance: " + this.account.balance);
-
-						if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
-							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-							resolve(false);
-							return;
-						}
+            		let result = validateBalanceSufficiency(this.account, this.state.unit, this.state.amount, extra_params);
+            		console.log("result: ",  result);
+            		if (result.result) {
+            			resolve(true);
 					} else {
-						if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
-							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-							resolve(false);
-							return;
-						}
-						let totalCoins = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance
-						if (amount.isGreaterThan(totalCoins)) {
-							alert_ok(strings('alert_title_error'), strings('send.error_insufficient_amount'));
-							resolve(false);
-							return;
-						}
+						alert_ok(strings('alert_title_error'), strings('send.' + result.err));
+						resolve(false);
 					}
-
-					resolve(true);
 				}
 			});
 		});

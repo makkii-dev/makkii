@@ -8,7 +8,7 @@ module.exports = {
     getBlockByNumber: jsonrpc.getBlockByNumber,
     blockNumber: jsonrpc.blockNumber,
     getBalance: jsonrpc.getBalance,
-    getTransactionReceipt: jsonrpc.getTransactionReceipt,
+    getTransactionStatus: transaction.getTransactionStatus,
     sendTransaction: transaction.sendTransaction,
     getTransactionsByAddress: transaction.getTransactionsByAddress,
     getTransactionUrlInExplorer: transaction.getTransactionUrlInExplorer,

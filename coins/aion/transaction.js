@@ -1,7 +1,7 @@
 import {AionTransaction} from "./AionTransaction";
 import {CONTRACT_ABI} from './token';
 import BigNumber from "bignumber.js";
-import {getTransactionCount, sendSignedTransaction} from './jsonrpc';
+import {getTransactionReceipt, getTransactionCount, sendSignedTransaction} from './jsonrpc';
 import ApiCaller from "../../utils/http_caller";
 
 function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
@@ -133,8 +133,22 @@ function getTransactionUrlInExplorer(txHash, network='mainnet') {
     return `https://${network}.aion.network/#/transaction/${txHash}`;
 }
 
+function getTransactionStatus(txHash, network='mainnet') {
+    return new Promise((resolve, reject) => {
+        getTransactionReceipt(txHash, network).then(receipt => {
+            resolve({
+                status: receipt.status === '0x01'? true: false,
+                blockNumber: receipt.blockNumber,
+            });
+        }).catch(err => {
+            reject(err);
+        });
+    });
+}
+
 module.exports={
     sendTransaction,
     getTransactionsByAddress,
     getTransactionUrlInExplorer,
+    getTransactionStatus,
 };

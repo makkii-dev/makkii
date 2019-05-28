@@ -8,4 +8,6 @@ module.exports = {
     validateAddress: jsonrpc.validateAddress,
     formatAddress1Line: core.formatAddress1Line,
     sendTransaction: transaction.sendTransaction,
+    validateBalanceSufficiency: core.validateBalanceSufficiency,
+    getTransactionStatus: transaction.getTransactionStatus,
 }

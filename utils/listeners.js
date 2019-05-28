@@ -1,4 +1,4 @@
-import {getCoinPrices, getTransactionReceipt, getBlockNumber, getBlockByNumber} from "../coins/api";
+import {getCoinPrices, getTransactionStatus, getBlockNumber, getBlockByNumber} from "../coins/api";
 import {DeviceEventEmitter} from "react-native";
 import {setting} from '../actions/setting';
 import {accountKey, fromHexString} from '../utils';
@@ -122,38 +122,42 @@ export class listenTransaction{
                 console.log('timeout');
                 removeTransaction(tx);
             }
-            getTransactionReceipt(symbol, tx.hash).then(
-                res=>{
+            getTransactionStatus(symbol, tx.hash).then(res=>{
                     if(res){
                         tx.blockNumber = res.blockNumber;
-                        if (res.status === '0x1') {
+                        if (res.status === true) {
                             if (thusMap[hashKey]) {
-                                let blockNumberInterval = setInterval(() => {
-                                    getBlockNumber(symbol).then(
-                                        number => {
-                                            console.log('blockbumber: ', number);
-                                            if (number > tx.blockNumber + 6) {
-                                                tx.status = 'CONFIRMED';
-                                                // special handling for ethereum to get tx timestamp
-                                                if (symbol === 'ETH') {
-                                                    getBlockByNumber(symbol, tx.blockNumber).then(res=> {
-                                                        tx.timestamp = fromHexString(res.timestamp, 16) * 1000;
-                                                        console.log("tx.timestamp:" + tx.timestamp);
+                                if (symbol === 'TRX') {
+                                    tx.status = 'CONFIRMED';
+                                    updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                } else {
+                                    let blockNumberInterval = setInterval(() => {
+                                        getBlockNumber(symbol).then(
+                                            number => {
+                                                console.log('blocknumber: ', number);
+                                                if (number > tx.blockNumber + 12) {
+                                                    tx.status = 'CONFIRMED';
+                                                    // special handling for ethereum to get tx timestamp
+                                                    if (symbol === 'ETH') {
+                                                        getBlockByNumber(symbol, tx.blockNumber).then(res => {
+                                                            tx.timestamp = fromHexString(res.timestamp, 16) * 1000;
+                                                            console.log("tx.timestamp:" + tx.timestamp);
+                                                            updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                                            clearInterval(blockNumberInterval);
+                                                        }, err => {
+                                                            console.log("get block number error:", err);
+                                                            updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                                            clearInterval(blockNumberInterval);
+                                                        });
+                                                    } else {
                                                         updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
                                                         clearInterval(blockNumberInterval);
-                                                    }, err=> {
-                                                        console.log("get block number error:", err);
-                                                        updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
-                                                        clearInterval(blockNumberInterval);
-                                                    });
-                                                } else {
-                                                    updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
-                                                    clearInterval(blockNumberInterval);
+                                                    }
                                                 }
                                             }
-                                        }
-                                    )
-                                }, 1000 * 5);
+                                        )
+                                    }, 1000 * 5);
+                                }
                             }
                         } else {
                             if (thusMap[hashKey]) {
