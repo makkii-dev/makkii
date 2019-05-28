@@ -496,7 +496,10 @@
     "hint_name": "Please enter name",
     "hint_address": "0x...",
     "error_address_exists": "This address already exists in address book.",
-    "toast_address_saved": "Saved to address book."
+    "error_address_format": "Invalid {{coin}} address",
+    "toast_address_saved": "Saved to address book.",
+    "label_coin_type": "Coin",
+    "btn_select_coin": "Select Coin"
   },
   "vault_import_coin": {
     "title": "Select Coin"

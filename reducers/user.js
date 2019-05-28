@@ -47,30 +47,34 @@ export default function user(state = init, action){
 			should_update_db = true;
 			break;
 		case ADD_ADDRESS:
-		    if (state.address_book[action.address.address] !== undefined) {
-		    	state.address_book[action.address.address].name = action.address.name;
+		    if (state.address_book[action.address.key] !== undefined) {
+		    	state.address_book[action.address.key].name = action.address.name;
+		    	state.address_book[action.address.key].address = action.address.address;
+		    	state.address_book[action.address.key].symbol = action.address.symbol;
 			} else {
-		    	state.address_book[action.address.address] = {
+		    	state.address_book[action.address.key] = {
 		    		name: action.address.name,
 					address: action.address.address,
+					symbol: action.address.symbol,
 				};
 			}
 		    new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
 		case UPDATE_ADDRESS:
-			if (state.address_book[action.address.old_address] !== undefined) {
-				delete state.address_book[action.address.old_address];
+			if (state.address_book[action.address.oldKey] !== undefined) {
+				delete state.address_book[action.address.oldKey];
 			}
-			state.address_book[action.address.address] = {
+			state.address_book[action.address.key] = {
 				name: action.address.name,
 				address: action.address.address,
+				symbol: action.address.symbol
 			};
 			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
 		case DELETE_ADDRESS:
-		    delete state.address_book[action.address];
+		    delete state.address_book[action.addressKey];
 		    new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;

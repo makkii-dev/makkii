@@ -485,7 +485,10 @@
     "hint_name": "请输入地址名称",
     "hint_address": "0x...",
     "error_address_exists": "地址簿中已存在该地址",
-    "toast_address_saved": "已保存到地址簿"
+    "error_address_format": "错误的{{coin}}地址格式",
+    "toast_address_saved": "已保存到地址簿",
+    "label_coin_type": "币种",
+    "btn_select_coin": "选择币种"
   },
   "version_upgrade": {
     "alert_title_new_version":  "新版本",

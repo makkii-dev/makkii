@@ -6,6 +6,8 @@ import { connect } from 'react-redux';
 import { strings } from '../../../locales/i18n';
 import {RightActionButton} from '../../common';
 import {delete_address} from '../../../actions/user';
+import {COINS} from "../../../coins/support_coin_list";
+import {accountKey} from '../../../utils/index';
 
 const {width} = Dimensions.get('window');
 
@@ -35,6 +37,7 @@ class AddressBook extends Component {
     constructor(props) {
         super(props);
         this.type = props.navigation.getParam('type');
+        this.filterSymbol = props.navigation.getParam('filterSymbol');
         this.state = {
             openRowKey: null,
         };
@@ -101,7 +104,7 @@ class AddressBook extends Component {
                         justifyContent:'flex-end'}}>
                         <TouchableOpacity
                             onPress={()=>{
-                                this.onDelete(item.address);
+                                this.onDelete(accountKey(item.symbol, item.address));
                             }}>
                             <View style={{
                                 width: fixedHeight(186),
@@ -141,6 +144,7 @@ class AddressBook extends Component {
                                               this.props.navigation.navigate('signed_setting_add_address', {
                                                   name: item.name,
                                                   address: item.address,
+                                                  symbol: item.symbol,
                                                   addressAdded: this.addressAdded,
                                               });
                                           }
@@ -149,9 +153,18 @@ class AddressBook extends Component {
                                       }
                                   }
                                   }>
-                    <View style={{flexDirection: 'column'}}>
-                        <Text numberOfLines={1} style={{...styles.nameStyle, marginBottom: 10}}>{item.name}</Text>
-                        <Text numberOfLines={1} style={styles.addressStyle}>{item.address.substring(0, 12) + '...' + item.address.substring(54)}</Text>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Image source={COINS[item.symbol].icon}
+                               style={{
+                                   width: 30,
+                                   height: 30,
+                               }}
+                               resizeMode={'contain'}
+                        />
+                        <View style={{flexDirection: 'column', paddingLeft: 10}}>
+                            <Text numberOfLines={1} style={{...styles.nameStyle, marginBottom: 10}}>{item.name}</Text>
+                            <Text numberOfLines={1} style={styles.addressStyle}>{item.address.substring(0, 12) + '...' + item.address.substring(54)}</Text>
+                        </View>
                     </View>
                     <Image style={{width: 24, height: 24}}
                            source={require('../../../assets/arrow_right.png')} />
@@ -181,8 +194,19 @@ class AddressBook extends Component {
 
     render() {
         let address_book_items = Object.values(this.props.user.address_book);
+        let itemsFiltered = [];
+        if (this.filterSymbol !== undefined) {
+            address_book_items.forEach(addr => {
+                if (addr.symbol === this.filterSymbol) {
+                    itemsFiltered.push(addr);
+                }
+            });
+        } else {
+            itemsFiltered = address_book_items;
+        }
+
         return (
-            address_book_items.length > 0?
+            itemsFiltered.length > 0?
             <TouchableOpacity
                 activeOpacity={1}
                 style={{
@@ -197,7 +221,7 @@ class AddressBook extends Component {
                 >
                 <FlatList
                     style={{width: width}}
-                    data={address_book_items}
+                    data={itemsFiltered}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={()=><View style={styles.divider}/>}
                     keyExtractor={(item, index)=>item.address}

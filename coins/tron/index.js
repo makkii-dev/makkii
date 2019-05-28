@@ -4,7 +4,7 @@ import transaction from './transaction';
 
 module.exports = {
     getBalance: jsonrpc.getBalance,
-    getTransactionsByAddress: jsonrpc.getTransactionsByAddress,
+    getTransactionsByAddress: transaction.getTransactionsByAddress,
     validateAddress: jsonrpc.validateAddress,
     formatAddress1Line: core.formatAddress1Line,
     sendTransaction: transaction.sendTransaction,

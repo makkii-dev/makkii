@@ -44,10 +44,10 @@ function update_address(address) {
 }
 
 const DELETE_ADDRESS = 'DELETE_ADDRESS';
-function delete_address(address) {
+function delete_address(addressKey) {
 	return {
 		type: DELETE_ADDRESS,
-		address
+		addressKey
 	}
 }
 
