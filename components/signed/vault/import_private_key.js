@@ -59,7 +59,7 @@ class ImportPrivateKey extends Component {
 	    if (validatePrivateKey(this.state.private_key, this.symbol)) {
 	    	let coinType = keyStore.CoinType.fromCoinSymbol(this.symbol);
 	    	console.log('coinType:' + coinType);
-	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType).then(address => {
+	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType, false).then(address => {
                 console.log("recover keypair from private key: ", address);
                 this.getAcc = address;
 

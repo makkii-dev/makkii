@@ -1,7 +1,7 @@
 import ApiCaller from '../utils/http_caller';
 import {COINS} from './support_coin_list';
 import {toHex} from '../utils';
-
+import keyStore from 'react-native-makkii-core'
 function getBlockByNumber(coinType, blockNumber) {
     let coin = COINS[coinType.toUpperCase()];
     if (coin.api !== undefined && coin.api.getBlockByNumber !== undefined) {
@@ -66,11 +66,7 @@ function sendTransaction(account, symbol, to, value, extra_params, data=undefine
 
 function validateAddress(address, coinType = 'AION') {
     let coin =  COINS[coinType.toUpperCase()];
-    if (coin.api !== undefined && coin.api.validateAddress !== undefined) {
-        return coin.api.validateAddress(address, coin.network);
-    } else {
-        throw new Error('No sendTransaction impl for coin ' + coinType);
-    }
+    return keyStore.validateAddress(address,keyStore.CoinType.fromCoinSymbol(coin.symbol));
 }
 
 function sameAddress(coinType, address1, address2) {

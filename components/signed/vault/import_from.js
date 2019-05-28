@@ -49,7 +49,7 @@ class ImportFrom extends Component {
         }
         console.log("cointype: " + keyStore.CoinType.fromCoinSymbol(this.symbol));
         console.log("indexpath:" + indexPath);
-        keyStore.getKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, indexPath).then(acc => {
+        keyStore.getKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, indexPath, true).then(acc => {
             this.getAcc = acc;
             console.log("imported acc:", acc);
             this.props.navigation.navigate('signed_vault_change_account_name', {
