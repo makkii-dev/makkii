@@ -27,8 +27,9 @@ const sendTransaction = (account, symbol, to, value, extra_params, data, network
     });
 });
 
-
+const getTransactionUrlInExplorer = (txHash, network = 'BTC') => `https://chain.so/tx/${network}/${txHash}`;
 
 module.exports={
-    sendTransaction
+    sendTransaction,
+    getTransactionUrlInExplorer
 };
