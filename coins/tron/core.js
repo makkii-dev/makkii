@@ -6,13 +6,16 @@ function formatAddress1Line(address) {
 }
 
 function validateBalanceSufficiency(account, symbol, amount, extra_params) {
-    if (!validateAmount(amount)) return {result: false, err: 'error_format_amount'};
-    let balance = new BigNumber(account.balance);
-    let transferAmount = new BigNumber(amount);
-    if (transferAmount.isGreaterThan(balance)) {
-        return {result: false, err: 'error_insufficient_amount'};
-    }
-    return {result: true};
+    return new Promise((resolve, reject) => {
+        if (!validateAmount(amount)) resolve({result: false, err: 'error_format_amount'});
+        let balance = new BigNumber(account.balance);
+        let transferAmount = new BigNumber(amount);
+        if (transferAmount.isGreaterThan(balance)) {
+            resolve({result: false, err: 'error_insufficient_amount'});
+        }
+        resolve({result: true});
+    })
+
 }
 
 module.exports = {

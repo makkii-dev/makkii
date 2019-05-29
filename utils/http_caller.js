@@ -20,7 +20,7 @@ function requestAPI(method, url, _headers={}, _dataBody, isJSON=false) {
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
         dataBody = qs.stringify(dataBody)
     }
-
+    console.log('databody=>', dataBody);
     const config = {
         url,
         headers,

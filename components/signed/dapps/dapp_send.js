@@ -11,14 +11,14 @@ import {
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
 import Loading from '../../loading';
-import {update_account_txs} from "../../../actions/accounts";
+import {update_account_token_txs, update_account_txs} from "../../../actions/accounts";
 import {
+    accountKey,
     getLedgerMessage,
-    sendTransaction,
     validateAmount,
     validatePositiveInteger
 } from "../../../utils";
-import { validateAddress } from '../../../coins/api';
+import { validateAddress,sendTransaction } from '../../../coins/api';
 import {connect} from "react-redux";
 import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
@@ -92,41 +92,21 @@ class DappSend extends React.Component{
         const {dispatch, user, setting} = this.props;
         this.loadingView.show(strings('send.progress_sending_tx'));
         const { gasPrice, gasLimit, recipient,amount, data} = this.state;
-        let tx = {
-            sender: sender,
-            gasPrice: gasPrice * 1e9,
-            gas: gasLimit - 0,
-            to: recipient,
-            data: data,
-            value: new BigNumber(amount).shiftedBy(18),
-            type: 1,
-        };
-        sendTransaction(tx,this.account,'AION',setting.explorer_server).then(res=>{
-            const {pending, signedTransaction} = res;
-            console.log('pending ', pending);
-            pending.on('transactionHash', (hash)=>{
-                console.log("transaction sent: hash=" + hash);
+        const extra_params = {'gasPrice': gasPrice * 1e9, 'gasLimit': gasLimit - 0};
+        sendTransaction(this.account,'AION', recipient, amount, extra_params, data).then(res=>{
+            const {pendingTx} = res;
 
-                let txs = {};
-                let pendingTx={};
-                pendingTx.hash = hash;
-                pendingTx.timestamp = signedTransaction.timestamp.toNumber()/1000;
-                pendingTx.from = sender;
-                pendingTx.to = signedTransaction.to;
-                pendingTx.value = new BigNumber(amount);
-                pendingTx.status = 'PENDING';
-                txs[hash]=pendingTx;
-                DeviceEventEmitter.emit(message,{data: hash});
-                dispatch(update_account_txs(sender, txs, setting.explorer_server, user.hashed_password));
-                this.loadingView.hide();
-                AppToast.show(strings('send.toast_tx_sent'), {
-                    onHidden: () => {
-                        goBack();
-                    }
-                })
-            }).on('error', error=>{
-                throw error
-            });
+            let txs = {[pendingTx.hash]: pendingTx};
+
+            dispatch(update_account_txs(this.account_key, txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, setting.explorer_server, user.hashed_password));
+
+            this.loadingView.hide();
+            AppToast.show(strings('send.toast_tx_sent'), {
+                onHidden: () => {
+                    goBack();
+                }
+            })
         }).catch(error=>{
             console.log('send Transaction failed ', error);
             this.loadingView.hide();

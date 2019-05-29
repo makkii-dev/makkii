@@ -44,28 +44,31 @@ function formatAddress1Line(address) {
 }
 
 function validateBalanceSufficiency(account, symbol, amount, extra_params, network='mainnet') {
-    if (!validateAmount(amount)) return {result: false, err: 'error_format_amount'};
-    if (!validateAmount(extra_params['gas_price'])) return {result: false, err: 'error_invalid_gas_price'};
-    if (!validatePositiveInteger(extra_params['gas_limit'])) return {result: false, err: 'error_invalid_gas_limit'};
+    return new Promise((resolve, reject) => {
+        if (!validateAmount(amount)) resolve({result: false, err: 'error_format_amount'});
+        if (!validateAmount(extra_params['gas_price'])) resolve({result: false, err: 'error_invalid_gas_price'});
+        if (!validatePositiveInteger(extra_params['gas_limit'])) resolve({result: false, err: 'error_invalid_gas_limit'});
 
-    let gasLimit = new BigNumber(extra_params['gasLimit']);
-    let gasPrice = new BigNumber(extra_params['gasPrice']);
-    let balance = new BigNumber(account.balance);
-    let transferAmount = new BigNumber(amount);
-    if (account.symbol === symbol) {
-        if (transferAmount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
-            return {result: false, err: 'error_insufficient_amount'};
+        let gasLimit = new BigNumber(extra_params['gasLimit']);
+        let gasPrice = new BigNumber(extra_params['gasPrice']);
+        let balance = new BigNumber(account.balance);
+        let transferAmount = new BigNumber(amount);
+        if (account.symbol === symbol) {
+            if (transferAmount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
+                resolve({result: false, err: 'error_insufficient_amount'});
+            }
+        } else {
+            if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
+                resolve({result: false, err: 'error_insufficient_amount'});
+            }
+            let totalCoins = account.tokens[network][symbol].balance;
+            if (transferAmount.isGreaterThan(totalCoins)) {
+                resolve({result: false, err: 'error_insufficient_amount'});
+            }
         }
-    } else {
-        if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
-            return {result: false, err: 'error_insufficient_amount'};
-        }
-        let totalCoins = account.tokens[network][symbol].balance;
-        if (transferAmount.isGreaterThan(totalCoins)) {
-            return {result: false, err: 'error_insufficient_amount'};
-        }
-    }
-    return {result: true};
+        resolve({result: true});
+    })
+
 }
 
 module.exports = {

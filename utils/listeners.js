@@ -3,6 +3,7 @@ import {DeviceEventEmitter} from "react-native";
 import {setting} from '../actions/setting';
 import {accountKey, fromHexString} from '../utils';
 import {update_account_txs, update_account_token_txs} from '../actions/accounts';
+import {strings} from "../locales/i18n";
 
 export class listenCoinPrice{
     constructor(store, interval=30) {
@@ -87,6 +88,8 @@ export class listenTransaction{
         return Object.keys(this.pendingMap).length > 0;
     }
     addTransaction(tx, symbol='AION', token=undefined){
+        if (symbol === 'LTC' || symbol === 'BTC')
+            return;
         let thusMap = this.txMap;
         let thusPendingMap = this.pendingMap;
         const thusTimeOut = this.timeOut;
@@ -167,12 +170,11 @@ export class listenTransaction{
                         }
                         removeTransaction(tx);
                     }
-                },
-                err=>{
-                    Toast.show(strings('error_connect_remote_server'));
+                }).catch(e=>{
+                    console.log('reject err',e);
+                    AppToast.show(strings('error_connect_remote_server'));
                     removeTransaction(tx);
-                }
-            )
+                })
         }, 5 * 1000);
 
     }

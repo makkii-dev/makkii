@@ -74,6 +74,8 @@ function sameAddress(coinType, address1, address2) {
         return address1.toLowerCase() === address2.toLowerCase();
     } else if (coinType === 'TRX') {
         return address1 === address2;
+    } else if (coinType === 'BTC'||coinType === 'LTC') {
+        return address1 === address2;
     }
     return true;
 }
@@ -91,7 +93,7 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params) {
     if (coin.api !== undefined && coin.api.validateBalanceSufficiency !== undefined) {
         return coin.api.validateBalanceSufficiency(account, symbol, amount, extra_params);
     }
-    return true;
+    return Promise.resolve({result:true});
 }
 
 function getCoinPrices(currency) {
