@@ -617,7 +617,9 @@ class Home extends HomeComponent {
 							this.HomeCenterRef&&this.HomeCenterRef.closeAll();
 							Keyboard.dismiss();
 							this.setState({openRowKey:null/*, showMenu:true*/})
-							this.props.navigation.navigate('signed_vault_import_coin');
+							this.props.navigation.navigate('signed_vault_import_coin', {
+                                targetUri: 'signed_vault_import_from'
+							});
 						}}>
 							<Image source={require('../../../assets/ic_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
 						</TouchableOpacity>

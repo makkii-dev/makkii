@@ -1,6 +1,7 @@
 import {getTransactionById, getTransactionInfoById, getLatestBlock, broadcastTransaction} from './jsonrpc';
 import keyStore from 'react-native-makkii-core';
 import {base58check2HexString} from '../../utils/crypto/crypto';
+import ApiCaller from '../../utils/http_caller';
 
 function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
     return new Promise((resolve, reject) => {
@@ -95,22 +96,22 @@ function getTransactionStatus(txHash, network='mainnet') {
 function getTransactionsByAddress(address, page=0, size=25, network='mainnet') {
     let url;
     if (network === 'mainnet') {
-        url = `https://apilist.tronscan.org/api/transfer?sort=-timestamp&limit=${limit}&start=${page}&address=${address}`;
+        url = `https://apilist.tronscan.org/api/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
     } else {
-        url = `https://api.shasta.tronscan.org/api/transfer?sort=-timestamp&limit=${limit}&start=${page}&address=${address}`;
+        url = `https://api.shasta.tronscan.org/api/transfer?sort=-timestamp&limit=${size}&start=${page}&address=${address}`;
     }
     console.log("[tron req] get tron txs by address: " + url);
     return new Promise((resolve, reject) => {
         ApiCaller.get(url, false).then(res => {
-            const {content} = res.data.data;
+            const {data} = res.data;
             let txs = {};
-            content.forEach(t=> {
+            data.forEach(t=> {
                 let tx = {};
                 tx.hash = '0x' + t.transactionHash;
                 tx.timestamp = t.timestamp;
                 tx.from = t.transferFromAddress;
                 tx.to = t.transferToAddress;
-                tx.value = new BigNumber(amount, 10).shiftedBy(-6).toNumber();
+                tx.value = new BigNumber(t.amount, 10).shiftedBy(-6).toNumber();
                 tx.blockNumber = t.block;
                 tx.status = t.confirmed? "CONFIRMED": "FAILED";
                 txs[tx.hash] = tx;

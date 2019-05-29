@@ -449,6 +449,7 @@ class Send extends Component {
 		this.props.navigation.navigate('signed_setting_address_book', {
 			type: 'select',
 			addressSelected: this.addressSelected,
+			filterSymbol: this.account.symbol,
 		});
 	}
 	addressSelected=(address) => {

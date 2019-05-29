@@ -2,13 +2,15 @@ import {strings} from '../../../locales/i18n';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
 import {validateAddress} from "../../../coins/api";
-import {mainBgColor} from '../../style_util';
-import {Platform, View, TouchableOpacity, Iamge, StyleSheet, Keyboard, Image, PixelRatio, Dimensions, ScrollView} from 'react-native';
+import {mainBgColor, linkButtonColor} from '../../style_util';
+import {Text, Platform, View, TouchableOpacity, StyleSheet, Keyboard, Image, PixelRatio, Dimensions, ScrollView} from 'react-native';
 import {RightActionButton,SubTextInput} from '../../common';
 import defaultStyles from '../../styles';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Toast from 'react-native-root-toast';
 import {add_address, update_address} from '../../../actions/user';
+import {accountKey} from '../../../utils/index';
+import {COINS} from '../../../coins/support_coin_list';
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -38,11 +40,17 @@ class AddAddress extends Component {
 
     constructor(props) {
         super(props);
-        this.name = props.navigation.getParam('name');
         this.address = props.navigation.getParam('address');
+        if (this.address !== undefined) {
+            this.name = props.navigation.getParam('name');
+            this.symbol = props.navigation.getParam('symbol');
+            this.oldAddressKey = accountKey(this.symbol, this.address);
+            this.newSymbol = this.symbol;
+        }
         this.state = {
             name: this.name === undefined? '': this.name,
             address: this.address === undefined? '': this.address,
+            coinName: this.symbol === undefined? '': COINS[this.symbol].name + "/" + this.symbol,
         };
     }
 
@@ -67,43 +75,64 @@ class AddAddress extends Component {
 
     addAddress=() => {
         const {name, address} = this.state;
-        let address_book = this.props.user.address_book;
-        if ((this.address === undefined && Object.keys(address_book).indexOf(address) >= 0) ||
-            (this.address != undefined && address !== this.address && Object.keys(address_book).indexOf(address) >= 0)) {
-            AppToast.show(strings('add_address.error_address_exists'), {
+
+        validateAddress(address, this.newSymbol).then(isValid => {
+            if (!isValid) {
+                AppToast.show(strings('add_address.error_address_format', { coin: this.newSymbol }), {
+                    duration: Toast.durations.LONG,
+                    position: Toast.positions.CENTER
+                });
+                return;
+            }
+
+            let address_book = this.props.user.address_book;
+            let newKey = accountKey(this.newSymbol, address);
+            if (Object.keys(address_book).indexOf(newKey) >= 0)  {
+                if (this.address === undefined || (this.address !== undefined && address !== this.address)) {
+                    AppToast.show(strings('add_address.error_address_exists'), {
+                        duration: Toast.durations.LONG,
+                        position: Toast.positions.CENTER,
+                    });
+                    return;
+                }
+            }
+
+            const {dispatch} = this.props;
+            if (this.address === undefined) {
+                dispatch(add_address({key: newKey, name: name, address: address, symbol: this.newSymbol}));
+            } else {
+                dispatch(update_address({oldKey: this.oldAddressKey, key: newKey, name: name, address: address, symbol: this.newSymbol}));
+            }
+            AppToast.show(strings('add_address.toast_address_saved'), {
                 duration: Toast.durations.LONG,
-                position: Toast.positions.CENTER,
+                position: Toast.positions.CENTER
             });
-            return;
-        }
 
-        const {dispatch} = this.props;
-        if (this.address === undefined) {
-            dispatch(add_address({name: name, address: address}));
-        } else {
-            dispatch(update_address({oldAddress: this.address, name: name, address: address}));
-        }
-        AppToast.show(strings('add_address.toast_address_saved'), {
-            duration: Toast.durations.LONG,
-            position: Toast.positions.CENTER
+            const {addressAdded} = this.props.navigation.state.params;
+            if (addressAdded !== undefined) {
+                addressAdded({
+                    name: name,
+                    address: address,
+                    symbol: this.newSymbol,
+                    oldKey: this.oldAddressKey,
+                    newKey: newKey,
+                });
+            }
+            this.props.navigation.goBack();
+        }).catch( err=> {
+            AppToast.show(strings(''), {
+                    duration: Toast.durations.LONG,
+                    position: Toast.positions.CENTER
+                });
         });
-
-        const {addressAdded} = this.props.navigation.state.params;
-        if (addressAdded !== undefined) {
-            addressAdded({
-                name: name,
-                address: address,
-                oldAddress: this.address,
-            });
-        }
-        this.props.navigation.goBack();
     }
 
     scan=() => {
+        let thus = this;
         this.props.navigation.navigate('scan', {
             success: 'signed_setting_add_address',
-            validate: function(data) {
-                validateAddress(data.data).then(result => {
+            validate: function(data, callback) {
+                validateAddress(data.data, thus.newSymbol).then(result => {
                     if (result) {
                         callback(true);
                     } else {
@@ -115,12 +144,23 @@ class AddAddress extends Component {
     }
 
     updateEditStatus=(name, address)=> {
-        validateAddress(address).then(isValidAddress => {
-            let allValid = isValidAddress && name.length !== 0 && (name !== this.name || address !== this.address);
-            if (allValid !== this.props.navigation.getParam('isEdited')) {
-                this.props.navigation.setParams({
-                    isEdited: allValid,
+        let allValid = this.newSymbol !== undefined && name.length !== 0 && address.length !== 0
+            && (name !== this.name || address !== this.address || this.newSymbol !== this.symbol);
+        if (allValid !== this.props.navigation.getParam('isEdited')) {
+            this.props.navigation.setParams({
+                isEdited: allValid,
+            });
+        }
+    }
+
+    selectCoin=()=> {
+        this.props.navigation.navigate('signed_vault_import_coin', {
+            coinSelected: (symbol) => {
+                this.newSymbol = symbol;
+                this.setState({
+                    coinName: COINS[symbol].name + '/' + symbol
                 });
+                this.updateEditStatus(this.state.name, this.state.address);
             }
         });
     }
@@ -135,6 +175,18 @@ class AddAddress extends Component {
                 >
                     <TouchableOpacity style={{flex: 1}} activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                         <View style={{...styles.containerView, marginVertical: 30}}>
+                            <SubTextInput
+                                title={strings('add_address.label_coin_type')}
+                                style={styles.text_input}
+                                value={this.state.coinName}
+                                multiline={false}
+                                editable={false}
+                                rightView={() =>
+                                    <TouchableOpacity onPress={this.selectCoin}>
+                                        <Text style={{color: linkButtonColor}}>{strings('add_address.btn_select_coin')}</Text>
+                                    </TouchableOpacity>
+                                }
+                            />
                             <SubTextInput
                                 title={strings('add_address.label_name')}
                                 style={styles.text_input}

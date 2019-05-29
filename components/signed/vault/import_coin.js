@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
 import { strings } from '../../../locales/i18n';
 import {mainBgColor} from '../../style_util';
-import {COINS} from './constants';
+import {COINS} from '../../../coins/support_coin_list';
 
 const {width} = Dimensions.get('window');
 
@@ -17,7 +17,6 @@ class ImportCoin extends Component {
     constructor(props) {
         super(props);
     }
-
 
     render_item=({item, index})=> {
         const cellHeight = 60;
@@ -34,9 +33,18 @@ class ImportCoin extends Component {
                     height: cellHeight,
                 }}
                 onPress={() => {
-                    this.props.navigation.navigate('signed_vault_import_from', {
-                        symbol: item.symbol,
-                    });
+                    let coinSelected = this.props.navigation.getParam('coinSelected');
+                    if (coinSelected !== undefined) {
+                        coinSelected(item.symbol);
+                    }
+                    let targetUri = this.props.navigation.getParam('targetUri');
+                    if (targetUri !== undefined) {
+                        this.props.navigation.navigate(targetUri, {
+                            symbol: item.symbol
+                        });
+                    } else {
+                        this.props.navigation.goBack();
+                    }
                 }}
             >
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
