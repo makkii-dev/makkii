@@ -478,7 +478,7 @@
     "label_address_book_empty": "您还没有添加过地址项"
   },
   "add_address": {
-    "title": "地址",
+    "title": "联系人",
     "btn_save": "保存",
     "label_name": "名称",
     "label_address": "地址",

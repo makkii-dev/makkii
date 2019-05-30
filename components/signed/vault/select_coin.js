@@ -9,7 +9,7 @@ import {RightActionButton} from '../../common';
 import {mainBgColor, fixedHeight} from '../../style_util';
 import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
-import {COINS} from './constants';
+import {COINS} from '../../../coins/support_coin_list';
 
 const {width} = Dimensions.get('window');
 

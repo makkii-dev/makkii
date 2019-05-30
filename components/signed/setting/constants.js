@@ -14,11 +14,11 @@ const SETTINGS = [
         'icon': require('../../../assets/icon_setting_recovery.png'),
         'route_url':'signed_setting_recovery'
     },
-    {
-        'title': 'service_configuration.title',
-        'icon': require('../../../assets/icon_server.png'),
-        'route_url':'signed_setting_services'
-    },
+    // {
+    //     'title': 'service_configuration.title',
+    //     'icon': require('../../../assets/icon_server.png'),
+    //     'route_url':'signed_setting_services'
+    // },
     {
         'title': 'language.title',
         'icon': require('../../../assets/icon_setting_i18n.png'),

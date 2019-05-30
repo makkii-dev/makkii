@@ -8,6 +8,7 @@ import {RightActionButton} from '../../common';
 import {delete_address} from '../../../actions/user';
 import {COINS} from "../../../coins/support_coin_list";
 import {accountKey} from '../../../utils/index';
+import {formatAddress1Line} from '../../../coins/api';
 
 const {width} = Dimensions.get('window');
 
@@ -163,7 +164,7 @@ class AddressBook extends Component {
                         />
                         <View style={{flexDirection: 'column', paddingLeft: 10}}>
                             <Text numberOfLines={1} style={{...styles.nameStyle, marginBottom: 10}}>{item.name}</Text>
-                            <Text numberOfLines={1} style={styles.addressStyle}>{item.address.substring(0, 12) + '...' + item.address.substring(54)}</Text>
+                            <Text numberOfLines={1} style={styles.addressStyle}>{formatAddress1Line(item.symbol, item.address)}</Text>
                         </View>
                     </View>
                     <Image style={{width: 24, height: 24}}
