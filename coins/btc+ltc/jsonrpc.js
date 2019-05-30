@@ -146,7 +146,9 @@ const getTransactionsByAddress= (address, page, size, network='BTC')=> new Promi
                     });
                     tx.to = Object.keys(to)[0];
                 }
-                txs[tx.hash] = tx;
+                if(tx.blockNumber){
+                    txs[tx.hash] = tx;
+                }
             });
             resolve(txs);
         }else {

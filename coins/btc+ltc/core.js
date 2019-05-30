@@ -16,6 +16,10 @@ const validateBalanceSufficiency = (account, symbol, amount, extra_params)=>new 
         reject({result: false, err: 'error_insufficient_amount'})
     })
 });
+
+const formatAddress1Line =(address) => address;
+
 module.exports = {
-    validateBalanceSufficiency
+    validateBalanceSufficiency,
+    formatAddress1Line
 };

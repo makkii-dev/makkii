@@ -52,6 +52,9 @@ export const COINS = {
         icon: require('../assets/coin_ltc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
+        network: 'LTCTEST',
+        api: btc_api,
+
     },
     'TRX': {
         name: 'TRON',
