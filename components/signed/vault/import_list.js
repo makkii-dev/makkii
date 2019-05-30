@@ -98,7 +98,7 @@ class ImportHdWallet extends React.Component {
                 const start = this.state.lastIndex;
                 let promises = [];
                 range(start, start+n, 1).forEach(index=>
-                    promises.push(keyStore.getKey(425,0,0,index))
+                    promises.push(keyStore.getKey(425,0,0,index,true))
                 );
                 Promise.all(promises).then(accs=>{
                     accs.forEach(getAcc=>{

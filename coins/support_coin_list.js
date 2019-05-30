@@ -1,7 +1,8 @@
 import aion_api from './aion';
 import eth_api from './eth';
 import tron_api from './tron';
-
+import eos_api from './eos';
+import btc_api from './btc+ltc';
 export const COINS = {
     'AION': {
         name: 'AION',
@@ -22,6 +23,8 @@ export const COINS = {
         icon: require('../assets/coin_btc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
+        network: 'BTCTEST',
+        api: btc_api,
     },
     'ETH': {
         name: 'ETHEREUM',
@@ -41,6 +44,7 @@ export const COINS = {
         icon: require('../assets/coin_eos.png'),
         tokenSupport: false,
         gasPriceUnit: '',
+        api: eos_api,
     },
     'LTC': {
         name: 'LITECOIN',
@@ -48,6 +52,9 @@ export const COINS = {
         icon: require('../assets/coin_ltc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
+        network: 'LTCTEST',
+        api: btc_api,
+
     },
     'TRX': {
         name: 'TRON',

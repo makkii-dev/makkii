@@ -403,14 +403,21 @@ class Send extends Component {
             			extra_params['gasPrice'] = this.state.gasPrice;
             			extra_params['gasLimit'] = this.state.gasLimit;
 					}
-            		let result = validateBalanceSufficiency(this.account, this.state.unit, this.state.amount, extra_params);
-            		console.log("result: ",  result);
-            		if (result.result) {
-            			resolve(true);
-					} else {
-						alert_ok(strings('alert_title_error'), strings('send.' + result.err));
-						resolve(false);
+            		if (this.account.symbol === 'BTC'|| this.account.symbol === 'LTC'){
+            			extra_params['network'] = COINS[this.account.symbol].network;
 					}
+            		validateBalanceSufficiency(this.account, this.state.unit, this.state.amount, extra_params).then(result=>{
+						console.log("result: ",  result);
+						if (result.result) {
+							resolve(true);
+						} else {
+							alert_ok(strings('alert_title_error'), strings('send.' + result.err));
+							resolve(false);
+						}
+					}).catch(e=>{
+						alert_ok(strings('alert_title_error'), strings('send.' + e.err));
+						resolve(false);
+					});
 				}
 			});
 		});
