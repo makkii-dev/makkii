@@ -5,7 +5,6 @@ import {
 	ACCOUNTS,
 	ACCOUNTS_ADD,
 	ACCOUNTS_SAVE,
-	ACCOUNT_DEFAULT,
 	UPDATE_ACCOUNT_NAME,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
@@ -15,13 +14,6 @@ import {
     UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 } from '../actions/accounts.js';
 
-function ifSetDefault(state){
-	let res = Object.values(state).length === 0;
-	Object.values(state).map(v=>{
-		res = res||v.isDefault;
-	});
-	return res;
-}
 const init = {};
 export default function accounts(state = init, action){
 	let new_state;
@@ -36,12 +28,6 @@ export default function accounts(state = init, action){
 			break;
 		case ACCOUNTS_SAVE:
 			new_state = state;
-			should_update_db = true;
-			break;
-		case ACCOUNT_DEFAULT:
-			Object.values(state).map(v=>v.isDefault=false);
-			state[action.key].isDefault=true;
-			new_state = Object.assign({},state);
 			should_update_db = true;
 			break;
 		case UPDATE_ACCOUNT_NAME:
@@ -115,15 +101,6 @@ export default function accounts(state = init, action){
 			v.isDefault = false;
 		}
 	});
-
-	// if not set default, set the first one true
-	if(!ifSetDefault(new_state)){
-		let key = Object.keys(new_state)[0];
-		if(key){
-			new_state[key].isDefault=true;
-		}
-		new_state = Object.assign({},new_state);
-	}
 
 	if(should_update_db){
 		AsyncStorage.setItem(

@@ -21,7 +21,7 @@ import {
 	StatusBar
 } from 'react-native';
 import SwipeableRow from '../../swipeCell';
-import {accounts_add, delete_account, account_default} from '../../../actions/accounts.js';
+import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
 import {ComponentTabBar, alert_ok} from '../../common.js';
@@ -411,26 +411,6 @@ class Home extends HomeComponent {
 		)
 	}
 
-	onSetDefaultAccount(key) {
-		const {dispatch} = this.props;
-		popCustom.show(
-			strings('alert_title_warning'),
-			strings('warning_set_default_account'),
-			[
-				{text: strings('cancel_button'),onPress:()=>this.setState({openRowKey: null})},
-				{text: strings('ok_button'), onPress:()=>{
-						this.setState({
-							openRowKey:null
-						},()=>{
-							dispatch(account_default(key,this.props.user.hashed_password));
-						});
-					}}
-			],
-			{cancelable:false}
-		)
-
-	}
-
 	onImportLedger=()=> {
 		console.log("click import ledger.");
 		this.loadingView.show(strings('ledger.toast_connecting'));
@@ -463,7 +443,6 @@ class Home extends HomeComponent {
 		// 		accountImage = require('../../../assets/account_mk.png');
 		// }
 
-		const defaultImage = I18n.locale.indexOf('zh')>=0? require('../../../assets/default_zh.png'):require('../../../assets/default_en.png');
 		const txs = item.transactions[this.props.setting.explorer_server];
 		if (txs) {
 			Object.values(txs).map((tx) => {
@@ -477,23 +456,12 @@ class Home extends HomeComponent {
 				isOpen={ Key === this.state.openRowKey }
 				swipeEnabled={ this.state.openRowKey === null&&this.state.swipeEnable}
 				preventSwipeRight={true}
-				maxSwipeDistance={item.isDefault? fixedHeight(186): fixedHeight(186 + 250)}
+				maxSwipeDistance={fixedHeight(186)}
 				onOpen={()=>this.onSwipeOpen(Key)}
 				onClose={() => this.onSwipeClose(Key)}
 				shouldBounceOnMount={true}
 				slideoutView={
 						<View style={{...styles.accountContainer, backgroundColor:'transparent', justifyContent:'flex-end'}}>
-
-							{
-								item.isDefault?null:
-									<TouchableOpacity onPress={()=>{
-										this.onSetDefaultAccount(Key);
-									}}>
-										<View style={{...styles.accountSlideButton, width: fixedHeight(250), backgroundColor: '#c8c7ed'}}>
-											<Text style={{fontSize:14,color:'#000'}}>{strings('set_default_button')}</Text>
-										</View>
-									</TouchableOpacity>
-							}
 							<TouchableOpacity onPress={()=>{
 								this.onDeleteAccount(Key);
 							}}>
@@ -528,9 +496,6 @@ class Home extends HomeComponent {
 								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
 							</View>
 						</View>
-						{
-							item.isDefault?<Image source={defaultImage} style={{width:30,height:30,position:'absolute', top:0, right:0}}/>:null
-						}
 					</View>
 				</TouchableOpacity>
 

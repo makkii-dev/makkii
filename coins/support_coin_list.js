@@ -1,7 +1,7 @@
 import aion_api from './aion';
 import eth_api from './eth';
 import tron_api from './tron';
-import eos_api from './eos';
+// import eos_api from './eos';
 import btc_api from './btc+ltc';
 export const COINS = {
     'AION': {
@@ -38,14 +38,14 @@ export const COINS = {
         network: 'ropsten',
         api: eth_api,
     },
-    'EOS': {
-        name: 'EOS',
-        symbol: 'EOS',
-        icon: require('../assets/coin_eos.png'),
-        tokenSupport: false,
-        gasPriceUnit: '',
-        api: eos_api,
-    },
+    // 'EOS': {
+    //     name: 'EOS',
+    //     symbol: 'EOS',
+    //     icon: require('../assets/coin_eos.png'),
+    //     tokenSupport: false,
+    //     gasPriceUnit: '',
+    //     api: eos_api,
+    // },
     'LTC': {
         name: 'LITECOIN',
         symbol: 'LTC',

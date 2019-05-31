@@ -5,7 +5,6 @@ const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
 const UPDATE_ACCOUNT_TRANSACTIONS = 'UPDATE_ACCOUNT_TRANSACTIONS';
 const UPDATE_ACCOUNT_TOKEN_TRANSACTIONS = 'UPDATE_ACCOUNT_TOKEN_TRANSACTIONS';
 const UPDATE_ACCOUNT_TOKENS = 'UPDATE_ACCOUNT_TOKENS';
-const ACCOUNT_DEFAULT = "ACCOUNT_DEFAULT";
 const DEL_ACCOUNT = 'DEL_ACCOUNT';
 const DEL_ACCOUNTS = 'DEL_ACCOUNTS';
 const DEL_ACCOUNT_TOKEN = 'DEL_ACCOUNT_TOKEN';
@@ -31,14 +30,6 @@ function accounts_save(hashed_password) {
 		hashed_password
 	}
 
-}
-
-function account_default(key, hashed_password){
-	return {
-		type: ACCOUNT_DEFAULT,
-		key,
-		hashed_password
-	}
 }
 
 function update_account_name(key, newName, hashed_password){
@@ -111,7 +102,6 @@ module.exports={
 	ACCOUNTS,
 	ACCOUNTS_ADD,
 	ACCOUNTS_SAVE,
-	ACCOUNT_DEFAULT,
 	UPDATE_ACCOUNT_NAME,
 	UPDATE_ACCOUNT_TRANSACTIONS,
     UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
@@ -122,7 +112,6 @@ module.exports={
 	accounts,
 	accounts_add,
 	accounts_save,
-	account_default,
 	update_account_name,
 	update_account_txs,
 	update_account_tokens,
