@@ -7,6 +7,7 @@ import {accounts} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils';
 import {strings} from "../locales/i18n";
 import {ComponentLogo} from "./common";
+import {fetchTokenDetail} from '../coins/eth/token';
 
 const {width,height} = Dimensions.get('window');
 
@@ -17,6 +18,9 @@ class Splash extends Component {
 
 
 	componentWillMount(){
+		fetchTokenDetail('0x722dd3f80bac40c951b51bdd28dd19d435762180', 'ropsten')
+			.then(res=>console.log('get token =>',res))
+			.catch(e=>console.log('get token err=>',e));
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;

@@ -112,4 +112,6 @@ module.exports = {
     getTransactionCount,
     getBalance,
     blockNumber,
+    processRequest,
+    getEndpoint,
 };

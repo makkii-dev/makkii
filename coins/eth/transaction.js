@@ -2,6 +2,9 @@ import {getTransactionReceipt, getTransactionCount, sendSignedTransaction} from 
 import {appendHexStart, toHex} from '../../utils';
 import keyStore from "react-native-makkii-core";
 import ApiCaller from "../../utils/http_caller";
+import {Contract} from "web3-eth-contract";
+import {ERC20ABI} from "./token";
+import BigNumber from "../aion/transaction";
 
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
 const getEtherscanBaseUrl=(network)=> {
@@ -11,7 +14,7 @@ const getEtherscanBaseUrl=(network)=> {
         return `https://api-${network}.etherscan.io/api`
     }
 }
-function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
+function sendNativeTx(account, symbol, to, value, gasPrice, gasLimit, data, network='mainnet') {
     return new Promise((resolve, reject) => {
         getTransactionCount(account.address, 'latest', network).then(count=> {
             console.log("private key:" + account.private_key);
@@ -19,8 +22,8 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
                 chainID: toHex(3),
                 amount: toHex(value.shiftedBy(18)),
                 nonce: toHex(count),
-                gasLimit: toHex(extra_params['gasLimit']),
-                gasPrice: toHex(extra_params['gasPrice']),
+                gasLimit: gasPrice,
+                gasPrice: gasLimit,
                 to: toHex(to),
                 private_key: account.private_key,
             };
@@ -48,6 +51,41 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
             reject(err);
         });
     });
+}
+
+function sendTokenTx(account, symbol, to ,value, gasPrice, gasLimit, data, network='mainnet'){
+    const tokens = account.tokens[network];
+    const {contractAddr, tokenDecimal} = tokens[symbol];
+
+    const token_contract = new Contract(undefined, ERC20ABI, contractAddr);
+    const methodsData = token_contract.methods.transfer(account.address, to, value.shiftedBy(tokenDecimal + 0).toFixed(0).toString()).encodeABI();
+    return new Promise((resolve, reject) => {
+        sendNativeTx(account, contractAddr, new BigNumber(0), gasPrice, gasLimit, methodsData).then(res=> {
+            let pendingTx = res.pendingTx;
+            let pendingTokenTx = {
+                hash: pendingTx.hash,
+                from: pendingTx.from,
+                to: to,
+                value: value,
+                status: 'PENDING'
+            };
+
+            resolve({pendingTx, pendingTokenTx});
+        }).catch(err => {
+            reject(err);
+        });
+    })
+
+}
+
+function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
+    let gasPrice = extra_params['gasPrice'];
+    let gasLimit = extra_params['gasLimit'];
+    if (account.symbol === symbol) {
+        return sendNativeTx(account, to, value, gasPrice, gasLimit, data, network);
+    } else {
+        return sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network);
+    }
 }
 
 function getTransactionsByAddress(address, page, size, network='mainnet') {

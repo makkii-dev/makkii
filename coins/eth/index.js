@@ -1,6 +1,7 @@
 import core from './core';
 import jsonrpc from './jsonrpc';
 import transaction from './transaction';
+import token from './token';
 
 module.exports = {
     validateAddress: core.validateAddress,
@@ -12,4 +13,6 @@ module.exports = {
     sendTransaction: transaction.sendTransaction,
     getTransactionsByAddress: transaction.getTransactionsByAddress,
     getTransactionUrlInExplorer: transaction.getTransactionUrlInExplorer,
+    fetchAccountTokenBalance: token.fetchAccountTokenBalance,
+    fetchTokenDetail: token.fetchTokenDetail,
 };
