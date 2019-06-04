@@ -66,7 +66,7 @@ class AddToken extends Component {
     }
 
     addToken=() => {
-        const {tokenAdded} = this.props.navigation.state.params;
+        const {tokenSelected, targetUri} = this.props.navigation.state.params;
         const {symbol, tokenName, decimals, contractAddress} = this.state;
         const {accounts, setting, navigation} = this.props;
         let account_key = accountKey(this.account.symbol, this.account.address);
@@ -79,16 +79,15 @@ class AddToken extends Component {
             });
             return;
         }
-        tokenAdded(
-            {[symbol]: {
+        tokenSelected({
                 symbol: symbol,
                 contractAddr: contractAddress,
                 name: tokenName,
                 tokenDecimal: decimals,
                 balance: new BigNumber(0),
                 tokenTxs: {},
-            }});
-        navigation.goBack();
+            });
+        navigation.navigate(targetUri);
     }
 
     scan=() => {

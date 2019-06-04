@@ -1,58 +1,117 @@
 import {strings} from '../../../locales/i18n';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
-import {View, FlatList, StyleSheet, PixelRatio, TouchableOpacity, Dimensions, Text, Image} from 'react-native';
+import {Keyboard, Button, ActivityIndicator, TextInput, View, FlatList, StyleSheet, PixelRatio, TouchableOpacity, Dimensions, Text, Image} from 'react-native';
 import {accountKey} from '../../../utils';
 import Loading from '../../loading';
 import SwipeableRow from '../../swipeCell';
-import {RightActionButton} from '../../common';
 import {mainBgColor, fixedHeight} from '../../style_util';
 import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
 import {COINS} from '../../../coins/support_coin_list';
-import {fetchAccountTokenBalance} from '../../../coins/api';
+import {fetchAccountTokenBalance, searchToken, getTokenIconUrl} from '../../../coins/api';
+import FastImage from 'react-native-fast-image';
+
 const {width} = Dimensions.get('window');
 
 class SelectCoin extends Component {
     static navigationOptions = ({navigation})=> {
         return ({
-            title: strings('select_coin.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
+            headerTitle: <View style={{flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                    <TextInput
+                        style={{
+                            fontSize: 16,
+                            color: 'white',
+                            width: '100%',
+                            paddingLeft: 5,
+                            paddingRight: 5,
+                        }}
+                        value={navigation.state.params.searchstring}
+                        placeholder={strings('select_coin.placeholder_search_token')}
+                        onChangeText={e=> {
+                            console.log("onChangeText");
+                            navigation.setParams({
+                                isClearable: e.length > 0,
+                                searchstring: e,
+                            });
+
+                            navigation.state.params.searchToken(e);
+                        }}
+                    />
+                </View>,
             headerRight: (
-                <RightActionButton
-                    btnTitle={strings('select_coin.btn_add_token')}
-                    onPress={() => {
-                        navigation.navigate('signed_add_token', {
-                            account: navigation.getParam('account'),
-                            tokenAdded: navigation.getParam('tokenAdded'),
-                        });
-                    }}
-                />
+                (navigation.state.params && navigation.state.params.isClearable)?
+                    <TouchableOpacity onPress={()=> {
+                            navigation.setParams({
+                                searchstring: '',
+                                isClearable: false
+                            });
+                            navigation.state.params.searchToken('');
+                        }
+                    }>
+                        <Image style={{width: 20, height: 20, marginRight: 20, tintColor: 'white'}}
+                               resizeMode={'contain'}
+                               source={require('../../../assets/clear.png')}
+                               />
+                    </TouchableOpacity>
+                        // navigation.navigate('signed_add_token', {
+                        //     account: navigation.getParam('account'),
+                        //     tokenAdded: navigation.getParam('tokenAdded'),
+                :null
             )
         });
     };
+
 
     constructor(props) {
         super(props);
         this.account = this.props.navigation.state.params.account;
         this.account_key = accountKey(this.account.symbol, this.account.address);
         this.state = {
+            isLoading: true,
             openRowKey: null,
+            tokens: [],
+            searchString: '',
         };
         this.props.navigation.setParams({
-            tokenAdded: this.tokenAdded,
+            searchToken: this.searchToken,
         });
     }
 
-    tokenAdded= (token) => {
-        const {dispatch, navigation, setting, user} = this.props;
-        dispatch(update_account_tokens(this.account_key, token, setting.explorer_server, user.hashed_password));
-    };
+    searchToken = (keyword) => {
+        let loadingView = this.loadingView;
+        loadingView.show(null, {
+            position: 'top'
+        });
+
+        searchToken(this.account.symbol, keyword).then(res => {
+            loadingView.hide();
+            if (res.length === 0) {
+                Keyboard.dismiss();
+            }
+            this.setState({
+                searchString: keyword,
+                tokens: res,
+            });
+        }).catch(err => {
+            console.log("search token failed:", err);
+            loadingView.hide();
+        });
+    }
+
+    async componentWillMount() {
+        searchToken(this.account.symbol).then(res => {
+            this.setState({
+                isLoading: false,
+                tokens: res,
+            });
+        }).catch(err => {
+            this.setState({
+                isLoading: false,
+                tokens: [],
+            });
+        });
+    }
 
     onSwipeOpen(Key: any) {
         this.setState({
@@ -111,8 +170,32 @@ class SelectCoin extends Component {
         )
     }
 
+    addCustomToken=()=> {
+        this.props.navigation.navigate('signed_add_token', {
+            account: this.account,
+            tokenSelected: this.props.navigation.getParam('tokenSelected'),
+            targetUri: 'signed_vault_account_tokens',
+        });
+    }
+
     render_item= ({item, index}) => {
         const cellHeight = 60;
+        // prepare icon
+        let icon = undefined;
+        let fastIcon = undefined;
+        try {
+            fastIcon = getTokenIconUrl(this.account.symbol, item.symbol, item.contractAddr);
+        } catch (err) {
+            icon = COINS[this.account.symbol].icon;
+        }
+        // prepare right indicator
+        const {setting, accounts} = this.props;
+        let explorer_server = setting.explorer_server;
+        let tokens = accounts[this.account_key].tokens;
+        let isAdded = false;
+        if (tokens !== undefined && tokens[explorer_server] !== undefined) {
+            isAdded = Object.keys(tokens[explorer_server]).indexOf(item.symbol) >= 0;
+        }
         return (
                 <SwipeableRow maxSwipeDistance={fixedHeight(186)}
                           onOpen={()=>this.onSwipeOpen(item.symbol)}
@@ -142,7 +225,7 @@ class SelectCoin extends Component {
                               </View>
                           }
                           isOpen={item.symbol === this.state.openRowKey}
-                          swipeEnabled={this.state.openRowKey === null && index !== 0}
+                          swipeEnabled={/*this.state.openRowKey === null && index !== 0*/false}
                           preventSwipeRight={true}
                           shouldBounceOnMount={true}
             >
@@ -158,36 +241,63 @@ class SelectCoin extends Component {
                                   }}
                                   onPress={() => {
                                       if (this.state.openRowKey === null) {
-                                          console.log("selected: " + item.name);
-                                          const {coinSelected} = this.props.navigation.state.params;
-                                          coinSelected(item.symbol);
-                                          this.props.navigation.goBack();
+                                          if (!isAdded) {
+                                              console.log("selected: " + item.name);
+                                              const {tokenSelected} = this.props.navigation.state.params;
+                                              tokenSelected({
+                                                  symbol: item.symbol,
+                                                  contractAddr: item.contractAddr,
+                                                  name: item.name,
+                                                  tokenDecimal: item.tokenDecimal,
+                                                  balance: new BigNumber(0),
+                                                  tokenTxs: {},
+                                              });
+                                              this.props.navigation.goBack();
+                                          }
                                       } else {
                                           this.setState({openRowKey: null});
                                       }
                                   }
                   }>
-                    <Text numberOfLines={1}>{item.name}</Text>
-                    <Image style={{width: 24, height: 24}}
-                           source={require('../../../assets/arrow_right.png')} />
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        {
+                            fastIcon !== undefined?
+                                <FastImage
+                                    style={{width: 30, height: 30}}
+                                    source={{uri: fastIcon}}
+                                    resizeMode={FastImage.resizeMode.contain}
+                                />:
+                                <Image style={{width: 30, height: 30}}
+                                       source={icon}
+                                       resizeMode={'contain'}
+                                />
+                        }
+                        <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.name + '(' + item.symbol + ')'}</Text>
+                    </View>
+                    {/*<Image style={{width: 24, height: 24}}*/}
+                           {/*source={require('../../../assets/arrow_right.png')} />*/}
+                    {
+                        isAdded?<Text numberOfLines={1}>{strings('select_coin.label_is_added')}</Text>:null
+                    }
                 </TouchableOpacity>
             </SwipeableRow>
         )
     };
 
-    render() {
-        const {setting, accounts} = this.props;
-        let explorer_server = setting.explorer_server;
-        let tokens = accounts[this.account_key].tokens;
-        let tokenArray;
-        if (tokens !== undefined && tokens[explorer_server] !== undefined) {
-            tokenArray = Object.values(tokens[explorer_server]);
-        } else {
-            tokenArray = [];
-        }
+    // loading page
+    renderLoadingView() {
+        return (
+            <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                <ActivityIndicator
+                    animating={true}
+                    color='red'
+                    size="large"
+                />
+            </View>
+        );
+    }
 
-        let coinName = COINS[this.account.symbol].name;
-        let coinSymbol = this.account.symbol;
+    renderData() {
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -195,7 +305,6 @@ class SelectCoin extends Component {
                     backgroundColor: mainBgColor,
                     alignItems: 'center',
                     flex: 1,
-                    paddingTop: 20,
                 }}
                 onPress={()=> {
                     this.setState({openRowKey: null})
@@ -203,16 +312,46 @@ class SelectCoin extends Component {
             >
                 <FlatList
                     style={{width: width}}
-                    data={[{symbol: coinSymbol, name: coinName}, ...tokenArray]}
+                    data={this.state.tokens}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={() => <View style={styles.divider}/>}
                     keyExtractor={(item, index) => item.symbol}
                 />
+            </TouchableOpacity>
+        )
+    }
+
+    renderEmptyView() {
+        return (
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: mainBgColor
+            }}>
+                <View style={{width: width, height: 180, justifyContent: 'center', alignItems: 'center'}}>
+                    <Image source={require('../../../assets/empty_account.png')}
+                           style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+                           resizeMode={'contain'}
+                    />
+                    <Text style={{color: 'gray', marginBottom: 20}}>{strings('select_coin.no_token_found')}</Text>
+                    <Button title={strings('select_coin.btn_custom_token')} onPress={this.addCustomToken}/>
+                </View>
+            </View>
+        );
+    }
+
+    render() {
+        return (
+            <View style={{flex: 1}}>
+                {
+                    this.state.isLoading? this.renderLoadingView(): this.state.tokens.length !== 0?this.renderData(): this.renderEmptyView()
+                }
                 <Loading ref={element => {
                     this.loadingView = element;
                 }}/>
-            </TouchableOpacity>
-        )
+            </View>
+        );
     }
 }
 

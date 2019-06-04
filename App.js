@@ -39,6 +39,7 @@ import RegisterMnemonic      	from './components/unsigned/register_mnemonic.js';
 import Recovery              	from './components/unsigned/recovery.js';
 import Vault                	from './components/signed/vault/home.js';
 import VaultAccount         	from './components/signed/vault/account.js';
+import VaultAccountTokens       from './components/signed/vault/account_tokens.js';
 import VaultImportHdWallet   	from './components/signed/vault/import_list';
 import VaultImportCoin          from './components/signed/vault/import_coin';
 import VaultImportFrom          from './components/signed/vault/import_from';
@@ -197,6 +198,26 @@ const Routes = createAppContainer(createStackNavigator({
 			headerStyle: styles.headerStyleWithoutShadow,
 		}),
 	},
+	'signed_vault_account_tokens': {
+		screen: VaultAccountTokens,
+		navigationOptions: ({navigation}) =>({
+			headerLeft: (
+				<TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+					width: 48,
+					height: 48,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
+					<Image source={require('./assets/arrow_back.png')} style={{
+						tintColor: 'white',
+						width: 20,
+						height: 20,
+					}} />
+				</TouchableOpacity>
+			),
+			headerStyle: styles.headerStyleWithoutShadow,
+		}),
+	},
 	'signed_vault_import_coin': {
         screen: VaultImportCoin,
         navigationOptions,
@@ -223,7 +244,23 @@ const Routes = createAppContainer(createStackNavigator({
 	},
 	'signed_select_coin': {
 		screen: SelectCoin,
-		navigationOptions: navigationOptionsWithoutRight,
+		navigationOptions: ({navigation}) =>({
+			headerLeft: (
+				<TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
+					width: 48,
+					height: 48,
+					alignItems: 'center',
+					justifyContent: 'center',
+				}}>
+					<Image source={require('./assets/arrow_back.png')} style={{
+						tintColor: 'white',
+						width: 20,
+						height: 20,
+					}} />
+				</TouchableOpacity>
+			),
+			headerStyle: styles.headerStyleWithoutShadow,
+		}),
 	},
 	'signed_add_token': {
         screen: AddToken,

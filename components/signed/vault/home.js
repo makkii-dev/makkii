@@ -451,6 +451,7 @@ class Home extends HomeComponent {
 				}
 			});
 		}
+		let targetUri = COINS[item.symbol].tokenSupport? 'signed_vault_account_tokens': 'signed_vault_account';
 		return (
 			<SwipeableRow
 				isOpen={ Key === this.state.openRowKey }
@@ -481,7 +482,7 @@ class Home extends HomeComponent {
 					    	return;
 						}
                         this.state.openRowKey&&this.setState({openRowKey:null});
-						this.state.openRowKey||this.props.navigation.navigate('signed_vault_account',{account: item});
+						this.state.openRowKey||this.props.navigation.navigate(targetUri,{account: item});
 					}}
 				>
 					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start'}}>

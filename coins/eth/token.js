@@ -314,10 +314,34 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page=
 
 const fetchAccountTokens = (address, network) => Promise.resolve({});
 
+function searchTokens(keyword, network='mainnet') {
+    return new Promise((resolve, reject) => {
+        let url;
+        if (keyword === undefined || keyword.length === 0) {
+            url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20`;
+        } else {
+            url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        }
+        console.log("search eth token: " + url);
+        ApiCaller.get(url, false).then(res=>{
+            // console.log("fetch top tokens:",  res.data);
+            resolve(res.data);
+        }).catch(err => {
+            console.log(err);
+            reject(err);
+        });
+    });
+}
+
+function getTokenIconUrl(tokenSymbol, contractAddress, network='mainnet') {
+    return `http://45.118.132.89:8080/token/eth/img?contractAddress=${contractAddress}`;
+}
 module.exports = {
     ERC20ABI,
     fetchAccountTokenBalance,
     fetchTokenDetail,
     fetchAccountTokenTransferHistory,
-    fetchAccountTokens
+    fetchAccountTokens,
+    searchTokens,
+    getTokenIconUrl,
 };

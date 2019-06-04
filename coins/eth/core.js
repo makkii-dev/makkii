@@ -9,7 +9,7 @@ function validateAddress(address, network='mainnet') {
             resolve(false);
         }
 
-        if (/^0x[0-9a-f]{40}$/.test(address) || /^0x?[0-9A-F]{40}$/.test(address)) {
+        if (/^0x[0-9a-f]{40}$/.test(address) || /^0x[0-9A-F]{40}$/.test(address)) {
             // If it's all small caps or all all caps, return true
             resolve(true);
         }

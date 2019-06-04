@@ -6088,6 +6088,11 @@ react-native-device-info@^0.26.3:
   resolved "http://registry.npm.taobao.org/react-native-device-info/download/react-native-device-info-0.26.3.tgz#8dff9e64284ca274a8a574d5ae3bf4ed3f0a236d"
   integrity sha1-jf+eZChMonSopXTVrjv07T8KI20=
 
+react-native-fast-image@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.npm.taobao.org/react-native-fast-image/download/react-native-fast-image-6.0.3.tgz#e644076c5e21dd8695db07905779352b2b9c1cb8"
+  integrity sha1-5kQHbF4h3YaV2weQV3k1KyucHLg=
+
 react-native-fs@^2.13.3:
   version "2.13.3"
   resolved "http://registry.npm.taobao.org/react-native-fs/download/react-native-fs-2.13.3.tgz#a422f0ecd8a093a7e99d8d51ff51440e090a18a8"
@@ -6138,9 +6143,9 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
   version "0.0.2"
   resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#d0f4acdda93f601d04f6f724daef8f33bc2c37b5"
 
-"react-native-makkii-core@https://github.com/chaion/react-native-makkii-core":
+"react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-makkii-core#a77ded81edc0b65bd9c83b6a57917b6e6cb8b175"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#a77ded81edc0b65bd9c83b6a57917b6e6cb8b175"
   dependencies:
     bignumber.js "^9.0.0"
     bitcoinjs-lib "^5.0.5"

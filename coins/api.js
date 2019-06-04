@@ -1,7 +1,18 @@
 import ApiCaller from '../utils/http_caller';
 import {COINS} from './support_coin_list';
 import {toHex} from '../utils';
-import keyStore from 'react-native-makkii-core'
+import keyStore from 'react-native-makkii-core';
+
+
+function getTokenIconUrl(coinType, tokenSymbol=undefined, contractAddress=undefined) {
+    let coin = COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getTokenIconUrl !== undefined) {
+        return coin.api.getTokenIconUrl(tokenSymbol, contractAddress, coin.network);
+    } else {
+        throw new Error("No getTokenIconUrl impl for coin " + coinType);
+    }
+}
+
 function getBlockByNumber(coinType, blockNumber) {
     let coin = COINS[coinType.toUpperCase()];
     if (coin.api !== undefined && coin.api.getBlockByNumber !== undefined) {
@@ -147,6 +158,15 @@ function fetchAccountTokenBalance(coinType, contract_address, address, network){
 }
 
 
+function searchToken(symbol, keyword=undefined) {
+    let coin = COINS[symbol.toUpperCase()];
+    if (coin.api !== undefined && coin.api.searchTokens !== undefined) {
+        return coin.api.searchTokens(keyword, coin.network);
+    } else {
+        throw new Error('No searchTokens impl for coin ' + coinType);
+    }
+}
+
 module.exports = {
     getBlockByNumber,
     getTransactionExplorerUrl,
@@ -163,5 +183,7 @@ module.exports = {
     fetchTokenDetail,
     fetchAccountTokenTransferHistory,
     fetchAccountTokens,
-    fetchAccountTokenBalance
+    fetchAccountTokenBalance,
+    searchToken,
+    getTokenIconUrl,
 };

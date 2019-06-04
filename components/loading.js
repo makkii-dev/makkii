@@ -24,8 +24,16 @@ export default class Loading extends Component {
     }
 
     render() {
+        let align, paddingTop;
+        if (this.position === 'top') {
+            paddingTop = 50;
+            align = 'flex-start';
+        } else {
+            paddingTop = 0;
+            align = 'center';
+        }
         return this.state.isShow ?(
-            <View style={styles.container}>
+            <View style={{...styles.container, paddingTop: paddingTop, justifyContent: align}}>
                 <View style={styles.progressContainer}>
                     <ActivityIndicator animating={true} size='large' color='white'/>
                     {this.state.message && <Text style={styles.defaultText} numberOfLines={1}>{this.state.message}</Text>}
@@ -34,7 +42,10 @@ export default class Loading extends Component {
         ): (null)
     }
 
-    show(message = null) {
+    show(message = null, params) {
+        if (params !== undefined) {
+            this.position = params.position;
+        }
         this.setState({
             isShow: true,
             message: message,
@@ -42,6 +53,7 @@ export default class Loading extends Component {
     }
 
     hide() {
+        this.position = 'center';
         this.setState({
             isShow: false,
             message: null,

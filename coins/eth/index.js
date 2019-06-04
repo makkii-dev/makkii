@@ -13,5 +13,5 @@ module.exports = {
     sendTransaction: transaction.sendTransaction,
     getTransactionsByAddress: transaction.getTransactionsByAddress,
     getTransactionUrlInExplorer: transaction.getTransactionUrlInExplorer,
-    ...token
+    ...token,
 };
