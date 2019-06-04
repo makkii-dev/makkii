@@ -13,6 +13,5 @@ module.exports = {
     sendTransaction: transaction.sendTransaction,
     getTransactionsByAddress: transaction.getTransactionsByAddress,
     getTransactionUrlInExplorer: transaction.getTransactionUrlInExplorer,
-    fetchAccountTokenBalance: token.fetchAccountTokenBalance,
-    fetchTokenDetail: token.fetchTokenDetail,
+    ...token
 };

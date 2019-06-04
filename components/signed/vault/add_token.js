@@ -5,8 +5,8 @@ import React, {Component} from 'react';
 import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {accountKey, fetchTokenDetail} from '../../../utils';
-import {validateAddress} from "../../../coins/api";
+import {accountKey} from '../../../utils';
+import {validateAddress,fetchTokenDetail} from "../../../coins/api";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
 
@@ -94,7 +94,7 @@ class AddToken extends Component {
     scan=() => {
         this.props.navigation.navigate('scan', {
             success: 'signed_add_token',
-            validate: function(data, callback) {
+            validate: (data, callback)=>{
                 validateAddress(data.data, this.account.symbol).then(result => {
                     if (result) {
                         callback(true);
@@ -122,12 +122,12 @@ class AddToken extends Component {
 
     fetchTokenDetail=(address) => {
         this.loadingView.show();
-        fetchTokenDetail(address).then(symbol => {
+        fetchTokenDetail(this.account.symbol, address).then(symbol => {
             this.setState({
                 contractAddress: address,
                 tokenName: symbol.name,
                 symbol: symbol.symbol,
-                decimals: symbol.tokenDecimal
+                decimals: symbol.decimals
             });
             this.props.navigation.setParams({
                 isEdited: true

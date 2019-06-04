@@ -30,7 +30,7 @@ export const COINS = {
         name: 'ETHEREUM',
         symbol: 'ETH',
         icon: require('../assets/coin_eth.png'),
-        tokenSupport: false,
+        tokenSupport: true,
         txFeeSupport: true,
         gasPriceUnit: 'Gwei',
         defaultGasPrice: '20',

@@ -102,10 +102,17 @@ const getTransactionReceipt = (hash, network='mainnet') => new Promise((resolve,
         if (res.data.error) reject(res.data.error);
         else resolve(res.data.result);
     });
-
 });
 
+const ETHERSCAN_URL_MAP = {
+    ropsten: 'https://api-ropsten.etherscan.io',
+    kovan: 'https://api-kovan.etherscan.io',
+    rinkeby: 'https://api-rinkeby.etherscan.io',
+    mainnet: 'https://api.etherscan.io'
+};
+
 module.exports = {
+    ETHERSCAN_URL_MAP,
     getBlockByNumber,
     getTransactionReceipt,
     sendSignedTransaction,

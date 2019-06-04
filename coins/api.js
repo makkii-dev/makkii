@@ -110,6 +110,42 @@ function getCoinPrices(currency) {
         });
     });
 }
+function fetchTokenDetail(coinType, contract_address, network){
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.fetchTokenDetail !== undefined) {
+        return coin.api.fetchTokenDetail(contract_address, network||coin.network);
+    } else {
+        throw new Error('No fetchTokenDetail impl for coin ' + coinType);
+    }
+}
+
+function fetchAccountTokenTransferHistory(coinType, address, symbolAddress, network, page=0, size=25){
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.fetchAccountTokenTransferHistory !== undefined) {
+        return coin.api.fetchAccountTokenTransferHistory(address, symbolAddress, network||coin.network, page, size);
+    } else {
+        throw new Error('No fetchAccountTokenTransferHistory impl for coin ' + coinType);
+    }
+}
+
+function fetchAccountTokens(coinType, address, network){
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.fetchAccountTokens !== undefined) {
+        return coin.api.fetchAccountTokens(address, network||coin.network);
+    } else {
+        throw new Error('No fetchAccountTokens impl for coin ' + coinType);
+    }
+}
+
+function fetchAccountTokenBalance(coinType, contract_address, address, network){
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.fetchAccountTokenBalance !== undefined) {
+        return coin.api.fetchAccountTokenBalance(contract_address, address, network||coin.network);
+    } else {
+        throw new Error('No fetchAccountTokenBalance impl for coin ' + coinType);
+    }
+}
+
 
 module.exports = {
     getBlockByNumber,
@@ -124,4 +160,8 @@ module.exports = {
     getCoinPrices,
     formatAddress1Line,
     validateBalanceSufficiency,
+    fetchTokenDetail,
+    fetchAccountTokenTransferHistory,
+    fetchAccountTokens,
+    fetchAccountTokenBalance
 };

@@ -1,6 +1,11 @@
 // Declare ABI for token contract
 import {fetchRequest} from '../../utils/others';
 import BigNumber from "bignumber.js";
+import Contract from "aion-web3-eth-contract";
+import AbiCoder from 'aion-web3-eth-abi';
+import {getEndpoint, processRequest} from "./jsonrpc";
+import ApiCaller from "../../utils/http_caller";
+import axios from "axios";
 const CONTRACT_ABI = [
     {
         outputs: [
@@ -142,50 +147,61 @@ function fetchAccountTokens(address, network){
     });
 }
 
-function fetchAccountTokenBalance(contract_address,address=""){
-    const token_contract = new web3.eth.Contract(CONTRACT_ABI, contract_address);
 
-    // fetch account balance
-    return new Promise((resolve, reject) => {
-        token_contract.methods.balanceOf(address).call({}).then(balance => {
-            resolve(new BigNumber(balance))
-        }).catch(err => {
-            reject(new Error('get account ' + address + 'balance failed'))
-        });
+const fetchAccountTokenBalance = (contract_address, address, network) => new Promise((resolve, reject) => {
+    const contract = new Contract(CONTRACT_ABI);
+    const requestData = processRequest('eth_call', [
+        {to:contract_address, data:contract.methods.balanceOf(address).encodeABI()},
+        'latest'
+    ]);
+    console.log('[AION get token balance req]:',getEndpoint(network));
+
+    ApiCaller.post(getEndpoint(network),requestData, true).then(res=>{
+        if(res.data.result){
+            resolve(new BigNumber(AbiCoder.decodeParameter('uint128',res.data.result)))
+        }else {
+            reject('get account Balance failed:',res.data.error);
+        }
+    }).catch(e=>{
+        reject('get account Balance failed:',e);
     })
-}
+});
 
-function fetchTokenDetail(contract_address){
-    const token_contract = new web3.eth.Contract(CONTRACT_ABI, contract_address);
-    return new Promise((resolve, reject) => {
-        // fetch token symbol
-        token_contract.methods.symbol().call({}).then(symbol=>{
-            resolve({contractAddr:contract_address,symbol:symbol})
-        }).catch(()=>{
-            reject(new Error('get token symbol failed'))
-        })
-    }).then(obj=>{
-        return new Promise((resolve, reject) => {
-            // fetch token name
-            token_contract.methods.name().call({}).then(name=>{
-                obj = Object.assign(obj,{name:name});
-                resolve(obj)
-            }).catch(err=>{
-                reject(new Error('get token name failed'))
-            });
-        })
-    }).then(obj=>{
-        return new Promise((resolve, reject) => {
-            // fetch token decimals
-            token_contract.methods.decimals().call({}).then(decimals=>{
-                obj = Object.assign(obj,{tokenDecimal:decimals});
-                resolve(obj)
-            }).catch(err=>{
-                reject(new Error('get token decimals failed'))
-            });
-        })
-    });
-}
+const fetchTokenDetail = (contract_address, network) => new Promise((resolve, reject) => {
+    const contract = new Contract(CONTRACT_ABI);
+    const requestGetSymbol = processRequest('eth_call', [
+        {to:contract_address, data:contract.methods.symbol().encodeABI()},
+        'latest'
+    ]);
+    const requestGetName = processRequest('eth_call', [
+        {to:contract_address, data:contract.methods.name().encodeABI()},
+        'latest'
+    ]);
+    const requestGetDecimals = processRequest('eth_call', [
+        {to:contract_address, data:contract.methods.decimals().encodeABI()},
+        'latest'
+    ]);
+    const url = getEndpoint(network);
+    let promiseSymbol = ApiCaller.post(url, requestGetSymbol, true);
+    let promiseName = ApiCaller.post(url, requestGetName, true);
+    let promiseDecimals = ApiCaller.post(url, requestGetDecimals, true);
+    console.log('[AION get token detail req]:', getEndpoint(network));
+    axios.all([promiseSymbol,promiseName,promiseDecimals]).then(axios.spread(function (symbolRet, nameRet, decimalsRet) {
+        if(symbolRet.data.result&&nameRet.data.result&&decimalsRet.data.result){
+            console.log('[get token symobl resp]=>',symbolRet.data);
+            console.log('[get token name resp]=>',nameRet.data);
+            console.log('[get token decimals resp]=>',decimalsRet.data);
+            const symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
+            const name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            const decimals = AbiCoder.decodeParameter('uint8',decimalsRet.data.result);
+            resolve({contractAddr:contract_address,symbol,name,decimals})
+        }else {
+            reject("get token detail failed");
+        }
+    })).catch(e=>{
+        reject("get token detail failed",e);
+    })
+});
 
 function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=0, size=25){
     return new Promise((resolve, reject) => {

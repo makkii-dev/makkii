@@ -2,7 +2,7 @@ import {strings} from '../../../locales/i18n';
 import { connect } from 'react-redux';
 import React, {Component} from 'react';
 import {View, FlatList, StyleSheet, PixelRatio, TouchableOpacity, Dimensions, Text, Image} from 'react-native';
-import {fetchAccountTokenBalance, accountKey} from '../../../utils';
+import {accountKey} from '../../../utils';
 import Loading from '../../loading';
 import SwipeableRow from '../../swipeCell';
 import {RightActionButton} from '../../common';
@@ -10,7 +10,7 @@ import {mainBgColor, fixedHeight} from '../../style_util';
 import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
 import {COINS} from '../../../coins/support_coin_list';
-
+import {fetchAccountTokenBalance} from '../../../coins/api';
 const {width} = Dimensions.get('window');
 
 class SelectCoin extends Component {
@@ -85,7 +85,7 @@ class SelectCoin extends Component {
 
                             this.loadingView.show();
                             // fetch account balance
-                            fetchAccountTokenBalance(tokens[key].contractAddr, this.account.address)
+                            fetchAccountTokenBalance(this.account.symbol,tokens[key].contractAddr, this.account.address)
                             .then(res => {
                                 if (!res.eq(new BigNumber(0))) {
                                     this.loadingView.hide();

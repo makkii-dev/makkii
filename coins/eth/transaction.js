@@ -4,7 +4,7 @@ import keyStore from "react-native-makkii-core";
 import ApiCaller from "../../utils/http_caller";
 import {Contract} from "web3-eth-contract";
 import {ERC20ABI} from "./token";
-import BigNumber from "../aion/transaction";
+import BigNumber from "bignumber.js";
 
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
 const getEtherscanBaseUrl=(network)=> {

@@ -15,9 +15,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fetchAccountTokenBalance, fetchAccountTokenTransferHistory, getStatusBarHeight, navigationSafely} from "../../../utils";
-import {getTransactionsByAddress} from '../../../coins/api';
-import {fetchAccountTokens, accountKey} from '../../../utils';
+import {fgetStatusBarHeight, navigationSafely,accountKey} from "../../../utils";
 import Loading from '../../loading';
 import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
@@ -29,7 +27,7 @@ import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
 import {TransactionItem} from '../../common';
 import {COINS} from '../../../coins/support_coin_list';
-import {formatAddress1Line} from '../../../coins/api';
+import {getTransactionsByAddress,formatAddress1Line,fetchAccountTokenBalance,fetchAccountTokenTransferHistory,fetchAccountTokens} from '../../../coins/api';
 
 const {width} = Dimensions.get('window');
 
@@ -203,7 +201,7 @@ class Account extends Component {
 		if (COINS[this.account.symbol].tokenSupport) {
 			// load account's token list
 			let explorer_server = this.props.setting.explorer_server;
-			fetchAccountTokens(this.addr, explorer_server).then(res => {
+			fetchAccountTokens(this.account.symbol, this.addr, explorer_server).then(res => {
 				console.log("fetch account tokens: ", res);
 				const {dispatch, user} = this.props;
 				let newTokens;
@@ -214,7 +212,7 @@ class Account extends Component {
 				}
 				dispatch(update_account_tokens(this.account_key, newTokens, this.props.setting.explorer_server, user.hashed_password));
 			}, err => {
-				console.log("fetch token list failed: ", e);
+				console.log("fetch token list failed: ", err);
 			});
 		}
 		this.isMount = true;
@@ -315,7 +313,7 @@ class Account extends Component {
 				}
 				this.loadingView.show(strings('select_coin.progress_switching_coin'));
 				let tokens = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server];
-				fetchAccountTokenBalance(tokens[symbol].contractAddr, this.account.address).then(res => {
+				fetchAccountTokenBalance(this.account.symbol, tokens[symbol].contractAddr, this.account.address).then(res => {
 					console.log("fetched token balance: " + res);
 
 					const {dispatch, user} = this.props;
@@ -344,6 +342,7 @@ class Account extends Component {
 		const {accounts,dispatch,user} = this.props;
 		if (tokenSymbol === this.account.symbol) {
 			getTransactionsByAddress(this.account.symbol, address, page, size).then(txs => {
+				console.log('txs+++++++++++++++++++++++=>', txs);
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
@@ -366,7 +365,7 @@ class Account extends Component {
 			// currently only support aion token
 		    let tokens = accounts[this.account_key].tokens[explorer_server];
 			const {contractAddr, tokenTxs} = tokens[tokenSymbol];
-			fetchAccountTokenTransferHistory(address, contractAddr, explorer_server, page, size).then(txs => {
+			fetchAccountTokenTransferHistory(this.account.symbol, address, contractAddr, null, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
@@ -440,6 +439,7 @@ class Account extends Component {
 	}
 
 	renderTransactions(transactionsList){
+		console.log('transcationList=>', transactionsList);
 		if(this.state.loading){
 			return(
 				<View style={{
@@ -508,7 +508,7 @@ class Account extends Component {
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
 		type==='[ledger]'?ACCOUNT_MENU.slice(0,1):ACCOUNT_MENU
-		var menuArray = [ACCOUNT_MENU[0]];
+		let menuArray = [ACCOUNT_MENU[0]];
 		if (type !== '[ledger]') {
 			menuArray.push(ACCOUNT_MENU[1]);
 		}
