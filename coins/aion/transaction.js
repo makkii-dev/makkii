@@ -31,7 +31,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network) {
                     promise = aionTx.signByECKey(private_key);
                 }
             } catch (err) {
-                console.log("aion sign tx failed: ", e);
+                console.log("aion sign tx failed: ", err);
                 throw (err);
             }
             promise.then(encoded =>{
