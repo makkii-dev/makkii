@@ -68,7 +68,6 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params, netwo
         }
         resolve({result: true});
     })
-
 }
 
 module.exports = {

@@ -15,7 +15,7 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {fgetStatusBarHeight, navigationSafely,accountKey} from "../../../utils";
+import {getStatusBarHeight, navigationSafely,accountKey} from "../../../utils";
 import Loading from '../../loading';
 import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
@@ -164,57 +164,49 @@ class Account extends Component {
 	    const title = navigation.getParam('title');
 	    const type = navigation.getParam('type','[local]' );
 	    const showMenu  = navigation.getParam('showMenu', ()=>{});
+	    const hasMenu = navigation.getParam('hasMenu');
 		return {
 	    	headerTitle: <ImageHeader title={title} type={type}/>,
-			headerRight: (<TouchableOpacity
-				style={{width: 48,
-					height: 48,
-					alignItems: 'center',
-					justifyContent: 'center',}}
-				onPress={()=>{showMenu()}}
-			>
-				<Image source={require('../../../assets/icon_account_menu.png')} style={{width:30,height:30, tintColor:'#fff'}} resizeMode={'contain'}/>
-			</TouchableOpacity>),
+			headerRight: (
+                    <TouchableOpacity
+                        style={{width: 48,
+                            height: 48,
+                            alignItems: 'center',
+                            justifyContent: 'center',}}
+                        onPress={()=> {if (hasMenu) showMenu(); }}
+                    >
+						{
+							hasMenu ?
+								<Image source={require('../../../assets/icon_account_menu.png')}
+									   style={{width: 30, height: 30, tintColor: '#fff'}} resizeMode={'contain'}/>
+								: null
+						}
+                    </TouchableOpacity>
+			),
 	    };
     };
 	constructor(props){
 		super(props);
 		this.account = this.props.navigation.state.params.account;
-		this.addr= this.account.address;
+		this.token = this.props.navigation.state.params.token;
+
 		this.account_key = accountKey(this.account.symbol, this.account.address);
 		this.isMount = false;
+
 		this.state={
 			refreshing: false,
 			loading: true,
 			showMenu: false,
-			tokenSymbol: this.account.symbol,
-			tokenBalance: new BigNumber(this.account.balance).toNotExString(),
 		};
 		this.props.navigation.setParams({
 			title: this.account.name,
 			type: this.account.type,
-			showMenu: ()=>this.openMenu(),
+			showMenu: this.openMenu,
+            hasMenu: !COINS[this.account.symbol].tokenSupport
 		})
 	}
 	componentWillMount(){
-		this.fetchAccountTransactions(this.addr);
-		if (COINS[this.account.symbol].tokenSupport) {
-			// load account's token list
-			let explorer_server = this.props.setting.explorer_server;
-			fetchAccountTokens(this.account.symbol, this.addr, explorer_server).then(res => {
-				console.log("fetch account tokens: ", res);
-				const {dispatch, user} = this.props;
-				let newTokens;
-				if (this.props.accounts[this.account_key].tokens) {
-					newTokens = Object.assign({}, res, this.props.accounts[this.account_key].tokens[explorer_server]);
-				} else {
-					newTokens = res;
-				}
-				dispatch(update_account_tokens(this.account_key, newTokens, this.props.setting.explorer_server, user.hashed_password));
-			}, err => {
-				console.log("fetch token list failed: ", err);
-			});
-		}
+        this.fetchAccountTransactions(this.account.address);
 		this.isMount = true;
 	}
 
@@ -271,12 +263,6 @@ class Account extends Component {
 							args:{privateKey: this.account.private_key},
 						});
 					break;
-				case ACCOUNT_MENU[2].title:
-				    navigation.navigate('signed_select_coin', {
-				    	account: this.account,
-						coinSelected: this.coinSelected,
-				    });
-					break;
 				default:
 			}
 		})
@@ -286,8 +272,7 @@ class Account extends Component {
 		Keyboard.dismiss();
 		this.props.navigation.navigate('signed_vault_send', {
 			account: this.account,
-			tokenSymbol: this.state.tokenSymbol,
-			coinSelected: this.coinSelected,
+			token: this.token,
 		});
 	}
 
@@ -295,54 +280,15 @@ class Account extends Component {
 		Keyboard.dismiss();
 		this.props.navigation.navigate('signed_vault_receive', {
 		    account: this.account,
-			tokenSymbol: this.state.tokenSymbol,
-			coinSelected: this.coinSelected,
+			token: this.token,
 		});
 	}
 
-	coinSelected = (symbol)=> {
-	    if (this.state.tokenSymbol !== symbol) {
-			if (symbol === 'AION') {
-				this.setState({
-					tokenBalance: new BigNumber(this.account.balance).toNotExString(),
-					tokenSymbol: symbol
-				})
-			} else {
-			    const callback = () => {
-			    	this.loadingView.hide();
-				}
-				this.loadingView.show(strings('select_coin.progress_switching_coin'));
-				let tokens = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server];
-				fetchAccountTokenBalance(this.account.symbol, tokens[symbol].contractAddr, this.account.address).then(res => {
-					console.log("fetched token balance: " + res);
-
-					const {dispatch, user} = this.props;
-					tokens[symbol].balance = res.shiftedBy(-(tokens[symbol].tokenDecimal - 0));
-					console.log("/18:" + tokens[symbol].balance);
-					dispatch(update_account_tokens(this.account_key, tokens, this.props.setting.explorer_server, user.hashed_password));
-
-					this.fetchAccountTransactions(this.account.address, 0, 5, symbol, {
-						tokenBalance: tokens[symbol].balance.toNotExString(),
-						tokenSymbol: symbol
-					}, callback);
-				}).catch(err => {
-					console.log("fetch token balance error", err);
-					this.setState();
-					this.fetchAccountTransactions(this.account.address, 0, 5, symbol, {
-						tokenBalance: tokens[symbol].balance ? tokens[symbol].balance.toNotExString() : '--.-',
-						tokenSymbol: symbol
-					},callback);
-				});
-			}
-		}
-	}
-
-	fetchAccountTransactions = (address, page=0, size=5, tokenSymbol=this.state.tokenSymbol,obj={}, callback=()=>{})=>{
+	fetchAccountTransactions = (address, page=0, size=5, obj={}, callback=()=>{})=>{
 		const {explorer_server} = this.props.setting;
 		const {accounts,dispatch,user} = this.props;
-		if (tokenSymbol === this.account.symbol) {
+		if (this.token === undefined) {
 			getTransactionsByAddress(this.account.symbol, address, page, size).then(txs => {
-				console.log('txs+++++++++++++++++++++++=>', txs);
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
@@ -363,15 +309,14 @@ class Account extends Component {
 			});
 		} else {
 			// currently only support aion token
-		    let tokens = accounts[this.account_key].tokens[explorer_server];
-			const {contractAddr, tokenTxs} = tokens[tokenSymbol];
+			const {contractAddr, tokenTxs} = this.token;
 			fetchAccountTokenTransferHistory(this.account.symbol, address, contractAddr, null, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
 
-				tokens[tokenSymbol].tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
+				this.token.tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
 				dispatch(update_account_tokens(this.account_key, tokens, this.props.setting.explorer_server, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
@@ -411,7 +356,7 @@ class Account extends Component {
 			return (
 				<TouchableOpacity style={{flex: 1}} onPress={()=>{
 					this.setState({loading:true},()=>{
-						setTimeout(()=>this.fetchAccountTransactions(this.addr),500);
+						setTimeout(()=>this.fetchAccountTransactions(this.account.address),500);
 					})
 				}}>
 					<View style={{
@@ -465,15 +410,15 @@ class Account extends Component {
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=><TransactionItem
 						transaction={item}
-						currentAddr={this.addr}
-						symbol={this.state.tokenSymbol}
+						currentAddr={this.account.address}
+						symbol={this.token === undefined? this.account.symbol: this.token.symbol}
 						account={this.account}
 						onPress={()=>{
 							Keyboard.dismiss();
 							this.props.navigation.navigate('signed_vault_transaction',{
 								account:this.account,
 								transaction: item,
-                                symbol: this.state.tokenSymbol
+                                token: this.token
 							});
 						}}/>}
 					refreshControl={
@@ -491,29 +436,27 @@ class Account extends Component {
 	render(){
 		const {navigation, setting, accounts} = this.props;
 		const {address, transactions, type, symbol} = this.account;
-		let transactionsList;
+		let transactionsList, accountBalanceText;
 		let compareFn = (a, b) => {
 		    if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
 		    if (b.timestamp === undefined && a.timestamp === undefined) return 0;
 		    if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
 		    return b.timestamp - a.timestamp;
 		};
-		if (this.state.tokenSymbol === this.account.symbol) {
+		if (this.token === undefined) {
 			transactionsList = transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
+			accountBalanceText = new BigNumber(accounts[this.account_key].balance).toNotExString() + ' ' + this.account.symbol;
 		} else {
-		    let tokenTxs = accounts[this.account_key].tokens[setting.explorer_server][this.state.tokenSymbol].tokenTxs;
+		    let tokenTxs = accounts[this.account_key].tokens[setting.explorer_server][this.token.symbol].tokenTxs;
             transactionsList = tokenTxs? Object.values(tokenTxs).sort(compareFn).slice(0,5):[];
+
+			accountBalanceText = new BigNumber(accounts[this.account_key].tokens[setting.explorer_server][this.token.symbol].balance) + ' ' + this.token.symbol;
 		}
-		const accountBalanceText = this.state.tokenBalance + ' ' + this.state.tokenSymbol;
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
-		type==='[ledger]'?ACCOUNT_MENU.slice(0,1):ACCOUNT_MENU
 		let menuArray = [ACCOUNT_MENU[0]];
 		if (type !== '[ledger]') {
 			menuArray.push(ACCOUNT_MENU[1]);
-		}
-		if (COINS[symbol].tokenSupport) {
-			menuArray.push(ACCOUNT_MENU[2]);
 		}
 
 		return (
@@ -550,7 +493,7 @@ class Account extends Component {
 								onPress={()=>{
 									this.props.navigation.navigate('signed_vault_transaction_history', {
 										account: this.account,
-										symbol: this.state.tokenSymbol,
+										token: this.token,
 									})
 								}}
 							>

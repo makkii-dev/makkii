@@ -55,12 +55,12 @@ class Receive extends Component {
 		super(props);
 		this.qrcodeRef = null;
 		this.account = this.props.navigation.state.params.account;
+		this.token = this.props.navigation.state.params.token;
 		this.addr=this.account.address;
-		let tokenSymbol = this.props.navigation.getParam('tokenSymbol');
+		this.unit = this.token === undefined? this.account.symbol: this.token.symbol;
 		this.state={
 			amount: '0',
-			qrCodeValue: generateQRCode('0', this.addr, tokenSymbol),
-			unit: tokenSymbol,
+			qrCodeValue: generateQRCode('0', this.addr, this.unit),
 		}
 
 	}
@@ -74,7 +74,7 @@ class Receive extends Component {
 
 		// refresh
 		this.setState({
-			qrCodeValue: generateQRCode(this.state.amount, this.addr, this.state.unit),
+			qrCodeValue: generateQRCode(this.state.amount, this.addr, this.unit),
 		})
 	}
 	longPressCode() {
@@ -110,23 +110,6 @@ class Receive extends Component {
                 });
             });
 		}
-	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
-	}
-	coinSelected=(tokenSymbol)=>{
-		let superCoinSelected = this.props.navigation.getParam('coinSelected');
-		superCoinSelected(tokenSymbol);
-		this.setState({
-			unit: tokenSymbol
-		})
-	}
-	toChangeToken=() => {
-		this.props.navigation.navigate('signed_select_coin', {
-			account: this.account,
-			coinSelected: this.coinSelected,
-		});
 	}
 	render(){
 		return (
@@ -189,8 +172,7 @@ class Receive extends Component {
 										<Image source={require('../../../assets/refresh.png')} style={{width:20,height:20,tintColor:linkButtonColor}} resizeMode={'contain'}/>
 									</TouchableOpacity>
 								}
-								unit={this.state.unit}
-								changeUnit={COINS[this.account.symbol].tokenSupport?this.toChangeToken:undefined}
+								unit={this.unit}
 							/>
 						</View>
 					</View>

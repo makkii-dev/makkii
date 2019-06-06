@@ -6,6 +6,7 @@ import {
 	ACCOUNTS_ADD,
 	ACCOUNTS_SAVE,
 	UPDATE_ACCOUNT_NAME,
+	UPDATE_ACCOUNT_BALANCE,
 	DEL_ACCOUNT,
 	DEL_ACCOUNTS,
 	DEL_ACCOUNT_TOKEN,
@@ -37,6 +38,13 @@ export default function accounts(state = init, action){
 			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
+		case UPDATE_ACCOUNT_BALANCE:
+			if (typeof state[action.key] !== 'undefined') {
+				state[action.key].balance = action.newBalance;
+			}
+			new_state = Object.assign({}, state);
+			should_update_db = true;
+			break;
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
 				// only keep 10 latest txs
@@ -58,7 +66,13 @@ export default function accounts(state = init, action){
 		    if (typeof state[action.key] !== 'undefined') {
 				let transactions = Object.assign({}, state[action.key].tokens[action.network][action.symbol].tokenTxs, action.transactions);
 				let new_transactions = {};
-				Object.values(transactions).sort((a,b)=>b.timestamp - a.timestamp).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
+				let compareFn = (a, b) => {
+					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+					if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+					if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+					return b.timestamp - a.timestamp;
+				};
+				Object.values(transactions).sort(compareFn).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
 				state[action.key].tokens[action.network][action.symbol].tokenTxs = new_transactions;
 			}
 		    new_state = Object.assign({}, state);
@@ -96,11 +110,11 @@ export default function accounts(state = init, action){
 			break;
 	}
 	// if no isDefault prop , set it false;
-	Object.values(new_state).map(v=>{
-		if(!v.isDefault){
-			v.isDefault = false;
-		}
-	});
+	// Object.values(new_state).map(v=>{
+	// 	if(!v.isDefault){
+	// 		v.isDefault = false;
+	// 	}
+	// });
 
 	if(should_update_db){
 		AsyncStorage.setItem(

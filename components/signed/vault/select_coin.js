@@ -6,10 +6,10 @@ import {accountKey} from '../../../utils';
 import Loading from '../../loading';
 import SwipeableRow from '../../swipeCell';
 import {mainBgColor, fixedHeight} from '../../style_util';
-import {update_account_tokens, delete_account_token} from '../../../actions/accounts';
+import {delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
 import {COINS} from '../../../coins/support_coin_list';
-import {fetchAccountTokenBalance, searchToken, getTokenIconUrl} from '../../../coins/api';
+import {fetchAccountTokenBalance, searchTokens, getTopTokens, getTokenIconUrl} from '../../../coins/api';
 import FastImage from 'react-native-fast-image';
 
 const {width} = Dimensions.get('window');
@@ -29,7 +29,6 @@ class SelectCoin extends Component {
                         value={navigation.state.params.searchstring}
                         placeholder={strings('select_coin.placeholder_search_token')}
                         onChangeText={e=> {
-                            console.log("onChangeText");
                             navigation.setParams({
                                 isClearable: e.length > 0,
                                 searchstring: e,
@@ -71,7 +70,6 @@ class SelectCoin extends Component {
             isLoading: true,
             openRowKey: null,
             tokens: [],
-            searchString: '',
         };
         this.props.navigation.setParams({
             searchToken: this.searchToken,
@@ -84,23 +82,34 @@ class SelectCoin extends Component {
             position: 'top'
         });
 
-        searchToken(this.account.symbol, keyword).then(res => {
-            loadingView.hide();
-            if (res.length === 0) {
-                Keyboard.dismiss();
-            }
-            this.setState({
-                searchString: keyword,
-                tokens: res,
+        if (keyword.length !== 0) {
+            searchTokens(this.account.symbol, keyword).then(res => {
+                console.log("search token res,", res);
+                loadingView.hide();
+                if (res.length === 0) {
+                    Keyboard.dismiss();
+                }
+                this.setState({
+                    tokens: res,
+                });
+            }).catch(err => {
+                console.log("search token failed:", err);
+                loadingView.hide();
             });
-        }).catch(err => {
-            console.log("search token failed:", err);
-            loadingView.hide();
-        });
+        } else {
+            getTopTokens(this.account.symbol).then(res => {
+                loadingView.hide();
+                this.setState({
+                    tokens: res,
+                });
+            }).catch(err => {
+                loadingView.hide();
+            });
+        }
     }
 
     async componentWillMount() {
-        searchToken(this.account.symbol).then(res => {
+        getTopTokens(this.account.symbol).then(res => {
             this.setState({
                 isLoading: false,
                 tokens: res,
@@ -198,8 +207,8 @@ class SelectCoin extends Component {
         }
         return (
                 <SwipeableRow maxSwipeDistance={fixedHeight(186)}
-                          onOpen={()=>this.onSwipeOpen(item.symbol)}
-                          onClose={()=>this.onSwipeClose(item.symbol)}
+                          onOpen={()=>this.onSwipeOpen(item.address)}
+                          onClose={()=>this.onSwipeClose(item.address)}
                           slideoutView={
                               <View style={{
                                   flexDirection: 'row',
@@ -224,7 +233,7 @@ class SelectCoin extends Component {
                                   </TouchableOpacity>
                               </View>
                           }
-                          isOpen={item.symbol === this.state.openRowKey}
+                          isOpen={item.address === this.state.openRowKey}
                           swipeEnabled={/*this.state.openRowKey === null && index !== 0*/false}
                           preventSwipeRight={true}
                           shouldBounceOnMount={true}
@@ -272,7 +281,7 @@ class SelectCoin extends Component {
                                        resizeMode={'contain'}
                                 />
                         }
-                        <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.name + '(' + item.symbol + ')'}</Text>
+                        <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.symbol + '-' + item.name}</Text>
                     </View>
                     {/*<Image style={{width: 24, height: 24}}*/}
                            {/*source={require('../../../assets/arrow_right.png')} />*/}
@@ -315,7 +324,7 @@ class SelectCoin extends Component {
                     data={this.state.tokens}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={() => <View style={styles.divider}/>}
-                    keyExtractor={(item, index) => item.symbol}
+                    keyExtractor={(item, index) => item.contractAddr}
                 />
             </TouchableOpacity>
         )

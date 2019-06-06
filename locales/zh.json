@@ -113,7 +113,7 @@
     "cancel": "取消",
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？",
     "warning_send_zero": "您的发送金额为０，请确认是否继续？",
-    "toast_unsupported_token": "不支持的Token: {{token}}"
+    "toast_unsupported_token": "不支持的代币: {{token}}"
   },
   "transaction_detail": {
     "title": "交易详情",

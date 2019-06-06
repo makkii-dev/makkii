@@ -9,8 +9,8 @@ import {
     Dimensions, Keyboard,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
-import {fetchAccountTokenTransferHistory, accountKey} from "../../../utils";
-import {getTransactionsByAddress} from "../../../coins/api";
+import {accountKey} from "../../../utils";
+import {getTransactionsByAddress, fetchAccountTokenTransferHistory} from "../../../coins/api";
 import {connect} from "react-redux";
 import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
@@ -32,6 +32,7 @@ class TransactionHistory extends React.Component {
     constructor(props){
         super(props);
         this.account = this.props.navigation.state.params.account;
+        this.token = this.props.navigation.state.params.token;
         this.account_key = accountKey(this.account.symbol, this.account.address);
     }
 
@@ -52,16 +53,12 @@ class TransactionHistory extends React.Component {
         let {currentPage,transactions} = this.state;
         const {explorer_server} = this.props.setting;
         console.log('get transactions page: '+page+' size: '+size);
-        let symbol = this.props.navigation.getParam('symbol');
-        console.log("account:", account);
-        console.log("symbol:" + symbol);
+
         let promise;
-        if (symbol === this.account.symbol) {
-            promise = getTransactionsByAddress(this.account.symbol, this.account.address, page, size);
+        if (this.token === undefined) {
+            promise = getTransactionsByAddress(account.symbol, account.address, page, size);
         } else {
-            let token = this.props.accounts[this.account_key].tokens[explorer_server][symbol];
-            console.log("token: ", token);
-            promise = fetchAccountTokenTransferHistory(this.account.address, token.contractAddr, explorer_server, page, size);
+            promise = fetchAccountTokenTransferHistory(account.symbol, account.address, this.token.contractAddr, null, page, size);
         }
         promise.then(txs => {
             if (Object.keys(txs).length === 0) {
@@ -122,7 +119,6 @@ class TransactionHistory extends React.Component {
         if (this.state.isLoading) {
             return this.renderLoadingView();
         } else {
-            let symbol = this.props.navigation.getParam('symbol');
             let transactions;
             let compareFn = (a, b) => {
                 if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
@@ -130,11 +126,11 @@ class TransactionHistory extends React.Component {
                 if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
                 return b.timestamp - a.timestamp;
             };
-            if (symbol === this.account.symbol) {
+            if (this.token === undefined) {
                 let propTxs = this.props.accounts[this.account_key].transactions[this.props.setting.explorer_server];
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             } else {
-                let propTxs = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][symbol].tokenTxs;
+                let propTxs = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.token.symbol].tokenTxs;
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             }
             return (
@@ -146,7 +142,7 @@ class TransactionHistory extends React.Component {
                             keyExtractor={(item, index) => index + ''}
                             renderItem={({item})=><TransactionItem
                                 account={this.account}
-                                symbol={symbol}
+                                symbol={this.token === undefined? this.account.symbol: this.token.symbol}
                                 transaction={item}
                                 currentAddr={this.account.address}
                                 onPress={()=>{
@@ -154,7 +150,7 @@ class TransactionHistory extends React.Component {
                                     this.props.navigation.navigate('signed_vault_transaction',{
                                         account:this.account,
                                         transaction: item,
-                                        symbol: this.props.navigation.getParam('symbol'),
+                                        token: this.token,
                                     });
                                 }}/>}
                             onEndReached={() => {

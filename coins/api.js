@@ -69,6 +69,7 @@ function getBalance(coinType, address) {
 function sendTransaction(account, symbol, to, value, extra_params, data=undefined) {
     let coin =  COINS[account.symbol.toUpperCase()];
     if (coin.api !== undefined && coin.api.sendTransaction !== undefined) {
+        console.log("network1:" + coin.network);
         return coin.api.sendTransaction(account, symbol, to, value, extra_params, data, coin.network);
     } else {
         throw new Error('No sendTransaction impl for coin ' + coinType);
@@ -157,8 +158,17 @@ function fetchAccountTokenBalance(coinType, contract_address, address, network){
     }
 }
 
+function getTopTokens(coinType, topN=20) {
+    let coin =  COINS[coinType.toUpperCase()];
+    if (coin.api !== undefined && coin.api.getTopTokens !== undefined) {
+        return coin.api.getTopTokens(topN, coin.network);
+    } else {
+        throw new Error('No getTopTokens impl for coin ' + coinType);
+    }
 
-function searchToken(symbol, keyword=undefined) {
+}
+
+function searchTokens(symbol, keyword) {
     let coin = COINS[symbol.toUpperCase()];
     if (coin.api !== undefined && coin.api.searchTokens !== undefined) {
         return coin.api.searchTokens(keyword, coin.network);
@@ -184,6 +194,7 @@ module.exports = {
     fetchAccountTokenTransferHistory,
     fetchAccountTokens,
     fetchAccountTokenBalance,
-    searchToken,
+    searchTokens,
+    getTopTokens,
     getTokenIconUrl,
 };

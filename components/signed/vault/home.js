@@ -301,6 +301,7 @@ class Home extends HomeComponent {
 	}
 
 	fetchAccountsBalance = ()=> {
+		// TODO: also update token's balance
 		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
 		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
@@ -334,13 +335,9 @@ class Home extends HomeComponent {
 				let newAccounts={};
 				let totalBalance=new BigNumber(0);
 				res.forEach(account=>{
-				    console.log("account:",account);
 					let account_key = accountKey(account.symbol, account.address);
 					// check if delete
 					if (this.props.accounts[account_key]){
-						console.log("account.balance:", account.balance);
-						console.log("setting:", this.props.setting.coinPrices);
-						console.log("coinprice:" + this.props.setting.coinPrices[account.symbol]);
 						totalBalance = totalBalance.plus(account.balance.multipliedBy(new BigNumber(this.props.setting.coinPrices[account.symbol])));
 						newAccounts[account_key] = account;
 					}

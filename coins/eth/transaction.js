@@ -2,11 +2,26 @@ import {getTransactionReceipt, getTransactionCount, sendSignedTransaction} from 
 import {appendHexStart, toHex} from '../../utils';
 import keyStore from "react-native-makkii-core";
 import ApiCaller from "../../utils/http_caller";
-import {Contract} from "web3-eth-contract";
+import Contract from "web3-eth-contract";
 import {ERC20ABI} from "./token";
 import BigNumber from "bignumber.js";
 
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
+const getChainId=(network)=> {
+    if (network.toLowerCase() === 'morden') {
+        return 2;
+    } else if (network.toLowerCase() === 'ropsten') {
+        return 3;
+    } else if (network.toLowerCase() === 'rinkeby') {
+        return 4;
+    } else if (network.toLowerCase() === 'goerli') {
+        return 5;
+    } else if (network.toLowerCase() === 'kovan') {
+        return 42;
+    } else {
+        return 1;
+    }
+}
 const getEtherscanBaseUrl=(network)=> {
     if (network === 'mainnet') {
         return `https://api.etherscan.io/api`;
@@ -14,19 +29,24 @@ const getEtherscanBaseUrl=(network)=> {
         return `https://api-${network}.etherscan.io/api`
     }
 }
-function sendNativeTx(account, symbol, to, value, gasPrice, gasLimit, data, network='mainnet') {
+
+
+
+function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network='mainnet') {
     return new Promise((resolve, reject) => {
         getTransactionCount(account.address, 'latest', network).then(count=> {
-            console.log("private key:" + account.private_key);
             let tx = {
-                chainID: toHex(3),
+                chainID: toHex(getChainId(network)),
                 amount: toHex(value.shiftedBy(18)),
                 nonce: toHex(count),
-                gasLimit: gasPrice,
-                gasPrice: gasLimit,
+                gasLimit: toHex(gasLimit),
+                gasPrice: toHex(gasPrice),
                 to: toHex(to),
                 private_key: account.private_key,
             };
+            if (data !== undefined) {
+                tx = { ...tx, data: data};
+            }
             keyStore.signTransaction(tx, 60).then(res=> {
                 const {v, r, s, encoded} = res;
                 console.log("sign result:");
@@ -42,25 +62,30 @@ function sendNativeTx(account, symbol, to, value, gasPrice, gasLimit, data, netw
                         status: 'PENDING',
                     };
                     resolve({pendingTx});
+                }).catch(e => {
+                    console.log("send signed tx:", e);
+                    reject(e);
                 });
             }).catch(e=> {
                 console.log("sign error:", e);
                 reject(e);
             });
         }).catch(err=> {
+            console.log("get tx count error:", err);
             reject(err);
         });
     });
 }
 
-function sendTokenTx(account, symbol, to ,value, gasPrice, gasLimit, data, network='mainnet'){
-    const tokens = account.tokens[network];
+function sendTokenTx(account, symbol, to ,value, gasPrice, gasLimit, network='mainnet'){
+    // TODO: should remove mainnet after remove explorer_server
+    const tokens = account.tokens['mainnet'];
     const {contractAddr, tokenDecimal} = tokens[symbol];
 
-    const token_contract = new Contract(undefined, ERC20ABI, contractAddr);
-    const methodsData = token_contract.methods.transfer(account.address, to, value.shiftedBy(tokenDecimal + 0).toFixed(0).toString()).encodeABI();
+    const token_contract = new Contract(ERC20ABI, contractAddr);
+    const methodsData = token_contract.methods.transfer(to, value.shiftedBy(tokenDecimal - 0).toFixed(0).toString()).encodeABI();
     return new Promise((resolve, reject) => {
-        sendNativeTx(account, contractAddr, new BigNumber(0), gasPrice, gasLimit, methodsData).then(res=> {
+        sendNativeTx(account, contractAddr, new BigNumber(0), gasPrice, gasLimit, methodsData, network).then(res=> {
             let pendingTx = res.pendingTx;
             let pendingTokenTx = {
                 hash: pendingTx.hash,
@@ -127,10 +152,14 @@ function getTransactionUrlInExplorer(txHash, network='mainnet') {
 function getTransactionStatus(txHash, network='mainnet') {
     return new Promise((resolve, reject) => {
         getTransactionReceipt(txHash, network).then(receipt => {
-            resolve({
-                status: receipt.status === '0x01'? true: false,
-                blockNumber: receipt.blockNumber,
-            });
+            if (receipt !== null) {
+                resolve({
+                    status: parseInt(receipt.status, 16) === 1 ? true : false,
+                    blockNumber: parseInt(receipt.blockNumber, 16),
+                });
+            } else {
+                resolve(null);
+            }
         }).catch(err => {
            reject(err);
         });

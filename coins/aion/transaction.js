@@ -76,7 +76,7 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
 }
 
 function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network='mainnet'){
-    const tokens = account.tokens[network];
+    const tokens = account.tokens['mainnet'];
     const {contractAddr, tokenDecimal} = tokens[symbol];
 
     // TODO: how to remove web3 here?
@@ -84,7 +84,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network='ma
     const methodsData = token_contract.methods.send(to,value.shiftedBy(tokenDecimal + 0).toFixed(0).toString(),"").encodeABI();
 
     return new Promise((resolve, reject)=> {
-        sendNativeTx(account, contractAddr, new BigNumber(0), gasPrice, gasLimit, methodsData).then(res=> {
+        sendNativeTx(account, contractAddr, new BigNumber(0), gasPrice, gasLimit, methodsData, network).then(res=> {
             let pendingTx = res.pendingTx;
             let pendingTokenTx = {
                 hash: pendingTx.hash,
@@ -136,10 +136,14 @@ function getTransactionUrlInExplorer(txHash, network='mainnet') {
 function getTransactionStatus(txHash, network='mainnet') {
     return new Promise((resolve, reject) => {
         getTransactionReceipt(txHash, network).then(receipt => {
-            resolve({
-                status: receipt.status === '0x01'? true: false,
-                blockNumber: receipt.blockNumber,
-            });
+            if (receipt !== null) {
+                resolve({
+                    status: parseInt(receipt.status, 16) === 1 ? true : false,
+                    blockNumber: parseInt(receipt.blockNumber, 16),
+                });
+            } else {
+                resolve(null);
+            }
         }).catch(err => {
             reject(err);
         });

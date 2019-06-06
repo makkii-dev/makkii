@@ -126,6 +126,7 @@ export class listenTransaction{
                 removeTransaction(tx);
             }
             getTransactionStatus(symbol, tx.hash).then(res=>{
+                console.log("status res:", res);
                     if(res){
                         tx.blockNumber = res.blockNumber;
                         if (res.status === true) {
@@ -137,14 +138,12 @@ export class listenTransaction{
                                     let blockNumberInterval = setInterval(() => {
                                         getBlockNumber(symbol).then(
                                             number => {
-                                                console.log('blocknumber: ', number);
                                                 if (number > tx.blockNumber + 12) {
                                                     tx.status = 'CONFIRMED';
                                                     // special handling for ethereum to get tx timestamp
                                                     if (symbol === 'ETH') {
                                                         getBlockByNumber(symbol, tx.blockNumber).then(res => {
                                                             tx.timestamp = fromHexString(res.timestamp, 16) * 1000;
-                                                            console.log("tx.timestamp:" + tx.timestamp);
                                                             updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
                                                             clearInterval(blockNumberInterval);
                                                         }, err => {
@@ -153,6 +152,8 @@ export class listenTransaction{
                                                             clearInterval(blockNumberInterval);
                                                         });
                                                     } else {
+
+
                                                         updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
                                                         clearInterval(blockNumberInterval);
                                                     }
@@ -164,8 +165,19 @@ export class listenTransaction{
                             }
                         } else {
                             if (thusMap[hashKey]) {
-                                tx.status = 'FAILED';
-                                updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                if (symbol === 'ETH') {
+                                    getBlockByNumber(symbol, tx.blockNumber).then(res => {
+                                        tx.timestamp = fromHexString(res.timestamp, 16) * 1000;
+                                        tx.status = 'FAILED';
+                                        updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                    }, err=> {
+                                        tx.status = 'FAILED';
+                                        updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                    });
+                                } else {
+                                    tx.status = 'FAILED';
+                                    updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
+                                }
                             }
                         }
                         removeTransaction(tx);

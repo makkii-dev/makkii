@@ -4,7 +4,6 @@ import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
 import Toast from 'react-native-root-toast';
-import TokenUtil from '../coins/aion/token';
 import {fetchRequest} from './others';
 
 const tripledes = require('crypto-js/tripledes');

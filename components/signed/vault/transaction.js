@@ -28,20 +28,21 @@ class Transaction extends Component {
 	constructor(props){
 		super(props);
 		this.account = this.props.navigation.state.params.account;
+		this.token = this.props.navigation.state.params.token;
 		this.transaction = this.props.navigation.state.params.transaction;
 	}
-	onViewInExplorer(){
+	onViewInExplorer=()=>{
 		const url = getTransactionExplorerUrl(this.account.symbol, this.transaction.hash);
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
 	}
-	sendAgain(){
+	sendAgain=()=>{
 		const {navigation} = this.props;
 		const transaction = this.transaction;
 		navigation.navigate('signed_vault_send',{
 			account: this.account,
 			value: transaction.value + '',
 			recipient: transaction.to,
-            tokenSymbol: this.props.navigation.getParam('symbol'),
+            token: this.token,
 		})
 	}
 	render(){
@@ -50,13 +51,19 @@ class Transaction extends Component {
 		const ifSender = sameAddress(this.account.symbol, this.account.address, transaction.from);
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
-		let inAddressBook, addressName;
+		let inAddressBook, addressName, unit;
 		if (Object.keys(this.props.user.address_book).indexOf(value1) >= 0) {
 			inAddressBook = true;
 			addressName = this.props.user.address_book[value1].name;
 		} else {
 			inAddressBook = false;
 		}
+		if (this.token === undefined) {
+			unit = this.account.symbol;
+		} else {
+			unit = this.token.symbol;
+		}
+
 		return (
 			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
 				<View style={{flex:1,width:width,paddingHorizontal:20}}>
@@ -116,7 +123,7 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:80}}
 							title={strings('transaction_detail.amount_label')}
-							value={new BigNumber(transaction.value).toNotExString()+' ' + this.props.navigation.getParam('symbol')}
+							value={new BigNumber(transaction.value).toNotExString()+' ' + unit}
 							valueTextAlign={'left'}
 
 						/>
@@ -130,12 +137,12 @@ class Transaction extends Component {
 					{
 						ifSender? <ComponentButton
 							title={strings('transaction_detail.sendAgain_button')}
-							onPress={()=>this.sendAgain()}
+							onPress={this.sendAgain}
 						/>: null
 					}
 					<View style={{marginTop:10, flexDirection: 'row', justifyContent: 'flex-end', width:'100%', padding:10}}>
 						<TouchableOpacity
-							onPress={()=>this.onViewInExplorer()}
+							onPress={this.onViewInExplorer}
 						>
 							<Text style={{color: linkButtonColor}}>{strings('transaction_detail.viewInExplorer_button')}</Text>
 						</TouchableOpacity>

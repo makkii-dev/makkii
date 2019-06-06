@@ -2,6 +2,7 @@ const ACCOUNTS = 'ACCOUNTS';
 const ACCOUNTS_ADD = 'ADD_ACCOUNTS';
 const ACCOUNTS_SAVE = 'ACCOUNTS_SAVE';
 const UPDATE_ACCOUNT_NAME = 'UPDATE_ACCOUNT_NAME';
+const UPDATE_ACCOUNT_BALANCE = 'UPDATE_ACCOUNT_BALANCE';
 const UPDATE_ACCOUNT_TRANSACTIONS = 'UPDATE_ACCOUNT_TRANSACTIONS';
 const UPDATE_ACCOUNT_TOKEN_TRANSACTIONS = 'UPDATE_ACCOUNT_TOKEN_TRANSACTIONS';
 const UPDATE_ACCOUNT_TOKENS = 'UPDATE_ACCOUNT_TOKENS';
@@ -37,6 +38,15 @@ function update_account_name(key, newName, hashed_password){
 		type: UPDATE_ACCOUNT_NAME,
 		key,
 		newName,
+		hashed_password
+	}
+}
+
+function update_account_balance(key, newBalance, hashed_password) {
+	return {
+		type: UPDATE_ACCOUNT_BALANCE,
+		key,
+		newBalance,
 		hashed_password
 	}
 }
@@ -103,6 +113,7 @@ module.exports={
 	ACCOUNTS_ADD,
 	ACCOUNTS_SAVE,
 	UPDATE_ACCOUNT_NAME,
+	UPDATE_ACCOUNT_BALANCE,
 	UPDATE_ACCOUNT_TRANSACTIONS,
     UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 	UPDATE_ACCOUNT_TOKENS,
@@ -113,6 +124,7 @@ module.exports={
 	accounts_add,
 	accounts_save,
 	update_account_name,
+	update_account_balance,
 	update_account_txs,
 	update_account_tokens,
 	update_account_token_txs,

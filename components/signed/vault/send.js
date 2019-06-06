@@ -18,7 +18,6 @@ import {
 	getLedgerMessage,
 	navigationSafely,
 	validateAmount,
-	validatePositiveInteger,
     accountKey,
 } from '../../../utils';
 import {sendTransaction, validateAddress} from "../../../coins/api";
@@ -52,18 +51,20 @@ class Send extends Component {
 	constructor(props){
 		super(props);
 		this.account = this.props.navigation.state.params.account;
-		this.addr = this.account.address;
-		this.account_key = accountKey(this.account.symbol, this.addr);
-		let tokenSymbol = this.props.navigation.getParam('tokenSymbol');
+		this.token = this.props.navigation.state.params.token;
+		this.account_key = accountKey(this.account.symbol, this.account.address);
+
 		let gasPrice = COINS[this.account.symbol].defaultGasPrice;
 		let gasLimit;
-		if (COINS[this.account.symbol].tokenSupport && tokenSymbol !== this.account.symbol) {
+		if (this.token !== undefined) {
 			gasLimit = COINS[this.account.symbol].defaultGasLimitForContract;
+			this.unit = this.token.symbol;
 		} else {
 			gasLimit = COINS[this.account.symbol].defaultGasLimit;
+			this.unit = this.account.symbol;
 		}
+
 		this.state={
-		    unit: tokenSymbol,
 			showAdvanced: false,
 			amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
 			recipient: this.props.navigation.state.params.recipient? this.props.navigation.state.params.recipient: '',
@@ -100,20 +101,10 @@ class Send extends Component {
 					// process token in qrcode
 					let token = receiverCode.coin;
 					if (token !== undefined) {
-						if (token !== this.account.symbol) {
-							// token
-							if (accounts[this.account_key].tokens[setting.explorer_server][token] === undefined) {
-								AppToast.show(strings('send.toast_unsupported_token', {token: token}));
-								return;
-							}
-							this.coinSelected(token);
-						} else {
-							// native coin
-							this.coinSelected(this.account.symbol);
+						if (token !== this.unit) {
+                            AppToast.show(strings('send.toast_unsupported_token', {token: token}));
+                            return;
 						}
-					} else {
-						// if no coin/token is specified, by default it is the native coin.
-						this.coinSelected(this.account.symbol);
 					}
 
 					if (receiverCode.receiver !== undefined && receiverCode.amount !== undefined) {
@@ -131,32 +122,7 @@ class Send extends Component {
 		}
 	}
 
-	coinSelected=(tokenSymbol) => {
-		let superCoinSelected = this.props.navigation.getParam('coinSelected');
-		superCoinSelected(tokenSymbol);
-		if (tokenSymbol !== this.state.unit) {
-            if (COINS[this.account.symbol].tokenSupport && tokenSymbol !== this.account.symbol) {
-                this.setState({
-                    unit: tokenSymbol,
-                    gasLimit: COINS[this.account.symbol].defaultGasLimitForContract,
-                })
-            } else {
-                this.setState({
-                    unit: tokenSymbol,
-                    gasLimit: COINS[this.account.symbol].defaultGasLimit,
-                })
-            }
-		}
-	}
-
-	toChangeToken=()=> {
-		this.props.navigation.navigate('signed_select_coin', {
-			account: this.account,
-			coinSelected: this.coinSelected,
-		});
-	}
-
-	validateRecipient=(recipientQRCode, symbol='AION') => {
+	validateRecipient=(recipientQRCode, symbol) => {
 	    return new Promise((resolve, reject) => {
 			validateAddress(recipientQRCode, symbol).then(isValidAddress => {
 				if (isValidAddress) {
@@ -235,8 +201,7 @@ class Send extends Component {
 										<TouchableOpacity onPress={this.sendAll}>
 											<Text style={{color: linkButtonColor}}>{strings('send.button_send_all')}</Text>
 										</TouchableOpacity>}
-									unit={this.state.unit}
-									changeUnit={COINS[this.account.symbol].tokenSupport? this.toChangeToken: undefined}
+									unit={this.unit}
 								/>
 
 							</View>
@@ -354,11 +319,11 @@ class Send extends Component {
 		const {goBack} = this.props.navigation;
 		const {dispatch, user, setting} = this.props;
 		const { gasPrice, gasLimit, recipient, amount} = this.state;
+		// TODO:
 		let extra_params = COINS[this.account.symbol].txFeeSupport? {'gasPrice': gasPrice * 1e9, 'gasLimit': gasLimit - 0}: {};
 
 		this.loadingView.show(strings('send.progress_sending_tx'));
-		console.log("function:", sendTransaction);
-		sendTransaction(this.account, this.state.unit, recipient, new BigNumber(amount), extra_params).then(res=> {
+		sendTransaction(this.account, this.unit, recipient, new BigNumber(amount), extra_params).then(res=> {
 			const {pendingTx, pendingTokenTx} = res;
             console.log("transaction sent: ", pendingTx);
             console.log("token tx sent: ", pendingTokenTx);
@@ -370,8 +335,8 @@ class Send extends Component {
 
             if (pendingTokenTx != undefined) {
                 let tokenTxs = { [pendingTokenTx.hash]: pendingTokenTx};
-                dispatch(update_account_token_txs(this.account_key, tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
-                dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.state.unit, setting.explorer_server, user.hashed_password));
+                dispatch(update_account_token_txs(this.account_key, tokenTxs, this.unit, setting.explorer_server, user.hashed_password));
+                dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.unit, setting.explorer_server, user.hashed_password));
             }
 
             this.loadingView.hide();
@@ -406,7 +371,7 @@ class Send extends Component {
             		if (this.account.symbol === 'BTC'|| this.account.symbol === 'LTC'){
             			extra_params['network'] = COINS[this.account.symbol].network;
 					}
-            		validateBalanceSufficiency(this.account, this.state.unit, this.state.amount, extra_params).then(result=>{
+            		validateBalanceSufficiency(this.account, this.unit, this.state.amount, extra_params).then(result=>{
 						console.log("result: ",  result);
 						if (result.result) {
 							resolve(true);
@@ -425,7 +390,7 @@ class Send extends Component {
 	};
 
 	sendAll=() => {
-		if (this.state.unit === this.account.symbol) {
+		if (this.token === undefined) {
 			let totalAmount;
 			if (COINS[this.account.symbol].txFeeSupport) {
 				let gasLimit = new BigNumber(this.state.gasLimit);
@@ -441,7 +406,7 @@ class Send extends Component {
 			});
 		} else {
 		    this.setState({
-				amount:this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.state.unit].balance.toNotExString(),
+				amount:this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.unit].balance.toNotExString(),
 			});
 		}
 	};
@@ -462,8 +427,6 @@ class Send extends Component {
 		this.props.navigation.navigate('scan', {
 			success: 'signed_vault_send',
 			validate: function(data, callback) {
-				console.log("scanned: " + data.data);
-				console.log("this.account.symbol:", thus.account.symbol);
 				thus.validateRecipient(data.data, thus.account.symbol).then(result=> {
 					if (result) {
 						callback(true);

@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import Contract from "aion-web3-eth-contract";
 import AbiCoder from 'aion-web3-eth-abi';
 import {getEndpoint, processRequest} from "./jsonrpc";
+import {validateAddress} from './core';
 import ApiCaller from "../../utils/http_caller";
 import axios from "axios";
 const CONTRACT_ABI = [
@@ -228,11 +229,52 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=
     })
 }
 
+const getTopTokens=(topN=20, network='mainnet') => {
+    return new Promise((resolve, reject) => {
+        let url = `https://${network}-api.aion.network/aion/dashboard/getTokenList?page=0&size=${topN}`;
+        console.log("get top aion tokens:" + url);
+        ApiCaller.get(url, false).then(res=> {
+            resolve(res.data.content);
+        }).catch(err=> {
+            console.log("get top aion tokens error:", err);
+            reject(err);
+        });
+    });
+}
+
+const searchTokens=(keyword, network='mainnet') => {
+    return new Promise((resolve, reject) => {
+        validateAddress(keyword, network).then(validateResult => {
+            if (validateResult) {
+                let url = `https://${network}-api.aion.network/aion/dashboard/getTokenDetailsTransfersAndHoldersByContractAddress?searchParam=${keyword}`;
+                console.log("search aion tokens: " + url);
+                ApiCaller.get(url, false).then(res=> {
+                    resolve(res.data.content);
+                }).catch(err=> {
+                    console.log("search aion token by contract address error:", err);
+                    reject(err);
+                });
+            } else {
+                let url = `https://${network}-api.aion.network/aion/dashboard/getTokenListByTokenNameOrTokenSymbol?searchParam=${keyword}`;
+                console.log("search aion tokens: " + url);
+                ApiCaller.get(url, false).then(res=> {
+                    console.log("search token by name/symbol resp:", res);
+                    resolve(res.data.content);
+                }).catch(err=> {
+                    console.log("search aion token by name or symbol error:", err);
+                    reject(err);
+                });
+            }
+        });
+    });
+};
 
 module.exports = {
     CONTRACT_ABI,
     fetchAccountTokens,
     fetchAccountTokenBalance,
     fetchAccountTokenTransferHistory,
-    fetchTokenDetail
+    fetchTokenDetail,
+    getTopTokens,
+    searchTokens
 };

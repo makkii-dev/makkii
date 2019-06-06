@@ -45,7 +45,7 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
                 broadcastTransaction(signedTx, network).then(broadcastRes => {
                     if (broadcastRes.result) {
                         let pendingTx = {
-                            hash: signedTx.txID,
+                            hash: '0x' + signedTx.txID,
                             timestamp: now,
                             from: account.address,
                             to: to,

@@ -314,20 +314,27 @@ const fetchAccountTokenTransferHistory = (address, symbolAddress, network, page=
 
 const fetchAccountTokens = (address, network) => Promise.resolve({});
 
-function searchTokens(keyword, network='mainnet') {
+function getTopTokens(topN=20, network='mainnet') {
     return new Promise((resolve, reject) => {
-        let url;
-        if (keyword === undefined || keyword.length === 0) {
-            url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20`;
-        } else {
-            url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
-        }
-        console.log("search eth token: " + url);
+        let url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=${topN}`;
+        console.log("get top eth tokens: " + url);
         ApiCaller.get(url, false).then(res=>{
-            // console.log("fetch top tokens:",  res.data);
             resolve(res.data);
         }).catch(err => {
-            console.log(err);
+            console.log("get eth top tokens error:", err);
+            reject(err);
+        });
+    });
+}
+
+function searchTokens(keyword, network='mainnet') {
+    return new Promise((resolve, reject) => {
+        let url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        console.log("search eth token: " + url);
+        ApiCaller.get(url, false).then(res=>{
+            resolve(res.data);
+        }).catch(err => {
+            console.log("search eth token error:", err);
             reject(err);
         });
     });
@@ -342,6 +349,7 @@ module.exports = {
     fetchTokenDetail,
     fetchAccountTokenTransferHistory,
     fetchAccountTokens,
+    getTopTokens,
     searchTokens,
     getTokenIconUrl,
 };
