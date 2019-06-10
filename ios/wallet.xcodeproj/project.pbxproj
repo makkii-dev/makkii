@@ -37,7 +37,6 @@
 		E271862803BA4005B73DCBD3 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88757E7900954B85A61D4755 /* libRNFS.a */; };
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
 		607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF87723D22141F8AD5965D7 /* libRNCWebView.a */; };
-		52E98D3696B74D009A70E590 /* libRNMakkiiCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90A2B88B4B7C4FE4B656A1A1 /* libRNMakkiiCore.a */; };
 		7E72932097C74E5981C8C56F /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 783A1685F6D34C04B64D32B8 /* libFastImage.a */; };
 /* End PBXBuildFile section */
 
@@ -494,8 +493,6 @@
 		FD5C7EED60074CA8B34AA8A3 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
 		CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; name = "RNCWebView.xcodeproj"; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		EFF87723D22141F8AD5965D7 /* libRNCWebView.a */ = {isa = PBXFileReference; name = "libRNCWebView.a"; path = "libRNCWebView.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		FB16CDFB439749CAA46FCB8A /* RNMakkiiCore.xcodeproj */ = {isa = PBXFileReference; name = "RNMakkiiCore.xcodeproj"; path = "../node_modules/react-native-makkii-core/ios/RNMakkiiCore.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		90A2B88B4B7C4FE4B656A1A1 /* libRNMakkiiCore.a */ = {isa = PBXFileReference; name = "libRNMakkiiCore.a"; path = "libRNMakkiiCore.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		FAB81A38F5C44249A43BBF73 /* FastImage.xcodeproj */ = {isa = PBXFileReference; name = "FastImage.xcodeproj"; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		783A1685F6D34C04B64D32B8 /* libFastImage.a */ = {isa = PBXFileReference; name = "libFastImage.a"; path = "libFastImage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
@@ -532,7 +529,6 @@
 				8A7CE7039A9548A7B8B49B54 /* libRNReactNativeLocalBarcodeRecognizer.a in Frameworks */,
 				D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */,
 				607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */,
-				52E98D3696B74D009A70E590 /* libRNMakkiiCore.a in Frameworks */,
 				7E72932097C74E5981C8C56F /* libFastImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -861,7 +857,6 @@
 				84B513E06EEC450DA4A9FD20 /* RNReactNativeLocalBarcodeRecognizer.xcodeproj */,
 				D8ECDC55A1AC49ADBF903BDB /* TouchID.xcodeproj */,
 				CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */,
-				FB16CDFB439749CAA46FCB8A /* RNMakkiiCore.xcodeproj */,
 				FAB81A38F5C44249A43BBF73 /* FastImage.xcodeproj */,
 			);
 			name = Libraries;
@@ -1530,7 +1525,6 @@
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios",
-					"$(SRCROOT)/../node_modules/react-native-makkii-core/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
@@ -1540,9 +1534,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1581,7 +1572,6 @@
 					"$(SRCROOT)/../node_modules/react-native-local-barcode-recognizer/ios/**",
 					"$(SRCROOT)/../node_modules/react-native-touch-id",
 					"$(SRCROOT)/../node_modules/react-native-webview/ios",
-					"$(SRCROOT)/../node_modules/react-native-makkii-core/ios",
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
@@ -1591,9 +1581,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

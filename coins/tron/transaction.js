@@ -6,7 +6,11 @@ import ApiCaller from '../../utils/http_caller';
 function sendTransaction(account, symbol, to, value, extra_params, data, network='mainnet') {
     return new Promise((resolve, reject) => {
         getLatestBlock(network).then(block => {
-            let blk_header = block.block_header;
+            console.log('get latest block =>', block );
+            let latest_block = {
+                hash: block.blockID,
+                number: block.block_header.raw_data.number,
+            };
             let now = new Date().getTime();
             let expire = now + 10 * 60 * 60 * 1000;
             let tx = {
@@ -16,9 +20,10 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
                 amount: value.shiftedBy(6).toNumber(),
                 owner_address: account.address,
                 private_key : account.private_key,
-                block_header: blk_header,
+                latest_block: latest_block,
             };
             keyStore.signTransaction(tx, keyStore.CoinType.fromCoinSymbol(account.symbol)).then(signRes=> {
+                console.log('sign result =>', signRes);
                 let signedTx = {
                     signature: signRes.signature,
                     txID: signRes.txID,

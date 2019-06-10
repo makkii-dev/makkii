@@ -96,7 +96,7 @@ const getTransactionReceipt = (hash, network='mainnet') => new Promise((resolve,
     let params = [hash];
     let requestData = processRequest('eth_getTransactionReceipt', params);
     let promise = ApiCaller.post(getEndpoint(network), requestData, true, {'Content-Type': 'application/json'});
-    console.log("[eth http req] eth_getTransactionReceipt[" + hash + "]");
+    console.log(`[${network} eth http req] eth_getTransactionReceipt[${hash}]` );
     promise.then((res)=>{
         console.log("[eth http resp] ", res.data);
         if (res.data.error) reject(res.data.error);

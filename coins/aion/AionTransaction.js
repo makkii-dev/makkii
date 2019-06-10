@@ -164,7 +164,6 @@ export class AionTransaction {
 
     signByECKey = (private_key) => {
         return new Promise((resolve, reject) => {
-            let rawHash = this.getRawHash();
             let tx = {
                 nonce : this.nonce,
                 amount: this.valueHex,
@@ -174,7 +173,10 @@ export class AionTransaction {
                 private_key: private_key,
                 timestamp: this.timestampHex,
             };
-            this.data!==null&& (tx = {...tx,data:this.data});
+            if(this.data!==undefined){
+                tx = {...tx, data:this.data};
+            }
+            console.log('unsignedTx=>', tx);
             keyStore.signTransaction(tx, 425).then(res=>{
                 const {encoded, signature} = res;
                 if(!encoded.startsWith('0x')){
