@@ -198,7 +198,9 @@
     "menu_private_key": "Private key",
     "menu_ledger": "Ledger",
     "no_satisfied_accounts": "No matched accounts found",
-    "toast_has_pending_transactions": "There are pending transactions, please wait."
+    "toast_has_pending_transactions": "There are pending transactions, please wait.",
+    "section_title_add_from": "Add from",
+    "section_title_coin_type": "Coin Type"
   },
   "language": {
     "title": "Language",
@@ -506,7 +508,12 @@
     "title": "Select Coin"
   },
   "vault_import_source": {
-    "title": "Add From"
+    "title": "Add From",
+    "create": "Create",
+    "from_hd_wallet": "Created by HD Wallet",
+    "from_private_key": "Import from Private Key",
+    "from_ledger": "Import from Ledger",
+    "from_keystore": "Import from Keystore file"
   },
   "app_name": "Makkii",
   "logout": "Sign Out",

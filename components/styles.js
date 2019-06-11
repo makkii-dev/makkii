@@ -1,5 +1,5 @@
 import {Dimensions, Platform, StatusBar} from 'react-native';
-import {mainColor} from './style_util';
+import {mainColor, fixedWidthFont} from './style_util';
 import {Header} from "react-navigation";
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
@@ -225,5 +225,11 @@ export default styles = {
 			alignItems:'center',
 			flex:1,
 		}
+	},
+	addressFontStyle: {
+		fontSize:12,
+		color:'#fff',
+		includeFontPadding:false,
+		fontFamily:fixedWidthFont,
 	},
 };
