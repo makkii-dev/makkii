@@ -8,6 +8,7 @@ import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
 import keyStore from 'react-native-makkii-core';
+import {COINS} from "../../../coins/support_coin_list";
 
 const {width, height} = Dimensions.get('window');
 
@@ -59,7 +60,7 @@ class ImportPrivateKey extends Component {
 	    if (validatePrivateKey(this.state.private_key, this.symbol)) {
 	    	let coinType = keyStore.CoinType.fromCoinSymbol(this.symbol);
 	    	console.log('coinType:' + coinType);
-	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType, false).then(address => {
+	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType, COINS[this.symbol.toUpperCase()].isTestNet).then(address => {
                 console.log("recover keypair from private key: ", address);
                 this.getAcc = address;
 

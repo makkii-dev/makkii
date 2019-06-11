@@ -15,6 +15,7 @@ export const COINS = {
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '60000',
         network: 'mastery',
+        isTestNet: true,
         api: aion_api,
     },
     'BTC': {
@@ -24,6 +25,7 @@ export const COINS = {
         tokenSupport: false,
         gasPriceUnit: '',
         network: 'BTCTEST',
+        isTestNet: true,
         api: btc_api,
     },
     'ETH': {
@@ -37,6 +39,7 @@ export const COINS = {
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '60000',
         network: 'ropsten',
+        isTestNet: true,
         api: eth_api,
     },
     // 'EOS': {
@@ -54,6 +57,7 @@ export const COINS = {
         tokenSupport: false,
         gasPriceUnit: '',
         network: 'LTCTEST',
+        isTestNet: true,
         api: btc_api,
 
     },
@@ -64,6 +68,7 @@ export const COINS = {
         tokenSupport: false,
         txFeeSupport: false,
         network: 'shasta',
+        isTestNet: true,
         api: tron_api,
     }
 };
