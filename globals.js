@@ -1,5 +1,7 @@
 global.BigNumber = require('bignumber.js');
 // polyfill unit8array
+import Uint8Array from 'core-js/fn/typed/uint8-array';
+
 if (!Uint8Array.prototype.fill) {
     Uint8Array.prototype.fill = function (value) {
         // Steps 1-2.

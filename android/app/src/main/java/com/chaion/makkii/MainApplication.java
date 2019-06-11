@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.dylanvann.fastimage.FastImageViewPackage;
-import com.reactlibrary.RNMakkiiCorePackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import cn.jystudio.local.barcode.recognizer.LocalBarcodeRecognizerPackage;
@@ -43,7 +42,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new FastImageViewPackage(),
-            new RNMakkiiCorePackage(),
             new RNCWebViewPackage(),
             new FingerprintAuthPackage(),
             new LocalBarcodeRecognizerPackage(),

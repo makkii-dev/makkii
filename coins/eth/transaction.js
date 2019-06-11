@@ -36,7 +36,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network='mai
     return new Promise((resolve, reject) => {
         getTransactionCount(account.address, 'latest', network).then(count=> {
             let tx = {
-                chainID: toHex(getChainId(network)),
+                network: network,
                 amount: toHex(value.shiftedBy(18)),
                 nonce: toHex(count),
                 gasLimit: toHex(gasLimit),

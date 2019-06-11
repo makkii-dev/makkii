@@ -150,7 +150,6 @@ android {
 
 dependencies {
     implementation project(':react-native-fast-image')
-    implementation project(':react-native-makkii-core')
     implementation project(':react-native-webview')
     implementation project(':react-native-touch-id')
     implementation project(':react-native-local-barcode-recognizer')
