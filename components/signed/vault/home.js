@@ -33,12 +33,13 @@ import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
-import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
+import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor,fixedWidthFont} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
 import {accountKey, getStatusBarHeight} from '../../../utils';
 import {COINS} from '../../../coins/support_coin_list';
 import {getBalance, formatAddress1Line} from '../../../coins/api';
+import {update_index} from "../../../actions/user";
 
 
 const {width} = Dimensions.get('window');
@@ -361,7 +362,7 @@ class Home extends HomeComponent {
 		this.state={
 			showMenu: false,
 			sortOrder: SORT[0].title,
-			filter: [],
+			filter: ['[local]','[pk]'],
 			totalBalance: undefined,
 			openRowKey: null,
 			swipeEnable: true,
@@ -519,7 +520,7 @@ class Home extends HomeComponent {
 	}
 
 
-	onDeleteAccount(key){
+	onDeleteAccount(key, symbol){
 		const { dispatch } = this.props;
 		popCustom.show(
 			strings('alert_title_warning'),
@@ -532,6 +533,8 @@ class Home extends HomeComponent {
 						},()=>setTimeout(()=>
 						{
 							dispatch(delete_account(key,this.props.user.hashed_password));
+							console.log('delete key=>',key);
+							dispatch(update_index(symbol, 0 , 'delete'+key.slice(key.indexOf('+')+1)));
 							setTimeout(()=>DeviceEventEmitter.emit('updateAccountBalance'),1000);
 						}, 500));
 					}}
@@ -593,7 +596,7 @@ class Home extends HomeComponent {
 				slideoutView={
 						<View style={{...styles.accountContainer, backgroundColor:'transparent', justifyContent:'flex-end'}}>
 							<TouchableOpacity onPress={()=>{
-								this.onDeleteAccount(Key);
+								this.onDeleteAccount(Key, item.symbol);
 							}}>
 								<View style={{...styles.accountSlideButton, backgroundColor: '#fe0000'}}>
 									<Text style={{fontSize:14,color:'#fff'}}>{strings('delete_button')}</Text>
@@ -622,7 +625,7 @@ class Home extends HomeComponent {
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
-								<Text style={styles.accountSubTextFontStyle2}>{formatAddress1Line(item.symbol, item.address)}</Text>
+								<Text style={{...styles.accountSubTextFontStyle2, fontFamily:fixedWidthFont}}>{formatAddress1Line(item.symbol, item.address)}</Text>
 								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
 							</View>
 						</View>

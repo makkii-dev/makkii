@@ -79,7 +79,20 @@ export default function user(state = init, action){
 			should_update_db = true;
 			break;
 		case UPDATE_INDEX:
-		    state.hd_index[action.symbol] = action.index;
+			let hd_index_map = state.hd_index[action.symbol];
+			hd_index_map = typeof hd_index_map === 'object'? hd_index_map: {};
+			console.log('opCode=>', action.opCode);
+			if (action.opCode.startsWith('add')){
+				hd_index_map[action.index] = action.opCode.slice(3);
+			}else if (action.opCode.startsWith('delete')){
+				// delete address;
+				Object.keys(hd_index_map).forEach(k=>{
+					if(hd_index_map[k].indexOf(action.opCode.slice(6))>=0){
+						delete hd_index_map[k];
+					}
+				})
+			}
+			state.hd_index[action.symbol] = hd_index_map;
 			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;

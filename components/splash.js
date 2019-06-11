@@ -41,7 +41,9 @@ class Splash extends Component {
 					dispatch(user(db_user.hashed_password,
 						db_user.mnemonic,
 						db_user.hashed_pinCode!==undefined?db_user.hashed_pinCode:'',
-						db_user.address_book!==undefined?db_user.address_book: {}));
+						db_user.address_book!==undefined?db_user.address_book: {},
+						db_user.hd_index!==undefined?db_user.hd_index:{}
+					));
 					setTimeout(()=>{
 						// navigate('signed_vault');
 						navigate('unsigned_login');
