@@ -540,6 +540,7 @@
   "permission_storage_message": "Makkii App needs access to your external storage to save some data.",
   "ok_button": "OK",
   "alert_ok_button": "OK",
+  "confirm_button": "Confirm",
   "cancel_button": "Cancel",
   "save_file_button": "Save to Phone",
   "error_invalid_qrcode": "Invalid QR Code",

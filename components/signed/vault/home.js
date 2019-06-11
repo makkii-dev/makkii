@@ -25,7 +25,7 @@ import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
-import {OptionButton, ComponentTabBar, alert_ok} from '../../common.js';
+import {OptionButton, ComponentTabBar, alert_ok, ComponentButton} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
@@ -70,12 +70,24 @@ function sortAccounts(src,select, network){
 
 function filterAccounts(src,filters){
 	let res = src;
-    res  = res.filter(a=>{
-		for (let i = 0; i < filters.length; i++) {
-			if (a[filters[i].type] === filters[i].key) return true;
+	if (filters.length > 0) {
+		let typeFilters = {};
+	    for (let i = 0; i < filters.length; i++) {
+	    	let f = typeFilters[filters[i].type];
+	    	if (typeof f !== 'object') f = [];
+	    	f.push(filters[i].key);
+	    	typeFilters[filters[i].type] = f;
 		}
-		return false;
-    });
+	    console.log("typeFilters", typeFilters);
+
+		res = res.filter(a => {
+			let match = true;
+		    Object.keys(typeFilters).forEach(f => {
+		    	match = match && typeFilters[f].indexOf(a[f]) >= 0;
+			});
+		    return match;
+		});
+	}
 	return res;
 }
 
@@ -87,11 +99,12 @@ function searchAccounts(src,keyword){
 	});
 }
 
-class HomeCenterComponent extends  React.Component{
+class HomeCenterComponent extends React.Component{
 
 	state={
 		showFilter: false,
 		showSort: false,
+        currentFilter: this.props.currentFilter,
 	};
 
 	static propTypes={
@@ -99,18 +112,12 @@ class HomeCenterComponent extends  React.Component{
 		closeSort: PropTypes.func.isRequired,
 		onTouch: PropTypes.func.isRequired,
 		onChangeText: PropTypes.func.isRequired,
-		currentFilter: PropTypes.string.isRequired,
+		currentFilter: PropTypes.array.isRequired,
 		currentSort: PropTypes.string.isRequired,
 	};
 
-	closeAll=()=> {
-		(this.state.showFilter || this.state.showSort) && this.setState({showFilter: false, showSort: false});
-		this.props.closeFilter();
-		this.props.closeSort();
-	};
-	isShow=()=>this.state.showSort||this.state.showFilter;
-
-	render_filters=()=> {
+	constructor(props) {
+	    super(props);
 		let addFromKey = strings('wallet.section_title_add_from');
 		let filters = {
 			[addFromKey] : [
@@ -129,7 +136,7 @@ class HomeCenterComponent extends  React.Component{
 					key: '[ledger]',
 					type: 'type'
 				}
-            ]
+			]
 		};
 		if (Platform.OS === 'iOS') {
 			filters[addFromKey] = filters[addFromKey].slice(0, 2);
@@ -146,12 +153,51 @@ class HomeCenterComponent extends  React.Component{
 				});
 			});
 		}
-		let filterKeys = Object.keys(filters);
+		this.filters = filters;
+	}
+
+	closeAll=()=> {
+		(this.state.showFilter || this.state.showSort) && this.setState({showFilter: false, showSort: false});
+		this.setState({
+			currentFilter: this.props.currentFilter,
+		});
+		this.props.closeFilter();
+		this.props.closeSort();
+	};
+	isShow=()=>this.state.showSort||this.state.showFilter;
+
+	containsOption=(option)=>{
+		if (this.state.currentFilter.length > 0) {
+			for (let i = 0; i < this.state.currentFilter.length; i++) {
+				if (this.state.currentFilter[i].type === option.type && this.state.currentFilter[i].key === option.key) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	unselectOption=(option)=> {
+		if (this.state.currentFilter.length > 0) {
+            for (let i = 0; i < this.state.currentFilter.length; i++) {
+                if (this.state.currentFilter[i].type === option.type && this.state.currentFilter[i].key === option.key) {
+                    let cf = this.state.currentFilter;
+                	this.setState({
+						currentFilter: cf.filter((value, index, arr)=> index != i )
+					});
+                    return;
+                }
+            }
+		}
+	}
+
+	render_filters=()=> {
+		let filterKeys = Object.keys(this.filters);
 		let ret=[];
 		filterKeys.forEach(filterKey => {
 			ret.push(<View key={filterKey} style={{width: '100%', marginTop: 10}}>
 				<Text style={{color: 'black', fontSize: 16}}>{filterKey}</Text>
-				{ this.render_filter_options(filters[filterKey]) }
+				{ this.render_filter_options(this.filters[filterKey]) }
 			</View>);
 		});
 		return ret;
@@ -171,13 +217,29 @@ class HomeCenterComponent extends  React.Component{
 		let btnWidth = (width - 40 - 40 - space * (cols-1)) / cols;
 	    let ret = [];
 		for (let i = line * 4; i < Math.min((line + 1) * 4, options.length); i++) {
-			ret.push(<OptionButton key={i + ''} title={options[i].text} style={{
-				marginRight: space,
-				width: btnWidth,
-				height: 36,
-                marginVertical: 5,
-				}} onPress={() =>{
-					// TODO: add to this.property
+			let currentOption = options[i];
+			console.log("currentOption: ", currentOption);
+			let selected = this.containsOption(currentOption);
+			console.log("contains:" + selected);
+			ret.push(<OptionButton
+				key={i + ''}
+				title={currentOption.text}
+				style={{
+                    marginRight: space,
+                    width: btnWidth,
+                    height: 36,
+                    marginVertical: 5,
+                }}
+				selected={selected}
+				onPress={() =>{
+					if (this.containsOption(currentOption)) {
+						this.unselectOption(currentOption);
+					} else {
+						let cf = this.state.currentFilter;
+						this.setState({
+							currentFilter: [...cf, currentOption],
+						});
+					}
 			}}/>);
 		}
 		return ret;
@@ -228,7 +290,13 @@ class HomeCenterComponent extends  React.Component{
 				{
 					// filter list
 					this.state.showFilter?
-                    <View style={{marginTop: 10, width: '100%'}}>{this.render_filters()}</View>
+                    <TouchableOpacity activeOpacity={1} style={{marginTop: 10, width: '100%'}} onPress={()=>{}}>
+						{this.render_filters()}
+						<ComponentButton title={strings('confirm_button')} style={{marginTop: 10}} onPress={()=>{
+							this.props.closeFilter(this.state.currentFilter);
+							this.setState({showFilter: false});
+						}}/>
+                    </TouchableOpacity>
 					// 	<FlatList
 					// 	style={{marginTop:10}}
 					// 	data={Platform.OS === 'android'? FILTER: FILTER.slice(0, -1)}
@@ -595,7 +663,8 @@ class Home extends HomeComponent {
 		})
 	}
 
-	closeFilter(select){
+	closeFilter=(select)=>{
+		console.log("select,", select);
 		select&&this.setState({
 			filter:select,
 			swipeEnable:true,
@@ -603,7 +672,7 @@ class Home extends HomeComponent {
 		select||this.setState({
 			swipeEnable:true,
 		})
-	}
+	};
 
 	onChangeText(t){
 		const {keyWords} = this.state;
@@ -614,8 +683,6 @@ class Home extends HomeComponent {
 	onTouchCenter(){
 		this.setState({openRowKey:null,swipeEnable:false});
 	}
-
-
 
 	render(){
 		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder, this.props.setting.explorer_server);
@@ -704,7 +771,7 @@ class Home extends HomeComponent {
 						style={{...defaultStyles.shadow, borderRadius: fixedWidth(20),justifyContent:'center', alignItems:'center', backgroundColor:'#fff',
 							width:width - 40, position:'absolute', top: fixedHeight(500)+ (Platform.OS==='ios'?20:StatusBar.currentHeight), right: 20, padding:20
 						}}
-						closeFilter={(item)=>this.closeFilter(item)}
+						closeFilter={this.closeFilter}
 						closeSort={(item)=>this.closeSort(item)}
 						onChangeText={(value)=>this.onChangeText(value)}
 						onTouch={()=>this.onTouchCenter()}

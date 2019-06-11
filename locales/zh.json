@@ -540,6 +540,7 @@
   "permission_storage_message": "Makkii App需要得到您授权来保存部分数据文件",
   "ok_button": "同意",
   "alert_ok_button": "确定",
+  "confirm_button": "确定",
   "cancel_button": "取消",
   "save_file_button": "保存到手机",
   "error_invalid_qrcode": "无效的二维码",

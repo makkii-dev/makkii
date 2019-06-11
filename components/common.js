@@ -74,16 +74,16 @@ class ComponentTabBar extends Component{
 
 
 class OptionButton extends Component {
-	state = {
+	static defaultProps = {
 		selected: false,
-	}
+	};
 	constructor(props) {
 		super(props);
 	}
 	render() {
-	    let borderColor = this.state.selected? mainColor: 'gray';
-	    let fontColor = this.state.selected? mainColor: 'black';
-	    let backgroundColor = this.state.selected? mainColorAlpha: 'transparent';
+	    let borderColor = this.props.selected? mainColor: 'gray';
+	    let fontColor = this.props.selected? mainColor: 'black';
+	    let backgroundColor = this.props.selected? mainColorAlpha: 'transparent';
 		return (
 			<TouchableOpacity style={{
                                   ...this.props.style,
@@ -94,12 +94,7 @@ class OptionButton extends Component {
                                   justifyContent: 'center',
                                   alignItems: 'center'
                               }}
-                              onPress={() => {
-                              	  this.setState({
-									  selected: !this.state.selected,
-								  });
-                              	  this.props.onPress();
-							  }}
+                              onPress={ this.props.onPress }
 			>
 				<Text style={{textAlign: 'center', color: fontColor}} numberOfLines={1}>{this.props.title}</Text>
 			</TouchableOpacity>
