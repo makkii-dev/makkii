@@ -9,7 +9,7 @@
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js"
   },
   "dependencies": {
-    "aion-web3": "^1.1.5",
+    "aion-web3": "1.1.5",
     "axios": "^0.18.0",
     "bignumber.js": "^8.0.2",
     "bip39": "^2.5.0",
