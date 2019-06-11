@@ -17,7 +17,7 @@ const validateBalanceSufficiency = (account, symbol, amount, extra_params)=>new 
     })
 });
 
-const formatAddress1Line =(address) => address;
+const formatAddress1Line =(address) => address.slice(0,12)+'...'+address.slice(-10);
 
 module.exports = {
     validateBalanceSufficiency,

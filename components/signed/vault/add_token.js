@@ -6,9 +6,10 @@ import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
 import {accountKey} from '../../../utils';
-import {validateAddress,fetchTokenDetail} from "../../../coins/api";
+import {validateAddress, fetchTokenDetail, fetchAccountTokenBalance} from "../../../coins/api";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
+import BigNumber from "./select_coin";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -79,7 +80,23 @@ class AddToken extends Component {
             });
             return;
         }
-        tokenSelected({
+        this.loadingView.show();
+
+        fetchAccountTokenBalance(this.account.symbol, contractAddress, this.account.address).then(balance=> {
+            this.loadingView.hide();
+            tokenSelected({
+                symbol: symbol,
+                contractAddr: contractAddress,
+                name: tokenName,
+                tokenDecimal: decimals,
+                balance: balance.shiftedBy(-(decimals-0)),
+                tokenTxs: {},
+            });
+            navigation.navigate(targetUri);
+        }).catch(err=> {
+            this.loadingView.hide();
+
+            tokenSelected({
                 symbol: symbol,
                 contractAddr: contractAddress,
                 name: tokenName,
@@ -87,7 +104,10 @@ class AddToken extends Component {
                 balance: new BigNumber(0),
                 tokenTxs: {},
             });
-        navigation.navigate(targetUri);
+            navigation.navigate(targetUri);
+
+        });
+
     }
 
     scan=() => {

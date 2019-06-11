@@ -33,7 +33,7 @@ import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
 import {PopWindow} from "./home_popwindow";
-import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor} from "../../style_util";
+import {fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor,fixedWidthFont} from "../../style_util";
 import defaultStyles from '../../styles';
 import PropTypes from 'prop-types';
 import {accountKey, getStatusBarHeight} from '../../../utils';
@@ -557,7 +557,7 @@ class Home extends HomeComponent {
 								<Text style={{...styles.accountSubTextFontStyle1, fontWeight: 'bold'}}>{new BigNumber(item.balance).toFixed(4)}</Text>
 							</View>
 							<View style={{...styles.accountSubContainer, flex:1, alignItems:'center'}}>
-								<Text style={styles.accountSubTextFontStyle2}>{formatAddress1Line(item.symbol, item.address)}</Text>
+								<Text style={{...styles.accountSubTextFontStyle2, fontFamily:fixedWidthFont}}>{formatAddress1Line(item.symbol, item.address)}</Text>
 								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
 							</View>
 						</View>

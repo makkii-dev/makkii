@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator,PixelRatio,Dimensions} from 'react-native';
+import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator,PixelRatio,Dimensions,Clipboard} from 'react-native';
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
@@ -650,7 +650,6 @@ class AddressComponent extends Component {
 	}
 	render() {
 		const {address, symbol} = this.props;
-		this.expandable = (address.length == 66 || address.length == 42);
 		let address1Line = address;
 		try {
 			address1Line  = formatAddress1Line(symbol, address);
@@ -660,7 +659,7 @@ class AddressComponent extends Component {
 			return (
 				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',width:width}}>
 					{address.length === 66? this.render_address66(address):
-						address.length == 42? this.render_address42(address): null
+						address.length === 42? this.render_address42(address): <Text style={styles.addressFontStyle}>{address}</Text>
 					}
 					<View style={{marginHorizontal:10,justifyContent:'space-between', alignItems:'center'}}>
 						<TouchableOpacity onPress={()=>{
@@ -689,22 +688,19 @@ class AddressComponent extends Component {
 						<Image source={require("../assets/copy.png")}
 							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
 					</TouchableOpacity>
-					{this.expandable ?
-						<TouchableOpacity onPress={() => {
-							this.setState({showAllAddress: true})
+					<TouchableOpacity onPress={() => {
+						this.setState({showAllAddress: true})
+					}}>
+						<View style={{
+							height: 24,
+							backgroundColor: 'rgba(255,255,255,0.1)',
+							borderRadius: 10,
+							paddingHorizontal: 5,
+							justifyContent: 'center'
 						}}>
-							<View style={{
-								height: 24,
-								backgroundColor: 'rgba(255,255,255,0.1)',
-								borderRadius: 10,
-								paddingHorizontal: 5,
-								justifyContent: 'center'
-							}}>
-								<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
-							</View>
-						</TouchableOpacity>
-						:null
-					}
+							<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
+						</View>
+					</TouchableOpacity>
 				</View>
 			);
 		}

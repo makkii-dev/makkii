@@ -1,9 +1,7 @@
 import {validateAmount} from '../../utils/index';
 import BigNumber from 'bignumber.js';
 
-function formatAddress1Line(address) {
-    return address;
-}
+const formatAddress1Line =(address) => address.slice(0,12)+'...'+address.slice(-10);
 
 function validateBalanceSufficiency(account, symbol, amount, extra_params) {
     return new Promise((resolve, reject) => {

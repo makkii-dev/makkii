@@ -10,4 +10,5 @@ module.exports = {
     sendTransaction: transaction.sendTransaction,
     validateBalanceSufficiency: core.validateBalanceSufficiency,
     getTransactionStatus: transaction.getTransactionStatus,
+    getTransactionUrlInExplorer: transaction.getTransactionUrlInExplorer,
 }
