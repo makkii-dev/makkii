@@ -52,11 +52,12 @@ function delete_address(addressKey) {
 }
 
 const UPDATE_INDEX = "UPDATE_INDEX";
-function update_index(symbol, index) {
+function update_index(symbol, index, opCode = 'add') {
 	return {
 		type: UPDATE_INDEX,
 		symbol,
-		index
+		index,
+		opCode,
 	}
 }
 

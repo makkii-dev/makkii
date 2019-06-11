@@ -43,22 +43,42 @@ class ImportFrom extends Component {
     }
 
     importFromMasterKey=() => {
-        let indexPath = 0;
+        const {dispatch} = this.props;
+
+        let indexPathMap;
         if (this.props.user.hd_index !== undefined && this.props.user.hd_index[this.symbol] !== undefined) {
-            indexPath = this.props.user.hd_index[this.symbol];
+            indexPathMap = this.props.user.hd_index[this.symbol];
+        }
+        indexPathMap = typeof indexPathMap ==='object'? indexPathMap: {};
+        let minIndex = 0;
+        while(indexPathMap[minIndex]!==undefined){
+            minIndex++;
         }
         console.log("cointype: " + keyStore.CoinType.fromCoinSymbol(this.symbol));
-        console.log("indexpath:" + indexPath);
-        keyStore.getKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, indexPath, true).then(acc => {
-            this.getAcc = acc;
-            console.log("imported acc:", acc);
-            this.props.navigation.navigate('signed_vault_change_account_name', {
-                oldName: '',
-                onUpdate: this.setAccountName,
-                targetUri: 'signed_vault',
+        console.log("indexPathMap:" , indexPathMap);
+        console.log("minIndex:" + minIndex);
+        this.loadingView.show();
+        const getUniqueKey = (coinType, path1,path2,path3,isTestNet)=>{
+            keyStore.getKey(coinType, path1, path2, path3, isTestNet).then(acc => {
+                if (this.props.accounts[this.symbol+'+'+acc.address]!==undefined){
+                    console.log('acc=>',acc);
+                    dispatch(update_index(this.symbol, acc.index , 'add'+acc.address));
+                    getUniqueKey(coinType,path1,path2,path3+1,isTestNet);
+                }else{
+                    this.loadingView.hide();
+                    this.getAcc = acc;
+                    console.log("imported acc:", acc);
+                    this.props.navigation.navigate('signed_vault_change_account_name', {
+                        oldName: '',
+                        onUpdate: this.setAccountName,
+                        targetUri: 'signed_vault',
+                    });
+                }
             });
-        });
-    }
+        };
+        getUniqueKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, minIndex, true);
+
+    };
 
     setAccountName=(newName) => {
         console.log('set account name=>', newName)
@@ -77,12 +97,13 @@ class ImportFrom extends Component {
         }, this.props.user.hashed_password));
 
         console.log("index:" + this.getAcc.index);
-        dispatch(update_index(this.symbol, this.getAcc.index + 1));
+        dispatch(update_index(this.symbol, this.getAcc.index , 'add'+this.getAcc.address));
 
         setTimeout(() => {
             DeviceEventEmitter.emit('updateAccountBalance');
         }, 500);
-    }
+    };
+
     importFromPrivateKey=() => {
         this.props.navigation.navigate('signed_vault_import_private_key', {
             symbol: this.symbol
@@ -184,6 +205,7 @@ const styles = StyleSheet.create({
 
 export default connect(state=> {
     return {
-        user: state.user
+        user: state.user,
+        accounts: state.accounts,
     };
 })(ImportFrom);

@@ -39,6 +39,7 @@ import PropTypes from 'prop-types';
 import {accountKey, getStatusBarHeight} from '../../../utils';
 import {COINS} from '../../../coins/support_coin_list';
 import {getBalance, formatAddress1Line} from '../../../coins/api';
+import {update_index} from "../../../actions/user";
 
 
 const {width} = Dimensions.get('window');
@@ -99,7 +100,7 @@ class HomeCenterComponent extends  React.Component{
 		closeSort: PropTypes.func.isRequired,
 		onTouch: PropTypes.func.isRequired,
 		onChangeText: PropTypes.func.isRequired,
-		currentFilter: PropTypes.string.isRequired,
+		currentFilter: PropTypes.array.isRequired,
 		currentSort: PropTypes.string.isRequired,
 	};
 
@@ -293,7 +294,7 @@ class Home extends HomeComponent {
 		this.state={
 			showMenu: false,
 			sortOrder: SORT[0].title,
-			filter: [],
+			filter: ['[local]','[pk]'],
 			totalBalance: undefined,
 			openRowKey: null,
 			swipeEnable: true,
@@ -451,7 +452,7 @@ class Home extends HomeComponent {
 	}
 
 
-	onDeleteAccount(key){
+	onDeleteAccount(key, symbol){
 		const { dispatch } = this.props;
 		popCustom.show(
 			strings('alert_title_warning'),
@@ -464,6 +465,8 @@ class Home extends HomeComponent {
 						},()=>setTimeout(()=>
 						{
 							dispatch(delete_account(key,this.props.user.hashed_password));
+							console.log('delete key=>',key);
+							dispatch(update_index(symbol, 0 , 'delete'+key.slice(key.indexOf('+')+1)));
 							setTimeout(()=>DeviceEventEmitter.emit('updateAccountBalance'),1000);
 						}, 500));
 					}}
@@ -525,7 +528,7 @@ class Home extends HomeComponent {
 				slideoutView={
 						<View style={{...styles.accountContainer, backgroundColor:'transparent', justifyContent:'flex-end'}}>
 							<TouchableOpacity onPress={()=>{
-								this.onDeleteAccount(Key);
+								this.onDeleteAccount(Key, item.symbol);
 							}}>
 								<View style={{...styles.accountSlideButton, backgroundColor: '#fe0000'}}>
 									<Text style={{fontSize:14,color:'#fff'}}>{strings('delete_button')}</Text>
