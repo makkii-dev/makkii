@@ -186,7 +186,9 @@
     "menu_private_key": "私钥",
     "menu_ledger": "Ledger冷钱包",
     "no_satisfied_accounts": "无满足条件账号",
-    "toast_has_pending_transactions": "请等待未确认交易完成"
+    "toast_has_pending_transactions": "请等待未确认交易完成",
+    "section_title_add_from": "添加方式",
+    "section_title_coin_type": "币种"
   },
   "language": {
     "title": "语言",
@@ -504,7 +506,12 @@
     "title": "选择币种"
   },
   "vault_import_source": {
-    "title": "添加方式"
+    "title": "添加方式",
+    "create": "创建",
+    "from_hd_wallet": "从HD Wallet创建",
+    "from_private_key": "从私钥导入",
+    "from_ledger": "从Ledger导入",
+    "from_keystore": "从证书文件导入"
   },
   "app_name": "Makkii",
   "logout": "退出",

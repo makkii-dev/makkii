@@ -106,19 +106,19 @@ const COINS = {
 
 const IMPORT_SOURCE = [
     {
-        title: 'Create',
+        title: 'vault_import_source.create',
         icon: require('../../../assets/account_mk_symbol.png'),
     },
     {
-        title: 'Import from Private Key',
+        title: 'vault_import_source.from_private_key',
         icon: require('../../../assets/account_pk_symbol.png'),
     },
     {
-        title: 'Import from KeyStore',
+        title: 'vault_import_source.from_keystore',
         icon: require('../../../assets/account_pk_symbol.png'),
     },
     {
-        title: 'Import from Ledger',
+        title: 'vault_import_source.from_ledger',
         icon: require('../../../assets/account_le_symbol.png'),
     }
 ];

@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
 import {strings} from '../../../locales/i18n';
 import { connect } from 'react-redux';
-import {Platform, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList} from 'react-native';
+import {RefreshControl, Platform, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList} from 'react-native';
 import {navigationSafely, getStatusBarHeight, accountKey} from '../../../utils';
-import {mainBgColor, fixedHeight} from '../../style_util';
+import {mainBgColor, fixedHeight, mainColor} from '../../style_util';
 import {COINS} from '../../../coins/support_coin_list';
 import SwipeableRow from '../../swipeCell';
 import FastImage from 'react-native-fast-image';
-import {getTokenIconUrl, fetchAccountTokenBalance, getBalance} from '../../../coins/api';
+import {getTokenIconUrl, fetchAccountTokenBalance, getBalance, formatAddress1Line} from '../../../coins/api';
 import {update_account_name, accounts as update_accounts, update_account_tokens, delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
 import {PopWindow} from "./home_popwindow";
 import {Header} from 'react-navigation';
 import {ACCOUNT_MENU} from "./constants";
+import {AddressComponent} from '../../common';
 
 const {width} = Dimensions.get('window');
 
@@ -60,6 +61,7 @@ class AccountTokens extends Component {
         this.state = {
             openRowKey: null,
             showMenu: false,
+            refreshing: false,
         };
         this.props.navigation.setParams({
             title: this.account.name,
@@ -113,7 +115,12 @@ class AccountTokens extends Component {
     };
 
     async componentDidMount() {
+        this.isMount = true;
         this.loadBalances();
+    }
+
+    componentWillUnmount() {
+        this.isMount = false;
     }
 
     loadBalances=() => {
@@ -142,11 +149,21 @@ class AccountTokens extends Component {
             });
             Promise.all(executors).then(res=> {
                 dispatch(update_accounts(accounts));
+                console.log("isMount:" + this.isMount);
+                this.isMount && this.setState({
+                    refreshing: false,
+                });
             }, errors => {
                 console.log("get token balances failed: ", errors);
+                this.isMount && this.setState({
+                    refreshing: false,
+                });
             });
         }).catch(err=>{
             console.log("get balance: symbol=" + this.account.symbol + ",address=" + this.account.address + " failed.", err);
+            this.isMount && this.setState({
+                refreshing: false,
+            });
         });
     }
 
@@ -201,6 +218,14 @@ class AccountTokens extends Component {
             {cancelable:false}
         )
     }
+    onRefresh=() => {
+        this.setState({
+            refreshing: true
+        });
+        setTimeout(()=> {
+            this.loadBalances();
+        }, 1000);
+    }
 
     render_item=({item, index})=> {
         const {setting, accounts} = this.props;
@@ -208,7 +233,7 @@ class AccountTokens extends Component {
         let tokens = accounts[this.account_key].tokens;
         let token;
 
-        const cellHeight = 80;
+        const cellHeight = 60;
         // prepare image
         let imageIcon;
         let fastImageUrl;
@@ -274,10 +299,14 @@ class AccountTokens extends Component {
                        height: cellHeight,
                    }}
                    onPress={()=> {
-                       this.props.navigation.navigate('signed_vault_account', {
-                           account: this.account,
-                           token: index === 0? undefined: token,
-                       });
+                       if (this.state.openRowKey) {
+                           this.setState({openRowKey: null});
+                       } else {
+                           this.props.navigation.navigate('signed_vault_account', {
+                               account: this.account,
+                               token: index === 0 ? undefined : token,
+                           });
+                       }
                    }}
                >
                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -318,6 +347,23 @@ class AccountTokens extends Component {
             menuArray.push(ACCOUNT_MENU[1]);
         }
 
+        const titleFontSize = 32;
+
+        let typeIcon, typeText;
+        switch(this.account.type) {
+            case '[ledger]':
+                typeIcon = require('../../../assets/account_le_symbol.png');
+                typeText = strings('vault_import_source.from_ledger');
+                break;
+            case '[pk]':
+                typeIcon = require('../../../assets/account_pk_symbol.png');
+                typeText = strings('vault_import_source.from_private_key');
+                break;
+            default:
+                typeIcon = require('../../../assets/account_mk_symbol.png');
+                typeText = strings('vault_import_source.from_hd_wallet');
+        }
+
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -327,13 +373,39 @@ class AccountTokens extends Component {
                     justifyContent: 'center',
                     flex: 1,
                 }}
+                onPress={()=>{
+                    this.state.openRowKey && this.setState({openRowKey: null});
+                }}
             >
+                <View style={{backgroundColor: mainColor, width: "100%", paddingVertical: 20, paddingHorizontal: 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: 10}}>
+                        <Image style={{width: 20, height: 20, marginRight: 10}} resizeMode={'contain'} source={COINS[this.account.symbol].icon}/>
+                        <Text style={{color: '#fff', marginRight: 20}}>{COINS[this.account.symbol].name}</Text>
+                    {/*</View>*/}
+                    {/*<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>*/}
+                        <Image style={{width: 20, height: 20, marginRight: 10, tintColor:'#fff'}} resizeMode={'contain'} source={typeIcon}/>
+                        <Text style={{color: '#fff'}}>{typeText}</Text>
+                    </View>
+                    <AddressComponent address={this.account.address} symbol={this.account.symbol}/>
+                </View>
                 <FlatList
                     style={{width: width}}
                     data={tokenList}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={() => <View style={styles.divider}/>}
                     keyExtractor={(item, index) => item.symbol}
+                    onScroll={e=> {
+                        this.setState({
+                            openRowKey: null,
+                        });
+                    }}
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.refreshing}
+                            onRefresh={this.onRefresh}
+                            title={'Loading'}
+                            />
+                    }
                 />
                 {/*Menu Pop window*/}
                 {
@@ -343,7 +415,7 @@ class AccountTokens extends Component {
                             onClose={(select)=>this.onCloseMenu(select)}
                             data={menuArray}
                             containerPosition={{position:'absolute', top:popwindowTop,right:5}}
-                            imageStyle={{width: 20, height: 20, marginRight:10}}
+                            imageStyle={{width: titleFontSize, height: 20, marginRight:10}}
                             fontStyle={{fontSize:12, color:'#000'}}
                             itemStyle={{flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
                             containerBackgroundColor={'#fff'}

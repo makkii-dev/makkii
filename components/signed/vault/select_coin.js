@@ -252,16 +252,38 @@ class SelectCoin extends Component {
                                       if (this.state.openRowKey === null) {
                                           if (!isAdded) {
                                               console.log("selected: " + item.name);
-                                              const {tokenSelected} = this.props.navigation.state.params;
-                                              tokenSelected({
-                                                  symbol: item.symbol,
-                                                  contractAddr: item.contractAddr,
-                                                  name: item.name,
-                                                  tokenDecimal: item.tokenDecimal,
-                                                  balance: new BigNumber(0),
-                                                  tokenTxs: {},
+
+                                              this.loadingView.show(null, {
+                                                  position: 'top'
                                               });
-                                              this.props.navigation.goBack();
+
+                                              const {tokenSelected} = this.props.navigation.state.params;
+                                              fetchAccountTokenBalance(this.account.symbol, item.contractAddr, this.account.address).then(balance=> {
+                                                  this.loadingView.hide();
+
+                                                  tokenSelected({
+                                                      symbol: item.symbol,
+                                                      contractAddr: item.contractAddr,
+                                                      name: item.name,
+                                                      tokenDecimal: item.tokenDecimal,
+                                                      balance: balance.shiftedBy(-(item.tokenDecimal-0)),
+                                                      tokenTxs: {},
+                                                  });
+                                                  this.props.navigation.goBack();
+                                              }).catch(err=> {
+                                                  this.loadingView.hide();
+
+                                                  tokenSelected({
+                                                      symbol: item.symbol,
+                                                      contractAddr: item.contractAddr,
+                                                      name: item.name,
+                                                      tokenDecimal: item.tokenDecimal,
+                                                      balance: new BigNumber(0),
+                                                      tokenTxs: {},
+                                                  });
+                                                  this.props.navigation.goBack();
+                                              });
+
                                           }
                                       } else {
                                           this.setState({openRowKey: null});

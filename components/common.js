@@ -3,9 +3,9 @@ import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
-import {mainColor, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
+import {mainColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
 import BigNumber from 'bignumber.js';
-import {sameAddress} from "../coins/api";
+import {sameAddress, formatAddress1Line} from "../coins/api";
 
 const {width,height} = Dimensions.get('window');
 
@@ -69,6 +69,41 @@ class ComponentTabBar extends Component{
 				</TouchableOpacity>
 			</View>
 		);
+	}
+}
+
+
+class OptionButton extends Component {
+	state = {
+		selected: false,
+	}
+	constructor(props) {
+		super(props);
+	}
+	render() {
+	    let borderColor = this.state.selected? mainColor: 'gray';
+	    let fontColor = this.state.selected? mainColor: 'black';
+	    let backgroundColor = this.state.selected? mainColorAlpha: 'transparent';
+		return (
+			<TouchableOpacity style={{
+                                  ...this.props.style,
+                                  borderWidth:1/PixelRatio.get(),
+                                  borderColor: borderColor,
+                                  backgroundColor: backgroundColor,
+                                  borderRadius: 3,
+                                  justifyContent: 'center',
+                                  alignItems: 'center'
+                              }}
+                              onPress={() => {
+                              	  this.setState({
+									  selected: !this.state.selected,
+								  });
+                              	  this.props.onPress();
+							  }}
+			>
+				<Text style={{textAlign: 'center', color: fontColor}} numberOfLines={1}>{this.props.title}</Text>
+			</TouchableOpacity>
+		)
 	}
 }
 
@@ -573,6 +608,108 @@ class TransactionItem extends React.PureComponent{
 	}
 }
 
+class AddressComponent extends Component {
+	state={
+		showAllAddress: false,
+		symbol: undefined,
+	};
+	render_address66(address) {
+		return (
+			<View>
+				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
+				address.substring(4, 10)+' '+
+				address.substring(10,16)+' '+
+				address.substring(16,22)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(22,26)+' '+
+				address.substring(26,32)+' '+
+				address.substring(32,38)+' '+
+				address.substring(38,44)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(44,48)+' '+
+				address.substring(48,54)+' '+
+				address.substring(54,60)+' '+
+				address.substring(60,66)}</Text>
+			</View>
+		)
+	}
+	render_address42(address) {
+		return (
+			<View>
+				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
+				address.substring(4, 8)+' '+
+				address.substring(8,12)+' '+
+				address.substring(12, 16) + ' ' +
+				address.substring(16,21)}</Text>
+				<Text style={styles.addressFontStyle}>{address.substring(21,25)+' '+
+				address.substring(25,29)+' '+
+				address.substring(29,33)+' '+
+				address.substring(33,37)+ ' ' +
+				address.substring(37, 42)}</Text>
+			</View>
+		)
+
+	}
+	render() {
+		const {address, symbol} = this.props;
+		this.expandable = (address.length == 66 || address.length == 42);
+		let address1Line = address;
+		try {
+			address1Line  = formatAddress1Line(symbol, address);
+		} catch (err) {
+		}
+		if(this.state.showAllAddress) {
+			return (
+				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',width:width}}>
+					{address.length === 66? this.render_address66(address):
+						address.length == 42? this.render_address42(address): null
+					}
+					<View style={{marginHorizontal:10,justifyContent:'space-between', alignItems:'center'}}>
+						<TouchableOpacity onPress={()=>{
+							Clipboard.setString(address);
+							AppToast.show(strings('toast_copy_success'));
+						}}>
+							<Image source={require("../assets/copy.png")} style={{width:20, height:20}}/>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={()=>{this.setState({showAllAddress:false})}}>
+							<View style={{height:20,backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center'}}>
+								<Text style={styles.addressFontStyle}>{strings('account_view.collapse_button')}</Text>
+							</View>
+						</TouchableOpacity>
+					</View>
+				</View>
+			)
+		}else {
+			return (
+				<View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width}}>
+					<Text
+						style={styles.addressFontStyle}>{address1Line}</Text>
+					<TouchableOpacity onPress={() => {
+						Clipboard.setString(address);
+						AppToast.show(strings('toast_copy_success'));
+					}}>
+						<Image source={require("../assets/copy.png")}
+							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
+					</TouchableOpacity>
+					{this.expandable ?
+						<TouchableOpacity onPress={() => {
+							this.setState({showAllAddress: true})
+						}}>
+							<View style={{
+								height: 24,
+								backgroundColor: 'rgba(255,255,255,0.1)',
+								borderRadius: 10,
+								paddingHorizontal: 5,
+								justifyContent: 'center'
+							}}>
+								<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
+							</View>
+						</TouchableOpacity>
+						:null
+					}
+				</View>
+			);
+		}
+	}
+}
 
 module.exports = {
 	ComponentButton,
@@ -589,5 +726,7 @@ module.exports = {
 	SubTextInput,
 	alert_ok,
 	TransactionItem,
-	PendingComponent
+	PendingComponent,
+	AddressComponent,
+	OptionButton
 };

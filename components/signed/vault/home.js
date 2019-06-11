@@ -11,6 +11,7 @@ import {
 	RefreshControl,
 	StyleSheet,
 	Text,
+    Button,
 	TextInput,
 	TouchableOpacity,
 	View,
@@ -24,7 +25,7 @@ import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
-import {ComponentTabBar, alert_ok} from '../../common.js';
+import {OptionButton, ComponentTabBar, alert_ok} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
 import {HomeComponent} from "../HomeComponent";
@@ -67,25 +68,14 @@ function sortAccounts(src,select, network){
 	return res;
 }
 
-function filterAccounts(src,select){
+function filterAccounts(src,filters){
 	let res = src;
-	switch (select) {
-		case FILTER[1].title:
-			res  = res.filter(a=>{
-				return a.type === '[local]';
-			});
-			break;
-		case FILTER[2].title:
-			res  = res.filter(a=>{
-				return a.type === '[pk]';
-			});
-			break;
-		case FILTER[3].title:
-			res  = res.filter(a=>{
-				return a.type === '[ledger]';
-			});
-			break;
-	}
+    res  = res.filter(a=>{
+		for (let i = 0; i < filters.length; i++) {
+			if (a[filters[i].type] === filters[i].key) return true;
+		}
+		return false;
+    });
 	return res;
 }
 
@@ -96,7 +86,6 @@ function searchAccounts(src,keyword){
 		return a.name.indexOf(keyword) >= 0;
 	});
 }
-
 
 class HomeCenterComponent extends  React.Component{
 
@@ -120,6 +109,79 @@ class HomeCenterComponent extends  React.Component{
 		this.props.closeSort();
 	};
 	isShow=()=>this.state.showSort||this.state.showFilter;
+
+	render_filters=()=> {
+		let addFromKey = strings('wallet.section_title_add_from');
+		let filters = {
+			[addFromKey] : [
+				{
+					text: strings('filter.masterKey'),
+					key: '[local]',
+					type: 'type'
+				},
+				{
+					text: strings('filter.privateKey'),
+					key: '[pk]',
+					type: 'type'
+				},
+				{
+					text: strings('filter.ledger'),
+					key: '[ledger]',
+					type: 'type'
+				}
+            ]
+		};
+		if (Platform.OS === 'iOS') {
+			filters[addFromKey] = filters[addFromKey].slice(0, 2);
+		}
+		let coinKeys = Object.values(COINS);
+		if (coinKeys.length > 0) {
+			let coinTypeKey = strings('wallet.section_title_coin_type');
+			filters[coinTypeKey] = [];
+			coinKeys.forEach(coin => {
+				filters[coinTypeKey].push({
+					text: coin.symbol,
+					key: coin.symbol,
+					type: 'symbol',
+				});
+			});
+		}
+		let filterKeys = Object.keys(filters);
+		let ret=[];
+		filterKeys.forEach(filterKey => {
+			ret.push(<View key={filterKey} style={{width: '100%', marginTop: 10}}>
+				<Text style={{color: 'black', fontSize: 16}}>{filterKey}</Text>
+				{ this.render_filter_options(filters[filterKey]) }
+			</View>);
+		});
+		return ret;
+	};
+	render_filter_options = (options) => {
+		let ret = [];
+		let cols = Math.min(options.length, 4);
+		let rows = ((options.length-1) / 4 + 1);
+		for (let i = 0; i < rows; i++) {
+			ret.push(<View key={'line' + i} style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems:'space-between', }}>{this.render_options_byline(options, i, cols)}</View>);
+		}
+		return ret;
+	};
+
+	render_options_byline=(options, line, cols) => {
+		let space = 10;
+		let btnWidth = (width - 40 - 40 - space * (cols-1)) / cols;
+	    let ret = [];
+		for (let i = line * 4; i < Math.min((line + 1) * 4, options.length); i++) {
+			ret.push(<OptionButton key={i + ''} title={options[i].text} style={{
+				marginRight: space,
+				width: btnWidth,
+				height: 36,
+                marginVertical: 5,
+				}} onPress={() =>{
+					// TODO: add to this.property
+			}}/>);
+		}
+		return ret;
+	}
 
 	render(){
 		const sortTintColor = this.state.showSort?linkButtonColor:'black';
@@ -165,26 +227,29 @@ class HomeCenterComponent extends  React.Component{
 				</View>
 				{
 					// filter list
-					this.state.showFilter?<FlatList
-						style={{marginTop:10}}
-						data={Platform.OS === 'android'? FILTER: FILTER.slice(0, -1)}
-						renderItem={({item}) =>
-							<TouchableOpacity activeOpacity={0.3} onPress={() => {
-								this.props.closeFilter(item.title);
-								this.closeAll();
-							}}>
-								<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center', marginVertical: 10}}>
-									{item.image ?
-										<Image source={item.image} style={{width:20,height:20}} resizeMode={'contain'}/> : null}
-									<Text numberOfLines={1}
-										  style={{marginLeft:40,color:item.title===this.props.currentFilter?linkButtonColor:'black'}}>{strings(item.title)}</Text>
-								</View>
-							</TouchableOpacity>
-
-						}
-						ItemSeparatorComponent={()=><View style={styles.divider}/>}
-						keyExtractor={(item, index) => index.toString()}
-					/>:null
+					this.state.showFilter?
+                    <View style={{marginTop: 10, width: '100%'}}>{this.render_filters()}</View>
+					// 	<FlatList
+					// 	style={{marginTop:10}}
+					// 	data={Platform.OS === 'android'? FILTER: FILTER.slice(0, -1)}
+					// 	renderItem={({item}) =>
+					// 		<TouchableOpacity activeOpacity={0.3} onPress={() => {
+					// 			this.props.closeFilter(item.title);
+					// 			this.closeAll();
+					// 		}}>
+					// 			<View style={{width:width-30,flexDirection:'row',height:30, alignItems:'center', marginVertical: 10}}>
+					// 				{item.image ?
+					// 					<Image source={item.image} style={{width:20,height:20}} resizeMode={'contain'}/> : null}
+					// 				<Text numberOfLines={1}
+					// 					  style={{marginLeft:40,color:item.title===this.props.currentFilter?linkButtonColor:'black'}}>{strings(item.title)}</Text>
+					// 			</View>
+					// 		</TouchableOpacity>
+					//
+					// 	}
+					// 	ItemSeparatorComponent={()=><View style={styles.divider}/>}
+					// 	keyExtractor={(item, index) => index.toString()}
+					// />
+					:null
 				}
 				{
 					// sort list
@@ -228,7 +293,7 @@ class Home extends HomeComponent {
 		this.state={
 			showMenu: false,
 			sortOrder: SORT[0].title,
-			filter: FILTER[0].title,
+			filter: [],
 			totalBalance: undefined,
 			openRowKey: null,
 			swipeEnable: true,
@@ -302,7 +367,6 @@ class Home extends HomeComponent {
 
 	fetchAccountsBalance = ()=> {
 		// TODO: also update token's balance
-		console.log('fetchAccountsBalance');
 		const {dispatch,accounts} = this.props;
 		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
@@ -482,8 +546,8 @@ class Home extends HomeComponent {
 						this.state.openRowKey||this.props.navigation.navigate(targetUri,{account: item});
 					}}
 				>
-					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start'}}>
-						<Image source={COINS[item.symbol].icon} style={{width:fixedHeight(40), height:fixedHeight(40)}}/>
+					<View style={{...styles.accountContainerWithShadow, justifyContent:'flex-start',  alignItems: 'center'}}>
+						<Image source={COINS[item.symbol].icon} style={{marginLeft: 15, width:fixedHeight(100), height:fixedHeight(100)}}/>
 						<View style={{flex:1, paddingVertical: 10}}>
 							<View style={{...styles.accountSubContainer, width:'100%',flex:1, alignItems:'center'}}>
 								<Text style={{...styles.accountSubTextFontStyle1, width:'70%'}} numberOfLines={1}>{item.name}</Text>

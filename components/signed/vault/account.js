@@ -25,7 +25,7 @@ import defaultStyles from '../../styles';
 import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
-import {TransactionItem} from '../../common';
+import {TransactionItem, AddressComponent} from '../../common';
 import {COINS} from '../../../coins/support_coin_list';
 import {getTransactionsByAddress,formatAddress1Line,fetchAccountTokenBalance,fetchAccountTokenTransferHistory,fetchAccountTokens} from '../../../coins/api';
 
@@ -46,116 +46,19 @@ const SwithType = type=>{
 	return accountImage;
 };
 
-const ImageHeader = ({type, title})=>(
+const ImageHeader = ({type, title, hasMenu})=>(
 	<View style={{flexDirection:'row', flex:1,justifyContent:'center',paddingHorizontal:20,alignItems:'center'}}>
-		<Image source={SwithType(type)} style={{width:20,height:20, marginRight:20,tintColor:'#fff', borderRadius:5, }} resizeMode={'contain'}/>
+		{
+			hasMenu ?
+				<Image source={SwithType(type)}
+					   style={{width: 20, height: 20, marginRight: 20, tintColor: '#fff', borderRadius: 5,}}
+					   resizeMode={'contain'}/>
+				:null
+		}
 		<Text style={{color:'#fff', includeFontPadding:true, textAlignVertical:'bottom', fontWeight: 'bold', fontSize:16}}>{title}</Text>
 	</View>
 );
 
-class AddressComponent extends Component {
-	state={
-		showAllAddress: false,
-		symbol: undefined,
-	};
-	render_address66(address) {
-		return (
-			<View>
-				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
-                    address.substring(4, 10)+' '+
-                    address.substring(10,16)+' '+
-                    address.substring(16,22)}</Text>
-				<Text style={styles.addressFontStyle}>{address.substring(22,26)+' '+
-                    address.substring(26,32)+' '+
-                    address.substring(32,38)+' '+
-                    address.substring(38,44)}</Text>
-				<Text style={styles.addressFontStyle}>{address.substring(44,48)+' '+
-                    address.substring(48,54)+' '+
-                    address.substring(54,60)+' '+
-                    address.substring(60,66)}</Text>
-			</View>
-		)
-	}
-	render_address42(address) {
-		return (
-			<View>
-				<Text style={styles.addressFontStyle}>{address.substring(0, 4 )+' '+
-                    address.substring(4, 8)+' '+
-                    address.substring(8,12)+' '+
-                    address.substring(12, 16) + ' ' +
-                    address.substring(16,21)}</Text>
-				<Text style={styles.addressFontStyle}>{address.substring(21,25)+' '+
-                    address.substring(25,29)+' '+
-                    address.substring(29,33)+' '+
-                    address.substring(33,37)+ ' ' +
-                    address.substring(37, 42)}</Text>
-			</View>
-		)
-
-	}
-	render() {
-		const {address, symbol} = this.props;
-        this.expandable = (address.length == 66 || address.length == 42);
-        let address1Line = address;
-        try {
-			address1Line  = formatAddress1Line(symbol, address);
-		} catch (err) {
-		}
-		if(this.state.showAllAddress) {
-			return (
-				<View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',width:width}}>
-					{address.length === 66? this.render_address66(address):
-						address.length == 42? this.render_address42(address): null
-					}
-					<View style={{marginHorizontal:10,justifyContent:'space-between', alignItems:'center'}}>
-						<TouchableOpacity onPress={()=>{
-							Clipboard.setString(address);
-							AppToast.show(strings('toast_copy_success'));
-						}}>
-							<Image source={require("../../../assets/copy.png")} style={{width:20, height:20}}/>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={()=>{Keyboard.dismiss();this.setState({showAllAddress:false})}}>
-							<View style={{height:20,backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center'}}>
-								<Text style={styles.addressFontStyle}>{strings('account_view.collapse_button')}</Text>
-							</View>
-						</TouchableOpacity>
-					</View>
-				</View>
-			)
-		}else {
-			return (
-				<View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center', width: width}}>
-					<Text
-						style={styles.addressFontStyle}>{address1Line}</Text>
-					<TouchableOpacity onPress={() => {
-						Clipboard.setString(address);
-						AppToast.show(strings('toast_copy_success'));
-					}}>
-						<Image source={require("../../../assets/copy.png")}
-							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
-					</TouchableOpacity>
-					{this.expandable ?
-						<TouchableOpacity onPress={() => {
-							Keyboard.dismiss();
-							this.setState({showAllAddress: true})
-						}}>
-							<View style={{
-								height: 24,
-								backgroundColor: 'rgba(255,255,255,0.1)',
-								borderRadius: 10,
-								paddingHorizontal: 5,
-								justifyContent: 'center'
-							}}>
-								<Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
-							</View>
-						</TouchableOpacity>
-						:null
-					}
-				</View>
-			);
-		}
-	}
-}
 
 
 class Account extends Component {
@@ -166,7 +69,7 @@ class Account extends Component {
 	    const showMenu  = navigation.getParam('showMenu', ()=>{});
 	    const hasMenu = navigation.getParam('hasMenu');
 		return {
-	    	headerTitle: <ImageHeader title={title} type={type}/>,
+	    	headerTitle: <ImageHeader title={title} type={type} hasMenu={hasMenu}/>,
 			headerRight: (
                     <TouchableOpacity
                         style={{width: 48,
@@ -541,12 +444,6 @@ export default connect(state => {
 })(Account);
 
 const styles=StyleSheet.create({
-	addressFontStyle: {
-		fontSize:12,
-		color:'#fff',
-		includeFontPadding:false,
-		fontFamily:fixedWidthFont,
-	},
 	divider: {
 		height: 0.5,
 		backgroundColor: '#dfdfdf'

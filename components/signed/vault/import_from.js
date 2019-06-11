@@ -141,7 +141,7 @@ class ImportFrom extends Component {
                            }}
                            resizeMode={'contain'}
                     />
-                    <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.title}</Text>
+                    <Text numberOfLines={1} style={{paddingLeft: 10}}>{strings(item.title)}</Text>
                 </View>
                 <Image
                     style={{width: 24, height: 24}}

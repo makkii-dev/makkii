@@ -87,6 +87,7 @@ class Transaction extends Component {
 											<TouchableOpacity onPress={() => {
 												this.props.navigation.navigate('signed_setting_add_address', {
 													address: value1,
+													symbol: this.account.symbol,
 												});
 											}} style={{marginLeft: 10}}>
 												<Image source={require('../../../assets/icon_add_address.png')}
