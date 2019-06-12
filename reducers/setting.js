@@ -10,7 +10,6 @@ const init = {
 	login_session_timeout: '30',
 	exchange_refresh_interval: "30",
 	fiat_currency: "CNY",
-	coinPrice: undefined,
     coinPrices: {},
 	pinCodeEnabled: false,
 	touchIDEnabled: false,
@@ -34,7 +33,7 @@ export default function setting(state = init, action){
 			} else {
 				setLocale(action.setting.lang);
 			}
-			new_state =  Object.assign({}, action.setting);
+			new_state =  Object.assign({}, state, action.setting);
 			should_update_db = true;
 			break;
 		case SETTING_UPDATE_PINCODE_ENABLED:
