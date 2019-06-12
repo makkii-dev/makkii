@@ -10,30 +10,40 @@ import {ComponentLogo} from "./common";
 
 const {width,height} = Dimensions.get('window');
 
-const upgradeAccountDb = (accounts, state_version, options = {}) => {
+const upgradeAccountDb = (accs, state_version, options = {}) => {
 	if(state_version===undefined||state_version<1){
 		let new_accounts = {};
-		Object.keys(accounts).forEach(k=>{
+		Object.keys(accs).forEach(k=>{
 			// check key is satisfy 'symbol+address'
 			let new_key = k;
 			new_key = new_key.indexOf('+')>=0? new_key: 'AION+'+new_key;
-			let account = accounts[k];
+			let account = Object.assign({},accs[k]);
 			// remove account network in transactions and tokens
+			delete account['isDefault'];
 			account.transactions = typeof  account.transactions === 'object'? account.transactions:{};
 			account.tokens = typeof  account.tokens === 'object'? account.tokens:{};
-			account.transactions=account.transactions[options.network];
-			account.tokens = account.tokens[options.network];
+			account.transactions= account.transactions[options.network]? account.transactions[options.network]:{};
+			account.tokens= account.tokens[options.network]? account.tokens[options.network]:{};
 			account.symbol = account.symbol? account.symbol: 'AION';
+
 			new_accounts[new_key] = account;
 		});
 		return new_accounts;
 	}
-	return accounts;
+	return accs;
 };
 
 const upgradeSettingDb = (settings)=>{
 	if(settings.state_version===undefined||settings.state_version<1){
-		settings.state_version = 1;
+		let new_settings = {};
+		Object.keys(settings).forEach(k=>{
+			new_settings[k] = settings[k]
+		});
+		new_settings.state_version = 1;
+		new_settings.coinPrices ={};
+		new_settings.explorer_server = 'mainnet';
+		delete  new_settings['theme'];
+		return new_settings;
 	}
 	return settings;
 };
@@ -50,11 +60,10 @@ class Splash extends Component {
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
 		dbGet('settings').then(json => {
-		    let setting_json =JSON.parse(json);
-		    setting_json.coinPrice = undefined;
-		    const old_state_version = setting_json.state_version || 0;
-			setting_json = upgradeSettingDb(setting_json);
-			this.props.dispatch(setting(setting_json));
+		    const setting_json =JSON.parse(json);
+			const old_state_version = setting_json.state_version || 0;
+			const new_setting = upgradeSettingDb(setting_json);
+			dispatch(setting(new_setting));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
 			// load db user
@@ -65,12 +74,12 @@ class Splash extends Component {
 					dbGet('accounts')
 						.then(json=>{
 							let decrypted = decrypt(json, db_user.hashed_password);
-							let accounts_json = JSON.parse(decrypted);
-							accounts_json = upgradeAccountDb(accounts_json, old_state_version, {network: setting_json.explorer_server})
+							const old_accounts = JSON.parse(decrypted);
+							const new_accounts = upgradeAccountDb(old_accounts, old_state_version, {network: setting_json.explorer_server})
 							if(old_state_version<1){
-								dispatch(accounts_add(accounts_json,db_user.hashed_password));
+								dispatch(accounts_add(new_accounts,db_user.hashed_password));
 							}else{
-								dispatch(accounts(accounts_json));
+								dispatch(accounts(new_accounts));
 							}
 						},err=>{
 							console.log(err);
