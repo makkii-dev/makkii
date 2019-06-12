@@ -51,33 +51,30 @@ function update_account_balance(key, newBalance, hashed_password) {
 	}
 }
 
-function update_account_txs(key, transactions, network, hashed_password){
+function update_account_txs(key, transactions, hashed_password){
 	return {
 		type: UPDATE_ACCOUNT_TRANSACTIONS,
 		key,
 		transactions,
-		network,
 		hashed_password
 	}
 }
 
-function update_account_token_txs(key, transactions, symbol, network, hashed_password) {
+function update_account_token_txs(key, transactions, symbol, hashed_password) {
 	return {
 		type: UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 		key,
 		transactions,
 		symbol,
-		network,
 		hashed_password
 	}
 }
 
-function update_account_tokens(key, tokens, network, hashed_password) {
+function update_account_tokens(key, tokens, hashed_password) {
 	return {
 		type: UPDATE_ACCOUNT_TOKENS,
 		key,
 		tokens,
-		network,
 		hashed_password
 	}
 }
@@ -91,12 +88,11 @@ function delete_account(key, hashed_password) {
 	}
 }
 
-function delete_account_token(key, symbol, network, hashed_password){
+function delete_account_token(key, symbol, hashed_password){
 	return {
 		type: DEL_ACCOUNT_TOKEN,
 		key,
 		symbol,
-		network,
 		hashed_password
 	}
 }

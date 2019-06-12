@@ -21,7 +21,7 @@ const init = {
     endpoint_dapps:  'http://dapps.chaion.net',
     endpoint_odex:   'http://odex.chaion.net',
 	explorer_server: 'mainnet',
-
+	state_version: 0,
 }
 
 export default function setting(state = init, action){

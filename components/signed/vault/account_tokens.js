@@ -125,16 +125,15 @@ class AccountTokens extends Component {
     }
 
     loadBalances=() => {
-        const {setting, accounts, dispatch, user} = this.props;
+        const {accounts, dispatch, user} = this.props;
         getBalance(this.account.symbol, this.account.address).then(balance => {
             console.log("get balance " + this.account.symbol + ": " + balance);
             accounts[this.account_key].balance = balance;
 
-            let explorer_server = setting.explorer_server;
             let tokens = accounts[this.account_key].tokens;
 
             let executors = [];
-            Object.values(tokens[explorer_server]).map(token => {
+            Object.values(tokens).map(token => {
                 executors.push(
                     new Promise((resolve, reject)=>{
                         fetchAccountTokenBalance(this.account.symbol, token.contractAddr, this.account.address).then(balance => {
@@ -176,10 +175,10 @@ class AccountTokens extends Component {
     }
 
     tokenSelected=(token) => {
-        const {dispatch, setting, user} = this.props;
+        const {dispatch, user} = this.props;
         dispatch(update_account_tokens(this.account_key, {
             [token.symbol]: token
-        }, setting.explorer_server, user.hashed_password));
+        },user.hashed_password));
     }
 
     onSwipeOpen(Key: any) {
@@ -208,10 +207,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         },()=>setTimeout(()=>
                         {
-                            let explorer_server = setting.explorer_server;
-
                             dispatch(delete_account_token(this.account_key, key,
-                                explorer_server,
                                 user.hashed_password));
                         }, 500));
                     }}
@@ -230,8 +226,8 @@ class AccountTokens extends Component {
 
     render_item=({item, index})=> {
         const {setting, accounts} = this.props;
-        let explorer_server = setting.explorer_server;
         let tokens = accounts[this.account_key].tokens;
+        console.log('tokens=>',tokens);
         let token;
 
         const cellHeight = 60;
@@ -246,9 +242,7 @@ class AccountTokens extends Component {
                 console.log("get token icon url failed: ", err);
                 imageIcon = COINS[this.account.symbol].default_token_icon;
             }
-            console.log("imageIcon:", imageIcon);
-            console.log("fast url:", fastImageUrl);
-            token = tokens[explorer_server][item.symbol];
+            token = tokens[item.symbol];
             balance = token.balance;
         } else {
             imageIcon = COINS[this.account.symbol].icon;
@@ -342,12 +336,11 @@ class AccountTokens extends Component {
     };
 
     render() {
-        const {setting, accounts} = this.props;
-        let explorer_server = setting.explorer_server;
+        const {accounts} = this.props;
         let tokens = accounts[this.account_key].tokens;
         let tokenList;
-        if (tokens !== undefined && tokens[explorer_server] !== undefined) {
-            tokenList = Object.values(tokens[explorer_server]);
+        if (tokens !== undefined) {
+            tokenList = Object.values(tokens);
         } else {
             tokenList = [];
         }

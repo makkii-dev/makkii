@@ -188,7 +188,6 @@ class Account extends Component {
 	}
 
 	fetchAccountTransactions = (address, page=0, size=5, obj={}, callback=()=>{})=>{
-		const {explorer_server} = this.props.setting;
 		const {accounts,dispatch,user} = this.props;
 		if (this.token === undefined) {
 			getTransactionsByAddress(this.account.symbol, address, page, size).then(txs => {
@@ -196,7 +195,7 @@ class Account extends Component {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
-				dispatch(update_account_txs(this.account_key, txs, explorer_server, user.hashed_password));
+				dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
@@ -220,7 +219,7 @@ class Account extends Component {
 				}
 
 				this.token.tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
-				dispatch(update_account_tokens(this.account_key, tokens, this.props.setting.explorer_server, user.hashed_password));
+				dispatch(update_account_tokens(this.account_key, tokens, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
@@ -347,13 +346,13 @@ class Account extends Component {
 		    return b.timestamp - a.timestamp;
 		};
 		if (this.token === undefined) {
-			transactionsList = transactions[setting.explorer_server]?Object.values(transactions[setting.explorer_server]).slice(0,5):[];
+			transactionsList = transactions?Object.values(transactions).slice(0,5):[];
 			accountBalanceText = new BigNumber(accounts[this.account_key].balance).toNotExString() + ' ' + this.account.symbol;
 		} else {
-		    let tokenTxs = accounts[this.account_key].tokens[setting.explorer_server][this.token.symbol].tokenTxs;
+		    let tokenTxs = accounts[this.account_key].tokens[this.token.symbol].tokenTxs;
             transactionsList = tokenTxs? Object.values(tokenTxs).sort(compareFn).slice(0,5):[];
 
-			accountBalanceText = new BigNumber(accounts[this.account_key].tokens[setting.explorer_server][this.token.symbol].balance) + ' ' + this.token.symbol;
+			accountBalanceText = new BigNumber(accounts[this.account_key].tokens[this.token.symbol].balance) + ' ' + this.token.symbol;
 		}
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
