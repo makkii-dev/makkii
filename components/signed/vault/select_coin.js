@@ -193,7 +193,7 @@ class SelectCoin extends Component {
         try {
             fastIcon = getTokenIconUrl(this.account.symbol, item.symbol, item.contractAddr);
         } catch (err) {
-            icon = COINS[this.account.symbol].icon;
+            icon = COINS[this.account.symbol].default_token_icon;
         }
         // prepare right indicator
         const {setting, accounts} = this.props;
@@ -296,10 +296,11 @@ class SelectCoin extends Component {
                                     source={{uri: fastIcon}}
                                     resizeMode={FastImage.resizeMode.contain}
                                 />:
+                                icon !== undefined?
                                 <Image style={{width: 30, height: 30}}
                                        source={icon}
                                        resizeMode={'contain'}
-                                />
+                                />:null
                         }
                         <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.symbol + '-' + item.name}</Text>
                     </View>

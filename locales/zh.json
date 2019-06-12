@@ -214,7 +214,7 @@
     "warning_delete_token": "确定要删除这个代币?",
     "toast_delete_token_not_empty": "仅有余额为０的代币可被删除",
     "toast_get_token_balance_fail": "获取代币余额失败",
-    "placeholder_search_token": "搜索代币",
+    "placeholder_search_token": "输入Token名称或合约地址",
     "no_token_found": "找不到代币",
     "btn_custom_token": "添加自定义代币",
     "label_is_added": "已添加"
