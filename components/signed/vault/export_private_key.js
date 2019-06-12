@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Clipboard,
     Platform,
-    PermissionsAndroid
+    PermissionsAndroid, ScrollView
 } from 'react-native';
 
 import Toast from 'react-native-root-toast';
@@ -20,8 +20,11 @@ import QRCode from "react-native-qrcode-svg";
 import {alert_ok, ComponentButton, InputMultiLines} from "../../common";
 import {saveImage} from "../../../utils";
 import screenshotHelper from 'react-native-screenshot-helper';
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 
-var nativeBridge = NativeModules.RNScreenshotHelper;
+const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
+
+const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
 const {width} = Dimensions.get('window');
 
@@ -90,7 +93,7 @@ class ExportPrivateKey extends React.Component{
     }
     render(){
         return(
-            <View style={styles.container}>
+            <MyscrollView style={styles.container}>
                 <Text style={styles.warningLabel}>{strings('export_private_key.warning')}</Text>
                 <View style={styles.qrCodeView}>
                     <QRCode
@@ -122,7 +125,7 @@ class ExportPrivateKey extends React.Component{
                         AppToast.show(strings('toast_copy_success'));
                     }}
                 />
-            </View>
+            </MyscrollView>
         )
     }
 }
@@ -155,7 +158,6 @@ const styles= StyleSheet.create({
     privateKeyView:{
         ...defaultStyles.shadow,
         padding: 10,
-        height: 100,
         borderTopLeftRadius:5,
         borderTopRightRadius:5,
         backgroundColor: 'white',
@@ -165,6 +167,7 @@ const styles= StyleSheet.create({
     },
     privateKeyText:{
         borderWidth: 0,
+        flex:1,
         fontSize: 16,
         fontWeight: 'normal',
         textAlignVertical: 'top'

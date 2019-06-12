@@ -11,6 +11,7 @@ import {accounts_add } from "../../../actions/accounts";
 import {update_index } from "../../../actions/user";
 import {accountKey} from '../../../utils';
 import {alert_ok} from '../../common';
+import {COINS} from "../../../coins/support_coin_list";
 
 const {width} = Dimensions.get('window');
 
@@ -76,7 +77,7 @@ class ImportFrom extends Component {
                 }
             });
         };
-        getUniqueKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, minIndex, true);
+        getUniqueKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, minIndex, COINS[this.symbol.toUpperCase()].isTestNet);
 
     };
 

@@ -14,6 +14,7 @@ import {PopWindow} from "./home_popwindow";
 import {Header} from 'react-navigation';
 import {ACCOUNT_MENU} from "./constants";
 import {AddressComponent} from '../../common';
+import defaultStyles from "../../styles";
 
 const {width} = Dimensions.get('window');
 
@@ -269,7 +270,10 @@ class AccountTokens extends Component {
                        flex: 1,
                        backgroundColor:'transparent',
                        height: cellHeight,
-                       justifyContent:'flex-end'}}>
+                       justifyContent:'flex-end',
+                       borderRadius:5,
+                       marginVertical:10,
+                       marginHorizontal:20}}>
                        <TouchableOpacity
                            onPress={()=>{
                                this.onDeleteToken(item.symbol);
@@ -280,6 +284,7 @@ class AccountTokens extends Component {
                                height: cellHeight,
                                alignItems: 'center',
                                backgroundColor: '#fe0000',
+                               borderRadius:5,
                            }}>
                                <Text style={{fontSize:14,color:'#fff'}}>{strings('delete_button')}</Text>
                            </View>
@@ -290,12 +295,16 @@ class AccountTokens extends Component {
                <TouchableOpacity
                    activeOpacity={1}
                    style={{
+                       ...defaultStyles.shadow,
                        flexDirection: 'row',
+                       borderRadius:5,
                        alignItems: 'center',
                        paddingVertical: 10,
                        paddingHorizontal: 20,
                        backgroundColor: '#fff',
                        justifyContent: 'space-between',
+                       marginVertical:10,
+                       marginHorizontal:20,
                        height: cellHeight,
                    }}
                    onPress={()=> {
