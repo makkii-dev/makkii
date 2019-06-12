@@ -46,11 +46,13 @@ class AddAddress extends Component {
             this.symbol = props.navigation.getParam('symbol');
             this.oldAddressKey = accountKey(this.symbol, this.address);
             this.newSymbol = this.symbol;
+        } else {
+            this.newSymbol = 'AION';
         }
         this.state = {
             name: this.name === undefined? '': this.name,
             address: this.address === undefined? '': this.address,
-            coinName: this.symbol === undefined? '': COINS[this.symbol].name + "/" + this.symbol,
+            coinName: this.symbol === undefined? COINS[this.newSymbol].name + "/" + this.newSymbol: COINS[this.symbol].name + "/" + this.symbol,
         };
     }
 
@@ -65,12 +67,26 @@ class AddAddress extends Component {
     async componentWillReceiveProps(props) {
         let oldData = this.props.navigation.getParam('scanned');
         let scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== '' && oldData !== scannedData) {
-            this.setState({
-                address: scannedData,
+        // if (scannedData !== '' && oldData !== scannedData) {
+            validateAddress(scannedData, this.newSymbol).then(isValidAddress => {
+                console.log("scannedData:" + scannedData);
+                let address = scannedData;
+                if (!isValidAddress) {
+                    try {
+                        let json = JSON.parse(scannedData);
+                        address = json.receiver;
+                    } catch (error) {
+                        console.log("parse qrcode failed: ", error);
+                        // did nothing.
+                        return;
+                    }
+                }
+                this.setState({
+                    address: address,
+                });
+                this.updateEditStatus(this.state.name, address);
             });
-            this.updateEditStatus(this.state.name, scannedData);
-        }
+        // }
     }
 
     addAddress=() => {
@@ -126,13 +142,39 @@ class AddAddress extends Component {
                 });
         });
     }
+    validateQrcode=(code, symbol)=> {
+        return new Promise((resolve, reject) => {
+            validateAddress(code, symbol).then(isValidAddress => {
+                if (isValidAddress) {
+                    resolve(true);
+                } else {
+                    try {
+                        let json = JSON.parse(code);
+                        if (!json.receiver) {
+                            resolve(false);
+                        } else {
+                            if (json.coin !== undefined && json.coin !== symbol) {
+                                resolve(false);
+                                return;
+                            }
+                            validateAddress(json.receiver, symbol).then(isValidAddress => {
+                                resolve(isValidAddress);
+                            });
+                        }
+                    } catch (error) {
+                        resolve(false);
+                    }
+                }
+            });
+        });
+    }
 
     scan=() => {
         let thus = this;
         this.props.navigation.navigate('scan', {
             success: 'signed_setting_add_address',
             validate: function(data, callback) {
-                validateAddress(data.data, thus.newSymbol).then(result => {
+                thus.validateQrcode(data.data, thus.newSymbol).then(result => {
                     if (result) {
                         callback(true);
                     } else {
