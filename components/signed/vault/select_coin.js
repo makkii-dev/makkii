@@ -137,7 +137,7 @@ class SelectCoin extends Component {
     onDeleteToken(key) {
         console.log("delete key: " + key);
 
-        const { dispatch, accounts, setting, user } = this.props;
+        const { dispatch, accounts, user } = this.props;
         popCustom.show(
             strings('alert_title_warning'),
             strings('select_coin.warning_delete_token'),
@@ -148,8 +148,7 @@ class SelectCoin extends Component {
                             openRowKey: null,
                         },()=>setTimeout(()=>
                         {
-                            let explorer_server = setting.explorer_server;
-                            const tokens = accounts[this.account_key].tokens[explorer_server];
+                            const tokens = accounts[this.account_key].tokens;
 
                             this.loadingView.show();
                             // fetch account balance
@@ -162,8 +161,7 @@ class SelectCoin extends Component {
                                     });
                                     return;
                                 }
-                                dispatch(delete_account_token(account_key, key,
-                                    explorer_server,
+                                dispatch(delete_account_token(this.account_key, key,
                                     user.hashed_password));
                                 this.loadingView.hide();
                             }).catch(err => {

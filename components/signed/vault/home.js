@@ -45,7 +45,7 @@ import {update_index} from "../../../actions/user";
 const {width} = Dimensions.get('window');
 
 
-function sortAccounts(src,select, network){
+function sortAccounts(src,select){
 	let res = src;
 	switch (select) {
 		case SORT[0].title:
@@ -55,10 +55,10 @@ function sortAccounts(src,select, network){
 			break;
 		case SORT[1].title:
 			res =  res.sort((a,b)=>{
-				const a_transactions =  a.transactions[network];
-				const b_transactions =  b.transactions[network];
+				const a_transactions =  a.transactions;
+				const b_transactions =  b.transactions;
 				if(a_transactions&&b_transactions){
-					return Object.keys(b.transactions[network]).length - Object.keys(a.transactions[network]).length;
+					return Object.keys(b.transactions).length - Object.keys(a.transactions).length;
 				}else {
 					return 1;
 				}
@@ -79,7 +79,6 @@ function filterAccounts(src,filters){
 	    	f.push(filters[i].key);
 	    	typeFilters[filters[i].type] = f;
 		}
-	    console.log("typeFilters", typeFilters);
 
 		res = res.filter(a => {
 			let match = true;
@@ -575,7 +574,7 @@ class Home extends HomeComponent {
 		// 		accountImage = require('../../../assets/account_mk.png');
 		// }
 
-		const txs = item.transactions[this.props.setting.explorer_server];
+		const txs = item.transactions;
 		if (txs) {
 			Object.values(txs).map((tx) => {
 				if (tx.status === 'PENDING') {
@@ -688,7 +687,7 @@ class Home extends HomeComponent {
 	}
 
 	render(){
-		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder, this.props.setting.explorer_server);
+		let renderAccounts= sortAccounts(Object.values(this.props.accounts),this.state.sortOrder);
 		renderAccounts = filterAccounts(renderAccounts, this.state.filter);
 		renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
 		let total_currency = Object.keys(this.props.accounts).length===0?0:undefined;

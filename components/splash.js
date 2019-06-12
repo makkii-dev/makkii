@@ -3,12 +3,41 @@ import {connect} from 'react-redux';
 import {ImageBackground, Dimensions, Text} from 'react-native';
 import {user} from '../actions/user.js';
 import {setting} from "../actions/setting.js";
-import {accounts} from '../actions/accounts.js';
+import {accounts,accounts_add} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils';
 import {strings} from "../locales/i18n";
 import {ComponentLogo} from "./common";
 
 const {width,height} = Dimensions.get('window');
+
+const upgradeAccountDb = (accounts, state_version, options = {}) => {
+	if(state_version===undefined||state_version<1){
+		let new_accounts = {};
+		Object.keys(accounts).forEach(k=>{
+			// check key is satisfy 'symbol+address'
+			let new_key = k;
+			new_key = new_key.indexOf('+')>=0? new_key: 'AION+'+new_key;
+			let account = accounts[k];
+			// remove account network in transactions and tokens
+			account.transactions = typeof  account.transactions === 'object'? account.transactions:{};
+			account.tokens = typeof  account.tokens === 'object'? account.tokens:{};
+			account.transactions=account.transactions[options.network];
+			account.tokens = account.tokens[options.network];
+
+			new_accounts[new_key] = account;
+		});
+		return new_accounts;
+	}
+	return accounts;
+};
+
+const upgradeSettingDb = (settings)=>{
+	if(settings.state_version===undefined||settings.state_version<1){
+		settings.state_version = 1;
+	}
+	return settings;
+};
+
 
 class Splash extends Component {
 	constructor(props){
@@ -23,6 +52,8 @@ class Splash extends Component {
 		dbGet('settings').then(json => {
 		    let setting_json =JSON.parse(json);
 		    setting_json.coinPrice = undefined;
+		    const old_state_version = setting_json.state_version || 0;
+			setting_json = upgradeSettingDb(setting_json);
 			this.props.dispatch(setting(setting_json));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
@@ -34,7 +65,13 @@ class Splash extends Component {
 					dbGet('accounts')
 						.then(json=>{
 							let decrypted = decrypt(json, db_user.hashed_password);
-							dispatch(accounts(JSON.parse(decrypted)));
+							let accounts_json = JSON.parse(decrypted);
+							accounts_json = upgradeAccountDb(accounts_json, old_state_version, {network: setting_json.explorer_server})
+							if(old_state_version<1){
+								dispatch(accounts_add(accounts_json,db_user.hashed_password));
+							}else{
+								dispatch(accounts(accounts_json));
+							}
 						},err=>{
 							console.log(err);
 						});

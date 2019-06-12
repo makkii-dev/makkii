@@ -110,11 +110,11 @@ export class listenTransaction{
         let updateTxStatus = function(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user) {
             delete thusPendingMap[hashKey];
             if (token === undefined) {
-                thusStore.dispatch(update_account_txs(accountKey(symbol, tx.from), {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
-                thusStore.dispatch(update_account_txs(accountKey(symbol, tx.to), {[tx.hash]: tx}, setting.explorer_server, user.hashed_password));
+                thusStore.dispatch(update_account_txs(accountKey(symbol, tx.from), {[tx.hash]: tx}, user.hashed_password));
+                thusStore.dispatch(update_account_txs(accountKey(symbol, tx.to), {[tx.hash]: tx}, user.hashed_password));
             } else {
-                thusStore.dispatch(update_account_token_txs(accountKey(symbol, tx.from), {[tx.hash]: tx}, token, setting.explorer_server, user.hashed_password));
-                thusStore.dispatch(update_account_token_txs(accountKey(symbol, tx.to), {[tx.hash]: tx}, token, setting.explorer_server, user.hashed_password));
+                thusStore.dispatch(update_account_token_txs(accountKey(symbol, tx.from), {[tx.hash]: tx}, token, user.hashed_password));
+                thusStore.dispatch(update_account_token_txs(accountKey(symbol, tx.to), {[tx.hash]: tx}, token, user.hashed_password));
             }
             DeviceEventEmitter.emit('updateAccountBalance');
         };

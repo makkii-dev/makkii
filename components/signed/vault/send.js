@@ -330,13 +330,13 @@ class Send extends Component {
 
             let txs = {[pendingTx.hash]: pendingTx};
 
-            dispatch(update_account_txs(this.account_key, txs, setting.explorer_server, user.hashed_password));
-            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, user.hashed_password));
 
-            if (pendingTokenTx != undefined) {
+            if (pendingTokenTx !== undefined) {
                 let tokenTxs = { [pendingTokenTx.hash]: pendingTokenTx};
-                dispatch(update_account_token_txs(this.account_key, tokenTxs, this.unit, setting.explorer_server, user.hashed_password));
-                dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.unit, setting.explorer_server, user.hashed_password));
+                dispatch(update_account_token_txs(this.account_key, tokenTxs, this.unit, user.hashed_password));
+                dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.unit, user.hashed_password));
             }
 
             this.loadingView.hide();

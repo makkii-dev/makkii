@@ -47,8 +47,8 @@ export default function accounts(state = init, action){
 			break;
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
-				// only keep 10 latest txs
-				let transactions = Object.assign({}, state[action.key].transactions[action.network],action.transactions);
+				// only keep 5 latest txs
+				let transactions = Object.assign({}, state[action.key].transactions,action.transactions);
 				let new_transactions = {};
 				let compareFn = (a, b) => {
 					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
@@ -57,14 +57,14 @@ export default function accounts(state = init, action){
 					return b.timestamp - a.timestamp;
 				};
 				Object.values(transactions).sort(compareFn).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
-				state[action.key].transactions[action.network] = new_transactions;
+				state[action.key].transactions = new_transactions;
 			}
 			new_state = Object.assign({}, state);
 			should_update_db = true;
 			break;
 		case UPDATE_ACCOUNT_TOKEN_TRANSACTIONS:
 		    if (typeof state[action.key] !== 'undefined') {
-				let transactions = Object.assign({}, state[action.key].tokens[action.network][action.symbol].tokenTxs, action.transactions);
+				let transactions = Object.assign({}, state[action.key].tokens[action.symbol].tokenTxs, action.transactions);
 				let new_transactions = {};
 				let compareFn = (a, b) => {
 					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
@@ -73,19 +73,15 @@ export default function accounts(state = init, action){
 					return b.timestamp - a.timestamp;
 				};
 				Object.values(transactions).sort(compareFn).slice(0,5).forEach(s=>new_transactions[s.hash]=s);
-				state[action.key].tokens[action.network][action.symbol].tokenTxs = new_transactions;
+				state[action.key].tokens[action.symbol].tokenTxs = new_transactions;
 			}
 		    new_state = Object.assign({}, state);
 		    should_update_db = true;
 		    break;
 		case UPDATE_ACCOUNT_TOKENS:
 			if (typeof state[action.key] !== 'undefined') {
-				let tokenExist = state[action.key].tokens !== undefined && state[action.key].tokens[action.network] !== undefined;
-				if (!tokenExist) {
-					state[action.key].tokens = {};
-				}
-
-				state[action.key].tokens[action.network] = Object.assign({}, tokenExist ? state[action.key].tokens[action.network] : {}, action.tokens);
+				let tokenExist = state[action.key].tokens !== undefined && state[action.key].tokens !== undefined;
+				state[action.key].tokens = Object.assign({}, tokenExist ? state[action.key].tokens : {}, action.tokens);
 			}
 			new_state = Object.assign({}, state);
 			should_update_db = true;
@@ -100,7 +96,7 @@ export default function accounts(state = init, action){
 			should_update_db = true;
 			break;
 		case DEL_ACCOUNT_TOKEN:
-			let tokens = state[action.key].tokens[action.network];
+			let tokens = state[action.key].tokens;
 			delete tokens[action.symbol];
 			new_state = Object.assign({},state);
 			should_update_db = true;

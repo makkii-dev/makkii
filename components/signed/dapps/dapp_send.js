@@ -98,8 +98,8 @@ class DappSend extends React.Component{
 
             let txs = {[pendingTx.hash]: pendingTx};
 
-            dispatch(update_account_txs(this.account_key, txs, setting.explorer_server, user.hashed_password));
-            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, setting.explorer_server, user.hashed_password));
+            dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
+            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, user.hashed_password));
 
             this.loadingView.hide();
             AppToast.show(strings('send.toast_tx_sent'), {
