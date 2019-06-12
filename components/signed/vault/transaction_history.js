@@ -14,6 +14,7 @@ import {getTransactionsByAddress, fetchAccountTokenTransferHistory} from "../../
 import {connect} from "react-redux";
 import {ImportListfooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
+import {COINS} from "../../../coins/support_coin_list";
 
 const {width} = Dimensions.get('window');
 
@@ -51,14 +52,13 @@ class TransactionHistory extends React.Component {
 
     fetchAccountTransactions = (account, page=0, size=25)=>{
         let {currentPage,transactions} = this.state;
-        const {explorer_server} = this.props.setting;
         console.log('get transactions page: '+page+' size: '+size);
 
         let promise;
         if (this.token === undefined) {
             promise = getTransactionsByAddress(account.symbol, account.address, page, size);
         } else {
-            promise = fetchAccountTokenTransferHistory(account.symbol, account.address, this.token.contractAddr, null, page, size);
+            promise = fetchAccountTokenTransferHistory(account.symbol, account.address, this.token.contractAddr,COINS[account.symbol.toUpperCase()].network , page, size);
         }
         promise.then(txs => {
             if (Object.keys(txs).length === 0) {
@@ -127,10 +127,10 @@ class TransactionHistory extends React.Component {
                 return b.timestamp - a.timestamp;
             };
             if (this.token === undefined) {
-                let propTxs = this.props.accounts[this.account_key].transactions[this.props.setting.explorer_server];
+                let propTxs = this.props.accounts[this.account_key].transactions;
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             } else {
-                let propTxs = this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.token.symbol].tokenTxs;
+                let propTxs = this.props.accounts[this.account_key].tokens[this.token.symbol].tokenTxs;
                 transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
             }
             return (
