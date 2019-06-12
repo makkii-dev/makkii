@@ -236,17 +236,18 @@ class AccountTokens extends Component {
 
         const cellHeight = 60;
         // prepare image
-        let imageIcon;
-        let fastImageUrl;
+        let imageIcon = undefined;
+        let fastImageUrl = undefined;
         let balance;
         if (index > 0) {
             try {
                 fastImageUrl = getTokenIconUrl(this.account.symbol, item.symbol, item.contractAddr);
             } catch (err) {
                 console.log("get token icon url failed: ", err);
-                // TODO: replace with a default icon
-                imageIcon = COINS[this.account.symbol].icon;
+                imageIcon = COINS[this.account.symbol].default_token_icon;
             }
+            console.log("imageIcon:", imageIcon);
+            console.log("fast url:", fastImageUrl);
             token = tokens[explorer_server][item.symbol];
             balance = token.balance;
         } else {
@@ -325,10 +326,12 @@ class AccountTokens extends Component {
                                       source={imageIcon}
                                       resizeMode={'contain'}
                                />:
+                               fastImageUrl !== undefined?
                                <FastImage style={{width: 30, height: 30}}
                                           source={{uri: fastImageUrl}}
                                           resizeMode={FastImage.resizeMode.contain}
-                                          />
+                                          />:
+                                   null
                        }
                        <Text numberOfLines={1} style={{paddingLeft: 10}}>{item.name}</Text>
                    </View>
