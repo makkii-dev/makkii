@@ -393,10 +393,9 @@ class AccountTokens extends Component {
                     <AddressComponent address={this.account.address} symbol={this.account.symbol}/>
                 </View>
                 <FlatList
-                    style={{width: width}}
+                    style={{flex:1, width:width}}
                     data={tokenList}
                     renderItem={this.render_item}
-                    ItemSeparatorComponent={() => <View style={styles.divider}/>}
                     keyExtractor={(item, index) => item.symbol}
                     onScroll={e=> {
                         this.setState({
