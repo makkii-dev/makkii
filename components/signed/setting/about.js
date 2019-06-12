@@ -111,7 +111,7 @@ class About extends Component {
 						marginTop: 15,
 						fontSize: 14,
 						color: 'black',
-					}}>{strings('about.version_label')} {this.props.setting.version}</Text>
+					}}>{strings('about.version_label')} {DeviceInfo.getVersion()}</Text>
 				</View>
 				<View style={{
 				    ...defaultStyles.shadow,
