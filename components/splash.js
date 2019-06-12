@@ -23,7 +23,7 @@ const upgradeAccountDb = (accounts, state_version, options = {}) => {
 			account.tokens = typeof  account.tokens === 'object'? account.tokens:{};
 			account.transactions=account.transactions[options.network];
 			account.tokens = account.tokens[options.network];
-
+			account.symbol = account.symbol? account.symbol: 'AION';
 			new_accounts[new_key] = account;
 		});
 		return new_accounts;
