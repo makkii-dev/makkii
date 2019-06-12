@@ -89,13 +89,14 @@ class Scan extends Component {
 				path: 'images'
 			}
 		};
-
+		listenApp.ignore = true;
 		ImagePicker.launchImageLibrary(options, (res) => {
 			if (res.error) {
 			 	console.log('error ', res.error);
 			} else{
 				this.getQrcode(res.data);
 			}
+			setTimeout(()=>listenApp.ignore=false, 1000);
 		});
 	};
 
