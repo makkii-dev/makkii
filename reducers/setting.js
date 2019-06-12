@@ -6,7 +6,8 @@ import DeviceInfo from 'react-native-device-info';
 
 const init = {
 	lang: 'auto',
-	version: '0.1.1',
+	version: '1.0.0',
+	theme: 'white',
 	login_session_timeout: '30',
 	exchange_refresh_interval: "30",
 	fiat_currency: "CNY",
