@@ -406,7 +406,7 @@ class Send extends Component {
 			});
 		} else {
 		    this.setState({
-				amount:this.props.accounts[this.account_key].tokens[this.props.setting.explorer_server][this.unit].balance.toNotExString(),
+				amount:this.props.accounts[this.account_key].tokens[this.unit].balance.toNotExString(),
 			});
 		}
 	};

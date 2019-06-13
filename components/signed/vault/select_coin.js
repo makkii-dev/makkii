@@ -197,11 +197,10 @@ class SelectCoin extends Component {
         }
         // prepare right indicator
         const {setting, accounts} = this.props;
-        let explorer_server = setting.explorer_server;
         let tokens = accounts[this.account_key].tokens;
         let isAdded = false;
-        if (tokens !== undefined && tokens[explorer_server] !== undefined) {
-            isAdded = Object.keys(tokens[explorer_server]).indexOf(item.symbol) >= 0;
+        if (tokens !== undefined) {
+            isAdded = Object.keys(tokens).indexOf(item.symbol) >= 0;
         }
         return (
                 <SwipeableRow maxSwipeDistance={fixedHeight(186)}

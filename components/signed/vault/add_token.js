@@ -73,8 +73,7 @@ class AddToken extends Component {
         let account_key = accountKey(this.account.symbol, this.account.address);
         let tokens = accounts[account_key].tokens;
         if (tokens !== undefined &&
-            tokens[setting.explorer_server] !== undefined &&
-            tokens[setting.explorer_server][symbol] !== undefined) {
+            tokens[symbol] !== undefined) {
             AppToast.show(strings('add_token.toast_token_exists'), {
                 position: 0,
             });

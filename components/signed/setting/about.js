@@ -135,7 +135,7 @@ class About extends Component {
 								if (version.versionCode <= currentVersionCode) {
 									AppToast.show(strings('about.version_latest'));
 								} else {
-								    popCustom.show(strings('version_upgrade.alert_title_new_version'), generateUpdateMessage(version), [
+									let options = [
 										{
 											text: strings('cancel_button'), onPress: ()=> {}
 										},
@@ -149,7 +149,14 @@ class About extends Component {
 												}
 											}
 										}
-                                    ], {
+                                    ];
+									if (version.mandatory) {
+										options.shift();
+									}
+								    popCustom.show(strings('version_upgrade.alert_title_new_version'),
+										generateUpdateMessage(version),
+										options,
+                                    {
 								    	canHide: false,
 										cancelable: false,
 									});
