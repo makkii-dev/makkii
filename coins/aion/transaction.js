@@ -113,8 +113,10 @@ function getTransactionsByAddress(address, page=0, size=25, network='mainnet'){
             let txs = {};
             content.forEach(t=>{
                 let tx={};
+                const timestamp = t.transactionTimestamp + '';
                 tx.hash = '0x'+t.transactionHash;
-                tx.timestamp = t.transactionTimestamp/1000;
+                tx.timestamp  = timestamp.length === 16 ? timestamp / 1000: timestamp.length === 13? timestamp*1:timestamp.length === 10 ? timestamp*1000: null;
+                console.log('timestamp=>', tx.timestamp);
                 tx.from = '0x'+t.fromAddr;
                 tx.to = '0x'+t.toAddr;
                 tx.value = network==='mastery'?new BigNumber(t.value,10).toNumber():new BigNumber(t.value,16).shiftedBy(-18).toNumber();
