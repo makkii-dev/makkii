@@ -132,7 +132,7 @@ class About extends Component {
 							}
 						    getLatestVersion(Platform.OS, currentVersionCode, lang).then(version=> {
 						    	console.log("latest version is: ", version);
-								if (version.versionCode === currentVersionCode) {
+								if (version.versionCode <= currentVersionCode) {
 									AppToast.show(strings('about.version_latest'));
 								} else {
 								    popCustom.show(strings('version_upgrade.alert_title_new_version'), generateUpdateMessage(version), [
