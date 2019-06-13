@@ -474,7 +474,7 @@ import {listenTransaction} from './utils/listeners';
 import PopupCustom from './components/Popupcustom';
 global.listenTx = new listenTransaction(store);
 global.listenPrice = new listenCoinPrice(store);
-global.listenApp = new listenAppState();
+global.listenApp = new listenAppState(Routes);
 export default class App extends Component {
 	render() {
 		return (

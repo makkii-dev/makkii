@@ -208,15 +208,17 @@ class AppToast {
 
 
 class listenAppState{
-    constructor(){
+    constructor(routes){
         this.timeOut = '30';
         this.timestamp = Date.now('milli');
     }
     handleActive = null;
     handleTimeOut = null;
+    ignore = false;
     _handleAppStateChange=(nextAppState)=>{
         console.log('appState change');
-        if (nextAppState != null && nextAppState === 'active') {
+        console.log('ignore=>', this.ignore);
+        if (nextAppState != null && nextAppState === 'active'&&this.ignore===false) {
             // in active
             const max_keep_signed = 60000*parseInt(this.timeOut);
             console.log('max_keep_signed ', max_keep_signed);
@@ -226,7 +228,7 @@ class listenAppState{
             }else{
                 this.handleActive&&this.handleActive();
             }
-        } else if (nextAppState === 'background') {
+        } else if (nextAppState === 'background'&&this.ignore===false) {
             this.timestamp = Date.now('milli');
             console.log('update timestamp ', this.timestamp)
         }
