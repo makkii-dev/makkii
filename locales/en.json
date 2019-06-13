@@ -446,9 +446,9 @@
     "pinCode_prompt": "You need reset PIN code when reopening pin code, Using fingerprint requires you enabled PIN code firstly.",
     "pinCode_invalid": "Incorrect PIN code",
     "pinCode_not_match": "Your entries not match",
-    "pinCode_enter": "Enter your PIN code to unlock",
-    "pinCode_create": "1- Enter a new PIN code",
-    "pinCode_confirm": "2- Confirm your PIN code"
+    "pinCode_enter": "Enter PIN to unlock",
+    "pinCode_create": "Enter your PIN code",
+    "pinCode_confirm": "Confirm your PIN code"
   },
   "dapp": {
     "launch_button": "Launch",

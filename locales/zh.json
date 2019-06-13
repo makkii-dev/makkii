@@ -434,7 +434,7 @@
     "pinCode_prompt": "开启数字口令时需要重新设置口令,开启指纹解锁之前必须开启数字口令。",
     "pinCode_invalid": "数字口令不正确",
     "pinCode_not_match": "2次输入不匹配",
-    "pinCode_enter": "输入PIN code 解锁",
+    "pinCode_enter": "输入PIN码解锁",
     "pinCode_create": "1- 输入新的数字口令",
     "pinCode_confirm": "2- 确认你的数字口令"
   },

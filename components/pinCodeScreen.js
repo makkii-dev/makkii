@@ -1,5 +1,6 @@
 import React from  'react';
 import {
+    ImageBackground,
     Animated,
     View,
     Text,
@@ -21,6 +22,8 @@ const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0"
 const KeyboardDataWithTouchID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete", "blank", "finger", "blank"];
 const MaxPinCodeLength = 6;
 const isSmallScreen = height < 569
+
+const mColor = '#fff';
 class PinCodeScreen extends React.Component {
 
     /***********************************************************
@@ -76,16 +79,25 @@ class PinCodeScreen extends React.Component {
         const pinTyped = pinCode.length;
 
         const styleDot = {
-            width: 13,
-            height: 13,
-            borderRadius: 6.5,
+            width: 6,
+            height: 6,
+            borderRadius: 3,
             borderWidth: 1,
-            borderColor: mainColor,
+            borderColor: '#246ffa20',
+            marginHorizontal: 12
+        };
+        const styleBigDot = {
+            width: 12,
+            height: 12,
+            borderRadius: 6,
+            borderWidth: 1,
+            borderColor: mColor,
             marginHorizontal: 12
         };
         for (let i = 0; i < numberOfDots; i++) {
-            const backgroundColor = i < pinTyped ? { backgroundColor: mainColor } : {};
-            const dot = <View style={[styleDot, backgroundColor]} key={i} />;
+            const backgroundColor = {backgroundColor: mColor};
+            const dotStyle = i < pinTyped ? styleBigDot: styleDot;
+            const dot = <View style={[dotStyle, backgroundColor]} key={i} />;
             dots.push(dot)
         }
         return dots
@@ -214,14 +226,15 @@ class PinCodeScreen extends React.Component {
 
     renderItem = ({item}) => {
         const disabled = item==="blank"||(item==='cancel'&&this.cancel===false);
-        const itemBorder = disabled?{}:{
+        const noBorder = true;//item==="blank"||item==='cancel' || item === 'delete';
+        const itemBorder = noBorder?{}:{
             borderRadius : 75 / 2,
-            borderWidth: 0.5,
-            borderColor: mainColor};
+            borderWidth: 1,
+            borderColor: mColor};
         return (
             <TouchableOpacity
                 disabled={disabled}
-                style={[styles.keyboardViewItem,itemBorder, {backgroundColor: mainColor}]}
+                style={[styles.keyboardViewItem,itemBorder, {backgroundColor: 'transparent'}]}
                 onPress={() => {
                     if(item!== 'cancel' && item !== 'delete' && item!=='finger'){
                         this.onPressNumber(item)
@@ -234,11 +247,12 @@ class PinCodeScreen extends React.Component {
                     }
                 }}
                 >
-                <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: mainBgColor}]}>
-                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color : '#000', fontSize:36}]}>{item}</Text>)}
-                    { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) }
-                    { item === 'delete'&& (<Image source={require('../assets/delete_button.png')} style={{width:20, height:20}} resizeMode={'contain'}/>)}
-                    { item === 'finger'&& (<Image source={require('../assets/icon_touch_id.png')} style={{width:48, height:48}} resizeMode={'contain'}/>)}
+                <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: 'transparent'}]}>
+                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color : mColor, fontSize:36}]}>{item}</Text>)}
+                    {/*{ this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) }*/}
+                    { this.cancel&&item === 'cancel'&& (<Image source={require('../assets/arrow_back.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
+                    { item === 'delete'&& (<Image source={require('../assets/delete_button.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
+                    { item === 'finger'&& (<Image source={require('../assets/icon_touch_id.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
                 </View>
             </TouchableOpacity>
         )
@@ -251,22 +265,25 @@ class PinCodeScreen extends React.Component {
             useNativeDriver: true
         });
         return (
-            <View style={{ alignItems: 'center'}}>
-                <Text style={styles.desText}>{unlockDescription}</Text>
-                <Text style={styles.warningField}>{warningPincodeFail}</Text>
-                <Animated.View
-                    style={[styles.pinField, {
-                        transform: [
-                            {
-                                translateX: animationShake
-                            }
-                        ]
-                    }]}
-                >
-                    {this.renderDots(MaxPinCodeLength)}
-                </Animated.View>
-                <View style={{marginTop:20, alignItems:'center'}}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
+                <View style={{marginTop: 20, alignItems:'center'}}>
+                    <Text style={styles.desText}>{unlockDescription}</Text>
+                    <Text style={styles.warningField}>{warningPincodeFail}</Text>
+                    <Animated.View
+                        style={[styles.pinField, {
+                            transform: [
+                                {
+                                    translateX: animationShake
+                                }
+                            ]
+                        }]}
+                    >
+                        {this.renderDots(MaxPinCodeLength)}
+                    </Animated.View>
+                </View>
+                <View style={{height: 450, marginBottom: 20}}>
                     <FlatList
+                        style={{marginTop:20}}
                         contentContainerStyle={{
                             flexDirection: 'column',
                             alignItems   : 'flex-start',
@@ -299,9 +316,14 @@ class PinCodeScreen extends React.Component {
             warningPincodeFail = strings(`pinCode.${errorMsg}`);
         }
         return (
-          <View style={{flex:1, paddingTop:getStatusBarHeight(true),backgroundColor:mainBgColor, alignItems:'center'}}>
+          <ImageBackground
+              style={{flex: 1, paddingTop: getStatusBarHeight(true), alignItems: 'center', justifyContent: 'center',
+                  // backgroundColor: mainBgColor
+              }}
+              source={require('../assets/splash_bg.png')}
+          >
               {this.renderContent(unlockDescription,warningPincodeFail)}
-          </View>
+          </ImageBackground>
         )
     }
 
@@ -315,16 +337,19 @@ export default connect(state => { return ({
 const styles = StyleSheet.create({
     desText: {
         fontSize: isSmallScreen ? 14 : 22,
-        marginTop: 20
+        marginTop: 20,
+        color: mColor,
     },
     pinField: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 15
     },
     warningField: {
-        color: 'red',
+        color: '#ff3300',
         fontSize: 16,
-        marginVertical: 10,
+        marginVertical: 20,
         height:20,
     },
     keyboardViewItem: {
