@@ -91,6 +91,7 @@ class ImportFrom extends Component {
         acc.type = '[local]';
         acc.transactions = {};
         acc.symbol = this.symbol;
+        acc.tokens = {};
 
         const {dispatch} = this.props;
         dispatch(accounts_add({

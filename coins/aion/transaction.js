@@ -76,10 +76,9 @@ function sendTransaction(account, symbol, to, value, extra_params, data, network
 }
 
 function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network='mainnet'){
-    const tokens = account.tokens['mainnet'];
+    const tokens = account.tokens;
     const {contractAddr, tokenDecimal} = tokens[symbol];
 
-    // TODO: how to remove web3 here?
     const token_contract = new web3.eth.Contract(CONTRACT_ABI, contractAddr);
     const methodsData = token_contract.methods.send(to,value.shiftedBy(tokenDecimal + 0).toFixed(0).toString(),"").encodeABI();
 

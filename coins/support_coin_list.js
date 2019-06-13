@@ -13,7 +13,7 @@ export const COINS = {
         gasPriceUnit: 'AMP',
         defaultGasPrice: '10',
         defaultGasLimit: '21000',
-        defaultGasLimitForContract: '60000',
+        defaultGasLimitForContract: '90000',
         network: 'mastery',
         isTestNet: true,
         api: aion_api,

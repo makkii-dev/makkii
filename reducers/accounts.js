@@ -63,8 +63,8 @@ export default function accounts(state = init, action){
 			should_update_db = true;
 			break;
 		case UPDATE_ACCOUNT_TOKEN_TRANSACTIONS:
-		    if (typeof state[action.key] !== 'undefined') {
-				let transactions = Object.assign({}, state[action.key].tokens[action.symbol].tokenTxs, action.transactions);
+		    if (state[action.key] !== undefined&&state[action.key].tokens!==undefined&&state[action.key].tokens[action.symbol]!==undefined) {
+				let transactions = Object.assign({}, state[action.key].tokens[action.symbol].tokenTxs||{}, action.transactions);
 				let new_transactions = {};
 				let compareFn = (a, b) => {
 					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;

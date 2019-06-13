@@ -40,6 +40,7 @@ class ImportPrivateKey extends Component {
 		acc.type = '[pk]';
 		acc.transactions = {};
 		acc.symbol = this.symbol;
+		acc.tokens = {};
 
 		let key = accountKey(this.symbol, acc.address);
 		if(this.props.accounts[key]!==undefined){

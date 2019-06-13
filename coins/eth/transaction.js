@@ -78,8 +78,7 @@ function sendNativeTx(account, to, value, gasPrice, gasLimit, data, network='mai
 }
 
 function sendTokenTx(account, symbol, to ,value, gasPrice, gasLimit, network='mainnet'){
-    // TODO: should remove mainnet after remove explorer_server
-    const tokens = account.tokens['mainnet'];
+    const tokens = account.tokens;
     const {contractAddr, tokenDecimal} = tokens[symbol];
 
     const token_contract = new Contract(ERC20ABI, contractAddr);
