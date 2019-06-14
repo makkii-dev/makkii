@@ -9,7 +9,7 @@ import Loading from '../../loading.js';
 import keyStore from 'react-native-makkii-core';
 import {accounts_add } from "../../../actions/accounts";
 import {update_index } from "../../../actions/user";
-import {accountKey} from '../../../utils';
+import {accountKey,getLedgerMessage} from '../../../utils';
 import {alert_ok} from '../../common';
 import {COINS} from "../../../coins/support_coin_list";
 
@@ -128,6 +128,7 @@ class ImportFrom extends Component {
                         this.loadingView.hide();
                         this.props.navigation.navigate('signed_vault_import_list',{
                             type:'ledger',
+                            symbol: this.symbol,
                             title:strings('import_ledger.title')});
                     }, error => {
                         this.loadingView.hide();

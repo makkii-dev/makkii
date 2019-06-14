@@ -129,7 +129,7 @@ class Scan extends Component {
 		};
 		const { validate, success} = this.props.navigation.state.params;
 		return (
-	  		<View style={{wdith:'100%',height:'100%'}}>
+	  		<View style={{width:'100%',height:'100%'}}>
   				<RNCamera
 	  			    style={{
 			            flex: 1,

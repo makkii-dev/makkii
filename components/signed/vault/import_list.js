@@ -13,14 +13,12 @@ import {
 import {connect} from 'react-redux';
 import wallet from "react-native-aion-hw-wallet";
 
-import {AionAccount} from "../../../libs/aion-hd-wallet";
 import {accounts_add} from "../../../actions/accounts";
 import SelectList from '../../selectList';
 import {ImportListfooter, RightActionButton} from "../../common";
 import {strings} from '../../../locales/i18n';
-import {getLedgerMessage, range} from "../../../utils";
+import {accountKey, getLedgerMessage, range} from "../../../utils";
 import keyStore from 'react-native-makkii-core';
-import {mainBgColor} from '../../style_util';
 
 const {width} = Dimensions.get('window');
 
@@ -60,15 +58,37 @@ class ImportHdWallet extends React.Component {
     }
 
     ImportAccount= () => {
-        let acc = this.selectList.getSelect();
+
+        this.props.navigation.navigate('signed_vault_change_account_name', {
+            oldName: '',
+            onUpdate: this.setAccountName,
+            targetUri: 'signed_vault',
+        });
+    };
+    setAccountName=(newName) => {
+        let accounts = this.selectList.getSelect();
+        let account = Object.values(accounts)[0];
+
+        console.log('set account name=>', newName)
+        let acc = {};
+        acc.address = account.address;
+        acc.private_key = account.private_key;
+        acc.balance = 0;
+        acc.name = newName;
+        acc.type = '[ledger]';
+        acc.transactions = {};
+        acc.symbol = this.symbol;
+        acc.tokens = {};
+
         const {dispatch} = this.props;
-        dispatch(accounts_add(acc,this.props.user.hashed_password));
+        dispatch(accounts_add({
+            [accountKey(this.symbol, acc.address)]: acc
+        }, this.props.user.hashed_password));
+
         setTimeout(() => {
             DeviceEventEmitter.emit('updateAccountBalance');
         }, 500);
-        this.props.navigation.goBack();
     };
-
 
 
     componentWillMount(){
@@ -87,7 +107,7 @@ class ImportHdWallet extends React.Component {
     }
 
     isAccountIsAlreadyImport(address){
-        return typeof this.props.accounts[address] !== 'undefined';
+        return typeof this.props.accounts[accountKey(this.symbol, address)] !== 'undefined';
     }
 
     fetchAccountFromMasterKey(n){
@@ -147,6 +167,7 @@ class ImportHdWallet extends React.Component {
             acc.name = this.props.setting.default_account_name;
             acc.type = '[ledger]';
             acc.transactions = {'mainnet':{}, 'mastery':{}};
+            acc.symbol = 'AION';
             acc.derivationIndex = i;
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
@@ -235,7 +256,7 @@ class ImportHdWallet extends React.Component {
         return (
             <View style={styles.container}>
                 <SelectList
-                    isMultiSelect={true}
+                    isMultiSelect={false}
                     itemHeight={55}
                     ref={ref=>this.selectList=ref}
                     data={this.state.accountsList}
