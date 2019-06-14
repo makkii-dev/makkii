@@ -44,7 +44,7 @@
     "label_confirm_password": "Confirm Password",
     "hint_enter_confirm_password": "Please enter password again",
     "button_reset": "Reset",
-    "error_password": "Password must be 8-16 characters that contains numbers, letters and special characters \"!?#\".",
+    "error_password": "Password must be a combination of 8-16 characters.",
     "error_dont_match": "Confirm password does not match password!"
   },
   "about": {
@@ -440,7 +440,10 @@
     "touchID_dialog_title": "Authentication Required",
     "touchID_dialog_desc": "Touch fingerprint sensor to unlock your wallet.",
     "touchID_dialog_failed": "Authentication Failed",
-    "not_support_TouchID_label": "This device is not supported fingerprint.",
+    "touchID_NOT_SUPPORTED": "Biometry is not supported",
+    "touchID_NOT_AVAILABLE": "Biometry is not currently available",
+    "touchID_NOT_PRESENT": "Biometry hardware not present",
+    "touchID_NOT_ENROLLED": "Biometry is not enrolled",
     "verify_title": "Login Password",
     "verify_desc": "Enter login password to verify",
     "pinCode_prompt": "You need reset PIN code when reopening pin code, Using fingerprint requires you enabled PIN code firstly.",

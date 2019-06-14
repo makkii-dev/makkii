@@ -89,7 +89,7 @@ class PinCode extends React.Component {
                     dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
                 })
             }).catch(error=>{
-                AppToast.show(strings('pinCode.not_support_TouchID_label'))
+                AppToast.show(strings(`pinCode.touchID_${error}`))
             })
         }
     }
