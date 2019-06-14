@@ -68,21 +68,13 @@ class ImportHdWallet extends React.Component {
     setAccountName=(newName) => {
         let accounts = this.selectList.getSelect();
         let account = Object.values(accounts)[0];
+        console.log('set account name=>', newName);
+        account.name  = newName;
 
-        console.log('set account name=>', newName)
-        let acc = {};
-        acc.address = account.address;
-        acc.private_key = account.private_key;
-        acc.balance = 0;
-        acc.name = newName;
-        acc.type = '[ledger]';
-        acc.transactions = {};
-        acc.symbol = this.symbol;
-        acc.tokens = {};
 
         const {dispatch} = this.props;
         dispatch(accounts_add({
-            [accountKey(this.symbol, acc.address)]: acc
+            [accountKey(this.symbol, account.address)]: account
         }, this.props.user.hashed_password));
 
         setTimeout(() => {
@@ -125,9 +117,11 @@ class ImportHdWallet extends React.Component {
                         let acc = {};
                         acc.address = getAcc.address;
                         acc.private_key = getAcc.private_key;
-                        acc.balance = 0;
-                        acc.name = this.props.setting.default_account_name;
+                        acc.name = "";
                         acc.type = '[local]';
+                        acc.transactions = {};
+                        acc.tokens = {};
+                        acc.symbol = this.symbol;
                         acc.transactions = {};
                         if (!this.isAccountIsAlreadyImport(acc.address)) {
                             accounts[acc.address] = acc
@@ -164,10 +158,11 @@ class ImportHdWallet extends React.Component {
             let acc = {};
             acc.address = account.address;
             acc.balance = 0;
-            acc.name = this.props.setting.default_account_name;
+            acc.name = "";
             acc.type = '[ledger]';
-            acc.transactions = {'mainnet':{}, 'mastery':{}};
-            acc.symbol = 'AION';
+            acc.transactions = {};
+            acc.tokens = {};
+            acc.symbol = this.symbol;
             acc.derivationIndex = i;
             if (!this.isAccountIsAlreadyImport(acc.address)) {
                 sum = sum + 1;
