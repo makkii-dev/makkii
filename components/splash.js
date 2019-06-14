@@ -61,7 +61,7 @@ class Splash extends Component {
 		const {dispatch} = this.props;
 		dbGet('settings').then(json => {
 		    const setting_json =JSON.parse(json);
-			const old_state_version =  0;
+			const old_state_version = setting_json.state_version || 0;
 			const new_setting = upgradeSettingDb(setting_json);
 			dispatch(setting(new_setting));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
