@@ -34,7 +34,7 @@ const upgradeAccountDb = (accs, state_version, options = {}) => {
 };
 
 const upgradeSettingDb = (settings,state_version)=>{
-	if(state_version){
+	if(state_version<1){
 		let new_settings = {};
 		Object.keys(settings).forEach(k=>{
 			new_settings[k] = settings[k]
@@ -67,9 +67,11 @@ class Splash extends Component {
 		dbGet('settings').then(json => {
 		    const setting_json =JSON.parse(json);
 			const old_state_version = setting_json.state_version || 0;
+			console.log('setting_json=>',setting_json);
+			console.log('old_state_version=>',old_state_version);
 			const new_setting = upgradeSettingDb(setting_json,old_state_version);
 			dispatch(setting(new_setting));
-			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
+			listenPrice.reset(new_setting.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
 			// load db user
 			dbGet('user')

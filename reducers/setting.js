@@ -14,7 +14,7 @@ const init = {
 	touchIDEnabled: false,
     tx_confirm: 6,
 	explorer_server: 'mainnet',
-	state_version: 0,
+	state_version: 1,
 }
 
 export default function setting(state = init, action){

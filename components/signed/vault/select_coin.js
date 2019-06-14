@@ -109,17 +109,21 @@ class SelectCoin extends Component {
     }
 
     async componentWillMount() {
+        this.mount = true;
         getTopTokens(this.account.symbol).then(res => {
-            this.setState({
+            this.mount&&this.setState({
                 isLoading: false,
                 tokens: res,
             });
         }).catch(err => {
-            this.setState({
+            this.mount&&this.setState({
                 isLoading: false,
                 tokens: [],
             });
         });
+    }
+    componentWillUnmount(): void {
+        this.mount=false;
     }
 
     onSwipeOpen(Key: any) {
