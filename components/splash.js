@@ -33,8 +33,8 @@ const upgradeAccountDb = (accs, state_version, options = {}) => {
 	return accs;
 };
 
-const upgradeSettingDb = (settings)=>{
-	if(settings.state_version===undefined||settings.state_version<1){
+const upgradeSettingDb = (settings,state_version)=>{
+	if(state_version){
 		let new_settings = {};
 		Object.keys(settings).forEach(k=>{
 			new_settings[k] = settings[k]
@@ -42,7 +42,12 @@ const upgradeSettingDb = (settings)=>{
 		new_settings.state_version = 1;
 		new_settings.coinPrices ={};
 		new_settings.explorer_server = 'mainnet';
-		delete  new_settings['theme'];
+		delete new_settings['theme'];
+		delete new_settings['tx_fee'];
+		delete new_settings['endpoint_wallet'];
+		delete new_settings['endpoint_dapps'];
+		delete new_settings['endpoint_odex'];
+		delete new_settings['endpoint_odex'];
 		return new_settings;
 	}
 	return settings;
@@ -62,7 +67,7 @@ class Splash extends Component {
 		dbGet('settings').then(json => {
 		    const setting_json =JSON.parse(json);
 			const old_state_version = setting_json.state_version || 0;
-			const new_setting = upgradeSettingDb(setting_json);
+			const new_setting = upgradeSettingDb(setting_json,old_state_version);
 			dispatch(setting(new_setting));
 			listenPrice.reset(setting_json.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
