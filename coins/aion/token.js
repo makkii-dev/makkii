@@ -231,41 +231,57 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=
 
 const getTopTokens=(topN=20, network='mainnet') => {
     return new Promise((resolve, reject) => {
-        let url = `https://${network}-api.aion.network/aion/dashboard/getTokenList?page=0&size=${topN}`;
-        console.log("get top aion tokens:" + url);
-        ApiCaller.get(url, false).then(res=> {
-            resolve(res.data.content);
-        }).catch(err=> {
-            console.log("get top aion tokens error:", err);
+        let url = `http://45.118.132.89:8080/token/aion?offset=0&limit=${topN}`;
+        console.log("get top aion tokens: " + url);
+        ApiCaller.get(url, false).then(res=>{
+            resolve(res.data);
+        }).catch(err => {
+            console.log("get aion top tokens error:", err);
             reject(err);
         });
+        // let url = `https://${network}-api.aion.network/aion/dashboard/getTokenList?page=0&size=${topN}`;
+        // console.log("get top aion tokens:" + url);
+        // ApiCaller.get(url, false).then(res=> {
+        //     resolve(res.data.content);
+        // }).catch(err=> {
+        //     console.log("get top aion tokens error:", err);
+        //     reject(err);
+        // });
     });
 }
 
 const searchTokens=(keyword, network='mainnet') => {
     return new Promise((resolve, reject) => {
-        validateAddress(keyword, network).then(validateResult => {
-            if (validateResult) {
-                let url = `https://${network}-api.aion.network/aion/dashboard/getTokenDetailsTransfersAndHoldersByContractAddress?searchParam=${keyword}`;
-                console.log("search aion tokens: " + url);
-                ApiCaller.get(url, false).then(res=> {
-                    resolve(res.data.content);
-                }).catch(err=> {
-                    console.log("search aion token by contract address error:", err);
-                    reject(err);
-                });
-            } else {
-                let url = `https://${network}-api.aion.network/aion/dashboard/getTokenListByTokenNameOrTokenSymbol?searchParam=${keyword}`;
-                console.log("search aion tokens: " + url);
-                ApiCaller.get(url, false).then(res=> {
-                    console.log("search token by name/symbol resp:", res);
-                    resolve(res.data.content);
-                }).catch(err=> {
-                    console.log("search aion token by name or symbol error:", err);
-                    reject(err);
-                });
-            }
+        let url = `http://45.118.132.89:8080/token/aion/search?keyword=${keyword}`;
+        console.log("search aion token: " + url);
+        ApiCaller.get(url, false).then(res=>{
+            resolve(res.data);
+        }).catch(err => {
+            console.log("search aion token error:", err);
+            reject(err);
         });
+        // validateAddress(keyword, network).then(validateResult => {
+        //     if (validateResult) {
+        //         let url = `https://${network}-api.aion.network/aion/dashboard/getTokenDetailsTransfersAndHoldersByContractAddress?searchParam=${keyword}`;
+        //         console.log("search aion tokens: " + url);
+        //         ApiCaller.get(url, false).then(res=> {
+        //             resolve(res.data.content);
+        //         }).catch(err=> {
+        //             console.log("search aion token by contract address error:", err);
+        //             reject(err);
+        //         });
+        //     } else {
+        //         let url = `https://${network}-api.aion.network/aion/dashboard/getTokenListByTokenNameOrTokenSymbol?searchParam=${keyword}`;
+        //         console.log("search aion tokens: " + url);
+        //         ApiCaller.get(url, false).then(res=> {
+        //             console.log("search token by name/symbol resp:", res);
+        //             resolve(res.data.content);
+        //         }).catch(err=> {
+        //             console.log("search aion token by name or symbol error:", err);
+        //             reject(err);
+        //         });
+        //     }
+        // });
     });
 };
 
