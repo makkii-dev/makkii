@@ -220,7 +220,7 @@ export class AionTransaction {
                 wallet.sign(index, Object.values(this.getEncodedRaw())/*Object.values(this.getEncodedRaw())*/).then(signedTx => {
                     this.signature = signedTx;
                     this.fullSignature = sigToBytes(this.signature, hexString2Array(account.publicKey));
-                    resolve();
+                    resolve(this.getEncoded());
                 }, err => {
                     console.log("sign tx error: " + err);
                     reject(new Error(err.code));
