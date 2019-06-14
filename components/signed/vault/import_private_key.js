@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Dimensions, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter} from 'react-native';
+import {Dimensions, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter, Image} from 'react-native';
 import { validatePrivateKey, accountKey } from '../../../utils';
 import {strings} from '../../../locales/i18n';
 import {accounts_add} from "../../../actions/accounts";
@@ -9,6 +9,7 @@ import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
 import keyStore from 'react-native-makkii-core';
 import {COINS} from "../../../coins/support_coin_list";
+import {validateMnemonic} from "../../../libs/aion-hd-wallet";
 
 const {width, height} = Dimensions.get('window');
 
@@ -89,6 +90,20 @@ class ImportPrivateKey extends Component {
 		};
 	}
 
+	async componentWillReceiveProps(props){
+		const scanned = props.navigation.getParam('scanned');
+		if(scanned&&scanned!==this.state.private_key){
+			this.setState({
+				private_key: scanned,
+			});
+			this.props.navigation.setParams({
+				isEdited: true,
+			});
+		}
+
+	}
+
+
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 
@@ -99,6 +114,16 @@ class ImportPrivateKey extends Component {
             isEdited: false
 		});
 	}
+
+	scan = ()=>{
+		this.props.navigation.navigate('scan',{
+			success: 'signed_vault_import_private_key',
+			validate: (data, callback)=> {
+				let res = validatePrivateKey(data.data, this.symbol);
+				callback(res?data.data:null, res?'':strings('import_private_key.error_invalid_private_key'));
+			}
+		})
+	};
 
 	render(){
 		return (
@@ -117,11 +142,25 @@ class ImportPrivateKey extends Component {
 				padding: 40,
                 backgroundColor: mainBgColor,
 			}}>
-                <Text style={{
-                	marginBottom: 20,
-                    fontSize: 16,
-				}}>{strings('import_private_key.instruction_private_key')}</Text>
-
+				<View style={{
+					height: 20,
+					width: width-80,
+					flexDirection:'row',
+					justifyContent:'space-between',
+					alignItems:'center',
+					marginBottom: 20,
+				}}>
+					<Text style={{
+						fontSize: 16,
+					}}>{strings('import_private_key.instruction_private_key')}</Text>
+					<TouchableOpacity onPress={this.scan}>
+						<Image source={require('../../../assets/icon_scan.png')} style={{
+							tintColor: 'black',
+							width: 20,
+							height: 20,
+						}} />
+					</TouchableOpacity>
+				</View>
 				<View style={{
 				    ...defaultStyles.shadow,
 					padding: 10,
