@@ -66,6 +66,7 @@ class SelectCoin extends Component {
         super(props);
         this.account = this.props.navigation.state.params.account;
         this.account_key = accountKey(this.account.symbol, this.account.address);
+        this.isMount = false;
         this.state = {
             isLoading: true,
             openRowKey: null,
@@ -89,7 +90,7 @@ class SelectCoin extends Component {
                 if (res.length === 0) {
                     Keyboard.dismiss();
                 }
-                this.setState({
+                this.isMount && this.setState({
                     tokens: res,
                 });
             }).catch(err => {
@@ -99,7 +100,7 @@ class SelectCoin extends Component {
         } else {
             getTopTokens(this.account.symbol).then(res => {
                 loadingView.hide();
-                this.setState({
+                this.isMount && this.setState({
                     tokens: res,
                 });
             }).catch(err => {
@@ -109,21 +110,21 @@ class SelectCoin extends Component {
     }
 
     async componentWillMount() {
-        this.mount = true;
+        this.isMount = true;
         getTopTokens(this.account.symbol).then(res => {
-            this.mount&&this.setState({
+            this.isMount&&this.setState({
                 isLoading: false,
                 tokens: res,
             });
         }).catch(err => {
-            this.mount&&this.setState({
+            this.isMount&&this.setState({
                 isLoading: false,
                 tokens: [],
             });
         });
     }
     componentWillUnmount(): void {
-        this.mount=false;
+        this.isMount=false;
     }
 
     onSwipeOpen(Key: any) {

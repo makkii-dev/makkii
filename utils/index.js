@@ -216,7 +216,7 @@ class listenAppState{
     handleTimeOut = null;
     ignore = false;
     _handleAppStateChange=(nextAppState)=>{
-        console.log('appState change');
+        console.log('appState change', nextAppState);
         console.log('ignore=>', this.ignore);
         if (nextAppState != null && nextAppState === 'active'&&this.ignore===false) {
             // in active
