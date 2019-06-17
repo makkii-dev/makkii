@@ -85,7 +85,6 @@ class Send extends Component {
 	}
 
 	async componentWillReceiveProps(props) {
-		const {accounts, setting} = this.props;
 
 	    let scannedData = props.navigation.getParam('scanned', '');
 	    if (scannedData !== '') {
@@ -124,6 +123,7 @@ class Send extends Component {
 
 	validateRecipient=(recipientQRCode, symbol) => {
 	    return new Promise((resolve, reject) => {
+
 			validateAddress(recipientQRCode, symbol).then(isValidAddress => {
 				if (isValidAddress) {
 					resolve(true);
@@ -132,12 +132,10 @@ class Send extends Component {
 						let receiverObj = JSON.parse(recipientQRCode);
 						if (!receiverObj.receiver) {
 						    resolve(false);
-						    return;
 						}
                         validateAddress(receiverObj.receiver, symbol).then(isValidAddress => {
                         	if (!isValidAddress) {
                         		resolve(false);
-                        		return;
 							} else {
 								if (receiverObj.amount) {
 									if (!validateAmount(receiverObj.amount)) {
@@ -151,7 +149,6 @@ class Send extends Component {
 					} catch (error) {
 						console.log("recipient qr code is not a json");
 						resolve(false);
-						return;
 					}
 				}
 			});
