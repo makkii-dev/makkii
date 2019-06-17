@@ -64,6 +64,8 @@ class Splash extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
+		let buffer =  ('level garlic excess better rug lesson alert skill hover whisper alarm reunion' || '').normalize('NFKD');
+		console.log('buffer=>',buffer);
 		dbGet('settings').then(json => {
 		    const setting_json =JSON.parse(json);
 			const old_state_version = setting_json.state_version || 0;
@@ -78,6 +80,7 @@ class Splash extends Component {
 				.then(json=>{
 					// load db accounts
 					const db_user = JSON.parse(json);
+
 					dbGet('accounts')
 						.then(json=>{
 							let decrypted = decrypt(json, db_user.hashed_password);

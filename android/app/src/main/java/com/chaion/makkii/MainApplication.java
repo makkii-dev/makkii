@@ -16,7 +16,6 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.RNFetchBlob.RNFetchBlobPackage;
 import com.horcrux.svg.SvgPackage;
 import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -50,7 +49,6 @@ public class MainApplication extends Application implements ReactApplication {
             new RNScreenshotHelperPackage(),
             new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
-            new RNFetchBlobPackage(),
             new SvgPackage(),
             new RNI18nPackage(),
             new RNGestureHandlerPackage(),

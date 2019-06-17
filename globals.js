@@ -1,7 +1,6 @@
 global.BigNumber = require('bignumber.js');
 // polyfill unit8array
 import Uint8Array from 'core-js/fn/typed/uint8-array';
-
 if (!Uint8Array.prototype.fill) {
     Uint8Array.prototype.fill = function (value) {
         // Steps 1-2.
@@ -78,6 +77,27 @@ if(!String.prototype.isChinese){
         }
     }
 }
+
+String.prototype.normalize = function(form){
+    const unorm = require('unorm');
+    var str = "" + this;
+    form =  form === undefined ? "NFC" : form;
+
+    if (form === "NFC") {
+        return unorm.nfc(str);
+    } else if (form === "NFD") {
+        return unorm.nfd(str);
+    } else if (form === "NFKC") {
+        return unorm.nfkc(str);
+    } else if (form === "NFKD") {
+        return unorm.nfkd(str);
+    } else {
+        throw new RangeError("Invalid normalization form: " + form);
+    }
+
+};
+
+
 if (!BigNumber.prototype.toNonExString) {
     BigNumber.prototype.toNotExString = function() {
         let m = this.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);

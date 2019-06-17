@@ -214,7 +214,7 @@ export class AionTransaction {
         return new Promise((resolve, reject) => {
             listenApp.ignore=true;
             wallet.getAccount(index).then(account => {
-                setTimeout(()=>listenApp.ignore=false,1000);
+                setTimeout(()=>listenApp.ignore=false,100);
                 if (account.address !== this.sender) {
                     reject(new Error('error.wrong_device'));
                     return;
@@ -228,7 +228,7 @@ export class AionTransaction {
                     reject(new Error(err.code));
                 });
             }, error => {
-                setTimeout(()=>listenApp.ignore=false,1000);
+                setTimeout(()=>listenApp.ignore=false,100);
                 console.log("get account error: " + error);
                 reject(new Error(error.code));
             })
