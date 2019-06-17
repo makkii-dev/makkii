@@ -124,7 +124,7 @@ function generateQRCode(amount, address, coin='AION') {
 }
 
 function saveImage(base64, imageFileName) {
-    const storeLocation = `${RNFS.PicturesDirectoryPath}`;
+    const storeLocation = Platform.OS === 'ios'? `${RNFS.DocumentDirectoryPath}`:`${RNFS.PicturesDirectoryPath}`;
     const filePath = `${storeLocation}/${imageFileName}`;
     return new Promise((resolve, reject)=> {
         RNFS.writeFile(filePath, base64, 'base64').then(() => {
