@@ -19,8 +19,8 @@
     "crypto-js": "^3.1.9-1",
     "node-libs-react-native": "^1.0.3",
     "query-string": "^6.3.0",
-    "react": "16.6.3",
-    "react-native": "0.58.6",
+    "react": "16.8.3",
+    "react-native": "0.59.9",
     "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
     "react-native-camera": "^1.10.2",
     "react-native-device-info": "^0.26.3",
@@ -49,10 +49,12 @@
     "web3-eth-contract": "1.0.0-beta.37"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.51.1",
-    "react-test-renderer": "16.6.3"
+    "@babel/core": "^7.4.5",
+    "@babel/runtime": "^7.4.5",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.54.1",
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native"
