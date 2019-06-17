@@ -38,6 +38,7 @@ export default class PopupCustom extends Component {
         cancelable: false,
         progress:0,
         canHide: true,
+        forceExist: false,
         callback: ()=>{},
     };
 
@@ -96,6 +97,7 @@ export default class PopupCustom extends Component {
         Args.canHide = otherArgs.canHide !== undefined ? otherArgs.canHide : true;
         Args.callback = otherArgs.callback !== undefined? otherArgs.callback: ()=>{};
         Args.progress = otherArgs.progress !== undefined? otherArgs.progress: 0;
+        Args.forceExist = otherArgs.forceExist !== undefined? otherArgs.forceExist: false;
         this.setState({
             visible: true,
             content,
@@ -155,7 +157,7 @@ export default class PopupCustom extends Component {
                         disabled={disable}
                         onPress={() => {
                             btn.onPress(valueInput);
-                            hide || this.hide();
+                            forceExist || hide || this.hide();
                         }}
                     >
                         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

@@ -64,6 +64,7 @@ class Login extends Component {
                 }
             }
         ], {
+            forceExist: Platform.OS === 'ios',
             canHide: false,
             cancelable: false,
         });
