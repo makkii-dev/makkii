@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {DeviceEventEmitter, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
+import {Platform, DeviceEventEmitter, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
 import { strings } from '../../../locales/i18n';
 import {mainBgColor} from '../../style_util';
 import {IMPORT_SOURCE} from './constants';
