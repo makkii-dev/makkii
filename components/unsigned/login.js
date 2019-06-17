@@ -175,7 +175,7 @@ class Login extends Component {
                                             let db_user = JSON.parse(json);
                                             console.log('setting', setting);
                                             if(db_user.hashed_password === hashPassword(this.state.password)){
-                                                listenApp.handleTimeOut = ()=>navigate('unsigned_login');
+                                                listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
                                                 listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
                                                 listenApp.timeOut = setting.login_session_timeout;
                                                 listenApp.start();
