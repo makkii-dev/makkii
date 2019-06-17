@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.1.1</string>
+	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.1.1</string>
+	<string>9</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -39,6 +39,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>Makkii needs to use your camera to scan qrcode</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Enable Face ID allows you quick and secure accsess to your wallet</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Makkii needs to know your location to provide consulation service for you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -49,8 +51,6 @@
 	<string>Makkii will save image to your album</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Makkii will save image to your album</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Enable Face ID allows you quick and secure accsess to your wallet</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
