@@ -1,4 +1,4 @@
-import {AsyncStorage, Platform, CameraRoll, Dimensions, StatusBar, AppState} from 'react-native';
+import {AsyncStorage, Platform, CameraRoll, Dimensions, StatusBar, AppState,DeviceEventEmitter} from 'react-native';
 import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
@@ -218,6 +218,7 @@ class listenAppState{
     _handleAppStateChange=(nextAppState)=>{
         console.log('appState change', nextAppState);
         console.log('ignore=>', this.ignore);
+        nextAppState === 'active'&&DeviceEventEmitter.emit('APP_ACTIVE');
         if (nextAppState != null && nextAppState === 'active'&&this.ignore===false) {
             // in active
             const max_keep_signed = 60000*parseInt(this.timeOut);
@@ -225,11 +226,10 @@ class listenAppState{
             const time_diff = Date.now('milli') - this.timestamp;
             if (time_diff > max_keep_signed) {
                 this.handleTimeOut&&this.handleTimeOut();
-            }else{
-                this.handleActive&&this.handleActive();
             }
         } else if (nextAppState === 'background'&&this.ignore===false) {
             this.timestamp = Date.now('milli');
+            this.handleActive&&this.handleActive();
             console.log('update timestamp ', this.timestamp)
         }
     };

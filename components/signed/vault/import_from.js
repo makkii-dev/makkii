@@ -120,7 +120,7 @@ class ImportFrom extends Component {
             this.loadingView.show(strings('ledger.toast_connecting'));
             listenApp.ignore = true;
             wallet.listDevice().then((deviceList) => {
-                setTimeout(()=>listenApp.ignore=false,1000);
+                setTimeout(()=>listenApp.ignore=false,100);
                 if (deviceList.length <= 0) {
                     this.loadingView.hide();
                     alert_ok(strings('alert_title_error'), strings('ledger.error_device_count'));

@@ -8,7 +8,7 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    Image, BackHandler,Platform
+    Image, BackHandler,Platform,DeviceEventEmitter
 } from 'react-native';
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
@@ -68,9 +68,13 @@ class PinCodeScreen extends React.Component {
             this.onGoback(); // works best when the goBack is async
             return true;
         });
+        const {touchIDEnabled=false} = this.props.setting;
+        this.pincodelisten = touchIDEnabled? DeviceEventEmitter.addListener("APP_ACTIVE", this.onPressTouchId):null;
     }
+
     componentWillUnmount(): void {
         this.backHandler.remove();
+        this.pincodelisten&&this.pincodelisten.remove();
     }
 
     renderDots(numberOfDots) {
@@ -199,7 +203,6 @@ class PinCodeScreen extends React.Component {
         if (touchIDEnabled===false||this.isModifyPinCode===true ){
             return;
         }
-        console.log('render authentication dialog ', touchIDEnabled, ' ,', this.isModifyPinCode);
         const optionalConfigObject = {
             title: strings('pinCode.touchID_dialog_title'), // Android
             imageColor: '#e00606', // Android
@@ -213,14 +216,14 @@ class PinCodeScreen extends React.Component {
         listenApp.ignore = true;
         TouchID.authenticate('', optionalConfigObject)
             .then(success => {
-                setTimeout(()=>listenApp.ignore = false, 1000);
+                setTimeout(()=>listenApp.ignore = false, 100);
                 this.onUnlockSuccess&&this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                 this.targetScreen||this.props.navigation.goBack();
             })
             .catch(error => {
-                setTimeout(()=>listenApp.ignore = false, 1000);
+                setTimeout(()=>listenApp.ignore = false, 100);
                 if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
                     AppToast.show('Authentication Failed ' + error);
                 }

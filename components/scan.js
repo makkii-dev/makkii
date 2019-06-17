@@ -91,7 +91,7 @@ class Scan extends Component {
 		};
 		listenApp.ignore = true;
 		ImagePicker.launchImageLibrary(options, (res) => {
-			setTimeout(()=>listenApp.ignore=false, 1000);
+			setTimeout(()=>listenApp.ignore=false, 100);
 			if (res.error) {
 			 	console.log('error ', res.error);
 			} else{
