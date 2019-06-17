@@ -69,7 +69,6 @@ class AddAddress extends Component {
         let scannedData = props.navigation.getParam('scanned', '');
         // if (scannedData !== '' && oldData !== scannedData) {
             validateAddress(scannedData, this.newSymbol).then(isValidAddress => {
-                console.log("scannedData:" + scannedData);
                 let address = scannedData;
                 if (!isValidAddress) {
                     try {

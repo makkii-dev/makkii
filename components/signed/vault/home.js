@@ -369,7 +369,6 @@ class Home extends HomeComponent {
 			refreshing: false,
 			keyWords:'',
 		};
-
 	}
 
 	async requestStoragePermission() {
@@ -848,7 +847,6 @@ export default connect(state => {
 	return ({
 		user: state.user,
 		accounts: state.accounts,
-		ui: state.ui,
 		setting: state.setting
 	}); })(Home);
 
