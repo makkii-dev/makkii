@@ -94,7 +94,7 @@ class Mnemonic extends Component {
                 <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_done')}
                     onPress={e=>{
-                        listenApp.handleTimeOut = ()=>navigate('unsigned_login');
+                        listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
 						listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
 						listenApp.timeOut = setting.login_session_timeout;
                         listenApp.start();
