@@ -122,7 +122,6 @@ class ImportHdWallet extends React.Component {
                         acc.transactions = {};
                         acc.tokens = {};
                         acc.symbol = this.symbol;
-                        acc.transactions = {};
                         if (!this.isAccountIsAlreadyImport(acc.address)) {
                             accounts[acc.address] = acc
                         }

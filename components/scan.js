@@ -91,12 +91,12 @@ class Scan extends Component {
 		};
 		listenApp.ignore = true;
 		ImagePicker.launchImageLibrary(options, (res) => {
+			setTimeout(()=>listenApp.ignore=false, 1000);
 			if (res.error) {
 			 	console.log('error ', res.error);
 			} else{
 				this.getQrcode(res.data);
 			}
-			setTimeout(()=>listenApp.ignore=false, 1000);
 		});
 	};
 
@@ -108,8 +108,8 @@ class Scan extends Component {
 				if(result===''){
 					throw('error')
 				}
-				validate({data:result}, (result, message='') => {
-					if (result) {
+				validate({data:result}, (res, message='') => {
+					if (res) {
 						this.props.navigation.navigate(success, { scanned: result });
 					} else {
 						AppToast.show(message);

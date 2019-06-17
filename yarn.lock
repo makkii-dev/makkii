@@ -6731,7 +6731,7 @@ react-lifecycles-compat@^3.0.4:
 
 "react-native-aion-hw-wallet@https://github.com/chaion/lib-react-native-aion-hw.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-react-native-aion-hw.git#1afa05352042f169e6f1ccf31317945a629755c1"
+  resolved "https://github.com/chaion/lib-react-native-aion-hw.git#ae7753fa5e3311fdde346a5d46bc15f719c38d00"
 
 react-native-camera@^1.10.2:
   version "1.13.1"
