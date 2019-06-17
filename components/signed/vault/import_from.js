@@ -32,14 +32,9 @@ class ImportFrom extends Component {
 
         this.symbol = this.props.navigation.getParam('symbol');
 
-        if (this.symbol === 'AION') {
-            this.import_from = [
-              IMPORT_SOURCE[0], IMPORT_SOURCE[1], IMPORT_SOURCE[3]
-            ];
-        } else {
-            this.import_from = [
-                IMPORT_SOURCE[0], IMPORT_SOURCE[1]
-            ];
+        this.import_from = [ IMPORT_SOURCE[0], IMPORT_SOURCE[1] ];
+        if (this.symbol === 'AION' && Platform.OS === 'android') {
+            this.import_from.push(IMPORT_SOURCE[3]);
         }
     }
 
@@ -55,9 +50,7 @@ class ImportFrom extends Component {
         while(indexPathMap[minIndex]!==undefined){
             minIndex++;
         }
-        console.log("cointype: " + keyStore.CoinType.fromCoinSymbol(this.symbol));
-        console.log("indexPathMap:" , indexPathMap);
-        console.log("minIndex:" + minIndex);
+
         this.loadingView.show();
         const getUniqueKey = (coinType, path1,path2,path3,isTestNet)=>{
             keyStore.getKey(coinType, path1, path2, path3, isTestNet).then(acc => {
