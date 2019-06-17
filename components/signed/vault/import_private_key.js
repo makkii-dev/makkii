@@ -89,20 +89,7 @@ class ImportPrivateKey extends Component {
 			private_key: ''
 		};
 	}
-
-	async componentWillReceiveProps(props){
-		const scanned = props.navigation.getParam('scanned');
-		if(scanned&&scanned!==this.state.private_key){
-			this.setState({
-				private_key: scanned,
-			});
-			this.props.navigation.setParams({
-				isEdited: true,
-			});
-		}
-
-	}
-
+	
 
 	componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
@@ -120,6 +107,15 @@ class ImportPrivateKey extends Component {
 			success: 'signed_vault_import_private_key',
 			validate: (data, callback)=> {
 				let res = validatePrivateKey(data.data, this.symbol);
+				if(res){
+					this.setState({
+						private_key: data.data,
+					});
+					this.props.navigation.setParams({
+						isEdited: true,
+					});
+				}
+
 				callback(res?data.data:null, res?'':strings('import_private_key.error_invalid_private_key'));
 			}
 		})

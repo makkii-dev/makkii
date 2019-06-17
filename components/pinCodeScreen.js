@@ -210,14 +210,17 @@ class PinCodeScreen extends React.Component {
             unifiedErrors: true, // use unified error messages (default false)
             passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
+        listenApp.ignore = true;
         TouchID.authenticate('', optionalConfigObject)
             .then(success => {
+                setTimeout(()=>listenApp.ignore = false, 1000);
                 this.onUnlockSuccess&&this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                 this.targetScreen||this.props.navigation.goBack();
             })
             .catch(error => {
+                setTimeout(()=>listenApp.ignore = false, 1000);
                 if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
                     AppToast.show('Authentication Failed ' + error);
                 }
