@@ -4,6 +4,8 @@ import {processRequest,getEndpoint,ETHERSCAN_URL_MAP} from './jsonrpc';
 import ApiCaller from '../../utils/http_caller';
 import axios from 'axios';
 import BigNumber from "bignumber.js";
+import Config from 'react-native-config';
+
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
 
 const ERC20ABI = [
@@ -316,7 +318,7 @@ const fetchAccountTokens = (address, network) => Promise.resolve({});
 
 function getTopTokens(topN=20, network='mainnet') {
     return new Promise((resolve, reject) => {
-        let url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=${topN}`;
+        let url = `${Config.app_server_api}/token/eth/search?offset=0&limit=${topN}`;
         console.log("get top eth tokens: " + url);
         ApiCaller.get(url, false).then(res=>{
             resolve(res.data);
@@ -329,7 +331,7 @@ function getTopTokens(topN=20, network='mainnet') {
 
 function searchTokens(keyword, network='mainnet') {
     return new Promise((resolve, reject) => {
-        let url = `http://45.118.132.89:8080/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
+        let url = `${Config.app_server_api}/token/eth/search?offset=0&limit=20&keyword=${keyword}`;
         console.log("search eth token: " + url);
         ApiCaller.get(url, false).then(res=>{
             resolve(res.data);
@@ -341,7 +343,7 @@ function searchTokens(keyword, network='mainnet') {
 }
 
 function getTokenIconUrl(tokenSymbol, contractAddress, network='mainnet') {
-    return `http://45.118.132.89:8080/token/eth/img?contractAddress=${contractAddress}`;
+    return `${Config.app_server_api}/token/eth/img?contractAddress=${contractAddress}`;
 }
 module.exports = {
     ERC20ABI,

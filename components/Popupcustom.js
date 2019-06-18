@@ -122,6 +122,7 @@ export default class PopupCustom extends Component {
             type,
             valueInput,
             canHide,
+            forceExist
         } = this.state;
 
         return buttons.map((btn, index) => {

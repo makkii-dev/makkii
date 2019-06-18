@@ -23,6 +23,7 @@
     "react-native": "0.59.9",
     "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
     "react-native-camera": "^1.10.2",
+    "react-native-config": "^0.11.7",
     "react-native-device-info": "^0.26.3",
     "react-native-fast-image": "^6.0.3",
     "react-native-fs": "^2.13.3",

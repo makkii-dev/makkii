@@ -4,9 +4,10 @@ import BigNumber from "bignumber.js";
 import Contract from "aion-web3-eth-contract";
 import AbiCoder from 'aion-web3-eth-abi';
 import {getEndpoint, processRequest} from "./jsonrpc";
-import {validateAddress} from './core';
 import ApiCaller from "../../utils/http_caller";
 import axios from "axios";
+import Config from 'react-native-config';
+
 const CONTRACT_ABI = [
     {
         outputs: [
@@ -231,7 +232,7 @@ function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=
 
 const getTopTokens=(topN=20, network='mainnet') => {
     return new Promise((resolve, reject) => {
-        let url = `http://45.118.132.89:8080/token/aion?offset=0&limit=${topN}`;
+        let url = `${Config.app_server_api}/token/aion?offset=0&limit=${topN}`;
         console.log("get top aion tokens: " + url);
         ApiCaller.get(url, false).then(res=>{
             resolve(res.data);
@@ -252,7 +253,7 @@ const getTopTokens=(topN=20, network='mainnet') => {
 
 const searchTokens=(keyword, network='mainnet') => {
     return new Promise((resolve, reject) => {
-        let url = `http://45.118.132.89:8080/token/aion/search?keyword=${keyword}`;
+        let url = `${Config.app_server_api}/token/aion/search?keyword=${keyword}`;
         console.log("search aion token: " + url);
         ApiCaller.get(url, false).then(res=>{
             resolve(res.data);

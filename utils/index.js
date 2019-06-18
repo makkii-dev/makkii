@@ -5,6 +5,7 @@ import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
 import Toast from 'react-native-root-toast';
 import {fetchRequest} from './others';
+import Config from 'react-native-config';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -153,24 +154,8 @@ function deleteFile(filePath) {
     });
 }
 
-
-function getCoinPrice(currency='CNY',amount=1) {
-    // const url = `https://www.chaion.net/makkii/price?crypto=AION&fiat=${currency}`;
-    const url = `http://45.118.132.89:8080/price?crypto=AION&fiat=${currency}`;
-    return new Promise((resolve, reject) => {
-        fetchRequest(url,'GET').then(res=>{
-            console.log('[res] ',res);
-            const price = res.price;
-            resolve(amount*price)
-        },err=>{
-            console.log('[err] ', err);
-            reject(err)
-        });
-    })
-}
-
 function getLatestVersion(platform, currentVersionCode, language) {
-    const url = "http://45.118.132.89:8080/appVersion/latest" +
+    const url = Config.app_server_api + "/appVersion/latest" +
         "?versionCode=" + currentVersionCode +
         "&platform=" + platform +
         "&lang=" + language;

@@ -3,6 +3,10 @@ import eth_api from './eth';
 import tron_api from './tron';
 // import eos_api from './eos';
 import btc_api from './btc+ltc';
+import Config from 'react-native-config';
+
+const isTestNet = Config.is_testnet === 'true';
+
 export const COINS = {
     'AION': {
         name: 'AION',
@@ -14,8 +18,8 @@ export const COINS = {
         defaultGasPrice: '10',
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '90000',
-        network: 'mastery',
-        isTestNet: true,
+        network: isTestNet? 'mastery': 'mainnet',
+        isTestNet: isTestNet,
         api: aion_api,
     },
     'BTC': {
@@ -24,8 +28,8 @@ export const COINS = {
         icon: require('../assets/coin_btc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
-        network: 'BTCTEST',
-        isTestNet: true,
+        network: isTestNet? 'BTCTEST': 'BTC',
+        isTestNet: isTestNet,
         api: btc_api,
     },
     'ETH': {
@@ -38,8 +42,8 @@ export const COINS = {
         defaultGasPrice: '10',
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '60000',
-        network: 'ropsten',
-        isTestNet: true,
+        network: isTestNet? 'ropsten': 'mainnet',
+        isTestNet: isTestNet,
         api: eth_api,
     },
     // 'EOS': {
@@ -56,8 +60,8 @@ export const COINS = {
         icon: require('../assets/coin_ltc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
-        network: 'LTCTEST',
-        isTestNet: true,
+        network: isTestNet? 'LTCTEST': 'LTC',
+        isTestNet: isTestNet,
         api: btc_api,
 
     },
@@ -67,8 +71,8 @@ export const COINS = {
         icon: require('../assets/coin_trx.png'),
         tokenSupport: false,
         txFeeSupport: false,
-        network: 'shasta',
-        isTestNet: true,
+        network: isTestNet? 'shasta': 'mainnet',
+        isTestNet: isTestNet,
         api: tron_api,
     }
 };

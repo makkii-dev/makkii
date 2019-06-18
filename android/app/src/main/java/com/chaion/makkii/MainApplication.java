@@ -3,6 +3,7 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
@@ -40,6 +41,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ReactNativeConfigPackage(),
             new FastImageViewPackage(),
             new RNCWebViewPackage(),
             new FingerprintAuthPackage(),

@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply from: project(':react-native-config').projectDir.getPath() + "/dotenv.gradle"
 
 import com.android.build.OutputFile
 
@@ -96,6 +97,7 @@ def enableProguardInReleaseBuilds = false
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+    flavorDimensions "default"
 
     defaultConfig {
         applicationId "com.chaion.makkii"
@@ -106,6 +108,16 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
+        resValue "string", "build_config_package", "com.chaion.makkii"
+    }
+    productFlavors {
+      dev {
+        // Pre-compile run ENVFILE=.env.dev
+        applicationIdSuffix ".dev"
+      }
+      prod {
+        // Pre-compile run ENVFILE=.env.prod
+      }
     }
     signingConfigs {
             release {
@@ -148,6 +160,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-config')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-webview')
     implementation project(':react-native-touch-id')
