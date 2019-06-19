@@ -9,6 +9,7 @@ import {generateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import {strings} from "../../locales/i18n";
 import {mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
+import {setting_update_pincode_enabled} from "../../actions/setting";
 
 const {width,height} = Dimensions.get('window');
 
@@ -98,6 +99,7 @@ class Home extends Component {
 											{text: strings('alert_ok_button'),onPress:()=>{
 													console.log('mnemonic ', mnemonic);
 													dispatch(user(hashed_password, mnemonic));
+													dispatch(setting_update_pincode_enabled(false,false));
 													dispatch(delete_accounts(hashed_password));
 													this.props.navigation.navigate('unsigned_register_mnemonic')
 

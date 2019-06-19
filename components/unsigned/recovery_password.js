@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import {hashPassword,validatePassword} from '../../utils';
 import {user} from '../../actions/user.js';
 import {delete_accounts} from '../../actions/accounts';
+import {setting_update_pincode_enabled} from  '../../actions/setting';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles';
 import {mainBgColor} from '../style_util';
@@ -91,8 +92,8 @@ class Password extends Component {
 										text: strings('alert_ok_button'), onPress: () => {
 											let hashed_password = hashPassword(this.state.password);
 
-											this.props.dispatch(delete_accounts(hashed_password))
-
+											dispatch(delete_accounts(hashed_password));
+											dispatch(setting_update_pincode_enabled(false,false));
 											dispatch(user(hashed_password, this.mnemonic));
 											this.setState({
 												password: '',

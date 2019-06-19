@@ -120,6 +120,7 @@ class Home extends HomeComponent {
 										{text: strings('cancel_button'), onPress:()=>{}},
 										{text: strings('alert_ok_button'), onPress:()=>{
 												setTimeout(()=>{
+													listenApp.stop();
 													this.props.navigation.navigate('unsigned_login');
 												},200);
 											}},
