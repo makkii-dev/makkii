@@ -2,6 +2,7 @@ import ApiCaller from '../utils/http_caller';
 import {COINS} from './support_coin_list';
 import {toHex} from '../utils';
 import keyStore from 'react-native-makkii-core';
+import Config from 'react-native-config';
 
 
 function getTokenIconUrl(coinType, tokenSymbol=undefined, contractAddress=undefined) {
@@ -110,7 +111,7 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params) {
 
 function getCoinPrices(currency) {
     let cryptos = Object.keys(COINS).join(',');
-    const url = `http://45.118.132.89:8080/prices?cryptos=${cryptos}&fiat=${currency}`;
+    const url = `${Config.app_server_api}/prices?cryptos=${cryptos}&fiat=${currency}`;
     console.log("[http req]fetch coin prices: " + url);
     return new Promise((resolve, reject) => {
         ApiCaller.get(url, false).then(res => {

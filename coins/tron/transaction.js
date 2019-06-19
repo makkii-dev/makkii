@@ -132,7 +132,7 @@ function getTransactionUrlInExplorer(txHash, network='mainnet') {
     if (network === 'mainnet') {
         return `https://tronscan.org/#/transaction/${txHash}`;
     } else {
-        return `https://shasta.tronscan.org/#/transaction/${txHash}`;
+        return `https://${network}.tronscan.org/#/transaction/${txHash}`;
     }
 }
 

@@ -9,6 +9,7 @@ import {linkButtonColor, mainBgColor} from '../../style_util';
 import {getLatestVersion, generateUpdateMessage} from '../../../utils';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
+import Config from 'react-native-config';
 
 const {width,height} = Dimensions.get('window');
 
@@ -184,7 +185,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate('simple_webview', {
                                 title: strings('terms_service.title'),
-                                initialUrl: 'https://www.chaion.net/terms_services.html',
+                                initialUrl: `${Config.app_server_static}/terms_services.html`,
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
@@ -195,7 +196,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("simple_webview", {
                                 title: strings('privacy_policy.title'),
-                                initialUrl: 'https://www.chaion.net/privacy_policy.html',
+                                initialUrl: `${Config.app_server_static}/privacy_policy.html`,
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>
