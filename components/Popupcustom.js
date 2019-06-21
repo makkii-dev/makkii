@@ -113,6 +113,7 @@ export default class PopupCustom extends Component {
             errorMsg: '',
             valueInput: '',
             canHide: true,
+            forceExist: false,
         })
     }
 
@@ -158,7 +159,7 @@ export default class PopupCustom extends Component {
                         disabled={disable}
                         onPress={() => {
                             btn.onPress(valueInput);
-                            forceExist || hide || this.hide();
+                            this.state.forceExist || hide || this.hide();
                         }}
                     >
                         <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

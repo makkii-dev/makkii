@@ -118,7 +118,7 @@ function getTransactionsByAddress(address, page=0, size=25, network='mainnet'){
                 console.log('timestamp=>', tx.timestamp);
                 tx.from = '0x'+t.fromAddr;
                 tx.to = '0x'+t.toAddr;
-                tx.value = network==='mastery'?new BigNumber(t.value,10).toNumber():new BigNumber(t.value,16).shiftedBy(-18).toNumber();
+                tx.value = new BigNumber(t.value,10).toNumber();
                 tx.status = t.txError === ''? 'CONFIRMED':'FAILED';
                 tx.blockNumber = t.blockNumber;
                 txs[tx.hash]=tx;
