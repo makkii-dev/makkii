@@ -20,16 +20,12 @@ const getBalance = (address, network = 'mainnet') => new Promise((resolve, rejec
     console.log("[tron http req] body:",body);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
-        if (network === 'shasta') {
-            if (res.data.Error !== undefined) {
-                reject(res.data.Error);
-            } else if (res.data.balance !== undefined) {
-                resolve(new BigNumber(res.data.balance).shiftedBy(-6));
-            } else {
-                resolve(new BigNumber(0));
-            }
+        if (res.data.Error !== undefined) {
+            reject(res.data.Error);
+        } else if (res.data.balance !== undefined) {
+            resolve(new BigNumber(res.data.balance).shiftedBy(-6));
         } else {
-
+            resolve(new BigNumber(0));
         }
     });
 });
@@ -44,11 +40,7 @@ const validateAddress=(address, network='mainnet') => new Promise((resolve, reje
     console.log("[tron http req] body:", body);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
-        if (network === 'shasta') {
-            resolve(res.data.result);
-        } else {
-
-        }
+        resolve(res.data.result);
     });
 });
 
@@ -58,11 +50,7 @@ const getLatestBlock=(network='mainnet') => new Promise((resolve, reject)=> {
     console.log("[tron http req] " + url);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
-        if (network === 'shasta') {
-            resolve(res.data);
-        } else {
-
-        }
+        resolve(res.data);
     });
 });
 
@@ -72,11 +60,7 @@ const broadcastTransaction=(tx, network='mainnet') => new Promise((resolve, reje
     console.log("[tron http req] " + url);
     promise.then((res)=> {
         console.log("[tron http resp] ", res.data);
-        if (network === 'shasta') {
-            resolve(res.data);
-        } else {
-
-        }
+        resolve(res.data);
     });
 });
 
@@ -88,11 +72,7 @@ const getTransactionById=(hash, network='mainnet') => new Promise((resolve, reje
     console.log("[tron http req] " + url);
     promise.then((res) => {
         console.log("[tron http resp]", res.data);
-        if (network === 'shasta') {
-            resolve(res.data);
-        } else {
-
-        }
+        resolve(res.data);
     });
 });
 
@@ -104,11 +84,7 @@ const getTransactionInfoById=(hash, network='mainnet') => new Promise((resolve, 
     console.log("[tron http req] " + url);
     promise.then((res) => {
         console.log("[tron http resp]", res.data);
-        if (network === 'shasta') {
-            resolve(res.data);
-        } else {
-
-        }
+        resolve(res.data);
     });
 });
 

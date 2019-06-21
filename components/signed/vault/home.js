@@ -457,6 +457,7 @@ class Home extends HomeComponent {
 						value.balance = balance;
 						resolve(value)
 					},error => {
+						console.log("get balance failed: " + value.symbol + " " + value.address);
 						reject(error)
 					})
 				}));
