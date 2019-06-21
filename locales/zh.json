@@ -64,7 +64,7 @@
     "hint_enter_current_password": "请输入原密码",
     "hint_enter_new_password": "请输入新密码",
     "hint_enter_confirm_password": "请再次输入新密码",
-    "password_format": "密码必须是8-16个字符",
+    "password_format": "密码必须是8-16个字符,仅限数字、字母和特殊字符！？#",
     "hint_old_password": "请输入原密码",
     "hint_new_password": "请输入新密码",
     "hint_confirm_password": "请再次输入新密码"
