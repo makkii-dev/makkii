@@ -129,6 +129,9 @@ class ImportFrom extends Component {
                         alert_ok(strings('alert_title_error'), getLedgerMessage(error.code));
                     });
                 }
+            }).catch(error=>{
+                this.loadingView.hide();
+                alert_ok(strings('alert_title_error'), getLedgerMessage(error.code));
             });
         }
     }

@@ -89,9 +89,9 @@ class ImportHdWallet extends React.Component {
             ImportAccount : this.ImportAccount,
             isEdited: false
         });
-        InteractionManager.runAfterInteractions(()=>{
+        setTimeout(()=>{
             this.fetchAccount(20)
-        });
+        },500);
         this.isUnmount = true;
     }
     componentWillUnmount(): void {
