@@ -5,7 +5,6 @@ import {
     Image,
     Text,
     ActivityIndicator,
-    InteractionManager,
     Dimensions, Keyboard,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
@@ -38,9 +37,9 @@ class TransactionHistory extends React.Component {
     }
 
     componentWillMount(){
-        InteractionManager.runAfterInteractions(()=>{
-            this.fetchAccountTransactions(this.account,this.state.currentPage)
-        });
+        setTimeout(() => {
+            this.fetchAccountTransactions(this.account, this.state.currentPage);
+        }, 500);
         this.isMount = true;
     }
 
