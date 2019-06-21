@@ -6,7 +6,7 @@ const sendTransaction = (account, symbol, to, value, extra_params, data, network
            amount: value.shiftedBy(8).toNumber(),
            change_address: account.address,
            to_address: to,
-           byte_fee: 1,
+           byte_fee: 2,
            private_key: account.private_key,
            utxos: utxos,
            network: network,

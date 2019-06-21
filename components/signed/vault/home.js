@@ -138,7 +138,7 @@ class HomeCenterComponent extends React.Component{
 				}
 			]
 		};
-		if (Platform.OS === 'iOS') {
+		if (Platform.OS === 'ios') {
 			filters[addFromKey] = filters[addFromKey].slice(0, 2);
 		}
 		let coinKeys = Object.values(COINS);
