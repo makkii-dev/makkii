@@ -83,11 +83,13 @@ class Send extends Component {
 	_handleOpenURL(event) {
 		console.log(event.url);
 	}
+	oldScannedData = null;
 
 	async componentWillReceiveProps(props) {
 
 	    let scannedData = props.navigation.getParam('scanned', '');
-	    if (scannedData !== '') {
+	    if (scannedData !== this.oldScannedData) {
+	    	this.oldScannedData = scannedData;
 	    	validateAddress(scannedData, this.account.symbol).then(isValidAddress => {
 	    		if (isValidAddress) {
 					// only address is in qrcode
