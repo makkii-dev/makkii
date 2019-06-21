@@ -22,9 +22,7 @@ class Home extends HomeComponent {
 	constructor(props){
 		super(props);
 	}
-	shouldComponentUpdate(nextProps) {
-		return nextProps.setting!==this.props.setting;
-	}
+
 
 	componentWillMount(){
 		super.componentWillMount();
