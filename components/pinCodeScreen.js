@@ -223,6 +223,7 @@ class PinCodeScreen extends React.Component {
                 this.targetScreen||this.props.navigation.goBack();
             })
             .catch(error => {
+                console.log('error.core=>',error.code);
                 setTimeout(()=>listenApp.ignore = false, 100);
                 if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'&&error.code!=='UNKNOWN_ERROR'){
                     AppToast.show(strings(`pinCode.touchID_${error.code}`));
