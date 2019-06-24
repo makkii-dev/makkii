@@ -203,18 +203,20 @@ class listenAppState{
     _handleAppStateChange=(nextAppState)=>{
         console.log('appState change', nextAppState);
         console.log('ignore=>', this.ignore);
-        !this.ignore&&nextAppState === 'active'&&DeviceEventEmitter.emit('APP_ACTIVE');
-        if (nextAppState != null && nextAppState === 'active'&&this.ignore===false) {
+        if (nextAppState != null && nextAppState === 'active') {
             // in active
             const max_keep_signed = 60000*parseInt(this.timeOut);
             console.log('max_keep_signed ', max_keep_signed);
             const time_diff = Date.now('milli') - this.timestamp;
+            console.log('time_diff', time_diff)
             if (time_diff > max_keep_signed) {
-                this.handleTimeOut&&this.handleTimeOut();
+                !this.ignore&&this.handleTimeOut&&this.handleTimeOut();
+            }else{
+                !this.ignore&&DeviceEventEmitter.emit('APP_ACTIVE');
             }
-        } else if (nextAppState === 'background'&&this.ignore===false) {
+        } else if (nextAppState === 'background') {
             this.timestamp = Date.now('milli');
-            this.handleActive&&this.handleActive();
+            !this.ignore&&this.handleActive&&this.handleActive();
             console.log('update timestamp ', this.timestamp)
         }
     };
