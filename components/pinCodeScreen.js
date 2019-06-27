@@ -8,7 +8,7 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    Image, BackHandler,Platform,DeviceEventEmitter
+    Image, BackHandler,Platform,DeviceEventEmitter,
 } from 'react-native';
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
@@ -199,6 +199,7 @@ class PinCodeScreen extends React.Component {
     };
 
     onPressTouchId = ()=>{
+        console.log('onPressTouchId');
         const {touchIDEnabled=false} = this.props.setting;
         if (touchIDEnabled===false||this.isModifyPinCode===true ){
             return;
@@ -213,10 +214,10 @@ class PinCodeScreen extends React.Component {
             unifiedErrors: true, // use unified error messages (default false)
             passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
-        listenApp.ignore = true;
+        Platform.OS === 'ios'?listenApp.ignore = true:null;
         TouchID.authenticate('', optionalConfigObject)
             .then(success => {
-                setTimeout(()=>listenApp.ignore = false, 100);
+                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
                 this.onUnlockSuccess&&this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
@@ -224,7 +225,7 @@ class PinCodeScreen extends React.Component {
             })
             .catch(error => {
                 console.log('error.core=>',error.code);
-                setTimeout(()=>listenApp.ignore = false, 100);
+                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
                 if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'&&error.code!=='UNKNOWN_ERROR'){
                     AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
