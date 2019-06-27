@@ -107,7 +107,7 @@ class Services extends Component {
 		// }
 
 
-		// TODO: connectivity test
+		// TODO: connectivity qa
 		const { dispatch } = this.props;
 		let _setting = this.props.setting;
 		_setting.explorer_server = Object.keys(this.selectList.getSelect())[0];

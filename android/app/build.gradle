@@ -104,16 +104,20 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10
-        versionName "1.0.0-alpha1"
+        versionName "1.0.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         resValue "string", "build_config_package", "com.chaion.makkii"
     }
     productFlavors {
-      dev {
-        // Pre-compile run ENVFILE=.env.dev
-        applicationIdSuffix ".dev"
+      qa {
+        // Pre-compile run ENVFILE=.env.qa
+        applicationIdSuffix ".qa"
+      }
+      staging {
+        // Pre-compile run ENVFILE=.env.staging
+        applicationIdSuffix ".staging"
       }
       prod {
         // Pre-compile run ENVFILE=.env.prod
