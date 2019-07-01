@@ -435,6 +435,7 @@ class Home extends HomeComponent {
 	fetchAccountsBalance = ()=> {
 		// TODO: also update token's balance
 		const {dispatch,accounts} = this.props;
+		console.log('listenTx.pendingMap=>', listenTx.pendingMap);
 		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
 				AppToast.show(strings('wallet.toast_has_pending_transactions'), {

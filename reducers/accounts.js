@@ -48,7 +48,17 @@ export default function accounts(state = init, action){
 		case UPDATE_ACCOUNT_TRANSACTIONS:
 			if (typeof state[action.key] !== 'undefined') {
 				// only keep 5 latest txs
-				let transactions = Object.assign({}, state[action.key].transactions,action.transactions);
+				// Object.keys(action.transactions).forEach(k=>{
+				// 	listenTx.removeTransaction(k);
+				// });
+				const pendingTransactions = action.force?{}:Object.keys(state[action.key].transactions).reduce((map,el)=>{
+					if(state[action.key].transactions[el].status==='PENDING'){
+						map[el]=state[action.key].transactions[el];
+					}
+					return map;
+				},{});
+				// console.log('get pendingTransactions==========================>', pendingTransactions);
+				let transactions = Object.assign({}, state[action.key].transactions,action.transactions,pendingTransactions);
 				let new_transactions = {};
 				let compareFn = (a, b) => {
 					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;

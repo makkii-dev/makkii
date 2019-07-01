@@ -100,11 +100,13 @@ export class listenTransaction{
             return;
         console.log('getting transaction ' + tx.hash + ' status');
         this.pendingMap[hashKey] = tx;
-        let removeTransaction = function(tx){
+
+        let removeTransaction = function(){
             if(typeof thusMap[hashKey] !== 'undefined'){
                 console.log('clear listener');
                 clearInterval(thusMap[hashKey]);
                 delete thusMap[hashKey];
+                delete thusPendingMap[hashKey];
             }
         };
         let updateTxStatus = function(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user) {
@@ -123,7 +125,7 @@ export class listenTransaction{
             if (Date.now() - start > thusTimeOut) {
                 delete thusPendingMap[hashKey];
                 console.log('timeout');
-                removeTransaction(tx);
+                removeTransaction();
             }
             getTransactionStatus(symbol, tx.hash).then(res=>{
                 console.log("status res:", res);
@@ -138,7 +140,7 @@ export class listenTransaction{
                                     let blockNumberInterval = setInterval(() => {
                                         getBlockNumber(symbol).then(
                                             number => {
-                                                if (number > tx.blockNumber + 12) {
+                                                if (number > tx.blockNumber + 2) {
                                                     tx.status = 'CONFIRMED';
                                                     // special handling for ethereum to get tx timestamp
                                                     if (symbol === 'ETH') {

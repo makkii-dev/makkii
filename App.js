@@ -137,7 +137,8 @@ const Routes = createAppContainer(createStackNavigator({
 	'unlock': {
 		screen: PinCodeScreen,
 		navigationOptions: {
-			header: null
+			header: null,
+			gesturesEnabled: false,
 		}
 	},
 	'splash':   {
