@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, View, Text, Keyboard, TouchableOpacity} from 'react-native';
-import Toast from 'react-native-root-toast';
-
+import {AppToast} from "../../../utils/AppToast";
 import { PasswordInputWithTitle, RightActionButton, alert_ok } from '../../common.js';
 import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
@@ -155,7 +154,7 @@ class Password extends Component {
 		dispatch(accounts_save(newHashedPassword));
         console.log("update password successfully.");
         AppToast.show(strings('toast_update_success'), {
-			position: Toast.positions.CENTER,
+			position: AppToast.positions.CENTER,
         	onHidden: () => {
 				this.props.navigation.goBack();
 			}

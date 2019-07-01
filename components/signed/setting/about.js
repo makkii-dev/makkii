@@ -10,6 +10,7 @@ import {getLatestVersion, generateUpdateMessage} from '../../../utils';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Config from 'react-native-config';
+import {AppToast} from "../../../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 

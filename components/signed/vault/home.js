@@ -40,7 +40,7 @@ import {accountKey, getStatusBarHeight} from '../../../utils';
 import {COINS} from '../../../coins/support_coin_list';
 import {getBalance, formatAddress1Line} from '../../../coins/api';
 import {update_index} from "../../../actions/user";
-
+import {AppToast} from "../../../utils/AppToast";
 
 const {width} = Dimensions.get('window');
 
@@ -784,34 +784,6 @@ class Home extends HomeComponent {
 
 
 				</ImageBackground>
-				<ComponentTabBar
-					style={{
-						position: 'absolute',
-						height: fixedHeight(156),
-						bottom: 0,
-						right: 0,
-						left: 0,
-						backgroundColor: 'white',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'
-					}}
-					active={'wallet'}
-					onPress={[
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-						},
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_dapps_launch');
-						},
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_setting');
-						},
-					]}
-				/>
 				</TouchableOpacity>
 				<Loading ref={(element) => {
 					this.loadingView = element;
@@ -853,7 +825,7 @@ export default connect(state => {
 
 const styles = StyleSheet.create({
     accountView:{
-        flex: 1, marginTop: fixedHeight(300), marginBottom: fixedHeight(156)
+        flex: 1, marginTop: fixedHeight(300)
     },
 	accountContainerWithShadow:{
 		...defaultStyles.shadow,

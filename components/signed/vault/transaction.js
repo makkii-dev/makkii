@@ -17,6 +17,7 @@ import {sameAddress, getTransactionExplorerUrl} from "../../../coins/api";
 import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
+import {AppToast} from "../../../utils/AppToast";
 
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {

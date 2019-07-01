@@ -11,6 +11,7 @@ import BigNumber from 'bignumber.js';
 import {COINS} from '../../../coins/support_coin_list';
 import {fetchAccountTokenBalance, searchTokens, getTopTokens, getTokenIconUrl} from '../../../coins/api';
 import FastImage from 'react-native-fast-image';
+import {AppToast} from "../../../utils/AppToast";
 
 const {width} = Dimensions.get('window');
 

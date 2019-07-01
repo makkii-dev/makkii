@@ -6,6 +6,7 @@ import {strings} from '../locales/i18n';
 import {mainColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
 import BigNumber from 'bignumber.js';
 import {sameAddress, formatAddress1Line} from "../coins/api";
+import {AppToast} from "../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 

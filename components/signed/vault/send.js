@@ -30,6 +30,7 @@ import defaultStyles from '../../styles';
 import {COINS} from '../../../coins/support_coin_list';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateBalanceSufficiency} from '../../../coins/api';
+import {AppToast} from "../../../utils/AppToast";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');

@@ -16,6 +16,7 @@ import {getStatusBarHeight, hashPassword} from '../utils';
 import {user_update_pincode} from '../actions/user';
 import TouchID from 'react-native-touch-id';
 import {strings} from "../locales/i18n";
+import {AppToast} from "../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];

@@ -10,6 +10,7 @@ import {mainBgColor} from '../../style_util';
 import keyStore from 'react-native-makkii-core';
 import {COINS} from "../../../coins/support_coin_list";
 import {validateMnemonic} from "../../../libs/aion-hd-wallet";
+import {AppToast} from "../../../utils/AppToast";
 
 const {width, height} = Dimensions.get('window');
 

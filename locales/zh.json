@@ -3,7 +3,8 @@
   "menuRef": {
     "title_settings": "设置",
     "title_wallet": "钱包",
-    "title_dapps": "应用"
+    "title_dapps": "应用",
+    "title_dex": "市场"
   },
   "unsigned_login": {
     "error_login": "登录失败",
@@ -143,7 +144,8 @@
     "error_empty_account_name": "账户名不能为空",
     "menu_change_name": "更改账户名称",
     "menu_export_private_key": "导出私钥",
-    "menu_switch_token": "切换代币"
+    "menu_switch_token": "切换代币",
+    "menu_token_exchange": "交易代币"
   },
   "import_private_key": {
     "title": "私钥",
@@ -232,6 +234,15 @@
     "hint_decimals": "请填写小数位数",
     "toast_fetch_token_detail_fail": "错误的代币合约地址",
     "toast_token_exists": "添加失败，该代币已存在"
+  },
+  "token_exchange": {
+    "title": "交易代币",
+    "toast_not_support": "暂不支持代币{{token}}",
+    "label_current_account": "当前账号:",
+    "label_select_account": "选择账号",
+    "label_current_rate": "当前汇率:",
+    "label_sell": "卖:",
+    "label_buy": "买:"
   },
   "currency": {
     "title": "兑换汇率",
