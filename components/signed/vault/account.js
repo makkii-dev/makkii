@@ -28,6 +28,7 @@ import {Header} from 'react-navigation';
 import {TransactionItem, AddressComponent} from '../../common';
 import {COINS} from '../../../coins/support_coin_list';
 import {getTransactionsByAddress,formatAddress1Line,fetchAccountTokenBalance,fetchAccountTokenTransferHistory,fetchAccountTokens} from '../../../coins/api';
+import {AppToast} from "../../../utils/AppToast";
 
 const {width} = Dimensions.get('window');
 

@@ -12,7 +12,6 @@ import {
     PermissionsAndroid, ScrollView
 } from 'react-native';
 
-import Toast from 'react-native-root-toast';
 import defaultStyles from '../../styles.js';
 import {mainBgColor, linkButtonColor, fontColor} from "../../style_util";
 import {strings} from "../../../locales/i18n";
@@ -21,6 +20,7 @@ import {alert_ok, ComponentButton, InputMultiLines} from "../../common";
 import {saveImage} from "../../../utils";
 import screenshotHelper from 'react-native-screenshot-helper';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {AppToast} from "../../../utils/AppToast";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 
@@ -48,8 +48,8 @@ class ExportPrivateKey extends React.Component{
         } else {
             this.subscription = NativeModule.addListener('screenshot_taken', () => {
                 AppToast.show(strings('toast_private_key_warning'), {
-                    duration: Toast.durations.LONG,
-                    position: Toast.positions.CENTER,
+                    duration: AppToast.durations.LONG,
+                    position: AppToast.positions.CENTER,
                 });
             });
         }

@@ -55,7 +55,7 @@ class Home extends HomeComponent {
 				alignItems: 'center'
 			}}>
 				<ScrollView
-					style={{width:width,marginBottom: fixedHeight(180)}}
+					style={{width:width}}
 					contentContainerStyle={{alignItems: 'center'}}
 				>
 					<View style={{
@@ -127,27 +127,27 @@ class Home extends HomeComponent {
 							}}/>
 					</View>
 				</ScrollView>
-				<ComponentTabBar
-					// TODO
-					style={{
-						position: 'absolute',
-						bottom: 0,
-						right: 0,
-						height: fixedHeight(156),
-						left: 0,
-						backgroundColor: 'white',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'
-					}}
-					active={'settings'}
-					onPress={[
-						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps_launch');},
-						()=>{},
-					]}
-				/>
+				{/*<ComponentTabBar*/}
+				{/*	// TODO*/}
+				{/*	style={{*/}
+				{/*		position: 'absolute',*/}
+				{/*		bottom: 0,*/}
+				{/*		right: 0,*/}
+				{/*		height: fixedHeight(156),*/}
+				{/*		left: 0,*/}
+				{/*		backgroundColor: 'white',*/}
+				{/*		flexDirection: 'row',*/}
+				{/*		justifyContent: 'space-around',*/}
+				{/*		borderTopWidth: 0.3,*/}
+				{/*		borderTopColor: '#8c8a8a'*/}
+				{/*	}}*/}
+				{/*	active={'settings'}*/}
+				{/*	onPress={[*/}
+				{/*		()=>{this.props.navigation.navigate('signed_vault');},*/}
+				{/*		()=>{this.props.navigation.navigate('signed_dapps_launch');},*/}
+				{/*		()=>{},*/}
+				{/*	]}*/}
+				{/*/>*/}
 			</View>
 		);
 	}

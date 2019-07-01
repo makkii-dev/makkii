@@ -3,7 +3,6 @@ import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
-import Toast from 'react-native-root-toast';
 import {fetchRequest} from './others';
 import Config from 'react-native-config';
 
@@ -174,26 +173,8 @@ function generateUpdateMessage(version) {
     return message;
 }
 
-class AppToast {
-    constructor() {
-        this.toast = null;
-    }
-    show(message, options = {position: Toast.positions.BOTTOM, duration: Toast.durations.SHORT}){
-        this.close();
-        this.toast= Toast.show(message,options);
-    }
-    close(){
-        if(this.toast){
-            Toast.hide(this.toast);
-            this.toast = null;
-        }
-    }
-}
-
-
-
 class listenAppState{
-    constructor(routes){
+    constructor(){
         this.timeOut = '30';
         this.timestamp = Date.now('milli');
     }
@@ -379,7 +360,6 @@ module.exports = {
     getStatusBarHeight:getStatusBarHeight,
     listenAppState:listenAppState,
     strLen: strLen,
-    AppToast: AppToast,
     navigationSafely,
     getLatestVersion: getLatestVersion,
     generateUpdateMessage: generateUpdateMessage,

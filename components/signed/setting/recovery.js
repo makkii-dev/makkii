@@ -9,12 +9,11 @@ import {
 	NativeEventEmitter} from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import QRCode from 'react-native-qrcode-svg';
-import Toast from 'react-native-root-toast';
-
 import {InputMultiLines, ComponentButton} from '../../common.js';
 import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
+import {AppToast} from "../../../utils/AppToast";
 
 var nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
@@ -38,8 +37,8 @@ class Recovery extends Component {
 		} else {
 			this.subscription = NativeModule.addListener('screenshot_taken',() => {
 				AppToast.show(strings('toast_mnemonic_share_warning'), {
-					duration: Toast.durations.LONG,
-					position: Toast.positions.CENTER
+					duration: AppToast.durations.LONG,
+					position: AppToast.positions.CENTER
 				});
 			});
 		}

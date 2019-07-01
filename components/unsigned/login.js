@@ -10,6 +10,7 @@ import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
+import {AppToast} from "../../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 
@@ -180,7 +181,7 @@ class Login extends Component {
                                                 listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
                                                 listenApp.timeOut = setting.login_session_timeout;
                                                 listenApp.start();
-                                                navigate('signed_vault');
+                                                navigate('signed_home');
                                             } else {
                                                 alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
                                             }

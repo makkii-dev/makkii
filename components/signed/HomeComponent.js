@@ -1,7 +1,9 @@
 import {Component} from 'react';
 import {BackHandler} from 'react-native';
-import Toast from 'react-native-root-toast';
+import {AppToast} from '../../utils/AppToast';
 import {strings} from '../../locales/i18n';
+import {StackActions,NavigationActions} from "react-navigation";
+import {connect} from "react-redux";
 
 export class HomeComponent extends Component {
 
@@ -11,11 +13,11 @@ export class HomeComponent extends Component {
     }
 
     componentWillMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+        // BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+        // BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     handleBackButton=() => {
@@ -23,6 +25,12 @@ export class HomeComponent extends Component {
                 console.log("count: " + this.backClickCount);
                 if(this.backClickCount === 1){
                     listenApp.stop(()=> BackHandler.exitApp());
+                    this.props.dispatch(StackActions.reset({
+                        index:0,
+                        actions:[
+                            NavigationActions.navigate({routeName:'unsigned_login'})
+                        ]
+                    }));
                 }else{
                     this.prepare();
                 }
@@ -38,3 +46,4 @@ export class HomeComponent extends Component {
         });
     }
 }
+connect()(HomeComponent);

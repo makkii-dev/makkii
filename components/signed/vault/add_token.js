@@ -10,6 +10,7 @@ import {validateAddress, fetchTokenDetail, fetchAccountTokenBalance} from "../..
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
 import BigNumber from "./select_coin";
+import {AppToast} from "../../../utils/AppToast";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');

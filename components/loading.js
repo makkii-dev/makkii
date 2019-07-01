@@ -12,7 +12,8 @@ const {width, height} = Dimensions.get('window');
 
 export default class Loading extends Component {
     static propTypes = {
-        isShow: PropTypes.bool
+        isShow: PropTypes.bool,
+        message: PropTypes.string
     };
 
     constructor(props) {
@@ -20,6 +21,17 @@ export default class Loading extends Component {
         this.state = {
             message: null,
             isShow: false,
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        const {message, isShow} = this.props;
+        const {message: nextMessage, isShow: nextIsShow} = nextProps;
+        if(message!==nextMessage||isShow!==nextIsShow){
+            this.setState({
+                message:nextMessage,
+                isShow:nextIsShow
+            })
         }
     }
 

@@ -7,6 +7,7 @@ import {accounts,accounts_add} from '../actions/accounts.js';
 import {dbGet,decrypt} from '../utils';
 import {strings} from "../locales/i18n";
 import {ComponentLogo} from "./common";
+import {createAction} from "../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
@@ -63,7 +64,7 @@ class Splash extends Component {
 	componentWillMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
-		const {dispatch} = this.props;
+		const {dispatch} = this.props;``
 		let buffer =  ('level garlic excess better rug lesson alert skill hover whisper alarm reunion' || '').normalize('NFKD');
 		console.log('buffer=>',buffer);
 		dbGet('settings').then(json => {
@@ -100,6 +101,7 @@ class Splash extends Component {
 						db_user.address_book!==undefined?db_user.address_book: {},
 						db_user.hd_index!==undefined?db_user.hd_index:{}
 					));
+					dispatch(createAction('ERC20Dex/getTokenList')());
 					setTimeout(()=>{
 						// navigate('signed_vault');
 						navigate('unsigned_login');

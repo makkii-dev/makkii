@@ -4,7 +4,8 @@ import {setting} from '../actions/setting';
 import {accountKey, fromHexString} from '../utils';
 import {update_account_txs, update_account_token_txs} from '../actions/accounts';
 import {strings} from "../locales/i18n";
-import Toast from 'react-native-root-toast'
+import {AppToast} from "./AppToast";
+
 export class listenCoinPrice{
     constructor(store, interval=30) {
         this.store = store;
@@ -48,7 +49,7 @@ export class listenCoinPrice{
         }, error => {
             console.log("get coin price errors:", error);
             AppToast.show(strings('error_connect_remote_server'), {
-                position: Toast.positions.CENTER,
+                position: AppToast.positions.CENTER,
             })
         });
 

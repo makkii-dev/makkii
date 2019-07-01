@@ -79,7 +79,7 @@ class ChangeAccountNameScreen extends  React.Component {
             AppToast.show(
                 strings('account_name_hint'),
                 {
-                    position:Toast.positions.CENTER,
+                    position:AppToast.positions.CENTER,
                 });
         }
     };
