@@ -88,7 +88,7 @@ class Send extends Component {
 	async componentWillReceiveProps(props) {
 
 	    let scannedData = props.navigation.getParam('scanned', '');
-	    if (scannedData !== this.oldScannedData) {
+	    if (scannedData !== this.oldScannedData&&scannedData!=='') {
 	    	this.oldScannedData = scannedData;
 	    	validateAddress(scannedData, this.account.symbol).then(isValidAddress => {
 	    		if (isValidAddress) {
