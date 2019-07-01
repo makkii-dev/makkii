@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         zIndex: 9999,
+        elevation: 10,
         justifyContent: 'center',
         alignItems: 'center',
         width: width,

@@ -237,7 +237,12 @@
   },
   "token_exchange": {
     "title": "交易代币",
-    "toast_not_support": "暂不支持代币{{token}}"
+    "toast_not_support": "暂不支持代币{{token}}",
+    "label_current_account": "当前账号:",
+    "label_select_account": "选择账号",
+    "label_current_rate": "当前汇率:",
+    "label_sell": "卖:",
+    "label_buy": "买:"
   },
   "currency": {
     "title": "兑换汇率",

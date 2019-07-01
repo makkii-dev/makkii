@@ -249,7 +249,12 @@
   },
   "token_exchange": {
     "title": "Exchange Token",
-    "toast_not_support": "Not Support token {{token}} "
+    "toast_not_support": "Not Support token {{token}} ",
+    "label_current_account": "Current Account:",
+    "label_select_account": "Select Account",
+    "label_current_rate": "Current Rate:",
+    "label_sell": "Sell:",
+    "label_buy": "Buy"
   },
   "currency": {
     "title": "Exchange Rates",
