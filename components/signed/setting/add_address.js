@@ -65,9 +65,9 @@ class AddAddress extends Component {
     }
 
     async componentWillReceiveProps(props) {
-        let oldData = this.props.navigation.getParam('scanned');
         let scannedData = props.navigation.getParam('scanned', '');
-        // if (scannedData !== '' && oldData !== scannedData) {
+        if (scannedData !== '' && this.oldScannedData !== scannedData) {
+            this.oldScannedData = scannedData;
             validateAddress(scannedData, this.newSymbol).then(isValidAddress => {
                 let address = scannedData;
                 if (!isValidAddress) {
@@ -85,7 +85,7 @@ class AddAddress extends Component {
                 });
                 this.updateEditStatus(this.state.name, address);
             });
-        // }
+        }
     }
 
     addAddress=() => {
