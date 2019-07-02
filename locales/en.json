@@ -256,7 +256,10 @@
     "label_sell": "Sell:",
     "label_buy": "Buy:",
     "label_account_not_found": "Can't find eth account",
-    "button_add_account": "Add"
+    "button_add_account": "Add",
+    "button_exchange_enable": "Exchange",
+    "button_exchange_disable": "Insufficient account balance",
+    "button_exchange_no_account": "No Account"
   },
   "currency": {
     "title": "Exchange Rates",

@@ -231,6 +231,15 @@ class Home extends React.Component {
 
 		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
 		const {currentAccount} = this.props;
+		console.log('currentAccount=>',currentAccount);
+		let buttonEnabled = false;
+		if(currentAccount){
+			const {balance, tokens} = currentAccount;
+			const ethCost = srcToken === 'ETH'? srcQty+0.0043:0.0043;
+			const tokenCost = srcToken === 'ETH'? 0 : srcQty;
+			const {balance: tokenBalance} = tokens.srcToken;
+			buttonEnabled = balance >ethCost &&  tokenCost>tokenBalance;
+		}
 		return(
 			<DismissKeyboard>
 				<View style={{flex:1, backgroundColor:mainBgColor}}>
@@ -296,8 +305,10 @@ class Home extends React.Component {
 
 						</View>
 						<ComponentButton
-							title={'兑换'}
-							disabled={true}
+							title={currentAccount!==undefined?
+								buttonEnabled?strings('token_exchange.button_exchange_enable'):strings('token_exchange.button_exchange_disable')
+								:strings('token_exchange.button_exchange_no_account')}
+							disabled={!buttonEnabled}
 							style={{
 								width:width-40,
 								marginHorizontal:20,

@@ -244,7 +244,10 @@
     "label_sell": "卖:",
     "label_buy": "买:",
     "label_account_not_found": "找不到以太坊账号",
-    "button_add_account": "添加账号"
+    "button_add_account": "添加账号",
+    "button_exchange_enable": "兑换",
+    "button_exchange_disable": "账户余额不足",
+    "button_exchange_no_account": "没有账号"
   },
   "currency": {
     "title": "兑换汇率",
