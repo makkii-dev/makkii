@@ -45,9 +45,13 @@ class Home extends Component {
 		console.log('[route] ' + this.props.navigation.state.routeName);
 	}
 	async componentWillReceiveProps(props){
-		this.setState({
-			mnemonic: props.navigation.getParam('scanned', '')
-		});
+		let scannedData = props.navigation.getParam('scanned', '');
+		if(scannedData!=='scanned'&& scannedData!== this.oldScannedData){
+			this.oldScannedData = scannedData;
+			this.setState({
+				mnemonic: scannedData
+			});
+		}
 	}
 	componentWillMount() {
 	    	this.props.navigation.setParams({
