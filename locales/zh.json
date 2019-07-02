@@ -428,7 +428,7 @@
     "touchID_dialog_title": "指纹验证",
     "touchID_dialog_desc": "请触摸指纹传感器",
     "touchID_dialog_failed": "验证失败",
-    "touchID_NOT_SUPPORTED": "生物信息解锁不支持",
+    "touchID_NOT_SUPPORTED": "指纹解锁不支持",
     "touchID_NOT_AVAILABLE": "生物信息解锁当前不可用",
     "touchID_NOT_PRESENT": "本设备不支持生物信息解锁",
     "touchID_NOT_ENROLLED": "生物信息没有录入",

@@ -440,7 +440,7 @@
     "touchID_dialog_title": "Fingerprint Authentication",
     "touchID_dialog_desc": "Touch Sensor",
     "touchID_dialog_failed": "Authentication Failed",
-    "touchID_NOT_SUPPORTED": "Biometry is not supported",
+    "touchID_NOT_SUPPORTED": "TouchID is not supported",
     "touchID_NOT_AVAILABLE": "Biometry is not currently available",
     "touchID_NOT_PRESENT": "Biometry hardware not present",
     "touchID_NOT_ENROLLED": "Biometry is not enrolled",
