@@ -43,6 +43,7 @@ class PinCodeScreen extends React.Component {
     createPinCode = '';
     constructor(props){
         super(props);
+        this.errorCounts = 0;
         this.isModifyPinCode =  this.props.navigation.getParam('isModifyPinCode', false);
         this.onUnlockSuccess  = this.props.navigation.getParam('onUnlockSuccess', ()=>{});
         this.targetScreen = this.props.navigation.getParam('targetScreen');
@@ -108,6 +109,7 @@ class PinCodeScreen extends React.Component {
     }
 
     handleErrorCode(errorMsg){
+        const {navigation} = this.props;
         Animated.spring(
             this.animatedValue,
             {
@@ -118,6 +120,11 @@ class PinCodeScreen extends React.Component {
             }
         ).start();
         this.isShake=!this.isShake;
+        this.errorCounts +=1;
+        if(this.errorCounts === 5){
+            AppToast.show(strings('pinCode.toast_please_login'));
+            listenApp.stop(()=>navigation.navigate('unsigned_login'));
+        }
         this.setState({pinCode: '',errorMsg})
     }
 
@@ -321,7 +328,7 @@ class PinCodeScreen extends React.Component {
             unlockDescription = strings('pinCode.pinCode_confirm')
         }
         if(errorMsg&&errorMsg!==''){
-            warningPincodeFail = strings(`pinCode.${errorMsg}`);
+            warningPincodeFail = strings(`pinCode.${errorMsg}`) + ' ' +strings('pinCode.label_remaining_attempts',{count:5-this.errorCounts});
         }
         return (
           <ImageBackground

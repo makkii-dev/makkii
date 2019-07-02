@@ -440,7 +440,9 @@
     "pinCode_not_match": "2次输入不匹配",
     "pinCode_enter": "输入PIN码解锁",
     "pinCode_create": "1- 输入新的数字口令",
-    "pinCode_confirm": "2- 确认你的数字口令"
+    "pinCode_confirm": "2- 确认你的数字口令",
+    "toast_please_login": "请重新登陆",
+    "label_remaining_attempts": "剩余尝试次数:{{count}}"
   },
   "sort": {
     "balance": "余额优先",

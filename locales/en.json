@@ -452,7 +452,9 @@
     "pinCode_not_match": "Your entries not match",
     "pinCode_enter": "Enter PIN to unlock",
     "pinCode_create": "Enter your PIN code",
-    "pinCode_confirm": "Confirm your PIN code"
+    "pinCode_confirm": "Confirm your PIN code",
+    "toast_please_login": "Please login in again",
+    "label_remaining_attempts": "remaining attempts:{{count}}",
   },
   "dapp": {
     "launch_button": "Launch",
