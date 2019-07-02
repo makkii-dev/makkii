@@ -1,11 +1,9 @@
 
-import React, {} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,DeviceEventEmitter,Dimensions, FlatList, PixelRatio, ScrollView} from 'react-native';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
-import {ComponentTabBar} from '../../common.js';
-import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
@@ -13,35 +11,14 @@ import {navigationSafely} from '../../../utils';
 
 const {width} = Dimensions.get('window');
 
-class Home extends HomeComponent {
-	static navigationOptions = ({ navigation }) => {
+class Home extends Component {
+	static navigationOptions = ({ navigation,screenProps:{t,lan} }) => {
 	    return {
-			title: navigation.getParam('title')
+			title: t('menuRef.title_settings',{locale:lan})
 	    };
     };
 	constructor(props){
 		super(props);
-	}
-
-
-	componentWillMount(){
-		super.componentWillMount();
-		this.update_locale();
-
-		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-		    this.update_locale();
-		});
-	}
-
-	update_locale= () => {
-		this.props.navigation.setParams({
-			'title': strings('menuRef.title_settings'),
-		});
-	};
-
-	componentWillUnmount() {
-		super.componentWillUnmount();
-		this.listener.remove();
 	}
 
 	render(){

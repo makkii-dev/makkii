@@ -252,9 +252,11 @@
     "toast_not_support": "Not Support token {{token}} ",
     "label_current_account": "Current Account:",
     "label_select_account": "Select Account",
-    "label_current_rate": "Current Rate:",
+    "label_current_rate": "Current Rate",
     "label_sell": "Sell:",
-    "label_buy": "Buy"
+    "label_buy": "Buy:",
+    "label_account_not_found": "Can't find eth account",
+    "button_add_account": "Add"
   },
   "currency": {
     "title": "Exchange Rates",

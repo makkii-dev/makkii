@@ -240,9 +240,11 @@
     "toast_not_support": "暂不支持代币{{token}}",
     "label_current_account": "当前账号:",
     "label_select_account": "选择账号",
-    "label_current_rate": "当前汇率:",
+    "label_current_rate": "当前汇率",
     "label_sell": "卖:",
-    "label_buy": "买:"
+    "label_buy": "买:",
+    "label_account_not_found": "找不到以太坊账号",
+    "button_add_account": "添加账号"
   },
   "currency": {
     "title": "兑换汇率",

@@ -2,9 +2,16 @@ import React from 'react'
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
 import PopupCustom from '../components/Popupcustom';
+import {NavigationActions} from "react-navigation";
 
 export { connect }
-export const createAction = type => payload => ({ type, payload })
+export const createAction = type => payload => ({ type, payload });
+export const navigate = (url,params={})=>({dispatch})=>{
+    dispatch(NavigationActions.navigate({routeName:url,params:params}));
+};
+export const navigateBack = ({dispatch})=>{
+    dispatch(NavigationActions.back());
+};
 
 export default function(options) {
     const app = create(options);

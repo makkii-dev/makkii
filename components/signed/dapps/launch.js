@@ -3,15 +3,14 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, DeviceEven
 import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {fixedHeight, mainColor, mainBgColor} from "../../style_util";
-import {ComponentTabBar} from "../../common";
-import {HomeComponent} from "../HomeComponent";
 const {width} = Dimensions.get('window')
 import defaultStyles from '../../styles';
 
-class Launch extends HomeComponent{
+class Launch extends Component{
 
-    static navigationOptions = ({ navigation }) => ({
-        title: navigation.getParam('title'),
+    static navigationOptions = ({ navigation, screenProps:{t,lan} }) => ({
+
+        title: t('menuRef.title_dapps',{locale:lan}),
         headerTitleStyle: {
             alignSelf: "center",
             textAlign: "center",
@@ -19,25 +18,7 @@ class Launch extends HomeComponent{
         },
         headerRight: (<View></View>)
     });
-    componentWillMount(){
-        super.componentWillMount();
-        this.update_locale();
 
-        this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-            this.update_locale();
-        });
-    }
-
-    update_locale= () => {
-        this.props.navigation.setParams({
-            'title': strings('menuRef.title_dapps'),
-        });
-    };
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-        this.listener.remove();
-    }
 
     constructor(props) {
         super(props);

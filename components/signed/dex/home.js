@@ -3,8 +3,8 @@ import {
 	View,
 	Image,
 	Text,
-	TextInput,
-	TouchableWithoutFeedback, ActivityIndicator
+	TextInput, TouchableOpacity,
+	TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions
 } from 'react-native';
 import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
@@ -15,8 +15,15 @@ import commonStyles from '../../styles';
 import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
 import BigNumber from "bignumber.js";
+import {navigate} from "../../../utils/dva";
+import {accountKey} from "../../../utils";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {DismissKeyboard} from "../../dimissKyboradView";
+import {getTokenIconUrl} from "../../../coins/api";
+import FastImage from "react-native-fast-image";
+const {width} = Dimensions.get('window');
 
-
+const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 export const renderAddress = (address)=>(
 	<View>
 		<Text style={{...commonStyles.addressFontStyle, color:'#000'}}>{address.substring(0, 4 )+' '+
@@ -33,9 +40,10 @@ export const renderAddress = (address)=>(
 );
 
 class Home extends React.Component {
-	static navigationOptions = ({navigation})=>{
+	static navigationOptions = ({navigation, screenProps})=>{
+		const {t, lan} = screenProps;
 		return({
-			title: strings('token_exchange.title'),
+			title: t('token_exchange.title',{locale:lan}),
 		})
 	};
 
@@ -85,16 +93,6 @@ class Home extends React.Component {
 		this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:destToken,destToken:srcToken}))
 	};
 
-	onChangeSrcToken = (st)=>{
-		const {destToken} = this.props.trade;
-		this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:st,destToken:destToken}))
-	};
-
-	onChangeDestToken = (dt)=>{
-		const {srcToken} = this.props.trade;
-		this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:srcToken,destToken:dt}))
-	};
-
 	onChangeSrcTokenValue = (v)=>{
 		const {tradeRate} = this.state;
 		this.setState({
@@ -111,6 +109,19 @@ class Home extends React.Component {
 		});
 	};
 
+	selectAccount =  ()=>{
+		navigate('signed_Dex_account_list')(this.props);
+	};
+
+	selectToken = (flow)=>{
+		navigate('signed_Dex_exchange_token_list', {flow:flow})(this.props);
+	};
+
+	goToAccountDetail = (item)=>{
+		console.log('go to Account detail');
+		navigate('signed_vault_account_tokens', {account:item})(this.props);
+	};
+
 	renderAccount = (item) =>{
 		if(item) {
 			return (
@@ -118,9 +129,11 @@ class Home extends React.Component {
 					...commonStyles.shadow,
 					borderRadius: 10,
 					marginVertical: 10,
+					marginHorizontal:20,
 					paddingHorizontal: 10,
 					alignItems: 'flex-start',
 					backgroundColor: '#fff',
+					width:width-40
 				}}>
 					<View style={{
 						width: '100%',
@@ -134,27 +147,29 @@ class Home extends React.Component {
 							fontSize: 16,
 							fontWeight: 'bold'
 						}}>{strings('token_exchange.label_current_account')}</Text>
-						<TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={this.selectAccount}>
 							<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
 						</TouchableWithoutFeedback>
 					</View>
-					<View style={styles.accountContainerWithShadow}>
-						<Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
-						<View style={{flex: 1, paddingVertical: 10}}>
-							<View style={{...styles.accountSubContainer, width: '100%', alignItems: 'center'}}>
-								<Text style={{...styles.accountSubTextFontStyle1, width: '70%'}}
-									  numberOfLines={1}>{item.name}</Text>
-								<Text style={{
-									...styles.accountSubTextFontStyle1,
-									fontWeight: 'bold'
-								}}>{new BigNumber(item.balance).toFixed(4)}</Text>
-							</View>
-							<View style={{...styles.accountSubContainer, alignItems: 'center'}}>
-								{renderAddress(item.address)}
-								<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
+					<TouchableWithoutFeedback onPress={()=>this.goToAccountDetail(item)}>
+						<View style={styles.accountContainerWithShadow}>
+							<Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
+							<View style={{flex: 1, paddingVertical: 10}}>
+								<View style={{...styles.accountSubContainer, width: '100%', alignItems: 'center'}}>
+									<Text style={{...styles.accountSubTextFontStyle1, width: '70%'}}
+										  numberOfLines={1}>{item.name}</Text>
+									<Text style={{
+										...styles.accountSubTextFontStyle1,
+										fontWeight: 'bold'
+									}}>{new BigNumber(item.balance).toFixed(4)}</Text>
+								</View>
+								<View style={{...styles.accountSubContainer, alignItems: 'center'}}>
+									{renderAddress(item.address)}
+									<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
+								</View>
 							</View>
 						</View>
-					</View>
+					</TouchableWithoutFeedback>
 				</View>
 			)
 		}else{
@@ -163,9 +178,11 @@ class Home extends React.Component {
 					...commonStyles.shadow,
 					borderRadius: 10,
 					marginVertical: 10,
+					marginHorizontal:20,
 					paddingHorizontal: 10,
 					alignItems: 'flex-start',
 					backgroundColor: '#fff',
+					width:width-40
 				}}>
 					<View style={{
 						width: '100%',
@@ -179,7 +196,7 @@ class Home extends React.Component {
 							fontSize: 16,
 							fontWeight: 'bold'
 						}}>{strings('token_exchange.label_select_account')}</Text>
-						<TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={this.selectAccount}>
 							<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
 						</TouchableWithoutFeedback>
 					</View>
@@ -199,58 +216,98 @@ class Home extends React.Component {
 		</View>
 	);
 
+	getTokenIcon = (tokenSymbol)=>{
+		const {tokenList} = this.props;
+		try{
+			const fastIcon = getTokenIconUrl('ETH',tokenSymbol, tokenList[tokenSymbol].address);
+			return <FastImage style={{width: 24, height: 24}} source={{uri: fastIcon}} resizeMode={FastImage.resizeMode.contain}/>
+		}catch (e) {
+			const Icon = COINS['ETH'].default_token_icon;
+			return <Image style={{width: 24, height: 24}} source={Icon} resizeMode={'contain'}/>
+		}
+	};
+
 	renderContent = ()=>{
 
 		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
-		// const {srcToken,destToken,srcQty, destQty} = {srcToken:'ETH',destToken:'DAI',srcQty:0,destQty:0};
-		const {accounts,currentAccount} = this.props;
+		const {currentAccount} = this.props;
 		return(
-			<View style={{flex:1, paddingHorizontal:20, backgroundColor:mainBgColor}}>
-				{this.renderAccount(accounts[currentAccount])}
-				<View style={styles.container1}>
-					<View style={{width:'100%', alignItems:'flex-start'}}>
-						<Text style={{fontSize: 16, fontWeight: 'bold'}}>{strings('token_exchange.label_current_rate') + ' '+ tradeRate}</Text>
-					</View>
-					<View style={styles.tokenView}>
-						<View style={styles.tokenNumberLabel}>
-							<Text>{strings('token_exchange.label_sell')}</Text>
-							<TextInput
-								value={srcQty+''}
-								onChangeText={this.onChangeSrcTokenValue}
-								onFocus={()=>this.srcQtyFocused=true}
-								onBlur={()=>this.srcQtyFocused=false}
-								KeyboardType={'numeric'}
-							/>
-						</View>
-						<View style={styles.tokenLabel}>
-							<Text>{srcToken}</Text>
-						</View>
-					</View>
-					<TouchableWithoutFeedback onPress={this.onExchangeSrc2dest}>
-						<Image source={require('../../../assets/icon_exchange.png')} style={{width:20,height:20}} resizeMode={'contain'}/>
-					</TouchableWithoutFeedback>
-					<View style={styles.tokenView}>
-						<View style={styles.tokenNumberLabel}>
-							<Text>{strings('token_exchange.label_buy')}</Text>
-							<TextInput
-								value={destQty+''}
-								onChangeText={this.onChangeDestTokenValue}
-								onFocus={()=>this.destQtyFocused=true}
-								onBlur={()=>this.destQtyFocused=false}
-								KeyboardType={'numeric'}
-							/>
-						</View>
-						<View style={styles.tokenLabel}>
-							<Text>{destToken+''}</Text>
-						</View>
-					</View>
+			<DismissKeyboard>
+				<View style={{flex:1, backgroundColor:mainBgColor}}>
+					<MyscrollView
+						style={{width:width}}
+						keyboardShouldPersistTaps='always'
+					>
+						{this.renderAccount(currentAccount)}
+						<View style={styles.container1}>
+							<View style={{width:'100%', alignItems:'flex-start'}}>
+								<Text style={{fontSize: 16, fontWeight: 'bold'}}>
+									{strings('token_exchange.label_current_rate') + ' ≈ '}
+									<Text style={{fontSize:14}}>{tradeRate}</Text>
+								</Text>
+							</View>
+							<View style={styles.tokenView}>
+								<View style={styles.tokenNumberLabel}>
+									<Text style={{fontSize:16}}>{strings('token_exchange.label_sell')}</Text>
+									<TextInput
+										style={styles.textInputStyle}
+										value={srcQty+''}
+										onChangeText={this.onChangeSrcTokenValue}
+										onFocus={()=>this.srcQtyFocused=true}
+										onBlur={()=>this.srcQtyFocused=false}
+										KeyboardType={'numeric'}
+										multiline={false}
+										underlineColorAndroid={'transparent'}
+									/>
+								</View>
+								<TouchableOpacity onPress={()=>this.selectToken('src')}>
+									<View style={styles.tokenLabel}>
+										{this.getTokenIcon(srcToken)}
+										<Text style={{fontSize:16}}>{srcToken}</Text>
+										<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
+									</View>
+								</TouchableOpacity>
+							</View>
+							<TouchableWithoutFeedback onPress={this.onExchangeSrc2dest}>
+								<Image source={require('../../../assets/icon_exchange.png')} style={{width:20,height:20}} resizeMode={'contain'}/>
+							</TouchableWithoutFeedback>
+							<View style={styles.tokenView}>
+								<View style={styles.tokenNumberLabel}>
+									<Text style={{fontSize:16}}>{strings('token_exchange.label_buy')}</Text>
+									<TextInput
+										style={styles.textInputStyle}
+										value={destQty+''}
+										onChangeText={this.onChangeDestTokenValue}
+										onFocus={()=>this.destQtyFocused=true}
+										onBlur={()=>this.destQtyFocused=false}
+										KeyboardType={'numeric'}
+										multiline={false}
+										underlineColorAndroid={'transparent'}
+									/>
+								</View>
+								<TouchableOpacity onPress={()=>this.selectToken('dest')}>
+									<View style={styles.tokenLabel}>
+										{this.getTokenIcon(destToken)}
+										<Text style={{fontSize:16}}>{destToken+''}</Text>
+										<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
+									</View>
+								</TouchableOpacity>
+							</View>
 
+						</View>
+						<ComponentButton
+							title={'兑换'}
+							disabled={true}
+							style={{
+								width:width-40,
+								marginHorizontal:20,
+							}}
+							onPress={()=>{}}
+						/>
+					</MyscrollView>
+					<Loading isShow={this.props.isWaiting}/>
 				</View>
-				<ComponentButton
-					title={'兑换'}
-				/>
-				<Loading isShow={this.props.isWaiting}/>
-			</View>
+			</DismissKeyboard>
 		)
 	};
 
@@ -261,14 +318,14 @@ class Home extends React.Component {
 
 }
 
-const mapToState = ({accounts, ERC20Dex})=>{
+const mapToState = ({accounts, setting, ERC20Dex})=>{
 	return {
-		// accounts:Object.keys(accounts).filter(k=>k.toLowerCase().startsWith('eth')).reduce((map,el)=>{map[el]=accounts[el];return map},{}),
-		accounts: accounts,
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
-		currentAccount: ERC20Dex.currentAccount,
+		currentAccount: accounts[accountKey('ETH',ERC20Dex.currentAccount)],
+		tokenList:ERC20Dex.tokenList,
+		lang:setting.lang,
 	}
 };
 
@@ -281,10 +338,11 @@ const styles = {
 		...commonStyles.shadow,
 		borderRadius:10,
 		backgroundColor: 'white',
-		width:'100%',
+		width:width-40,
 		alignItems: 'center',
 		padding:10,
-		marginVertical: 20,
+		marginVertical:20,
+		marginHorizontal:20,
 	},
 	tokenView:{
 		width:'100%',
@@ -296,7 +354,14 @@ const styles = {
 		marginVertical:10,
 	},
 	tokenLabel:{
-
+		flexDirection:'row',
+		alignItems:'center',
+		justifyContent:'space-around',
+		width:100,
+		padding:5,
+	},
+	textInputStyle:{
+		padding:0,
 	},
 	tokenNumberLabel:{
 		flexDirection:'row',

@@ -35,12 +35,13 @@ import VaultTransaction      	from './signed/vault/transaction.js';
 import VaultTransactionHistory 	from './signed/vault/transaction_history.js';
 import VaultChangeAccountName   from './signed/vault/change_account_name.js';
 import VaultExportPRivateKey    from './signed/vault/export_private_key.js';
-import VaultExchangeTokenList   from './signed/dex/exchange_token_list.js';
 import Dapps                 	from './signed/dapps/home.js';
 import DappsDapp             	from './signed/dapps/dapp.js';
 import DappsLaunch           	from './signed/dapps/launch.js';
 import DappsSend 	         	from './signed/dapps/dapp_send.js';
 import Dex                      from './signed/dex/home.js';
+import DexTAccountList          from './signed/dex/account_list.js';
+import DexExchangeTokenList   from './signed/dex/exchange_token_list.js';
 import Setting               	from './signed/setting/home.js';
 import SettingAbout          	from './signed/setting/about.js';
 import SettingPassword       	from './signed/setting/password.js';
@@ -357,8 +358,12 @@ const AppNavigator = createStackNavigator({
             headerStyle: styles.headerStyleWithoutShadow,
         }),
     },
-    'signed_exchange_token_list':{
-        screen:VaultExchangeTokenList,
+    'signed_Dex_exchange_token_list':{
+        screen:DexExchangeTokenList,
+        navigationOptions
+    },
+    'signed_Dex_account_list':{
+        screen:DexTAccountList,
         navigationOptions
     },
     'signed_add_token': {
@@ -537,15 +542,18 @@ class Router extends PureComponent {
     }
 
     render() {
-        const { app, dispatch, router } = this.props;
+        const { app, dispatch, router,setting} = this.props;
 
-        return <App dispatch={dispatch} state={router} />
+        return <App dispatch={dispatch} state={router} screenProps={{
+                t:strings,
+                lan: setting.lan,
+            }}/>
     }
 }
 
 const mapStateToProps = state => {
-    const { app, router } = state;
-    return { app, router };
+    const { app, router,setting} = state;
+    return { app, router,setting };
 };
 
 export default connect(mapStateToProps)(Router);

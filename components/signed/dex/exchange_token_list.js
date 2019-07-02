@@ -7,6 +7,7 @@ import {connect} from "react-redux";
 import {getTokenIconUrl} from "../../../coins/api";
 import {COINS} from "../../../coins/support_coin_list";
 import FastImage from 'react-native-fast-image';
+import {createAction, navigateBack} from "../../../utils/dva";
 const {width} = Dimensions.get('window');
 
 class ExchangeTokenList extends React.PureComponent{
@@ -21,11 +22,24 @@ class ExchangeTokenList extends React.PureComponent{
         </View>
     );
 
+    onSelectToken = (token)=>{
+        const {srcToken,destToken} = this.props.trade;
+        const flow = this.props.navigation.getParam('flow');
+        const payload = flow === 'src'?{
+            srcToken:token,
+            destToken: token===destToken?srcToken:destToken
+        }:{
+            srcToken:token===srcToken?destToken:srcToken,
+            destToken: token
+        };
+        this.props.dispatch(createAction('ERC20Dex/updateTrade')(payload));
+        navigateBack(this.props);
+    };
+
     renderItem = ({item})=>{
         const {symbol, name, fastIcon, icon} = item;
         return(
             <TouchableOpacity
-                activeOpactiy={1}
                 style={{
                     flexDirection: 'row',
                     alignItems: 'center',
@@ -36,7 +50,7 @@ class ExchangeTokenList extends React.PureComponent{
                     height: 60,
                     width:'100%'
                 }}
-                onPress={()=>{}}
+                onPress={()=>this.onSelectToken(symbol)}
             >
                 {
                     fastIcon !== undefined?
@@ -95,6 +109,7 @@ const mapToState = ({ERC20Dex})=>{
 
     return {
         isLoading: ERC20Dex.isLoading,
+        trade: ERC20Dex.trade,
         tokenList:tokenList
     }
 };

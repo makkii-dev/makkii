@@ -104,6 +104,7 @@ class AccountTokens extends Component {
                     break;
                 case ACCOUNT_MENU[2].title:
                     // dispatch(createAction('ethTokenSwap/getTokenList')());
+                    dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:this.account.address}));
                     navigation.navigate('signed_dex');
                     break;
                 default:

@@ -45,7 +45,8 @@ const getTokenTradeRate = async (sellToken, buyToken,network) =>{
             }
         });
         //Assuming a 3% slippage rate,
-        return rates[`ETH_${sellToken}`].current_bid / rates[`ETH_${buyToken}`].current_ask *0.97;
+        const rate = rates[`ETH_${sellToken}`].current_bid / rates[`ETH_${buyToken}`].current_ask *0.97;
+        return rate.toFixed(6);
     }catch (e) {
         throw 'http request error:'+e;
     }

@@ -1,7 +1,10 @@
 import * as React from 'react';
 import {
     View,
-    FlatList, Image, Text
+    FlatList,
+    Image, Text,
+    Button,Dimensions,
+    TouchableOpacity
 } from 'react-native';
 import {mainBgColor} from '../../style_util';
 import {connect} from "react-redux";
@@ -9,45 +12,84 @@ import {COINS} from "../../../coins/support_coin_list";
 import {renderAddress} from "./home";
 import BigNumber from 'bignumber.js';
 import commonStyles from "../../styles";
-
+import {strings} from "../../../locales/i18n";
+import {createAction, navigate, navigateBack} from "../../../utils/dva";
+const {width} = Dimensions.get('window');
 class AccountList extends React.Component{
 
-    static navigationOptions={
-
+    static navigationOptions=({navigation})=>{
+        return{
+            title: strings('token_exchange.label_select_account')
+        }
     };
+
+    addAccount = ()=>{
+        navigate('signed_vault_import_from', {symbol:'ETH'})(this.props);
+    };
+
+    selectAccount = (address)=>{
+        const {dispatch} = this.props;
+        dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:address}));
+        navigateBack(this.props);
+    };
+
     renderItem = ({item})=>{
         return (
-            <View style={styles.accountContainerWithShadow}>
-                <Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
-                <View style={{flex: 1, paddingVertical: 10}}>
-                    <View style={{...styles.accountSubContainer, width: '100%', alignItems: 'center'}}>
-                        <Text style={{...styles.accountSubTextFontStyle1, width: '70%'}}
-                              numberOfLines={1}>{item.name}</Text>
-                        <Text style={{
-                            ...styles.accountSubTextFontStyle1,
-                            fontWeight: 'bold'
-                        }}>{new BigNumber(item.balance).toFixed(4)}</Text>
+            <TouchableOpacity onPress={()=>this.selectAccount(item.address)}>
+                <View style={styles.accountContainerWithShadow}>
+                    <Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
+                    <View style={{flex: 1, paddingVertical: 10}}>
+                        <View style={{...styles.accountSubContainer, width: '100%', alignItems: 'center'}}>
+                            <Text style={{...styles.accountSubTextFontStyle1, width: '70%'}}
+                                  numberOfLines={1}>{item.name}</Text>
+                            <Text style={{
+                                ...styles.accountSubTextFontStyle1,
+                                fontWeight: 'bold'
+                            }}>{new BigNumber(item.balance).toFixed(4)}</Text>
+                        </View>
+                        <View style={{...styles.accountSubContainer, alignItems: 'center'}}>
+                            {renderAddress(item.address)}
+                            <Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
+                        </View>
                     </View>
-                    <View style={{...styles.accountSubContainer, alignItems: 'center'}}>
-                        {renderAddress(item.address)}
-                        <Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
-                    </View>
+                </View>
+            </TouchableOpacity>
+        )
+    };
+    renderEmpty = ()=>{
+        return(
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: mainBgColor
+            }}>
+                <View style={{width: width, height: 180, justifyContent: 'center', alignItems: 'center'}}>
+                    <Image source={require('../../../assets/empty_account.png')}
+                           style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
+                           resizeMode={'contain'}
+                    />
+                    <Text style={{color: 'gray', marginBottom: 20}}>{strings('token_exchange.label_account_not_found')}</Text>
+                    <Button title={strings('token_exchange.button_add_account')} onPress={this.addAccount}/>
                 </View>
             </View>
         )
     };
     render(){
         const {accounts} = this.props;
-
-        return(
-            <View style={{flex:1,backgroundColor:mainBgColor}}>
-                <FlatList
-                   data={accounts}
-                   renderItem={this.renderItem}
-                   keyExtractor={(item,index)=>index+''}
-                />
-            </View>
-        )
+        if(accounts.length===0){
+            return this.renderEmpty();
+        }else {
+            return (
+                <View style={{flex: 1, backgroundColor: mainBgColor}}>
+                    <FlatList
+                        data={accounts}
+                        renderItem={this.renderItem}
+                        keyExtractor={(item, index) => index + ''}
+                    />
+                </View>
+            )
+        }
     }
 }
 
@@ -68,6 +110,8 @@ const styles={
         justifyContent:'flex-start',
         alignItems: 'center',
         paddingHorizontal:15,
+        marginHorizontal:20,
+        marginVertical:10,
     },
     accountSubContainer:{
         flexDirection:'row',

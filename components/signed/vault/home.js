@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {
     ActivityIndicator,
@@ -25,10 +25,9 @@ import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
-import {OptionButton, ComponentTabBar, alert_ok, ComponentButton} from '../../common.js';
+import {OptionButton, alert_ok, ComponentButton} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
-import {HomeComponent} from "../HomeComponent";
 import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
@@ -347,7 +346,7 @@ class HomeCenterComponent extends React.Component{
 	}
 }
 
-class Home extends HomeComponent {
+class Home extends Component {
 
 	static navigationOptions = ({ navigation }) => {
 	    return {
@@ -393,7 +392,6 @@ class Home extends HomeComponent {
 	}
 
 	componentWillMount(){
-		super.componentWillMount();
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		if (Platform.OS === 'android') {
@@ -424,7 +422,6 @@ class Home extends HomeComponent {
 	};
 
 	componentWillUnmount(): void {
-		super.componentWillUnmount();
 		console.log("unmount home");
 		Linking.removeEventListener('url', this.handleOpenURL);
 
