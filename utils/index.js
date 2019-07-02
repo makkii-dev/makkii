@@ -200,9 +200,11 @@ class listenAppState{
     handleActive = null;
     handleTimeOut = null;
     ignore = false;
+    currentAppState = 'active';
     _handleAppStateChange=(nextAppState)=>{
         console.log('appState change', nextAppState);
         console.log('ignore=>', this.ignore);
+        this.currentAppState = nextAppState;
         if (nextAppState != null && nextAppState === 'active'&&!this.ignore) {
             // in active
             const max_keep_signed = 60000*parseInt(this.timeOut);
