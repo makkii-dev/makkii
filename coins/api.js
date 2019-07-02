@@ -111,7 +111,7 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params) {
 
 function getCoinPrices(currency) {
     let cryptos = Object.keys(COINS).join(',');
-    const url = `${Config.app_server_api}/prices?cryptos=${cryptos}&fiat=${currency}`;
+    const url = `${Config.app_server_api}/market/prices?cryptos=${cryptos}&fiat=${currency}`;
     console.log("[http req]fetch coin prices: " + url);
     return new Promise((resolve, reject) => {
         ApiCaller.get(url, false).then(res => {
