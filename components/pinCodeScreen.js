@@ -219,7 +219,7 @@ class PinCodeScreen extends React.Component {
             sensorErrorDescription: strings('pinCode.touchID_dialog_failed'), // Android
             cancelText: strings('cancel_button'), // Android
             unifiedErrors: true, // use unified error messages (default false)
-            passcodeFallback: true, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
+            passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
         Platform.OS === 'ios'?listenApp.ignore = true:null;
         TouchID.authenticate('', optionalConfigObject)
@@ -233,7 +233,7 @@ class PinCodeScreen extends React.Component {
             .catch(error => {
                 console.log('error.core=>',error.code);
                 Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
-                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'&&error.code!=='UNKNOWN_ERROR'){
+                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
                     AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
             });
