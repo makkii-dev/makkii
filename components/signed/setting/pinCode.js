@@ -11,7 +11,7 @@ import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {navigationSafely} from '../../../utils';
+import {hashPassword, navigationSafely} from '../../../utils';
 import {setting_update_pincode_enabled} from '../../../actions/setting';
 import {user_update_pincode} from '../../../actions/user';
 import TouchID from 'react-native-touch-id';
@@ -59,17 +59,37 @@ class PinCode extends React.Component {
     };
 
     handleToggleSwitch(){
-        const {navigation} = this.props;
-        const {pinCodeEnabled} = this.props.setting;
         const {hashed_password} = this.props.user;
-        navigationSafely(
-            pinCodeEnabled,
-            hashed_password,
-            navigation,
+        popCustom.show(
+            strings('alert_title_warning'),
+            strings('warning_dangerous_operation'),
+            [
+                {
+                    text: strings('cancel_button'),
+                    onPress:()=>{
+                        popCustom.hide()
+                    }
+                },
+                {
+                    text: strings('alert_ok_button'),
+                    onPress:(text)=>{
+                        const _hashed_password = hashPassword(text);
+                        if(_hashed_password === hashed_password){
+                            popCustom.hide();
+                            this.onVerifySuccess();
+                        }else{
+                            popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
+                        }
+                    }
+                }
+            ],
             {
-                onVerifySuccess: this.onVerifySuccess,
+                cancelable: false,
+                type:'input',
+                canHide: false,
             }
         );
+
     }
 
     handleToggleTouchIDSwitch(){
