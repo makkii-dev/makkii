@@ -26,19 +26,26 @@ const getTokenList = async (network)=>{
     }
 };
 
-const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress,network) =>{
+const getTokenTradeRate = async (sellToken, buyToken,network) =>{
     try{
-        const QTY = 1;
-        const sellUrl = `${NETWORK_URL[network]}/sell_rate?id=${sellTokenAddress}&qty=${QTY}`;
-        const buyUrl = `${NETWORK_URL[network]}/buy_rate?id=${buyTokenAddress}&qty=${QTY}`;
-        console.log('sellUrl=>',sellUrl);
-        console.log('buyUrl=>',buyUrl);
-        const {data:sellResp} = await HttpClient.get(sellUrl);
-        const {data:buyResp} = await HttpClient.get(buyUrl);
-        console.log('sellResp=>',sellResp);
-        console.log('buyResp=>',buyResp);
+        const url = `${NETWORK_URL[network]}/market`;
+        const {data:rateResp} = await HttpClient.get(url);
+        const {data} = rateResp;
+        console.log('data=>',data);
+        const rates = data.reduce((map,el)=>{
+            map[el.pair] = {
+                current_bid: el.current_bid,
+                current_ask: el.current_ask,
+            };
+            return map;
+        },{
+            'ETH_ETH':{
+                current_bid:1,
+                current_ask:1
+            }
+        });
         //Assuming a 3% slippage rate,
-        return sellResp.data[0].dst_qty[0]/buyResp.data[0].src_qty[0]*0.97;
+        return rates[`ETH_${sellToken}`].current_bid / rates[`ETH_${buyToken}`].current_ask *0.97;
     }catch (e) {
         throw 'http request error:'+e;
     }

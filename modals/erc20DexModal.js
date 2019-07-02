@@ -10,6 +10,7 @@ export default {
         isLoading: true,
         isWaiting: false,
         network: COINS.ETH.network,
+        currentAccount: '',
         tokenList: {},
         trade:{
             srcToken: '',
@@ -30,7 +31,7 @@ export default {
             // init trade;
             const srcToken = Object.keys(lists)[0];
             const destToken = Object.keys(lists)[1];
-            const rate = yield call(getTokenTradeRate,lists[srcToken].address, lists[destToken].address, network);
+            const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
             console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
             const trade = {
                 srcToken:srcToken,
@@ -52,7 +53,7 @@ export default {
                 AppToast.show(strings('token_exchange.toast_not_support',{token: destToken}));
                 return;
             }
-            const rate = yield call(getTokenTradeRate,tokenList[srcToken].address, tokenList[destToken].address, network);
+            const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
             console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
             let trade = {
                 srcToken:srcToken,

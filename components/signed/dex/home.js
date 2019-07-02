@@ -8,18 +8,16 @@ import {
 } from 'react-native';
 import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
-import {ComponentButton, AddressComponent} from '../../common';
+import {ComponentButton} from '../../common';
 import {createAction} from "../../../utils/dva";
 import Loading from "../../loading";
 import commonStyles from '../../styles';
-import {fixedHeight, fixedWidth, fixedWidthFont, mainBgColor} from '../../style_util';
+import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
 import BigNumber from "bignumber.js";
-import {formatAddress1Line} from "../../../coins/api";
-import {accountKey} from "../../../utils";
 
 
-const renderAddress = (address)=>(
+export const renderAddress = (address)=>(
 	<View>
 		<Text style={{...commonStyles.addressFontStyle, color:'#000'}}>{address.substring(0, 4 )+' '+
 		address.substring(4, 8)+' '+
@@ -32,7 +30,7 @@ const renderAddress = (address)=>(
 		address.substring(33,37)+ ' ' +
 		address.substring(37, 42)}</Text>
 	</View>
-)
+);
 
 class Home extends React.Component {
 	static navigationOptions = ({navigation})=>{
@@ -48,14 +46,13 @@ class Home extends React.Component {
 		srcQty: 0,
 		destQty: 0,
 		tradeRate: this.props.trade.tradeRate,
-		currentAccount: '0xe92e7096eAaa7B404Df2f95ad6b930846E568f9f',
 	};
 	srcQtyFocused =false;
 	destQtyFocused = false;
 
 	componentWillReceiveProps(nextProps){
 		const {isLoading, trade} = this.props;
-		const {isLoading:nextisLoading, trade:nextTrade} = nextProps;
+		const {isLoading:nextisLoading, trade:nextTrade,} = nextProps;
 		const res =  isLoading!==nextisLoading || trade.destToken!==nextTrade.destToken
 			|| trade.srcToken!== nextTrade.srcToken;
 		if(res){
@@ -204,12 +201,12 @@ class Home extends React.Component {
 
 	renderContent = ()=>{
 
-		const {srcToken,destToken,srcQty, destQty,tradeRate,currentAccount} = this.state;
+		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
 		// const {srcToken,destToken,srcQty, destQty} = {srcToken:'ETH',destToken:'DAI',srcQty:0,destQty:0};
-		const {accounts} = this.props;
+		const {accounts,currentAccount} = this.props;
 		return(
 			<View style={{flex:1, paddingHorizontal:20, backgroundColor:mainBgColor}}>
-				{this.renderAccount(accounts[accountKey('ETH', currentAccount)])}
+				{this.renderAccount(accounts[currentAccount])}
 				<View style={styles.container1}>
 					<View style={{width:'100%', alignItems:'flex-start'}}>
 						<Text style={{fontSize: 16, fontWeight: 'bold'}}>{strings('token_exchange.label_current_rate') + ' '+ tradeRate}</Text>
@@ -271,6 +268,7 @@ const mapToState = ({accounts, ERC20Dex})=>{
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
+		currentAccount: ERC20Dex.currentAccount,
 	}
 };
 
