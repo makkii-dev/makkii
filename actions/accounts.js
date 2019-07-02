@@ -51,12 +51,13 @@ function update_account_balance(key, newBalance, hashed_password) {
 	}
 }
 
-function update_account_txs(key, transactions, hashed_password){
+function update_account_txs(key, transactions, hashed_password, force=true){
 	return {
 		type: UPDATE_ACCOUNT_TRANSACTIONS,
 		key,
 		transactions,
-		hashed_password
+		hashed_password,
+		force
 	}
 }
 

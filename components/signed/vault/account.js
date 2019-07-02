@@ -196,7 +196,7 @@ class Account extends Component {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
-				dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
+				dispatch(update_account_txs(this.account_key, txs, user.hashed_password,false));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,

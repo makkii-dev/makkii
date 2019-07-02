@@ -31,8 +31,12 @@ const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress,network) =>{
         const QTY = 1;
         const sellUrl = `${NETWORK_URL[network]}/sell_rate?id=${sellTokenAddress}&qty=${QTY}`;
         const buyUrl = `${NETWORK_URL[network]}/buy_rate?id=${buyTokenAddress}&qty=${QTY}`;
+        console.log('sellUrl=>',sellUrl);
+        console.log('buyUrl=>',buyUrl);
         const {data:sellResp} = await HttpClient.get(sellUrl);
         const {data:buyResp} = await HttpClient.get(buyUrl);
+        console.log('sellResp=>',sellResp);
+        console.log('buyResp=>',buyResp);
         //Assuming a 3% slippage rate,
         return sellResp.data[0].dst_qty[0]/buyResp.data[0].src_qty[0]*0.97;
     }catch (e) {
