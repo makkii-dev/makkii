@@ -5,7 +5,7 @@ import {
     Text,
     Switch,
     TouchableOpacity,
-    Image, StyleSheet
+    Image, StyleSheet,Platform
 } from 'react-native';
 import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
@@ -87,9 +87,13 @@ class PinCode extends React.Component {
                 passcodeFallback: false, // if true is passed, it will allow isSupported to return an error if the device is not enrolled in touch id/face id etc. Otherwise, it will just tell you what method is supported, even if the user is not enrolled.  (default false)
             };
             TouchID.isSupported(optionalConfigObject).then(biometryType => {
-                this.setState({touchIDEnabled:!touchIDEnabled},()=>{
-                    dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
-                })
+                if((Platform.OS==='ios'&&biometryType==='TouchID')||Platform.OS==='android'){
+                    this.setState({touchIDEnabled:!touchIDEnabled},()=>{
+                        dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
+                    })
+                }else {
+                    AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`))
+                }
             }).catch(error=>{
                 AppToast.show(strings(`pinCode.touchID_${error.code}`))
             })

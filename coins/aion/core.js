@@ -5,8 +5,13 @@ function validateAddress(address, network='mainnet') {
     return new Promise((resolve, reject) => {
         // do not verify prefix a0
         let reg = /^[0-9a-fA-F]{64}$/;
-        address = address.startsWith('0x') ? address.substring(2) : address;
-        resolve(reg.test(address));
+        let lcAddress = address.toLowerCase();
+        lcAddress = lcAddress.startsWith('0x') ? lcAddress.substring(2) : lcAddress;
+        if (!lcAddress.startsWith('a0')) {
+            resolve(false);
+        } else {
+            resolve(reg.test(address));
+        }
     });
 }
 

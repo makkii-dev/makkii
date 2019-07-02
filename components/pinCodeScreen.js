@@ -44,6 +44,7 @@ class PinCodeScreen extends React.Component {
     createPinCode = '';
     constructor(props){
         super(props);
+        this.errorCounts = 0;
         this.isModifyPinCode =  this.props.navigation.getParam('isModifyPinCode', false);
         this.onUnlockSuccess  = this.props.navigation.getParam('onUnlockSuccess', ()=>{});
         this.targetScreen = this.props.navigation.getParam('targetScreen');
@@ -109,6 +110,7 @@ class PinCodeScreen extends React.Component {
     }
 
     handleErrorCode(errorMsg){
+        const {navigation} = this.props;
         Animated.spring(
             this.animatedValue,
             {
@@ -119,6 +121,11 @@ class PinCodeScreen extends React.Component {
             }
         ).start();
         this.isShake=!this.isShake;
+        this.errorCounts +=1;
+        if(this.errorCounts === 5){
+            AppToast.show(strings('pinCode.toast_please_login'));
+            listenApp.stop(()=>navigation.navigate('unsigned_login'));
+        }
         this.setState({pinCode: '',errorMsg})
     }
 
@@ -226,10 +233,10 @@ class PinCodeScreen extends React.Component {
             })
             .catch(error => {
                 console.log('error.core=>',error.code);
-                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
-                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'&&error.code!=='UNKNOWN_ERROR'){
-                    AppToast.show(strings(`pinCode.touchID_${error.code}`));
+                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
+                   listenApp.currentAppState==='active'&&AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
+                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
             });
     };
 
@@ -322,7 +329,7 @@ class PinCodeScreen extends React.Component {
             unlockDescription = strings('pinCode.pinCode_confirm')
         }
         if(errorMsg&&errorMsg!==''){
-            warningPincodeFail = strings(`pinCode.${errorMsg}`);
+            warningPincodeFail = strings(`pinCode.${errorMsg}`) + ' ' +strings('pinCode.label_remaining_attempts',{count:5-this.errorCounts});
         }
         return (
           <ImageBackground

@@ -439,11 +439,12 @@
     "touchID_dialog_title": "指纹验证",
     "touchID_dialog_desc": "请触摸指纹传感器",
     "touchID_dialog_failed": "验证失败",
-    "touchID_NOT_SUPPORTED": "生物信息解锁不支持",
+    "touchID_NOT_SUPPORTED": "指纹解锁不支持",
     "touchID_NOT_AVAILABLE": "生物信息解锁当前不可用",
     "touchID_NOT_PRESENT": "本设备不支持生物信息解锁",
     "touchID_NOT_ENROLLED": "生物信息没有录入",
     "touchID_AUTHENTICATION_FAILED": "若下次生物信息再不匹配，指纹解锁将被禁用，请去 设置 > Touch ID 重新开启。",
+    "touchID_UNKNOWN_ERROR": "指纹解锁被禁用，请去 设置 > Touch ID 重新开启。",
     "verify_title": "验证登录密码",
     "verify_desc": "请输入登录密码确认本人操作",
     "pinCode_prompt": "开启后, 转账、查看私钥和查看助记词等敏感操作时，需首先进行数字口令验证。\n\n开启数字口令时需要重新设置口令。\n开启指纹解锁之前必须开启数字口令。",
@@ -451,7 +452,9 @@
     "pinCode_not_match": "2次输入不匹配",
     "pinCode_enter": "输入PIN码解锁",
     "pinCode_create": "1- 输入新的数字口令",
-    "pinCode_confirm": "2- 确认你的数字口令"
+    "pinCode_confirm": "2- 确认你的数字口令",
+    "toast_please_login": "请重新登陆",
+    "label_remaining_attempts": "剩余尝试次数:{{count}}"
   },
   "sort": {
     "balance": "余额优先",
