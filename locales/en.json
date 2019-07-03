@@ -259,7 +259,8 @@
     "button_add_account": "Add",
     "button_exchange_enable": "Exchange",
     "button_exchange_disable": "Insufficient account balance",
-    "button_exchange_no_account": "No Account"
+    "button_exchange_no_account": "No account",
+    "button_exchange_invalid_number":"Invalid number"
   },
   "currency": {
     "title": "Exchange Rates",

@@ -247,7 +247,8 @@
     "button_add_account": "添加账号",
     "button_exchange_enable": "兑换",
     "button_exchange_disable": "账户余额不足",
-    "button_exchange_no_account": "没有账号"
+    "button_exchange_no_account": "没有账号",
+    "button_exchange_invalid_number":"无效数字"
   },
   "currency": {
     "title": "兑换汇率",

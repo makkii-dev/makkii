@@ -3,6 +3,7 @@ import {createAction} from "../utils/dva";
 import {AppToast} from "../utils/AppToast";
 import {strings} from "../locales/i18n";
 import {COINS} from "../coins/support_coin_list";
+import {popCustom} from "../utils/dva";
 
 export default {
     namespace: 'ERC20Dex',
@@ -71,10 +72,15 @@ export default {
                 //  no need approve
                 const tradeDatResp = yield call(genTradeData,currentAccount,'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenList[destToken].address,srcQty,destQty,network);
                 if(!tradeDatResp.error){
-
+                    const rawTx = tradeDatResp.data[0];
+                    console.log('rawTx=>',rawTx);
                 }else{
-
+                    AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);
                 }
+            }else{
+                popCustom.show(
+
+                )
             }
         }
 

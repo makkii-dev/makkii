@@ -121,8 +121,13 @@ class Home extends React.Component {
 	};
 
 	goToAccountDetail = (item)=>{
-		console.log('go to Account detail');
 		navigate('signed_vault_account_tokens', {account:item})(this.props);
+	};
+
+	onTrade = ()=>{
+		const {srcToken, destToken, srcQty,destQty} = this.state;
+		const {dispatch} = this.props;
+		dispatch(createAction('ERC20Dex/trade')({srcToken,destToken,srcQty,destQty}));
 	};
 
 	renderAccount = (item) =>{
@@ -238,15 +243,10 @@ class Home extends React.Component {
 		let buttonEnabled = false;
 		if(currentAccount){
 			const {balance, tokens} = currentAccount;
-			const ethCost = srcToken === 'ETH'? +srcQty+0.0043:0.0043;
+			const ethCost = srcToken === 'ETH'? +srcQty+0.0043:0.0014;
 			const tokenCost = srcToken === 'ETH'? 0 : +srcQty;
 			const {balance: tokenBalance = BigNumber(0)} = tokens.srcToken ||{};
-			console.log('srcQty=>', srcQty);
-			console.log('ethCost=>', ethCost);
-			console.log('tokenCost=>',tokenCost);
-			console.log('balance=>',balance);
-			console.log('tokenBalance=>',tokenBalance);
-			buttonEnabled = balance.toNumber()>=ethCost &&  tokenBalance.toNumber()>=tokenCost;
+			buttonEnabled = balance.toNumber()>=ethCost &&  tokenBalance.toNumber()>=tokenCost &&srcQty>0;
 		}
 		return(
 			<DismissKeyboard>
@@ -272,7 +272,7 @@ class Home extends React.Component {
 										onChangeText={this.onChangeSrcTokenValue}
 										onFocus={()=>this.srcQtyFocused=true}
 										onBlur={()=>this.srcQtyFocused=false}
-										KeyboardType={'numeric'}
+										keyboardType={'number-pad'}
 										multiline={false}
 										underlineColorAndroid={'transparent'}
 									/>
@@ -297,7 +297,7 @@ class Home extends React.Component {
 										onChangeText={this.onChangeDestTokenValue}
 										onFocus={()=>this.destQtyFocused=true}
 										onBlur={()=>this.destQtyFocused=false}
-										KeyboardType={'numeric'}
+										keyboardType={'number-pad'}
 										multiline={false}
 										underlineColorAndroid={'transparent'}
 									/>
@@ -314,14 +314,14 @@ class Home extends React.Component {
 						</View>
 						<ComponentButton
 							title={currentAccount!==undefined?
-								buttonEnabled?strings('token_exchange.button_exchange_enable'):strings('token_exchange.button_exchange_disable')
-								:strings('token_exchange.button_exchange_no_account')}
+								buttonEnabled?strings('token_exchange.button_exchange_enable'):srcQty>0?strings('token_exchange.button_exchange_disable')
+									:strings('token_exchange.button_exchange_invalid_number'):strings('token_exchange.button_exchange_no_account')}
 							disabled={!buttonEnabled}
 							style={{
 								width:width-40,
 								marginHorizontal:20,
 							}}
-							onPress={()=>{}}
+							onPress={this.onTrade}
 						/>
 					</MyscrollView>
 					<Loading isShow={this.props.isWaiting}/>

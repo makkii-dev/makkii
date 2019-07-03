@@ -53,6 +53,7 @@ class Send extends Component {
 	constructor(props){
 		super(props);
 		this.account = this.props.navigation.state.params.account;
+		this.rawTx = this.props.navigation.state.params.rawTx;
 		this.token = this.props.navigation.state.params.token;
 		this.account_key = accountKey(this.account.symbol, this.account.address);
 
@@ -65,14 +66,23 @@ class Send extends Component {
 			gasLimit = COINS[this.account.symbol].defaultGasLimit;
 			this.unit = this.account.symbol;
 		}
-
-		this.state={
-			showAdvanced: false,
-			amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
-			recipient: this.props.navigation.state.params.recipient? this.props.navigation.state.params.recipient: '',
-			gasPrice: gasPrice,
-			gasLimit: gasLimit,
-		};
+		if(this.rawTx){
+			this.state = {
+				showAdvanced: false,
+				amount: BigNumber(this.rawTx.value).shiftedBy(-18).toNumber(),
+				recipient: this.rawTx.to,
+				gasPrice: BigNumber(this.rawTx.gasPrice).shiftedBy(-18).toNumber(),
+				gasLimit: BigNumber(this.rawTx.gasLimit).shiftedBy(-18).toNumber(),
+			}
+		}else{
+			this.state={
+				showAdvanced: false,
+				amount: this.props.navigation.state.params.value? this.props.navigation.state.params.value: '0',
+				recipient: this.props.navigation.state.params.recipient? this.props.navigation.state.params.recipient: '',
+				gasPrice: gasPrice,
+				gasLimit: gasLimit,
+			};
+		}
 	}
 	async componentDidMount(){
 		Linking.addEventListener('url', this._handleOpenURL);
@@ -204,7 +214,16 @@ class Send extends Component {
 										</TouchableOpacity>}
 									unit={this.unit}
 								/>
+								{
+									this.state.data?<SubTextInput
+										title={strings('send.label_data')}
+										style={styles.text_input}
+										value={this.state.data}
+										multiline={true}
+										editable={false}
+									/>:null
 
+								}
 							</View>
 
 							{/*advanced button*/}
