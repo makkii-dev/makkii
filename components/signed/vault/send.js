@@ -32,6 +32,7 @@ import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view"
 import {validateBalanceSufficiency} from '../../../coins/api';
 import {AppToast} from "../../../utils/AppToast";
 import {popCustom} from "../../../utils/dva";
+import {sendTransferEventLog} from "../../../services/eventLogService";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -379,6 +380,10 @@ class Send extends Component {
 				let tokenTxs = { [pendingTokenTx.hash]: pendingTokenTx};
 				dispatch(update_account_token_txs(this.account_key, tokenTxs, this.unit, user.hashed_password));
 				dispatch(update_account_token_txs(accountKey(this.account.symbol, pendingTokenTx.to), tokenTxs, this.unit, user.hashed_password));
+
+				sendTransferEventLog(this.account.symbol, this.unit, new BigNumber(amount));
+			} else {
+				sendTransferEventLog(this.account.symbol, null, new BigNumber(amount));
 			}
 
 			this.loadingView.hide();
