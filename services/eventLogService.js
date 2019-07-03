@@ -18,7 +18,7 @@ const sendEventLog = async (eventLog) => {
 const sendLoginEventLog = ()=> {
     try {
         sendEventLog({
-            userId: DeviceInfo.getDeviceId(),
+            user: DeviceInfo.getDeviceId(),
             event: 'LOGIN',
             data: {
                 platform: Platform.OS,
@@ -34,7 +34,7 @@ const sendLoginEventLog = ()=> {
 const sendRegisterEventLog = () => {
     try {
         sendEventLog({
-            userId: DeviceInfo.getDeviceId(),
+            user: DeviceInfo.getDeviceId(),
             event: 'REGISTER',
             data: {
                 platform: Platform.OS,
@@ -48,7 +48,7 @@ const sendRegisterEventLog = () => {
 const sendRecoveryEventLog = () => {
     try {
         sendEventLog({
-            userId: DeviceInfo.getDeviceId(),
+            user: DeviceInfo.getDeviceId(),
             event: 'RECOVERY',
             data: {
                 platform: Platform.OS,
@@ -62,7 +62,7 @@ const sendRecoveryEventLog = () => {
 const sendTransferEventLog = (coin, token, amount) => {
     try {
         sendEventLog({
-            userId: DeviceInfo.getDeviceId(),
+            user: DeviceInfo.getDeviceId(),
             event: 'TRANSFER',
             data: {
                 coin: coin,
