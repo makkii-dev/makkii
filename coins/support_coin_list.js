@@ -28,8 +28,10 @@ export const COINS = {
         icon: require('../assets/coin_btc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
-        network: isTestNet? 'BTCTEST': 'BTC',
-        isTestNet: isTestNet,
+        // network: isTestNet? 'BTCTEST': 'BTC',
+        network:'BTC',
+        // isTestNet: isTestNet,
+        isTestNet: false,
         api: btc_api,
     },
     'ETH': {

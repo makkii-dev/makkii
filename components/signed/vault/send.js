@@ -350,7 +350,7 @@ class Send extends Component {
 			if(error.message && this.account.type === '[ledger]'){
 				alert_ok(strings('alert_title_error'), getLedgerMessage(error.message));
 			}else{
-				alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
+				alert_ok(strings('alert_title_error'), strings('send.error_send_transaction')+':\n'+error);
 			}
 		})
 	};
