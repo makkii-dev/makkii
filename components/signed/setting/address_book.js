@@ -9,6 +9,7 @@ import {delete_address} from '../../../actions/user';
 import {COINS} from "../../../coins/support_coin_list";
 import {accountKey} from '../../../utils/index';
 import {formatAddress1Line} from '../../../coins/api';
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

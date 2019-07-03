@@ -7,6 +7,7 @@ import {mainColor, mainBgColor, mainColorAlpha, fontColor, rightBtnColorDisable,
 import BigNumber from 'bignumber.js';
 import {sameAddress, formatAddress1Line} from "../coins/api";
 import {AppToast} from "../utils/AppToast";
+import {popCustom} from "../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 

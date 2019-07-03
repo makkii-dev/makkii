@@ -40,6 +40,7 @@ import {COINS} from '../../../coins/support_coin_list';
 import {getBalance, formatAddress1Line} from '../../../coins/api';
 import {update_index} from "../../../actions/user";
 import {AppToast} from "../../../utils/AppToast";
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

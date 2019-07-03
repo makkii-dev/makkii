@@ -8,6 +8,7 @@ import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import {navigationSafely} from '../../../utils';
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

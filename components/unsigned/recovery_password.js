@@ -9,6 +9,7 @@ import {setting_update_pincode_enabled} from  '../../actions/setting';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles';
 import {mainBgColor} from '../style_util';
+import {popCustom} from "../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

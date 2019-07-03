@@ -1,4 +1,4 @@
-import {getTokenList,getTokenTradeRate} from '../services/erc20DexService';
+import {genTradeData, getTokenList, getTokenTradeRate} from '../services/erc20DexService';
 import {createAction} from "../utils/dva";
 import {AppToast} from "../utils/AppToast";
 import {strings} from "../locales/i18n";
@@ -61,6 +61,22 @@ export default {
                 tradeRate: rate,
             };
             yield put(createAction('ERC20DexUpdateState')({trade:trade,isWaiting:false}));
+        },
+        *trade({payload},{call,put, select}){
+            const {srcToken,destToken,srcQty,destQty} = payload;
+            const currentAccount = yield select(({ERC20Dex})=>ERC20Dex.currentAccount);
+            const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
+            const network = yield select(({ERC20Dex})=>ERC20Dex.network);
+            if('ETH'===srcToken){
+                //  no need approve
+                const tradeDatResp = yield call(genTradeData,currentAccount,'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenList[destToken].address,srcQty,destQty,network);
+                if(!tradeDatResp.error){
+
+                }else{
+
+                }
+            }
         }
+
     }
 }

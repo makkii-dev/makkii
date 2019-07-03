@@ -18,6 +18,7 @@ import {ImportListfooter, RightActionButton} from "../../common";
 import {strings} from '../../../locales/i18n';
 import {accountKey, getLedgerMessage, range} from "../../../utils";
 import keyStore from 'react-native-makkii-core';
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

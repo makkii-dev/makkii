@@ -16,6 +16,7 @@ import {ACCOUNT_MENU} from "./constants";
 import {AddressComponent} from '../../common';
 import defaultStyles from "../../styles";
 import {createAction} from "../../../utils/dva";
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 

@@ -12,6 +12,7 @@ export const navigate = (url,params={})=>({dispatch})=>{
 export const navigateBack = ({dispatch})=>{
     dispatch(NavigationActions.back());
 };
+export let popCustom;
 
 export default function(options) {
     const app = create(options);
@@ -24,7 +25,7 @@ export default function(options) {
     const store = app._store;
     app.store = app._store;
     app.start = container => () => <Provider store={store}>
-        <PopupCustom ref={ref=>{global.popCustom=ref}}/>
+        <PopupCustom ref={ref=>{popCustom=ref}}/>
         {container}
     </Provider>;
     app.getStore = () => store;

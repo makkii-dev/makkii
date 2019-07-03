@@ -16,7 +16,7 @@ import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
 import BigNumber from "bignumber.js";
 import {navigate} from "../../../utils/dva";
-import {accountKey} from "../../../utils";
+import {accountKey, validateAmount} from "../../../utils";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
@@ -95,10 +95,13 @@ class Home extends React.Component {
 
 	onChangeSrcTokenValue = (v)=>{
 		const {tradeRate} = this.state;
-		this.setState({
-			srcQty:v,
-			destQty: v*tradeRate
-		});
+		if(validateAmount(v)||v===''){
+			this.setState({
+				srcQty:v,
+				destQty: v*tradeRate
+			});
+		}
+
 	};
 
 	onChangeDestTokenValue = (v)=>{
@@ -135,22 +138,22 @@ class Home extends React.Component {
 					backgroundColor: '#fff',
 					width:width-40
 				}}>
-					<View style={{
-						width: '100%',
-						paddingVertical: 10,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						borderBottomWidth: 0.2,
-						borderBottomColor: 'lightgray'
-					}}>
-						<Text style={{
-							fontSize: 16,
-							fontWeight: 'bold'
-						}}>{strings('token_exchange.label_current_account')}</Text>
-						<TouchableWithoutFeedback onPress={this.selectAccount}>
+					<TouchableOpacity onPress={this.selectAccount}>
+						<View style={{
+							width: '100%',
+							paddingVertical: 10,
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							borderBottomWidth: 0.2,
+							borderBottomColor: 'lightgray'
+						}}>
+							<Text style={{
+								fontSize: 16,
+								fontWeight: 'bold'
+							}}>{strings('token_exchange.label_current_account')}</Text>
 							<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
-						</TouchableWithoutFeedback>
-					</View>
+						</View>
+					</TouchableOpacity>
 					<TouchableWithoutFeedback onPress={()=>this.goToAccountDetail(item)}>
 						<View style={styles.accountContainerWithShadow}>
 							<Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
@@ -184,22 +187,23 @@ class Home extends React.Component {
 					backgroundColor: '#fff',
 					width:width-40
 				}}>
-					<View style={{
-						width: '100%',
-						paddingVertical: 10,
-						flexDirection: 'row',
-						justifyContent: 'space-between',
-						borderBottomWidth: 0.2,
-						borderBottomColor: 'lightgray'
-					}}>
-						<Text style={{
-							fontSize: 16,
-							fontWeight: 'bold'
-						}}>{strings('token_exchange.label_select_account')}</Text>
-						<TouchableWithoutFeedback onPress={this.selectAccount}>
+					<TouchableOpacity onPress={this.selectAccount}>
+						<View style={{
+							width: '100%',
+							paddingVertical: 10,
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							borderBottomWidth: 0.2,
+							borderBottomColor: 'lightgray'
+						}}>
+							<Text style={{
+								fontSize: 16,
+								fontWeight: 'bold'
+							}}>{strings('token_exchange.label_select_account')}</Text>
 							<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
-						</TouchableWithoutFeedback>
-					</View>
+						</View>
+					</TouchableOpacity>
+
 				</View>
 
 			)
@@ -231,14 +235,18 @@ class Home extends React.Component {
 
 		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
 		const {currentAccount} = this.props;
-		console.log('currentAccount=>',currentAccount);
 		let buttonEnabled = false;
 		if(currentAccount){
 			const {balance, tokens} = currentAccount;
-			const ethCost = srcToken === 'ETH'? srcQty+0.0043:0.0043;
-			const tokenCost = srcToken === 'ETH'? 0 : srcQty;
-			const {balance: tokenBalance} = tokens.srcToken;
-			buttonEnabled = balance >ethCost &&  tokenCost>tokenBalance;
+			const ethCost = srcToken === 'ETH'? +srcQty+0.0043:0.0043;
+			const tokenCost = srcToken === 'ETH'? 0 : +srcQty;
+			const {balance: tokenBalance = BigNumber(0)} = tokens.srcToken ||{};
+			console.log('srcQty=>', srcQty);
+			console.log('ethCost=>', ethCost);
+			console.log('tokenCost=>',tokenCost);
+			console.log('balance=>',balance);
+			console.log('tokenBalance=>',tokenBalance);
+			buttonEnabled = balance.toNumber()>=ethCost &&  tokenBalance.toNumber()>=tokenCost;
 		}
 		return(
 			<DismissKeyboard>
@@ -363,6 +371,7 @@ const styles = {
 		borderBottomWidth:0.2,
 		borderBottomColor:'lightgray',
 		marginVertical:10,
+		height:50,
 	},
 	tokenLabel:{
 		flexDirection:'row',
@@ -373,6 +382,7 @@ const styles = {
 	},
 	textInputStyle:{
 		padding:0,
+		width:width-200,
 	},
 	tokenNumberLabel:{
 		flexDirection:'row',

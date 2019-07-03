@@ -11,6 +11,7 @@ import {strings} from "../../locales/i18n";
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import {AppToast} from "../../utils/AppToast";
+import {popCustom} from "../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 

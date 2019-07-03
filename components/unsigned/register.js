@@ -10,6 +10,7 @@ import {strings} from "../../locales/i18n";
 import {mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {setting_update_pincode_enabled} from "../../actions/setting";
+import {popCustom} from "../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 

@@ -5,6 +5,7 @@ import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
 import {fetchRequest} from './others';
 import Config from 'react-native-config';
+import {popCustom} from "./dva";
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");

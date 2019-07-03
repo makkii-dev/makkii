@@ -16,6 +16,7 @@ import {setting_update_pincode_enabled} from '../../../actions/setting';
 import {user_update_pincode} from '../../../actions/user';
 import TouchID from 'react-native-touch-id';
 import {AppToast} from "../../../utils/AppToast";
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
