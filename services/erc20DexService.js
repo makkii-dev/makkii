@@ -64,8 +64,27 @@ const genTradeData = async  (user_address, src_id, dst_id, src_qty, min_dst_qty,
     }
 };
 
+const getEnabledStatus = async (user_address, src_id, network)=>{
+    try{
+        const url = `${NETWORK_URL[network]}/users/${user_address}/currencies`;
+        console.log('[kyber req genEnabledStatus]=>',url);
+        const {data:enabledStatusResp} = await HttpClient.get(url);
+        const {data} = enabledStatusResp;
+        let txs_required = 0;
+        for (let i = 0; i<data.length; i++){
+            if(data[i].id === src_id){
+                txs_required = data[i].txs_required;
+            }
+        }
+        return txs_required;
+    }catch (e) {
+        throw 'http request error:'+e;
+    }
+};
+
 export {
     getTokenList,
     getTokenTradeRate,
-    genTradeData
+    genTradeData,
+    getEnabledStatus
 }

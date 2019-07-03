@@ -248,7 +248,8 @@
     "button_exchange_enable": "兑换",
     "button_exchange_disable": "账户余额不足",
     "button_exchange_no_account": "没有账号",
-    "button_exchange_invalid_number":"无效数字"
+    "button_exchange_invalid_number":"无效数字",
+    "button_exchange_no_token": "请先添加代币 {{token}}"
   },
   "currency": {
     "title": "兑换汇率",

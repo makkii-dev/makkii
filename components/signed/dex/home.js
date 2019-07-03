@@ -126,8 +126,8 @@ class Home extends React.Component {
 
 	onTrade = ()=>{
 		const {srcToken, destToken, srcQty,destQty} = this.state;
-		const {dispatch} = this.props;
-		dispatch(createAction('ERC20Dex/trade')({srcToken,destToken,srcQty,destQty}));
+		const {dispatch, currentAccount} = this.props;
+		dispatch(createAction('ERC20Dex/trade')({srcToken,destToken,srcQty,destQty,account:currentAccount}));
 	};
 
 	renderAccount = (item) =>{
@@ -240,13 +240,21 @@ class Home extends React.Component {
 
 		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
 		const {currentAccount} = this.props;
+		console.log('currentAccount=>', currentAccount);
 		let buttonEnabled = false;
+		let hasToken = false;
 		if(currentAccount){
 			const {balance, tokens} = currentAccount;
+			hasToken = srcToken === 'ETH'?true:!!tokens[srcToken];
 			const ethCost = srcToken === 'ETH'? +srcQty+0.0043:0.0014;
 			const tokenCost = srcToken === 'ETH'? 0 : +srcQty;
-			const {balance: tokenBalance = BigNumber(0)} = tokens.srcToken ||{};
-			buttonEnabled = balance.toNumber()>=ethCost &&  tokenBalance.toNumber()>=tokenCost &&srcQty>0;
+			const {balance: tokenBalance = 0} = tokens[srcToken] ||{};
+			console.log('hasToken=>',hasToken);
+			console.log('ethBalance=>',balance);
+			console.log('ethCost=>',ethCost);
+			console.log('tokenBalance=>',tokenBalance);
+			console.log('tokenCost=>',tokenCost);
+			buttonEnabled = BigNumber(balance).toNumber()>=ethCost &&  BigNumber(tokenBalance).toNumber()>=tokenCost &&srcQty>0;
 		}
 		return(
 			<DismissKeyboard>
@@ -314,8 +322,14 @@ class Home extends React.Component {
 						</View>
 						<ComponentButton
 							title={currentAccount!==undefined?
-								buttonEnabled?strings('token_exchange.button_exchange_enable'):srcQty>0?strings('token_exchange.button_exchange_disable')
-									:strings('token_exchange.button_exchange_invalid_number'):strings('token_exchange.button_exchange_no_account')}
+								buttonEnabled?
+									strings('token_exchange.button_exchange_enable'):
+									!hasToken?
+										strings('token_exchange.button_exchange_no_token',{token:srcToken})
+										: srcQty>0?
+											strings('token_exchange.button_exchange_disable')
+											:strings('token_exchange.button_exchange_invalid_number')
+								:strings('token_exchange.button_exchange_no_account')}
 							disabled={!buttonEnabled}
 							style={{
 								width:width-40,
