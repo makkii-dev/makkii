@@ -587,10 +587,10 @@ class TransactionItem extends React.PureComponent{
 		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
 		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
 		const valueColor = isSender? 'red':'green';
-		if(transaction.status === 'PENDING'){
-			console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
-			listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
-		}
+		// if(transaction.status === 'PENDING'){
+		// 	console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
+		// 	listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
+		// }
 
 		return (
 			<TouchableOpacity

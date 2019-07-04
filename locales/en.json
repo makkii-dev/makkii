@@ -261,8 +261,16 @@
     "button_exchange_disable": "Insufficient account balance",
     "button_exchange_no_account": "No account",
     "button_exchange_invalid_number":"Invalid number",
-    "button_exchange_no_token": "Please add {{token}} firstly"
-
+    "button_exchange_no_token": "Please add {{token}} firstly",
+    "alert_title_need_authorization": "Need authorization",
+    "alert_button_why_need_authorization": "Why？",
+    "alert_button_approve": "Approve",
+    "alert_button_re-approve": "Re-approve",
+    "alert_content_need_approve": "Please approve authorization to the Wallet to manage {{token}}",
+    "alert_content_need_re-approve": "Allowance has been given but is insufficient, need re-approve authorization.",
+    "title_approve": "Approve authorization",
+    "title_re-approve": "Re-approve authorization",
+    "title_revoke": "Revoke authorization"
   },
   "currency": {
     "title": "Exchange Rates",

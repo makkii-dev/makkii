@@ -432,9 +432,8 @@ class Home extends Component {
 
 	fetchAccountsBalance = ()=> {
 		// TODO: also update token's balance
-		const {dispatch,accounts} = this.props;
-		console.log('listenTx.pendingMap=>', listenTx.pendingMap);
-		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
+		const {dispatch,accounts, hasPendingTx} = this.props;
+		if (this.isFetchingAccountBalance||hasPendingTx || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
 				AppToast.show(strings('wallet.toast_has_pending_transactions'), {
 					position: Toast.positions.CENTER,
@@ -574,13 +573,13 @@ class Home extends Component {
 		// }
 
 		const txs = item.transactions;
-		if (txs) {
-			Object.values(txs).map((tx) => {
-				if (tx.status === 'PENDING') {
-					listenTx.addTransaction(tx, item.symbol);
-				}
-			});
-		}
+		// if (txs) {
+		// 	Object.values(txs).map((tx) => {
+		// 		if (tx.status === 'PENDING') {
+		// 			listenTx.addTransaction(tx, item.symbol);
+		// 		}
+		// 	});
+		// }
 		let targetUri = COINS[item.symbol].tokenSupport? 'signed_vault_account_tokens': 'signed_vault_account';
 		return (
 			<SwipeableRow
@@ -816,10 +815,13 @@ class Home extends Component {
 
 
 export default connect(state => {
+	const {txsListener} = state;
+	const hasPendingTx = Object.values(txsListener.txs).length>0;
 	return ({
 		user: state.user,
 		accounts: state.accounts,
-		setting: state.setting
+		setting: state.setting,
+		hasPendingTx:hasPendingTx,
 	}); })(Home);
 
 const styles = StyleSheet.create({

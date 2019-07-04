@@ -74,7 +74,13 @@ export default function accounts(state = init, action){
 			break;
 		case UPDATE_ACCOUNT_TOKEN_TRANSACTIONS:
 		    if (state[action.key] !== undefined&&state[action.key].tokens!==undefined&&state[action.key].tokens[action.symbol]!==undefined) {
-				let transactions = Object.assign({}, state[action.key].tokens[action.symbol].tokenTxs||{}, action.transactions);
+				const pendingTransactions = action.force?{}:Object.keys(state[action.key].tokens[action.symbol].tokenTxs).reduce((map,el)=>{
+					if(state[action.key].transactions[el].status==='PENDING'){
+						map[el]=state[action.key].tokens[action.symbol].tokenTxs[el];
+					}
+					return map;
+				},{});
+		    	let transactions = Object.assign({}, state[action.key].tokens[action.symbol].tokenTxs||{}, action.transactions,pendingTransactions);
 				let new_transactions = {};
 				let compareFn = (a, b) => {
 					if (b.timestamp === undefined && a.timestamp !== undefined) return 1;

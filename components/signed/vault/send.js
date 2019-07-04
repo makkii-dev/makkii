@@ -31,7 +31,7 @@ import {COINS} from '../../../coins/support_coin_list';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {validateBalanceSufficiency} from '../../../coins/api';
 import {AppToast} from "../../../utils/AppToast";
-import {popCustom} from "../../../utils/dva";
+import {createAction, popCustom} from "../../../utils/dva";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -369,6 +369,17 @@ class Send extends Component {
 			const {pendingTx, pendingTokenTx} = res;
 			console.log("transaction sent: ", pendingTx);
 			console.log("token tx sent: ", pendingTokenTx);
+
+
+			let payload = {
+				txObj:pendingTx,
+				type: pendingTokenTx !== undefined? 'token':'normal',
+				symbol: this.account.symbol,
+			};
+			if(payload.type==='token'){
+				payload = {...payload, token: {symbol:this.unit,tokenTx:pendingTokenTx }}
+			}
+			dispatch(createAction('txsListener/addPendingTxs')(payload));
 
 			let txs = {[pendingTx.hash]: pendingTx};
 

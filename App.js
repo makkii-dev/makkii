@@ -12,15 +12,15 @@ import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js';
 
 // modals
-import ethTokenSwapModal from './modals/erc20DexModal';
-
+import erc20DexModal from './modals/erc20DexModal';
+import txListenerModal from './modals/txsListenerModal';
 // store
 import Router, {routerReducer,routerMiddleware} from './components/routes';
 import dva from './utils/dva';
 
 
 const app = dva({
-	models: [ethTokenSwapModal],
+	models: [erc20DexModal, txListenerModal],
 	extraReducers: {
 		router: 		 routerReducer,
 		account:         reducer_account,

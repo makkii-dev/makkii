@@ -249,7 +249,16 @@
     "button_exchange_disable": "账户余额不足",
     "button_exchange_no_account": "没有账号",
     "button_exchange_invalid_number":"无效数字",
-    "button_exchange_no_token": "请先添加代币 {{token}}"
+    "button_exchange_no_token": "请先添加代币 {{token}}",
+    "alert_title_need_authorization": "需要授权",
+    "alert_button_why_need_authorization": "为什么？",
+    "alert_button_approve": "授权",
+    "alert_button_re-approve": "重新授权",
+    "alert_content_need_approve": "请先授权钱包管理{{token}}",
+    "alert_content_need_re-approve": "钱包授权的额度不正常，需要重新授权。",
+    "title_approve": "授权",
+    "title_re-approve": "重新授权",
+    "title_revoke": "取消授权"
   },
   "currency": {
     "title": "兑换汇率",

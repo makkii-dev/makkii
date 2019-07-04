@@ -63,6 +63,7 @@ import AddToken                 from './signed/vault/add_token';
 
 import {strings} from "../locales/i18n";
 import {ComponentTabBar} from './common';
+import {createAction} from "../utils/dva";
 
 const transitionConfig = () => {
     return {
@@ -504,10 +505,15 @@ class Router extends PureComponent {
     backClickCount=0;
     componentWillMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backHandle);
+        this.props.dispatch(createAction('txsListener/loadStorage')());
+        this.listenTx = setInterval(()=>{
+            this.props.dispatch(createAction('txsListener/checkAllTxs')());
+        },10*1000);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backHandle);
+        clearInterval(this.listenTx);
     }
 
     backHandle = () => {

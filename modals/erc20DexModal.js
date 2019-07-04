@@ -6,6 +6,7 @@ import {strings} from "../locales/i18n";
 import {COINS} from "../coins/support_coin_list";
 import {popCustom} from "../utils/dva";
 
+const ETHID = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 export default {
     namespace: 'ERC20Dex',
     state:{
@@ -71,7 +72,8 @@ export default {
             const network = yield select(({ERC20Dex})=>ERC20Dex.network);
             if('ETH'===srcToken){
                 //  no need approve
-                const tradeDatResp = yield call(genTradeData,account.address,'0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', tokenList[destToken].address,srcQty,destQty,network);
+                const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,destQty,network);
+                yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
                 if(!tradeDatResp.error){
                     const rawTx = tradeDatResp.data[0];
                     console.log('rawTx=>',rawTx);
@@ -82,14 +84,55 @@ export default {
             }else{
                 // check enabledStatus
                 const txs_required = yield call(getEnabledStatus, account.address,tokenList[srcToken].address,network);
+                yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
                 if(txs_required === 1){
                     // No allowance so approve to maximum amount (2^255)
                     popCustom.show(
+                        strings('token_exchange.alert_title_need_authorization'),
+                        strings('token_exchange.alert_content_need_approve',{token:srcToken}),
+                        [
+                            {
+                                text:strings('token_exchange.alert_button_why_need_authorization'),
+                                onPress:()=>{
 
+                                }
+                            },
+                            {
+                                text:strings('cancel_button'),
+                                onPress:()=>{}
+                            },
+
+                            {
+                                text:strings('token_exchange.alert_button_approve'),
+                                onPress:()=>{
+
+                                }
+                            }
+                        ]
                     )
-
                 }else if(txs_required ===2){
+                    popCustom.show(
+                        strings('token_exchange.alert_title_need_authorization'),
+                        strings('token_exchange.alert_content_need_re-approve'),
+                        [
+                            {
+                                text:strings('token_exchange.alert_button_why_need_authorization'),
+                                onPress:()=>{}
+                            },
+                            {
+                                text:strings('cancel_button'),
+                                onPress:()=>{
 
+                                }
+                            },
+                            {
+                                text:strings('token_exchange.alert_button_approve'),
+                                onPress:()=>{
+
+                                }
+                            }
+                        ]
+                    )
                 }else{
                     const tradeDatResp = yield call(genTradeData,account.address,tokenList[srcToken].address, tokenList[destToken].address,srcQty,destQty,network);
                     if(!tradeDatResp.error){
@@ -101,7 +144,6 @@ export default {
                     }
                 }
             }
-            yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
         }
 
     }

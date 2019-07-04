@@ -61,13 +61,14 @@ function update_account_txs(key, transactions, hashed_password, force=true){
 	}
 }
 
-function update_account_token_txs(key, transactions, symbol, hashed_password) {
+function update_account_token_txs(key, transactions, symbol, hashed_password, force=true) {
 	return {
 		type: UPDATE_ACCOUNT_TOKEN_TRANSACTIONS,
 		key,
 		transactions,
 		symbol,
-		hashed_password
+		hashed_password,
+		force
 	}
 }
 

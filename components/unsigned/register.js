@@ -80,7 +80,7 @@ class Home extends Component {
 							});
 						}}
 					/>
-					<View style={{marginTop: 40}}/>
+					<View style={{marginTop: 40}}/>W
 					<ComponentButton
 						title={strings("register.button_register")}
 						onPress={e=>{
