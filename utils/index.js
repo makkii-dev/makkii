@@ -6,6 +6,7 @@ import {strings} from '../locales/i18n';
 import Toast from 'react-native-root-toast';
 import {fetchRequest} from './others';
 import Config from 'react-native-config';
+const _ = require('underscore');
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -190,7 +191,26 @@ class AppToast {
     }
 }
 
+var isHexStrict = function (hex) {
+    return ((_.isString(hex) || _.isNumber(hex)) && /^(-)?0x[0-9a-f]*$/i.test(hex));
+};
 
+function hexToAscii(hex) {
+    // if (!isHexStrict(hex))
+    //     throw new Error('The parameter must be a valid HEX string.');
+
+    var str = "";
+    var i = 0, l = hex.length;
+    if (hex.substring(0, 2) === '0x') {
+        i = 2;
+    }
+    for (; i < l; i+=2) {
+        var code = parseInt(hex.substr(i, 2), 16);
+        str += String.fromCharCode(code);
+    }
+
+    return str;
+}
 
 class listenAppState{
     constructor(routes){
@@ -390,4 +410,5 @@ module.exports = {
     appendHexStart,
     toHex,
     fromHexString,
+    hexToAscii,
 };

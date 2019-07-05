@@ -103,7 +103,7 @@ function sendTokenTx(account, symbol, to, value, gasPrice, gasLimit, network='ma
 
 
 function getTransactionsByAddress(address, page=0, size=25, network='mainnet'){
-    const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&page=${page}&size=${size}`;
+    const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&page=${page}&size=${size}`;
     console.log("[aion req] get aion transactions by address: " + url);
     return new Promise((resolve, reject) => {
         ApiCaller.get(url, false).then(res=>{
