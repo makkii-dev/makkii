@@ -11,6 +11,7 @@ import {mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {setting_update_pincode_enabled} from "../../actions/setting";
 import {popCustom} from "../../utils/dva";
+import {sendRegisterEventLog} from "../../services/eventLogService";
 
 const {width,height} = Dimensions.get('window');
 
@@ -102,6 +103,9 @@ class Home extends Component {
 													dispatch(user(hashed_password, mnemonic));
 													dispatch(setting_update_pincode_enabled(false,false));
 													dispatch(delete_accounts(hashed_password));
+
+													sendRegisterEventLog();
+
 													this.props.navigation.navigate('unsigned_register_mnemonic')
 
 												}},

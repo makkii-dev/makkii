@@ -12,6 +12,7 @@ import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import {AppToast} from "../../utils/AppToast";
 import {popCustom} from "../../utils/dva";
+import {sendLoginEventLog} from "../../services/eventLogService";
 
 const {width,height} = Dimensions.get('window');
 
@@ -182,6 +183,9 @@ class Login extends Component {
                                                 listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
                                                 listenApp.timeOut = setting.login_session_timeout;
                                                 listenApp.start();
+
+                                                sendLoginEventLog();
+
                                                 navigate('signed_home');
                                             } else {
                                                 alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));

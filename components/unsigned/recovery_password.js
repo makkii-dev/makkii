@@ -10,6 +10,7 @@ import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles';
 import {mainBgColor} from '../style_util';
 import {popCustom} from "../../utils/dva";
+import {sendRecoveryEventLog} from "../../services/eventLogService";
 
 const {width} = Dimensions.get('window');
 
@@ -96,6 +97,9 @@ class Password extends Component {
 											dispatch(delete_accounts(hashed_password));
 											dispatch(setting_update_pincode_enabled(false,false));
 											dispatch(user(hashed_password, this.mnemonic));
+
+											sendRecoveryEventLog();
+
 											this.setState({
 												password: '',
 												password_confirm: '',

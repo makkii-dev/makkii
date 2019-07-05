@@ -70,7 +70,6 @@ function getBalance(coinType, address) {
 function sendTransaction(account, symbol, to, value, extra_params, data=undefined) {
     let coin =  COINS[account.symbol.toUpperCase()];
     if (coin.api !== undefined && coin.api.sendTransaction !== undefined) {
-        console.log("network1:" + coin.network);
         return coin.api.sendTransaction(account, symbol, to, value, extra_params, data, coin.network);
     } else {
         throw new Error('No sendTransaction impl for coin ' + coinType);
