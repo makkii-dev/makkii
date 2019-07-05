@@ -54,6 +54,7 @@ class Send extends Component {
 		super(props);
 		this.account = this.props.navigation.state.params.account;
 		this.rawTx = this.props.navigation.state.params.rawTx;
+		this.txType = this.props.navigation.state.params.txType;
 		this.token = this.props.navigation.state.params.token;
 		this.account_key = accountKey(this.account.symbol, this.account.address);
 
@@ -373,11 +374,26 @@ class Send extends Component {
 
 			let payload = {
 				txObj:pendingTx,
-				type: pendingTokenTx !== undefined? 'token':'normal',
+				type: 'normal',
 				symbol: this.account.symbol,
 			};
+			if(pendingTokenTx){
+				payload={...payload, type:'token'};
+			}
+			if (this.txType){
+				payload={...payload, type:this.txType.type};
+			}
 			if(payload.type==='token'){
 				payload = {...payload, token: {symbol:this.unit,tokenTx:pendingTokenTx }}
+			}else if(payload.type ==='exchange'){
+				payload = {...payload,exchange:this.txType.data};
+				dispatch(createAction('ERC20Dex/updateExchangeHistory')({
+					txs:{[pendingTx.hash]:this.txType.data},
+					user_address:this.account.address,
+				}));
+			}else if(payload.type ==='approve'){
+				payload = {...payload,approve:this.txType.data};
+				dispatch(createAction('ERC20Dex/updateTokenApproval')(this.txType.data))
 			}
 			dispatch(createAction('txsListener/addPendingTxs')(payload));
 

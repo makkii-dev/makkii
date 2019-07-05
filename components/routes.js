@@ -41,7 +41,8 @@ import DappsLaunch           	from './signed/dapps/launch.js';
 import DappsSend 	         	from './signed/dapps/dapp_send.js';
 import Dex                      from './signed/dex/home.js';
 import DexTAccountList          from './signed/dex/account_list.js';
-import DexExchangeTokenList   from './signed/dex/exchange_token_list.js';
+import DexExchangeTokenList     from './signed/dex/exchange_token_list.js';
+import DexExchangeHistory       from './signed/dex/exchange_history.js';
 import Setting               	from './signed/setting/home.js';
 import SettingAbout          	from './signed/setting/about.js';
 import SettingPassword       	from './signed/setting/password.js';
@@ -176,8 +177,7 @@ const tabNavigator = createBottomTabNavigator({
         'signed_dex': {
             screen: Dex,
             navigationOptions: {
-                headerLeft: null,
-                headerRight: null,
+                headerLeft: (<View/>),
                 headerStyle: styles.headerStyle,
                 headerTitleStyle: styles.headerTitleStyle,
                 headerTitleAllowFontScaling: false,
@@ -367,6 +367,10 @@ const AppNavigator = createStackNavigator({
         screen:DexTAccountList,
         navigationOptions
     },
+    'signed_Dex_exchange_history':{
+        screen:DexExchangeHistory,
+        navigationOptions:navigationOptionsWithoutRight
+    },
     'signed_add_token': {
         screen: AddToken,
         navigationOptions: navigationOptionsWithoutRight,
@@ -506,6 +510,7 @@ class Router extends PureComponent {
     componentWillMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backHandle);
         this.props.dispatch(createAction('txsListener/loadStorage')());
+        this.props.dispatch(createAction('ERC20Dex/loadStorage')());
         this.listenTx = setInterval(()=>{
             this.props.dispatch(createAction('txsListener/checkAllTxs')());
         },10*1000);

@@ -125,6 +125,8 @@
     "blockNumber_label": "块号#",
     "amount_label": "金额",
     "status_label": "状态",
+    "label_payment": "支付金额",
+    "label_exchanged": "换取金额",
     "sendAgain_button": "重新发送",
     "viewInExplorer_button": "在Explorer中查看更多",
     "PENDING": "确认中",
@@ -244,6 +246,8 @@
     "label_sell": "卖:",
     "label_buy": "买:",
     "label_account_not_found": "找不到以太坊账号",
+    "label_please_select_account": "请先选择一个账号。",
+    "label_no_exchange_history": "暂无兑换历史。",
     "button_add_account": "添加账号",
     "button_exchange_enable": "兑换",
     "button_exchange_disable": "账户余额不足",
@@ -257,8 +261,11 @@
     "alert_content_need_approve": "请先授权钱包管理{{token}}",
     "alert_content_need_re-approve": "钱包授权的额度不正常，需要重新授权。",
     "title_approve": "授权",
-    "title_re-approve": "重新授权",
-    "title_revoke": "取消授权"
+    "title_revoke": "取消授权",
+    "title_exchange": "请求交易",
+    "title_exchange_history": "交易记录",
+    "title_exchange_rules": "交易规则",
+    "toast_waitApprove": "等待请求交易完成"
   },
   "currency": {
     "title": "兑换汇率",
@@ -590,5 +597,8 @@
   "no_more_data_label": "-- 没有更多数据了 --",
   "label_loading": "加载中……",
   "account_name_hint": "最多15个英文、数字、符号，或7个其他语言字符",
-  "warning_dangerous_operation": "此操作需要输入登录密码验证是否本人操作。"
+  "warning_dangerous_operation": "此操作需要输入登录密码验证是否本人操作。",
+  "toast_tx": "交易:",
+  "toast_CONFIRMED":"确认",
+  "toast_FAILED": "失败"
 }

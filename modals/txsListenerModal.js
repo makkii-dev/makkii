@@ -3,6 +3,11 @@ import {update_account_token_txs, update_account_txs} from "../actions/accounts"
 import {accountKey} from "../utils";
 import {createAction} from "../utils/dva";
 import {Storage} from "../utils/storage";
+import {AppToast} from "../utils/AppToast";
+import {strings} from "../locales/i18n";
+import {findSymbolByAddress, getExchangeHistory} from "../services/erc20DexService";
+import {COINS} from "../coins/support_coin_list";
+const network = COINS.ETH.network;
 
 export default {
     namespace: 'txsListener',
@@ -14,6 +19,7 @@ export default {
                'type': 'token'/'exchange'/'approve'/'normal'.
                'token': null/{symbol:'MAK',tokenTx}, //optional, when type is token
                'exchange': {srcToken:'ETH',destToken:'BAT', srcQty:1.0, destQty:2}, //optional
+               'approve':{symbol:'MAK',state:'waitApprove'/‘waitRevoke'}
                'listenerStatus': 'waitReceipt'/blockNumber
              ` 'symbol': 'ETH'/'AION'/'TRX'
              },
@@ -26,7 +32,7 @@ export default {
     reducers: {
         addPendingTxs(state, {payload}) {
             console.log('add pending tx=>', payload);
-            const {txObj, type, token, exchange, symbol} = payload;
+            const {txObj, type, token, exchange, symbol, approve} = payload;
             let tx = {
                 txObj: txObj,
                 type: type,
@@ -37,7 +43,9 @@ export default {
                 tx = {...tx, token: token}
                 : 'exchange' === type ?
                 tx = {...tx, exchange: exchange}
-                : null;
+                : 'approve' === type?
+                    tx = {...tx, approve: approve}
+                    :null;
             state.txs[txObj.hash] = tx;
             return Object.assign({}, state);
         },
@@ -65,7 +73,7 @@ export default {
         }
     },
     effects: {
-        *loadStorage(action,{call,put}){
+        *loadStorage(action,{call,select,put}){
             const PendingTxs = yield call(Storage.get, 'pendingTx', false);
             console.log('load pending Tx from storage => ', PendingTxs);
             yield put(createAction('txsListenerUpdateState')({ txs:PendingTxs }));
@@ -87,6 +95,7 @@ export default {
                     const {newTx, symbol, listenerStatus} = newStatus;
                     if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
+                        AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`,{position:AppToast.positions.CENTER}));
                         //dispatch other actions;
                         const type = txs[newTx.hash].type;
                         yield put((update_account_txs(accountKey(symbol, newTx.from), {[newTx.hash]: newTx}, hashed_password)));
@@ -98,6 +107,28 @@ export default {
                             newTokenTx.status = newTx.status;
                             yield put((update_account_token_txs(accountKey(symbol, newTx.from), {[tokenTx.hash]: newTokenTx}, tokenSymbol, hashed_password)));
                             yield put((update_account_token_txs(accountKey(symbol, newTx.from), {[tokenTx.hash]: newTokenTx}, tokenSymbol, hashed_password)));
+                        }else if ('exchange'===type){
+                            let exchange = {...txs[newTx.hash].exchange};
+                            exchange.timestamp = newTx.timestamp;
+                            exchange.status = newTx.status;
+                            exchange.blockNumber = newTx.blockNumber;
+                            if(exchange.status==='CONFIRMED'){
+                                // get newest dest_qty
+                                const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
+                                const history = yield call(getExchangeHistory,newTx.from,network,newTx.hash);
+                                const symbol = findSymbolByAddress(tokenList,history.destToken);
+                                exchange.destQty = history.destQty / 10**tokenList[symbol].decimals;
+                            }
+                            yield put(createAction('ERC20Dex/updateExchangeHistory')({
+                                txs:{[newTx.hash]:exchange},
+                                user_address:newTx.from,
+                            }))
+                        }else if('approve'===type){
+                            const {symbol} = txs[newTx.hash].approve;
+                            yield put(createAction('ERC20Dex/updateTokenApproval')({
+                                symbol,
+                                state:'delete',
+                            }))
                         }
                     }
                 }

@@ -20,7 +20,7 @@ const getOneTxStatus = async (tx)=>{
     try {
         let newTx = Object.assign({},oldTx);
         let newListenerStatus = listenerStatus;
-        console.log(`tx[${oldTx.hash}] listenerStatus=>listenerStatus`);
+        console.log(`tx[${oldTx.hash}] listenerStatus=>${listenerStatus}`);
         if('waitReceipt'===listenerStatus){
             const {status, blockNumber} = await getTransactionStatus(symbol, oldTx.hash);
             newTx.blockNumber = blockNumber;
@@ -49,17 +49,16 @@ const getOneTxStatus = async (tx)=>{
                 newListenerStatus = 'CONFIRMED';
                 if('ETH'===symbol){
                     try{
-                        const {timestamp} = await getBlockByNumber(symbol,newListenerStatus);
+                        const {timestamp} = await getBlockByNumber(symbol,newTx.blockNumber);
                         newTx.timestamp = fromHexString(timestamp, 16) * 1000;
                     }catch{}
                 }
                 return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
             }else{// stay wait
-                return {newTx:newTx, symbol, listenerStatus:newListenerStatus};
+                return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
             }
         }
     }catch (e) {
-        console.log('getOneTxStatus error',e);
         return {newTx:oldTx, symbol, listenerStatus};
     }
 };

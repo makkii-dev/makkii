@@ -125,10 +125,12 @@ class AccountTokens extends Component {
     async componentDidMount() {
         this.isMount = true;
         this.loadBalances();
+        this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
     }
 
     componentWillUnmount() {
         this.isMount = false;
+        this.listenNavigation.remove();
     }
 
     loadBalances=() => {

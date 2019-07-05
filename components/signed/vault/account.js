@@ -112,10 +112,12 @@ class Account extends Component {
 	componentWillMount(){
         this.fetchAccountTransactions(this.account.address);
 		this.isMount = true;
+		this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
 	}
 
 	async componentWillUnmount() {
 		this.isMount = false;
+		this.listenNavigation.remove();
 	}
 
 	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
@@ -196,7 +198,7 @@ class Account extends Component {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
-				dispatch(update_account_txs(this.account_key, txs, user.hashed_password,false));
+				dispatch(update_account_txs(this.account_key, txs, user.hashed_password,this.account.symbol === 'BTC' || this.account.symbol === 'LTC'));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,

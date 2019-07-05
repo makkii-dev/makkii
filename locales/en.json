@@ -128,6 +128,8 @@
     "blockNumber_label": "Block#",
     "amount_label": "Amount",
     "status_label": "Status",
+    "label_payment": "Payment amount",
+    "label_exchanged": "Exchanged amount",
     "sendAgain_button": "SEND AGAIN",
     "viewInExplorer_button": "VIEW IN EXPLORER",
     "PENDING": "PENDING",
@@ -256,6 +258,8 @@
     "label_sell": "Sell:",
     "label_buy": "Buy:",
     "label_account_not_found": "Can't find eth account",
+    "label_please_select_account": "Please select an account first.",
+    "label_no_exchange_history": "No exchange history.",
     "button_add_account": "Add",
     "button_exchange_enable": "Exchange",
     "button_exchange_disable": "Insufficient account balance",
@@ -269,8 +273,11 @@
     "alert_content_need_approve": "Please approve authorization to the Wallet to manage {{token}}",
     "alert_content_need_re-approve": "Allowance has been given but is insufficient, need re-approve authorization.",
     "title_approve": "Approve authorization",
-    "title_re-approve": "Re-approve authorization",
-    "title_revoke": "Revoke authorization"
+    "title_revoke": "Revoke authorization",
+    "title_exchange": "Exchange request",
+    "title_exchange_history": "Exchange history",
+    "title_exchange_rules": "Exchange rules",
+    "toast_waitApprove": "Please wait approve request confirmed"
   },
   "currency": {
     "title": "Exchange Rates",
@@ -590,5 +597,8 @@
   "no_more_data_label": "-- No More Data --",
   "label_loading": "Loading...",
   "account_name_hint": "Up to 15 alphanumeric and puntucation characters, or 7 other characters",
-  "warning_dangerous_operation": "Require password to verify."
+  "warning_dangerous_operation": "Require password to verify.",
+  "toast_tx": "Transaction:",
+  "toast_CONFIRMED":"confirmed",
+  "toast_FAILED": "failed"
 }

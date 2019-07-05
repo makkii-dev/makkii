@@ -49,6 +49,7 @@
     "rn-fetch-blob": "^0.10.15",
     "sodium-javascript": "^0.5.5",
     "vm-browserify": "0.0.4",
+    "web3-eth-abi": "1.0.0-beta.37",
     "web3-eth-contract": "1.0.0-beta.37"
   },
   "devDependencies": {

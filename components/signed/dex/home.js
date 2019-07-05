@@ -16,11 +16,15 @@ import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
 import BigNumber from "bignumber.js";
 import {navigate} from "../../../utils/dva";
-import {accountKey, validateAmount} from "../../../utils";
+import {accountKey, getStatusBarHeight, validateAmount} from "../../../utils";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
 import FastImage from "react-native-fast-image";
+import {DEX_MENU} from "./constants";
+import {PopWindow} from "../vault/home_popwindow";
+import {Header} from "react-navigation";
+
 const {width} = Dimensions.get('window');
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
@@ -42,8 +46,22 @@ export const renderAddress = (address)=>(
 class Home extends React.Component {
 	static navigationOptions = ({navigation, screenProps})=>{
 		const {t, lan} = screenProps;
+		const showMenu  = navigation.getParam('showMenu', ()=>{});
 		return({
 			title: t('token_exchange.title',{locale:lan}),
+			headerRight:(
+				<TouchableOpacity
+					style={{width: 48,
+						height: 48,
+						alignItems: 'center',
+						justifyContent: 'center',}}
+					onPress={showMenu}
+				>
+					<Image source={require('../../../assets/icon_account_menu.png')}
+						   style={{width:25,height:25, tintColor:'#fff'}}
+						   resizeMode={'contain'}/>
+				</TouchableOpacity>
+			)
 		})
 	};
 
@@ -54,6 +72,7 @@ class Home extends React.Component {
 		srcQty: 0,
 		destQty: 0,
 		tradeRate: this.props.trade.tradeRate,
+		showMenu: false,
 	};
 	srcQtyFocused =false;
 	destQtyFocused = false;
@@ -127,11 +146,50 @@ class Home extends React.Component {
 	onTrade = ()=>{
 		const {srcToken, destToken, srcQty,destQty} = this.state;
 		const {dispatch, currentAccount} = this.props;
-		dispatch(createAction('ERC20Dex/trade')({srcToken,destToken,srcQty,destQty,account:currentAccount}));
+		dispatch(createAction('ERC20Dex/trade')({srcToken,destToken,srcQty,destQty,account:currentAccount, dispatch:dispatch}));
+	};
+	componentWillMount(): void {
+		this.props.navigation.setParams({
+			showMenu: this.openMenu,
+		});
+		this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
+	}
+	componentWillUnmount(): void {
+		this.listenNavigation.remove();
+	}
+
+	openMenu = () => {
+		this.setState({
+			showMenu:true
+		})
+	};
+
+	onCloseMenu = (select) => {
+
+		this.setState({
+			showMenu:false
+		},()=>{
+			switch(select){
+				case DEX_MENU[0].title:
+					navigate('signed_Dex_exchange_history')(this.props);
+					break;
+				case DEX_MENU[1].title:
+
+					break;
+				default:
+			}
+		})
 	};
 
 	renderAccount = (item) =>{
 		if(item) {
+			const {srcToken} = this.state;
+			let balance = item.balance;
+			let symbol = item.symbol;
+			if(srcToken !== 'ETH'&&item.tokens[srcToken]){
+				balance = item.tokens[srcToken].balance;
+				symbol = item.tokens[srcToken].symbol;
+			}
 			return (
 				<View style={{
 					...commonStyles.shadow,
@@ -169,11 +227,11 @@ class Home extends React.Component {
 									<Text style={{
 										...styles.accountSubTextFontStyle1,
 										fontWeight: 'bold'
-									}}>{new BigNumber(item.balance).toFixed(4)}</Text>
+									}}>{new BigNumber(balance).toFixed(4)}</Text>
 								</View>
 								<View style={{...styles.accountSubContainer, alignItems: 'center'}}>
 									{renderAddress(item.address)}
-									<Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
+									<Text style={styles.accountSubTextFontStyle2}>{symbol}</Text>
 								</View>
 							</View>
 						</View>
@@ -238,9 +296,8 @@ class Home extends React.Component {
 
 	renderContent = ()=>{
 
-		const {srcToken,destToken,srcQty, destQty,tradeRate} = this.state;
+		const {srcToken,destToken,srcQty, destQty,tradeRate,showMenu} = this.state;
 		const {currentAccount} = this.props;
-		console.log('currentAccount=>', currentAccount);
 		let buttonEnabled = false;
 		let hasToken = false;
 		if(currentAccount){
@@ -249,13 +306,9 @@ class Home extends React.Component {
 			const ethCost = srcToken === 'ETH'? +srcQty+0.0043:0.0014;
 			const tokenCost = srcToken === 'ETH'? 0 : +srcQty;
 			const {balance: tokenBalance = 0} = tokens[srcToken] ||{};
-			console.log('hasToken=>',hasToken);
-			console.log('ethBalance=>',balance);
-			console.log('ethCost=>',ethCost);
-			console.log('tokenBalance=>',tokenBalance);
-			console.log('tokenCost=>',tokenCost);
 			buttonEnabled = BigNumber(balance).toNumber()>=ethCost &&  BigNumber(tokenBalance).toNumber()>=tokenCost &&srcQty>0;
 		}
+		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
 		return(
 			<DismissKeyboard>
 				<View style={{flex:1, backgroundColor:mainBgColor}}>
@@ -339,6 +392,22 @@ class Home extends React.Component {
 						/>
 					</MyscrollView>
 					<Loading isShow={this.props.isWaiting}/>
+					{/*Menu Pop window*/}
+					{
+						showMenu?
+							<PopWindow
+								backgroundColor={'rgba(52,52,52,0.54)'}
+								onClose={(select)=>this.onCloseMenu(select)}
+								data={DEX_MENU}
+								containerPosition={{position:'absolute', top:popwindowTop,right:5}}
+								imageStyle={{width: 20, height: 20, marginRight:10}}
+								fontStyle={{fontSize:12, color:'#000'}}
+								itemStyle={{flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
+								containerBackgroundColor={'#fff'}
+								ItemSeparatorComponent={()=><View style={styles.divider}/>}
+							/>
+							:null
+					}
 				</View>
 			</DismissKeyboard>
 		)
@@ -420,5 +489,9 @@ const styles = {
 	accountSubTextFontStyle2:{
 		fontSize:12,
 		color:'gray'
+	},
+	divider: {
+		height: 0.5,
+		backgroundColor: '#dfdfdf'
 	},
 };
