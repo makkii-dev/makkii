@@ -144,7 +144,7 @@ class About extends Component {
 											text: strings('alert_button_upgrade'),
 											onPress: ()=> {
 												if (Platform.OS === 'android') {
-													this.upgradeForAndroid(version);
+													setTimeout(() => this.upgradeForAndroid(version), 500);
 												} else {
 													this.upgradeForIOS();
 												}
