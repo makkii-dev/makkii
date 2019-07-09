@@ -44,7 +44,6 @@ function formatAddress1Line(address) {
 }
 
 function validateBalanceSufficiency(account, symbol, amount, extra_params, network='mainnet') {
-    console.log("extra_params: ", extra_params);
     return new Promise((resolve, reject) => {
         if (!validateAmount(amount)) resolve({result: false, err: 'error_format_amount'});
         if (!validateAmount(extra_params['gasPrice'])) resolve({result: false, err: 'error_invalid_gas_price'});
@@ -62,7 +61,7 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params, netwo
             if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
                 resolve({result: false, err: 'error_insufficient_amount'});
             }
-            let totalCoins = account.tokens[network][symbol].balance;
+            let totalCoins = account.tokens[symbol].balance;
             if (transferAmount.isGreaterThan(totalCoins)) {
                 resolve({result: false, err: 'error_insufficient_amount'});
             }
