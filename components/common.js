@@ -551,7 +551,7 @@ class PendingComponent extends React.Component {
 	}
 
 	render(){
-		if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED'){
+		if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED' || this.props.status === 'UNCONFIRMED'){
 			return <Text style={{textAlign: 'left'}}>{strings(`transaction_detail.${this.props.status}`)}</Text>
 		}else{
 			const tail = '.'.repeat(this.state.waiting);

@@ -24,8 +24,8 @@ function formatAddress1Line(address) {
 function validateBalanceSufficiency(account, symbol, amount, extra_params, network='mainnet') {
     return new Promise((resolve, reject) => {
         if (!validateAmount(amount)) resolve({result: false, err: 'error_format_amount'});
-        if (!validateAmount(extra_params['gas_price'])) resolve({result: false, err: 'error_invalid_gas_price'});
-        if (!validatePositiveInteger(extra_params['gas_limit'])) resolve({result: false, err: 'error_invalid_gas_limit'});
+        if (!validateAmount(extra_params['gasPrice'])) resolve({result: false, err: 'error_invalid_gas_price'});
+        if (!validatePositiveInteger(extra_params['gasLimit'])) resolve({result: false, err: 'error_invalid_gas_limit'});
 
         let gasLimit = new BigNumber(extra_params['gasLimit']);
         let gasPrice = new BigNumber(extra_params['gasPrice']);

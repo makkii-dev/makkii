@@ -126,6 +126,9 @@ export class listenTransaction{
                 delete thusPendingMap[hashKey];
                 console.log('timeout');
                 removeTransaction();
+
+                tx.status = 'UNCONFIRMED';
+                updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
             }
             getTransactionStatus(symbol, tx.hash).then(res=>{
                 console.log("status res:", res);
