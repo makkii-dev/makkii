@@ -59,10 +59,12 @@ export default {
 
         *getTokenList({payload}, {call, select, put}){
             const lists = yield call(getTokenList,network);
+            console.log("get token list:", lists);
             // init trade;
             const srcToken = Object.keys(lists)[0];
             const destToken = Object.keys(lists)[1];
             const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
+            console.log("rate:" + rate);
             console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
             const trade = {
                 srcToken:srcToken,

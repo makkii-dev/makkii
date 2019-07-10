@@ -210,6 +210,7 @@ class Account extends Component {
 			account:currentAccount,
 			transaction:item,
 		})(this.props);
+
 	};
 
 

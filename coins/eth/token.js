@@ -6,6 +6,7 @@ import axios from 'axios';
 import BigNumber from "bignumber.js";
 import Config from 'react-native-config';
 import {ERC20ABI} from "./constants/abi";
+import {hexToAscii} from '../../utils';
 
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
 
@@ -52,15 +53,26 @@ const fetchTokenDetail = (contract_address, network) => new Promise((resolve, re
             console.log('[get token symobl resp]=>',symbolRet.data);
             console.log('[get token name resp]=>',nameRet.data);
             console.log('[get token decimals resp]=>',decimalsRet.data);
-            const symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
-            const name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            let symbol, name;
+            try {
+                symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
+            } catch (e) {
+                symbol = hexToAscii(symbolRet.data.result);
+                symbol = symbol.slice(0, symbol.indexOf('\u0000'));
+            }
+            try {
+                name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            } catch (e) {
+                name = hexToAscii(nameRet.data.result);
+                name = name.slice(0, name.indexOf('\u0000'));
+            }
             const decimals = AbiCoder.decodeParameter('uint8',decimalsRet.data.result);
             resolve({contractAddr:contract_address,symbol,name,decimals})
         }else {
             reject("get token detail failed");
         }
     })).catch(e=>{
-        reject("get token detail failed:",e);
+        reject("get token detail failed:"+e);
     })
 });
 

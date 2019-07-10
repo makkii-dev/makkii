@@ -454,6 +454,7 @@ class Send extends Component {
 							resolve(false);
 						}
 					}).catch(e=>{
+						console.log(e);
 						alert_ok(strings('alert_title_error'), strings('send.' + e.err));
 						resolve(false);
 					});

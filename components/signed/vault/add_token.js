@@ -5,11 +5,9 @@ import React, {Component} from 'react';
 import {RightActionButton,SubTextInput} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {accountKey} from '../../../utils';
 import {validateAddress, fetchTokenDetail, fetchAccountTokenBalance} from "../../../coins/api";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
-import BigNumber from "./select_token";
 import {AppToast} from "../../../utils/AppToast";
 import {createAction} from "../../../utils/dva";
 
@@ -77,7 +75,7 @@ class AddToken extends Component {
         dispatch(createAction('accountsModal/addTokenToCurrentAccount')({token}))
             .then(r=>{
                 if(r){
-                    navigation.navigate('signed_vault_account');
+                    navigation.navigate('signed_vault_account_tokens');
                 }
             })
     };

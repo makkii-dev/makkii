@@ -76,6 +76,7 @@ class Splash extends Component {
 			dispatch(setting(new_setting));
 			listenPrice.reset(new_setting.exchange_refresh_interval, setting_json.fiat_currency);
 			listenPrice.startListen();
+			dispatch(createAction('ERC20Dex/getTokenList')());
 			// load db user
 			dbGet('user')
 				.then(json=>{
@@ -101,7 +102,6 @@ class Splash extends Component {
 						db_user.address_book!==undefined?db_user.address_book: {},
 						db_user.hd_index!==undefined?db_user.hd_index:{}
 					));
-					dispatch(createAction('ERC20Dex/getTokenList')());
 					dispatch(createAction('accountsModal/loadStorage')({state_version:2,options:{network: setting_json.explorer_server}}));
 					setTimeout(()=>{
 						// navigate('signed_vault');
