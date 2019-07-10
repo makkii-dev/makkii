@@ -11,7 +11,7 @@ We know that Terms can be long and confusing, so we will do our best to keep thi
 - Makkii Wallet provides self-hosted wallet services for Aion blockchains.
 - By creating or importing a wallet, downloading or running our mobile application, or visiting our website, you are agreeing to our Terms, so please read carefully.
 - These terms outline approved uses of Makkii Wallet, various licenses that we grant to you, and licenses that you grant us.
-- If you have any questions or comments related to this Agreement, please send us a message on our website at <chris@aion.network>.
+- If you have any questions or comments related to this Agreement, please send us a message on our website at <support@chaion.net>.
 - If you do not agree to this Agreement or any modifications to this Agreement, you should not use our Services.
 
 ### HOW YOU ACCEPT THIS POLICY
@@ -157,4 +157,4 @@ This Agreement sets forth the entire understanding and agreement as to the subje
 
 ### QUESTIONS OR COMMENTS
 
-We welcome comments, questions, concerns, or suggestions. Please send us a message on our contact page at <chris@aion.network>.
+We welcome comments, questions, concerns, or suggestions. Please send us a message on our contact page at <support@chaion.net>.

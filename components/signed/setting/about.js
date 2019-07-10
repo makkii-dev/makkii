@@ -187,7 +187,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate('simple_webview', {
                                 title: strings('terms_service.title'),
-                                initialUrl: `${Config.app_server_static}/terms_services.html`,
+                                initialUrl: {uri: `${Config.app_server_static}/terms_services.html`},
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.terms_label')} </Text>
@@ -198,7 +198,7 @@ class About extends Component {
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate("simple_webview", {
                                 title: strings('privacy_policy.title'),
-                                initialUrl: `${Config.app_server_static}/privacy_policy.html`,
+                                initialUrl: {uri: `${Config.app_server_static}/privacy_policy.html`},
                             });
                         }}>
                             <Text style={{...defaultStyles.center_text, color: linkButtonColor}}> {strings('about.policy_label')} </Text>

@@ -256,8 +256,8 @@
     "label_current_account": "Current Account:",
     "label_select_account": "Select Account",
     "label_current_rate": "Current Rate",
-    "label_sell": "Sell:",
-    "label_buy": "Buy:",
+    "label_sell": "Sell: ",
+    "label_buy": "Buy: ",
     "label_account_not_found": "Can't find eth account",
     "label_please_select_account": "Please select an account first.",
     "label_no_exchange_history": "No exchange history.",
@@ -276,9 +276,9 @@
     "title_approve": "Approve authorization",
     "title_revoke": "Revoke authorization",
     "title_exchange": "Exchange request",
-    "title_exchange_history": "Exchange history",
-    "title_exchange_rules": "Exchange rules",
-    "toast_waitApprove": "Please wait approve request confirmed"
+    "title_exchange_history": "Exchange History",
+    "title_exchange_rules": "Exchange Notes",
+    "toast_waitApprove": "Please wait approval request confirmed"
   },
   "currency": {
     "title": "Exchange Rates",

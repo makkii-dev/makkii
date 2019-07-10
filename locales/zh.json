@@ -241,7 +241,7 @@
     "toast_token_exists": "添加失败，该代币已存在"
   },
   "token_exchange": {
-    "title": "交易代币",
+    "title": "代币兑换",
     "toast_not_support": "暂不支持代币{{token}}",
     "label_current_account": "当前账号:",
     "label_select_account": "选择账号",
@@ -266,8 +266,8 @@
     "title_approve": "授权",
     "title_revoke": "取消授权",
     "title_exchange": "请求交易",
-    "title_exchange_history": "交易记录",
-    "title_exchange_rules": "交易规则",
+    "title_exchange_history": "兑换记录",
+    "title_exchange_rules": "兑换说明",
     "toast_waitApprove": "等待请求交易完成"
   },
   "currency": {

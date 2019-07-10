@@ -174,7 +174,14 @@ class Home extends React.Component {
 					navigate('signed_Dex_exchange_history')(this.props);
 					break;
 				case DEX_MENU[1].title:
-
+					const file = 'static/exchange_rule_zh.html';
+				    const initialUrl = Platform.OS === 'ios'?
+						require('../../../' + file):
+						{uri: 'file:///android_asset/' + file};
+					navigate("simple_webview", {
+						title: strings('token_exchange.title_exchange_rules'),
+						initialUrl: initialUrl
+					})(this.props);
 					break;
 				default:
 			}

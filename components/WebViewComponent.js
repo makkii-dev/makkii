@@ -83,7 +83,7 @@ class WebViewComponent extends Component {
         return (
             <View style={{flex: 1}}>
                 <WebView
-                    source={{uri: this.initialUrl}}
+                    source={this.initialUrl}
                     ref={ref=>this.webViewRef=ref}
                     useWebKit={true}
                     cacheEnabled={false}
