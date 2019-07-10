@@ -24,6 +24,7 @@ import {ComponentButton, SubTextInput, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
 import {linkButtonColor, mainBgColor} from '../../style_util';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import {AppToast} from "../../../utils/AppToast";
 
 const MyScrollView = Platform.OS === 'ios'?KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');

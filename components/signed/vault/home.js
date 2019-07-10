@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import {
     ActivityIndicator,
@@ -25,10 +25,9 @@ import SwipeableRow from '../../swipeCell';
 import {accounts_add, delete_account} from '../../../actions/accounts.js';
 import wallet from 'react-native-aion-hw-wallet';
 import I18n, {strings} from "../../../locales/i18n";
-import {OptionButton, ComponentTabBar, alert_ok, ComponentButton} from '../../common.js';
+import {OptionButton, alert_ok, ComponentButton} from '../../common.js';
 import BigNumber from 'bignumber.js';
 import Toast from "react-native-root-toast";
-import {HomeComponent} from "../HomeComponent";
 import {SORT, FILTER, MENU} from "./constants";
 import {getLedgerMessage} from "../../../utils";
 import Loading from '../../loading.js';
@@ -40,7 +39,8 @@ import {accountKey, getStatusBarHeight} from '../../../utils';
 import {COINS} from '../../../coins/support_coin_list';
 import {getBalance, formatAddress1Line} from '../../../coins/api';
 import {update_index} from "../../../actions/user";
-
+import {AppToast} from "../../../utils/AppToast";
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -347,7 +347,7 @@ class HomeCenterComponent extends React.Component{
 	}
 }
 
-class Home extends HomeComponent {
+class Home extends Component {
 
 	static navigationOptions = ({ navigation }) => {
 	    return {
@@ -393,7 +393,6 @@ class Home extends HomeComponent {
 	}
 
 	componentWillMount(){
-		super.componentWillMount();
 	    console.log("mount home");
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		if (Platform.OS === 'android') {
@@ -424,7 +423,6 @@ class Home extends HomeComponent {
 	};
 
 	componentWillUnmount(): void {
-		super.componentWillUnmount();
 		console.log("unmount home");
 		Linking.removeEventListener('url', this.handleOpenURL);
 
@@ -434,8 +432,8 @@ class Home extends HomeComponent {
 
 	fetchAccountsBalance = ()=> {
 		// TODO: also update token's balance
-		const {dispatch,accounts} = this.props;
-		if (this.isFetchingAccountBalance||listenTx.hasPending() || Object.keys(accounts).length === 0) {
+		const {dispatch,accounts, hasPendingTx} = this.props;
+		if (this.isFetchingAccountBalance||hasPendingTx || Object.keys(accounts).length === 0) {
 		    if (this.state.refreshing) {
 				AppToast.show(strings('wallet.toast_has_pending_transactions'), {
 					position: Toast.positions.CENTER,
@@ -575,13 +573,13 @@ class Home extends HomeComponent {
 		// }
 
 		const txs = item.transactions;
-		if (txs) {
-			Object.values(txs).map((tx) => {
-				if (tx.status === 'PENDING') {
-					listenTx.addTransaction(tx, item.symbol);
-				}
-			});
-		}
+		// if (txs) {
+		// 	Object.values(txs).map((tx) => {
+		// 		if (tx.status === 'PENDING') {
+		// 			listenTx.addTransaction(tx, item.symbol);
+		// 		}
+		// 	});
+		// }
 		let targetUri = COINS[item.symbol].tokenSupport? 'signed_vault_account_tokens': 'signed_vault_account';
 		return (
 			<SwipeableRow
@@ -784,34 +782,6 @@ class Home extends HomeComponent {
 
 
 				</ImageBackground>
-				<ComponentTabBar
-					style={{
-						position: 'absolute',
-						height: fixedHeight(156),
-						bottom: 0,
-						right: 0,
-						left: 0,
-						backgroundColor: 'white',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'
-					}}
-					active={'wallet'}
-					onPress={[
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-						},
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_dapps_launch');
-						},
-						()=>{
-							this.state.openRowKey&&this.setState({openRowKey: null});
-							this.state.openRowKey||this.props.navigation.navigate('signed_setting');
-						},
-					]}
-				/>
 				</TouchableOpacity>
 				<Loading ref={(element) => {
 					this.loadingView = element;
@@ -845,15 +815,18 @@ class Home extends HomeComponent {
 
 
 export default connect(state => {
+	const {txsListener} = state;
+	const hasPendingTx = Object.values(txsListener.txs).length>0;
 	return ({
 		user: state.user,
 		accounts: state.accounts,
-		setting: state.setting
+		setting: state.setting,
+		hasPendingTx:hasPendingTx,
 	}); })(Home);
 
 const styles = StyleSheet.create({
     accountView:{
-        flex: 1, marginTop: fixedHeight(300), marginBottom: fixedHeight(156)
+        flex: 1, marginTop: fixedHeight(300)
     },
 	accountContainerWithShadow:{
 		...defaultStyles.shadow,

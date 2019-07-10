@@ -3,7 +3,8 @@
   "menuRef": {
     "title_settings": "Settings",
     "title_wallet": "Wallet",
-    "title_dapps": "DApps"
+    "title_dapps": "DApps",
+    "title_dex": "Dex",
   },
   "unsigned_login": {
     "error_login": "Login fail",
@@ -127,11 +128,14 @@
     "blockNumber_label": "Block#",
     "amount_label": "Amount",
     "status_label": "Status",
+    "label_payment": "Payment amount",
+    "label_exchanged": "Exchanged amount",
     "sendAgain_button": "SEND AGAIN",
     "viewInExplorer_button": "VIEW IN EXPLORER",
     "PENDING": "PENDING",
     "FAILED": "FAILED",
-    "CONFIRMED": "CONFIRMED"
+    "CONFIRMED": "CONFIRMED",
+    "UNCONFIRMED": "UNCONFIRMED"
   },
   "account_view": {
     "send_button": "SEND",
@@ -146,7 +150,8 @@
     "error_empty_account_name": "Account name can't be empty",
     "menu_change_name": "Edit Account Name",
     "menu_export_private_key": "Export Private Key",
-    "menu_switch_token": "Switch Token"
+    "menu_switch_token": "Switch Token",
+    "menu_token_exchange": "Exchange Token"
   },
   "import_private_key": {
     "title": "Private Key",
@@ -244,6 +249,36 @@
     "hint_decimals": "Please enter decimal",
     "toast_fetch_token_detail_fail": "Token contract address is invalid.",
     "toast_token_exists": "This token already exists."
+  },
+  "token_exchange": {
+    "title": "Exchange Token",
+    "toast_not_support": "Not Support token {{token}} ",
+    "label_current_account": "Current Account:",
+    "label_select_account": "Select Account",
+    "label_current_rate": "Current Rate",
+    "label_sell": "Sell:",
+    "label_buy": "Buy:",
+    "label_account_not_found": "Can't find eth account",
+    "label_please_select_account": "Please select an account first.",
+    "label_no_exchange_history": "No exchange history.",
+    "button_add_account": "Add",
+    "button_exchange_enable": "Exchange",
+    "button_exchange_disable": "Insufficient account balance",
+    "button_exchange_no_account": "No account",
+    "button_exchange_invalid_number":"Invalid number",
+    "button_exchange_no_token": "Please add {{token}} firstly",
+    "alert_title_need_authorization": "Need authorization",
+    "alert_button_why_need_authorization": "Why？",
+    "alert_button_approve": "Approve",
+    "alert_button_re-approve": "Re-approve",
+    "alert_content_need_approve": "Please approve authorization to the Wallet to manage {{token}}",
+    "alert_content_need_re-approve": "Allowance has been given but is insufficient, need re-approve authorization.",
+    "title_approve": "Approve authorization",
+    "title_revoke": "Revoke authorization",
+    "title_exchange": "Exchange request",
+    "title_exchange_history": "Exchange history",
+    "title_exchange_rules": "Exchange rules",
+    "toast_waitApprove": "Please wait approve request confirmed"
   },
   "currency": {
     "title": "Exchange Rates",
@@ -440,11 +475,12 @@
     "touchID_dialog_title": "Fingerprint Authentication",
     "touchID_dialog_desc": "Touch Sensor",
     "touchID_dialog_failed": "Authentication Failed",
-    "touchID_NOT_SUPPORTED": "Biometry is not supported",
+    "touchID_NOT_SUPPORTED": "TouchID is not supported",
     "touchID_NOT_AVAILABLE": "Biometry is not currently available",
     "touchID_NOT_PRESENT": "Biometry hardware not present",
     "touchID_NOT_ENROLLED": "Biometry is not enrolled",
     "touchID_AUTHENTICATION_FAILED": "If biometry authentication fails again, Touch ID will be disabled. Please go to Settings > Touch ID to enable it.",
+    "touchID_UNKNOWN_ERROR": "Touch ID is disabled. Please go to Settings > Touch ID to enable it.",
     "verify_title": "Login Password",
     "verify_desc": "Enter login password to verify",
     "pinCode_prompt": "Once PIN code is enabled, verification is required before sensitive operations such as transfer and private key export.\n\nAfter enable PIN code, you must set one immediately.\nTouch ID can be enabled only after PIN code is enabled.",
@@ -452,7 +488,9 @@
     "pinCode_not_match": "Your entries not match",
     "pinCode_enter": "Enter PIN to unlock",
     "pinCode_create": "Enter your PIN code",
-    "pinCode_confirm": "Confirm your PIN code"
+    "pinCode_confirm": "Confirm your PIN code",
+    "toast_please_login": "Please login in again",
+    "label_remaining_attempts": "remaining attempts:{{count}}",
   },
   "dapp": {
     "launch_button": "Launch",
@@ -560,5 +598,8 @@
   "no_more_data_label": "-- No More Data --",
   "label_loading": "Loading...",
   "account_name_hint": "Up to 15 alphanumeric and puntucation characters, or 7 other characters",
-  "warning_dangerous_operation": "Require password to verify."
+  "warning_dangerous_operation": "Require password to verify.",
+  "toast_tx": "Transaction:",
+  "toast_CONFIRMED":"confirmed",
+  "toast_FAILED": "failed"
 }

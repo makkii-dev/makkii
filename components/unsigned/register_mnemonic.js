@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Clipboard, Dimensions, NativeModules, Platform, NativeEventEmitter } from 'react-native';
 import { ComponentButton, InputMultiLines } from '../common.js';
-import Toast from 'react-native-root-toast';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles.js';
 import {mainBgColor} from '../style_util';
 import screenshotHelper from 'react-native-screenshot-helper';
+import {AppToast} from "../../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 
@@ -34,8 +34,8 @@ class Mnemonic extends Component {
         } else {
 			this.subscription = NativeModule.addListener('screenshot_taken',() => {
 				AppToast.show(strings('toast_mnemonic_share_warning'), {
-					duration: Toast.durations.LONG,
-					position: Toast.positions.CENTER
+					duration: AppToast.durations.LONG,
+					position: AppToast.positions.CENTER
 				});
 			});
 		}
@@ -98,7 +98,7 @@ class Mnemonic extends Component {
 						listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
 						listenApp.timeOut = setting.login_session_timeout;
                         listenApp.start();
-                        navigate('signed_vault');
+                        navigate('signed_home');
                     }}
                 />
 			</View>

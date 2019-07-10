@@ -1,47 +1,25 @@
 
-import React, {} from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {View,DeviceEventEmitter,Dimensions, FlatList, PixelRatio, ScrollView} from 'react-native';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
-import {ComponentTabBar} from '../../common.js';
-import {HomeComponent} from "../HomeComponent";
 import {SETTINGS} from './constants';
 import {fixedHeight, mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import {navigationSafely} from '../../../utils';
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
-class Home extends HomeComponent {
-	static navigationOptions = ({ navigation }) => {
+class Home extends Component {
+	static navigationOptions = ({ navigation,screenProps:{t,lan} }) => {
 	    return {
-			title: navigation.getParam('title')
+			title: t('menuRef.title_settings',{locale:lan})
 	    };
     };
 	constructor(props){
 		super(props);
-	}
-
-
-	componentWillMount(){
-		super.componentWillMount();
-		this.update_locale();
-
-		this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-		    this.update_locale();
-		});
-	}
-
-	update_locale= () => {
-		this.props.navigation.setParams({
-			'title': strings('menuRef.title_settings'),
-		});
-	};
-
-	componentWillUnmount() {
-		super.componentWillUnmount();
-		this.listener.remove();
 	}
 
 	render(){
@@ -55,7 +33,7 @@ class Home extends HomeComponent {
 				alignItems: 'center'
 			}}>
 				<ScrollView
-					style={{width:width,marginBottom: fixedHeight(180)}}
+					style={{width:width}}
 					contentContainerStyle={{alignItems: 'center'}}
 				>
 					<View style={{
@@ -127,27 +105,27 @@ class Home extends HomeComponent {
 							}}/>
 					</View>
 				</ScrollView>
-				<ComponentTabBar
-					// TODO
-					style={{
-						position: 'absolute',
-						bottom: 0,
-						right: 0,
-						height: fixedHeight(156),
-						left: 0,
-						backgroundColor: 'white',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						borderTopWidth: 0.3,
-						borderTopColor: '#8c8a8a'
-					}}
-					active={'settings'}
-					onPress={[
-						()=>{this.props.navigation.navigate('signed_vault');},
-						()=>{this.props.navigation.navigate('signed_dapps_launch');},
-						()=>{},
-					]}
-				/>
+				{/*<ComponentTabBar*/}
+				{/*	// TODO*/}
+				{/*	style={{*/}
+				{/*		position: 'absolute',*/}
+				{/*		bottom: 0,*/}
+				{/*		right: 0,*/}
+				{/*		height: fixedHeight(156),*/}
+				{/*		left: 0,*/}
+				{/*		backgroundColor: 'white',*/}
+				{/*		flexDirection: 'row',*/}
+				{/*		justifyContent: 'space-around',*/}
+				{/*		borderTopWidth: 0.3,*/}
+				{/*		borderTopColor: '#8c8a8a'*/}
+				{/*	}}*/}
+				{/*	active={'settings'}*/}
+				{/*	onPress={[*/}
+				{/*		()=>{this.props.navigation.navigate('signed_vault');},*/}
+				{/*		()=>{this.props.navigation.navigate('signed_dapps_launch');},*/}
+				{/*		()=>{},*/}
+				{/*	]}*/}
+				{/*/>*/}
 			</View>
 		);
 	}

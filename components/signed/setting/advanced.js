@@ -8,6 +8,7 @@ import {setting} from "../../../actions/setting";
 import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
+import {AppToast} from "../../../utils/AppToast";
 
 const {width} = Dimensions.get('window');
 
@@ -72,7 +73,7 @@ class Advanced extends Component {
                             <TouchableOpacity onPress={()=>{
                                 Keyboard.dismiss();
                                 AppToast.show(strings('advanced.description_login_session_timeout'), {
-                                    position: Toast.positions.CENTER,
+                                    position: AppToast.positions.CENTER,
                                 })
                             }}>
                                 <Image source={require('../../../assets/question.png')} style={{width:20, height:20, tintColor: 'gray'}} resizeMode={'contain'}/>
@@ -140,7 +141,7 @@ class Advanced extends Component {
         listenApp.timeOut = this.state.login_session_timeout;
 
         AppToast.show(strings('toast_update_success'), {
-            position: Toast.positions.CENTER,
+            position: AppToast.positions.CENTER,
             onHidden: () => {
                 this.props.navigation.goBack();
             }

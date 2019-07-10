@@ -11,6 +11,7 @@ import Toast from 'react-native-root-toast';
 import {add_address, update_address} from '../../../actions/user';
 import {accountKey} from '../../../utils/index';
 import {COINS} from '../../../coins/support_coin_list';
+import {AppToast} from "../../../utils/AppToast";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -65,9 +66,9 @@ class AddAddress extends Component {
     }
 
     async componentWillReceiveProps(props) {
-        let oldData = this.props.navigation.getParam('scanned');
         let scannedData = props.navigation.getParam('scanned', '');
-        // if (scannedData !== '' && oldData !== scannedData) {
+        if (scannedData !== '' && this.oldScannedData !== scannedData) {
+            this.oldScannedData = scannedData;
             validateAddress(scannedData, this.newSymbol).then(isValidAddress => {
                 let address = scannedData;
                 if (!isValidAddress) {
@@ -85,7 +86,7 @@ class AddAddress extends Component {
                 });
                 this.updateEditStatus(this.state.name, address);
             });
-        // }
+        }
     }
 
     addAddress=() => {

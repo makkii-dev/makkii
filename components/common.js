@@ -3,9 +3,11 @@ import {View, TextInput, Text, Image, Alert, TouchableOpacity, ActivityIndicator
 import styles from './styles.js';
 import PropTypes from 'prop-types';
 import {strings} from '../locales/i18n';
-import {mainColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
+import {mainColor, mainBgColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor} from './style_util';
 import BigNumber from 'bignumber.js';
 import {sameAddress, formatAddress1Line} from "../coins/api";
+import {AppToast} from "../utils/AppToast";
+import {popCustom} from "../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
@@ -305,12 +307,18 @@ class RightActionButton extends Component {
 
 
 class ComponentButton extends Component{
+	static propTypes = {
+		disabled: PropTypes.bool,
+		title: PropTypes.string.isRequired,
+		onPress: PropTypes.func.isRequired,
+	};
 	render(){
 		return (
 			<TouchableOpacity onPress={this.props.onPress}
+							  disabled ={this.props.disabled || false}
 							  style={{
 								  ...this.props.style,
-								  backgroundColor: mainColor,
+								  backgroundColor:this.props.disabled?'lightgray': mainColor,
 								  borderRadius: 5,
 							  }}
 			>
@@ -551,7 +559,7 @@ class PendingComponent extends React.Component {
 	}
 
 	render(){
-		if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED'){
+		if(this.props.status === 'FAILED' || this.props.status === 'CONFIRMED' || this.props.status === 'UNCONFIRMED'){
 			return <Text style={{textAlign: 'left'}}>{strings(`transaction_detail.${this.props.status}`)}</Text>
 		}else{
 			const tail = '.'.repeat(this.state.waiting);
@@ -579,10 +587,10 @@ class TransactionItem extends React.PureComponent{
 		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
 		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
 		const valueColor = isSender? 'red':'green';
-		if(transaction.status === 'PENDING'){
-			console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
-			listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
-		}
+		// if(transaction.status === 'PENDING'){
+		// 	console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
+		// 	listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
+		// }
 
 		return (
 			<TouchableOpacity

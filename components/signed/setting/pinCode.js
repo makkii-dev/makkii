@@ -5,16 +5,19 @@ import {
     Text,
     Switch,
     TouchableOpacity,
-    Image, StyleSheet
+    Image, StyleSheet,Platform
 } from 'react-native';
 import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {navigationSafely} from '../../../utils';
+import {hashPassword, navigationSafely} from '../../../utils';
 import {setting_update_pincode_enabled} from '../../../actions/setting';
 import {user_update_pincode} from '../../../actions/user';
 import TouchID from 'react-native-touch-id';
+import {AppToast} from "../../../utils/AppToast";
+import {popCustom} from "../../../utils/dva";
+
 const {width} = Dimensions.get('window');
 
 
@@ -59,17 +62,37 @@ class PinCode extends React.Component {
     };
 
     handleToggleSwitch(){
-        const {navigation} = this.props;
-        const {pinCodeEnabled} = this.props.setting;
         const {hashed_password} = this.props.user;
-        navigationSafely(
-            pinCodeEnabled,
-            hashed_password,
-            navigation,
+        popCustom.show(
+            strings('alert_title_warning'),
+            strings('warning_dangerous_operation'),
+            [
+                {
+                    text: strings('cancel_button'),
+                    onPress:()=>{
+                        popCustom.hide()
+                    }
+                },
+                {
+                    text: strings('alert_ok_button'),
+                    onPress:(text)=>{
+                        const _hashed_password = hashPassword(text);
+                        if(_hashed_password === hashed_password){
+                            popCustom.hide();
+                            this.onVerifySuccess();
+                        }else{
+                            popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
+                        }
+                    }
+                }
+            ],
             {
-                onVerifySuccess: this.onVerifySuccess,
+                cancelable: false,
+                type:'input',
+                canHide: false,
             }
         );
+
     }
 
     handleToggleTouchIDSwitch(){
@@ -85,9 +108,13 @@ class PinCode extends React.Component {
                 passcodeFallback: false, // if true is passed, it will allow isSupported to return an error if the device is not enrolled in touch id/face id etc. Otherwise, it will just tell you what method is supported, even if the user is not enrolled.  (default false)
             };
             TouchID.isSupported(optionalConfigObject).then(biometryType => {
-                this.setState({touchIDEnabled:!touchIDEnabled},()=>{
-                    dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
-                })
+                if((Platform.OS==='ios'&&biometryType==='TouchID')||Platform.OS==='android'){
+                    this.setState({touchIDEnabled:!touchIDEnabled},()=>{
+                        dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
+                    })
+                }else {
+                    AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`))
+                }
             }).catch(error=>{
                 AppToast.show(strings(`pinCode.touchID_${error.code}`))
             })

@@ -15,6 +15,8 @@ import {Header} from 'react-navigation';
 import {ACCOUNT_MENU} from "./constants";
 import {AddressComponent} from '../../common';
 import defaultStyles from "../../styles";
+import {createAction} from "../../../utils/dva";
+import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -78,7 +80,7 @@ class AccountTokens extends Component {
     };
 
     onCloseMenu = (select) => {
-        const {navigation} = this.props;
+        const {navigation, dispatch} = this.props;
         const {pinCodeEnabled} = this.props.setting;
         const {hashed_password} = this.props.user;
         this.setState({
@@ -101,6 +103,11 @@ class AccountTokens extends Component {
                             args:{privateKey: this.account.private_key},
                         });
                     break;
+                case ACCOUNT_MENU[2].title:
+                    // dispatch(createAction('ethTokenSwap/getTokenList')());
+                    dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:this.account.address}));
+                    navigation.navigate('signed_dex');
+                    break;
                 default:
             }
         })
@@ -118,10 +125,12 @@ class AccountTokens extends Component {
     async componentDidMount() {
         this.isMount = true;
         this.loadBalances();
+        this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
     }
 
     componentWillUnmount() {
         this.isMount = false;
+        this.listenNavigation.remove();
     }
 
     loadBalances=() => {
@@ -350,6 +359,9 @@ class AccountTokens extends Component {
         let menuArray = [ACCOUNT_MENU[0]];
         if (this.account.type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
+        }
+        if(COINS[this.account.symbol].tokenExchangeSupport){
+            menuArray.push(ACCOUNT_MENU[2]);
         }
 
         const titleFontSize = 32;

@@ -3,9 +3,10 @@ import blake2b from "blake2b";
 import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
-import Toast from 'react-native-root-toast';
 import {fetchRequest} from './others';
 import Config from 'react-native-config';
+import {popCustom} from "./dva";
+const _ = require('underscore');
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
@@ -174,49 +175,54 @@ function generateUpdateMessage(version) {
     return message;
 }
 
-class AppToast {
-    constructor() {
-        this.toast = null;
+var isHexStrict = function (hex) {
+    return ((_.isString(hex) || _.isNumber(hex)) && /^(-)?0x[0-9a-f]*$/i.test(hex));
+};
+
+function hexToAscii(hex) {
+    // if (!isHexStrict(hex))
+    //     throw new Error('The parameter must be a valid HEX string.');
+
+    var str = "";
+    var i = 0, l = hex.length;
+    if (hex.substring(0, 2) === '0x') {
+        i = 2;
     }
-    show(message, options = {position: Toast.positions.BOTTOM, duration: Toast.durations.SHORT}){
-        this.close();
-        this.toast= Toast.show(message,options);
+    for (; i < l; i+=2) {
+        var code = parseInt(hex.substr(i, 2), 16);
+        str += String.fromCharCode(code);
     }
-    close(){
-        if(this.toast){
-            Toast.hide(this.toast);
-            this.toast = null;
-        }
-    }
+
+    return str;
 }
 
-
-
 class listenAppState{
-    constructor(routes){
+    constructor(){
         this.timeOut = '30';
         this.timestamp = Date.now('milli');
     }
     handleActive = null;
     handleTimeOut = null;
     ignore = false;
+    currentAppState = 'active';
     _handleAppStateChange=(nextAppState)=>{
         console.log('appState change', nextAppState);
         console.log('ignore=>', this.ignore);
-        if (nextAppState != null && nextAppState === 'active') {
+        this.currentAppState = nextAppState;
+        if (nextAppState != null && nextAppState === 'active'&&!this.ignore) {
             // in active
             const max_keep_signed = 60000*parseInt(this.timeOut);
             console.log('max_keep_signed ', max_keep_signed);
             const time_diff = Date.now('milli') - this.timestamp;
-            console.log('time_diff', time_diff)
+            console.log('time_diff', time_diff);
             if (time_diff > max_keep_signed) {
-                !this.ignore&&this.handleTimeOut&&this.handleTimeOut();
+                this.handleTimeOut&&this.handleTimeOut();
             }else{
-                !this.ignore&&DeviceEventEmitter.emit('APP_ACTIVE');
+                DeviceEventEmitter.emit('APP_ACTIVE');
             }
-        } else if (nextAppState === 'background') {
+        } else if (nextAppState === 'background'&&!this.ignore) {
             this.timestamp = Date.now('milli');
-            !this.ignore&&this.handleActive&&this.handleActive();
+            this.handleActive&&this.handleActive();
             console.log('update timestamp ', this.timestamp)
         }
     };
@@ -379,7 +385,6 @@ module.exports = {
     getStatusBarHeight:getStatusBarHeight,
     listenAppState:listenAppState,
     strLen: strLen,
-    AppToast: AppToast,
     navigationSafely,
     getLatestVersion: getLatestVersion,
     generateUpdateMessage: generateUpdateMessage,
@@ -388,4 +393,5 @@ module.exports = {
     appendHexStart,
     toHex,
     fromHexString,
+    hexToAscii,
 };

@@ -38,6 +38,7 @@ export const COINS = {
         icon: require('../assets/coin_eth.png'),
         tokenSupport: true,
         txFeeSupport: true,
+        tokenExchangeSupport:true,
         gasPriceUnit: 'Gwei',
         defaultGasPrice: '10',
         defaultGasLimit: '21000',

@@ -5,8 +5,13 @@ function validateAddress(address, network='mainnet') {
     return new Promise((resolve, reject) => {
         // do not verify prefix a0
         let reg = /^[0-9a-fA-F]{64}$/;
-        address = address.startsWith('0x') ? address.substring(2) : address;
-        resolve(reg.test(address));
+        let lcAddress = address.toLowerCase();
+        lcAddress = lcAddress.startsWith('0x') ? lcAddress.substring(2) : lcAddress;
+        if (!lcAddress.startsWith('a0')) {
+            resolve(false);
+        } else {
+            resolve(reg.test(address));
+        }
     });
 }
 
@@ -19,8 +24,8 @@ function formatAddress1Line(address) {
 function validateBalanceSufficiency(account, symbol, amount, extra_params, network='mainnet') {
     return new Promise((resolve, reject) => {
         if (!validateAmount(amount)) resolve({result: false, err: 'error_format_amount'});
-        if (!validateAmount(extra_params['gas_price'])) resolve({result: false, err: 'error_invalid_gas_price'});
-        if (!validatePositiveInteger(extra_params['gas_limit'])) resolve({result: false, err: 'error_invalid_gas_limit'});
+        if (!validateAmount(extra_params['gasPrice'])) resolve({result: false, err: 'error_invalid_gas_price'});
+        if (!validatePositiveInteger(extra_params['gasLimit'])) resolve({result: false, err: 'error_invalid_gas_limit'});
 
         let gasLimit = new BigNumber(extra_params['gasLimit']);
         let gasPrice = new BigNumber(extra_params['gasPrice']);
@@ -34,7 +39,7 @@ function validateBalanceSufficiency(account, symbol, amount, extra_params, netwo
             if (gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)).isGreaterThan(balance)) {
                 resolve({result: false, err: 'error_insufficient_amount'});
             }
-            let totalCoins = account.tokens[network][symbol].balance;
+            let totalCoins = account.tokens[symbol].balance;
             if (transferAmount.isGreaterThan(totalCoins)) {
                 resolve({result: false, err: 'error_insufficient_amount'});
             }

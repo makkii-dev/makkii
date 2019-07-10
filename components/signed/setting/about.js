@@ -10,6 +10,8 @@ import {getLatestVersion, generateUpdateMessage} from '../../../utils';
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import Config from 'react-native-config';
+import {AppToast} from "../../../utils/AppToast";
+import {popCustom} from "../../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
@@ -144,7 +146,7 @@ class About extends Component {
 											text: strings('alert_button_upgrade'),
 											onPress: ()=> {
 												if (Platform.OS === 'android') {
-													this.upgradeForAndroid(version);
+													setTimeout(() => this.upgradeForAndroid(version), 500);
 												} else {
 													this.upgradeForIOS();
 												}

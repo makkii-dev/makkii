@@ -5,231 +5,12 @@ import ApiCaller from '../../utils/http_caller';
 import axios from 'axios';
 import BigNumber from "bignumber.js";
 import Config from 'react-native-config';
+import {ERC20ABI} from "./constants/abi";
+import {hexToAscii} from '../../utils';
 
 const etherscan_apikey = 'W97WSD5JD814S3EJCJXHW7H8Y3TM3D2UK2';
 
-const ERC20ABI = [
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "name",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_spender",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "approve",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "totalSupply",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "transferFrom",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "decimals",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint8"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_owner",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "name": "balance",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "symbol",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "transfer",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_owner",
-                "type": "address"
-            },
-            {
-                "name": "_spender",
-                "type": "address"
-            }
-        ],
-        "name": "allowance",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "payable": true,
-        "stateMutability": "payable",
-        "type": "fallback"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "name": "owner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "name": "spender",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "name": "value",
-                "type": "uint256"
-            }
-        ],
-        "name": "Approval",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "name": "from",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "name": "to",
-                "type": "address"
-            },
-            {
-                "indexed": false,
-                "name": "value",
-                "type": "uint256"
-            }
-        ],
-        "name": "Transfer",
-        "type": "event"
-    }
-];
+
 const fetchAccountTokenBalance = (contract_address, address, network) => new Promise((resolve, reject) => {
     const contract = new Contract(ERC20ABI);
     const requestData = processRequest('eth_call', [
@@ -272,15 +53,26 @@ const fetchTokenDetail = (contract_address, network) => new Promise((resolve, re
             console.log('[get token symobl resp]=>',symbolRet.data);
             console.log('[get token name resp]=>',nameRet.data);
             console.log('[get token decimals resp]=>',decimalsRet.data);
-            const symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
-            const name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            let symbol, name;
+            try {
+                symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
+            } catch (e) {
+                symbol = hexToAscii(symbolRet.data.result);
+                symbol = symbol.slice(0, symbol.indexOf('\u0000'));
+            }
+            try {
+                name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            } catch (e) {
+                name = hexToAscii(nameRet.data.result);
+                name = name.slice(0, name.indexOf('\u0000'));
+            }
             const decimals = AbiCoder.decodeParameter('uint8',decimalsRet.data.result);
             resolve({contractAddr:contract_address,symbol,name,decimals})
         }else {
             reject("get token detail failed");
         }
     })).catch(e=>{
-        reject("get token detail failed:",e);
+        reject("get token detail failed:"+e);
     })
 });
 

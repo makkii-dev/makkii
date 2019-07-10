@@ -3,7 +3,8 @@
   "menuRef": {
     "title_settings": "设置",
     "title_wallet": "钱包",
-    "title_dapps": "应用"
+    "title_dapps": "应用",
+    "title_dex": "市场"
   },
   "unsigned_login": {
     "error_login": "登录失败",
@@ -113,7 +114,9 @@
     "cancel": "取消",
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？",
     "warning_send_zero": "您的发送金额为０，请确认是否继续？",
-    "toast_unsupported_token": "不支持的代币: {{token}}"
+    "toast_unsupported_token": "不支持的代币: {{token}}",
+    "error_invalid_gas_price": "燃料单价不正确",
+    "error_invalid_gas_limit": "燃料上限不正确"
   },
   "transaction_detail": {
     "title": "交易详情",
@@ -124,11 +127,14 @@
     "blockNumber_label": "块号#",
     "amount_label": "金额",
     "status_label": "状态",
+    "label_payment": "支付金额",
+    "label_exchanged": "换取金额",
     "sendAgain_button": "重新发送",
     "viewInExplorer_button": "在Explorer中查看更多",
     "PENDING": "确认中",
     "FAILED": "失败",
-    "CONFIRMED": "已确认"
+    "CONFIRMED": "已确认",
+    "UNCONFIRMED": "未确认"
   },
   "account_view": {
     "send_button": "转账",
@@ -143,7 +149,8 @@
     "error_empty_account_name": "账户名不能为空",
     "menu_change_name": "更改账户名称",
     "menu_export_private_key": "导出私钥",
-    "menu_switch_token": "切换代币"
+    "menu_switch_token": "切换代币",
+    "menu_token_exchange": "交易代币"
   },
   "import_private_key": {
     "title": "私钥",
@@ -232,6 +239,36 @@
     "hint_decimals": "请填写小数位数",
     "toast_fetch_token_detail_fail": "错误的代币合约地址",
     "toast_token_exists": "添加失败，该代币已存在"
+  },
+  "token_exchange": {
+    "title": "交易代币",
+    "toast_not_support": "暂不支持代币{{token}}",
+    "label_current_account": "当前账号:",
+    "label_select_account": "选择账号",
+    "label_current_rate": "当前汇率",
+    "label_sell": "卖:",
+    "label_buy": "买:",
+    "label_account_not_found": "找不到以太坊账号",
+    "label_please_select_account": "请先选择一个账号。",
+    "label_no_exchange_history": "暂无兑换历史。",
+    "button_add_account": "添加账号",
+    "button_exchange_enable": "兑换",
+    "button_exchange_disable": "账户余额不足",
+    "button_exchange_no_account": "没有账号",
+    "button_exchange_invalid_number":"无效数字",
+    "button_exchange_no_token": "请先添加代币 {{token}}",
+    "alert_title_need_authorization": "需要授权",
+    "alert_button_why_need_authorization": "为什么？",
+    "alert_button_approve": "授权",
+    "alert_button_re-approve": "重新授权",
+    "alert_content_need_approve": "请先授权钱包管理{{token}}",
+    "alert_content_need_re-approve": "钱包授权的额度不正常，需要重新授权。",
+    "title_approve": "授权",
+    "title_revoke": "取消授权",
+    "title_exchange": "请求交易",
+    "title_exchange_history": "交易记录",
+    "title_exchange_rules": "交易规则",
+    "toast_waitApprove": "等待请求交易完成"
   },
   "currency": {
     "title": "兑换汇率",
@@ -428,11 +465,12 @@
     "touchID_dialog_title": "指纹验证",
     "touchID_dialog_desc": "请触摸指纹传感器",
     "touchID_dialog_failed": "验证失败",
-    "touchID_NOT_SUPPORTED": "生物信息解锁不支持",
+    "touchID_NOT_SUPPORTED": "指纹解锁不支持",
     "touchID_NOT_AVAILABLE": "生物信息解锁当前不可用",
     "touchID_NOT_PRESENT": "本设备不支持生物信息解锁",
     "touchID_NOT_ENROLLED": "生物信息没有录入",
     "touchID_AUTHENTICATION_FAILED": "若下次生物信息再不匹配，指纹解锁将被禁用，请去 设置 > Touch ID 重新开启。",
+    "touchID_UNKNOWN_ERROR": "指纹解锁被禁用，请去 设置 > Touch ID 重新开启。",
     "verify_title": "验证登录密码",
     "verify_desc": "请输入登录密码确认本人操作",
     "pinCode_prompt": "开启后, 转账、查看私钥和查看助记词等敏感操作时，需首先进行数字口令验证。\n\n开启数字口令时需要重新设置口令。\n开启指纹解锁之前必须开启数字口令。",
@@ -440,7 +478,9 @@
     "pinCode_not_match": "2次输入不匹配",
     "pinCode_enter": "输入PIN码解锁",
     "pinCode_create": "1- 输入新的数字口令",
-    "pinCode_confirm": "2- 确认你的数字口令"
+    "pinCode_confirm": "2- 确认你的数字口令",
+    "toast_please_login": "请重新登陆",
+    "label_remaining_attempts": "剩余尝试次数:{{count}}"
   },
   "sort": {
     "balance": "余额优先",
@@ -535,8 +575,6 @@
   "same_old_new_passwords": "新密码不能和旧密码相同",
   "toast_copy_success": "已复制到剪切板",
   "invalid_amount": "无效的金额",
-  "error_invalid_gas_price": "燃料单价不正确",
-  "error_invalid_gas_limit": "燃料上限不正确",
   "error_save_qrcode_image": "保存二维码失败",
   "toast_save_image_success": "图片已保存至{{path}}",
   "toast_save_image_to_album": "图片已保存至相册",
@@ -560,5 +598,8 @@
   "no_more_data_label": "-- 没有更多数据了 --",
   "label_loading": "加载中……",
   "account_name_hint": "最多15个英文、数字、符号，或7个其他语言字符",
-  "warning_dangerous_operation": "此操作需要输入登录密码验证是否本人操作。"
+  "warning_dangerous_operation": "此操作需要输入登录密码验证是否本人操作。",
+  "toast_tx": "交易:",
+  "toast_CONFIRMED":"确认",
+  "toast_FAILED": "失败"
 }

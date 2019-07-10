@@ -149,7 +149,7 @@ export default class PopupCustom extends Component {
                     key={index}
                     style={{
                         flexDirection: 'row',
-                        alignItems: 'center',
+                        alignItems: 'flex-start',
                         flex: 1
                     }}
                 >
@@ -313,7 +313,7 @@ const styles = StyleSheet.create({
         height: 43
     },
     line: {
-        height: 43,
+        height: 35,
         width: 0.5,
         backgroundColor: mainColor
     },

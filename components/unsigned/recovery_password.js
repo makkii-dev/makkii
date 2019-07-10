@@ -9,6 +9,8 @@ import {setting_update_pincode_enabled} from  '../../actions/setting';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles';
 import {mainBgColor} from '../style_util';
+import {popCustom} from "../../utils/dva";
+import {sendRecoveryEventLog} from "../../services/eventLogService";
 
 const {width} = Dimensions.get('window');
 
@@ -90,16 +92,21 @@ class Password extends Component {
 									},
 									{
 										text: strings('alert_ok_button'), onPress: () => {
+											const {navigate} = this.props.navigation;
+											const {setting} = this.props;
 											let hashed_password = hashPassword(this.state.password);
 
 											dispatch(delete_accounts(hashed_password));
 											dispatch(setting_update_pincode_enabled(false,false));
 											dispatch(user(hashed_password, this.mnemonic));
-											this.setState({
-												password: '',
-												password_confirm: '',
-											});
-											this.props.navigation.navigate('signed_vault');
+
+											sendRecoveryEventLog();
+
+											listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
+											listenApp.handleActive = ()=>{};
+											listenApp.timeOut = setting.login_session_timeout;
+											listenApp.start();
+											navigate('signed_vault');
 										}
 									},
 								]
@@ -113,4 +120,4 @@ class Password extends Component {
 	}
 }
 
-export default connect()(Password);
+export default connect(({setting})=>({setting}))(Password);

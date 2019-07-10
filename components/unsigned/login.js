@@ -10,6 +10,9 @@ import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
+import {AppToast} from "../../utils/AppToast";
+import {popCustom} from "../../utils/dva";
+import {sendLoginEventLog} from "../../services/eventLogService";
 
 const {width,height} = Dimensions.get('window');
 
@@ -57,7 +60,7 @@ class Login extends Component {
                 text: strings('alert_button_upgrade'),
                 onPress: () => {
                     if (Platform.OS === 'android') {
-                        this.upgradeForAndroid(version);
+                        setTimeout(() => this.upgradeForAndroid(version), 500);
                     } else {
                         this.upgradeForiOS();
                     }
@@ -75,6 +78,14 @@ class Login extends Component {
 		Linking.removeEventListener('url', this.handleOpenURL);
 	}
 	tryDownload=(version, filePath) => {
+        popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
+            type: 'progress',
+            cancelable: false,
+            canHide: false,
+            callback: () => {
+            },
+            progress: 0.01,
+        });
         let download = RNFS.downloadFile({
             fromUrl: version.url,
             toFile: filePath,
@@ -98,14 +109,6 @@ class Login extends Component {
             console.log("download error: ", error);
             AppToast.show(strings('version_upgrade.toast_download_fail'));
             this.popupUpdateDialog(version);
-        });
-
-        popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
-            type: 'progress',
-            cancelable: false,
-            canHide: false,
-            callback: ()=> {},
-            progress: 0.01,
         });
     }
 	upgradeForAndroid = (version) => {
@@ -180,7 +183,10 @@ class Login extends Component {
                                                 listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
                                                 listenApp.timeOut = setting.login_session_timeout;
                                                 listenApp.start();
-                                                navigate('signed_vault');
+
+                                                sendLoginEventLog();
+
+                                                navigate('signed_home');
                                             } else {
                                                 alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
                                             }

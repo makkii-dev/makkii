@@ -17,6 +17,7 @@ import {sameAddress, getTransactionExplorerUrl} from "../../../coins/api";
 import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
+import {AppToast} from "../../../utils/AppToast";
 
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -29,22 +30,53 @@ class Transaction extends Component {
 		super(props);
 		this.account = this.props.navigation.state.params.account;
 		this.token = this.props.navigation.state.params.token;
+		this.additional_data =this.props.navigation.state.params.additional_data;
 		this.transaction = this.props.navigation.state.params.transaction;
 	}
 	onViewInExplorer=()=>{
 		const url = getTransactionExplorerUrl(this.account.symbol, this.transaction.hash);
 		Linking.openURL(url).catch(err => console.error('An error occurred', err));
-	}
-	sendAgain=()=>{
-		const {navigation} = this.props;
-		const transaction = this.transaction;
-		navigation.navigate('signed_vault_send',{
-			account: this.account,
-			value: transaction.value + '',
-			recipient: transaction.to,
-            token: this.token,
-		})
-	}
+	};
+
+	renderAdditionData = ()=>{
+		if(this.additional_data){
+			const {type, data} = this.additional_data;
+			if(type==='exchange'){
+				const {srcToken, srcQty, destToken, destQty} = data;
+				let content = [];
+				content.push(
+					<TransactionItemCell
+						key={'payment'}
+						style={{height:80}}
+						title={strings('transaction_detail.label_payment')}
+						value={ srcQty + ' ' +srcToken}
+						valueTextAlign={'left'}
+					/>
+				);
+				content.push(
+					<TransactionItemCell
+						key={'exchanged'}
+						style={{height:80}}
+						title={strings('transaction_detail.label_exchanged')}
+						value={ destQty + ' ' +destToken}
+						valueTextAlign={'left'}
+					/>
+				);
+				return content;
+			}
+		}else{
+			return (
+				<TransactionItemCell
+					style={{height:80}}
+					title={strings('transaction_detail.amount_label')}
+					value={new BigNumber(this.transaction.value).toNotExString()+' ' + unit}
+					valueTextAlign={'left'}
+
+				/>
+			);
+		}
+	};
+
 	render(){
 		const transaction = this.transaction;
 		const timestamp = transaction.timestamp === undefined? '': new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
@@ -63,6 +95,7 @@ class Transaction extends Component {
 		} else {
 			unit = this.token.symbol;
 		}
+
 
 		return (
 			<ScrollView style={{backgroundColor:mainBgColor,height,width}}>
@@ -121,26 +154,17 @@ class Transaction extends Component {
 							value={transaction.blockNumber}
 							valueTextAlign={'left'}
 						/>
-						<TransactionItemCell
-							style={{height:80}}
-							title={strings('transaction_detail.amount_label')}
-							value={new BigNumber(transaction.value).toNotExString()+' ' + unit}
-							valueTextAlign={'left'}
 
-						/>
+						{this.renderAdditionData()}
+
 						<TransactionItemCell
 							style={{height:80}}
 							title={strings('transaction_detail.status_label')}
 							value={<PendingComponent status={transaction.status}/>}
 							valueTextAlign={'left'}
 						/>
+
 					</View>
-					{
-						ifSender? <ComponentButton
-							title={strings('transaction_detail.sendAgain_button')}
-							onPress={this.sendAgain}
-						/>: null
-					}
 					<View style={{marginTop:10, flexDirection: 'row', justifyContent: 'flex-end', width:'100%', padding:10}}>
 						<TouchableOpacity
 							onPress={this.onViewInExplorer}

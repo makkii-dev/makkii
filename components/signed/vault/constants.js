@@ -51,6 +51,10 @@ const ACCOUNT_MENU = [
     {
         title: 'account_view.menu_export_private_key',
         image: require('../../../assets/icon_account_export.png'),
+    },
+    {
+        title: 'account_view.menu_token_exchange',
+        image: require('../../../assets/icon_token_exchange.png')
     }
 ];
 

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Dimensions, View,Text,DeviceEventEmitter, TouchableOpacity} from 'react-native';
-import Toast from 'react-native-root-toast';
-
+import {AppToast} from "../../../utils/AppToast";
 import {setting} from '../../../actions/setting.js';
 import {strings} from "../../../locales/i18n";
 import {mainnet_url, mastery_url} from '../../../utils';
@@ -121,7 +120,7 @@ class Services extends Component {
 		dispatch(setting(_setting));
 
 		AppToast.show(strings('toast_update_success'), {
-			position: Toast.positions.CENTER,
+			position: AppToast.positions.CENTER,
 			onHidden: () => {
 				DeviceEventEmitter.emit('updateAccountBalance');
         		this.props.navigation.goBack();

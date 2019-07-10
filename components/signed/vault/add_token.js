@@ -10,6 +10,7 @@ import {validateAddress, fetchTokenDetail, fetchAccountTokenBalance} from "../..
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
 import BigNumber from "./select_coin";
+import {AppToast} from "../../../utils/AppToast";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -152,7 +153,7 @@ class AddToken extends Component {
             });
             this.loadingView.hide();
         }).catch(err=> {
-            console.log("fetch token detail for address: " + address + " failed.");
+            console.log("fetch token detail for address: " + address + " failed:", err);
             AppToast.show(strings('add_token.toast_fetch_token_detail_fail'));
             this.props.navigation.setParams({
                 isEdited: false

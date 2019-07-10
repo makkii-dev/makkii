@@ -6,6 +6,7 @@ import {strings} from "../locales/i18n";
 import {mainColor} from './style_util';
 import ImagePicker from 'react-native-image-picker'
 import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
+import {AppToast} from "../utils/AppToast";
 
 class Scan extends Component {
     static navigationOptions = ({navigation}) => {

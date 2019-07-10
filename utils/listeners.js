@@ -4,7 +4,8 @@ import {setting} from '../actions/setting';
 import {accountKey, fromHexString} from '../utils';
 import {update_account_txs, update_account_token_txs} from '../actions/accounts';
 import {strings} from "../locales/i18n";
-import Toast from 'react-native-root-toast'
+import {AppToast} from "./AppToast";
+
 export class listenCoinPrice{
     constructor(store, interval=30) {
         this.store = store;
@@ -48,7 +49,7 @@ export class listenCoinPrice{
         }, error => {
             console.log("get coin price errors:", error);
             AppToast.show(strings('error_connect_remote_server'), {
-                position: Toast.positions.CENTER,
+                position: AppToast.positions.CENTER,
             })
         });
 
@@ -100,11 +101,13 @@ export class listenTransaction{
             return;
         console.log('getting transaction ' + tx.hash + ' status');
         this.pendingMap[hashKey] = tx;
-        let removeTransaction = function(tx){
+
+        let removeTransaction = function(){
             if(typeof thusMap[hashKey] !== 'undefined'){
                 console.log('clear listener');
                 clearInterval(thusMap[hashKey]);
                 delete thusMap[hashKey];
+                delete thusPendingMap[hashKey];
             }
         };
         let updateTxStatus = function(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user) {
@@ -123,7 +126,10 @@ export class listenTransaction{
             if (Date.now() - start > thusTimeOut) {
                 delete thusPendingMap[hashKey];
                 console.log('timeout');
-                removeTransaction(tx);
+                removeTransaction();
+
+                tx.status = 'UNCONFIRMED';
+                updateTxStatus(thusPendingMap, hashKey, token, thusStore, symbol, tx, setting, user);
             }
             getTransactionStatus(symbol, tx.hash).then(res=>{
                 console.log("status res:", res);
@@ -138,7 +144,7 @@ export class listenTransaction{
                                     let blockNumberInterval = setInterval(() => {
                                         getBlockNumber(symbol).then(
                                             number => {
-                                                if (number > tx.blockNumber + 12) {
+                                                if (number > tx.blockNumber + 2) {
                                                     tx.status = 'CONFIRMED';
                                                     // special handling for ethereum to get tx timestamp
                                                     if (symbol === 'ETH') {

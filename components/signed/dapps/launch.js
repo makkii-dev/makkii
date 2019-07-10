@@ -3,15 +3,14 @@ import { View, Text, Image, StyleSheet, TouchableOpacity, Dimensions, DeviceEven
 import { connect } from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {fixedHeight, mainColor, mainBgColor} from "../../style_util";
-import {ComponentTabBar} from "../../common";
-import {HomeComponent} from "../HomeComponent";
 const {width} = Dimensions.get('window')
 import defaultStyles from '../../styles';
 
-class Launch extends HomeComponent{
+class Launch extends Component{
 
-    static navigationOptions = ({ navigation }) => ({
-        title: navigation.getParam('title'),
+    static navigationOptions = ({ navigation, screenProps:{t,lan} }) => ({
+
+        title: t('menuRef.title_dapps',{locale:lan}),
         headerTitleStyle: {
             alignSelf: "center",
             textAlign: "center",
@@ -19,25 +18,7 @@ class Launch extends HomeComponent{
         },
         headerRight: (<View></View>)
     });
-    componentWillMount(){
-        super.componentWillMount();
-        this.update_locale();
 
-        this.listener = DeviceEventEmitter.addListener('locale_change', () => {
-            this.update_locale();
-        });
-    }
-
-    update_locale= () => {
-        this.props.navigation.setParams({
-            'title': strings('menuRef.title_dapps'),
-        });
-    };
-
-    componentWillUnmount() {
-        super.componentWillUnmount();
-        this.listener.remove();
-    }
 
     constructor(props) {
         super(props);
@@ -53,7 +34,7 @@ class Launch extends HomeComponent{
     }
     renderUnavailable(){
         return (
-            <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10,
+            <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20,
                 paddingVertical:20, paddingHorizontal:10,alignItems:'center',justifyContent:'center'}}>
                 <Image source={require('../../../assets/under-construction.png')} style={{width:80,height:80, tintColor: 'gray'}} resizeMode={'contain'}/>
                 <Text style={{color:'gray', textAlign: 'center', marginTop:20}}>{strings('dapp.unavailable_hint')}</Text>
@@ -62,7 +43,7 @@ class Launch extends HomeComponent{
     }
     renderDApp(){
         return(
-            <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20, marginBottom:fixedHeight(156)+10, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
+            <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20, paddingVertical:20, paddingHorizontal:10,alignItems:'center'}}>
                 <View style={{height:120,width:width-20, flexDirection:'row',paddingHorizontal:30}}>
                     <Image source={this.dapp.logo} style={{width:80,height:100, borderColor:'#eee', borderWidth:1,borderRadius:10}} resizeMode={'contain'}/>
                     <View style={{flex:1, justifyContent:'space-between', alignItems:'flex-start',marginLeft:20,paddingHorizontal:10}}>
@@ -101,27 +82,6 @@ class Launch extends HomeComponent{
                 {
                     this.dapp?this.renderDApp():this.renderUnavailable()
                 }
-                <ComponentTabBar
-                    // TODO
-                    style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 0,
-                        height: fixedHeight(156),
-                        left: 0,
-                        backgroundColor: 'white',
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        borderTopWidth: 0.3,
-                        borderTopColor: '#8c8a8a'
-                    }}
-                    active={'dapp'}
-                    onPress={[
-                        ()=>{this.props.navigation.navigate('signed_vault');},
-                        ()=>{this.props.navigation.navigate('signed_dapps_launch');},
-                        ()=>{this.props.navigation.navigate('signed_setting');},
-                    ]}
-                />
             </View>
         )
     }

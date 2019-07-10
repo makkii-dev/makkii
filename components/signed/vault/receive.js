@@ -21,6 +21,7 @@ import { generateQRCode, validateAmount, saveImage } from '../../../utils';
 import ContextMenu from '../../contextMenu';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {COINS} from '../../../coins/support_coin_list';
+import {AppToast} from "../../../utils/AppToast";
 
 const MyScrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const CIRCLE_SIZE = 20;
