@@ -196,7 +196,7 @@ class AddAddress extends Component {
     }
 
     selectCoin=()=> {
-        this.props.navigation.navigate('signed_vault_import_coin', {
+        this.props.navigation.navigate('signed_vault_select_coin', {
             coinSelected: (symbol) => {
                 this.newSymbol = symbol;
                 this.setState({

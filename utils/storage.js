@@ -4,9 +4,9 @@ function clear() {
     return AsyncStorage.clear()
 }
 
-function get(key, defaultValue = null) {
+function get(key, defaultValue = null, needParse = true) {
     return AsyncStorage.getItem(key).then(
-        value => (value !== null ? JSON.parse(value) : defaultValue)
+        value => (value !== null ? needParse?JSON.parse(value) : value : defaultValue)
     )
 }
 

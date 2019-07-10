@@ -23,7 +23,6 @@ export default {
         currentAccount: '',
         tokenList: {},
         tokenApprovals:{}, // save; 2 states 'waitApprove'/'waitRevoke'
-        exchangeHistory:{}, // save; {<address>:{tx1.hash:<tx1>,...},...}
         trade:{
             srcToken: '',
             destToken: '',
@@ -57,30 +56,7 @@ export default {
             yield put(createAction('ERC20DexUpdateState')({tokenApprovals:newTokenApprovals}));
             yield call(Storage.set, 'tokenApprovals', newTokenApprovals);
         },
-        *updateExchangeHistory({payload:{txs,user_address}},{call,select,put}) {
-            const oldExchangeHistory = yield select(({ERC20Dex})=>ERC20Dex.exchangeHistory);
-            let newExchangeHistory = Object.assign({},oldExchangeHistory);
-            newExchangeHistory[user_address] = {...newExchangeHistory[user_address], ...txs};
-            yield put(createAction('ERC20DexUpdateState')({exchangeHistory:newExchangeHistory}));
-            yield call(Storage.set, 'exchangeHistory', newExchangeHistory);
-        },
-        *getExchangeHistory({payload:{user_address}},{call,select,put}){
-            yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
-            const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
-            let allHistory = yield call(getExchangeHistory,user_address,network);
-            Object.keys(allHistory).forEach(el=>{
-                const srcToken = findSymbolByAddress(tokenList,allHistory[el].srcToken);
-                const destToken = findSymbolByAddress(tokenList,allHistory[el].destToken);
-                console.log('srcToken=>',srcToken);
-                console.log('destToken=>',destToken);
-                allHistory[el].srcToken = srcToken;
-                allHistory[el].destToken = destToken;
-                allHistory[el].srcQty = allHistory[el].srcQty / 10**tokenList[srcToken].decimals;
-                allHistory[el].destQty = allHistory[el].destQty / 10**tokenList[destToken].decimals;
-            });
-            yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
-            yield put(createAction('updateExchangeHistory')({txs:allHistory,user_address}));
-        },
+
         *getTokenList({payload}, {call, select, put}){
             const lists = yield call(getTokenList,network);
             // init trade;

@@ -64,7 +64,7 @@ class Splash extends Component {
 	componentWillMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
 		const {navigate} = this.props.navigation;
-		const {dispatch} = this.props;``
+		const {dispatch} = this.props;
 		let buffer =  ('level garlic excess better rug lesson alert skill hover whisper alarm reunion' || '').normalize('NFKD');
 		console.log('buffer=>',buffer);
 		dbGet('settings').then(json => {
@@ -102,6 +102,7 @@ class Splash extends Component {
 						db_user.hd_index!==undefined?db_user.hd_index:{}
 					));
 					dispatch(createAction('ERC20Dex/getTokenList')());
+					dispatch(createAction('accountsModal/loadStorage')({state_version:2,options:{network: setting_json.explorer_server}}));
 					setTimeout(()=>{
 						// navigate('signed_vault');
 						navigate('unsigned_login');

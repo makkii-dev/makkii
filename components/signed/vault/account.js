@@ -6,7 +6,6 @@ import {
 	Text,
 	PixelRatio,
 	Image,
-	Clipboard,
 	RefreshControl,
 	Keyboard,
 	Dimensions,
@@ -15,20 +14,18 @@ import {
 	Platform,
 	ActivityIndicator
 } from 'react-native';
-import {getStatusBarHeight, navigationSafely,accountKey} from "../../../utils";
-import Loading from '../../loading';
-import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
+import {getStatusBarHeight,accountKey} from "../../../utils";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
-import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
+import {mainColor, mainBgColor,linkButtonColor} from "../../style_util";
 import defaultStyles from '../../styles';
 import {PopWindow} from "./home_popwindow";
 import {ACCOUNT_MENU} from "./constants";
 import {Header} from 'react-navigation';
 import {TransactionItem, AddressComponent} from '../../common';
 import {COINS} from '../../../coins/support_coin_list';
-import {getTransactionsByAddress,formatAddress1Line,fetchAccountTokenBalance,fetchAccountTokenTransferHistory,fetchAccountTokens} from '../../../coins/api';
-import {AppToast} from "../../../utils/AppToast";
+import {sameAddress} from '../../../coins/api';
+import {createAction, navigate} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -91,10 +88,8 @@ class Account extends Component {
     };
 	constructor(props){
 		super(props);
-		this.account = this.props.navigation.state.params.account;
-		this.token = this.props.navigation.state.params.token;
-
-		this.account_key = accountKey(this.account.symbol, this.account.address);
+		const {currentAccount} = this.props;
+		this.account_key = accountKey(currentAccount.symbol, currentAccount.address);
 		this.isMount = false;
 
 		this.state={
@@ -103,14 +98,14 @@ class Account extends Component {
 			showMenu: false,
 		};
 		this.props.navigation.setParams({
-			title: this.account.name,
-			type: this.account.type,
+			title: currentAccount.name,
+			type: currentAccount.type,
 			showMenu: this.openMenu,
-            hasMenu: !COINS[this.account.symbol].tokenSupport
+            hasMenu: !COINS[currentAccount.symbol].tokenSupport
 		})
 	}
 	componentWillMount(){
-        this.fetchAccountTransactions(this.account.address);
+        this.fetchAccountTransactions();
 		this.isMount = true;
 		this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
 	}
@@ -120,25 +115,48 @@ class Account extends Component {
 		this.listenNavigation.remove();
 	}
 
-	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return this.props.accounts!==nextProps.accounts || this.state !== nextState;
+
+
+	componentWillReceiveProps(nextProps): void {
+		if(nextProps.currentAccount.name !== this.props.currentAccount.name){
+			this.props.navigation.setParams({
+				title: nextProps.currentAccount.name,
+			})
+		}
 	}
 
-	updateAccountName = (newName) =>{
-	    const {dispatch} = this.props;
-	    dispatch(update_account_name(this.account_key, newName, this.props.user.hashed_password));
-		const {name} = this.props.accounts[this.account_key];
-		this.props.navigation.setParams({
-			title: name,
+
+
+	fetchAccountTransactions = ()=>{
+		const {dispatch,currentAccount} = this.props;
+		dispatch(createAction('accountsModal/getTransactionHistory')({
+			user_address: currentAccount.address,
+			symbol: currentAccount.symbol,
+			tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol?'':currentAccount.coinSymbol,
+			page: 0,
+			size: 5,
+			needSave: true,
+		})).then(r=>{
+			this.isMount &&this.setState({
+				refreshing: false,
+				loading: false,
+			})
 		})
 	};
 
-	onRefresh =(address)=>{
+	onRefresh =()=>{
 		this.setState({
 			refreshing: true,
-		});
-		this.fetchAccountTransactions(address,0,10);
+		},()=>this.fetchAccountTransactions());
 	};
+
+	onReLoad = ()=>{
+		this.setState({
+			loading: true,
+		},()=>this.fetchAccountTransactions());
+	};
+
+
 	openMenu = () => {
 		this.setState({
 			showMenu:true
@@ -146,28 +164,22 @@ class Account extends Component {
 	};
 
 	onCloseMenu = (select) => {
-		const {navigation} = this.props;
-		const {pinCodeEnabled} = this.props.setting;
-		const {hashed_password} = this.props.user;
+		const {dispatch,currentAccount} = this.props;
+		const {navigationSafely} = this.props.screenProps;
 		this.setState({
 			showMenu:false
 		},()=>{
 			switch(select){
 				case ACCOUNT_MENU[0].title:
-					navigation.navigate('signed_vault_change_account_name',{
-					    name: this.account.name,
-						onUpdate: this.updateAccountName,
-					});
-					break;
+                    navigate('signed_vault_set_account_name')({dispatch});
+                    break;
 				case ACCOUNT_MENU[1].title:
-					navigationSafely(
-						pinCodeEnabled,
-						hashed_password,
-						navigation,
-						{
-							url:'signed_vault_export_private_key',
-							args:{privateKey: this.account.private_key},
-						});
+					navigationSafely({routeName:'signed_vault_export_private_key', params:{privateKey: currentAccount.private_key}})({dispatch});
+					break;
+				case ACCOUNT_MENU[2].title:
+					// dispatch(createAction('ethTokenSwap/getTokenList')());
+					dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:currentAccount.address}));
+					navigate('signed_dex')({dispatch});
 					break;
 				default:
 			}
@@ -175,69 +187,31 @@ class Account extends Component {
 	};
 
 	toSend=()=> {
-		Keyboard.dismiss();
 		this.props.navigation.navigate('signed_vault_send', {
 			account: this.account,
 			token: this.token,
 		});
-	}
+	};
 
 	toReceive=()=> {
-		Keyboard.dismiss();
 		this.props.navigation.navigate('signed_vault_receive', {
 		    account: this.account,
 			token: this.token,
 		});
-	}
-
-	fetchAccountTransactions = (address, page=0, size=5, obj={}, callback=()=>{})=>{
-		const {accounts,dispatch,user} = this.props;
-		if (this.token === undefined) {
-			getTransactionsByAddress(this.account.symbol, address, page, size).then(txs => {
-				if (Object.keys(txs).length === 0) {
-					AppToast.show(strings('message_no_more_data'));
-					throw Error('get no transactions')
-				}
-				dispatch(update_account_txs(this.account_key, txs, user.hashed_password,this.account.symbol === 'BTC' || this.account.symbol === 'LTC'));
-				this.isMount && this.setState({
-					refreshing: false,
-					loading: false,
-					...obj
-				})
-			}).catch(error => {
-				console.log(error);
-				this.isMount && this.setState({
-					refreshing: false,
-					loading: false,
-					...obj
-				})
-			});
-		} else {
-			// currently only support aion token
-			const {contractAddr, tokenTxs} = this.token;
-			fetchAccountTokenTransferHistory(this.account.symbol, address, contractAddr, null, page, size).then(txs => {
-				if (Object.keys(txs).length === 0) {
-					AppToast.show(strings('message_no_more_data'));
-					throw Error('get no transactions')
-				}
-
-				this.token.tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
-				dispatch(update_account_tokens(this.account_key, tokens, user.hashed_password));
-				this.isMount && this.setState({
-					refreshing: false,
-					loading: false,
-					...obj
-				}, callback)
-			}).catch(error => {
-				console.log(error);
-				this.isMount && this.setState({
-					refreshing: false,
-					loading: false,
-					...obj
-				}, callback)
-			});
-		}
 	};
+
+	toHistory=()=>{
+		navigate('signed_vault_transaction_history')(this.props);
+	};
+
+	toTxDetail=(item)=>{
+		const {currentAccount} = this.props;
+		navigate('signed_vault_transaction', {
+			account:currentAccount,
+			transaction:item,
+		})(this.props);
+	};
+
 
 	renderEmpty(){
 		if(this.state.loading){
@@ -259,11 +233,7 @@ class Account extends Component {
 
 		}else {
 			return (
-				<TouchableOpacity style={{flex: 1}} onPress={()=>{
-					this.setState({loading:true},()=>{
-						setTimeout(()=>this.fetchAccountTransactions(this.account.address),500);
-					})
-				}}>
+				<TouchableOpacity style={{flex: 1}} onPress={this.onReLoad}>
 					<View style={{
 						width: width,
 						flex: 1,
@@ -289,7 +259,7 @@ class Account extends Component {
 	}
 
 	renderTransactions(transactionsList){
-		console.log('transcationList=>', transactionsList);
+		const {currentAccount} = this.props;
 		if(this.state.loading){
 			return(
 				<View style={{
@@ -315,21 +285,14 @@ class Account extends Component {
 					keyExtractor={(item,index)=>index + ''}
 					renderItem={({item})=><TransactionItem
 						transaction={item}
-						currentAddr={this.account.address}
-						symbol={this.token === undefined? this.account.symbol: this.token.symbol}
-						account={this.account}
-						onPress={()=>{
-							Keyboard.dismiss();
-							this.props.navigation.navigate('signed_vault_transaction',{
-								account:this.account,
-								transaction: item,
-                                token: this.token
-							});
-						}}/>}
+						isSender={sameAddress(currentAccount.symbol, currentAccount.address, item.from)}
+						symbol={currentAccount.coinSymbol}
+						onPress={()=>this.toTxDetail(item)}
+					/>}
 					refreshControl={
 						<RefreshControl
 							refreshing={this.state.refreshing}
-							onRefresh={()=>this.onRefresh(this.account.address)}
+							onRefresh={()=>this.onRefresh(currentAccount.address)}
 							title={'loading'}
 						/>
 					}
@@ -339,26 +302,11 @@ class Account extends Component {
 	}
 
 	render(){
-		const {navigation, setting, accounts} = this.props;
-		const {address, transactions, type, symbol} = this.account;
-		let transactionsList, accountBalanceText;
-		let compareFn = (a, b) => {
-		    if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
-		    if (b.timestamp === undefined && a.timestamp === undefined) return 0;
-		    if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
-		    return b.timestamp - a.timestamp;
-		};
-		if (this.token === undefined) {
-			transactionsList = transactions?Object.values(transactions).slice(0,5):[];
-			accountBalanceText = new BigNumber(accounts[this.account_key].balance).toNotExString() + ' ' + this.account.symbol;
-		} else {
-		    let tokenTxs = accounts[this.account_key].tokens[this.token.symbol].tokenTxs;
-            transactionsList = tokenTxs? Object.values(tokenTxs).sort(compareFn).slice(0,5):[];
-
-			accountBalanceText = new BigNumber(accounts[this.account_key].tokens[this.token.symbol].balance) + ' ' + this.token.symbol;
-		}
+		const {currentAccount, transactions} = this.props;
+		const {address, type, coinSymbol, balance} = currentAccount;
+    	const accountBalanceText = new BigNumber(balance).toNotExString() + ' ' + coinSymbol;
 		const accountBalanceTextFontSize = Math.max(Math.min(32,200* PixelRatio.get() / (accountBalanceText.length +4) - 5), 16);
-		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
+		const popWindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
 		let menuArray = [ACCOUNT_MENU[0]];
 		if (type !== '[ledger]') {
 			menuArray.push(ACCOUNT_MENU[1]);
@@ -370,7 +318,7 @@ class Account extends Component {
 
 					<View style={{justifyContent:'space-between', alignItems:'center', height:130, paddingVertical:20, backgroundColor:mainColor}}>
 						<Text style={{fontSize:accountBalanceTextFontSize, color:'#fff'}}>{accountBalanceText}</Text>
-						<AddressComponent address={address} symbol={this.account.symbol}/>
+						<AddressComponent address={address} symbol={currentAccount.symbol}/>
 					</View>
 					<View style={{width:width,height:60,backgroundColor:'rgba(255,255,255,0.1)',
 						flexDirection:'row',justifyContent:'space-between', alignItems:'center'}}>
@@ -395,12 +343,7 @@ class Account extends Component {
 						<Text style={{marginLeft:10, fontSize: 16, color:'#000'}}>{strings('account_view.transaction_history_label')}</Text>
 						<View style={{flex:1, height:60, alignItems:'flex-end', justifyContent:'center'}}>
 							<TouchableOpacity style={{flexDirection:'row',flex:1,height:60,justifyContent:'flex-end', alignItems:'center'}}
-								onPress={()=>{
-									this.props.navigation.navigate('signed_vault_transaction_history', {
-										account: this.account,
-										token: this.token,
-									})
-								}}
+								onPress={this.toHistory}
 							>
 								<Text style={{fontSize:12,color:linkButtonColor}}>{strings('account_view.complete_button')}</Text>
 								<Image source={require('../../../assets/arrow_right.png')} style={{height:20,width:20,tintColor:'gray'}}/>
@@ -409,7 +352,7 @@ class Account extends Component {
 					</View>
 					<View style={{flex: 1, backgroundColor: mainBgColor}}>
 					{
-						transactionsList.length>0?this.renderTransactions(transactionsList):this.renderEmpty()
+						transactions.length>0?this.renderTransactions(transactions):this.renderEmpty()
 					}
 					</View>
 				</TouchableOpacity>
@@ -420,7 +363,7 @@ class Account extends Component {
 							backgroundColor={'rgba(52,52,52,0.54)'}
 							onClose={(select)=>this.onCloseMenu(select)}
 							data={menuArray}
-							containerPosition={{position:'absolute', top:popwindowTop,right:5}}
+							containerPosition={{position:'absolute', top:popWindowTop,right:5}}
 							imageStyle={{width: 20, height: 20, marginRight:10}}
 							fontStyle={{fontSize:12, color:'#000'}}
 							itemStyle={{flexDirection:'row',justifyContent:'flex-start', alignItems:'center', marginVertical: 10}}
@@ -429,21 +372,38 @@ class Account extends Component {
 						/>
 						:null
 				}
-				<Loading ref={element => {
-					this.loadingView = element;
-				}}/>
 			</View>
 		)
 	}
 }
 
-export default connect(state => {
-	return ({
-		accounts: state.accounts,
-		user: state.user,
-		setting: state.setting,
-	});
-})(Account);
+
+
+const mapToState=({accountsModal})=>{
+	const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModal;
+	const currentAccount = {
+		...accountsMap[key],
+		coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,
+		balance: currentToken===''?accountsMap[key].balance:accountsMap[key].tokens[currentToken]
+	};
+	const txKey = currentToken===''?key: key + '+' +currentToken;
+	const compareFn = (a, b) => {
+		if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+		if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+		if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+		return b.timestamp - a.timestamp;
+	};
+	const transactions = Object.values(transactionsMap[txKey]).sort(compareFn).slice(0,5);
+
+	return({
+		currentAccount,
+		transactions:transactions,
+	})
+};
+
+
+
+export default connect(mapToState)(Account);
 
 const styles=StyleSheet.create({
 	divider: {

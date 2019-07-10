@@ -14,6 +14,7 @@ import BigNumber from 'bignumber.js';
 import commonStyles from "../../styles";
 import {strings} from "../../../locales/i18n";
 import {createAction, navigate, navigateBack} from "../../../utils/dva";
+import {accountKey} from '../../../utils'
 const {width} = Dimensions.get('window');
 class AccountList extends React.Component{
 
@@ -29,7 +30,7 @@ class AccountList extends React.Component{
 
     selectAccount = (address)=>{
         const {dispatch} = this.props;
-        dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:address}));
+        dispatch(createAction('accountsModal/updateState')({currentAccount:accountKey('ETH',address)}));
         navigateBack(this.props);
     };
 
@@ -93,9 +94,10 @@ class AccountList extends React.Component{
     }
 }
 
-const mapToState = ({accounts})=>{
+const mapToState = ({accountsModal})=>{
+    const {accountsMap}  = accountsModal;
     return {
-        accounts:Object.values(Object.keys(accounts).filter(k=>k.toLowerCase().startsWith('eth')).reduce((map,el)=>{map[el]=accounts[el];return map},{})),
+        accounts:Object.values(Object.keys(accountsMap).filter(k=>k.toLowerCase().startsWith('eth')).reduce((map,el)=>{map[el]=accountsMap[el];return map},{})),
     }
 };
 

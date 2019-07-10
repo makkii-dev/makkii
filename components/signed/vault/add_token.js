@@ -9,8 +9,9 @@ import {accountKey} from '../../../utils';
 import {validateAddress, fetchTokenDetail, fetchAccountTokenBalance} from "../../../coins/api";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import Loading from '../../loading';
-import BigNumber from "./select_coin";
+import BigNumber from "./select_token";
 import {AppToast} from "../../../utils/AppToast";
+import {createAction} from "../../../utils/dva";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
@@ -41,12 +42,8 @@ class AddToken extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            contractAddress: '',
-            tokenName: '',
-            symbol: '',
-            decimals: '',
+            contractAddr: '',
         };
-        this.account = props.navigation.getParam('account');
     }
 
     componentWillMount() {
@@ -61,60 +58,35 @@ class AddToken extends Component {
         let scannedData = props.navigation.getParam('scanned', '');
         if (scannedData !== '' && oldData !== scannedData) {
             this.setState({
-                contractAddress: scannedData,
+                contractAddr: scannedData,
             });
             this.fetchTokenDetail(scannedData);
         }
     }
 
     addToken=() => {
-        const {tokenSelected, targetUri} = this.props.navigation.state.params;
-        const {symbol, tokenName, decimals, contractAddress} = this.state;
-        const {accounts, setting, navigation} = this.props;
-        let account_key = accountKey(this.account.symbol, this.account.address);
-        let tokens = accounts[account_key].tokens;
-        if (tokens !== undefined &&
-            tokens[symbol] !== undefined) {
-            AppToast.show(strings('add_token.toast_token_exists'), {
-                position: 0,
-            });
-            return;
-        }
-        this.loadingView.show();
-
-        fetchAccountTokenBalance(this.account.symbol, contractAddress, this.account.address).then(balance=> {
-            this.loadingView.hide();
-            tokenSelected({
-                symbol: symbol,
-                contractAddr: contractAddress,
-                name: tokenName,
-                tokenDecimal: decimals,
-                balance: balance.shiftedBy(-(decimals-0)),
-                tokenTxs: {},
-            });
-            navigation.navigate(targetUri);
-        }).catch(err=> {
-            this.loadingView.hide();
-
-            tokenSelected({
-                symbol: symbol,
-                contractAddr: contractAddress,
-                name: tokenName,
-                tokenDecimal: decimals,
-                balance: new BigNumber(0),
-                tokenTxs: {},
-            });
-            navigation.navigate(targetUri);
-
-        });
-
-    }
+        const {symbol, name, tokenDecimal}= this.props;
+        const {contractAddr} = this.state;
+        const token = {
+            symbol: symbol,
+            contractAddr: contractAddr,
+            name: name,
+            tokenDecimal: tokenDecimal,
+        };
+        const {dispatch,navigation}= this.props;
+        dispatch(createAction('accountsModal/addTokenToCurrentAccount')({token}))
+            .then(r=>{
+                if(r){
+                    navigation.navigate('signed_vault_account');
+                }
+            })
+    };
 
     scan=() => {
         this.props.navigation.navigate('scan', {
             success: 'signed_add_token',
             validate: (data, callback)=>{
-                validateAddress(data.data, this.account.symbol).then(result => {
+                validateAddress(data.data, this.props.currentAccount.symbol).then(result => {
                     if (result) {
                         callback(true);
                     } else {
@@ -123,46 +95,28 @@ class AddToken extends Component {
                 });
             }
         });
-    }
+    };
 
-    // updateEditStatus=(contractAddress, tokenName, symbol, decimals)=>{
-    //     let allFilled = contractAddress.length !== 0
-    //     && tokenName.length !== 0
-    //     && symbol.length !== 0
-    //     && decimals.length !== 0;
-    //     console.log("current isEdit:" + this.props.navigation.getParam('isEdited'));
-    //     console.log("allFilled: " + allFilled);
-    //     if (allFilled !== this.props.navigation.getParam('isEdited')) {
-    //         this.props.navigation.setParams({
-    //             isEdited: allFilled
-    //         })
-    //     }
-    // }
+
 
     fetchTokenDetail=(address) => {
-        this.loadingView.show();
-        fetchTokenDetail(this.account.symbol, address).then(symbol => {
-            this.setState({
-                contractAddress: address,
-                tokenName: symbol.name,
-                symbol: symbol.symbol,
-                decimals: symbol.decimals
+        this.refs['refLoading'].show();
+        const {dispatch,navigation}= this.props;
+        dispatch(createAction('tokenImportModal/fetchTokenDetail')({address:address}))
+            .then(r=>{
+                if(!r){
+                    navigation.setParams({isEdited: false});
+                    AppToast.show(strings('add_token.toast_fetch_token_detail_fail'));
+                }else{
+                    navigation.setParams({isEdited: true});
+                }
+                this.refs['refLoading'].hide();
             });
-            this.props.navigation.setParams({
-                isEdited: true
-            });
-            this.loadingView.hide();
-        }).catch(err=> {
-            console.log("fetch token detail for address: " + address + " failed.");
-            AppToast.show(strings('add_token.toast_fetch_token_detail_fail'));
-            this.props.navigation.setParams({
-                isEdited: false
-            });
-            this.loadingView.hide();
-        });
-    }
+    };
 
     render() {
+        const {symbol, name, tokenDecimal}= this.props;
+        const {contractAddr} = this.state;
         return (
             <View style={{flex:1, backgroundColor: mainBgColor}}>
                 <MyscrollView
@@ -174,12 +128,12 @@ class AddToken extends Component {
                             <SubTextInput
                                 title={strings('add_token.label_contract_address')}
                                 style={styles.text_input}
-                                value={this.state.contractAddress}
+                                value={contractAddr}
                                 multiline={true}
                                 onChangeText={v=>{
-                                    this.setState({contractAddress: v},
+                                    this.setState({contractAddr: v},
                                         () => {
-                                            validateAddress(v, this.account.symbol).then(result=> {
+                                            validateAddress(v, this.props.currentAccount.symbol).then(result=> {
                                                if (result) {
                                                    this.fetchTokenDetail(v);
                                                } else {
@@ -188,7 +142,6 @@ class AddToken extends Component {
                                                    })
                                                }
                                             });
-                                            // this.updateEditStatus(v, this.state.tokenName, this.state.symbol, this.state.decimals);
                                         });
 
                                 }}
@@ -201,45 +154,28 @@ class AddToken extends Component {
                             <SubTextInput
                                 title={strings('add_token.label_token_name')}
                                 style={styles.text_input}
-                                value={this.state.tokenName}
+                                value={name+''}
                                 multiline={false}
                                 editable={false}
-                                // onChangeText={v=>{
-                                //     this.setState({tokenName: v});
-                                //     this.updateEditStatus(this.state.contractAddress, v, this.state.symbol, this.state.decimals);
-                                // }}
-                                // placeholder={strings('add_token.hint_token_name')}
                             />
                             <SubTextInput
                                 title={strings('add_token.label_symbol')}
                                 style={styles.text_input}
-                                value={this.state.symbol}
+                                value={symbol+''}
                                 multiline={false}
                                 editable={false}
-                                // onChangeText={v=>{
-                                //     this.setState({symbol: v});
-                                //     this.updateEditStatus(this.state.contractAddress, this.state.tokenName, v, this.state.decimals);
-                                // }}
-                                // placeholder={strings('add_token.hint_symbol')}
                             />
                             <SubTextInput
                                 title={strings('add_token.label_decimals')}
                                 style={styles.text_input}
-                                value={this.state.decimals}
+                                value={tokenDecimal+''}
                                 multiline={false}
                                 editable={false}
-                                // onChangeText={v=>{
-                                //     this.setState({symbol: v});
-                                //     this.updateEditStatus(this.state.contractAddress, this.state.tokenName, this.state.symbol, v);
-                                // }}
-                                // placeholder={strings('add_token.hint_decimals')}
                             />
                         </View>
                     </TouchableOpacity>
                 </MyscrollView>
-                <Loading ref={element=> {
-                    this.loadingView = element;
-                }}/>
+                <Loading ref={'refLoading'}/>
             </View>
         )
     }
@@ -272,12 +208,13 @@ const styles = StyleSheet.create({
         // flex: 1,
     }
 });
+const mapToState = ({tokenImportModal,accountsModal})=>{
+    const {currentAccount:key,accountsMap} = accountsModal;
+    const {tokenToBeImported} = tokenImportModal;
+    return({
+        ...tokenToBeImported,
+        currentAccount: accountsMap[key],
+    })
+};
 
-export default connect( state => {
-    return {
-        accounts: state.accounts,
-        user: state.user,
-        setting: state.setting,
-    };
-
-})(AddToken);
+export default connect(mapToState)(AddToken);

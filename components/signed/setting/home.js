@@ -1,13 +1,12 @@
 
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {View,DeviceEventEmitter,Dimensions, FlatList, PixelRatio, ScrollView} from 'react-native';
+import {View,Dimensions, FlatList, PixelRatio, ScrollView} from 'react-native';
 import AionCell from '../../cell.js';
 import {strings} from '../../../locales/i18n';
 import {SETTINGS} from './constants';
-import {fixedHeight, mainBgColor} from "../../style_util";
+import {mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
-import {navigationSafely} from '../../../utils';
 import {popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
@@ -24,8 +23,7 @@ class Home extends Component {
 
 	render(){
 		const {navigation} = this.props;
-		const {pinCodeEnabled} = this.props.setting;
-		const {hashed_password} = this.props.user;
+		const {navigationSafely} =  this.props.screenProps;
 		return (
 			<View style={{
 				backgroundColor: mainBgColor,
@@ -53,14 +51,7 @@ class Home extends Component {
 									leadIcon={item.icon}
 									onClick={() => {
 										if(item.title==='recovery_phrase.title'){
-											navigationSafely(
-												pinCodeEnabled,
-												hashed_password,
-												navigation,
-												{
-													url:item.route_url,
-												}
-											);
+											navigationSafely({routeName:item.route_url})(this.props);
 										}else {
 											navigation.navigate(item.route_url);
 										}
@@ -105,35 +96,9 @@ class Home extends Component {
 							}}/>
 					</View>
 				</ScrollView>
-				{/*<ComponentTabBar*/}
-				{/*	// TODO*/}
-				{/*	style={{*/}
-				{/*		position: 'absolute',*/}
-				{/*		bottom: 0,*/}
-				{/*		right: 0,*/}
-				{/*		height: fixedHeight(156),*/}
-				{/*		left: 0,*/}
-				{/*		backgroundColor: 'white',*/}
-				{/*		flexDirection: 'row',*/}
-				{/*		justifyContent: 'space-around',*/}
-				{/*		borderTopWidth: 0.3,*/}
-				{/*		borderTopColor: '#8c8a8a'*/}
-				{/*	}}*/}
-				{/*	active={'settings'}*/}
-				{/*	onPress={[*/}
-				{/*		()=>{this.props.navigation.navigate('signed_vault');},*/}
-				{/*		()=>{this.props.navigation.navigate('signed_dapps_launch');},*/}
-				{/*		()=>{},*/}
-				{/*	]}*/}
-				{/*/>*/}
 			</View>
 		);
 	}
 }
 
-export default connect(state => {
-	return {
-		setting: state.setting,
-		user: state.user,
-	};
-})(Home);
+export default connect()(Home);

@@ -2,18 +2,17 @@ import React from 'react';
 import {
     View,
     TextInput,
-    StyleSheet, Dimensions, Text, TouchableOpacity, Keyboard, DeviceEventEmitter
+    StyleSheet, Dimensions, Text, TouchableOpacity, Keyboard
 } from 'react-native';
 import {RightActionButton} from "../../common";
 import {strings} from "../../../locales/i18n";
-import {update_account_name} from "../../../actions/accounts";
 import {connect} from "react-redux";
 import {mainBgColor, mainColor} from '../../style_util';
-import Toast from "react-native-root-toast";
 import {strLen} from "../../../utils";
+import {createAction} from "../../../utils/dva";
 const {width} = Dimensions.get('window');
 
-class ChangeAccountNameScreen extends  React.Component {
+class SetAccountNameScreen extends  React.Component {
     static navigationOptions = ({ navigation }) => {
         const updateAccountName =  navigation.getParam('updateAccountName', ()=>{});
         const isEdited = navigation.getParam('isEdited', false);
@@ -33,16 +32,9 @@ class ChangeAccountNameScreen extends  React.Component {
 
     constructor(props){
         super(props);
-        const {navigation} = this.props;
-        this.oldName = navigation.getParam('name', '');
-        this.targetUri = navigation.getParam('targetUri', '');
-
-        // this.addr=navigation.getParam('address');
-        this.onUpdate = navigation.getParam('onUpdate',()=>{});
-        // this.account = this.props.accounts[this.addr];
+        const {navigation, oldName} = this.props;
         this.state={
-            // textValue: this.account.name,
-            textValue: this.oldName,
+            textValue: oldName,
             editable: true,
         };
         navigation.setParams({
@@ -50,29 +42,27 @@ class ChangeAccountNameScreen extends  React.Component {
         })
     }
     updateAccountName=()=>{
-        const {dispatch, navigation} = this.props;
+        const {dispatch, navigation, usage} = this.props;
         const {textValue} = this.state;
-        // const key = this.account.address;
         this.setState({editable:false},()=>{
-            // dispatch(update_account_name(key,textValue,this.props.user.hashed_password));
-            this.onUpdate(textValue);
-            if (this.targetUri === '') {
-                navigation.goBack();
-            } else {
-                console.log("targetUri" + this.targetUri);
-                navigation.navigate(this.targetUri);
-            }
+           if(usage === 'import_account'){
+               dispatch(createAction('accountImportModal/importAccount')({name:textValue}))
+                   .then(r=>navigation.navigate('signed_vault'));
+           }else if (usage === 'change_account_name'){
+               dispatch(createAction('accountsModal/changeCurrentAccountName')({name:textValue}))
+                   .then(r=>navigation.goBack());
+           }
         });
     };
 
     onChangeText = (text) => {
-        const {navigation} = this.props;
+        const {navigation,oldName} = this.props;
         if (strLen(text) <= 15) {
             this.setState({
                 textValue: text,
             }, () => {
                 navigation.setParams({
-                    isEdited: this.state.textValue !== this.oldName&&text.trim()!=='',
+                    isEdited: this.state.textValue !== oldName&&text.trim()!=='',
                 })
             })
         }else {
@@ -103,13 +93,20 @@ class ChangeAccountNameScreen extends  React.Component {
         )
     }
 }
+const mapToState = ({accountImportModal, accountsModal}) =>{
+    const {readyToImport} = accountImportModal;
+    const {currentAccount:key, accountsMap} = accountsModal;
+    let oldName = '';
+    if(!readyToImport &&accountsMap[key]){
+        oldName = accountsMap[key].name ;
+    }
+    return({
+        oldName: oldName,
+        usage: readyToImport? 'import_account': 'change_account_name',
+    })
+};
 
-export default connect(state => {
-    return ({
-        accounts: state.accounts,
-        user: state.user,
-    });
-})(ChangeAccountNameScreen);
+export default connect(mapToState)(SetAccountNameScreen);
 
 const styles=StyleSheet.create({
     container:{

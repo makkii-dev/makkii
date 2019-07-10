@@ -204,7 +204,8 @@
     "no_satisfied_accounts": "No matched accounts found",
     "toast_has_pending_transactions": "There are pending transactions, please wait.",
     "section_title_add_from": "Add from",
-    "section_title_coin_type": "Coin Type"
+    "section_title_coin_type": "Coin Type",
+    "toast_is_getting_balance": "Getting account balance, please try later"
   },
   "language": {
     "title": "Language",

@@ -14,7 +14,7 @@ import {
 } from "react-navigation-redux-helpers";
 import {connect} from 'react-redux';
 import {AppToast} from "../utils/AppToast";
-
+import {navigationSafely} from '../utils'
 // ui
 import Scan                  	from './scan.js';
 import Splash                	from './splash.js';
@@ -25,15 +25,15 @@ import Recovery              	from './unsigned/recovery.js';
 import Vault                	from './signed/vault/home.js';
 import VaultAccount         	from './signed/vault/account.js';
 import VaultAccountTokens       from './signed/vault/account_tokens.js';
-import VaultImportHdWallet   	from './signed/vault/import_list';
-import VaultImportCoin          from './signed/vault/import_coin';
+import VaultImportHdWallet   	from './signed/vault/import_ledger_lists';
+import VaultSelectCoin          from './signed/vault/select_coin';
 import VaultImportFrom          from './signed/vault/import_from';
 import VaultImportPrivateKey 	from './signed/vault/import_private_key.js';
 import VaultReceive          	from './signed/vault/receive.js';
 import VaultSend             	from './signed/vault/send.js';
 import VaultTransaction      	from './signed/vault/transaction.js';
 import VaultTransactionHistory 	from './signed/vault/transaction_history.js';
-import VaultChangeAccountName   from './signed/vault/change_account_name.js';
+import VaultSetAccountName   from './signed/vault/set_account_name.js';
 import VaultExportPRivateKey    from './signed/vault/export_private_key.js';
 import Dapps                 	from './signed/dapps/home.js';
 import DappsDapp             	from './signed/dapps/dapp.js';
@@ -57,7 +57,7 @@ import SettingAddAddress        from './signed/setting/add_address.js';
 import RecoveryPassword      	from './unsigned/recovery_password.js';
 import SimpleWebView         	from './WebViewComponent';
 import PinCodeScreen            from './pinCodeScreen';
-import SelectCoin               from './signed/vault/select_coin';
+import SelectToken               from './signed/vault/select_token';
 import AddToken                 from './signed/vault/add_token';
 
 
@@ -315,8 +315,8 @@ const AppNavigator = createStackNavigator({
             headerStyle: styles.headerStyleWithoutShadow,
         }),
     },
-    'signed_vault_import_coin': {
-        screen: VaultImportCoin,
+    'signed_vault_select_coin': {
+        screen: VaultSelectCoin,
         navigationOptions,
     },
     'signed_vault_import_from': {
@@ -339,8 +339,8 @@ const AppNavigator = createStackNavigator({
         screen: VaultSend,
         navigationOptions,
     },
-    'signed_select_coin': {
-        screen: SelectCoin,
+    'signed_select_token': {
+        screen: SelectToken,
         navigationOptions: ({navigation}) =>({
             headerLeft: (
                 <TouchableOpacity onPress={()=>{navigation.goBack()}} style={{
@@ -383,8 +383,8 @@ const AppNavigator = createStackNavigator({
         screen: VaultTransactionHistory,
         navigationOptions,
     },
-    'signed_vault_change_account_name':{
-        screen: VaultChangeAccountName,
+    'signed_vault_set_account_name':{
+        screen: VaultSetAccountName,
         navigationOptions: navigationOptionsWithoutRight,
     },
     'signed_vault_export_private_key':{
@@ -511,14 +511,14 @@ class Router extends PureComponent {
         BackHandler.addEventListener("hardwareBackPress", this.backHandle);
         this.props.dispatch(createAction('txsListener/loadStorage')());
         this.props.dispatch(createAction('ERC20Dex/loadStorage')());
-        this.listenTx = setInterval(()=>{
-            this.props.dispatch(createAction('txsListener/checkAllTxs')());
-        },10*1000);
+        // this.listenTx = setInterval(()=>{
+        //     this.props.dispatch(createAction('txsListener/checkAllTxs')());
+        // },10*1000);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backHandle);
-        clearInterval(this.listenTx);
+        // clearInterval(this.listenTx);
     }
 
     backHandle = () => {
@@ -553,18 +553,21 @@ class Router extends PureComponent {
     }
 
     render() {
-        const { app, dispatch, router,setting} = this.props;
+        const {user, dispatch, router,setting} = this.props;
 
         return <App dispatch={dispatch} state={router} screenProps={{
                 t:strings,
                 lan: setting.lan,
+                navigationSafely:({routeName, params, onVerifySuccess=undefined})=>({dispatch})=>{
+                    navigationSafely(setting.pinCodeEnabled,user.hashed_password,{routeName,params,onVerifySuccess})({dispatch});
+                }
             }}/>
     }
 }
 
 const mapStateToProps = state => {
-    const { app, router,setting} = state;
-    return { app, router,setting };
+    const { app, router,setting,user} = state;
+    return { app, router,setting,user};
 };
 
 export default connect(mapStateToProps)(Router);

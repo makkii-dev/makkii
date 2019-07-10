@@ -33,10 +33,13 @@ class ExchangeHistory extends React.Component {
 
     onRefresh= ()=>{
         const {dispatch,currentAccount} = this.props;
-        dispatch(createAction('ERC20Dex/getExchangeHistory')({user_address:currentAccount.address}))
+        this.refs['refLoading'].show();
+        dispatch(createAction('accountsModal/getExchangeHistory')({user_address:currentAccount.address})).then(r=>{
+            this.refs['refLoading'].hide();
+        })
     };
 
-    goToTxDetail = (item)=>{
+    toTxDetail = (item)=>{
         const {currentAccount} = this.props;
         const transaction= {
             to: '0x818e6fecd516ecc3849daf6845e3ec868087b755',
@@ -96,7 +99,7 @@ class ExchangeHistory extends React.Component {
         const {status,timestamp:timestampSrc,srcToken,destToken,srcQty,destQty} = item;
         const timestamp = !timestampSrc? '': new Date(timestampSrc).Format("yyyy/MM/dd hh:mm");
         return(
-            <TouchableOpacity onPress={()=>this.goToTxDetail(item)}>
+            <TouchableOpacity onPress={()=>this.toTxDetail(item)}>
                 <View style={styles.transactionContainer}>
                     <View style={styles.transactionHeader}>
                         <Text>{timestamp}</Text>
@@ -135,7 +138,7 @@ class ExchangeHistory extends React.Component {
 
 
     render(){
-        const {currentAccount,exchangeHistory,isWaiting} = this.props;
+        const {currentAccount,exchangeHistory} = this.props;
         let content;
         if(currentAccount){
             if(exchangeHistory.length){
@@ -149,15 +152,16 @@ class ExchangeHistory extends React.Component {
         return (
             <View style={{flex:1}}>
                 {content}
-                <Loading isShow={isWaiting}/>
+                <Loading ref={'refLoading'}/>
             </View>
         )
 
     }
 }
 
-const mapToState = ({ERC20Dex,accounts})=>{
-    const currentAccount = accounts[accountKey('ETH',ERC20Dex.currentAccount)];
+const mapToState = ({accountsModal})=>{
+    const {currentAccount:key, accountsMap, transactionsMap} = accountsModal;
+    const currentAccount = accountsMap[key];
     let exchangeHistory = [];
     let compareFn = (a, b) => {
         if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
@@ -167,7 +171,7 @@ const mapToState = ({ERC20Dex,accounts})=>{
     };
 
     if (currentAccount){
-        const tmp = ERC20Dex.exchangeHistory[currentAccount.address]||{};
+        const tmp = transactionsMap[key+'+ERC20DEX']||{};
         exchangeHistory = Object.keys(tmp).map(k=>{
             return ({
                 ...tmp[k],
@@ -178,7 +182,6 @@ const mapToState = ({ERC20Dex,accounts})=>{
     return ({
         currentAccount: currentAccount,
         exchangeHistory: exchangeHistory,
-        isWaiting:ERC20Dex.isWaiting,
     })
 };
 

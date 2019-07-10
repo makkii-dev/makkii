@@ -178,7 +178,7 @@ class InputMultiLines extends Component{
 	}
 }
 
-class ImportListfooter extends React.PureComponent {
+class ImportListFooter extends React.PureComponent {
 
     static defaultProps = {
         hasSeparator: true,
@@ -571,26 +571,21 @@ class PendingComponent extends React.Component {
 
 class TransactionItem extends React.PureComponent{
 	static propTypes ={
-		account: PropTypes.object.isRequired,
 		transaction: PropTypes.object.isRequired,
 		onPress: PropTypes.func.isRequired,
-        currentAddr: PropTypes.string.isRequired,
 		symbol: PropTypes.string.isRequired,
+		isSender: PropTypes.bool.isRequired,
 	};
 
 
 	render(){
-		const {transaction, onPress,currentAddr,symbol, account} = this.props;
+		const {transaction, onPress,isSender,symbol} = this.props;
         const timestamp = transaction.timestamp === undefined? '': new Date(transaction.timestamp).Format("yyyy/MM/dd hh:mm");
-		const isSender = sameAddress(account.symbol, transaction.from, currentAddr);
 		const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
 		const fixed = Math.min(8,Math.max(0, (m[1] || '').length - m[2]));
 		const value = isSender? '-'+new BigNumber(transaction.value).toFixed(fixed): '+'+new BigNumber(transaction.value).toFixed(fixed);
 		const valueColor = isSender? 'red':'green';
-		// if(transaction.status === 'PENDING'){
-		// 	console.log('account:' + currentAddr +' try to get transaction '+transaction.hash+' status');
-		// 	listenTx.addTransaction(transaction, account.symbol, account.symbol === symbol? undefined: symbol);
-		// }
+
 
 		return (
 			<TouchableOpacity
@@ -719,7 +714,7 @@ module.exports = {
 	TextInputWithTitle,
 	PasswordInput,
 	PasswordInputWithTitle,
-	ImportListfooter,
+	ImportListFooter: ImportListFooter,
 	TransactionItemCell,
 	RightActionButton,
 	SubTextInput,
