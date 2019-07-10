@@ -60,7 +60,7 @@ class Login extends Component {
                 text: strings('alert_button_upgrade'),
                 onPress: () => {
                     if (Platform.OS === 'android') {
-                        this.upgradeForAndroid(version);
+                        setTimeout(() => this.upgradeForAndroid(version), 500);
                     } else {
                         this.upgradeForiOS();
                     }
@@ -78,6 +78,14 @@ class Login extends Component {
 		Linking.removeEventListener('url', this.handleOpenURL);
 	}
 	tryDownload=(version, filePath) => {
+        popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
+            type: 'progress',
+            cancelable: false,
+            canHide: false,
+            callback: () => {
+            },
+            progress: 0.01,
+        });
         let download = RNFS.downloadFile({
             fromUrl: version.url,
             toFile: filePath,
@@ -101,14 +109,6 @@ class Login extends Component {
             console.log("download error: ", error);
             AppToast.show(strings('version_upgrade.toast_download_fail'));
             this.popupUpdateDialog(version);
-        });
-
-        popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
-            type: 'progress',
-            cancelable: false,
-            canHide: false,
-            callback: ()=> {},
-            progress: 0.01,
         });
     }
 	upgradeForAndroid = (version) => {

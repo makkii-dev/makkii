@@ -134,7 +134,8 @@
     "viewInExplorer_button": "VIEW IN EXPLORER",
     "PENDING": "PENDING",
     "FAILED": "FAILED",
-    "CONFIRMED": "CONFIRMED"
+    "CONFIRMED": "CONFIRMED",
+    "UNCONFIRMED": "UNCONFIRMED"
   },
   "account_view": {
     "send_button": "SEND",

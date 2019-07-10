@@ -153,7 +153,7 @@ class AddToken extends Component {
             });
             this.loadingView.hide();
         }).catch(err=> {
-            console.log("fetch token detail for address: " + address + " failed.");
+            console.log("fetch token detail for address: " + address + " failed:", err);
             AppToast.show(strings('add_token.toast_fetch_token_detail_fail'));
             this.props.navigation.setParams({
                 isEdited: false

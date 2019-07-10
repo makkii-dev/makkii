@@ -17,7 +17,12 @@ import {
 } from 'react-native';
 import {getStatusBarHeight, navigationSafely,accountKey} from "../../../utils";
 import Loading from '../../loading';
-import {update_account_txs, update_account_tokens, update_account_name} from "../../../actions/accounts";
+import {
+	update_account_txs,
+	update_account_tokens,
+	update_account_name,
+	update_account_token_txs
+} from "../../../actions/accounts";
 import BigNumber from 'bignumber.js';
 import {strings} from "../../../locales/i18n";
 import {mainColor, fixedWidthFont, mainBgColor,linkButtonColor} from "../../style_util";
@@ -214,22 +219,21 @@ class Account extends Component {
 			});
 		} else {
 			// currently only support aion token
-			const {contractAddr, tokenTxs} = this.token;
+			const {contractAddr} = this.token;
 			fetchAccountTokenTransferHistory(this.account.symbol, address, contractAddr, null, page, size).then(txs => {
 				if (Object.keys(txs).length === 0) {
 					AppToast.show(strings('message_no_more_data'));
 					throw Error('get no transactions')
 				}
 
-				this.token.tokenTxs = tokenTxs?Object.assign({}, tokenTxs, txs): txs;
-				dispatch(update_account_tokens(this.account_key, tokens, user.hashed_password));
+				dispatch(update_account_token_txs(this.account_key, txs, this.token.symbol, user.hashed_password));
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
 					...obj
 				}, callback)
 			}).catch(error => {
-				console.log(error);
+				console.log('fetchAccountTokenTransferHistory err=>',error);
 				this.isMount && this.setState({
 					refreshing: false,
 					loading: false,
@@ -289,7 +293,6 @@ class Account extends Component {
 	}
 
 	renderTransactions(transactionsList){
-		console.log('transcationList=>', transactionsList);
 		if(this.state.loading){
 			return(
 				<View style={{

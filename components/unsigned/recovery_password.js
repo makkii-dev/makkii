@@ -92,6 +92,8 @@ class Password extends Component {
 									},
 									{
 										text: strings('alert_ok_button'), onPress: () => {
+											const {navigate} = this.props.navigation;
+											const {setting} = this.props;
 											let hashed_password = hashPassword(this.state.password);
 
 											dispatch(delete_accounts(hashed_password));
@@ -100,11 +102,11 @@ class Password extends Component {
 
 											sendRecoveryEventLog();
 
-											this.setState({
-												password: '',
-												password_confirm: '',
-											});
-											this.props.navigation.navigate('signed_vault');
+											listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
+											listenApp.handleActive = ()=>{};
+											listenApp.timeOut = setting.login_session_timeout;
+											listenApp.start();
+											navigate('signed_vault');
 										}
 									},
 								]
@@ -118,4 +120,4 @@ class Password extends Component {
 	}
 }
 
-export default connect()(Password);
+export default connect(({setting})=>({setting}))(Password);

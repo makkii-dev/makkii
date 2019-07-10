@@ -23,8 +23,8 @@ const sendTransaction = (account, symbol, to, value, extra_params, data, network
                };
                resolve({pendingTx});
            }).catch(e=>reject(e))
-       })
-    });
+       }).catch(e=>reject(e))
+    }).catch(e=>reject(e));
 });
 
 const getTransactionUrlInExplorer = (txHash, network = 'BTC') => `https://chain.so/tx/${network}/${txHash}`;

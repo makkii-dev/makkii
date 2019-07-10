@@ -7,6 +7,7 @@ import {getEndpoint, processRequest} from "./jsonrpc";
 import ApiCaller from "../../utils/http_caller";
 import axios from "axios";
 import Config from 'react-native-config';
+import {hexToAscii} from '../../utils';
 
 const CONTRACT_ABI = [
     {
@@ -126,7 +127,7 @@ const CONTRACT_ABI = [
 
 function fetchAccountTokens(address, network){
     return new Promise((resolve, reject) => {
-        const url = `https://${network}-api.aion.network/aion/dashboard/getAccountDetails?accountAddress=${address}`;
+        const url = `https://${network}-api.aion.network/aion/dashboard/getAccountDetails?accountAddress=${address.toLowerCase()}`;
         fetchRequest(url, 'GET').then(json => {
             let res = {};
             if (json.content.length > 0) {
@@ -193,21 +194,32 @@ const fetchTokenDetail = (contract_address, network) => new Promise((resolve, re
             console.log('[get token symobl resp]=>',symbolRet.data);
             console.log('[get token name resp]=>',nameRet.data);
             console.log('[get token decimals resp]=>',decimalsRet.data);
-            const symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
-            const name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            let symbol, name;
+            try {
+                symbol = AbiCoder.decodeParameter('string', symbolRet.data.result);
+            } catch (e) {
+                symbol = hexToAscii(symbolRet.data.result);
+                symbol = symbol.slice(0, symbol.indexOf('\u0000'));
+            }
+            try {
+                name = AbiCoder.decodeParameter('string', nameRet.data.result);
+            } catch (e) {
+                name = hexToAscii(nameRet.data.result);
+                name = name.slice(0, name.indexOf('\u0000'));
+            }
             const decimals = AbiCoder.decodeParameter('uint8',decimalsRet.data.result);
             resolve({contractAddr:contract_address,symbol,name,decimals})
         }else {
             reject("get token detail failed");
         }
     })).catch(e=>{
-        reject("get token detail failed",e);
-    })
+        reject("get token detail failed"+e);
+    });
 });
 
 function fetchAccountTokenTransferHistory(address, symbolAddress, network, page=0, size=25){
     return new Promise((resolve, reject) => {
-        const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address}&tokenAddress=${symbolAddress}&page=${page}&size=${size}`;
+        const url = `https://${network}-api.aion.network/aion/dashboard/getTransactionsByAddress?accountAddress=${address.toLowerCase()}&tokenAddress=${symbolAddress.toLowerCase()}&page=${page}&size=${size}`;
         console.log("get account token transactions: " + url);
         fetchRequest(url,"GET").then(res=>{
             const {content} = res;
