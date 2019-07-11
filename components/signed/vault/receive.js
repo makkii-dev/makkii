@@ -20,7 +20,6 @@ import {strings} from "../../../locales/i18n";
 import { generateQRCode, validateAmount, saveImage } from '../../../utils';
 import ContextMenu from '../../contextMenu';
 import { KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import {COINS} from '../../../coins/support_coin_list';
 import {AppToast} from "../../../utils/AppToast";
 
 const MyScrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
@@ -55,13 +54,10 @@ class Receive extends Component {
 	constructor(props){
 		super(props);
 		this.qrcodeRef = null;
-		this.account = this.props.navigation.state.params.account;
-		this.token = this.props.navigation.state.params.token;
-		this.addr=this.account.address;
-		this.unit = this.token === undefined? this.account.symbol: this.token.symbol;
+		const {currentAccount} = this.props;
 		this.state={
 			amount: '0',
-			qrCodeValue: generateQRCode('0', this.addr, this.unit),
+			qrCodeValue: generateQRCode('0', currentAccount.address, currentAccount.coinSymbol),
 		}
 
 	}
@@ -72,10 +68,10 @@ class Receive extends Component {
 			alert_ok(strings('alert_title_error'), strings('invalid_amount'));
 			return;
 		}
-
+		const {currentAccount} = this.props;
 		// refresh
 		this.setState({
-			qrCodeValue: generateQRCode(this.state.amount, this.addr, this.unit),
+			qrCodeValue: generateQRCode(this.state.amount, currentAccount.address, currentAccount.coinSymbol),
 		})
 	}
 	longPressCode() {
@@ -196,4 +192,16 @@ class Receive extends Component {
 	}
 }
 
-export default connect(state => { return ({ accounts: state.accounts }); })(Receive);
+
+const mapToState = ({accountsModal})=>{
+	const {currentAccount:key,currentToken, accountsMap}=accountsModal;
+	const currentAccount = {
+		...accountsMap[key],
+		coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,
+	};
+	return ({
+		currentAccount
+	})
+};
+
+export default connect(mapToState)(Receive);

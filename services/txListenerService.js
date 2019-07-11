@@ -16,9 +16,9 @@ const getTxsStatus = (txs)=>{
  */
 
 const getOneTxStatus = async (tx)=>{
-    const {oldTx, symbol, listenerStatus} = tx;
+    const {oldTx, symbol, listenerStatus, timestamp} = tx;
     try {
-        let newTx = Object.assign({},oldTx);
+        let newTx = {...oldTx};
         let newListenerStatus = listenerStatus;
         console.log(`tx[${oldTx.hash}] listenerStatus=>${listenerStatus}`);
         if('waitReceipt'===listenerStatus){
@@ -30,7 +30,7 @@ const getOneTxStatus = async (tx)=>{
                     newTx.status = 'CONFIRMED';
                     newListenerStatus = 'CONFIRMED'
                 }
-                return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
+                return {newTx: newTx, symbol, listenerStatus:newListenerStatus, timestamp};
             }else{ //failed
                 newTx.status = 'FAILED';
                 newListenerStatus = 'FAILED';
@@ -40,7 +40,7 @@ const getOneTxStatus = async (tx)=>{
                         newTx.timestamp = fromHexString(timestamp, 16) * 1000;
                     }catch{}
                 }
-                return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
+                return {newTx: newTx, symbol, listenerStatus:newListenerStatus, timestamp};
             }
         }else{
             const number = await getBlockNumber(symbol);
@@ -53,13 +53,13 @@ const getOneTxStatus = async (tx)=>{
                         newTx.timestamp = fromHexString(timestamp, 16) * 1000;
                     }catch{}
                 }
-                return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
+                return {newTx: newTx, symbol, listenerStatus:newListenerStatus, timestamp};
             }else{// stay wait
-                return {newTx: newTx, symbol, listenerStatus:newListenerStatus};
+                return {newTx: newTx, symbol, listenerStatus:newListenerStatus, timestamp};
             }
         }
     }catch (e) {
-        return {newTx:oldTx, symbol, listenerStatus};
+        return {newTx:oldTx, symbol, listenerStatus, timestamp};
     }
 };
 

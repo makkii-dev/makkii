@@ -187,17 +187,12 @@ class Account extends Component {
 	};
 
 	toSend=()=> {
-		this.props.navigation.navigate('signed_vault_send', {
-			account: this.account,
-			token: this.token,
-		});
+		this.props.dispatch(createAction('txSenderModal/reset')());
+		this.props.navigation.navigate('signed_vault_send');
 	};
 
 	toReceive=()=> {
-		this.props.navigation.navigate('signed_vault_receive', {
-		    account: this.account,
-			token: this.token,
-		});
+		this.props.navigation.navigate('signed_vault_receive');
 	};
 
 	toHistory=()=>{

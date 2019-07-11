@@ -12,6 +12,7 @@ import {strings} from "../locales/i18n";
 import {COINS} from "../coins/support_coin_list";
 import {popCustom} from "../utils/dva";
 import {Storage} from "../utils/storage";
+import BigNumber from 'bignumber.js';
 
 const ETHID = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const network = COINS.ETH.network;
@@ -105,14 +106,17 @@ export default {
                 if(!tradeDatResp.error){
                     const rawTx = tradeDatResp.data[0];
                     console.log('rawTx=>',rawTx);
-                    yield put(NavigationActions.navigate({
-                        routeName:'signed_vault_send',
-                        params:{
-                            rawTx:rawTx,
-                            account:account,
-                            title:strings('token_exchange.title_exchange'),
-                            txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}
-                        }}));
+                    yield put(createAction('accountsModal/updateState')({currentToken:''}));
+                    yield put(createAction('txSenderModal/updateState')({
+                        txObj:{
+                            ...rawTx,
+                            gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),
+                            gasLimit:BigNumber(rawTx.gasLimit).toNumber(),
+                            amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber()
+                        },
+                        editable:false,
+                        txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}}));
+                    yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title:strings('token_exchange.title_exchange'),}}));
                 }else{
                     AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);
                 }
@@ -181,14 +185,17 @@ export default {
                     if(!tradeDatResp.error){
                         const rawTx = tradeDatResp.data[0];
                         console.log('rawTx=>',rawTx);
-                        yield put(NavigationActions.navigate({
-                            routeName:'signed_vault_send',
-                            params:{
-                                rawTx:rawTx,
-                                account:account,
-                                title:strings('token_exchange.title_exchange'),
-                                txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty,status:'PENDING'}}
-                            }}))
+                        yield put(createAction('accountsModal/updateState')({currentToken:''}));
+                        yield put(createAction('txSenderModal/updateState')({
+                            txObj:{
+                                ...rawTx,
+                                gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),
+                                gasLimit:BigNumber(rawTx.gasLimit).toNumber(),
+                                amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber()
+                            },
+                            editable:false,
+                            txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}}));
+                        yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title:strings('token_exchange.title_exchange'),}}))
                     }else{
                         AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);
                     }
@@ -203,7 +210,17 @@ export default {
             const rawTx = yield call(getApproveAuthorizationTx,account.address,tokenList[token].address,network);
             console.log('rawTx=>', rawTx);
             yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
-            yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{rawTx:rawTx, account:account, title,txType:{type:'approve',data:{symbol:token, state:type}}}}))
+            yield put(createAction('accountsModal/updateState')({currentToken:''}));
+            yield put(createAction('txSenderModal/updateState')({
+                txObj:{
+                    ...rawTx,
+                    gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),
+                    gasLimit:BigNumber(rawTx.gasLimit).toNumber(),
+                    amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber()
+                },
+                editable:false,
+                txType:{type:'approve',data:{symbol:token, state:type}}}));
+            yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title}}))
         }
 
     }

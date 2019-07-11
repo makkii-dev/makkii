@@ -1,5 +1,5 @@
 import ApiCaller from '../../utils/http_caller';
-
+import BigNumber from 'bignumber.js'
 const baseurl = 'https://chain.so/api/v2';
 
 const getBalance = (address, network= 'BTC') => new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ const getUnspentTx = (address, network = 'BTC')=> new Promise((resolve,reject)=>
             txs.forEach(tx=>{
                 utxos.push({
                     script:tx.script_hex,
-                    amount:new BigNumber(tx.value).shiftedBy(8).toNumber(),
+                    amount: BigNumber(tx.value).shiftedBy(8).toNumber(),
                     hash:tx.txid,
                     index:tx.output_no,
                 })

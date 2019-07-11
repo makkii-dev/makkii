@@ -140,7 +140,6 @@ class Scan extends Component {
 			       	flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
 	  				captureAudio={false}
 	  				onBarCodeRead={e=>{
-	  					console.log('scan read =>', e);
 	  					if(validate&&success){
 	  						validate(e, (result, message='') => {
 	  							if (result) {

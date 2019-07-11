@@ -1,5 +1,4 @@
 import {getTxsStatus} from "../services/txListenerService";
-import {update_account_token_txs, update_account_txs} from "../actions/accounts";
 import {accountKey} from "../utils";
 import {createAction} from "../utils/dva";
 import {Storage} from "../utils/storage";
@@ -7,7 +6,19 @@ import {AppToast} from "../utils/AppToast";
 import {strings} from "../locales/i18n";
 import {findSymbolByAddress, getExchangeHistory} from "../services/erc20DexService";
 import {COINS} from "../coins/support_coin_list";
-const network = COINS.ETH.network;
+const ERC20DEX_NETWORK = COINS.ETH.network;
+const TIMEOUT = 10*60*1000;
+Array.prototype.unique = function(){
+    let res = [];
+    let json = {};
+    for(let i = 0; i < this.length; i++){
+        if(!json[this[i]]){
+            res.push(this[i]);
+            json[this[i]] = 1;
+        }
+    }
+    return res;
+};
 
 export default {
     namespace: 'txsListener',
@@ -21,7 +32,8 @@ export default {
                'exchange': {srcToken:'ETH',destToken:'BAT', srcQty:1.0, destQty:2}, //optional
                'approve':{symbol:'MAK',state:'waitApprove'/‘waitRevoke'}
                'listenerStatus': 'waitReceipt'/blockNumber
-             ` 'symbol': 'ETH'/'AION'/'TRX'
+             ` 'symbol': 'ETH'/'AION'/'TRX',
+               'timestamp'1562837929149,
              },
              ....
            }
@@ -38,6 +50,7 @@ export default {
                 type: type,
                 listenerStatus: 'waitReceipt',
                 symbol: symbol,
+                timestamp: Date.now()
             };
             'token' === type ?
                 tx = {...tx, token: token}
@@ -93,16 +106,21 @@ export default {
             const oldStatuses = Object.values(txs).map(tx => ({
                 oldTx: tx.txObj,
                 symbol: tx.symbol,
-                listenerStatus: tx.listenerStatus
+                listenerStatus: tx.listenerStatus,
+                timestamp: tx.timestamp,
             }));
+            let loadBalanceKeys = [];
             if(oldStatuses.length>0) {
                 console.log('check all pending Tx;');
                 const newStatuses = yield call(getTxsStatus, oldStatuses);
                 for (let newStatus of newStatuses) {
-                    const {newTx, symbol, listenerStatus} = newStatus;
-                    if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
+                    const {newTx, symbol, listenerStatus: _listenerStatus, timestamp} = newStatus;
+                    const listenerStatus = Date.now() - timestamp > TIMEOUT? 'UNCONFIRMED':_listenerStatus; // timeout
+                    if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED'||listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
                         AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`,{position:AppToast.positions.CENTER}));
+                        loadBalanceKeys.push(accountKey(symbol,newTx.to));
+                        loadBalanceKeys.push(accountKey(symbol.newTx.from));
                         //dispatch other actions;
                         const type = txs[newTx.hash].type;
                         yield put(createAction('accountsModal/updateTransactions')({
@@ -137,7 +155,7 @@ export default {
                             if(exchange.status==='CONFIRMED'){
                                 // get newest dest_qty
                                 const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
-                                const history = yield call(getExchangeHistory,newTx.from,network,newTx.hash);
+                                const history = yield call(getExchangeHistory,newTx.from,ERC20DEX_NETWORK,newTx.hash);
                                 const symbol = findSymbolByAddress(tokenList,history.destToken);
                                 exchange.destQty = history.destQty / 10**tokenList[symbol].decimals;
                             }
@@ -155,7 +173,11 @@ export default {
                         }
                     }
                 }
-                yield put(createAction('updatePendingTxs')({newStatuses: newStatuses}))
+                yield put(createAction('updatePendingTxs')({newStatuses: newStatuses}));
+                loadBalanceKeys = loadBalanceKeys.unique();
+                if(loadBalanceKeys.length>0){
+                    yield put(createAction('accountsModal/loadBalances')({keys: loadBalanceKeys}))
+                }
             }
 
         }

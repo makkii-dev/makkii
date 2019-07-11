@@ -154,7 +154,7 @@ export default {
                 yield put(createAction('saveTransaction')({keys:Object.keys(payload.transactionsMap)}));
                 yield put(createAction('saveTokenLists')());
                 yield put(createAction('saveHdIndex')());
-                yield put(createAction('loadBalances')({keys:payload.accountsKey, force: true}));
+                yield put(createAction('loadBalances')({keys:payload.accountsKey}));
             }else{
                 const accountsKey = yield call(Storage.get, 'accountsKey', []);
                 const tokenLists =  yield call(Storage.get, 'tokenLists', {});
@@ -186,7 +186,7 @@ export default {
                     }
                 }
                 yield put(createAction('updateState')({accountsKey,transactionsMap,accountsMap,tokenLists,hd_index}));
-                yield put(createAction('loadBalances')({keys:accountsKey, force: true}));
+                yield put(createAction('loadBalances')({keys:accountsKey}));
             }
             return true;
         },
@@ -293,7 +293,8 @@ export default {
             yield put(createAction('updateTransactions')({txs:allHistory,key:'ETH+'+user_address+'+ERC20DEX'}));
             return true;
         },
-        *updateTransactions({payload:{key, txs, force=true, needSave = true}},{put,select}){
+        *updateTransactions({payload},{put,select}){
+            const {key, txs, force=true, needSave = true} = payload;
             const oldTransactionsMap = yield select(({accountsModal})=>accountsModal.transactionsMap);
             let newTransactionsMap = {...oldTransactionsMap};
             if(newTransactionsMap[key]===undefined&&!force){
@@ -331,7 +332,9 @@ export default {
                 return Object.keys(txs).length;
             }
         },
-        *loadBalances({payload:{keys, force=false}},{call,select,put}){
+        *loadBalances({payload},{call,select,put}){
+            const {keys, force=false} = payload;
+            console.log('loadBalances=>',payload);
             const {oldAccountsMap, tokenLists,isGettingBalance} = yield select(({accountsModal})=>({
                 oldAccountsMap:accountsModal.accountsMap,
                 tokenLists:accountsModal.tokenLists,
