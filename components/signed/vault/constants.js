@@ -1,3 +1,5 @@
+import {strings} from "../../../locales/i18n";
+
 const SORT = [
     {
         title: 'sort.balance',
@@ -127,6 +129,24 @@ const IMPORT_SOURCE = [
     }
 ];
 
+const getAccountConstants =(type)=>{
+    let typeIcon, typeText;
+    switch(type) {
+        case '[ledger]':
+            typeIcon = require('../../../assets/account_le_symbol.png');
+            typeText = strings('vault_import_source.from_ledger');
+            break;
+        case '[pk]':
+            typeIcon = require('../../../assets/account_pk_symbol.png');
+            typeText = strings('vault_import_source.from_private_key');
+            break;
+        default:
+            typeIcon = require('../../../assets/account_mk_symbol.png');
+            typeText = strings('vault_import_source.from_hd_wallet');
+    }
+    return ({typeIcon, typeText});
+};
+
 module.exports={
     SORT: SORT,
     FILTER: FILTER,
@@ -134,4 +154,5 @@ module.exports={
     ACCOUNT_MENU:ACCOUNT_MENU,
     COINS: COINS,
     IMPORT_SOURCE: IMPORT_SOURCE,
+    getAccountConstants,
 };

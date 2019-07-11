@@ -122,6 +122,7 @@ const getExchangeHistory = async(user_id,network, txhash=undefined)=>{
                 timestamp:fromHexString(el.timeStamp,16)*1000,
                 blockNumber: fromHexString(el.blockNumber,16),
                 status: 'CONFIRMED',
+                hash: el.transactionHash,
             };
             return map;
         },{});

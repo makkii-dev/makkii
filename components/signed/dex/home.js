@@ -427,12 +427,13 @@ class Home extends React.Component {
 
 }
 
-const mapToState = ({accounts, setting, ERC20Dex})=>{
+const mapToState = ({accountsModal, setting, ERC20Dex})=>{
+    const currentAccount = accountsModal.accountsMap[accountsModal.currentAccount];
 	return {
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
-		currentAccount: accounts[accountKey('ETH',ERC20Dex.currentAccount)],
+		currentAccount: currentAccount?currentAccount.symbol === 'ETH'?currentAccount:null:null,
 		tokenList:ERC20Dex.tokenList,
 		lang:setting.lang,
 	}

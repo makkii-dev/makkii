@@ -11,7 +11,7 @@ import {
 	ScrollView,
 	Dimensions,
 } from 'react-native';
-import {TransactionItemCell,PendingComponent, ComponentButton} from '../../common'
+import {TransactionItemCell,PendingComponent} from '../../common'
 import {strings} from "../../../locales/i18n";
 import {sameAddress, getTransactionExplorerUrl} from "../../../coins/api";
 import {linkButtonColor,mainBgColor} from "../../style_util";
@@ -29,7 +29,6 @@ class Transaction extends Component {
 	constructor(props){
 		super(props);
 		this.account = this.props.navigation.state.params.account;
-		this.token = this.props.navigation.state.params.token;
 		this.additional_data =this.props.navigation.state.params.additional_data;
 		this.transaction = this.props.navigation.state.params.transaction;
 	}
@@ -65,11 +64,12 @@ class Transaction extends Component {
 				return content;
 			}
 		}else{
+			const {coinSymbol} = this.account;
 			return (
 				<TransactionItemCell
 					style={{height:80}}
 					title={strings('transaction_detail.amount_label')}
-					value={new BigNumber(this.transaction.value).toNotExString()+' ' + unit}
+					value={new BigNumber(this.transaction.value).toNotExString()+' ' + coinSymbol}
 					valueTextAlign={'left'}
 
 				/>
@@ -89,11 +89,6 @@ class Transaction extends Component {
 			addressName = this.props.user.address_book[value1].name;
 		} else {
 			inAddressBook = false;
-		}
-		if (this.token === undefined) {
-			unit = this.account.symbol;
-		} else {
-			unit = this.token.symbol;
 		}
 
 
@@ -180,8 +175,6 @@ class Transaction extends Component {
 
 export default connect(state => {
 	return ({
-		accounts: state.accounts,
-		setting: state.setting,
 		user: state.user,
 	}); })(Transaction);
 

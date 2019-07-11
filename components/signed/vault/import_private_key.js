@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {Dimensions, View, Text, Keyboard, TouchableOpacity, DeviceEventEmitter, Image} from 'react-native';
-import { validatePrivateKey, accountKey } from '../../../utils';
+import {Dimensions, View, Text, Keyboard, TouchableOpacity, Image} from 'react-native';
+import {validatePrivateKey} from '../../../utils';
 import {strings} from '../../../locales/i18n';
-import {accounts_add} from "../../../actions/accounts";
 import {RightActionButton, InputMultiLines, alert_ok} from "../../common";
 import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
-import keyStore from 'react-native-makkii-core';
-import {COINS} from "../../../coins/support_coin_list";
-import {validateMnemonic} from "../../../libs/aion-hd-wallet";
 import {AppToast} from "../../../utils/AppToast";
+import {createAction, navigate} from "../../../utils/dva";
 
 const {width, height} = Dimensions.get('window');
 
@@ -31,61 +28,25 @@ class ImportPrivateKey extends Component {
         });
 	};
 
-	setAccountName=(newName)=> {
-	    console.log("set account name=>", newName);
-
-		let acc = {};
-		acc.address = this.getAcc.address;
-		acc.private_key = this.getAcc.private_key;
-		acc.balance = 0;
-		acc.name = newName;
-		acc.type = '[pk]';
-		acc.transactions = {};
-		acc.symbol = this.symbol;
-		acc.tokens = {};
-
-		let key = accountKey(this.symbol, acc.address);
-		if(this.props.accounts[key]!==undefined){
-			AppToast.show(strings('import_private_key.already_existed',),{position:0})
-		}else {
-			this.props.navigation.state.params.dispatch(accounts_add({
-				[key]: acc
-			}, this.props.user.hashed_password));
-			setTimeout(() => {
-				DeviceEventEmitter.emit('updateAccountBalance');
-			}, 500);
-
-		}
-	}
 
 	ImportAccount= () => {
 		Keyboard.dismiss();
-	    if (validatePrivateKey(this.state.private_key, this.symbol)) {
-	    	let coinType = keyStore.CoinType.fromCoinSymbol(this.symbol);
-	    	console.log('coinType:' + coinType);
-	        keyStore.recoverKeyPairByPrivateKey(this.state.private_key, coinType, COINS[this.symbol.toUpperCase()].isTestNet).then(address => {
-                console.log("recover keypair from private key: ", address);
-                this.getAcc = address;
-
-                this.props.navigation.navigate('signed_vault_change_account_name', {
-                	oldName: '',
-					onUpdate: this.setAccountName,
-					targetUri: 'signed_vault',
-				});
-
-			}, error=> {
-    			console.log("error: " + error);
-				alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
-			});
-		} else {
-	    	alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
-		}
+		const {dispatch} = this.props;
+		const {private_key} = this.state;
+		dispatch(createAction('accountImportModal/fromPrivateKey')({private_key}))
+			.then(r=>{
+				if(r===2){ // already imported
+					AppToast.show(strings('import_private_key.already_existed',),{position:0})
+				}else if (r===3){ // invalid  private key
+					alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
+				}else{
+					navigate('signed_set_change_account_name')({dispatch})
+				}
+			})
 	};
 
 	constructor(props){
 		super(props);
-
-		this.symbol = this.props.navigation.getParam('symbol');
 		this.state = {
 			private_key: ''
 		};
@@ -93,8 +54,6 @@ class ImportPrivateKey extends Component {
 	
 
 	componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-
 		const {dispatch} = this.props;
 		this.props.navigation.setParams({
 			ImportAccount: this.ImportAccount,
@@ -104,10 +63,12 @@ class ImportPrivateKey extends Component {
 	}
 
 	scan = ()=>{
+		console.log('this.props.symbol=>',this.props.symbol);
 		this.props.navigation.navigate('scan',{
 			success: 'signed_vault_import_private_key',
 			validate: (data, callback)=> {
-				let res = validatePrivateKey(data.data, this.symbol);
+				console.log('scanned data=>', data);
+				let res = validatePrivateKey(data.data, this.props.symbol);
 				if(res){
 					this.setState({
 						private_key: data.data,
@@ -182,7 +143,7 @@ class ImportPrivateKey extends Component {
 								private_key: val
 							});
 							this.props.navigation.setParams({
-								isEdited: val.length != 0
+								isEdited: val.length !== 0
 							});
 						}}
 					/>
@@ -193,10 +154,8 @@ class ImportPrivateKey extends Component {
 	}
 }
 
-export default connect(state => {
-	return ({
-		accounts: state.accounts,
-		user: state.user,
-		setting: state.setting,
-	});
-})(ImportPrivateKey);
+const mapToState= ({accountImportModal})=>({
+	symbol: accountImportModal.symbol,
+});
+
+export default connect(mapToState)(ImportPrivateKey);

@@ -5,13 +5,17 @@ import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
 import {fetchRequest} from './others';
 import Config from 'react-native-config';
-import {popCustom} from "./dva";
+
+import {popCustom,navigate} from "./dva";
 const _ = require('underscore');
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require("crypto-js");
 
-function accountKey(symbol, address) {
+function accountKey(symbol, address, tokenSymbol) {
+    if(tokenSymbol){
+        return symbol + '+' + address + '+' + tokenSymbol;
+    }
     return symbol + '+' + address;
 }
 
@@ -279,18 +283,8 @@ function strLen(str){
 const mainnet_url = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
 const mastery_url = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 // const mastery_url = 'http://192.168.50.105:8545';
-function navigationSafely(pinCodeEnabled, hashed_password,navigation,
-                          route={
-                              url: '',
-                              args:{},
-                              onVerifySuccess:undefined,
-                          }) {
-    const newRoute = {
-        url: '',
-        args:{},
-        onVerifySuccess:undefined,
-        ...route
-    };
+const navigationSafely=(pinCodeEnabled, hashed_password, {routeName,params,onVerifySuccess=undefined})=>({dispatch})=>{
+
     pinCodeEnabled||popCustom.show(
         strings('alert_title_warning'),
         strings('warning_dangerous_operation'),
@@ -307,8 +301,8 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
                     const _hashed_password = hashPassword(text);
                     if(_hashed_password === hashed_password){
                         popCustom.hide();
-                        newRoute.onVerifySuccess&&newRoute.onVerifySuccess();
-                        newRoute.onVerifySuccess||navigation.navigate(newRoute.url,newRoute.args)
+                        onVerifySuccess&&onVerifySuccess();
+                        onVerifySuccess||navigate(routeName,params)({dispatch})
                     }else{
                         popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'))
                     }
@@ -321,13 +315,12 @@ function navigationSafely(pinCodeEnabled, hashed_password,navigation,
             canHide: false,
         }
     );
-    pinCodeEnabled&&navigation.navigate('unlock',{
-        targetScreen: newRoute.url,
-        targetScreenArgs: newRoute.args,
-        onUnlockSuccess: newRoute.onVerifySuccess
-    });
-
-}
+    pinCodeEnabled&&navigate('unlock',{
+        targetScreen: routeName,
+        targetScreenArgs: params,
+        onUnlockSuccess: onVerifySuccess
+    })({dispatch});
+};
 
 function range(start, end, step) {
     let arr = [];

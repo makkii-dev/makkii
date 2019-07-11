@@ -1,17 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Platform, DeviceEventEmitter, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
+import {Platform, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
 import { strings } from '../../../locales/i18n';
 import {mainBgColor} from '../../style_util';
 import {IMPORT_SOURCE} from './constants';
 import wallet from 'react-native-aion-hw-wallet';
 import Loading from '../../loading.js';
-import keyStore from 'react-native-makkii-core';
-import {accounts_add } from "../../../actions/accounts";
-import {update_index } from "../../../actions/user";
-import {accountKey,getLedgerMessage} from '../../../utils';
+import {getLedgerMessage} from '../../../utils';
 import {alert_ok} from '../../common';
-import {COINS} from "../../../coins/support_coin_list";
+import {createAction, navigate} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -20,121 +17,38 @@ class ImportFrom extends Component {
         return ({
             title: strings('vault_import_source.title'),
         });
-    }
+    };
 
-    constructor(props) {
-        super(props);
-
-        IMPORT_SOURCE[0].callback = this.importFromMasterKey;
-        IMPORT_SOURCE[1].callback = this.importFromPrivateKey;
-        IMPORT_SOURCE[2].callback = this.importFromKeystore;
-        IMPORT_SOURCE[3].callback = this.importFromLedger;
-
-        this.symbol = this.props.navigation.getParam('symbol');
-
-        this.import_from = [ IMPORT_SOURCE[0], IMPORT_SOURCE[1] ];
-        if (this.symbol === 'AION' && Platform.OS === 'android') {
-            this.import_from.push(IMPORT_SOURCE[3]);
-        }
-    }
 
     importFromMasterKey=() => {
         const {dispatch} = this.props;
+        this.refs['refLoading'].show();
+        dispatch(createAction('accountImportModal/fromMasterKey')())
+            .then(r=>{
+                this.refs['refLoading'].hide();
+                navigate('signed_vault_set_account_name')({dispatch});
+            })
 
-        let indexPathMap;
-        if (this.props.user.hd_index !== undefined && this.props.user.hd_index[this.symbol] !== undefined) {
-            indexPathMap = this.props.user.hd_index[this.symbol];
-        }
-        indexPathMap = typeof indexPathMap ==='object'? indexPathMap: {};
-        let minIndex = 0;
-        while(indexPathMap[minIndex]!==undefined){
-            minIndex++;
-        }
-
-        this.loadingView.show();
-        const getUniqueKey = (coinType, path1,path2,path3,isTestNet)=>{
-            keyStore.getKey(coinType, path1, path2, path3, isTestNet).then(acc => {
-                if (this.props.accounts[this.symbol+'+'+acc.address]!==undefined){
-                    console.log('acc=>',acc);
-                    dispatch(update_index(this.symbol, acc.index , 'add'+acc.address));
-                    getUniqueKey(coinType,path1,path2,path3+1,isTestNet);
-                }else{
-                    this.loadingView.hide();
-                    this.getAcc = acc;
-                    console.log("imported acc:", acc);
-                    this.props.navigation.navigate('signed_vault_change_account_name', {
-                        oldName: '',
-                        onUpdate: this.setAccountName,
-                        targetUri: 'signed_vault',
-                    });
-                }
-            });
-        };
-        getUniqueKey(keyStore.CoinType.fromCoinSymbol(this.symbol), 0, 0, minIndex, COINS[this.symbol.toUpperCase()].isTestNet);
-
-    };
-
-    setAccountName=(newName) => {
-        console.log('set account name=>', newName)
-        let acc = {};
-        acc.address = this.getAcc.address;
-        acc.private_key = this.getAcc.private_key;
-        acc.balance = 0;
-        acc.name = newName;
-        acc.type = '[local]';
-        acc.transactions = {};
-        acc.symbol = this.symbol;
-        acc.tokens = {};
-
-        const {dispatch} = this.props;
-        dispatch(accounts_add({
-            [accountKey(this.symbol, acc.address)]: acc
-        }, this.props.user.hashed_password));
-
-        console.log("index:" + this.getAcc.index);
-        dispatch(update_index(this.symbol, this.getAcc.index , 'add'+this.getAcc.address));
-
-        setTimeout(() => {
-            DeviceEventEmitter.emit('updateAccountBalance');
-        }, 500);
     };
 
     importFromPrivateKey=() => {
-        this.props.navigation.navigate('signed_vault_import_private_key', {
-            symbol: this.symbol
-        });
-    }
-    importFromKeystore=() => {
+        navigate('signed_vault_import_private_key')(this.props);
+    };
 
-    }
     importFromLedger=() => {
-        console.log("import " + this.symbol + " from ledger");
-        if (this.symbol === 'AION') {
-            this.loadingView.show(strings('ledger.toast_connecting'));
-            listenApp.ignore = true;
-            wallet.listDevice().then((deviceList) => {
-                setTimeout(()=>listenApp.ignore=false,100);
-                if (deviceList.length <= 0) {
-                    this.loadingView.hide();
-                    alert_ok(strings('alert_title_error'), strings('ledger.error_device_count'));
-                } else {
-                    wallet.getAccount(0).then(account => {
-                        this.loadingView.hide();
-                        this.props.navigation.navigate('signed_vault_import_list',{
-                            type:'ledger',
-                            symbol: this.symbol,
-                            title:strings('import_ledger.title')});
-                    }, error => {
-                        this.loadingView.hide();
-                        alert_ok(strings('alert_title_error'), getLedgerMessage(error.code));
-                    });
+        const {dispatch, symbol} = this.props;
+        console.log("import " + symbol+ " from ledger");
+        this.refs['refLoading'].show(strings('ledger.toast_connecting'));
+        dispatch(createAction('accountImportModal/getLedgerStatus')())
+            .then(ret=>{
+                this.refs['refLoading'].hide();
+                if(ret.status){
+                    navigate('signed_vault_import_list')({dispatch});
+                }else{
+                    alert_ok(strings('alert_title_error'), getLedgerMessage(ret.code));
                 }
-            }).catch(error=>{
-                this.loadingView.hide();
-                alert_ok(strings('alert_title_error'), getLedgerMessage(error.code));
             });
-        }
-    }
+    };
 
     render_item=({item, index})=> {
         const cellHeight = 60;
@@ -151,7 +65,7 @@ class ImportFrom extends Component {
                     height: cellHeight,
                 }}
                 onPress={() => {
-                    this.import_from[index].callback();
+                    item.callback();
                 }}
             >
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -171,9 +85,17 @@ class ImportFrom extends Component {
                 />
             </TouchableOpacity>
         )
-    }
+    };
 
     render() {
+        IMPORT_SOURCE[0].callback = this.importFromMasterKey;
+        IMPORT_SOURCE[1].callback = this.importFromPrivateKey;
+        IMPORT_SOURCE[3].callback = this.importFromLedger;
+        let data = [ IMPORT_SOURCE[0], IMPORT_SOURCE[1]];
+        const {symbol} = this.props;
+        if(symbol === 'AION'&& Platform.OS === 'android'){
+            data.push(IMPORT_SOURCE[3]);
+        }
         return (
             <View style={{
                 backgroundColor: mainBgColor,
@@ -183,29 +105,26 @@ class ImportFrom extends Component {
             }}>
                 <FlatList
                     style={{ width: width }}
-                    data={this.import_from}
+                    data={data}
                     renderItem={this.render_item}
                     ItemSeparatorComponent={()=><View style={styles.divider}/>}
                     keyExtractor={(item, index)=>item.title}
                 />
-                <Loading ref={(element)=> {
-                    this.loadingView = element;
-                }}/>
+                <Loading ref={'refLoading'}/>
             </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
-   divider: {
-       height: 1 / PixelRatio.get(),
-       backgroundColor: '#dfdfdf'
-   }
+    divider: {
+        height: 1 / PixelRatio.get(),
+        backgroundColor: '#dfdfdf'
+    }
 });
 
-export default connect(state=> {
-    return {
-        user: state.user,
-        accounts: state.accounts,
-    };
-})(ImportFrom);
+const mapToState= ({accountImportModal})=>({
+   symbol: accountImportModal.symbol,
+});
+
+export default connect(mapToState)(ImportFrom);

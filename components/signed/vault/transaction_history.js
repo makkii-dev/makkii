@@ -5,15 +5,14 @@ import {
     Image,
     Text,
     ActivityIndicator,
-    Dimensions, Keyboard,
+    Dimensions,
 } from 'react-native';
 import {strings} from "../../../locales/i18n";
-import {accountKey} from "../../../utils";
-import {getTransactionsByAddress, fetchAccountTokenTransferHistory} from "../../../coins/api";
+import {sameAddress} from "../../../coins/api";
 import {connect} from "react-redux";
-import {ImportListfooter, TransactionItem} from "../../common";
+import {ImportListFooter, TransactionItem} from "../../common";
 import {mainBgColor} from '../../style_util';
-import {COINS} from "../../../coins/support_coin_list";
+import {createAction, navigate} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -31,14 +30,11 @@ class TransactionHistory extends React.Component {
     };
     constructor(props){
         super(props);
-        this.account = this.props.navigation.state.params.account;
-        this.token = this.props.navigation.state.params.token;
-        this.account_key = accountKey(this.account.symbol, this.account.address);
     }
 
     componentWillMount(){
         setTimeout(() => {
-            this.fetchAccountTransactions(this.account, this.state.currentPage);
+            this.fetchAccountTransactions( this.state.currentPage);
         }, 500);
         this.isMount = true;
     }
@@ -49,44 +45,41 @@ class TransactionHistory extends React.Component {
     }
 
 
-    fetchAccountTransactions = (account, page=0, size=25)=>{
-        let {currentPage,transactions} = this.state;
+    fetchAccountTransactions = (page=0, size=25)=>{
+        let {currentPage} = this.state;
+        const {currentAccount,dispatch} = this.props;
         console.log('get transactions page: '+page+' size: '+size);
-
-        let promise;
-        if (this.token === undefined) {
-            promise = getTransactionsByAddress(account.symbol, account.address, page, size);
-        } else {
-            promise = fetchAccountTokenTransferHistory(account.symbol, account.address, this.token.contractAddr,COINS[account.symbol.toUpperCase()].network , page, size);
-        }
-        promise.then(txs => {
-            if (Object.keys(txs).length === 0) {
+        dispatch(createAction('accountsModal/getTransactionHistory')({
+            user_address: currentAccount.address,
+            symbol: currentAccount.symbol,
+            tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol?'':currentAccount.coinSymbol,
+            page: page,
+            size: size,
+            needSave: false,
+        })).then(r=>{
+            if(r===0){
                 this.isMount && this.setState({
                     currentPage,
-                    transactions,
                     isLoading: false,
                     footerState: 1
                 });
-                return;
+            }else{
+                this.isMount && this.setState({
+                    currentPage: page,
+                    isLoading: false,
+                    footerState: r === size ? 0 : 1
+                })
             }
-            transactions = Object.assign({}, transactions, txs);
-            this.isMount && this.setState({
-                currentPage: page,
-                transactions,
-                isLoading: false,
-                footerState: Object.keys(transactions).length >= 25 ? 0 : 1
-            })
-        }).catch(error => {
-            console.log(error);
-            this.isMount && this.setState({
-                currentPage,
-                transactions,
-                isLoading: false,
-                footerState: 0
-            })
         });
     };
 
+    toTxDetail=(item)=>{
+        const {currentAccount} = this.props;
+        navigate('signed_vault_transaction', {
+            account:currentAccount,
+            transaction:item,
+        })(this.props);
+    };
 
     _onEndReached(){
         // if not in fetching account
@@ -96,7 +89,7 @@ class TransactionHistory extends React.Component {
         // set footer state
         this.setState({
             footerState: 2,
-        },()=>{setTimeout(()=>this.fetchAccountTransactions(this.account, this.state.currentPage+1),500)});
+        },()=>{setTimeout(()=>this.fetchAccountTransactions(this.state.currentPage+1),500)});
     }
 
 
@@ -114,24 +107,23 @@ class TransactionHistory extends React.Component {
         );
     }
 
+    renderTransaction = ({item})=> {
+        const {currentAccount} = this.props;
+        return(
+        <TransactionItem
+            isSender={sameAddress(currentAccount.symbol, currentAccount.address, item.from)}
+            symbol={currentAccount.coinSymbol}
+            transaction={item}
+            onPress={()=>this.toTxDetail(item)}
+        />
+     )
+    };
+
     render() {
         if (this.state.isLoading) {
             return this.renderLoadingView();
         } else {
-            let transactions;
-            let compareFn = (a, b) => {
-                if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
-                if (b.timestamp === undefined && a.timestamp === undefined) return 0;
-                if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
-                return b.timestamp - a.timestamp;
-            };
-            if (this.token === undefined) {
-                let propTxs = this.props.accounts[this.account_key].transactions;
-                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
-            } else {
-                let propTxs = this.props.accounts[this.account_key].tokens[this.token.symbol].tokenTxs;
-                transactions = Object.values(Object.assign({}, this.state.transactions, propTxs)).sort(compareFn);
-            }
+            const {transactions} = this.props;
             return (
                 <View style={{flex: 1, justifyContent:'center',alignItems:'center', backgroundColor: mainBgColor}}>
                     {
@@ -139,24 +131,12 @@ class TransactionHistory extends React.Component {
                             data={transactions}
                             style={{backgroundColor: '#fff'}}
                             keyExtractor={(item, index) => index + ''}
-                            renderItem={({item})=><TransactionItem
-                                account={this.account}
-                                symbol={this.token === undefined? this.account.symbol: this.token.symbol}
-                                transaction={item}
-                                currentAddr={this.account.address}
-                                onPress={()=>{
-                                    Keyboard.dismiss();
-                                    this.props.navigation.navigate('signed_vault_transaction',{
-                                        account:this.account,
-                                        transaction: item,
-                                        token: this.token,
-                                    });
-                                }}/>}
+                            renderItem={this.renderTransaction}
                             onEndReached={() => {
                                 this._onEndReached()
                             }}
                             ListFooterComponent={() =>
-                                <ImportListfooter
+                                <ImportListFooter
                                     hasSeparator={false}
                                     footerState={this.state.footerState}
                                 />
@@ -177,9 +157,30 @@ class TransactionHistory extends React.Component {
 
 }
 
-export default connect(state => {
-    return ({
-        setting: state.setting,
-        accounts: state.accounts,
-    });
-})(TransactionHistory);
+
+const mapToState=({accountsModal})=>{
+    const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModal;
+    const currentAccount = {
+        ...accountsMap[key],
+        coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,
+        balance: currentToken===''?accountsMap[key].balance:accountsMap[key].tokens[currentToken]
+    };
+    const txKey = currentToken===''?key: key + '+' +currentToken;
+    const compareFn = (a, b) => {
+        if (b.timestamp === undefined && a.timestamp !== undefined) return 1;
+        if (b.timestamp === undefined && a.timestamp === undefined) return 0;
+        if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
+        return b.timestamp - a.timestamp;
+    };
+    const transactions = Object.values(transactionsMap[txKey]).sort(compareFn);
+
+    return({
+        currentAccount,
+        transactions:transactions,
+    })
+};
+
+
+
+
+export default connect(mapToState)(TransactionHistory);

@@ -72,6 +72,13 @@ export default {
             return {...state,...payload};
         }
     },
+    subscriptions:{
+      setup({dispatch}){
+          setInterval(()=>{
+              dispatch(createAction('checkAllTxs')());
+          },10*1000)
+      }
+    },
     effects: {
         *loadStorage(action,{call,select,put}){
             const PendingTxs = yield call(Storage.get, 'pendingTx', false);
@@ -83,13 +90,13 @@ export default {
             const txs = yield select(({txsListener}) => txsListener.txs);
             //save current pending tx;
             yield call(Storage.set, 'pendingTx', txs);
-            const hashed_password = yield select(({user})=> user.hashed_password);
             const oldStatuses = Object.values(txs).map(tx => ({
                 oldTx: tx.txObj,
                 symbol: tx.symbol,
                 listenerStatus: tx.listenerStatus
             }));
             if(oldStatuses.length>0) {
+                console.log('check all pending Tx;');
                 const newStatuses = yield call(getTxsStatus, oldStatuses);
                 for (let newStatus of newStatuses) {
                     const {newTx, symbol, listenerStatus} = newStatus;
@@ -98,20 +105,35 @@ export default {
                         AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`,{position:AppToast.positions.CENTER}));
                         //dispatch other actions;
                         const type = txs[newTx.hash].type;
-                        yield put((update_account_txs(accountKey(symbol, newTx.from), {[newTx.hash]: newTx}, hashed_password)));
-                        yield put((update_account_txs(accountKey(symbol, newTx.to), {[newTx.hash]: newTx}, hashed_password)));
+                        yield put(createAction('accountsModal/updateTransactions')({
+                            txs:{[newTx.hash]: newTx},
+                            key: accountKey(symbol, newTx.from),
+                        }));
+                        yield put(createAction('accountsModal/updateTransactions')({
+                            txs:{[newTx.hash]: newTx},
+                            key: accountKey(symbol, newTx.to),
+                        }));
                         if ('token' === type) {
                             const {symbol: tokenSymbol, tokenTx} = txs[newTx.hash].token;
                             let newTokenTx = Object.assign({}, tokenTx);
                             newTokenTx.timestamp = newTx.timestamp;
                             newTokenTx.status = newTx.status;
-                            yield put((update_account_token_txs(accountKey(symbol, newTx.from), {[tokenTx.hash]: newTokenTx}, tokenSymbol, hashed_password)));
-                            yield put((update_account_token_txs(accountKey(symbol, newTx.from), {[tokenTx.hash]: newTokenTx}, tokenSymbol, hashed_password)));
+                            yield put(createAction('accountsModal/updateTransactions')({
+                                txs:{[newTx.hash]: newTx},
+                                key: accountKey(symbol, newTx.from, tokenSymbol),
+                                force: false,
+                            }));
+                            yield put(createAction('accountsModal/updateTransactions')({
+                                txs:{[newTx.hash]: newTx},
+                                key: accountKey(symbol, newTx.to, tokenSymbol),
+                                force: false,
+                            }));
                         }else if ('exchange'===type){
                             let exchange = {...txs[newTx.hash].exchange};
                             exchange.timestamp = newTx.timestamp;
                             exchange.status = newTx.status;
                             exchange.blockNumber = newTx.blockNumber;
+                            exchange.hash = newTx.hash;
                             if(exchange.status==='CONFIRMED'){
                                 // get newest dest_qty
                                 const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
@@ -119,9 +141,10 @@ export default {
                                 const symbol = findSymbolByAddress(tokenList,history.destToken);
                                 exchange.destQty = history.destQty / 10**tokenList[symbol].decimals;
                             }
-                            yield put(createAction('ERC20Dex/updateExchangeHistory')({
+                            yield put(createAction('accountsModal/updateTransactions')({
                                 txs:{[newTx.hash]:exchange},
-                                user_address:newTx.from,
+                                key: 'ETH+'+newTx.from+'+ERC20DEX',
+                                force: false,
                             }))
                         }else if('approve'===type){
                             const {symbol} = txs[newTx.hash].approve;
