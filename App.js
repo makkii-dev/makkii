@@ -11,12 +11,12 @@ import reducer_dapps           from './reducers/dapps.js';
 import reducer_setting         from './reducers/setting.js';
 import reducer_user            from './reducers/user.js';
 
-// modals
-import erc20DexModal from './modals/erc20DexModal';
-import txListenerModal from './modals/txsListenerModal';
-import accountsModal from './modals/accountsModal';
-import accountImportModal from './modals/accountImportModal'
-import tokenImportModal from './modals/tokenImportModal';
+// models
+import erc20DexModal from './models/erc20DexModel';
+import txListenerModal from './models/txsListenerModel';
+import accountsModal from './models/accountsModel';
+import accountImportModal from './models/accountImportModel'
+import tokenImportModal from './models/tokenImportModel';
 // store
 import Router, {routerReducer,routerMiddleware} from './components/routes';
 import dva from './utils/dva';

@@ -259,7 +259,7 @@
     "label_current_rate": "Current Rate",
     "label_sell": "Sell: ",
     "label_buy": "Buy: ",
-    "label_account_not_found": "Can't find eth account",
+    "label_account_not_found": "No Ethereum Accounts",
     "label_please_select_account": "Please select an account first.",
     "label_no_exchange_history": "No exchange history.",
     "button_add_account": "Add",

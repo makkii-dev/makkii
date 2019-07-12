@@ -6,7 +6,13 @@ import {
 	TextInput, TouchableOpacity,
 	TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions
 } from 'react-native';
+import {Header} from "react-navigation";
+import DeviceInfo from 'react-native-device-info';
 import {connect} from "react-redux";
+import FastImage from "react-native-fast-image";
+import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
+import BigNumber from "bignumber.js";
+
 import {strings} from "../../../locales/i18n";
 import {ComponentButton} from '../../common';
 import {createAction} from "../../../utils/dva";
@@ -14,16 +20,12 @@ import Loading from "../../loading";
 import commonStyles from '../../styles';
 import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
-import BigNumber from "bignumber.js";
 import {navigate} from "../../../utils/dva";
 import {accountKey, getStatusBarHeight, validateAmount} from "../../../utils";
-import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
-import FastImage from "react-native-fast-image";
 import {DEX_MENU} from "./constants";
 import {PopWindow} from "../vault/home_popwindow";
-import {Header} from "react-navigation";
 
 const {width} = Dimensions.get('window');
 
@@ -174,10 +176,26 @@ class Home extends React.Component {
 					navigate('signed_Dex_exchange_history')(this.props);
 					break;
 				case DEX_MENU[1].title:
-					const file = 'static/exchange_rule_zh.html';
-				    const initialUrl = Platform.OS === 'ios'?
-						require('../../../' + file):
-						{uri: 'file:///android_asset/' + file};
+					let lang = this.props.lang;
+					if (this.props.lang === 'auto') {
+						if (DeviceInfo.getDeviceLocale().startsWith("zh")) {
+							lang = "zh";
+						} else {
+							lang = "en";
+						}
+					}
+
+				    let initialUrl;
+				    const file_prefix = 'static/exchange_rule_';
+				    if (Platform.OS === 'ios') {
+				    	if (lang === 'en') {
+				    		initialUrl = require('../../../' +　file_prefix + 'en.html');
+						} else {
+							initialUrl = require('../../../' + file_prefix + 'zh.html');
+						}
+					} else {
+				    	initialUrl = {uri: 'file:///android_asset/' + file_prefix + lang + ".html"};
+					}
 					navigate("simple_webview", {
 						title: strings('token_exchange.title_exchange_rules'),
 						initialUrl: initialUrl
@@ -263,8 +281,6 @@ class Home extends React.Component {
 							paddingVertical: 10,
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							borderBottomWidth: 0.2,
-							borderBottomColor: 'lightgray'
 						}}>
 							<Text style={{
 								fontSize: 16,
@@ -378,7 +394,10 @@ class Home extends React.Component {
 									</View>
 								</TouchableOpacity>
 							</View>
-
+                            <View style={{flexDirection: 'row-reverse', width: '100%'}}>
+								<Text style={{fontSize: 10}}>Kyber.Network</Text>
+								<Text style={{fontStyle: 'italic', fontSize: 10}}> Powered by </Text>
+							</View>
 						</View>
 						<ComponentButton
 							title={currentAccount!==undefined?
