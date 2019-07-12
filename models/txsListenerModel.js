@@ -124,14 +124,14 @@ export default {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
                         AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`,{position:AppToast.positions.CENTER}));
                         loadBalanceKeys.push(accountKey(symbol,newTx.to));
-                        loadBalanceKeys.push(accountKey(symbol.newTx.from));
+                        loadBalanceKeys.push(accountKey(symbol,newTx.from));
                         //dispatch other actions;
                         const type = txs[newTx.hash].type;
-                        yield put(createAction('accountsModal/updateTransactions')({
+                        yield put(createAction('accountsModel/updateTransactions')({
                             txs:{[newTx.hash]: newTx},
                             key: accountKey(symbol, newTx.from),
                         }));
-                        yield put(createAction('accountsModal/updateTransactions')({
+                        yield put(createAction('accountsModel/updateTransactions')({
                             txs:{[newTx.hash]: newTx},
                             key: accountKey(symbol, newTx.to),
                         }));
@@ -140,12 +140,12 @@ export default {
                             let newTokenTx = Object.assign({}, tokenTx);
                             newTokenTx.timestamp = newTx.timestamp;
                             newTokenTx.status = newTx.status;
-                            yield put(createAction('accountsModal/updateTransactions')({
+                            yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]: newTx},
                                 key: accountKey(symbol, newTx.from, tokenSymbol),
                                 force: false,
                             }));
-                            yield put(createAction('accountsModal/updateTransactions')({
+                            yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]: newTx},
                                 key: accountKey(symbol, newTx.to, tokenSymbol),
                                 force: false,
@@ -163,7 +163,7 @@ export default {
                                 const symbol = findSymbolByAddress(tokenList,history.destToken);
                                 exchange.destQty = history.destQty / 10**tokenList[symbol].decimals;
                             }
-                            yield put(createAction('accountsModal/updateTransactions')({
+                            yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]:exchange},
                                 key: 'ETH+'+newTx.from+'+ERC20DEX',
                                 force: false,
@@ -181,7 +181,7 @@ export default {
                 yield put(createAction('updatePendingTxs')({newStatuses: newStatuses}));
                 loadBalanceKeys = loadBalanceKeys.unique();
                 if(loadBalanceKeys.length>0){
-                    yield put(createAction('accountsModal/loadBalances')({keys: loadBalanceKeys}))
+                    yield put(createAction('accountsModel/loadBalances')({keys: loadBalanceKeys}))
                 }
             }
 

@@ -9,7 +9,7 @@ const initToken ={
 };
 
 export default {
-    namespace: 'tokenImportModal',
+    namespace: 'tokenImportModel',
     state:{
         tokenToBeImported:initToken,
         token_lists:[]
@@ -22,8 +22,8 @@ export default {
     },
     effects:{
         *searchTokens({payload:{keyword}}, {call, select, put }){
-            const {currentAccount} = yield select(({accountsModal})=>{
-                const {currentAccount,accountsMap} = accountsModal;
+            const {currentAccount} = yield select(({accountsModel})=>{
+                const {currentAccount,accountsMap} = accountsModel;
                 return ({
                     currentAccount: accountsMap[currentAccount],
                 })
@@ -40,8 +40,8 @@ export default {
 
         },
         *getTopTokens(action, {call, select, put}){
-            const {currentAccount} = yield select(({accountsModal})=>{
-                const {currentAccount,accountsMap} = accountsModal;
+            const {currentAccount} = yield select(({accountsModel})=>{
+                const {currentAccount,accountsMap} = accountsModel;
                 return ({
                     currentAccount: accountsMap[currentAccount],
                 })
@@ -57,8 +57,8 @@ export default {
             return token_lists.length;
         },
         *fetchTokenDetail({payload:{address}},{call, select, put}){
-            const {currentAccount} = yield select(({accountsModal})=>{
-                const {currentAccount,accountsMap} = accountsModal;
+            const {currentAccount} = yield select(({accountsModel})=>{
+                const {currentAccount,accountsMap} = accountsModel;
                 return ({
                     currentAccount: accountsMap[currentAccount],
                 })

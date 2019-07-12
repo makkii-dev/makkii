@@ -8,7 +8,7 @@ import {strings} from "../locales/i18n";
     features: manage user base information
  */
 export default {
-    namespace: 'userModal',
+    namespace: 'userModel',
     state:{
         hashed_password: '',
         hashed_pinCode: '',
@@ -30,11 +30,11 @@ export default {
             return true;
         },
         *saveUser(action,{select,call}){
-            const toBeSaved = yield select(({userModal})=>({
-                hashed_password: userModal.hashed_password,
-                hashed_pinCode: userModal.hashed_pinCode,
-                mnemonic: userModal.mnemonic,
-                address_book: userModal.address_book,
+            const toBeSaved = yield select(({userModel})=>({
+                hashed_password: userModel.hashed_password,
+                hashed_pinCode: userModel.hashed_pinCode,
+                mnemonic: userModel.mnemonic,
+                address_book: userModel.address_book,
             }));
             yield call(Storage.set, 'user',toBeSaved);
         },
@@ -42,7 +42,7 @@ export default {
             let {address_book} = yield select(mapToUserModal);
             address_book[accountKey(contactObj.symbol, contactObj.address)] = contactObj;
             yield put(createAction('updateState')({address_book}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
         },
         *deteleContact({payload:{key}},{select, put}){
             let {address_book} = yield select(mapToUserModal);
@@ -52,11 +52,11 @@ export default {
         },
         *updatePassword({payload}, {select,put}){
             const {hashed_password} = payload;
-            const {accountsKey} = yield select(({accountsModal})=>accountsModal.accountsKey);
+            const {accountsKey} = yield select(({accountsModel})=>accountsModel.accountsKey);
             yield put(createAction('updateState')({hashed_password}));
             yield put(createAction('saveUser'))();
             // re-save all accounts
-            yield put(createAction('accountsModal/saveAccounts')({keys:accountsKey}));
+            yield put(createAction('accountsModel/saveAccounts')({keys:accountsKey}));
         },
         *register({payload}, {call,put}){
             const {password, password_confirm} = payload;
@@ -90,4 +90,4 @@ export default {
     }
 }
 
-const mapToUserModal = ({userModal})=>({...userModal});
+const mapToUserModal = ({userModel})=>({...userModel});

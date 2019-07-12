@@ -87,7 +87,7 @@ class Launch extends Component{
     }
 }
 
-export default connect(state => { return ({ dapps: state.dapps, setting: state.settingsModal }); })(Launch);
+export default connect(state => { return ({ dapps: state.dapps, setting: state.settingsModel }); })(Launch);
 
 const styles = StyleSheet.create({
     container: {

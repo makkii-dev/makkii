@@ -28,7 +28,7 @@ class Password extends Component {
 	recovery = ()=>{
 		const {dispatch, navigation } = this.props;
 		const {password, password_confirm} = this.state;
-		dispatch(createAction('userModal/register')({password_confirm,password, mnemonic: this.mnemonic}))
+		dispatch(createAction('userModel/register')({password_confirm,password, mnemonic: this.mnemonic}))
 			.then(r=>{
 				if(r){
 					sendRecoveryEventLog();
@@ -49,11 +49,11 @@ class Password extends Component {
 					{text: strings('cancel_button'),onPress:()=>{}},
 					{text: strings('alert_ok_button'),onPress:()=>{
 							Promise.all([
-								dispatch(createAction('userModal/reset')()),
-								dispatch(createAction('accountsModal/reset')()),
-								dispatch(createAction('settingsModal/reset')),
+								dispatch(createAction('userModel/reset')()),
+								dispatch(createAction('accountsModel/reset')()),
+								dispatch(createAction('settingsModel/reset')),
 								dispatch(createAction('ERC20Dex/reset')()),
-								dispatch(createAction('txSenderModal/reset')()),
+								dispatch(createAction('txSenderModel/reset')()),
 							]).then(this.recovery)
 						}},
 				]
@@ -119,7 +119,7 @@ class Password extends Component {
 }
 
 
-const mapToState = ({userModal})=>({
-	hashed_password: userModal.hashed_password
+const mapToState = ({userModel})=>({
+	hashed_password: userModel.hashed_password
 });
 export default connect(mapToState)(Password);

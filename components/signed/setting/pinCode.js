@@ -31,14 +31,14 @@ class PinCode extends React.Component {
         this.refs['refLoading'].show();
         if(!pinCodeEnabled===false){
             // close pin code
-            dispatch(createAction('settingsModal/switchPinCode')())
+            dispatch(createAction('settingsModel/switchPinCode')())
                 .then(r=>{
                     this.refs['refLoading'].hide();
                 })
         }else{
             navigation.navigate('unlock',{
                 onUnlockSuccess:()=>{
-                    dispatch(createAction('settingsModal/switchPinCode')())
+                    dispatch(createAction('settingsModel/switchPinCode')())
                         .then(r=>{
                             this.refs['refLoading'].hide();
                         })
@@ -84,7 +84,7 @@ class PinCode extends React.Component {
     handleToggleTouchIDSwitch(){
         const {dispatch} = this.props;
         this.refs['refLoading'].show();
-        dispatch(createAction('settingsModal/switchTouchId')())
+        dispatch(createAction('settingsModel/switchTouchId')())
             .then(r=>{
                 this.refs['refLoading'].hide();
             });
@@ -134,10 +134,10 @@ class PinCode extends React.Component {
     }
 }
 
-const mapToState = ({settingsModal, userModal})=>({
-    pinCodeEnabled: settingsModal.pinCodeEnabled,
-    touchIDEnabled: settingsModal.touchIDEnabled,
-    hashed_password: userModal.hashed_password
+const mapToState = ({settingsModel, userModel})=>({
+    pinCodeEnabled: settingsModel.pinCodeEnabled,
+    touchIDEnabled: settingsModel.touchIDEnabled,
+    hashed_password: userModel.hashed_password
 });
 
 export default connect(mapToState)(PinCode);

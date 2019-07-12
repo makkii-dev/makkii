@@ -8,7 +8,7 @@ import TouchID from "react-native-touch-id";
 import DeviceInfo from "react-native-device-info";
 
 export default {
-    namespace:'settingsModal',
+    namespace:'settingsModel',
     state:{
         lang:'auto',
         login_session_timeout: '30',
@@ -37,7 +37,7 @@ export default {
                   clearInterval(listener);
               }else{
                   listener=setInterval(()=>{
-                      dispatch(createAction('settingsModal/getCoinPrices')());
+                      dispatch(createAction('settingsModel/getCoinPrices')());
                   },exchange_refresh_interval*60*1000);
               }
           })
@@ -74,16 +74,16 @@ export default {
             yield put(createAction('saveSettings')());
         },
         *saveSettings(action, {call, select}){
-            const toBeSaved = yield select(({settingsModal})=>({
-                lang:settingsModal.lang,
-                login_session_timeout: settingsModal.login_session_timeout,
-                exchange_refresh_interval: settingsModal.exchange_refresh_interval,
-                fiat_currency: settingsModal.fiat_currency,
-                pinCodeEnabled: settingsModal.pinCodeEnabled,
-                touchIDEnabled: settingsModal.touchIDEnabled,
-                explorer_server: settingsModal.explorer_server, // only used in unused dapp_send. will remove later.
-                state_version: settingsModal.state_version, // local state/db version, used to upgrade
-                version: settingsModal.version // app version
+            const toBeSaved = yield select(({settingsModel})=>({
+                lang:settingsModel.lang,
+                login_session_timeout: settingsModel.login_session_timeout,
+                exchange_refresh_interval: settingsModel.exchange_refresh_interval,
+                fiat_currency: settingsModel.fiat_currency,
+                pinCodeEnabled: settingsModel.pinCodeEnabled,
+                touchIDEnabled: settingsModel.touchIDEnabled,
+                explorer_server: settingsModel.explorer_server, // only used in unused dapp_send. will remove later.
+                state_version: settingsModel.state_version, // local state/db version, used to upgrade
+                version: settingsModel.version // app version
             }));
             yield call(Storage.set,'settings',toBeSaved);
         },
@@ -169,8 +169,8 @@ export default {
 }
 
 
-const mapToSettings = ({settingsModal})=>({...settingsModal});
-const mapToUsers = ({userModal})=>({...userModal});
+const mapToSettings = ({settingsModel})=>({...settingsModel});
+const mapToUsers = ({userModel})=>({...userModel});
 
 const upgradeSettingsV0_V1=(old_settings)=>{
     let new_settings = {...old_settings};

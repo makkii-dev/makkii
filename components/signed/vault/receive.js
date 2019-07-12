@@ -193,8 +193,8 @@ class Receive extends Component {
 }
 
 
-const mapToState = ({accountsModal})=>{
-	const {currentAccount:key,currentToken, accountsMap}=accountsModal;
+const mapToState = ({accountsModel})=>{
+	const {currentAccount:key,currentToken, accountsMap}=accountsModel;
 	const currentAccount = {
 		...accountsMap[key],
 		coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,

@@ -130,10 +130,10 @@ class Advanced extends Component {
             return;
         }
         if(_login_session_timeout!== login_session_timeout){
-            dispatch(createAction('settingsModal/updateLoginSessionTimeOut')({time:login_session_timeout}))
+            dispatch(createAction('settingsModel/updateLoginSessionTimeOut')({time:login_session_timeout}))
         }
         if(_exchange_refresh_interval!==exchange_refresh_interval){
-            dispatch(createAction('settingsModal/updateExchangeRefreshInterval')({interval:exchange_refresh_interval}));
+            dispatch(createAction('settingsModel/updateExchangeRefreshInterval')({interval:exchange_refresh_interval}));
         }
 
         AppToast.show(strings('toast_update_success'), {
@@ -145,9 +145,9 @@ class Advanced extends Component {
     }
 }
 
-const mapToState = ({settingsModal})=>({
-    login_session_timeout: settingsModal.login_session_timeout,
-    exchange_refresh_interval: settingsModal.exchange_refresh_interval,
+const mapToState = ({settingsModel})=>({
+    login_session_timeout: settingsModel.login_session_timeout,
+    exchange_refresh_interval: settingsModel.exchange_refresh_interval,
 });
 
 export default connect(mapToState)(Advanced);

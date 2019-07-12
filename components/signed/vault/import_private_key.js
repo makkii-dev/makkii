@@ -33,7 +33,7 @@ class ImportPrivateKey extends Component {
 		Keyboard.dismiss();
 		const {dispatch} = this.props;
 		const {private_key} = this.state;
-		dispatch(createAction('accountImportModal/fromPrivateKey')({private_key}))
+		dispatch(createAction('accountImportModel/fromPrivateKey')({private_key}))
 			.then(r=>{
 				if(r===2){ // already imported
 					AppToast.show(strings('import_private_key.already_existed',),{position:0})
@@ -154,8 +154,8 @@ class ImportPrivateKey extends Component {
 	}
 }
 
-const mapToState= ({accountImportModal})=>({
-	symbol: accountImportModal.symbol,
+const mapToState= ({accountImportModel})=>({
+	symbol: accountImportModel.symbol,
 });
 
 export default connect(mapToState)(ImportPrivateKey);

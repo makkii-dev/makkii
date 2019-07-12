@@ -13,7 +13,7 @@ const init ={
 };
 
 export default {
-    namespace: 'contactAddModal',
+    namespace: 'contactAddModel',
     state:init,
     reducers:{
         updateState(state, {payload}){
@@ -38,9 +38,9 @@ export default {
             const {symbol, address, name} = yield select(mapToConTactAddModal);
             const contactObj = {symbol, address, name, ...payload};
             const key = accountKey(contactObj.symbol, contactObj.address);
-            const ret = yield call(validateAddress, contactObj.symbol, contactObj.address);
+            const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
             if(!ret){
-                AppToast.show(strings('add_address.error_address_format', { coin: this.newSymbol }), {
+                AppToast.show(strings('add_address.error_address_format', { coin:contactObj.symbol }), {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.CENTER
                 });
@@ -53,12 +53,13 @@ export default {
                 });
                 return false;
             }
-            yield put(createAction('userModal/addContact')({contactObj}));
+            yield put(createAction('userModel/addContact')({contactObj}));
+            yield put(createAction('reset')());
             return true;
         }
 
     }
 }
 
-const mapToConTactAddModal = ({contactAddModal})=>({...contactAddModal});
-const mapToUserModal = ({userModal})=>({...userModal});
+const mapToConTactAddModal = ({contactAddModel})=>({...contactAddModel});
+const mapToUserModal = ({userModel})=>({...userModel});

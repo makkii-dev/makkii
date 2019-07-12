@@ -17,7 +17,7 @@ const init= {
 };
 
 export default {
-    namespace: 'txSenderModal',
+    namespace: 'txSenderModel',
     state:init,
     reducers:{
         updateState(state, {payload}){
@@ -30,13 +30,13 @@ export default {
             yield put(createAction('updateState')(init))
         },
         *sendAll({payload},{call,select,put}){
-            const {currentAccount} = yield select(mapToAccountsModal);
+            const {currentAccount} = yield select(mapToaccountsModel);
             const amount = yield call(getAllBalance, currentAccount, payload);
             yield put(createAction('updateState')({amount:amount}))
         },
         *parseScannedData({payload:{data}},{call, select, put}){
             console.log('data=>',data);
-            const {currentAccount} = yield select(mapToAccountsModal);
+            const {currentAccount} = yield select(mapToaccountsModel);
             let ret = yield call(parseScannedData, data, currentAccount);
             if(ret.result){
                 yield put(createAction('updateState')({...ret.data}));
@@ -44,7 +44,7 @@ export default {
             return ret.result;
         },
         *validateTxObj({payload:{txObj}},{call,select, put}){
-            const {currentAccount} = yield select(mapToAccountsModal);
+            const {currentAccount} = yield select(mapToaccountsModel);
             const ret = yield call(validateTxObj, txObj, currentAccount);
             if(!ret.result) {
                 alert_ok(strings('alert_title_error'), strings('send.' + ret.err));
@@ -54,14 +54,14 @@ export default {
             }
         },
         *sendTx({payload:{txObj}}, {call, select, put, take}){
-            const {currentAccount} = yield select(mapToAccountsModal);
-            const txType = yield select(({txSenderModal})=>txSenderModal.txType);
+            const {currentAccount} = yield select(mapToaccountsModel);
+            const txType = yield select(({txSenderModel})=>txSenderModel.txType);
             const {address, symbol ,coinSymbol, type:accountType} = currentAccount;
             const {type,data} = txType;
             const ret = yield call(sendTx, txObj, currentAccount);
             if(ret.result){
                 sendTransferEventLog(symbol, symbol===coinSymbol?null:coinSymbol, new BigNumber(txObj.amount));
-                //dispatch tx to accountsModal;
+                //dispatch tx to accountsModel;
                 const {data:{pendingTx, pendingTokenTx}} = ret;
                 const payloadTx= {
                     key: accountKey(symbol,address),
@@ -72,7 +72,7 @@ export default {
                     type: 'normal',
                     symbol: symbol,
                 };
-                yield put(createAction('accountsModal/updateTransactions')(payloadTx));
+                yield put(createAction('accountsModel/updateTransactions')(payloadTx));
                 if(pendingTokenTx){
                     const payload = {
                         key: accountKey(symbol, address, coinSymbol),
@@ -83,8 +83,8 @@ export default {
                         type: 'token',
                         token: {symbol:coinSymbol,tokenTx:pendingTokenTx }
                     };
-                    yield take('accountsModal/updateTransactions/@@end');
-                    yield put(createAction('accountsModal/updateTransactions')(payload));
+                    yield take('accountsModel/updateTransactions/@@end');
+                    yield put(createAction('accountsModel/updateTransactions')(payload));
                 }
                 if(type&&type==='exchange'){
                     const payload = {
@@ -96,8 +96,8 @@ export default {
                         type: 'exchange',
                         exchange: data,
                     };
-                    yield take('accountsModal/updateTransactions/@@end');
-                    yield put(createAction('accountsModal/updateTransactions')(payload));
+                    yield take('accountsModel/updateTransactions/@@end');
+                    yield put(createAction('accountsModel/updateTransactions')(payload));
                 }
 
                 //dispatch tx to erc20dexModal
@@ -113,7 +113,7 @@ export default {
                 //dispatch tx to tx listener
                 yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
 
-                // reset txSenderModal
+                // reset txSenderModel
                 yield put(createAction('reset')());
                 return true;
             }else{
@@ -131,8 +131,8 @@ export default {
 
 
 
-const mapToAccountsModal = ({accountsModal})=>{
-    const {currentAccount:key, currentToken, accountsMap, tokenLists} = accountsModal;
+const mapToaccountsModel = ({accountsModel})=>{
+    const {currentAccount:key, currentToken, accountsMap, tokenLists} = accountsModel;
     const {tokens,symbol} = accountsMap[key];
     const newtokens = Object.keys(tokens).reduce((map,el)=>{
         map[el]={
@@ -152,4 +152,4 @@ const mapToAccountsModal = ({accountsModal})=>{
     })
 };
 
-const mapToTxSenderModal = ({txSenderModal})=>({...txSenderModal});
+const mapToTxSenderModal = ({txSenderModel})=>({...txSenderModel});

@@ -24,11 +24,11 @@ class SelectCoin extends Component {
     selectCoin = (item)=>{
         const {dispatch, navigation} = this.props;
         if(this.usage === 'import'){
-            dispatch(createAction('accountImportModal/updateState')({symbol: item.symbol}));
+            dispatch(createAction('accountImportModel/updateState')({symbol: item.symbol}));
             navigation.navigate('signed_vault_import_from')
         }else if(this.usage === 'address_book'){
             //Todo: refactor address_book
-            dispatch(createAction('contactAddModal/updateAState')({symbol: item.symbol}));
+            dispatch(createAction('contactAddModel/updateAState')({symbol: item.symbol}));
             navigation.goBack()
         }
     };

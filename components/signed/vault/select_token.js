@@ -87,8 +87,8 @@ class SelectToken extends Component {
         this.refs['refLoading'].show(null, {position: 'top'});
         const {dispatch} = this.props;
         const action = keyword.length?
-            createAction('tokenImportModal/searchTokens')({keyword:keyword}):
-            createAction('tokenImportModal/getTopTokens')();
+            createAction('tokenImportModel/searchTokens')({keyword:keyword}):
+            createAction('tokenImportModel/getTopTokens')();
         dispatch(action)
             .then(len=>{
                 if(this.isMount){
@@ -103,7 +103,7 @@ class SelectToken extends Component {
     async componentWillMount() {
         this.isMount = true;
         const {dispatch} = this.props;
-        dispatch(createAction('tokenImportModal/getTopTokens')())
+        dispatch(createAction('tokenImportModel/getTopTokens')())
             .then(len=>{
                 this.isMount&&this.setState({
                     isLoading: false,
@@ -126,7 +126,7 @@ class SelectToken extends Component {
           tokenDecimal: item.tokenDecimal,
       };
       const {dispatch,navigation}= this.props;
-      dispatch(createAction('accountsModal/addTokenToCurrentAccount')({token}))
+      dispatch(createAction('accountsModel/addTokenToCurrentAccount')({token}))
           .then(r=>{
               if(r){
                   navigation.goBack();
@@ -251,10 +251,10 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapToState = ({tokenImportModal,accountsModal})=>{
-    const {currentAccount:key,accountsMap} = accountsModal;
+const mapToState = ({tokenImportModel,accountsModel})=>{
+    const {currentAccount:key,accountsMap} = accountsModel;
     const {tokens, symbol} = accountsMap[key];
-    const {token_lists} =  tokenImportModal;
+    const {token_lists} =  tokenImportModel;
     let newTokenLists = [...token_lists];
     newTokenLists.forEach(token=>{
         const {contractAddr, symbol: tokenSymbol} = token;

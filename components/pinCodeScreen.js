@@ -343,9 +343,9 @@ class PinCodeScreen extends React.Component {
 
 }
 
-const mapToState = ({userModal, settingsModal })=>({
-    hashed_pinCode: userModal.hashed_pinCode,
-    touchIDEnabled: settingsModal.touchIDEnabled,
+const mapToState = ({userModel, settingsModel })=>({
+    hashed_pinCode: userModel.hashed_pinCode,
+    touchIDEnabled: settingsModel.touchIDEnabled,
 })
 
 export default connect(mapToState)(PinCodeScreen);

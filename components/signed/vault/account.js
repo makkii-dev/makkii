@@ -129,7 +129,7 @@ class Account extends Component {
 
 	fetchAccountTransactions = ()=>{
 		const {dispatch,currentAccount} = this.props;
-		dispatch(createAction('accountsModal/getTransactionHistory')({
+		dispatch(createAction('accountsModel/getTransactionHistory')({
 			user_address: currentAccount.address,
 			symbol: currentAccount.symbol,
 			tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol?'':currentAccount.coinSymbol,
@@ -187,7 +187,7 @@ class Account extends Component {
 	};
 
 	toSend=()=> {
-		this.props.dispatch(createAction('txSenderModal/reset')());
+		this.props.dispatch(createAction('txSenderModel/reset')());
 		this.props.navigation.navigate('signed_vault_send');
 	};
 
@@ -375,8 +375,8 @@ class Account extends Component {
 
 
 
-const mapToState=({accountsModal})=>{
-	const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModal;
+const mapToState=({accountsModel})=>{
+	const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModel;
 	const currentAccount = {
 		...accountsMap[key],
 		coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,

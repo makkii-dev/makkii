@@ -148,7 +148,7 @@ class Password extends Component {
 		// update password
 		const { dispatch } = this.props;
 		let newHashedPassword = hashPassword(this.state.password_new);
-		dispatch(createAction('userModal/updatePassword')({hashed_password: newHashedPassword}))
+		dispatch(createAction('userModel/updatePassword')({hashed_password: newHashedPassword}))
 			.then(r=>{
 				AppToast.show(strings('toast_update_success'), {
 					position: AppToast.positions.CENTER,
@@ -161,7 +161,7 @@ class Password extends Component {
 	}
 
 }
-const mapToState = ({userModal})=>({
-	hashed_password: userModal.hashed_password
+const mapToState = ({userModel})=>({
+	hashed_password: userModel.hashed_password
 });
 export default connect(mapToState)(Password);

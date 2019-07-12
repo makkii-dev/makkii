@@ -100,7 +100,7 @@ class Home extends Component {
 		);
 	}
 }
-const mapToState = ({settingsModal})=>({
-	lang:settingsModal.lang,
+const mapToState = ({settingsModel})=>({
+	lang:settingsModel.lang,
 });
 export default connect(mapToState)(Home);

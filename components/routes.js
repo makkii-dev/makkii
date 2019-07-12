@@ -63,6 +63,7 @@ import AddToken                 from './signed/vault/add_token';
 
 
 import {strings} from "../locales/i18n";
+import userModel from "../models/userModel";
 
 const transitionConfig = () => {
     return {
@@ -541,21 +542,24 @@ class Router extends PureComponent {
     }
 
     render() {
-        const {user, dispatch, router,settingsModal} = this.props;
-        console.log('app lang => ',settingsModal.lang === 'auto'? DeviceInfo.getDeviceLocale(): settingsModal.lang);
+        const {lang, dispatch, router,pinCodeEnabled, hashed_password} = this.props;
         return <App dispatch={dispatch} state={router} screenProps={{
                 t:strings,
-                lang: settingsModal.lang === 'auto'? DeviceInfo.getDeviceLocale(): settingsModal.lang,
+                lang: lang === 'auto'? DeviceInfo.getDeviceLocale():lang,
                 navigationSafely:({routeName, params, onVerifySuccess=undefined})=>({dispatch})=>{
-                    navigationSafely(settingsModal.pinCodeEnabled,user.hashed_password,{routeName,params,onVerifySuccess})({dispatch});
+                    navigationSafely(pinCodeEnabled,hashed_password,{routeName,params,onVerifySuccess})({dispatch});
                 }
             }}/>
     }
 }
 
 const mapStateToProps = state => {
-    const { app, router,settingsModal,user} = state;
-    return { app, router,settingsModal,user};
+    const { app, router,settingsModel,userModel} = state;
+    return {app, router,
+        lang:settingsModel.lang,
+        pinCodeEnabled: settingsModel.pinCodeEnabled,
+        hashed_password: userModel.hashed_password
+        };
 };
 
 export default connect(mapStateToProps)(Router);

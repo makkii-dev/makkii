@@ -30,7 +30,7 @@ class AccountList extends React.Component{
 
     selectAccount = (address)=>{
         const {dispatch} = this.props;
-        dispatch(createAction('accountsModal/updateState')({currentAccount:accountKey('ETH',address)}));
+        dispatch(createAction('accountsModel/updateState')({currentAccount:accountKey('ETH',address)}));
         navigateBack(this.props);
     };
 
@@ -94,8 +94,8 @@ class AccountList extends React.Component{
     }
 }
 
-const mapToState = ({accountsModal})=>{
-    const {accountsMap}  = accountsModal;
+const mapToState = ({accountsModel})=>{
+    const {accountsMap}  = accountsModel;
     return {
         accounts:Object.values(Object.keys(accountsMap).filter(k=>k.toLowerCase().startsWith('eth')).reduce((map,el)=>{map[el]=accountsMap[el];return map},{})),
     }

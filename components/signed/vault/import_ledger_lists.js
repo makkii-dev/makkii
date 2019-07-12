@@ -69,7 +69,7 @@ class ImportHdWallet extends React.Component {
     fetchAccount= (page, size=25)=>{
         const {dispatch} = this.props;
         console.log('fetchAccount page: '+page+' size: '+size);
-        dispatch(createAction('accountsModal/getAccountsFromLedger')({page, size}))
+        dispatch(createAction('accountsModel/getAccountsFromLedger')({page, size}))
             .then(r=>{
                 this.isMount && this.setState({
                     currentPage:page,
@@ -148,10 +148,10 @@ class ImportHdWallet extends React.Component {
 }
 
 
-const mapToState = ({accountImportModal})=>{
-    const accountLists = Object.keys(accountImportModal.ledger_lists).reduce((map,el)=>{
+const mapToState = ({accountImportModel})=>{
+    const accountLists = Object.keys(accountImportModel.ledger_lists).reduce((map,el)=>{
         map[el]={
-            address:accountImportModal.ledger_lists[el],
+            address:accountImportModel.ledger_lists[el],
             index:el,
         };
         return map;

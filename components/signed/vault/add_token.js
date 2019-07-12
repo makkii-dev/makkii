@@ -72,7 +72,7 @@ class AddToken extends Component {
             tokenDecimal: tokenDecimal,
         };
         const {dispatch,navigation}= this.props;
-        dispatch(createAction('accountsModal/addTokenToCurrentAccount')({token}))
+        dispatch(createAction('accountsModel/addTokenToCurrentAccount')({token}))
             .then(r=>{
                 if(r){
                     navigation.navigate('signed_vault_account_tokens');
@@ -100,7 +100,7 @@ class AddToken extends Component {
     fetchTokenDetail=(address) => {
         this.refs['refLoading'].show();
         const {dispatch,navigation}= this.props;
-        dispatch(createAction('tokenImportModal/fetchTokenDetail')({address:address}))
+        dispatch(createAction('tokenImportModel/fetchTokenDetail')({address:address}))
             .then(r=>{
                 if(!r){
                     navigation.setParams({isEdited: false});
@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
         // flex: 1,
     }
 });
-const mapToState = ({tokenImportModal,accountsModal})=>{
-    const {currentAccount:key,accountsMap} = accountsModal;
-    const {tokenToBeImported} = tokenImportModal;
+const mapToState = ({tokenImportModel,accountsModel})=>{
+    const {currentAccount:key,accountsMap} = accountsModel;
+    const {tokenToBeImported} = tokenImportModel;
     return({
         ...tokenToBeImported,
         currentAccount: accountsMap[key],

@@ -34,7 +34,7 @@ class ExchangeHistory extends React.Component {
     onRefresh= ()=>{
         const {dispatch,currentAccount} = this.props;
         this.refs['refLoading'].show();
-        dispatch(createAction('accountsModal/getExchangeHistory')({user_address:currentAccount.address})).then(r=>{
+        dispatch(createAction('accountsModel/getExchangeHistory')({user_address:currentAccount.address})).then(r=>{
             this.refs['refLoading'].hide();
         })
     };
@@ -159,8 +159,8 @@ class ExchangeHistory extends React.Component {
     }
 }
 
-const mapToState = ({accountsModal})=>{
-    const {currentAccount:key, accountsMap, transactionsMap} = accountsModal;
+const mapToState = ({accountsModel})=>{
+    const {currentAccount:key, accountsMap, transactionsMap} = accountsModel;
     const currentAccount = accountsMap[key];
     let exchangeHistory = [];
     let compareFn = (a, b) => {

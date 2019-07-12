@@ -32,7 +32,7 @@ class Home extends Component {
 	register = ()=>{
 		const {dispatch, navigation } = this.props;
 		const {password, password_confirm} = this.state;
-		dispatch(createAction('userModal/register')({password_confirm,password}))
+		dispatch(createAction('userModel/register')({password_confirm,password}))
 			.then(r=>{
 				if(r){
 					sendRegisterEventLog();
@@ -53,11 +53,11 @@ class Home extends Component {
 					{text: strings('cancel_button'),onPress:()=>{}},
 					{text: strings('alert_ok_button'),onPress:()=>{
 							Promise.all([
-								dispatch(createAction('userModal/reset')()),
-								dispatch(createAction('accountsModal/reset')()),
-								dispatch(createAction('settingsModal/reset')),
+								dispatch(createAction('userModel/reset')()),
+								dispatch(createAction('accountsModel/reset')()),
+								dispatch(createAction('settingsModel/reset')),
 								dispatch(createAction('ERC20Dex/reset')()),
-								dispatch(createAction('txSenderModal/reset')()),
+								dispatch(createAction('txSenderModel/reset')()),
 							]).then(this.register)
 						}},
 				]
@@ -127,7 +127,7 @@ class Home extends Component {
 	}
 }
 
-const mapToState = ({userModal})=>({
-	hashed_password: userModal.hashed_password
+const mapToState = ({userModel})=>({
+	hashed_password: userModel.hashed_password
 });
 export default connect(mapToState)(Home);

@@ -99,8 +99,8 @@ class Recovery extends Component {
 	}
 }
 
-const mapToState = ({userModal})=>({
-	mnemonic: userModal.mnemonic,
+const mapToState = ({userModel})=>({
+	mnemonic: userModel.mnemonic,
 });
 
 export default connect(mapToState)(Recovery);

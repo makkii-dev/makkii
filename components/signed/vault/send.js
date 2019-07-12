@@ -96,7 +96,7 @@ class Send extends Component {
 		navigation.navigate('scan', {
 			success: 'signed_vault_send',
 			validate: (data, callback)=> {
-				dispatch(createAction('txSenderModal/parseScannedData')({data:data.data}))
+				dispatch(createAction('txSenderModel/parseScannedData')({data:data.data}))
 					.then(res=>{
 						res?callback(true):callback(false,strings('error_invalid_qrcode'));
 					})
@@ -249,7 +249,7 @@ class Send extends Component {
 			gasPrice: this.state.gasPrice,
 			gasLimit: this.state.gasLimit,
 		};
-		dispatch(createAction('txSenderModal/validateTxObj')({txObj}))
+		dispatch(createAction('txSenderModel/validateTxObj')({txObj}))
 			.then(result => {
 				if (result) {
 					this.checkSameAddress();
@@ -307,7 +307,7 @@ class Send extends Component {
 			gasPrice: this.state.gasPrice,
 			gasLimit: this.state.gasLimit,
 		};
-		dispatch(createAction('txSenderModal/sendTx')({txObj}))
+		dispatch(createAction('txSenderModel/sendTx')({txObj}))
 			.then(r=>{
 				this.refs['refLoading'].hide();
 				if(r){
@@ -327,7 +327,7 @@ class Send extends Component {
 		this.refs['refLoading'].show();
 		const {dispatch} = this.props;
 		const {gasLimit,gasPrice} = this.state;
-		dispatch(createAction('txSenderModal/sendAll')({currentGasPrice:gasPrice, currentGasLimit:gasLimit}))
+		dispatch(createAction('txSenderModel/sendAll')({currentGasPrice:gasPrice, currentGasLimit:gasLimit}))
 			.then(r=>{
 				this.refs['refLoading'].hide();
 			})
@@ -365,10 +365,10 @@ const styles = StyleSheet.create({
 });
 
 
-const mapToState = ({accountsModal, txSenderModal})=>{
+const mapToState = ({accountsModel, txSenderModel})=>{
 
-	const {to, amount, data, gasLimit, gasPrice,editable} = txSenderModal;
-	const {currentAccount:key,currentToken, accountsMap}=accountsModal;
+	const {to, amount, data, gasLimit, gasPrice,editable} = txSenderModel;
+	const {currentAccount:key,currentToken, accountsMap}=accountsModel;
 	const currentAccount = {
 		...accountsMap[key],
 		coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,

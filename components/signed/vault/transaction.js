@@ -18,6 +18,8 @@ import {linkButtonColor,mainBgColor} from "../../style_util";
 const {width, height} = Dimensions.get('window');
 import defaultStyles from '../../styles';
 import {AppToast} from "../../../utils/AppToast";
+import {createAction} from "../../../utils/dva";
+import {accountKey} from "../../../utils";
 
 class Transaction extends Component {
 	static navigationOptions = ({ navigation }) => {
@@ -76,6 +78,16 @@ class Transaction extends Component {
 			);
 		}
 	};
+	addToAddressBook = (address, symbol)=>{
+		const {dispatch, navigation} = this.props;
+		dispatch(createAction('contactAddModel/updateState')({
+			symbol:symbol,
+			name: '',
+			address: address,
+			editable: false,
+		}));
+		navigation.navigate('signed_setting_add_address');
+	};
 
 	render(){
 		const transaction = this.transaction;
@@ -83,10 +95,11 @@ class Transaction extends Component {
 		const ifSender = sameAddress(this.account.symbol, this.account.address, transaction.from);
 		const title1 = ifSender? strings('transaction_detail.receiver_label'): strings('transaction_detail.sender_label');
 		const value1 = ifSender? transaction.to: transaction.from;
-		let inAddressBook, addressName, unit;
-		if (Object.keys(this.props.user.address_book).indexOf(value1) >= 0) {
+		const accKey = accountKey(this.account.symbol, value1);
+		let inAddressBook, addressName;
+		if (Object.keys(this.props.address_book).indexOf(accKey) >= 0) {
 			inAddressBook = true;
-			addressName = this.props.user.address_book[value1].name;
+			addressName = this.props.address_book[accKey].name;
 		} else {
 			inAddressBook = false;
 		}
@@ -99,7 +112,7 @@ class Transaction extends Component {
 						<TransactionItemCell
 							style={{height:100}}
 							title={title1}
-							value={inAddressBook?addressName+"("+value1+")":value1}
+							value={inAddressBook?addressName+":("+value1+")":value1}
 							valueTextAlign={'left'}
 							rightView={() =>
                                 <View style={{flexDirection: 'row'}}>
@@ -112,12 +125,7 @@ class Transaction extends Component {
                                     </TouchableOpacity>
 									{
 										inAddressBook?null:
-											<TouchableOpacity onPress={() => {
-												this.props.navigation.navigate('signed_setting_add_address', {
-													address: value1,
-													symbol: this.account.symbol,
-												});
-											}} style={{marginLeft: 10}}>
+											<TouchableOpacity onPress={() => this.addToAddressBook(value1, this.account.symbol)} style={{marginLeft: 10}}>
 												<Image source={require('../../../assets/icon_add_address.png')}
 													   style={{width: 20, height: 20, tintColor: '#000'}} resizeMode={'contain'}/>
 											</TouchableOpacity>
@@ -173,10 +181,10 @@ class Transaction extends Component {
 	}
 }
 
-export default connect(state => {
-	return ({
-		user: state.user,
-	}); })(Transaction);
+const mapToState =({userModel})=>({
+	address_book: userModel.address_book,
+});
+export default connect(mapToState)(Transaction);
 
 const style =  StyleSheet.create({
 

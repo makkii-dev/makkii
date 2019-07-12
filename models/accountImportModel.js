@@ -24,7 +24,7 @@ const init = {
 
 
 export default {
-    namespace: 'accountImportModal',
+    namespace: 'accountImportModel',
     state:init,
     reducers:{
         updateState(state, {payload}){
@@ -34,10 +34,10 @@ export default {
     },
     effects:{
         *fromMasterKey(action, {call, put,select}) {
-            const {symbol, hd_index ,accountsMap} = yield select(({accountImportModal, accountsModal}) => ({
-                symbol: accountImportModal.symbol,
-                hd_index: accountsModal.hd_index,
-                accountsMap: accountsModal.accountsMap,
+            const {symbol, hd_index ,accountsMap} = yield select(({accountImportModel, accountsModel}) => ({
+                symbol: accountImportModel.symbol,
+                hd_index: accountsModel.hd_index,
+                accountsMap: accountsModel.accountsMap,
             }));
             const indexPathMap = hd_index[symbol] || {};
             console.log('indexPathMap=>', indexPathMap);
@@ -49,7 +49,7 @@ export default {
             while(1){
                 const {private_key, address, index} = yield call(getAccountFromMasterKey, symbol, minIndex);
                 console.log('getAccountFromMasterKey ret =>', {private_key, address, index} );
-                yield put(createAction('accountsModal/updateHdIndex')({symbol:symbol, address:address, index: index, code:'add'}));
+                yield put(createAction('accountsModel/updateHdIndex')({symbol:symbol, address:address, index: index, code:'add'}));
                 if(!accountsMap[accountKey(symbol, address)]){
                     console.log('not added');
                     yield put(createAction('updateState')({private_key, address, type:'[local]', readyToImport:true}));
@@ -60,9 +60,9 @@ export default {
         },
         *fromPrivateKey({payload},{call,put, select}){
             const {private_key} = payload;
-            const {symbol, accountsMap} = yield select(({accountImportModal, accountsModal})=>({
-                symbol:accountImportModal.symbol,
-                accountsMap: accountsModal.accountsMap,
+            const {symbol, accountsMap} = yield select(({accountImportModel, accountsModel})=>({
+                symbol:accountImportModel.symbol,
+                accountsMap: accountsModel.accountsMap,
             }));
             try {
                 const {address} = yield call(getAccountFromPrivateKey, symbol, private_key);
@@ -78,15 +78,15 @@ export default {
         },
         *fromLedger({payload},{put,select}){
           const {index} = payload;
-          const ledger_lists = yield select(({accountImportModal})=>accountImportModal.ledger_lists);
+          const ledger_lists = yield select(({accountImportModel})=>accountImportModel.ledger_lists);
           const address =ledger_lists[index];
           yield put(createAction('updateState')({address,derivationIndex:index, type:'[ledger]', readyToImport:true}));
         },
         *getAccountsFromLedger({payload:{page, size}}, {call, put, select}){
-            const {symbol, accountsMap, old_ledger_lists} = yield select(({accountImportModal, accountsModal})=>({
-                symbol:accountImportModal.symbol,
-                old_ledger_lists: accountImportModal.ledger_lists,
-                accountsMap: accountsModal.accountsMap,
+            const {symbol, accountsMap, old_ledger_lists} = yield select(({accountImportModel, accountsModel})=>({
+                symbol:accountImportModel.symbol,
+                old_ledger_lists: accountImportModel.ledger_lists,
+                accountsMap: accountsModel.accountsMap,
             }));
             let new_ledger_lists =  {...old_ledger_lists};
             const rets = yield call(getAccountsFromLedger, symbol, page*size, page*size+size);
@@ -99,12 +99,12 @@ export default {
             yield put(createAction('updateState')({ledger_lists:new_ledger_lists}));
         },
         *importAccount({payload:{name}}, {put,select}){
-            const {symbol, address, type, private_key,derivationIndex} = yield select(({accountImportModal})=>({
-                symbol: accountImportModal.symbol,
-                address: accountImportModal.address,
-                type: accountImportModal.type,
-                private_key: accountImportModal.private_key,
-                derivationIndex: accountImportModal.derivationIndex,
+            const {symbol, address, type, private_key,derivationIndex} = yield select(({accountImportModel})=>({
+                symbol: accountImportModel.symbol,
+                address: accountImportModel.address,
+                type: accountImportModel.type,
+                private_key: accountImportModel.private_key,
+                derivationIndex: accountImportModel.derivationIndex,
             }));
             let account = {symbol, address, type, name, tokens:{}};
             if(account.type === '[ledger]'){
@@ -112,7 +112,7 @@ export default {
             }else{
                 account.private_key = private_key;
             }
-            yield put(createAction('accountsModal/addAccount')({account:account}));
+            yield put(createAction('accountsModel/addAccount')({account:account}));
             yield put(createAction('updateState')(init));
         },
         *getLedgerStatus(action, {call}){

@@ -28,7 +28,7 @@ Array.prototype.remove = function(val) {
 
  */
 export default {
-    namespace: 'accountsModal',
+    namespace: 'accountsModel',
     state:{
         currentAccount: '', // one of accountKey
         currentToken: '',
@@ -141,15 +141,15 @@ export default {
     effects:{
         *loadStorage({payload},{call,select,put,take}){
             const {state_version, options}=payload;
-            yield take('userModal/loadStorage/@@end');
-            const hashed_password = yield select(({userModal})=>userModal.hashed_password);
+            yield take('userModel/loadStorage/@@end');
+            const hashed_password = yield select(({userModel})=>userModel.hashed_password);
             console.log('hashed_password=>',hashed_password);
             if(state_version<2){
                 const  old_accounts_storage = yield call(Storage.get,'accounts',false, false);
                 let old_accounts = JSON.parse(decrypt(old_accounts_storage,hashed_password)||{});
                 old_accounts  = upgradeAccountsV0_V1(state_version,old_accounts,options);
                 const payload = upgradeAccountsV1_V2(old_accounts);
-                const hd_index = yield call(Storage.get, 'userModal',{}).hd_index|| Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
+                const hd_index = yield call(Storage.get, 'userModel',{}).hd_index|| Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
                 yield put(createAction('updateState')({...payload,hd_index}));
                 yield put(createAction('saveAccounts')({keys:Object.keys(payload.accountsMap)}));
                 yield put(createAction('saveTransaction')({keys:Object.keys(payload.transactionsMap)}));
@@ -192,16 +192,16 @@ export default {
             return true;
         },
         *reset(action,{select, put ,take}){
-            const {accountsKey} = yield select(({accountsModal})=> ({accountsKey: accountsModal.accountsKey,}));
+            const {accountsKey} = yield select(({accountsModel})=> ({accountsKey: accountsModel.accountsKey,}));
             yield take('loadBalances/@@end');
             yield put(createAction('deleteAccounts')({keys:accountsKey}));
         },
         *saveAccounts({payload}, {call,select}){ // Adding account and changing account name need to be saved
             const {keys} = payload;
-            const {accountsKey,accountsMap,hashed_password} = yield select(({accountsModal,userModal})=> ({
-                accountsKey: accountsModal.accountsKey,
-                accountsMap: accountsModal.accountsMap,
-                hashed_password: userModal.hashed_password
+            const {accountsKey,accountsMap,hashed_password} = yield select(({accountsModel,userModel})=> ({
+                accountsKey: accountsModel.accountsKey,
+                accountsMap: accountsModel.accountsMap,
+                hashed_password: userModel.hashed_password
             }));
             //save accountsKey
             yield call(Storage.set, 'accountsKey', accountsKey);
@@ -221,7 +221,7 @@ export default {
         },
         *saveTransaction({payload},{call,select}){
             const {keys} = payload;
-            const transactionsMap = yield select(({accountsModal})=> accountsModal.transactionsMap);
+            const transactionsMap = yield select(({accountsModel})=> accountsModel.transactionsMap);
             for(let key of keys){
                 const txs =  transactionsMap[key];
                 // only saved recent 20 tx;
@@ -233,21 +233,21 @@ export default {
             }
         },
         *saveTokenLists({payload},{call,select}){
-            const tokenLists = yield select(({accountsModal})=> accountsModal.tokenLists);
+            const tokenLists = yield select(({accountsModel})=> accountsModel.tokenLists);
             yield call(Storage.set, 'tokenLists', tokenLists);
 
         },
         *saveHdIndex(action,{call,select}){
-            const hd_index = yield select(({accountsModal})=>accountsModal.hd_index);
+            const hd_index = yield select(({accountsModel})=>accountsModel.hd_index);
             yield call(Storage.set, 'hdIndex',hd_index);
         },
         *deleteAccounts({payload},{call,select, put }){
-            const {accountsKey,accountsMap,transactionsMap,hd_index,isGettingBalance} = yield select(({accountsModal})=> ({
-                accountsKey: accountsModal.accountsKey,
-                accountsMap: accountsModal.accountsMap,
-                transactionsMap: accountsModal.transactionsMap,
-                hd_index: accountsModal.hd_index,
-                isGettingBalance: accountsModal.isGettingBalance,
+            const {accountsKey,accountsMap,transactionsMap,hd_index,isGettingBalance} = yield select(({accountsModel})=> ({
+                accountsKey: accountsModel.accountsKey,
+                accountsMap: accountsModel.accountsMap,
+                transactionsMap: accountsModel.transactionsMap,
+                hd_index: accountsModel.hd_index,
+                isGettingBalance: accountsModel.isGettingBalance,
             }));
             if(isGettingBalance){
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});
@@ -301,7 +301,7 @@ export default {
         },
         *updateTransactions({payload},{put,select}){
             const {key, txs, force=true, needSave = true} = payload;
-            const oldTransactionsMap = yield select(({accountsModal})=>accountsModal.transactionsMap);
+            const oldTransactionsMap = yield select(({accountsModel})=>accountsModel.transactionsMap);
             let newTransactionsMap = {...oldTransactionsMap};
             if(newTransactionsMap[key]===undefined&&!force){
                 // Not mandatory to add
@@ -323,7 +323,7 @@ export default {
         *getTransactionHistory({payload:{user_address, symbol, tokenSymbol, page, size ,needSave = true}},{call,select,put}){
             let txs;
             if(tokenSymbol&&tokenSymbol!==''){
-                const tokenLists = yield select(({accountsModal})=>accountsModal.tokenLists);
+                const tokenLists = yield select(({accountsModel})=>accountsModel.tokenLists);
                 const contractAddr = tokenLists[symbol][tokenSymbol].contractAddr;
                 txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size);
 
@@ -341,10 +341,10 @@ export default {
         *loadBalances({payload},{call,select,put}){
             const {keys, force=false} = payload;
             console.log('loadBalances=>',payload);
-            const {oldAccountsMap, tokenLists,isGettingBalance} = yield select(({accountsModal})=>({
-                oldAccountsMap:accountsModal.accountsMap,
-                tokenLists:accountsModal.tokenLists,
-                isGettingBalance:accountsModal.isGettingBalance
+            const {oldAccountsMap, tokenLists,isGettingBalance} = yield select(({accountsModel})=>({
+                oldAccountsMap:accountsModel.accountsMap,
+                tokenLists:accountsModel.tokenLists,
+                isGettingBalance:accountsModel.isGettingBalance
             }));
             if(isGettingBalance)return;
             yield put(createAction('updateState')({isGettingBalance:true}));
@@ -380,7 +380,7 @@ export default {
             return ret;
         },
         *updateHdIndex({payload:{symbol, address, index, code}}, {select, put}){
-            const oldHdIndex = yield select(({accountsModal})=>accountsModal.hd_index);
+            const oldHdIndex = yield select(({accountsModel})=>accountsModel.hd_index);
             const newHdIndex = {...oldHdIndex};
             if(code === 'delete'){
                 let del;
@@ -398,10 +398,10 @@ export default {
             yield put(createAction('saveHdIndex')());
         },
         *addAccount({payload:{account}}, {select,put}){
-            const {accountsKey,accountsMap, transactionsMap} = yield select(({accountsModal})=> ({
-                accountsKey: accountsModal.accountsKey,
-                accountsMap: accountsModal.accountsMap,
-                transactionsMap: accountsModal.transactionsMap,
+            const {accountsKey,accountsMap, transactionsMap} = yield select(({accountsModel})=> ({
+                accountsKey: accountsModel.accountsKey,
+                accountsMap: accountsModel.accountsMap,
+                transactionsMap: accountsModel.transactionsMap,
             }));
             const {symbol, address} =account;
             const key = accountKey(symbol, address);
@@ -414,10 +414,10 @@ export default {
             yield put(createAction('loadBalances')({keys:[key], force:true}));
         },
         *changeCurrentAccountName({payload:{name}},{select,put}){
-            const {currentAccount,accountsMap,isGettingBalance} = yield select(({accountsModal})=> ({
-                currentAccount: accountsModal.currentAccount,
-                accountsMap: accountsModal.accountsMap,
-                isGettingBalance: accountsModal.isGettingBalance
+            const {currentAccount,accountsMap,isGettingBalance} = yield select(({accountsModel})=> ({
+                currentAccount: accountsModel.currentAccount,
+                accountsMap: accountsModel.accountsMap,
+                isGettingBalance: accountsModel.isGettingBalance
             }));
             if(isGettingBalance){
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});
@@ -430,12 +430,12 @@ export default {
 
         },
         *addTokenToCurrentAccount({payload:{token}},{select,put}){
-            const {tokenLists,accountsMap, currentAccount,transactionsMap,isGettingBalance} = yield select(({accountsModal})=> ({
-                currentAccount: accountsModal.currentAccount,
-                tokenLists: accountsModal.tokenLists,
-                accountsMap: accountsModal.accountsMap,
-                transactionsMap: accountsModal.transactionsMap,
-                isGettingBalance: accountsModal.isGettingBalance
+            const {tokenLists,accountsMap, currentAccount,transactionsMap,isGettingBalance} = yield select(({accountsModel})=> ({
+                currentAccount: accountsModel.currentAccount,
+                tokenLists: accountsModel.tokenLists,
+                accountsMap: accountsModel.accountsMap,
+                transactionsMap: accountsModel.transactionsMap,
+                isGettingBalance: accountsModel.isGettingBalance
             }));
             if(isGettingBalance){
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});
@@ -461,10 +461,10 @@ export default {
             return true;
         },
         *deleteToken({payload:{symbol, address, tokenSymbol}}, {call,select,put}){
-            const {accountsMap,transactionsMap,isGettingBalance} = yield select(({accountsModal})=> ({
-                accountsMap: accountsModal.accountsMap,
-                transactionsMap: accountsModal.transactionsMap,
-                isGettingBalance: accountsModal.isGettingBalance,
+            const {accountsMap,transactionsMap,isGettingBalance} = yield select(({accountsModel})=> ({
+                accountsMap: accountsModel.accountsMap,
+                transactionsMap: accountsModel.transactionsMap,
+                isGettingBalance: accountsModel.isGettingBalance,
             }));
             if(isGettingBalance){
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});

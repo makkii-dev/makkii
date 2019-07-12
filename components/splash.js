@@ -11,9 +11,9 @@ const loadStorage=(dispatch)=> new Promise((resolve, reject) => {
 	Storage.get('settings', {state_version: 2}).then(setting=>{
 		const current_state_version  = setting.state_version || 0;
 		Promise.all([
-			dispatch(createAction('userModal/loadStorage')({state_version: current_state_version})),
-			dispatch(createAction('accountsModal/loadStorage')({state_version: current_state_version, options: {network:setting.network||'mainnet'}})),
-			dispatch(createAction('settingsModal/loadStorage')({state_version: current_state_version})),
+			dispatch(createAction('userModel/loadStorage')({state_version: current_state_version})),
+			dispatch(createAction('accountsModel/loadStorage')({state_version: current_state_version, options: {network:setting.network||'mainnet'}})),
+			dispatch(createAction('settingsModel/loadStorage')({state_version: current_state_version})),
 			dispatch(createAction('ERC20Dex/loadStorage')({state_version: current_state_version})),
 			dispatch(createAction('txsListener/loadStorage')({state_version: current_state_version})),
 			new Promise(resolve=>setTimeout(()=>resolve(),3*1000)),

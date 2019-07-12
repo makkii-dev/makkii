@@ -67,7 +67,7 @@ class AddressBook extends Component {
                             openRowKey: null,
                         }, ()=>setTimeout(() => {
                             // delete address locally
-                            dispatch(createAction('userModal/deleteContact')({key}));
+                            dispatch(createAction('userModel/deleteContact')({key}));
                         }));
                     }}
             ],
@@ -79,10 +79,10 @@ class AddressBook extends Component {
         const {dispatch, navigation} = this.props;
         if (this.state.openRowKey === null) {
             if(this.type === 'select'){
-                dispatch(createAction('txSenderModal/updateState')({to:item.address}));
+                dispatch(createAction('txSenderModel/updateState')({to:item.address}));
                 navigation.goBack();
             }else {
-                dispatch(createAction('contactAddModal/updateState')({
+                dispatch(createAction('contactAddModel/updateState')({
                     symbol:item.symbol,
                     name: item.name,
                     address: item.address,
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapToState = ({userModal})=>({
-    address_book: userModal.address_book,
+const mapToState = ({userModel})=>({
+    address_book: userModel.address_book,
 });
 
 export default connect(mapToState)(AddressBook);

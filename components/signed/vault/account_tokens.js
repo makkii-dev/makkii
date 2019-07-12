@@ -124,7 +124,7 @@ class AccountTokens extends Component {
         this.setState({
             refreshing: true
         },()=>{
-            dispatch(createAction('accountsModal/loadBalances')({keys:[accountKey(currentAccount.symbol, currentAccount.address)]}))
+            dispatch(createAction('accountsModel/loadBalances')({keys:[accountKey(currentAccount.symbol, currentAccount.address)]}))
                 .then(r=>{
                     if(r) {
                         this.isMount && this.setState({
@@ -170,7 +170,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         },()=>setTimeout(()=>
                         {
-                            dispatch(createAction('accountsModal/deleteToken')({...currentAccount, tokenSymbol:key}))
+                            dispatch(createAction('accountsModel/deleteToken')({...currentAccount, tokenSymbol:key}))
                         }, 500));
                     }}
             ],
@@ -182,7 +182,7 @@ class AccountTokens extends Component {
     toAccounts =(tokenSymbol)=>{
         const {dispatch, currentAccount} = this.props;
         if(tokenSymbol!==currentAccount.symbol){
-            dispatch(createAction('accountsModal/updateState')({currentToken:tokenSymbol}));
+            dispatch(createAction('accountsModel/updateState')({currentToken:tokenSymbol}));
         }
         navigate('signed_vault_account')({dispatch});
     };
@@ -357,8 +357,8 @@ const styles = StyleSheet.create({
 });
 
 
-const mapToState=({accountsModal})=>{
-    const {currentAccount:key,accountsMap, tokenLists}=accountsModal;
+const mapToState=({accountsModel})=>{
+    const {currentAccount:key,accountsMap, tokenLists}=accountsModel;
     const currentAccount = {...accountsMap[key]};
     const {symbol}=currentAccount;
     const tokens = Object.keys(currentAccount.tokens).reduce((arr,el)=>{

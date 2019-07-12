@@ -4,38 +4,29 @@ import React, {Component} from 'react';
 import {dapps}             from './actions/dapps.js';
 
 // reducers
-import reducer_account         from './reducers/account.js';
-import reducer_accounts        from './reducers/accounts.js';
-import reducer_accounts_ledger from './reducers/accounts_ledger.js';
 import reducer_dapps           from './reducers/dapps.js';
-import reducer_setting         from './reducers/setting.js';
-import reducer_user            from './reducers/user.js';
 
-// modals
-import erc20DexModal from './modals/erc20DexModal';
-import txListenerModal from './modals/txsListenerModal';
-import accountsModal from './modals/accountsModal';
-import accountImportModal from './modals/accountImportModal'
-import tokenImportModal from './modals/tokenImportModal';
-import txSenderModal  from './modals/txSenderModal';
-import userModal      from './modals/userModal';
-import settingsModal  from  './modals/settingsModal';
-import contactAddModal from './modals/contactAddModal';
+
+// models
+import erc20DexModel from './models/erc20DexModel';
+import txListenerModel from './models/txsListenerModel';
+import accountsModel from './models/accountsModel';
+import accountImportModel from './models/accountImportModel'
+import tokenImportModel from './models/tokenImportModel';
+import txSenderModel  from './models/txSenderModel';
+import userModel      from './models/userModel';
+import settingsModel  from  './models/settingsModel';
+import contactAddModel from './models/contactAddModel';
 // store
 import Router, {routerReducer,routerMiddleware} from './components/routes';
 import dva from './utils/dva';
 
 
 const app = dva({
-	models: [erc20DexModal, txListenerModal, accountsModal, accountImportModal,tokenImportModal,txSenderModal, userModal, settingsModal, contactAddModal],
+	models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel,tokenImportModel,txSenderModel, userModel, settingsModel, contactAddModel],
 	extraReducers: {
 		router: 		 routerReducer,
-		account:         reducer_account,
-		accounts:        reducer_accounts,
-		accounts_ledger: reducer_accounts_ledger,
 		dapps:           reducer_dapps,
-		setting:         reducer_setting,
-		user:            reducer_user,
 	},
 	onAction: [routerMiddleware],
 	onError(e) {

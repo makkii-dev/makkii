@@ -214,9 +214,9 @@ class Login extends Component {
 	}
 }
 
-const mapToState = ({userModal,settingsModal})=>({
-    hashed_password: userModal.hashed_password,
-    lang: settingsModal.lang
+const mapToState = ({userModel,settingsModel})=>({
+    hashed_password: userModel.hashed_password,
+    lang: settingsModel.lang
 });
 
 export default connect(mapToState)(Login);

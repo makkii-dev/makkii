@@ -46,10 +46,10 @@ class SetAccountNameScreen extends  React.Component {
         const {textValue} = this.state;
         this.setState({editable:false},()=>{
            if(usage === 'import_account'){
-               dispatch(createAction('accountImportModal/importAccount')({name:textValue}))
+               dispatch(createAction('accountImportModel/importAccount')({name:textValue}))
                    .then(r=>navigation.navigate('signed_vault'));
            }else if (usage === 'change_account_name'){
-               dispatch(createAction('accountsModal/changeCurrentAccountName')({name:textValue}))
+               dispatch(createAction('accountsModel/changeCurrentAccountName')({name:textValue}))
                    .then(r=>navigation.goBack());
            }
         });
@@ -93,9 +93,9 @@ class SetAccountNameScreen extends  React.Component {
         )
     }
 }
-const mapToState = ({accountImportModal, accountsModal}) =>{
-    const {readyToImport} = accountImportModal;
-    const {currentAccount:key, accountsMap} = accountsModal;
+const mapToState = ({accountImportModel, accountsModel}) =>{
+    const {readyToImport} = accountImportModel;
+    const {currentAccount:key, accountsMap} = accountsModel;
     let oldName = '';
     if(!readyToImport &&accountsMap[key]){
         oldName = accountsMap[key].name ;

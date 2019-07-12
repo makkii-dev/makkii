@@ -49,7 +49,7 @@ class TransactionHistory extends React.Component {
         let {currentPage} = this.state;
         const {currentAccount,dispatch} = this.props;
         console.log('get transactions page: '+page+' size: '+size);
-        dispatch(createAction('accountsModal/getTransactionHistory')({
+        dispatch(createAction('accountsModel/getTransactionHistory')({
             user_address: currentAccount.address,
             symbol: currentAccount.symbol,
             tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol?'':currentAccount.coinSymbol,
@@ -158,8 +158,8 @@ class TransactionHistory extends React.Component {
 }
 
 
-const mapToState=({accountsModal})=>{
-    const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModal;
+const mapToState=({accountsModel})=>{
+    const {currentAccount:key,currentToken, transactionsMap, accountsMap}=accountsModel;
     const currentAccount = {
         ...accountsMap[key],
         coinSymbol: currentToken===''?accountsMap[key].symbol:currentToken,

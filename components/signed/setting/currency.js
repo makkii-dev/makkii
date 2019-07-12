@@ -47,7 +47,7 @@ class Currency extends Component {
         const {dispatch,navigation} = this.props;
         let newCurrency = Object.keys(this.refs['refSelectList'].getSelect())[0];
         this.refs['refLoading'].show();
-        dispatch(createAction('settingsModal/updateFiatCurrency')({currency:newCurrency}))
+        dispatch(createAction('settingsModel/updateFiatCurrency')({currency:newCurrency}))
             .then(r=>{
                 this.refs['refLoading'].hide();
                 if(r){
@@ -194,8 +194,8 @@ class Currency extends Component {
     }
 }
 
-const mapToState = ({settingsModal})=>({
-    currentCurrency:settingsModal.fiat_currency,
+const mapToState = ({settingsModel})=>({
+    currentCurrency:settingsModel.fiat_currency,
 });
 
 export default connect(mapToState)(Currency);

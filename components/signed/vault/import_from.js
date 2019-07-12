@@ -23,7 +23,7 @@ class ImportFrom extends Component {
     importFromMasterKey=() => {
         const {dispatch} = this.props;
         this.refs['refLoading'].show();
-        dispatch(createAction('accountImportModal/fromMasterKey')())
+        dispatch(createAction('accountImportModel/fromMasterKey')())
             .then(r=>{
                 this.refs['refLoading'].hide();
                 navigate('signed_vault_set_account_name')({dispatch});
@@ -39,7 +39,7 @@ class ImportFrom extends Component {
         const {dispatch, symbol} = this.props;
         console.log("import " + symbol+ " from ledger");
         this.refs['refLoading'].show(strings('ledger.toast_connecting'));
-        dispatch(createAction('accountImportModal/getLedgerStatus')())
+        dispatch(createAction('accountImportModel/getLedgerStatus')())
             .then(ret=>{
                 this.refs['refLoading'].hide();
                 if(ret.status){
@@ -123,8 +123,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const mapToState= ({accountImportModal})=>({
-   symbol: accountImportModal.symbol,
+const mapToState= ({accountImportModel})=>({
+   symbol: accountImportModel.symbol,
 });
 
 export default connect(mapToState)(ImportFrom);

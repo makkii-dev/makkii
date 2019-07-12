@@ -47,9 +47,10 @@ class AddAddress extends Component {
     constructor(props) {
         super(props);
         const {contactObj} = this.props;
-        this.setState({
+        console.log('contactObj=>',contactObj);
+        this.state = {
             ...contactObj
-        })
+        }
     }
 
     componentWillMount() {
@@ -75,7 +76,7 @@ class AddAddress extends Component {
     addContact=() => {
         const {name, address, symbol} = this.state;
         const {dispatch, navigation} = this.props;
-        dispatch(createAction('contactAddModal/addContact')({name,address,symbol}))
+        dispatch(createAction('contactAddModel/addContact')({name,address,symbol}))
             .then(r=>{
                 if(r){
                     navigation.goBack();
@@ -88,7 +89,7 @@ class AddAddress extends Component {
         navigation.navigate('scan', {
             success: 'signed_setting_add_address',
             validate: (data, callback)=> {
-                dispatch(createAction('contactAddModal/parseScannedData')({data:data.data}))
+                dispatch(createAction('contactAddModel/parseScannedData')({data:data.data}))
                     .then(res=>{
                         res?callback(true):callback(false,strings('error_invalid_qrcode'));
                     })
@@ -96,11 +97,11 @@ class AddAddress extends Component {
         });
     };
 
-    updateEditStatus=()=> {
-        const {symbol, name, address} = this.state;
-        const {symbol: _symbol, name: _name, address:_address} = this.props;
+    updateEditStatus=(name, address)=> {
+        const {symbol} = this.state;
+        const {name: _name, address:_address} = this.props.contactObj;
         let allValid =  symbol !== undefined && name.length !== 0 && address.length !== 0
-            && (name !== _name || address !== _address || symbol !== _symbol);
+            && (name !== _name || address !== _address);
         if (allValid !== this.props.navigation.getParam('isEdited')) {
             this.props.navigation.setParams({
                 isEdited: allValid,
@@ -207,13 +208,13 @@ const styles = StyleSheet.create({
 });
 
 
-const mapToState = ({contactAddModal})=>({
+const mapToState = ({contactAddModel})=>({
     contactObj: {
-        symbol: contactAddModal.symbol,
-        address: contactAddModal.address,
-        name: contactAddModal.name,
+        symbol: contactAddModel.symbol,
+        address: contactAddModel.address,
+        name: contactAddModel.name,
     },
-    editable:contactAddModal.editable
+    editable:contactAddModel.editable
 });
 
 

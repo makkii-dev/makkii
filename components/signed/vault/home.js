@@ -398,7 +398,7 @@ class Home extends Component {
 		this.setState({
 			refreshing: true
 		},()=>{
-			dispatch(createAction('accountsModal/loadBalances')({keys:Object.keys(accounts)}))
+			dispatch(createAction('accountsModel/loadBalances')({keys:Object.keys(accounts)}))
 				.then(r=>{
 					if(r) {
 						this.setState({
@@ -471,7 +471,7 @@ class Home extends Component {
 		}else{
 			const {dispatch} = this.props;
 			const targetUri = COINS[item.symbol].tokenSupport? 'signed_vault_account_tokens': 'signed_vault_account';
-			dispatch(createAction('accountsModal/updateState')({currentAccount:accountKey(item.symbol, item.address), currentToken:''}));
+			dispatch(createAction('accountsModel/updateState')({currentAccount:accountKey(item.symbol, item.address), currentToken:''}));
 			navigate(targetUri)({dispatch})
 		}
 	};
@@ -489,7 +489,7 @@ class Home extends Component {
 							openRowKey: null,
 						},()=>setTimeout(()=>
 						{
-                            dispatch(createAction('accountsModal/deleteAccounts')({keys:[key]}))
+                            dispatch(createAction('accountsModel/deleteAccounts')({keys:[key]}))
 						}, 500));
 					}}
 			],
@@ -641,23 +641,23 @@ class Home extends Component {
 	}
 }
 
-const mapToState = ({accountsModal, settingsModal})=>{
-	const {accountsMap, transactionsMap} = accountsModal;
+const mapToState = ({accountsModel, settingsModel})=>{
+	const {accountsMap, transactionsMap} = accountsModel;
 	let totalBalance = BigNumber(0);
 	const accounts = Object.keys(accountsMap).reduce((map,el)=>{
 		map[el]={
 			...accountsMap[el],
 			txNumber: Object.keys(transactionsMap[el]).length,
 		};
-		totalBalance = totalBalance.plus(BigNumber(accountsMap[el].balance).multipliedBy(BigNumber(settingsModal.coinPrices[accountsMap[el].symbol])));
+		totalBalance = totalBalance.plus(BigNumber(accountsMap[el].balance).multipliedBy(BigNumber(settingsModel.coinPrices[accountsMap[el].symbol])));
 		return map;
 	},{});
 	return ({
-        isGettingBalance: accountsModal.isGettingBalance,
+        isGettingBalance: accountsModel.isGettingBalance,
 		totalBalance: totalBalance,
-		fiat_currency:settingsModal.fiat_currency,
+		fiat_currency:settingsModel.fiat_currency,
 		accounts: accounts,
-		lang: settingsModal.lang
+		lang: settingsModel.lang
 	})
 };
 
