@@ -3,6 +3,8 @@ import {createAction} from "../utils/dva";
 import {accountKey, hashPassword, validatePassword} from "../utils";
 import keyStore from "react-native-makkii-core";
 import {strings} from "../locales/i18n";
+import {NavigationActions, StackActions} from "react-navigation";
+import {generateMnemonic} from "../libs/aion-hd-wallet";
 
 /*
     features: manage user base information
@@ -10,6 +12,7 @@ import {strings} from "../locales/i18n";
 export default {
     namespace: 'userModel',
     state:{
+        isLogin: false,
         hashed_password: '',
         hashed_pinCode: '',
         mnemonic: '',
@@ -48,44 +51,59 @@ export default {
             let {address_book} = yield select(mapToUserModal);
             delete address_book[key];
             yield put(createAction('updateState')({address_book}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
         },
         *updatePassword({payload}, {select,put}){
             const {hashed_password} = payload;
             const {accountsKey} = yield select(({accountsModel})=>accountsModel.accountsKey);
             yield put(createAction('updateState')({hashed_password}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
             // re-save all accounts
             yield put(createAction('accountsModel/saveAccounts')({keys:accountsKey}));
         },
         *register({payload}, {call,put}){
             const {password, password_confirm} = payload;
-            if(validatePassword(password)){
-                return {result:false, error:strings("register.error_password")}
-            }else if(password!==password_confirm){
+            if(!validatePassword(password)){
                 return {result:false, error:strings("register.error_password")}
             }
-            const mnemonic = yield call(keyStore.generateMnemonic);
+            if(password!==password_confirm){
+                return {result:false, error:strings("register.error_dont_match")}
+            }
+            const mnemonic = generateMnemonic();
             const hashed_password = hashPassword(password);
             yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
             return {result:true}
         },
         *recovery({payload}, {put}){
             const {password, password_confirm, mnemonic} = payload;
-            if(validatePassword(password)){
+            if(!validatePassword(password)){
                 return {result:false, error:strings("register.error_password")}
             }else if(password!==password_confirm){
                 return {result:false, error:strings("register.error_password")}
             }
             const hashed_password = hashPassword(password);
             yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
             return {result:true}
         },
         *reset(action, {put}){
             yield put(createAction('updateState')({hashed_password:'',mnemonic:'',hashed_pinCode:'', address_book:{}}));
-            yield put(createAction('saveUser'))();
+            yield put(createAction('saveUser')());
+        },
+        *login(action, {put}){
+            yield put(createAction('updateState')({isLogin:true}));
+            yield put(StackActions.reset({
+                index: 0,
+                actions:[NavigationActions.navigate({routeName:'signed_home'})]
+            }));
+        },
+        *logOut(action, {put}){
+            yield put(createAction('updateState')({isLogin:false}));
+            yield put(StackActions.reset({
+                index: 0,
+                actions:[NavigationActions.navigate({routeName:'unsigned_login'})]
+            }));
         }
     }
 }

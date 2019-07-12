@@ -158,9 +158,10 @@ export default {
                 yield put(createAction('loadBalances')({keys:payload.accountsKey}));
             }else{
                 const accountsKey = yield call(Storage.get, 'accountsKey', []);
+                // const accountsKey = [];
+                console.log('accountsKey=>',accountsKey);
                 const tokenLists =  yield call(Storage.get, 'tokenLists', {});
-                // const hd_index =  yield call(Storage.get, 'hdIndex', Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{}));
-                const hd_index =  Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
+                const hd_index =  yield call(Storage.get, 'hdIndex', Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{}));
                 let accountsMap ={};
                 let transactionsMap ={};
                 for (let key of accountsKey){
@@ -191,10 +192,9 @@ export default {
             }
             return true;
         },
-        *reset(action,{select, put ,take}){
-            const {accountsKey} = yield select(({accountsModel})=> ({accountsKey: accountsModel.accountsKey,}));
-            yield take('loadBalances/@@end');
-            yield put(createAction('deleteAccounts')({keys:accountsKey}));
+        *reset(action,{put , call}){
+            yield call(Storage.remove,'accountsKey');
+            yield put(createAction('updateState')({accountsKey:[], accountsMap:{},currentAccount:'',currentToken:''}));
         },
         *saveAccounts({payload}, {call,select}){ // Adding account and changing account name need to be saved
             const {keys} = payload;
@@ -247,7 +247,6 @@ export default {
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
                 hd_index: accountsModel.hd_index,
-                isGettingBalance: accountsModel.isGettingBalance,
             }));
             if(isGettingBalance){
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});
@@ -460,16 +459,14 @@ export default {
             yield put(createAction('loadBalances')({keys:[currentAccount]}));
             return true;
         },
-        *deleteToken({payload:{symbol, address, tokenSymbol}}, {call,select,put}){
-            const {accountsMap,transactionsMap,isGettingBalance} = yield select(({accountsModel})=> ({
+        *deleteToken({payload:{symbol, address, tokenSymbol, take}}, {call,select,put}){
+            const {accountsMap,transactionsMap} = yield select(({accountsModel})=> ({
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
-                isGettingBalance: accountsModel.isGettingBalance,
             }));
-            if(isGettingBalance){
-                AppToast.show(strings('wallet.toast_is_getting_balance'), {position:AppToast.positions.TOP});
-                return
-            }
+
+            yield take('loadBalances/@@end');
+            yield take('addAccount/@@end');
             const acckey = accountKey(symbol,address);
             const txKey = accountKey(symbol,address,tokenSymbol);
             let newAccountsMap = {...accountsMap};

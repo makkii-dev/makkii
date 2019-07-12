@@ -9,14 +9,14 @@ import {strings} from "../../locales/i18n";
 import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import {AppToast} from "../../utils/AppToast";
-import {popCustom} from "../../utils/dva";
+import {createAction, popCustom} from "../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
 class Login extends Component {
 	constructor(props){
 		super(props);
-		this.state = {
+        this.state = {
 			password: '',
 		}
 	}
@@ -108,7 +108,7 @@ class Login extends Component {
         });
     };
 	upgradeForAndroid = (version) => {
-        var index = version.url.lastIndexOf('\/');
+        let index = version.url.lastIndexOf('\/');
         let filename = version.url.substring(index + 1, version.url.length);
 
         let filePath = RNFS.CachesDirectoryPath + '/' + filename;
@@ -129,11 +129,11 @@ class Login extends Component {
 
 	Login = ()=>{
 	    const {password} = this.state;
-	    const {hashed_password, navigation} = this.props;
+	    const {hashed_password, dispatch} = this.props;
 	    if(hashed_password === ''){
             alert_ok(strings('alert_title_error'), strings('unsigned_login.error_not_register'));
         }else if(hashed_password === hashPassword(password)){
-            navigation.navigate('signed_home');
+            dispatch(createAction('userModel/login')());
         }else{
             alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
         }

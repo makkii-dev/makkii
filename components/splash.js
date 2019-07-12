@@ -10,7 +10,7 @@ import {Storage} from "../utils/storage";
 const loadStorage=(dispatch)=> new Promise((resolve, reject) => {
 	Storage.get('settings', {state_version: 2}).then(setting=>{
 		const current_state_version  = setting.state_version || 0;
-		Promise.all([
+		Promise.race([
 			dispatch(createAction('userModel/loadStorage')({state_version: current_state_version})),
 			dispatch(createAction('accountsModel/loadStorage')({state_version: current_state_version, options: {network:setting.network||'mainnet'}})),
 			dispatch(createAction('settingsModel/loadStorage')({state_version: current_state_version})),

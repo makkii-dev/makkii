@@ -28,20 +28,23 @@ export default {
         version: '0.1.1' // app version
     },
     subscriptions:{
-      setupListenerCoinPrice({dispatch}){
-          let listener;
-          DeviceEventEmitter.addListener('update_exchange_refresh_interval',(params)=>{
-              const {exchange_refresh_interval} = params;
-              console.log('update_exchange_refresh_interval=>',exchange_refresh_interval);
-              if(listener){
-                  clearInterval(listener);
-              }else{
-                  listener=setInterval(()=>{
-                      dispatch(createAction('settingsModel/getCoinPrices')());
-                  },exchange_refresh_interval*60*1000);
-              }
-          })
-      }
+        setupListenerCoinPrice({dispatch}){
+            let listener;
+            DeviceEventEmitter.addListener('update_exchange_refresh_interval',(params)=>{
+                const {exchange_refresh_interval} = params;
+                console.log('update_exchange_refresh_interval=>',exchange_refresh_interval);
+                if(listener){
+                    clearInterval(listener);
+                }else{
+                    listener=setInterval(()=>{
+                        dispatch(createAction('settingsModel/getCoinPrices')());
+                    },exchange_refresh_interval*60*1000);
+                }
+            })
+        },
+        setupListenerAppState({dispatch}){
+
+        }
     },
     reducers:{
         updateState(state, {payload}){

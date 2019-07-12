@@ -7,6 +7,7 @@ import defaultStyles from '../styles.js';
 import {mainBgColor} from '../style_util';
 import screenshotHelper from 'react-native-screenshot-helper';
 import {AppToast} from "../../utils/AppToast";
+import {createAction} from "../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
@@ -24,10 +25,6 @@ class Mnemonic extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		if(this.props.user.mnemonic !== ''){
-
-		}
-
 		if (Platform.OS === 'android') {
 			screenshotHelper.disableTakeScreenshot();
         } else {
@@ -50,7 +47,7 @@ class Mnemonic extends Component {
 
 	render(){
 		const {mnemonic} = this.props;
-		const {navigate} = this.props.navigation;
+		const {dispatch} = this.props.navigation;
 		return (
 			<View style={{
 					flex: 1,
@@ -93,8 +90,8 @@ class Mnemonic extends Component {
                 <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_done')}
                     onPress={e=>{
-                        navigate('signed_home');
-                    }}
+						dispatch(createAction('userModel/login')());
+					}}
                 />
 			</View>
 		);

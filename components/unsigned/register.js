@@ -34,7 +34,7 @@ class Home extends Component {
 		const {password, password_confirm} = this.state;
 		dispatch(createAction('userModel/register')({password_confirm,password}))
 			.then(r=>{
-				if(r){
+				if(r.result){
 					sendRegisterEventLog();
 					navigation.navigate('unsigned_register_mnemonic')
 				}else{
@@ -55,10 +55,10 @@ class Home extends Component {
 							Promise.all([
 								dispatch(createAction('userModel/reset')()),
 								dispatch(createAction('accountsModel/reset')()),
-								dispatch(createAction('settingsModel/reset')),
+								dispatch(createAction('settingsModel/reset')()),
 								dispatch(createAction('ERC20Dex/reset')()),
 								dispatch(createAction('txSenderModel/reset')()),
-							]).then(this.register)
+							]).then(()=>this.register())
 						}},
 				]
 			)

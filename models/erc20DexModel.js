@@ -4,7 +4,7 @@ import {
     getTokenList,
     getTokenTradeRate,
     getEnabledStatus,
-    getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress
+    getApproveAuthorizationTx,
 } from '../services/erc20DexService';
 import {createAction, navigate} from "../utils/dva";
 import {AppToast} from "../utils/AppToast";

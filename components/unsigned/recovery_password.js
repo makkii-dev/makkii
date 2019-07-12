@@ -28,11 +28,11 @@ class Password extends Component {
 	recovery = ()=>{
 		const {dispatch, navigation } = this.props;
 		const {password, password_confirm} = this.state;
-		dispatch(createAction('userModel/register')({password_confirm,password, mnemonic: this.mnemonic}))
+		dispatch(createAction('userModel/recovery')({password_confirm,password, mnemonic: this.mnemonic}))
 			.then(r=>{
-				if(r){
+				if(r.result){
 					sendRecoveryEventLog();
-					navigation.navigate('unsigned_register_mnemonic')
+					dispatch(createAction('userModel/login')());
 				}else{
 					alert_ok(strings('alert_title_error'),r.error);
 				}
@@ -51,7 +51,7 @@ class Password extends Component {
 							Promise.all([
 								dispatch(createAction('userModel/reset')()),
 								dispatch(createAction('accountsModel/reset')()),
-								dispatch(createAction('settingsModel/reset')),
+								dispatch(createAction('settingsModel/reset')()),
 								dispatch(createAction('ERC20Dex/reset')()),
 								dispatch(createAction('txSenderModel/reset')()),
 							]).then(this.recovery)

@@ -363,7 +363,6 @@ class Home extends Component {
 		if (Platform.OS === 'android') {
 			this.requestStoragePermission();
 		}
-		this.isMount = true;
 
 		Linking.getInitialURL().then(url => {
 			console.log("linking url: " + url);
@@ -388,9 +387,6 @@ class Home extends Component {
 	componentWillUnmount(): void {
 		console.log("unmount home");
 		Linking.removeEventListener('url', this.handleOpenURL);
-
-		this.isMount = false;
-		this.listener.remove();
 	}
 
 	fetchAccountsBalance = ()=> {

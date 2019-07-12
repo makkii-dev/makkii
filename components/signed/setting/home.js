@@ -7,7 +7,7 @@ import {strings} from '../../../locales/i18n';
 import {SETTINGS} from './constants';
 import {mainBgColor} from "../../style_util";
 import defaultStyles from '../../styles';
-import {popCustom} from "../../../utils/dva";
+import {createAction, popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -22,7 +22,7 @@ class Home extends Component {
 	}
 
 	render(){
-		const {navigation} = this.props;
+		const {navigation,dispatch} = this.props;
 		const {navigationSafely} =  this.props.screenProps;
 		return (
 			<View style={{
@@ -86,10 +86,7 @@ class Home extends Component {
 									[
 										{text: strings('cancel_button'), onPress:()=>{}},
 										{text: strings('alert_ok_button'), onPress:()=>{
-												setTimeout(()=>{
-													listenApp.stop();
-													this.props.navigation.navigate('unsigned_login');
-												},200);
+												dispatch(createAction('userModel/logOut')());
 											}},
 									]
 								);
