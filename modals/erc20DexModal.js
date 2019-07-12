@@ -39,20 +39,22 @@ export default {
     effects:{
         *loadStorage(action,{call,put}){
             const tokenApprovals = yield call(Storage.get, 'tokenApprovals', false);
-            const exchangeHistory = yield call(Storage.get, 'exchangeHistory', false);
             console.log('get tokenApprovals from storage => ', tokenApprovals);
-            console.log('get exchangeHistory from storage => ', exchangeHistory);
-            yield put(createAction('ERC20DexUpdateState')({tokenApprovals,exchangeHistory}))
+            yield put(createAction('ERC20DexUpdateState')({tokenApprovals}))
+            yield put(createAction('getTokenList')());
+        },
+        *reset(action, {call, put}){
+            yield call(Storage.remove, 'tokenApprovals');
+            yield put(createAction('ERC20DexUpdateState')({tokenApprovals:{}}))
         },
         *updateTokenApproval({payload},{call,select,put}) {
-            console.log('updateTokenApproval=>', payload);
             const oldTokenApprovals = yield select(({ERC20Dex}) => ERC20Dex.tokenApprovals);
-            const {symbol, state} = payload; // state one of 'waitApprove'/'waitRevoke'/'delete'
+            const {symbol, state, address} = payload; // state one of 'waitApprove'/'waitRevoke'/'delete'
             let newTokenApprovals =  Object.assign({},oldTokenApprovals);
             if('delete'===state){
-                delete newTokenApprovals[symbol]
+                delete newTokenApprovals[address][symbol]
             }else {
-                newTokenApprovals[symbol] = state;
+                newTokenApprovals[address]={...newTokenApprovals[address],[symbol]:state};
             }
             yield put(createAction('ERC20DexUpdateState')({tokenApprovals:newTokenApprovals}));
             yield call(Storage.set, 'tokenApprovals', newTokenApprovals);
@@ -60,12 +62,10 @@ export default {
 
         *getTokenList({payload}, {call, select, put}){
             const lists = yield call(getTokenList,network);
-            console.log("get token list:", lists);
             // init trade;
             const srcToken = Object.keys(lists)[0];
             const destToken = Object.keys(lists)[1];
             const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
-            console.log("rate:" + rate);
             console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
             const trade = {
                 srcToken:srcToken,
@@ -219,7 +219,7 @@ export default {
                     amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber()
                 },
                 editable:false,
-                txType:{type:'approve',data:{symbol:token, state:type}}}));
+                txType:{type:'approve',data:{address: account.address,symbol:token, state:type}}}));
             yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title}}))
         }
 

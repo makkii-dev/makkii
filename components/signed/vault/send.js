@@ -107,11 +107,6 @@ class Send extends Component {
 	selectFromAddressBook=() => {
 		this.props.navigation.navigate('signed_setting_address_book', {
 			type: 'select',
-			addressSelected: (address)=>{
-				this.setState({
-					to: address,
-				});
-			},
 			filterSymbol: this.account.symbol,
 		});
 	};
@@ -372,7 +367,7 @@ const styles = StyleSheet.create({
 
 const mapToState = ({accountsModal, txSenderModal})=>{
 
-	const {txObj,editable} = txSenderModal;
+	const {to, amount, data, gasLimit, gasPrice,editable} = txSenderModal;
 	const {currentAccount:key,currentToken, accountsMap}=accountsModal;
 	const currentAccount = {
 		...accountsMap[key],
@@ -380,7 +375,7 @@ const mapToState = ({accountsModal, txSenderModal})=>{
 	};
 	return ({
 		currentAccount:currentAccount,
-		txObj: txObj,
+		txObj: {to, amount, data, gasLimit, gasPrice},
 		editable:editable
 	})
 

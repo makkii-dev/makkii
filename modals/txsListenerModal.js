@@ -98,6 +98,10 @@ export default {
             console.log('load pending Tx from storage => ', PendingTxs);
             yield put(createAction('txsListenerUpdateState')({ txs:PendingTxs }));
         },
+        *reset(action,{call,put}){
+            yield call(Storage.remove, 'pendingTx');
+            yield put(createAction('txsListenerUpdateState')({ txs:{} }));
+        },
         *checkAllTxs(action, {call,put,select}) {
             console.log('check all pending Tx;');
             const txs = yield select(({txsListener}) => txsListener.txs);
@@ -167,6 +171,7 @@ export default {
                         }else if('approve'===type){
                             const {symbol} = txs[newTx.hash].approve;
                             yield put(createAction('ERC20Dex/updateTokenApproval')({
+                                address: newTx.from,
                                 symbol,
                                 state:'delete',
                             }))

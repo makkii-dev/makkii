@@ -26,7 +26,6 @@ class About extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
 	}
 	upgradeForAndroid = (version) => {
 		var index = version.url.lastIndexOf('\/');
@@ -47,7 +46,7 @@ class About extends Component {
 		download.promise.then(result => {
 		    popCustom.hide();
 			console.log("download result: ", result);
-			if (result.statusCode == 200) {
+			if (result.statusCode === 200) {
 				console.log("install apk: api level: " + DeviceInfo.getAPILevel() +
 					",packageId: " + DeviceInfo.getBundleId() + ", filePath: " + filePath);
 				NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
@@ -129,7 +128,7 @@ class About extends Component {
 						title={strings('about.version_update_button')}
 						onClick={() => {
 							let currentVersionCode = DeviceInfo.getBuildNumber();
-							let lang = this.props.setting.lang;
+							let lang = this.props.lang;
 							if (lang === 'auto') {
 								lang = DeviceInfo.getDeviceLocale().substring(0, 2);
 							}
@@ -212,5 +211,7 @@ class About extends Component {
 		);
 	}
 }
-
-export default connect(state => { return ({ setting: state.setting }); })(About);
+const mapToState = ({settingsModal})=>({
+	lang: settingsModal.lang
+});
+export default connect(mapToState)(About);

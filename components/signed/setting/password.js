@@ -6,9 +6,8 @@ import { PasswordInputWithTitle, RightActionButton, alert_ok } from '../../commo
 import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { validatePassword, hashPassword } from '../../../utils';
-import { user_update_password } from '../../../actions/user.js';
-import { accounts_save } from '../../../actions/accounts.js';
 import { strings } from '../../../locales/i18n';
+import {createAction} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -43,7 +42,6 @@ class Password extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.setting);
 	}
 
 	componentWillMount() {
@@ -114,18 +112,18 @@ class Password extends Component {
 	}
 
 	updateEditStatus=(currentp, newp, confirmp) => {
-		let allFilled = currentp.length != 0
-			&& newp.length != 0
-			&& confirmp.length != 0;
+		let allFilled = currentp.length !== 0
+			&& newp.length !== 0
+			&& confirmp.length !== 0;
 		this.props.navigation.setParams({
 			isEdited: allFilled
 		});
-	}
+	};
 
 	updatePassword=()=> {
 		// validate old password correctness
 		let hashedPassword = hashPassword(this.state.password_current);
-		if (hashedPassword !== this.props.user.hashed_password) {
+		if (hashedPassword !== this.props.hashed_password) {
 			alert_ok(strings('alert_title_error'), strings('invalid_old_password'));
 			return;
 		}
@@ -150,17 +148,20 @@ class Password extends Component {
 		// update password
 		const { dispatch } = this.props;
 		let newHashedPassword = hashPassword(this.state.password_new);
-		dispatch(user_update_password(newHashedPassword));
-		dispatch(accounts_save(newHashedPassword));
-        console.log("update password successfully.");
-        AppToast.show(strings('toast_update_success'), {
-			position: AppToast.positions.CENTER,
-        	onHidden: () => {
-				this.props.navigation.goBack();
-			}
-		});
+		dispatch(createAction('userModal/updatePassword')({hashed_password: newHashedPassword}))
+			.then(r=>{
+				AppToast.show(strings('toast_update_success'), {
+					position: AppToast.positions.CENTER,
+					onHidden: () => {
+						this.props.navigation.goBack();
+					}
+				});
+			})
+
 	}
 
 }
-
-export default connect(state => { return ({ setting: state.setting, user: state.user }); })(Password);
+const mapToState = ({userModal})=>({
+	hashed_password: userModal.hashed_password
+});
+export default connect(mapToState)(Password);

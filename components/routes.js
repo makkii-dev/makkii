@@ -13,6 +13,7 @@ import {
     createReactNavigationReduxMiddleware,
 } from "react-navigation-redux-helpers";
 import {connect} from 'react-redux';
+import DeviceInfo from "react-native-device-info";
 import {AppToast} from "../utils/AppToast";
 import {navigationSafely} from '../utils'
 // ui
@@ -47,7 +48,6 @@ import Setting               	from './signed/setting/home.js';
 import SettingAbout          	from './signed/setting/about.js';
 import SettingPassword       	from './signed/setting/password.js';
 import SettingRecovery       	from './signed/setting/recovery.js';
-import SettingServices       	from './signed/setting/services.js';
 import SettingLanguage      	from './signed/setting/language.js';
 import SettingAdvanced       	from './signed/setting/advanced.js';
 import SettingCurrency       	from './signed/setting/currency.js';
@@ -63,8 +63,6 @@ import AddToken                 from './signed/vault/add_token';
 
 
 import {strings} from "../locales/i18n";
-import {ComponentTabBar} from './common';
-import {createAction} from "../utils/dva";
 
 const transitionConfig = () => {
     return {
@@ -419,10 +417,6 @@ const AppNavigator = createStackNavigator({
         screen: SettingRecovery,
         navigationOptions,
     },
-    'signed_setting_services': {
-        screen: SettingServices,
-        navigationOptions: navigationOptionsWithoutRight,
-    },
     'signed_setting_currency': {
         screen: SettingCurrency,
         navigationOptions: navigationOptionsWithoutRight,
@@ -509,16 +503,10 @@ class Router extends PureComponent {
     backClickCount=0;
     componentWillMount() {
         BackHandler.addEventListener("hardwareBackPress", this.backHandle);
-        this.props.dispatch(createAction('txsListener/loadStorage')());
-        this.props.dispatch(createAction('ERC20Dex/loadStorage')());
-        // this.listenTx = setInterval(()=>{
-        //     this.props.dispatch(createAction('txsListener/checkAllTxs')());
-        // },10*1000);
     }
 
     componentWillUnmount() {
         BackHandler.removeEventListener("hardwareBackPress", this.backHandle);
-        // clearInterval(this.listenTx);
     }
 
     backHandle = () => {
@@ -553,21 +541,21 @@ class Router extends PureComponent {
     }
 
     render() {
-        const {user, dispatch, router,setting} = this.props;
-
+        const {user, dispatch, router,settingsModal} = this.props;
+        console.log('app lang => ',settingsModal.lang === 'auto'? DeviceInfo.getDeviceLocale(): settingsModal.lang);
         return <App dispatch={dispatch} state={router} screenProps={{
                 t:strings,
-                lan: setting.lan,
+                lang: settingsModal.lang === 'auto'? DeviceInfo.getDeviceLocale(): settingsModal.lang,
                 navigationSafely:({routeName, params, onVerifySuccess=undefined})=>({dispatch})=>{
-                    navigationSafely(setting.pinCodeEnabled,user.hashed_password,{routeName,params,onVerifySuccess})({dispatch});
+                    navigationSafely(settingsModal.pinCodeEnabled,user.hashed_password,{routeName,params,onVerifySuccess})({dispatch});
                 }
             }}/>
     }
 }
 
 const mapStateToProps = state => {
-    const { app, router,setting,user} = state;
-    return { app, router,setting,user};
+    const { app, router,settingsModal,user} = state;
+    return { app, router,settingsModal,user};
 };
 
 export default connect(mapStateToProps)(Router);

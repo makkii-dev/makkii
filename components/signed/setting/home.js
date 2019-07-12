@@ -12,9 +12,9 @@ import {popCustom} from "../../../utils/dva";
 const {width} = Dimensions.get('window');
 
 class Home extends Component {
-	static navigationOptions = ({ navigation,screenProps:{t,lan} }) => {
+	static navigationOptions = ({ navigation,screenProps:{t,lang} }) => {
 	    return {
-			title: t('menuRef.title_settings',{locale:lan})
+			title: t('menuRef.title_settings',{locale:lang})
 	    };
     };
 	constructor(props){
@@ -100,5 +100,7 @@ class Home extends Component {
 		);
 	}
 }
-
-export default connect()(Home);
+const mapToState = ({settingsModal})=>({
+	lang:settingsModal.lang,
+});
+export default connect(mapToState)(Home);

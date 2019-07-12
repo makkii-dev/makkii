@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import {View, ScrollView, TouchableOpacity, Text, Dimensions} from 'react-native';
+import {View, ScrollView, Text, Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
-import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
 import defaultStyles from '../../styles';
+import {createAction} from "../../../utils/dva";
+import Loading from "../../loading";
 
 const {width} = Dimensions.get('window');
 
@@ -43,16 +44,20 @@ class Currency extends Component {
     }
 
     updateCurrency= () => {
-        const {dispatch} = this.props;
-        let newCurrency = Object.keys(this.selectList.getSelect())[0];
-        if (newCurrency != this.props.setting.fiat_currency) {
-            listenPrice.setCurrency(newCurrency);
-        }
-
-        this.props.navigation.goBack();
-    }
+        const {dispatch,navigation} = this.props;
+        let newCurrency = Object.keys(this.refs['refSelectList'].getSelect())[0];
+        this.refs['refLoading'].show();
+        dispatch(createAction('settingsModal/updateFiatCurrency')({currency:newCurrency}))
+            .then(r=>{
+                this.refs['refLoading'].hide();
+                if(r){
+                    navigation.goBack();
+                }
+            })
+    };
 
     render() {
+        const {currentCurrency} = this.props;
         return (
             <View style={{
                 flex: 1,
@@ -73,7 +78,7 @@ class Currency extends Component {
                     marginVertical: 20,
                 }} >
                         <SelectList
-                            ref={ref=>this.selectList=ref}
+                            ref={'refSelectList'}
                             itemHeight={55}
                             data={{
                                 'BTC': { name: strings('currency.BTC'), unit: strings('currency.BTC_unit') },
@@ -174,22 +179,23 @@ class Currency extends Component {
                                         <Text style={{flex: 1}}>{item.name}/{item.unit}</Text>
                                 )
                             }}
-                            defaultKey={this.props.setting.fiat_currency}
+                            defaultKey={currentCurrency}
                             onItemSelected={() => {
                                 this.props.navigation.setParams({
-                                    isEdited: this.props.setting.fiat_currency != Object.keys(this.selectList.getSelect())[0],
+                                    isEdited: currentCurrency!== Object.keys(this.refs['refSelectList'].getSelect())[0],
                                 })
                             }}
                         />
                 </View>
                 </ScrollView>
+                <Loading ref={'refLoading'}/>
             </View>
         )
     }
 }
 
-export default connect( state => {
-    return {
-        setting: state.setting,
-    };
-})(Currency);
+const mapToState = ({settingsModal})=>({
+    currentCurrency:settingsModal.fiat_currency,
+});
+
+export default connect(mapToState)(Currency);

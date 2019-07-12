@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import {COINS} from "../coins/support_coin_list";
 import {sendAll} from "../coins/btc+ltc/core";
 import {validateAddress,validateBalanceSufficiency,sendTransaction} from "../coins/api";
-import {validateAmount} from "../utils";
+import {isJsonString, validateAmount} from "../utils";
 
 const validateTxObj = async (txObj, account)=>{
     const {to, amount, data, gasPrice, gasLimit} =txObj;
@@ -46,7 +46,7 @@ const getAllBalance = async (currentAccount,options)=>{
     return amount;
 };
 
-const parseSanedData = async (data, currentAccount) =>{
+const parseScannedData = async (data, currentAccount) =>{
     let ret;
     let retData = {};
     if(isJsonString(data)){
@@ -94,20 +94,11 @@ const sendTx = async (txObj, currentAccount)=>{
 
 
 
-const isJsonString = (data)=>{
-    try {
-        if (typeof JSON.parse(data) == "object") {
-            return true;
-        }
-    } catch(e) {
-    }
-    return false;
-};
 
 
 export {
     validateTxObj,
     getAllBalance,
-    parseSanedData,
+    parseScannedData,
     sendTx
 }

@@ -7,13 +7,14 @@ import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
 import defaultStyles from '../../styles';
+import {createAction} from "../../../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 
 class Language extends Component {
-    static navigationOptions = ({navigation})=> {
+    static navigationOptions = ({navigation, screenProps:{t,lang}})=> {
         return ({
-            title: strings('language.title'),
+            title: t('language.title',{locale:lang}),
             headerTitleStyle: {
                 fontSize: 20,
                 alignSelf: 'center',
@@ -34,24 +35,21 @@ class Language extends Component {
 
     constructor(props) {
         super(props);
-    }
-
-    componentWillMount() {
         this.props.navigation.setParams({
             updateLocale: this.updateLocale,
             isEdited: false
         });
     }
-    updateLocale= () => {
-        const {dispatch} = this.props;
-        this.props.setting.lang = Object.keys(this.selectList.getSelect())[0];
-        dispatch(setting(this.props.setting));
 
-        DeviceEventEmitter.emit('locale_change');
-        this.props.navigation.goBack();
+    updateLocale= () => {
+        const {dispatch, navigation} = this.props;
+        const lang = Object.keys(this.refs['refSelectList'].getSelect())[0];
+        dispatch(createAction('settingsModal/updateState')({lang}));
+        navigation.goBack();
     };
 
     render() {
+        const {currentLanguage} = this.props;
         return (
             <View style={{
                 backgroundColor: mainBgColor,
@@ -68,7 +66,7 @@ class Language extends Component {
                     paddingRight: 20,
                 }} >
                     <SelectList
-                        ref={ref=>this.selectList=ref}
+                        ref={'refSelectList'}
                         itemHeight={55}
                         data={{ 'auto': strings('language.auto'),
                             'en': strings('language.english'),
@@ -78,10 +76,10 @@ class Language extends Component {
                                 <Text style={{flex: 1}}>{item}</Text>
                             )
                         }}
-                        defaultKey={this.props.setting.lang}
+                        defaultKey={currentLanguage}
                         onItemSelected={() => {
                             this.props.navigation.setParams({
-                                isEdited: this.props.setting.lang != Object.keys(this.selectList.getSelect())[0],
+                                isEdited: currentLanguage !== Object.keys(this.refs['refSelectList'].getSelect())[0],
                             });
                         }}
                     />
@@ -91,8 +89,8 @@ class Language extends Component {
     }
 }
 
-export default connect( state => {
-    return {
-        setting: state.setting,
-    };
-})(Language);
+const mapToState = ({settingsModal})=>({
+    currentLanguage: settingsModal.lang,
+});
+
+export default connect(mapToState)(Language);

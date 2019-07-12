@@ -141,14 +141,15 @@ export default {
     effects:{
         *loadStorage({payload},{call,select,put,take}){
             const {state_version, options}=payload;
-            const hashed_password = yield select(({user})=>user.hashed_password);
+            yield take('userModal/loadStorage/@@end');
+            const hashed_password = yield select(({userModal})=>userModal.hashed_password);
             console.log('hashed_password=>',hashed_password);
             if(state_version<2){
                 const  old_accounts_storage = yield call(Storage.get,'accounts',false, false);
                 let old_accounts = JSON.parse(decrypt(old_accounts_storage,hashed_password)||{});
                 old_accounts  = upgradeAccountsV0_V1(state_version,old_accounts,options);
                 const payload = upgradeAccountsV1_V2(old_accounts);
-                const hd_index = yield call(Storage.get, 'user',{}).hd_index|| Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
+                const hd_index = yield call(Storage.get, 'userModal',{}).hd_index|| Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
                 yield put(createAction('updateState')({...payload,hd_index}));
                 yield put(createAction('saveAccounts')({keys:Object.keys(payload.accountsMap)}));
                 yield put(createAction('saveTransaction')({keys:Object.keys(payload.transactionsMap)}));
@@ -190,12 +191,17 @@ export default {
             }
             return true;
         },
+        *reset(action,{select, put ,take}){
+            const {accountsKey} = yield select(({accountsModal})=> ({accountsKey: accountsModal.accountsKey,}));
+            yield take('loadBalances/@@end');
+            yield put(createAction('deleteAccounts')({keys:accountsKey}));
+        },
         *saveAccounts({payload}, {call,select}){ // Adding account and changing account name need to be saved
             const {keys} = payload;
-            const {accountsKey,accountsMap,hashed_password} = yield select(({accountsModal,user})=> ({
+            const {accountsKey,accountsMap,hashed_password} = yield select(({accountsModal,userModal})=> ({
                 accountsKey: accountsModal.accountsKey,
                 accountsMap: accountsModal.accountsMap,
-                hashed_password: user.hashed_password
+                hashed_password: userModal.hashed_password
             }));
             //save accountsKey
             yield call(Storage.set, 'accountsKey', accountsKey);

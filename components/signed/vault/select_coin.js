@@ -22,12 +22,14 @@ class SelectCoin extends Component {
 
 
     selectCoin = (item)=>{
-        const {dispatch} = this.props;
+        const {dispatch, navigation} = this.props;
         if(this.usage === 'import'){
-            dispatch(createAction('accountImportModal/updateState')({symbol: item.symbol}))
-            navigate('signed_vault_import_from')({dispatch})
+            dispatch(createAction('accountImportModal/updateState')({symbol: item.symbol}));
+            navigation.navigate('signed_vault_import_from')
         }else if(this.usage === 'address_book'){
             //Todo: refactor address_book
+            dispatch(createAction('contactAddModal/updateAState')({symbol: item.symbol}));
+            navigation.goBack()
         }
     };
 

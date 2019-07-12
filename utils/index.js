@@ -359,6 +359,17 @@ function fromHexString(str) {
     return parseInt(strNo0x, 16);
 }
 
+const isJsonString = (data)=>{
+    try {
+        if (typeof JSON.parse(data) == "object") {
+            return true;
+        }
+    } catch(e) {
+    }
+    return false;
+};
+
+
 module.exports = {
     encrypt: encrypt,
     decrypt: decrypt,
@@ -387,4 +398,5 @@ module.exports = {
     toHex,
     fromHexString,
     hexToAscii,
+    isJsonString
 };

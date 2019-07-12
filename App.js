@@ -18,13 +18,16 @@ import accountsModal from './modals/accountsModal';
 import accountImportModal from './modals/accountImportModal'
 import tokenImportModal from './modals/tokenImportModal';
 import txSenderModal  from './modals/txSenderModal';
+import userModal      from './modals/userModal';
+import settingsModal  from  './modals/settingsModal';
+import contactAddModal from './modals/contactAddModal';
 // store
 import Router, {routerReducer,routerMiddleware} from './components/routes';
 import dva from './utils/dva';
 
 
 const app = dva({
-	models: [erc20DexModal, txListenerModal, accountsModal, accountImportModal,tokenImportModal,txSenderModal],
+	models: [erc20DexModal, txListenerModal, accountsModal, accountImportModal,tokenImportModal,txSenderModal, userModal, settingsModal, contactAddModal],
 	extraReducers: {
 		router: 		 routerReducer,
 		account:         reducer_account,

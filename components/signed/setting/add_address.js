@@ -1,20 +1,25 @@
 import {strings} from '../../../locales/i18n';
 import {connect} from 'react-redux';
 import React, {Component} from 'react';
-import {validateAddress} from "../../../coins/api";
 import {mainBgColor, linkButtonColor} from '../../style_util';
 import {Text, Platform, View, TouchableOpacity, StyleSheet, Keyboard, Image, PixelRatio, Dimensions, ScrollView} from 'react-native';
 import {RightActionButton,SubTextInput} from '../../common';
 import defaultStyles from '../../styles';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
-import Toast from 'react-native-root-toast';
-import {add_address, update_address} from '../../../actions/user';
-import {accountKey} from '../../../utils/index';
 import {COINS} from '../../../coins/support_coin_list';
-import {AppToast} from "../../../utils/AppToast";
+import {createAction} from "../../../utils/dva";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 const {width} = Dimensions.get('window');
+
+const updateContactObj = (contactObj, nextContactObj, oldState, field)=>{
+    if(contactObj[field]!==nextContactObj[field]){
+        return {...oldState,[field]:nextContactObj[field]}
+    }else{
+        return oldState
+    }
+};
+
 
 class AddAddress extends Component {
     static navigationOptions = ({navigation}) => {
@@ -30,8 +35,8 @@ class AddAddress extends Component {
                 <RightActionButton
                     btnTitle={strings('add_address.btn_save')}
                     onPress={() => {
-                        const addAddress = navigation.state.params.addAddress;
-                        addAddress();
+                        const addContact = navigation.state.params.addContact;
+                        addContact();
                     }}
                     disabled={!navigation.state.params || !navigation.state.params.isEdited}
                 />
@@ -41,174 +46,77 @@ class AddAddress extends Component {
 
     constructor(props) {
         super(props);
-        this.address = props.navigation.getParam('address');
-        if (this.address !== undefined) {
-            this.name = props.navigation.getParam('name');
-            this.symbol = props.navigation.getParam('symbol');
-            this.oldAddressKey = accountKey(this.symbol, this.address);
-            this.newSymbol = this.symbol;
-        } else {
-            this.newSymbol = 'AION';
-        }
-        this.state = {
-            name: this.name === undefined? '': this.name,
-            address: this.address === undefined? '': this.address,
-            coinName: this.symbol === undefined? COINS[this.newSymbol].name + "/" + this.newSymbol: COINS[this.symbol].name + "/" + this.symbol,
-        };
+        const {contactObj} = this.props;
+        this.setState({
+            ...contactObj
+        })
     }
 
     componentWillMount() {
         this.props.navigation.setParams({
             isAdd: this.name === undefined,
-            addAddress: this.addAddress,
+            addContact: this.addContact,
             isEdited: false,
         });
     }
 
-    async componentWillReceiveProps(props) {
-        let scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== '' && this.oldScannedData !== scannedData) {
-            this.oldScannedData = scannedData;
-            validateAddress(scannedData, this.newSymbol).then(isValidAddress => {
-                let address = scannedData;
-                if (!isValidAddress) {
-                    try {
-                        let json = JSON.parse(scannedData);
-                        address = json.receiver;
-                    } catch (error) {
-                        console.log("parse qrcode failed: ", error);
-                        // did nothing.
-                        return;
-                    }
-                }
-                this.setState({
-                    address: address,
-                });
-                this.updateEditStatus(this.state.name, address);
-            });
+    componentWillReceiveProps(props) {
+        const {contactObj: nextContactObj} = props;
+        const {contactObj} = this.props;
+        let newState = {};
+        ['symbol', 'name', 'address'].forEach(f=>{
+            newState = updateContactObj(contactObj, nextContactObj, newState, f);
+        });
+        if(JSON.stringify(newState)!=='{}'){
+            this.setState(newState);
         }
     }
 
-    addAddress=() => {
-        const {name, address} = this.state;
-
-        validateAddress(address, this.newSymbol).then(isValid => {
-            if (!isValid) {
-                AppToast.show(strings('add_address.error_address_format', { coin: this.newSymbol }), {
-                    duration: Toast.durations.LONG,
-                    position: Toast.positions.CENTER
-                });
-                return;
-            }
-
-            let address_book = this.props.user.address_book;
-            let newKey = accountKey(this.newSymbol, address);
-            if (Object.keys(address_book).indexOf(newKey) >= 0)  {
-                if (this.address === undefined || (this.address !== undefined && address !== this.address)) {
-                    AppToast.show(strings('add_address.error_address_exists'), {
-                        duration: Toast.durations.LONG,
-                        position: Toast.positions.CENTER,
-                    });
-                    return;
+    addContact=() => {
+        const {name, address, symbol} = this.state;
+        const {dispatch, navigation} = this.props;
+        dispatch(createAction('contactAddModal/addContact')({name,address,symbol}))
+            .then(r=>{
+                if(r){
+                    navigation.goBack();
                 }
-            }
-
-            const {dispatch} = this.props;
-            if (this.address === undefined) {
-                dispatch(add_address({key: newKey, name: name, address: address, symbol: this.newSymbol}));
-            } else {
-                dispatch(update_address({oldKey: this.oldAddressKey, key: newKey, name: name, address: address, symbol: this.newSymbol}));
-            }
-            AppToast.show(strings('add_address.toast_address_saved'), {
-                duration: Toast.durations.LONG,
-                position: Toast.positions.CENTER
-            });
-
-            const {addressAdded} = this.props.navigation.state.params;
-            if (addressAdded !== undefined) {
-                addressAdded({
-                    name: name,
-                    address: address,
-                    symbol: this.newSymbol,
-                    oldKey: this.oldAddressKey,
-                    newKey: newKey,
-                });
-            }
-            this.props.navigation.goBack();
-        }).catch( err=> {
-            AppToast.show(strings(''), {
-                    duration: Toast.durations.LONG,
-                    position: Toast.positions.CENTER
-                });
-        });
-    }
-    validateQrcode=(code, symbol)=> {
-        return new Promise((resolve, reject) => {
-            validateAddress(code, symbol).then(isValidAddress => {
-                if (isValidAddress) {
-                    resolve(true);
-                } else {
-                    try {
-                        let json = JSON.parse(code);
-                        if (!json.receiver) {
-                            resolve(false);
-                        } else {
-                            if (json.coin !== undefined && json.coin !== symbol) {
-                                resolve(false);
-                                return;
-                            }
-                            validateAddress(json.receiver, symbol).then(isValidAddress => {
-                                resolve(isValidAddress);
-                            });
-                        }
-                    } catch (error) {
-                        resolve(false);
-                    }
-                }
-            });
-        });
-    }
+            })
+    };
 
     scan=() => {
-        let thus = this;
-        this.props.navigation.navigate('scan', {
+        const {dispatch, navigation} = this.props;
+        navigation.navigate('scan', {
             success: 'signed_setting_add_address',
-            validate: function(data, callback) {
-                thus.validateQrcode(data.data, thus.newSymbol).then(result => {
-                    if (result) {
-                        callback(true);
-                    } else {
-                        callback(false, strings('error_invalid_qrcode'));
-                    }
-                });
-            }
+            validate: (data, callback)=> {
+                dispatch(createAction('contactAddModal/parseScannedData')({data:data.data}))
+                    .then(res=>{
+                        res?callback(true):callback(false,strings('error_invalid_qrcode'));
+                    })
+            },
         });
-    }
+    };
 
-    updateEditStatus=(name, address)=> {
-        let allValid = this.newSymbol !== undefined && name.length !== 0 && address.length !== 0
-            && (name !== this.name || address !== this.address || this.newSymbol !== this.symbol);
+    updateEditStatus=()=> {
+        const {symbol, name, address} = this.state;
+        const {symbol: _symbol, name: _name, address:_address} = this.props;
+        let allValid =  symbol !== undefined && name.length !== 0 && address.length !== 0
+            && (name !== _name || address !== _address || symbol !== _symbol);
         if (allValid !== this.props.navigation.getParam('isEdited')) {
             this.props.navigation.setParams({
                 isEdited: allValid,
             });
         }
-    }
+    };
 
     selectCoin=()=> {
-        this.props.navigation.navigate('signed_vault_select_coin', {
-            coinSelected: (symbol) => {
-                this.newSymbol = symbol;
-                this.setState({
-                    coinName: COINS[symbol].name + '/' + symbol
-                });
-                this.updateEditStatus(this.state.name, this.state.address);
-            }
-        });
-    }
+
+        this.props.navigation.navigate('signed_vault_select_coin', {usage:'address_book'});
+    };
 
     render() {
-        let addressEditable = !(this.name === undefined && this.address !== undefined);
+        const {editable} = this.props;
+        const {name, symbol, address} = this.state;
+        const coinName = COINS[symbol].name + "/" + symbol;
         return (
             <View style={{flex: 1, backgroundColor: mainBgColor}}>
                 <MyscrollView
@@ -220,39 +128,41 @@ class AddAddress extends Component {
                             <SubTextInput
                                 title={strings('add_address.label_coin_type')}
                                 style={styles.text_input}
-                                value={this.state.coinName}
+                                value={coinName}
                                 multiline={false}
                                 editable={false}
                                 rightView={() =>
-                                    <TouchableOpacity onPress={this.selectCoin}>
-                                        <Text style={{color: linkButtonColor}}>{strings('add_address.btn_select_coin')}</Text>
-                                    </TouchableOpacity>
+                                    editable?
+                                        <TouchableOpacity onPress={this.selectCoin}>
+                                            <Text style={{color: linkButtonColor}}>{strings('add_address.btn_select_coin')}</Text>
+                                        </TouchableOpacity>
+                                        :null
                                 }
                             />
                             <SubTextInput
                                 title={strings('add_address.label_name')}
                                 style={styles.text_input}
-                                value={this.state.name}
+                                value={name}
                                 multiline={false}
                                 onChangeText={v=>{
                                     this.setState({name: v});
-                                    this.updateEditStatus(v, this.state.address);
+                                    this.updateEditStatus(v, address);
                                 }}
                                 placeholder={strings('add_address.hint_name')}
                             />
                             <SubTextInput
                                 title={strings('add_address.label_address')}
                                 style={styles.text_input}
-                                value={this.state.address}
+                                value={address}
                                 multiline={true}
-                                editable={addressEditable}
+                                editable={editable}
                                 onChangeText={v=>{
                                     this.setState({address: v});
-                                    this.updateEditStatus(this.state.name, v);
+                                    this.updateEditStatus(name, v);
                                 }}
                                 placeholder={strings('add_address.hint_address')}
                                 rightView={() =>
-                                    addressEditable?
+                                    editable?
                                     <TouchableOpacity onPress={() => this.scan()}>
                                         <Image source={require('../../../assets/icon_scan.png')}
                                                style={{width: 20, height: 20, tintColor: '#000'}}
@@ -296,9 +206,15 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(state => {
-    return {
-        setting: state.setting,
-        user: state.user,
-    };
-})(AddAddress);
+
+const mapToState = ({contactAddModal})=>({
+    contactObj: {
+        symbol: contactAddModal.symbol,
+        address: contactAddModal.address,
+        name: contactAddModal.name,
+    },
+    editable:contactAddModal.editable
+});
+
+
+export default connect(mapToState)(AddAddress);

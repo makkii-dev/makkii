@@ -11,12 +11,9 @@ import {connect} from "react-redux";
 import {strings} from "../../../locales/i18n";
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';
-import {hashPassword, navigationSafely} from '../../../utils';
-import {setting_update_pincode_enabled} from '../../../actions/setting';
-import {user_update_pincode} from '../../../actions/user';
-import TouchID from 'react-native-touch-id';
-import {AppToast} from "../../../utils/AppToast";
-import {popCustom} from "../../../utils/dva";
+import {hashPassword} from '../../../utils';
+import {createAction, popCustom} from "../../../utils/dva";
+import Loading from "../../loading";
 
 const {width} = Dimensions.get('window');
 
@@ -29,40 +26,29 @@ class PinCode extends React.Component {
           })
     };
 
-    constructor(props){
-        super(props);
-        const {pinCodeEnabled, touchIDEnabled}  = this.props.setting;
-        this.state={
-            pinCodeEnabled:pinCodeEnabled!==undefined?pinCodeEnabled:false,
-            touchIDEnabled: touchIDEnabled!==undefined?touchIDEnabled:false,
-        }
-    }
-
     onVerifySuccess = ()=>{
-        const {dispatch } = this.props;
-        const {pinCodeEnabled}  = this.state;
-        const {navigate} = this.props.navigation;
+        const {dispatch,pinCodeEnabled,navigation } = this.props;
+        this.refs['refLoading'].show();
         if(!pinCodeEnabled===false){
             // close pin code
-            this.setState({pinCodeEnabled:!pinCodeEnabled,touchIDEnabled:false},()=>{
-                listenApp.handleActive = null;
-                dispatch(user_update_pincode(''));
-                dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled,false));
-            })
+            dispatch(createAction('settingsModal/switchPinCode')())
+                .then(r=>{
+                    this.refs['refLoading'].hide();
+                })
         }else{
-            navigate('unlock',{
+            navigation.navigate('unlock',{
                 onUnlockSuccess:()=>{
-                    this.setState({pinCodeEnabled:!pinCodeEnabled},()=>{
-                        dispatch(setting_update_pincode_enabled(this.state.pinCodeEnabled));
-                        listenApp.handleActive = ()=>navigate('unlock',{cancel:false});
-                    });
+                    dispatch(createAction('settingsModal/switchPinCode')())
+                        .then(r=>{
+                            this.refs['refLoading'].hide();
+                        })
                 }
             })
         }
     };
 
-    handleToggleSwitch(){
-        const {hashed_password} = this.props.user;
+    handleTogglePinCodeSwitch(){
+        const {hashed_password} = this.props;
         popCustom.show(
             strings('alert_title_warning'),
             strings('warning_dangerous_operation'),
@@ -96,34 +82,17 @@ class PinCode extends React.Component {
     }
 
     handleToggleTouchIDSwitch(){
-        const {dispatch } = this.props;
-        const {pinCodeEnabled,touchIDEnabled}  = this.state;
-        if(!touchIDEnabled === false){
-            this.setState({touchIDEnabled:!touchIDEnabled},()=>{
-                dispatch(setting_update_pincode_enabled(pinCodeEnabled,false));
-            })
-        }else{
-            const optionalConfigObject = {
-                unifiedErrors: true,// use unified error messages (default false)
-                passcodeFallback: false, // if true is passed, it will allow isSupported to return an error if the device is not enrolled in touch id/face id etc. Otherwise, it will just tell you what method is supported, even if the user is not enrolled.  (default false)
-            };
-            TouchID.isSupported(optionalConfigObject).then(biometryType => {
-                if((Platform.OS==='ios'&&biometryType==='TouchID')||Platform.OS==='android'){
-                    this.setState({touchIDEnabled:!touchIDEnabled},()=>{
-                        dispatch(setting_update_pincode_enabled(pinCodeEnabled,true));
-                    })
-                }else {
-                    AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`))
-                }
-            }).catch(error=>{
-                AppToast.show(strings(`pinCode.touchID_${error.code}`))
-            })
-        }
+        const {dispatch} = this.props;
+        this.refs['refLoading'].show();
+        dispatch(createAction('settingsModal/switchTouchId')())
+            .then(r=>{
+                this.refs['refLoading'].hide();
+            });
     }
 
     render(){
         const {navigate} = this.props.navigation;
-        const {pinCodeEnabled,touchIDEnabled} = this.state;
+        const {pinCodeEnabled,touchIDEnabled} = this.props;
         const disableTextStyle = pinCodeEnabled?{}: { color: '#8A8D97' };
         return (
             <View style={{flex:1, backgroundColor:mainBgColor,alignItems:'center', paddingHorizontal: 20}}>
@@ -132,7 +101,7 @@ class PinCode extends React.Component {
                     <Text style={[styles.textStyle]}>{strings('pinCode.switch_button')}</Text>
                     <Switch
                         value={pinCodeEnabled}
-                        onValueChange={()=>this.handleToggleSwitch()}
+                        onValueChange={this.handleTogglePinCodeSwitch}
                     />
                 </View>
                 <View style={styles.CellView}>
@@ -140,7 +109,7 @@ class PinCode extends React.Component {
                     <Switch
                         disabled={!pinCodeEnabled}
                         value={touchIDEnabled}
-                        onValueChange={()=>this.handleToggleTouchIDSwitch()}
+                        onValueChange={this.handleToggleTouchIDSwitch}
                     />
                 </View>
                 <TouchableOpacity
@@ -159,17 +128,20 @@ class PinCode extends React.Component {
                         <Image source={require('../../../assets/arrow_right.png')} style={{width:20,height:20}} resizeMode={'contain'}/>
                     </View>
                 </TouchableOpacity>
+                <Loading ref={'refLoading'}/>
             </View>
         )
     }
 }
 
-export default connect( state => {
-    return {
-        setting: state.setting,
-        user: state.user,
-    };
-})(PinCode);
+const mapToState = ({settingsModal, userModal})=>({
+    pinCodeEnabled: settingsModal.pinCodeEnabled,
+    touchIDEnabled: settingsModal.touchIDEnabled,
+    hashed_password: userModal.hashed_password
+});
+
+export default connect(mapToState)(PinCode);
+
 
 const styles = StyleSheet.create({
    CellView:{

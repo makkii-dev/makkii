@@ -62,7 +62,7 @@ class PinCodeScreen extends React.Component {
     componentWillMount(): void {
         this.setState({
             // 0: unlock; 1: create pinCode; 2: confirm pinCode
-            pinState: this.props.user.hashed_pinCode===''?1:0,
+            pinState: this.props.hashed_pinCode===''?1:0,
         },()=>{
             this.onPressTouchId();
         });
@@ -70,7 +70,7 @@ class PinCodeScreen extends React.Component {
             this.onGoback(); // works best when the goBack is async
             return true;
         });
-        const {touchIDEnabled=false} = this.props.setting;
+        const {touchIDEnabled=false} = this.props;
         this.pincodelisten = touchIDEnabled? DeviceEventEmitter.addListener("APP_ACTIVE", this.onPressTouchId):null;
     }
 
@@ -156,9 +156,7 @@ class PinCodeScreen extends React.Component {
         if(pinState === 0 ){
             // unlock
             const hashed_pinCode = hashPassword(pinCode);
-            console.log('hashed_pinCode: ', hashed_pinCode);
-            console.log('props.hashed_pinCode', this.props.user.hashed_pinCode);
-            if(hashed_pinCode === this.props.user.hashed_pinCode){
+            if(hashed_pinCode === this.props.hashed_pinCode){
                 if(this.isModifyPinCode){
                     this.setState({
                         pinCode: '',
@@ -208,7 +206,7 @@ class PinCodeScreen extends React.Component {
 
     onPressTouchId = ()=>{
         console.log('onPressTouchId');
-        const {touchIDEnabled=false} = this.props.setting;
+        const {touchIDEnabled=false} = this.props;
         if (touchIDEnabled===false||this.isModifyPinCode===true ){
             return;
         }
@@ -274,7 +272,7 @@ class PinCodeScreen extends React.Component {
         )
     };
     renderContent(unlockDescription,warningPincodeFail){
-        const {touchIDEnabled} = this.props.setting;
+        const {touchIDEnabled} = this.props;
         const animationShake = this.animatedValue.interpolate({
             inputRange: [0, 0.3, 0.7, 1],
             outputRange: [0, -20, 20, 0],
@@ -345,10 +343,12 @@ class PinCodeScreen extends React.Component {
 
 }
 
-export default connect(state => { return ({
-    user:state.user,
-    setting: state.setting,
-}); })(PinCodeScreen);
+const mapToState = ({userModal, settingsModal })=>({
+    hashed_pinCode: userModal.hashed_pinCode,
+    touchIDEnabled: settingsModal.touchIDEnabled,
+})
+
+export default connect(mapToState)(PinCodeScreen);
 
 const styles = StyleSheet.create({
     desText: {

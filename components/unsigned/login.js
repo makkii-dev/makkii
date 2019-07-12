@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Platform, View,Text,TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground,BackHandler, NativeModules} from 'react-native';
-
 import {ComponentLogo,PasswordInput, ComponentButton, alert_ok} from '../common.js';
-import {user} from '../../actions/user.js';
-import {dbGet,hashPassword, getLatestVersion, generateUpdateMessage} from '../../utils';
+import {hashPassword, getLatestVersion, generateUpdateMessage} from '../../utils';
 import {fixedHeight, linkButtonColor, mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
 import {strings} from "../../locales/i18n";
@@ -12,7 +10,6 @@ import DeviceInfo from 'react-native-device-info';
 import RNFS from 'react-native-fs';
 import {AppToast} from "../../utils/AppToast";
 import {popCustom} from "../../utils/dva";
-import {sendLoginEventLog} from "../../services/eventLogService";
 
 const {width,height} = Dimensions.get('window');
 
@@ -24,8 +21,6 @@ class Login extends Component {
 		}
 	}
 	async componentDidMount(){
-		console.log("mount login");
-		console.log('[route] ' + this.props.navigation.state.routeName);
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             if (this.props.navigation.isFocused()) {
                 BackHandler.exitApp();
@@ -39,13 +34,13 @@ class Login extends Component {
 
 		let versionCode = DeviceInfo.getBuildNumber();
 		console.log("current version code: " + versionCode);
-		let lang = this.props.setting.lang;
+		let lang = this.props.lang;
 		if (lang === 'auto') {
             lang = DeviceInfo.getDeviceLocale().substring(0, 2);
         }
 		getLatestVersion(Platform.OS, versionCode, lang).then(version=> {
 		    console.log("latest version: ", version);
-            if (versionCode != version.versionCode && version.mandatory) {
+            if (versionCode !== version.versionCode && version.mandatory) {
                 this.popupUpdateDialog(version);
             }
         }, err=>{
@@ -71,7 +66,8 @@ class Login extends Component {
             canHide: false,
             cancelable: false,
         });
-    }
+    };
+
 	componentWillUnmount() {
 		console.log("unmount login");
         this.backHandler.remove();
@@ -99,7 +95,7 @@ class Login extends Component {
         download.promise.then(result => {
             this.popupUpdateDialog(version);
             console.log("download result: ", result);
-            if (result.statusCode == 200) {
+            if (result.statusCode === 200) {
                 console.log("install apk: " + DeviceInfo.getAPILevel() + " " + DeviceInfo.getBundleId());
                 NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
             } else {
@@ -110,7 +106,7 @@ class Login extends Component {
             AppToast.show(strings('version_upgrade.toast_download_fail'));
             this.popupUpdateDialog(version);
         });
-    }
+    };
 	upgradeForAndroid = (version) => {
         var index = version.url.lastIndexOf('\/');
         let filename = version.url.substring(index + 1, version.url.length);
@@ -119,19 +115,40 @@ class Login extends Component {
         console.log("download to " + filePath);
 
         this.tryDownload(version, filePath);
-    }
+    };
     upgradeForiOS = () => {
 	    Linking.openURL("https://itunes.apple.com/us/app/makkii/id1457952857?ls=1&mt=8").catch(error => {
             console.log("open app store url failed: ", error);
             AppToast.show(strings('version_upgrade.toast_to_appstore_fail'));
         });
-    }
+    };
 	handleOpenURL = (event) => {
 		console.log("linking url=" + event.url);
 	};
+
+
+	Login = ()=>{
+	    const {password} = this.state;
+	    const {hashed_password, navigation} = this.props;
+	    if(hashed_password === ''){
+            alert_ok(strings('alert_title_error'), strings('unsigned_login.error_not_register'));
+        }else if(hashed_password === hashPassword(password)){
+            navigation.navigate('signed_home');
+        }else{
+            alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
+        }
+
+    };
+
+	toRegister = ()=>{
+        this.props.navigation.navigate('unsigned_register')
+    };
+
+	toRecovery = ()=>{
+        this.props.navigation.navigate('unsigned_recovery')
+    };
+
 	render(){
-		const {dispatch,setting} = this.props;
-		const {navigate} = this.props.navigation;
 		return (
                 <ImageBackground
 					style={{
@@ -173,27 +190,8 @@ class Login extends Component {
                             />
                             <ComponentButton
                                 style={{marginTop: 30}}
-                                onPress={e => {
-                                    dbGet('user')
-                                        .then(json=>{
-                                            let db_user = JSON.parse(json);
-                                            console.log('setting', setting);
-                                            if(db_user.hashed_password === hashPassword(this.state.password)){
-                                                listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
-                                                listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
-                                                listenApp.timeOut = setting.login_session_timeout;
-                                                listenApp.start();
-
-                                                sendLoginEventLog();
-
-                                                navigate('signed_home');
-                                            } else {
-                                                alert_ok(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
-                                            }
-                                        },err=>{
-                                            alert_ok(strings('alert_title_error'), strings('unsigned_login.error_login'));
-                                        })
-                                }}
+                                disabled={this.state.password.length === 0}
+                                onPress={this.Login}
                                 title={strings('unsigned_login.btn_login')}
                             />
                             <View style={{
@@ -202,24 +200,12 @@ class Login extends Component {
                                 height: 40,
                                 marginTop: 30
                             }}>
-                                <TouchableOpacity
-                                    onPress={e=>{
-                                        this.props.navigation.navigate('unsigned_register')
-                                    }}
-                                >
-                                    <Text style={{
-                                        color: linkButtonColor
-                                    }}>{strings('unsigned_login.btn_register')}</Text>
+                                <TouchableOpacity onPress={this.toRegister}>
+                                    <Text style={{color: linkButtonColor}}>{strings('unsigned_login.btn_register')}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={e=>{
-                                        this.props.navigation.navigate('unsigned_recovery')
-                                    }}
-                                >
-                                    <Text style={{
-                                        color: linkButtonColor
-                                    }}>{strings('unsigned_login.btn_recovery')}</Text>
-							</TouchableOpacity>
+                                <TouchableOpacity onPress={this.toRecovery}>
+                                    <Text style={{color: linkButtonColor}}>{strings('unsigned_login.btn_recovery')}</Text>
+							    </TouchableOpacity>
 						</View>
 					</View>
 					</TouchableOpacity>
@@ -228,9 +214,9 @@ class Login extends Component {
 	}
 }
 
-export default connect(state => {
-	return {
-		user: state.user,
-        setting: state.setting,
-	};
-})(Login);
+const mapToState = ({userModal,settingsModal})=>({
+    hashed_password: userModal.hashed_password,
+    lang: settingsModal.lang
+});
+
+export default connect(mapToState)(Login);

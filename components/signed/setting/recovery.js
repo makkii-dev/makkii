@@ -15,7 +15,7 @@ import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
 import {AppToast} from "../../../utils/AppToast";
 
-var nativeBridge = NativeModules.RNScreenshotHelper;
+const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
 const {width} = Dimensions.get('window');
 
@@ -25,11 +25,6 @@ class Recovery extends Component {
 			title: strings('recovery_phrase.title'),
 	    };
     };
-	constructor(props){
-		super(props);
-		console.log('[route] ' + this.props.navigation.state.routeName);
-	}
-
 
 	componentDidMount() {
 		if (Platform.OS === 'android') {
@@ -53,6 +48,7 @@ class Recovery extends Component {
 	}
 
 	render(){
+		const {mnemonic} = this.props;
 		return (
 			<View style={{...defaultStyles.container, backgroundColor: mainBgColor}}>
 				<View style={{
@@ -66,7 +62,7 @@ class Recovery extends Component {
 				}}>
 					<QRCode
 						size={200}
-						value={this.props.user.mnemonic}
+						value={mnemonic}
 					/>
 				</View>
 				<View style={{
@@ -88,13 +84,13 @@ class Recovery extends Component {
 							textAlignVertical: 'top'
 						}}
 						editable={false}
-						value={this.props.user.mnemonic}
+						value={mnemonic}
 					/>
 				</View>
                 <ComponentButton
                     title={strings('copy_button')}
                     onPress={e => {
-                        Clipboard.setString(this.props.user.mnemonic);
+                        Clipboard.setString(mnemonic);
                         AppToast.show(strings('toast_copy_success'));
                     }}
                 />
@@ -103,8 +99,8 @@ class Recovery extends Component {
 	}
 }
 
-export default connect(state => {
-	return ({
-		user: state.user
-	});
-})(Recovery);
+const mapToState = ({userModal})=>({
+	mnemonic: userModal.mnemonic,
+});
+
+export default connect(mapToState)(Recovery);

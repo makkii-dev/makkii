@@ -641,7 +641,7 @@ class Home extends Component {
 	}
 }
 
-const mapToState = ({accountsModal, setting})=>{
+const mapToState = ({accountsModal, settingsModal})=>{
 	const {accountsMap, transactionsMap} = accountsModal;
 	let totalBalance = BigNumber(0);
 	const accounts = Object.keys(accountsMap).reduce((map,el)=>{
@@ -649,14 +649,15 @@ const mapToState = ({accountsModal, setting})=>{
 			...accountsMap[el],
 			txNumber: Object.keys(transactionsMap[el]).length,
 		};
-		totalBalance = totalBalance.plus(BigNumber(accountsMap[el].balance).multipliedBy(BigNumber(setting.coinPrices[accountsMap[el].symbol])));
+		totalBalance = totalBalance.plus(BigNumber(accountsMap[el].balance).multipliedBy(BigNumber(settingsModal.coinPrices[accountsMap[el].symbol])));
 		return map;
 	},{});
 	return ({
         isGettingBalance: accountsModal.isGettingBalance,
 		totalBalance: totalBalance,
-		fiat_currency:setting.fiat_currency,
-		accounts: accounts
+		fiat_currency:settingsModal.fiat_currency,
+		accounts: accounts,
+		lang: settingsModal.lang
 	})
 };
 

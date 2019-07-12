@@ -9,6 +9,7 @@
   "unsigned_login": {
     "error_login": "登录失败",
     "error_incorrect_password": "密码不正确",
+    "error_not_register": "没有设置密码， 请先注册",
     "btn_login": "登录",
     "btn_register": "注册",
     "btn_recovery": "恢复",

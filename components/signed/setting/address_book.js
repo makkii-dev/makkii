@@ -5,11 +5,10 @@ import {fixedHeight, mainBgColor} from '../../style_util';
 import { connect } from 'react-redux';
 import { strings } from '../../../locales/i18n';
 import {RightActionButton} from '../../common';
-import {delete_address} from '../../../actions/user';
 import {COINS} from "../../../coins/support_coin_list";
 import {accountKey} from '../../../utils/index';
 import {formatAddress1Line} from '../../../coins/api';
-import {popCustom} from "../../../utils/dva";
+import {createAction, popCustom} from "../../../utils/dva";
 
 const {width} = Dimensions.get('window');
 
@@ -24,17 +23,15 @@ class AddressBook extends Component {
                 flex: 1,
             },
             headerRight: (
-                navigation.getParam('isEdit')?<RightActionButton
+                navigation.getParam('type', 'edit') === 'edit'?<RightActionButton
                     btnTitle={strings('address_book.btn_add')}
                     onPress={() => {
-                        navigation.navigate('signed_setting_add_address', {
-                            addressAdded: navigation.getParam('addressAdded'),
-                        })
+                        navigation.navigate('signed_setting_add_address')
                     }}
                 />:<RightActionButton btnTitle={' '} onPresss={() => {}}/>
             )
         });
-    }
+    };
 
     constructor(props) {
         super(props);
@@ -43,19 +40,8 @@ class AddressBook extends Component {
         this.state = {
             openRowKey: null,
         };
-        if (this.type === undefined || this.type === 'edit') {
-            this.props.navigation.setParams({
-                isEdit: true,
-                addressAdded: this.addressAdded,
-            });
-        } else {
-            this.props.navigation.setParams({
-                isEdit: false,
-            });
-        }
     }
 
-    addressAdded=(address) => {}
 
     onSwipeOpen(Key: any) {
         this.setState({
@@ -77,16 +63,36 @@ class AddressBook extends Component {
             [
                 {text: strings('cancel_button'), onPress:()=>this.setState({openRowKey: null})},
                 {text: strings('delete_button'), onPress:()=>{
-                    this.setState({
-                        openRowKey: null,
-                    }, ()=>setTimeout(() => {
-                        // delete address locally
-                        dispatch(delete_address(key));
-                    }));
-                }}
+                        this.setState({
+                            openRowKey: null,
+                        }, ()=>setTimeout(() => {
+                            // delete address locally
+                            dispatch(createAction('userModal/deleteContact')({key}));
+                        }));
+                    }}
             ],
             {cancelable: false}
         );
+    }
+
+    onSelect(item) {
+        const {dispatch, navigation} = this.props;
+        if (this.state.openRowKey === null) {
+            if(this.type === 'select'){
+                dispatch(createAction('txSenderModal/updateState')({to:item.address}));
+                navigation.goBack();
+            }else {
+                dispatch(createAction('contactAddModal/updateState')({
+                    symbol:item.symbol,
+                    name: item.name,
+                    address: item.address,
+                    editable: false,
+                }));
+                navigation.navigate('signed_setting_add_address');
+            }
+        }else{
+            this.setState({openRowKey: null});
+        }
     }
 
     render_item= ({item, index}) => {
@@ -124,37 +130,20 @@ class AddressBook extends Component {
                 swipeEnabled={this.state.openRowKey === null && this.type !== 'select'}
                 preventSwipeRight={true}
                 shouldBounceOnMount={true}
+            >
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        backgroundColor: '#fff',
+                        justifyContent: 'space-between',
+                        height: cellHeight,
+                    }}
+                    onPress={() => this.onSelect(item)}
                 >
-                <TouchableOpacity activeOpacity={1}
-                                  style={{
-                                      flexDirection: 'row',
-                                      alignItems: 'center',
-                                      paddingVertical: 10,
-                                      paddingHorizontal: 20,
-                                      backgroundColor: '#fff',
-                                      justifyContent: 'space-between',
-                                      height: cellHeight,
-                                  }}
-                                  onPress={() => {
-                                      if (this.state.openRowKey === null) {
-                                          console.log("selected: " + item.address);
-                                          if (this.type === 'select') {
-                                              const {addressSelected} = this.props.navigation.state.params;
-                                              addressSelected(item.address);
-                                              this.props.navigation.goBack();
-                                          } else {
-                                              this.props.navigation.navigate('signed_setting_add_address', {
-                                                  name: item.name,
-                                                  address: item.address,
-                                                  symbol: item.symbol,
-                                                  addressAdded: this.addressAdded,
-                                              });
-                                          }
-                                      } else {
-                                          this.setState({openRowKey: null});
-                                      }
-                                  }
-                                  }>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <Image source={COINS[item.symbol].icon}
                                style={{
@@ -195,7 +184,7 @@ class AddressBook extends Component {
     }
 
     render() {
-        let address_book_items = Object.values(this.props.user.address_book);
+        let address_book_items = Object.values(this.props.address_book);
         let itemsFiltered = [];
         if (this.filterSymbol !== undefined) {
             address_book_items.forEach(addr => {
@@ -209,27 +198,27 @@ class AddressBook extends Component {
 
         return (
             itemsFiltered.length > 0?
-            <TouchableOpacity
-                activeOpacity={1}
-                style={{
-                    backgroundColor: mainBgColor,
-                    alignItems: 'center',
-                    flex: 1,
-                    paddingTop: 20,
-                }}
-                onPress={() => {
-                    this.setState({openRowKey: null});
-                }}
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        backgroundColor: mainBgColor,
+                        alignItems: 'center',
+                        flex: 1,
+                        paddingTop: 20,
+                    }}
+                    onPress={() => {
+                        this.setState({openRowKey: null});
+                    }}
                 >
-                <FlatList
-                    style={{width: width}}
-                    data={itemsFiltered}
-                    renderItem={this.render_item}
-                    ItemSeparatorComponent={()=><View style={styles.divider}/>}
-                    keyExtractor={(item, index)=>item.address}
-                />
-            </TouchableOpacity>:
-            this.renderEmpty()
+                    <FlatList
+                        style={{width: width}}
+                        data={itemsFiltered}
+                        renderItem={this.render_item}
+                        ItemSeparatorComponent={()=><View style={styles.divider}/>}
+                        keyExtractor={(item, index)=>item.address}
+                    />
+                </TouchableOpacity>:
+                this.renderEmpty()
         )
     }
 }
@@ -249,9 +238,8 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(state => {
-    return {
-        setting: state.setting,
-        user: state.user,
-    };
-})(AddressBook);
+const mapToState = ({userModal})=>({
+    address_book: userModal.address_book,
+});
+
+export default connect(mapToState)(AddressBook);

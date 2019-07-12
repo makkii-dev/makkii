@@ -67,7 +67,8 @@ class Home extends Component {
 				callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
 			}
 		});
-	}
+	};
+
 
 	render(){
 		return (

@@ -9,6 +9,7 @@
   "unsigned_login": {
     "error_login": "Login fail",
     "error_incorrect_password": "Incorrect password",
+    "error_not_register": "No password set, Register first",
     "btn_login": "Login",
     "btn_register": "Register",
     "btn_recovery": "Recovery",

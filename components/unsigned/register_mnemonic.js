@@ -10,7 +10,7 @@ import {AppToast} from "../../utils/AppToast";
 
 const {width,height} = Dimensions.get('window');
 
-var nativeBridge = NativeModules.RNScreenshotHelper;
+const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
 
 class Mnemonic extends Component {
@@ -24,7 +24,6 @@ class Mnemonic extends Component {
 	}
 	async componentDidMount(){
 		console.log('[route] ' + this.props.navigation.state.routeName);
-		console.log(this.props.user);
 		if(this.props.user.mnemonic !== ''){
 
 		}
@@ -50,7 +49,7 @@ class Mnemonic extends Component {
 	}
 
 	render(){
-		const {setting} = this.props;
+		const {mnemonic} = this.props;
 		const {navigate} = this.props.navigation;
 		return (
 			<View style={{
@@ -74,7 +73,7 @@ class Mnemonic extends Component {
 				}}>
                     <InputMultiLines
                         editable={false}
-                        value={this.props.user.mnemonic}
+                        value={mnemonic}
                         style={{
                             borderWidth: 0,
                             fontSize: 18,
@@ -86,7 +85,7 @@ class Mnemonic extends Component {
                 <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_copy')}
                     onPress={e=>{
-                        Clipboard.setString(this.props.user.mnemonic);
+                        Clipboard.setString(mnemonic);
                         AppToast.show(strings('unsigned_register_mnemonic.toast_copy_mnemonic'));
                     }}
                 />
@@ -94,10 +93,6 @@ class Mnemonic extends Component {
                 <ComponentButton
                     title={strings('unsigned_register_mnemonic.btn_done')}
                     onPress={e=>{
-                        listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
-						listenApp.handleActive = setting.pinCodeEnabled?()=>navigate('unlock',{cancel:false}):()=>{};
-						listenApp.timeOut = setting.login_session_timeout;
-                        listenApp.start();
                         navigate('signed_home');
                     }}
                 />
@@ -106,4 +101,8 @@ class Mnemonic extends Component {
 	}
 }
 
-export default connect(state=>{return {user: state.user,setting:state.setting};})(Mnemonic);
+const mapToState = ({userModal})=>({
+	mnemonic: userModal.mnemonic,
+});
+
+export default connect(mapToState)(Mnemonic);

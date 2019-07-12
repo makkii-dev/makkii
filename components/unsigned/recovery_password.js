@@ -2,14 +2,10 @@ import React, {Component} from 'react';
 import {Dimensions, Keyboard,TouchableOpacity,View, Alert} from 'react-native';
 import {PasswordInputWithTitle, ComponentButton, alert_ok } from '../common.js';
 import {connect} from 'react-redux';
-import {hashPassword,validatePassword} from '../../utils';
-import {user} from '../../actions/user.js';
-import {delete_accounts} from '../../actions/accounts';
-import {setting_update_pincode_enabled} from  '../../actions/setting';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles';
 import {mainBgColor} from '../style_util';
-import {popCustom} from "../../utils/dva";
+import {createAction, popCustom} from "../../utils/dva";
 import {sendRecoveryEventLog} from "../../services/eventLogService";
 
 const {width} = Dimensions.get('window');
@@ -28,12 +24,49 @@ class Password extends Component {
 			password_confirm: '',
 		}
 	}
-	async componentDidMount(){
-		console.log('[route] ' + this.props.navigation.state.routeName);
-	}
+
+	recovery = ()=>{
+		const {dispatch, navigation } = this.props;
+		const {password, password_confirm} = this.state;
+		dispatch(createAction('userModal/register')({password_confirm,password, mnemonic: this.mnemonic}))
+			.then(r=>{
+				if(r){
+					sendRecoveryEventLog();
+					navigation.navigate('unsigned_register_mnemonic')
+				}else{
+					alert_ok(strings('alert_title_error'),r.error);
+				}
+			});
+	};
+
+	beforeRecovery = ()=>{
+		const {dispatch, hashed_password} = this.props;
+		if(hashed_password!==''){
+			popCustom.show(
+				strings('alert_title_warning'),
+				strings('recovery.warning_mnemonic'),
+				[
+					{text: strings('cancel_button'),onPress:()=>{}},
+					{text: strings('alert_ok_button'),onPress:()=>{
+							Promise.all([
+								dispatch(createAction('userModal/reset')()),
+								dispatch(createAction('accountsModal/reset')()),
+								dispatch(createAction('settingsModal/reset')),
+								dispatch(createAction('ERC20Dex/reset')()),
+								dispatch(createAction('txSenderModal/reset')()),
+							]).then(this.recovery)
+						}},
+				]
+			)
+		}else{
+			this.recovery()
+		}
+	};
+
 
 	render(){
-		const {dispatch} = this.props;
+		const { password, password_confirm } = this.state;
+
 		return (
 			<TouchableOpacity
 				activeOpacity={1}
@@ -56,7 +89,7 @@ class Password extends Component {
 					<PasswordInputWithTitle
 						title={strings('recovery_password.label_password')}
                         placeholder={strings('recovery_password.hint_enter_password')}
-						value={this.state.password}
+						value={password}
 						onChange={e=>{
 							this.setState({
 								password: e
@@ -67,7 +100,7 @@ class Password extends Component {
 					<PasswordInputWithTitle
                         title={strings('recovery_password.label_confirm_password')}
 						placeholder={strings('recovery_password.hint_enter_confirm_password')}
-						value={this.state.password_confirm}
+						value={password_confirm}
 						onChange={e=>{
 							this.setState({
 								password_confirm: e
@@ -76,48 +109,17 @@ class Password extends Component {
                     />
 				</View>
 				<ComponentButton
+					disabled={password_confirm.length === 0 ||password.length === 0}
 					title={strings('recovery_password.button_reset')}
-					onPress={e=>{
-						if (!validatePassword(this.state.password)) {
-						    alert_ok(strings('alert_title_error'), strings('recovery_password.error_password'));
-						} else if (this.state.password !== this.state.password_confirm) {
-							alert_ok(strings('alert_title_error'), strings('recovery_password.error_dont_match'));
-						} else {
-							popCustom.show(
-								strings('alert_title_warning'),
-								strings('recovery.warning_mnemonic'),
-								[
-									{
-										text: strings('cancel_button'), onPress: () => {}
-									},
-									{
-										text: strings('alert_ok_button'), onPress: () => {
-											const {navigate} = this.props.navigation;
-											const {setting} = this.props;
-											let hashed_password = hashPassword(this.state.password);
-
-											dispatch(delete_accounts(hashed_password));
-											dispatch(setting_update_pincode_enabled(false,false));
-											dispatch(user(hashed_password, this.mnemonic));
-
-											sendRecoveryEventLog();
-
-											listenApp.handleTimeOut = ()=>{navigate('unsigned_login');listenApp.stop()};
-											listenApp.handleActive = ()=>{};
-											listenApp.timeOut = setting.login_session_timeout;
-											listenApp.start();
-											navigate('signed_vault');
-										}
-									},
-								]
-							)
-
-						}
-					}}
+					onPress={this.beforeRecovery}
 				/>
 			</TouchableOpacity>
 		);
 	}
 }
 
-export default connect(({setting})=>({setting}))(Password);
+
+const mapToState = ({userModal})=>({
+	hashed_password: userModal.hashed_password
+});
+export default connect(mapToState)(Password);

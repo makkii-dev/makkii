@@ -1,26 +1,24 @@
 import {createAction, popCustom} from "../utils/dva";
 import {sendAll} from "../coins/btc+ltc/core";
-import {getAllBalance, parseSanedData, sendTx, validateTxObj} from "../services/txSenderService";
+import {getAllBalance, parseScannedData, sendTx, validateTxObj} from "../services/txSenderService";
 import {alert_ok} from "../components/common";
 import {strings} from "../locales/i18n";
 import {accountKey, getLedgerMessage} from "../utils";
 import {sendTransferEventLog} from "../services/eventLogService";
 
-const initTx= {
+const init= {
     to: '',
     amount: '',
     data: '',
     gasPrice: '',
     gasLimit: '',
+    editable: true,
+    txType:{},
 };
 
 export default {
     namespace: 'txSenderModal',
-    state:{
-        txObj:initTx,
-        editable: true,
-        txType:{},
-    },
+    state:init,
     reducers:{
         updateState(state, {payload}){
             console.log('payload=>',payload);
@@ -29,23 +27,19 @@ export default {
     },
     effects:{
         *reset(action, {put}){
-            yield put(createAction('updateState')({txObj:initTx, editable: true,txType:{}}))
+            yield put(createAction('updateState')(init))
         },
         *sendAll({payload},{call,select,put}){
             const {currentAccount} = yield select(mapToAccountsModal);
-            const {txObj} = yield select(mapToTxSenderModal);
             const amount = yield call(getAllBalance, currentAccount, payload);
-            yield put(createAction('updateState')({txObj:{...txObj, amount:amount}}))
+            yield put(createAction('updateState')({amount:amount}))
         },
         *parseScannedData({payload:{data}},{call, select, put}){
             console.log('data=>',data);
             const {currentAccount} = yield select(mapToAccountsModal);
-            const {txObj} = yield select(mapToTxSenderModal);
-            let newTxObj = {...txObj};
-            let ret = yield call(parseSanedData, data, currentAccount);
+            let ret = yield call(parseScannedData, data, currentAccount);
             if(ret.result){
-                newTxObj = {...newTxObj,...ret.data};
-                yield put(createAction('updateState')({txObj:newTxObj}));
+                yield put(createAction('updateState')({...ret.data}));
             }
             return ret.result;
         },
@@ -158,4 +152,4 @@ const mapToAccountsModal = ({accountsModal})=>{
     })
 };
 
-const mapToTxSenderModal = ({txSenderModal})=>({txObj: txSenderModal.txObj});
+const mapToTxSenderModal = ({txSenderModal})=>({...txSenderModal});

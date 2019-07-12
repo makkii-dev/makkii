@@ -45,10 +45,10 @@ export const renderAddress = (address)=>(
 
 class Home extends React.Component {
 	static navigationOptions = ({navigation, screenProps})=>{
-		const {t, lan} = screenProps;
+		const {t, lang} = screenProps;
 		const showMenu  = navigation.getParam('showMenu', ()=>{});
 		return({
-			title: t('token_exchange.title',{locale:lan}),
+			title: t('token_exchange.title',{locale:lang}),
 			headerRight:(
 				<TouchableOpacity
 					style={{width: 48,

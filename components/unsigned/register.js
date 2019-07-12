@@ -1,16 +1,11 @@
 import React,{Component} from 'react';
 import {connect} from 'react-redux';
-import {View, Alert, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
+import {View, TouchableOpacity, Keyboard, Dimensions} from 'react-native';
 import {ComponentButton,PasswordInput, alert_ok} from '../common.js';
-import {validatePassword, hashPassword, dbGet} from '../../utils';
-import {user} from '../../actions/user.js';
-import {delete_accounts} from "../../actions/accounts";
-import {generateMnemonic} from '../../libs/aion-hd-wallet/index.js';
 import {strings} from "../../locales/i18n";
 import {mainColor, mainBgColor} from '../style_util';
 import defaultStyles from '../styles';
-import {setting_update_pincode_enabled} from "../../actions/setting";
-import {popCustom} from "../../utils/dva";
+import {createAction, popCustom} from "../../utils/dva";
 import {sendRegisterEventLog} from "../../services/eventLogService";
 
 const {width,height} = Dimensions.get('window');
@@ -20,7 +15,7 @@ class Home extends Component {
 		return {
 			title: strings("register.title"),
 		};
-	}
+	};
 	constructor(props){
 		super(props);
 		this.state = {
@@ -31,10 +26,49 @@ class Home extends Component {
 			alerted: false,
 		};
 	}
-	async componentDidMount(){
-	}
+
+
+
+	register = ()=>{
+		const {dispatch, navigation } = this.props;
+		const {password, password_confirm} = this.state;
+		dispatch(createAction('userModal/register')({password_confirm,password}))
+			.then(r=>{
+				if(r){
+					sendRegisterEventLog();
+					navigation.navigate('unsigned_register_mnemonic')
+				}else{
+					alert_ok(strings('alert_title_error'),r.error);
+				}
+			});
+	};
+
+	beforeRegister = ()=>{
+		const {dispatch, hashed_password} = this.props;
+		if(hashed_password!==''){
+			popCustom.show(
+				strings('alert_title_warning'),
+				strings("register.warning_register_again"),
+				[
+					{text: strings('cancel_button'),onPress:()=>{}},
+					{text: strings('alert_ok_button'),onPress:()=>{
+							Promise.all([
+								dispatch(createAction('userModal/reset')()),
+								dispatch(createAction('accountsModal/reset')()),
+								dispatch(createAction('settingsModal/reset')),
+								dispatch(createAction('ERC20Dex/reset')()),
+								dispatch(createAction('txSenderModal/reset')()),
+							]).then(this.register)
+						}},
+				]
+			)
+		}else{
+			this.register()
+		}
+	};
+
 	render(){
-		const { dispatch } = this.props;
+		const { password, password_confirm } = this.state;
 		return (
 			<TouchableOpacity activeOpacity={1} onPress={() => {Keyboard.dismiss()}} style={{
 				flex: 1,
@@ -63,7 +97,7 @@ class Home extends Component {
 					paddingTop: 40,
 				}} >
 					<PasswordInput
-						value={this.state.password}
+						value={password}
 						placeholder={strings('register.hint_enter_password')}
 						onChange={e=>{
 							this.setState({
@@ -73,7 +107,7 @@ class Home extends Component {
 					/>
                     <View style={{marginTop: 30}}/>
 					<PasswordInput
-						value={this.state.password_confirm}
+						value={password_confirm}
 						placeholder={strings('register.hint_enter_confirm_password')}
 						onChange={e=>{
 							this.setState({
@@ -83,40 +117,9 @@ class Home extends Component {
 					/>
 					<View style={{marginTop: 40}}/>
 					<ComponentButton
+						disabled={password_confirm.length === 0 ||password.length === 0}
 						title={strings("register.button_register")}
-						onPress={e=>{
-							if (!validatePassword(this.state.password))
-								alert_ok(strings('alert_title_error'),strings("register.error_password"));
-							else if (this.state.password !== this.state.password_confirm)
-								alert_ok(strings('alert_title_error'),strings("register.error_dont_match"));
-							else {
-								const hashed_password = hashPassword(this.state.password);
-								const mnemonic = generateMnemonic();
-								dbGet('user').then(userJson=>{
-									popCustom.show(
-										strings('alert_title_warning'),
-										strings("register.warning_register_again"),
-										[
-											{text: strings('cancel_button'),onPress:()=>{}},
-											{text: strings('alert_ok_button'),onPress:()=>{
-													console.log('mnemonic ', mnemonic);
-													dispatch(user(hashed_password, mnemonic));
-													dispatch(setting_update_pincode_enabled(false,false));
-													dispatch(delete_accounts(hashed_password));
-
-													sendRegisterEventLog();
-
-													this.props.navigation.navigate('unsigned_register_mnemonic')
-
-												}},
-										]
-									)
-								},err=>{
-									dispatch(user(hashed_password, mnemonic));
-									this.props.navigation.navigate('unsigned_register_mnemonic')
-								})
-							}
-						}}
+						onPress={this.beforeRegister}
 					/>
 				</View>
 			</TouchableOpacity>
@@ -124,8 +127,7 @@ class Home extends Component {
 	}
 }
 
-export default connect(state=>{
-	return {
-		user: state.user
-	};
-})(Home);
+const mapToState = ({userModal})=>({
+	hashed_password: userModal.hashed_password
+});
+export default connect(mapToState)(Home);
