@@ -24,7 +24,7 @@ import {navigate} from "../../../utils/dva";
 import {accountKey, getStatusBarHeight, validateAmount} from "../../../utils";
 import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
-import {DEX_MENU} from "./constants";
+import {DEX_MENU, getExchangeRulesURL} from "./constants";
 import {PopWindow} from "../vault/home_popwindow";
 
 const {width} = Dimensions.get('window');
@@ -141,7 +141,7 @@ class Home extends React.Component {
 		navigate('signed_Dex_exchange_token_list', {flow:flow})(this.props);
 	};
 
-	goToAccountDetail = (item)=>{
+	toAccountDetail = (item)=>{
 		navigate('signed_vault_account_tokens', {account:item})(this.props);
 	};
 
@@ -176,26 +176,7 @@ class Home extends React.Component {
 					navigate('signed_Dex_exchange_history')(this.props);
 					break;
 				case DEX_MENU[1].title:
-					let lang = this.props.lang;
-					if (this.props.lang === 'auto') {
-						if (DeviceInfo.getDeviceLocale().startsWith("zh")) {
-							lang = "zh";
-						} else {
-							lang = "en";
-						}
-					}
-
-				    let initialUrl;
-				    const file_prefix = 'static/exchange_rule_';
-				    if (Platform.OS === 'ios') {
-				    	if (lang === 'en') {
-				    		initialUrl = require('../../../' +　file_prefix + 'en.html');
-						} else {
-							initialUrl = require('../../../' + file_prefix + 'zh.html');
-						}
-					} else {
-				    	initialUrl = {uri: 'file:///android_asset/' + file_prefix + lang + ".html"};
-					}
+					const initialUrl = getExchangeRulesURL(this.props.lang);
 					navigate("simple_webview", {
 						title: strings('token_exchange.title_exchange_rules'),
 						initialUrl: initialUrl
@@ -242,7 +223,7 @@ class Home extends React.Component {
 							<Image source={require('../../../assets/arrow_right.png')} style={{width: 24, height: 24}}/>
 						</View>
 					</TouchableOpacity>
-					<TouchableWithoutFeedback onPress={()=>this.goToAccountDetail(item)}>
+					<TouchableWithoutFeedback onPress={()=>this.toAccountDetail(item)}>
 						<View style={styles.accountContainerWithShadow}>
 							<Image source={COINS[item.symbol].icon} style={{marginRight: 10, width: 24, height: 24}}/>
 							<View style={{flex: 1, paddingVertical: 10}}>
@@ -452,7 +433,7 @@ const mapToState = ({accountsModel, settingsModel, ERC20Dex})=>{
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
-		currentAccount: currentAccount?currentAccount.symbol === 'ETH'?currentAccount:null:null,
+		currentAccount: currentAccount?currentAccount.symbol === 'ETH'?currentAccount:undefined:undefined,
 		tokenList:ERC20Dex.tokenList,
 		lang:settingsModel.lang,
 	}

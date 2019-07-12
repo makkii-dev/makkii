@@ -6,13 +6,14 @@ import {
     getEnabledStatus,
     getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress
 } from '../services/erc20DexService';
-import {createAction} from "../utils/dva";
+import {createAction, navigate} from "../utils/dva";
 import {AppToast} from "../utils/AppToast";
 import {strings} from "../locales/i18n";
 import {COINS} from "../coins/support_coin_list";
 import {popCustom} from "../utils/dva";
 import {Storage} from "../utils/storage";
 import BigNumber from 'bignumber.js';
+import {getExchangeRulesURL} from "../components/signed/dex/constants";
 
 const ETHID = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const network = COINS.ETH.network;
@@ -99,6 +100,7 @@ export default {
             yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
             const {srcToken,destToken,srcQty,destQty, account, dispatch} = payload;
             const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
+            const lang = yield select(({settingsModel})=>settingsModel.lang);
             if('ETH'===srcToken){
                 //  no need approve
                 const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,destQty,network);
@@ -137,7 +139,11 @@ export default {
                             {
                                 text:strings('token_exchange.alert_button_why_need_authorization'),
                                 onPress:()=>{
-
+                                    const initialUrl = getExchangeRulesURL(lang);
+                                    navigate("simple_webview", {
+                                        title: strings('token_exchange.title_exchange_rules'),
+                                        initialUrl: initialUrl
+                                    })({dispatch});
                                 }
                             },
                             {
@@ -162,13 +168,17 @@ export default {
                         [
                             {
                                 text:strings('token_exchange.alert_button_why_need_authorization'),
-                                onPress:()=>{}
+                                onPress:()=>{
+                                    const initialUrl = getExchangeRulesURL(lang);
+                                    navigate("simple_webview", {
+                                        title: strings('token_exchange.title_exchange_rules'),
+                                        initialUrl: initialUrl
+                                    })({dispatch});
+                                }
                             },
                             {
                                 text:strings('cancel_button'),
-                                onPress:()=>{
-
-                                }
+                                onPress:()=>{}
                             },
                             {
                                 text:strings('token_exchange.alert_button_approve'),
