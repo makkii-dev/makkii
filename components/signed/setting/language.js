@@ -44,7 +44,7 @@ class Language extends Component {
     updateLocale= () => {
         const {dispatch, navigation} = this.props;
         const lang = Object.keys(this.refs['refSelectList'].getSelect())[0];
-        dispatch(createAction('settingsModel/updateState')({lang}));
+        dispatch(createAction('settingsModel/updateLocale')({lang}));
         navigation.goBack();
     };
 

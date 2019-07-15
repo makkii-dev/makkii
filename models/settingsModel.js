@@ -136,8 +136,8 @@ export default {
             yield put(createAction('saveSettings')());
         },
         *updateLocale({payload:{lang}},{put}){
-            yield put(createAction('updateState')({lang:lang}));
             updateLocale(lang);
+            yield put(createAction('updateState')({lang:lang}));
             yield put(createAction('saveSettings')());
         },
         *updateLoginSessionTimeOut({payload:{time}},{put}){
@@ -232,5 +232,4 @@ const updateLocale = (lang)=>{
     }else{
         setLocale(lang);
     }
-
-}
+};
