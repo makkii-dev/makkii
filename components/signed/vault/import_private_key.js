@@ -40,7 +40,7 @@ class ImportPrivateKey extends Component {
 				}else if (r===3){ // invalid  private key
 					alert_ok(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
 				}else{
-					navigate('signed_set_change_account_name')({dispatch})
+					navigate('signed_vault_set_account_name')({dispatch})
 				}
 			})
 	};

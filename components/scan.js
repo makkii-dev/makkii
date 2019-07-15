@@ -7,6 +7,7 @@ import {mainColor} from './style_util';
 import ImagePicker from 'react-native-image-picker'
 import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
 import {AppToast} from "../utils/AppToast";
+import {createAction} from "../utils/dva";
 
 class Scan extends Component {
     static navigationOptions = ({navigation}) => {
@@ -90,9 +91,10 @@ class Scan extends Component {
 				path: 'images'
 			}
 		};
-		listenApp.ignore = true;
+		const {dispatch} =this.props;
+		dispatch(createAction('settingsModel/updateState')({ignoreAppState:true}));
 		ImagePicker.launchImageLibrary(options, (res) => {
-			setTimeout(()=>listenApp.ignore=false, 100);
+			dispatch(createAction('settingsModel/updateState')({ignoreAppState:false}));
 			if (res.error) {
 			 	console.log('error ', res.error);
 			} else{

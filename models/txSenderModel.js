@@ -21,7 +21,7 @@ export default {
     state:init,
     reducers:{
         updateState(state, {payload}){
-            console.log('payload=>',payload);
+            console.log('txSenderModel payload=>',payload);
             return {...state, ...payload};
         }
     },
@@ -59,6 +59,7 @@ export default {
             const {address, symbol ,coinSymbol, type:accountType} = currentAccount;
             const {type,data} = txType;
             const ret = yield call(sendTx, txObj, currentAccount);
+            yield put(createAction('settingsModel/updateState')({ignoreAppState:true}));
             if(ret.result){
                 sendTransferEventLog(symbol, symbol===coinSymbol?null:coinSymbol, new BigNumber(txObj.amount));
                 //dispatch tx to accountsModel;
@@ -115,6 +116,7 @@ export default {
 
                 // reset txSenderModel
                 yield put(createAction('reset')());
+                yield put(createAction('settingsModel/updateState')({ignoreAppState:false}));
                 return true;
             }else{
                 const {error} = ret;
@@ -123,6 +125,7 @@ export default {
                 }else{
                     alert_ok(strings('alert_title_error'), strings('send.error_send_transaction'));
                 }
+                yield put(createAction('settingsModel/updateState')({ignoreAppState:false}));
                 return false;
             }
         }

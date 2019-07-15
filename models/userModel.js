@@ -20,7 +20,7 @@ export default {
     },
     reducers:{
         updateState(state,{payload}){
-            console.log('payload=>',payload);
+            console.log('userModel payload=>',payload);
             return {...state,...payload};
         }
     },
@@ -55,11 +55,16 @@ export default {
         },
         *updatePassword({payload}, {select,put}){
             const {hashed_password} = payload;
-            const {accountsKey} = yield select(({accountsModel})=>accountsModel.accountsKey);
+            const accountsKey = yield select(({accountsModel})=>accountsModel.accountsKey);
             yield put(createAction('updateState')({hashed_password}));
             yield put(createAction('saveUser')());
             // re-save all accounts
             yield put(createAction('accountsModel/saveAccounts')({keys:accountsKey}));
+        },
+        *updatePinCode({payload}, {put}){
+            const {hashed_pinCode} = payload;
+            yield put(createAction('updateState')({hashed_pinCode}));
+            yield put(createAction('saveUser')());
         },
         *register({payload}, {call,put}){
             const {password, password_confirm} = payload;
@@ -104,7 +109,7 @@ export default {
                 index: 0,
                 actions:[NavigationActions.navigate({routeName:'unsigned_login'})]
             }));
-        }
+        },
     }
 }
 

@@ -28,7 +28,7 @@ export default {
     state:init,
     reducers:{
         updateState(state, {payload}){
-            console.log('payload=>', payload);
+            console.log('accountImportModel payload=>', payload);
             return {...state, ...payload}
         }
     },
@@ -115,8 +115,11 @@ export default {
             yield put(createAction('accountsModel/addAccount')({account:account}));
             yield put(createAction('updateState')(init));
         },
-        *getLedgerStatus(action, {call}){
-            return yield call(getLedgerStatus);
+        *getLedgerStatus(action, {call,put}){
+            yield put(createAction('settingsModel/updateState')({ignoreAppState:true}));
+            const ret =  yield call(getLedgerStatus);
+            yield put(createAction('settingsModel/updateState')({ignoreAppState:false}));
+            return ret;
         }
     }
 

@@ -47,7 +47,7 @@ class PinCode extends React.Component {
         }
     };
 
-    handleTogglePinCodeSwitch(){
+    handleTogglePinCodeSwitch=()=>{
         const {hashed_password} = this.props;
         popCustom.show(
             strings('alert_title_warning'),
@@ -81,14 +81,14 @@ class PinCode extends React.Component {
 
     }
 
-    handleToggleTouchIDSwitch(){
+    handleToggleTouchIDSwitch=()=>{
         const {dispatch} = this.props;
         this.refs['refLoading'].show();
         dispatch(createAction('settingsModel/switchTouchId')())
             .then(r=>{
                 this.refs['refLoading'].hide();
             });
-    }
+    };
 
     render(){
         const {navigate} = this.props.navigation;

@@ -134,7 +134,7 @@ export default {
     },
     reducers:{
         updateState(state,{payload}){
-            console.log('payload=>',payload);
+            console.log('accountsModel payload=>',payload);
             return {...state, ...payload};
         }
     },
@@ -143,6 +143,7 @@ export default {
             const {state_version, options}=payload;
             yield take('userModel/loadStorage/@@end');
             const hashed_password = yield select(({userModel})=>userModel.hashed_password);
+            console.log('loadStorage=>',payload);
             console.log('hashed_password=>',hashed_password);
             if(state_version<2){
                 const  old_accounts_storage = yield call(Storage.get,'accounts',false, false);
@@ -159,7 +160,6 @@ export default {
             }else{
                 const accountsKey = yield call(Storage.get, 'accountsKey', []);
                 // const accountsKey = [];
-                console.log('accountsKey=>',accountsKey);
                 const tokenLists =  yield call(Storage.get, 'tokenLists', {});
                 const hd_index =  yield call(Storage.get, 'hdIndex', Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{}));
                 let accountsMap ={};
@@ -192,9 +192,9 @@ export default {
             }
             return true;
         },
-        *reset(action,{put , call}){
-            yield call(Storage.remove,'accountsKey');
-            yield put(createAction('updateState')({accountsKey:[], accountsMap:{},currentAccount:'',currentToken:''}));
+        *reset(action,{put , select, call}){
+            const accountsKey = yield select(({accountsModel})=>accountsModel.accountsKey);
+            yield put(createAction('deleteAccounts')({keys:accountsKey}));
         },
         *saveAccounts({payload}, {call,select}){ // Adding account and changing account name need to be saved
             const {keys} = payload;

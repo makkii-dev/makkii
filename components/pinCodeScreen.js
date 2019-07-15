@@ -17,6 +17,7 @@ import {user_update_pincode} from '../actions/user';
 import TouchID from 'react-native-touch-id';
 import {strings} from "../locales/i18n";
 import {AppToast} from "../utils/AppToast";
+import {createAction} from "../utils/dva";
 
 const {width,height} = Dimensions.get('window');
 const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];
@@ -110,7 +111,7 @@ class PinCodeScreen extends React.Component {
     }
 
     handleErrorCode(errorMsg){
-        const {navigation} = this.props;
+        const {dispatch} = this.props;
         Animated.spring(
             this.animatedValue,
             {
@@ -124,7 +125,7 @@ class PinCodeScreen extends React.Component {
         this.errorCounts +=1;
         if(this.errorCounts === 5){
             AppToast.show(strings('pinCode.toast_please_login'));
-            listenApp.stop(()=>navigation.navigate('unsigned_login'));
+            dispatch(createAction('userModel/logOut')());
         }
         this.setState({pinCode: '',errorMsg})
     }
@@ -146,7 +147,7 @@ class PinCodeScreen extends React.Component {
             return false;
         }else {
             const hashed_pinCode = hashPassword(pinCode);
-            dispatch(user_update_pincode(hashed_pinCode));
+            dispatch(createAction('userModel/updatePinCode')({hashed_pinCode}));
             return true;
         }
     }
@@ -206,7 +207,7 @@ class PinCodeScreen extends React.Component {
 
     onPressTouchId = ()=>{
         console.log('onPressTouchId');
-        const {touchIDEnabled=false} = this.props;
+        const {touchIDEnabled=false, dispatch} = this.props;
         if (touchIDEnabled===false||this.isModifyPinCode===true ){
             return;
         }
@@ -220,17 +221,17 @@ class PinCodeScreen extends React.Component {
             unifiedErrors: true, // use unified error messages (default false)
             passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
-        Platform.OS === 'ios'?listenApp.ignore = true:null;
+        Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:true})):null;
         TouchID.authenticate('', optionalConfigObject)
             .then(success => {
-                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
+                Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:false})):null;
                 this.onUnlockSuccess&&this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
                 this.targetScreen||this.props.navigation.goBack();
             })
             .catch(error => {
-                console.log('error.core=>',error.code);
+                Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:false})):null;
                 if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
                    listenApp.currentAppState==='active'&&AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }

@@ -16,7 +16,7 @@ export default {
     },
     reducers:{
         updateState(state, {payload}){
-            console.log('payload=>', payload);
+            console.log('tokenImportModel payload=>', payload);
             return {...state, ...payload}
         }
     },

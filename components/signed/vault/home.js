@@ -638,9 +638,9 @@ class Home extends Component {
 }
 
 const mapToState = ({accountsModel, settingsModel})=>{
-	const {accountsMap, transactionsMap} = accountsModel;
+	const {accountsMap, accountsKey, transactionsMap} = accountsModel;
 	let totalBalance = BigNumber(0);
-	const accounts = Object.keys(accountsMap).reduce((map,el)=>{
+	const accounts = accountsKey.reduce((map,el)=>{
 		map[el]={
 			...accountsMap[el],
 			txNumber: Object.keys(transactionsMap[el]).length,

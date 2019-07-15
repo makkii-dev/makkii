@@ -1,4 +1,4 @@
-import {DeviceEventEmitter} from 'react-native';
+import {DeviceEventEmitter, AppState} from 'react-native';
 import {Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
 import {getCoinPrices} from "../coins/api";
@@ -6,6 +6,7 @@ import {AppToast} from "../utils/AppToast";
 import {setLocale, strings} from "../locales/i18n";
 import TouchID from "react-native-touch-id";
 import DeviceInfo from "react-native-device-info";
+import {NavigationActions} from "react-navigation";
 
 export default {
     namespace:'settingsModel',
@@ -25,7 +26,10 @@ export default {
         touchIDEnabled: true,
         explorer_server: 'mainnet', // only used in unused dapp_send. will remove later.
         state_version: 1, // local state/db version, used to upgrade
-        version: '0.1.1' // app version
+        version: '0.1.1', // app version
+        currentAppState: 'active',
+        leaveTime: 0,
+        ignoreAppState: false,
     },
     subscriptions:{
         setupListenerCoinPrice({dispatch}){
@@ -37,18 +41,20 @@ export default {
                     clearInterval(listener);
                 }else{
                     listener=setInterval(()=>{
-                        dispatch(createAction('settingsModel/getCoinPrices')());
+                        dispatch(createAction('getCoinPrices')());
                     },exchange_refresh_interval*60*1000);
                 }
             })
         },
         setupListenerAppState({dispatch}){
-
+            AppState.addEventListener('change', (nextAppState)=>{
+                dispatch(createAction('tryLockScreen')({nextAppState}))
+            })
         }
     },
     reducers:{
         updateState(state, {payload}){
-            console.log('payload=>',payload);
+            console.log('settingsModel payload=>',payload);
             return {...state, ...payload};
         }
     },
@@ -167,6 +173,29 @@ export default {
                 }
             }
             yield put(createAction('saveSettings')());
+        },
+        *tryLockScreen({payload:{nextAppState}},{put,select}){
+            const {currentAppState,pinCodeEnabled,leaveTime,login_session_timeout, ignoreAppState} = yield select(mapToSettings);
+            const {isLogin} = yield select(mapToUsers);
+            if(ignoreAppState||!isLogin){
+                return;
+            }
+            if(currentAppState.match(/inactive|background/) && nextAppState === 'active'){
+                console.log('App has come to the foreground!');
+                const diff = Date.now() - leaveTime;
+                if(diff>login_session_timeout*60*1000){
+                    yield put(createAction('userModel/logOut')());
+                }else{
+                    if(pinCodeEnabled){
+                        yield put(NavigationActions.navigate({routeName:'unlock',params:{cancel:false}}))
+                    }
+                }
+                yield put(createAction('updateState')({currentAppState:nextAppState}));
+            }
+            if(currentAppState==='active' && nextAppState.match(/inactive|background/)){
+                console.log('App has come to the background!');
+                yield put(createAction('updateState')({currentAppState:nextAppState, leaveTime: Date.now()}));
+            }
         }
     }
 }

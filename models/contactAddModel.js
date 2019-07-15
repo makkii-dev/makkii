@@ -17,7 +17,7 @@ export default {
     state:init,
     reducers:{
         updateState(state, {payload}){
-            console.log('payload=>',payload);
+            console.log('contactAddModel payload=>',payload);
             return {...state,...payload};
         }
     },

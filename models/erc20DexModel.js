@@ -33,6 +33,7 @@ export default {
     },
     reducers:{
         ERC20DexUpdateState(state, {payload}){
+            console.log('ERC20Dex payload=>',payload);
             return {...state, ...payload};
         },
 
