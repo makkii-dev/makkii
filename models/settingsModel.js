@@ -40,7 +40,6 @@ export default {
                 if(listener){
                     clearInterval(listener);
                 }else{
-                    dispatch(createAction('getCoinPrices')());
                     listener=setInterval(()=>{
                         dispatch(createAction('getCoinPrices')());
                     },exchange_refresh_interval*60*1000);
@@ -99,6 +98,7 @@ export default {
         },
         *getCoinPrices(action, {call,put,select}){
             const {fiat_currency} = yield select(mapToSettings);
+            console.log('getCoinPrices=>',fiat_currency);
             try {
                 const prices = yield call(getCoinPrices, fiat_currency);
                 const coinPrices = prices.reduce((map,item)=>{

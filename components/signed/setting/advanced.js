@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {Dimensions, View, TouchableOpacity, Keyboard, Image} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {validatePositiveInteger} from '../../../utils';
-import {setting} from "../../../actions/setting";
 import {TextInputWithTitle, RightActionButton, alert_ok} from '../../common';
 import {mainBgColor} from '../../style_util';
 import defaultStyles from '../../styles';

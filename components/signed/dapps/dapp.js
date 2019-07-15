@@ -17,6 +17,7 @@ import * as RNFS from 'react-native-fs';
 import {strings} from "../../../locales/i18n";
 import {ProgressBar} from '../../processbar';
 import {alert_ok} from '../../common';
+import dappsModel from "../../../models/dappsModel";
 const {width, height} = Dimensions.get('window');
 class Dapp extends Component {
 
@@ -249,4 +250,4 @@ class Dapp extends Component {
         )
     }
 }
-export default connect(state => {return ({dapps: state.dapps, setting: state.setting, accounts:state.accounts});})(Dapp);
+export default connect(state => {return ({dapps: state.dappsModel, setting: state.settingsModel, accounts:state.accountsModel});})(Dapp);

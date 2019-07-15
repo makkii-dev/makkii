@@ -8,7 +8,6 @@ import {COINS} from '../../../coins/support_coin_list';
 import SwipeableRow from '../../swipeCell';
 import FastImage from 'react-native-fast-image';
 import {getTokenIconUrl} from '../../../coins/api';
-import {delete_account_token} from '../../../actions/accounts';
 import BigNumber from 'bignumber.js';
 import {PopWindow} from "./home_popwindow";
 import {Header} from 'react-navigation';

@@ -3,7 +3,6 @@ import {Dimensions, View, Text, DeviceEventEmitter} from 'react-native';
 import {connect} from 'react-redux';
 import {strings} from '../../../locales/i18n';
 import SelectList from '../../selectList.js';
-import {setting} from '../../../actions/setting';
 import {mainBgColor} from '../../style_util';
 import {RightActionButton} from '../../common';
 import defaultStyles from '../../styles';

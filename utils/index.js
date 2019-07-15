@@ -200,47 +200,6 @@ function hexToAscii(hex) {
     return str;
 }
 
-class listenAppState{
-    constructor(){
-        this.timeOut = '30';
-        this.timestamp = Date.now('milli');
-    }
-    handleActive = null;
-    handleTimeOut = null;
-    ignore = false;
-    currentAppState = 'active';
-    _handleAppStateChange=(nextAppState)=>{
-        console.log('appState change', nextAppState);
-        console.log('ignore=>', this.ignore);
-        this.currentAppState = nextAppState;
-        if (nextAppState != null && nextAppState === 'active'&&!this.ignore) {
-            // in active
-            const max_keep_signed = 60000*parseInt(this.timeOut);
-            console.log('max_keep_signed ', max_keep_signed);
-            const time_diff = Date.now('milli') - this.timestamp;
-            console.log('time_diff', time_diff);
-            if (time_diff > max_keep_signed) {
-                this.handleTimeOut&&this.handleTimeOut();
-            }else{
-                DeviceEventEmitter.emit('APP_ACTIVE');
-            }
-        } else if (nextAppState === 'background'&&!this.ignore) {
-            this.timestamp = Date.now('milli');
-            this.handleActive&&this.handleActive();
-            console.log('update timestamp ', this.timestamp)
-        }
-    };
-    start(){
-        console.log('start listen app state');
-        AppState.addEventListener('change',this._handleAppStateChange);
-    }
-    stop(cb=()=>{}){
-        console.log('stop listen app state');
-        AppState.removeEventListener('change',this._handleAppStateChange);
-        cb();
-    }
-
-}
 function isIphoneX() {
     const dimen = Dimensions.get('window');
     return (
@@ -387,7 +346,6 @@ module.exports = {
     mainnet_url: mainnet_url,
     mastery_url: mastery_url,
     getStatusBarHeight:getStatusBarHeight,
-    listenAppState:listenAppState,
     strLen: strLen,
     navigationSafely,
     getLatestVersion: getLatestVersion,

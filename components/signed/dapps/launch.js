@@ -5,6 +5,7 @@ import {strings} from "../../../locales/i18n";
 import {fixedHeight, mainColor, mainBgColor} from "../../style_util";
 const {width} = Dimensions.get('window')
 import defaultStyles from '../../styles';
+import dappsModel from "../../../models/dappsModel";
 
 class Launch extends Component{
 
@@ -87,7 +88,7 @@ class Launch extends Component{
     }
 }
 
-export default connect(state => { return ({ dapps: state.dapps, setting: state.settingsModel }); })(Launch);
+export default connect(state => { return ({ dapps: state.dappsModel, setting: state.settingsModel }); })(Launch);
 
 const styles = StyleSheet.create({
     container: {

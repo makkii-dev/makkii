@@ -1,10 +1,5 @@
 // libs
 import React, {Component} from 'react';
-// actions
-import {dapps}             from './actions/dapps.js';
-
-// reducers
-import reducer_dapps           from './reducers/dapps.js';
 
 
 // models
@@ -17,16 +12,16 @@ import txSenderModel  from './models/txSenderModel';
 import userModel      from './models/userModel';
 import settingsModel  from  './models/settingsModel';
 import contactAddModel from './models/contactAddModel';
+import dappsModel from './models/dappsModel';
 // store
 import Router, {routerReducer,routerMiddleware} from './components/routes';
-import dva from './utils/dva';
+import dva, {createAction} from './utils/dva';
 
 
 const app = dva({
-	models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel,tokenImportModel,txSenderModel, userModel, settingsModel, contactAddModel],
+	models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel,tokenImportModel,txSenderModel, userModel, settingsModel, contactAddModel,dappsModel],
 	extraReducers: {
 		router: 		 routerReducer,
-		dapps:           reducer_dapps,
 	},
 	onAction: [routerMiddleware],
 	onError(e) {
@@ -37,14 +32,8 @@ const app = dva({
 import data from './data.js';
 const store = app.store;
 
-store.dispatch(dapps(data.dapps));
+store.dispatch(createAction('dappsModel/updateState')({...data.dapps}));
 
-import {listenAppState} from './utils';
-import {listenCoinPrice} from './utils/listeners';
-import {listenTransaction} from './utils/listeners';
-global.listenTx = new listenTransaction(store);
-global.listenPrice = new listenCoinPrice(store);
-global.listenApp = new listenAppState();
 
 
 const App = app.start(<Router />);

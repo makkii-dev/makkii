@@ -11,7 +11,6 @@ import {
 import {strings} from "../../../locales/i18n";
 import BigNumber from "bignumber.js";
 import Loading from '../../loading';
-import {update_account_token_txs, update_account_txs} from "../../../actions/accounts";
 import {
     accountKey,
     getLedgerMessage,
@@ -99,8 +98,8 @@ class DappSend extends React.Component{
 
             let txs = {[pendingTx.hash]: pendingTx};
 
-            dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
-            dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, user.hashed_password));
+            // dispatch(update_account_txs(this.account_key, txs, user.hashed_password));
+            // dispatch(update_account_txs(accountKey(this.account.symbol, pendingTx.to), txs, user.hashed_password));
 
             this.loadingView.hide();
             AppToast.show(strings('send.toast_tx_sent'), {

@@ -13,7 +13,6 @@ import {
 import { connect } from 'react-redux';
 import {mainColor, mainBgColor} from './style_util';
 import {getStatusBarHeight, hashPassword} from '../utils';
-import {user_update_pincode} from '../actions/user';
 import TouchID from 'react-native-touch-id';
 import {strings} from "../locales/i18n";
 import {AppToast} from "../utils/AppToast";

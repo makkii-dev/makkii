@@ -4,6 +4,7 @@ import { ScrollView, Text, View, TouchableOpacity, Image, FlatList,  StyleSheet,
 import {ComponentTabBar} from '../../common.js';
 import {strings} from '../../../locales/i18n.js';
 import {fixedHeight, mainBgColor} from "../../style_util";
+import dappsModel from "../../../models/dappsModel";
 
 const {width} = Dimensions.get('window');
 class Home extends Component {
@@ -95,4 +96,4 @@ class Home extends Component {
 	}
 }
 
-export default connect(state => { return ({ dapps: state.dapps }); })(Home);
+export default connect(state => { return ({ dapps: state.dappsModel }); })(Home);
