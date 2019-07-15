@@ -40,6 +40,7 @@ export default {
                 if(listener){
                     clearInterval(listener);
                 }else{
+                    dispatch(createAction('getCoinPrices')());
                     listener=setInterval(()=>{
                         dispatch(createAction('getCoinPrices')());
                     },exchange_refresh_interval*60*1000);

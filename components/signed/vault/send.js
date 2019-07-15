@@ -313,6 +313,8 @@ class Send extends Component {
 				if(r){
 					AppToast.show(strings('send.toast_tx_sent'), {
 						onHidden: () => {
+							// reset txSenderModel
+							dispatch(createAction('txSenderModel/reset')());
 							navigation.goBack();
 						}
 					})

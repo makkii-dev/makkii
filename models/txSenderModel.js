@@ -114,8 +114,7 @@ export default {
                 //dispatch tx to tx listener
                 yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
 
-                // reset txSenderModel
-                yield put(createAction('reset')());
+
                 yield put(createAction('settingsModel/updateState')({ignoreAppState:false}));
                 return true;
             }else{

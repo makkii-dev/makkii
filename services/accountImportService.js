@@ -14,6 +14,7 @@ const getAccountFromMasterKey = async (symbol, index) =>{
 
 const getAccountFromPrivateKey = async (symbol, private_key) => {
     try{
+        console.log('getAccountFromPrivateKey=>',symbol);
         const coinType = keystore.CoinType.fromCoinSymbol(symbol);
         return await keystore.recoverKeyPairByPrivateKey(private_key, coinType, COINS[symbol].isTestNet);
     }catch (e) {

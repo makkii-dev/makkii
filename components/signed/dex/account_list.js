@@ -25,7 +25,9 @@ class AccountList extends React.Component{
     };
 
     addAccount = ()=>{
-        navigate('signed_vault_import_from', {symbol:'ETH'})(this.props);
+        const {dispatch} = this.props;
+        dispatch(createAction('accountImportModel/updateState')({symbol:'ETH'}));
+        navigate('signed_vault_import_from')(this.props);
     };
 
     selectAccount = (address)=>{

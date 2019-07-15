@@ -143,12 +143,10 @@ export default {
                             yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]: newTx},
                                 key: accountKey(symbol, newTx.from, tokenSymbol),
-                                force: false,
                             }));
                             yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]: newTx},
                                 key: accountKey(symbol, newTx.to, tokenSymbol),
-                                force: false,
                             }));
                         }else if ('exchange'===type){
                             let exchange = {...txs[newTx.hash].exchange};
@@ -166,7 +164,6 @@ export default {
                             yield put(createAction('accountsModel/updateTransactions')({
                                 txs:{[newTx.hash]:exchange},
                                 key: 'ETH+'+newTx.from+'+ERC20DEX',
-                                force: false,
                             }))
                         }else if('approve'===type){
                             const {symbol} = txs[newTx.hash].approve;
