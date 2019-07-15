@@ -59,7 +59,7 @@ import SimpleWebView         	from './WebViewComponent';
 import PinCodeScreen            from './pinCodeScreen';
 import SelectToken               from './signed/vault/select_token';
 import AddToken                 from './signed/vault/add_token';
-
+import backUpTips               from './signed/backup/backup_tips';
 
 
 import {strings} from "../locales/i18n";
@@ -449,9 +449,14 @@ const AppNavigator = createStackNavigator({
             headerTitleStyle: styles.headerTitleStyle,
             headerTitleAllowFontScaling: false,
         }
+    },
+    "signed_backup_tips":{
+        screen: backUpTips,
+        navigationOptions,
     }
 }, {
     initialRouteName: 'splash',
+    // initialRouteName: 'signed_backup_tips',
     swipeEnabled: false,
     animationEnabled: false,
     lazy: true,

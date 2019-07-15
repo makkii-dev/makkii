@@ -282,6 +282,18 @@
     "title_exchange_rules": "Exchange Notes",
     "toast_waitApprove": "Please wait approval request confirmed"
   },
+  "backUp": {
+    "title_backup_tips": "BackUp Tips",
+    "title_backup_mnemonic": "BackUp Mnemonic",
+    "title_offline_storage": "Offline Storage",
+    "title_dont_take_screenShot": "No ScreenShot",
+    "label_warning_mnemonic": "Obtaining Mnemonic equals owning all assets",
+    "label_backup_mnemonic": "Please write down the mnemonic\nIf your phone is lost, stolen, damaged, the mnemonic will be able to recover your assets",
+    "label_offline_storage": "Please save it in a secure place, isolated from the internet\nPlease do not share or store the mnemonic in a network environment, such as email, albums, social apps and others",
+    "label_dont_take_screenShot": "Please do not share or store the screenshots, which may be collected by third-party, resulting in loss of assets",
+    "label_understand": "UnderStand",
+    "button_next": "Next"
+  },
   "currency": {
     "title": "Exchange Rates",
     "BTC": "Bitcoin",

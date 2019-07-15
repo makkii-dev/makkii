@@ -164,7 +164,7 @@ export default {
                 };
                 try {
                     const biometryType = yield call(TouchID.isSupported, optionalConfigObject);
-                    if(!biometryType||biometryType==='TouchID'){
+                    if(biometryType ===true||biometryType==='TouchID'){
                         yield put(createAction('updateState')({touchIDEnabled:true}));
                     }else{
                         AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`))
