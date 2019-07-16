@@ -62,17 +62,20 @@ export default {
         *loadStorage({payload}, {call,put}){
             const {state_version, options} = payload;
             if(state_version<2){
-                let old_settings = yield call(Storage.get, 'settings');
+                let old_settings = yield call(Storage.get, 'settings', {});
                 old_settings = upgradeSettingsV0_V1(old_settings);
                 const payload = upgradeSettingsV1_V2(old_settings);
-                DeviceEventEmitter.emit('update_exchange_refresh_interval', {exchange_refresh_interval:payload.exchange_refresh_interval||30});
-                updateLocale(payload.lang);
+                const {lang='auto', exchange_refresh_interval=30} = payload;
+                DeviceEventEmitter.emit('update_exchange_refresh_interval', {exchange_refresh_interval:exchange_refresh_interval});
+                updateLocale(lang);
                 yield put(createAction('updateState')(payload));
                 yield put(createAction('saveSettings')());
             }else{
-                const payload = yield call(Storage.get, 'settings');
-                updateLocale(payload.lang);
-                DeviceEventEmitter.emit('update_exchange_refresh_interval', {exchange_refresh_interval:payload.exchange_refresh_interval||30});
+                const payload = yield call(Storage.get, 'settings', {});
+                console.log("****payload****:", payload);
+                const {lang='auto', exchange_refresh_interval=30} = payload ;
+                updateLocale(lang);
+                DeviceEventEmitter.emit('update_exchange_refresh_interval', {exchange_refresh_interval:exchange_refresh_interval});
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());

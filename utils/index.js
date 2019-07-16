@@ -93,6 +93,12 @@ function validateAmount(amount) {
     return reg.test(amount);
 }
 
+function validateAdvancedAmount(amount) {
+    // support match 1.
+    let reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]?)?))$/;
+    return reg.test(amount) ;
+}
+
 function validatePositiveInteger(input) {
     let reg= /^[1-9][0-9]*$/;
     return reg.test(input);
@@ -339,6 +345,7 @@ module.exports = {
     validatePrivateKey: validatePrivateKey,
     generateQRCode: generateQRCode,
     validateAmount: validateAmount,
+    validateAdvancedAmount: validateAdvancedAmount,
     saveImage: saveImage,
     validatePositiveInteger: validatePositiveInteger,
     fetchRequest: fetchRequest,

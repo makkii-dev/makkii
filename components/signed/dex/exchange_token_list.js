@@ -25,12 +25,15 @@ class ExchangeTokenList extends React.PureComponent{
     onSelectToken = (token)=>{
         const {srcToken,destToken} = this.props.trade;
         const flow = this.props.navigation.getParam('flow');
+        const srcQty = this.props.navigation.getParam('srcQty');
         const payload = flow === 'src'?{
             srcToken:token,
-            destToken: token===destToken?srcToken:destToken
+            destToken: token===destToken?srcToken:destToken,
+            srcQty: srcQty,
         }:{
             srcToken:token===srcToken?destToken:srcToken,
-            destToken: token
+            destToken: token,
+            srcQty: srcQty,
         };
         this.props.dispatch(createAction('ERC20Dex/updateTrade')(payload));
         navigateBack(this.props);
@@ -90,6 +93,13 @@ class ExchangeTokenList extends React.PureComponent{
 
 const mapToState = ({ERC20Dex})=>{
     const tokenList = Object.keys(ERC20Dex.tokenList).map(el=>{
+        if (el === 'ETH') {
+            return {
+                symbol: el,
+                name: ERC20Dex.tokenList[el].name,
+                icon: COINS['ETH'].icon
+            }
+        }
         try {
             const fastIcon = getTokenIconUrl('ETH', el, ERC20Dex.tokenList[el].address);
             return {

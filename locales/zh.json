@@ -253,7 +253,7 @@
     "label_account_not_found": "找不到以太坊账号",
     "label_please_select_account": "请先选择一个账号。",
     "label_no_exchange_history": "暂无兑换历史。",
-    "button_add_account": "添加账号",
+    "button_add_eth_account": "添加Ethereum账号",
     "button_exchange_enable": "兑换",
     "button_exchange_disable": "账户余额不足",
     "button_exchange_no_account": "没有账号",
@@ -270,7 +270,9 @@
     "title_exchange": "请求交易",
     "title_exchange_history": "兑换记录",
     "title_exchange_rules": "兑换说明",
-    "toast_waitApprove": "等待请求交易完成"
+    "toast_waitApprove": "等待请求交易完成",
+    "toast_unknown_error": "Kyber未知错误",
+    "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量"
   },
   "backUp": {
     "title_backup_tips": "备份提示",

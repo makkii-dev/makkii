@@ -73,7 +73,7 @@ class AccountList extends React.Component{
                            resizeMode={'contain'}
                     />
                     <Text style={{color: 'gray', marginBottom: 20}}>{strings('token_exchange.label_account_not_found')}</Text>
-                    <Button title={strings('token_exchange.button_add_account')} onPress={this.addAccount}/>
+                    <Button title={strings('token_exchange.button_add_eth_account')} onPress={this.addAccount}/>
                 </View>
             </View>
         )

@@ -6,8 +6,8 @@ import {
 	TextInput, TouchableOpacity,
 	TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions
 } from 'react-native';
+
 import {Header} from "react-navigation";
-import DeviceInfo from 'react-native-device-info';
 import {connect} from "react-redux";
 import FastImage from "react-native-fast-image";
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
@@ -21,7 +21,7 @@ import commonStyles from '../../styles';
 import { mainBgColor} from '../../style_util';
 import {COINS} from "../../../coins/support_coin_list";
 import {navigate} from "../../../utils/dva";
-import {accountKey, getStatusBarHeight, validateAmount} from "../../../utils";
+import {accountKey, getStatusBarHeight, validateAmount, validateAdvancedAmount} from "../../../utils";
 import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
 import {DEX_MENU, getExchangeRulesURL} from "./constants";
@@ -83,7 +83,7 @@ class Home extends React.Component {
 		const {isLoading, trade} = this.props;
 		const {isLoading:nextisLoading, trade:nextTrade,} = nextProps;
 		const res =  isLoading!==nextisLoading || trade.destToken!==nextTrade.destToken
-			|| trade.srcToken!== nextTrade.srcToken;
+			|| trade.srcToken!== nextTrade.srcToken || trade.tradeRate !== nextTrade.tradeRate;
 		if(res){
 			const {srcQty, destQty} = this.state;
 			let newState = {
@@ -95,12 +95,12 @@ class Home extends React.Component {
 				newState={
 					...newState,
 					srcQty:srcQty,
-					destQty: srcQty*nextTrade.tradeRate
+					destQty: BigNumber(srcQty || 0).multipliedBy(BigNumber(nextTrade.tradeRate)).toNumber()
 				}
 			}else{
 				newState={
 					...newState,
-					srcQty: destQty/nextTrade.tradeRate,
+					srcQty: BigNumber(destQty || 0).dividedBy(BigNumber(nextTrade.tradeRate)).toNumber(),
 					destQty:destQty,
 				}
 			}
@@ -111,15 +111,17 @@ class Home extends React.Component {
 
 	onExchangeSrc2dest = ()=>{
 		const {srcToken,destToken} = this.props.trade;
-		this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:destToken,destToken:srcToken}))
+		this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:destToken,destToken:srcToken, srcQty: this.state.srcQty}))
 	};
 
 	onChangeSrcTokenValue = (v)=>{
 		const {tradeRate} = this.state;
-		if(validateAmount(v)||v===''){
+		if(validateAdvancedAmount(v)||v===''){
+			const {srcToken,destToken} = this.props.trade;
+			this.props.dispatch(createAction('ERC20Dex/updateTrade')({srcToken:srcToken,destToken:destToken, srcQty: v, displayLoading: false}))
 			this.setState({
 				srcQty:v,
-				destQty: v*tradeRate
+                destQty: BigNumber(v || 0).multipliedBy(BigNumber(tradeRate)).toNumber(),
 			});
 		}
 
@@ -127,10 +129,13 @@ class Home extends React.Component {
 
 	onChangeDestTokenValue = (v)=>{
 		const {tradeRate} = this.state;
-		this.setState({
-			srcQty:v/tradeRate,
-			destQty: v
-		});
+		console.log("tradeRate:" + tradeRate);
+		if (validateAdvancedAmount(v) || v === '') {
+			this.setState({
+				srcQty: BigNumber(v || 0).dividedBy(BigNumber(tradeRate)).toNumber(),
+				destQty: v
+			});
+		}
 	};
 
 	selectAccount =  ()=>{
@@ -138,7 +143,7 @@ class Home extends React.Component {
 	};
 
 	selectToken = (flow)=>{
-		navigate('signed_Dex_exchange_token_list', {flow:flow})(this.props);
+		navigate('signed_Dex_exchange_token_list', {flow:flow, srcQty: this.state.srcQty})(this.props);
 	};
 
 	toAccountDetail = (item)=>{
@@ -289,6 +294,10 @@ class Home extends React.Component {
 
 	getTokenIcon = (tokenSymbol)=>{
 		const {tokenList} = this.props;
+		if (tokenSymbol === 'ETH') {
+			const Icon = COINS['ETH'].icon;
+			return <Image style={{width: 24, height: 24}} source={Icon} resizeMode={'contain'}/>
+		}
 		try{
 			const fastIcon = getTokenIconUrl('ETH',tokenSymbol, tokenList[tokenSymbol].address);
 			return <FastImage style={{width: 24, height: 24}} source={{uri: fastIcon}} resizeMode={FastImage.resizeMode.contain}/>

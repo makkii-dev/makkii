@@ -35,6 +35,7 @@ class ImportPrivateKey extends Component {
 		const {private_key} = this.state;
 		dispatch(createAction('accountImportModel/fromPrivateKey')({private_key}))
 			.then(r=>{
+				console.log("r:" + r);
 				if(r===2){ // already imported
 					AppToast.show(strings('import_private_key.already_existed',),{position:0})
 				}else if (r===3){ // invalid  private key

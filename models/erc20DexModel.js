@@ -5,6 +5,7 @@ import {
     getTokenTradeRate,
     getEnabledStatus,
     getApproveAuthorizationTx,
+    ETHID
 } from '../services/erc20DexService';
 import {createAction, navigate} from "../utils/dva";
 import {AppToast} from "../utils/AppToast";
@@ -15,7 +16,6 @@ import {Storage} from "../utils/storage";
 import BigNumber from 'bignumber.js';
 import {getExchangeRulesURL} from "../components/signed/dex/constants";
 
-const ETHID = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 const network = COINS.ETH.network;
 export default {
     namespace: 'ERC20Dex',
@@ -67,19 +67,26 @@ export default {
             // init trade;
             const srcToken = Object.keys(lists)[0];
             const destToken = Object.keys(lists)[1];
-            const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
-            console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
-            const trade = {
-                srcToken:srcToken,
-                destToken: destToken,
-                tradeRate: rate,
-            };
-            yield put(createAction('ERC20DexUpdateState')({isLoading:false,tokenList:lists, trade:trade}));
+            console.log(srcToken + " " + lists[srcToken].address);
+            console.log(destToken + " " + lists[destToken].address);
+            const result = yield call(getTokenTradeRate, lists[srcToken].address, lists[destToken].address, 1, network);
+            if (result.status) {
+                console.log(`get rate ${srcToken} -> ${destToken}=${result.rate}`);
+                const trade = {
+                    srcToken: srcToken,
+                    destToken: destToken,
+                    tradeRate: result.rate,
+                };
+                yield put(createAction('ERC20DexUpdateState')({isLoading: false, tokenList: lists, trade: trade}));
+            } else {
+                yield put(createAction('ERC20DexUpdateState')({isLoading: false, tokenList: lists}));
+            }
         },
         *updateTrade({payload},{call,put,select}){
-            yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
+            const {srcToken,destToken, srcQty, displayLoading=true} = payload;
+            if (displayLoading)
+                yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
             const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
-            const {srcToken,destToken} = payload;
             if(tokenList[srcToken]===undefined){
                 AppToast.show(strings('token_exchange.toast_not_support',{token: srcToken}));
                 return;
@@ -88,14 +95,21 @@ export default {
                 AppToast.show(strings('token_exchange.toast_not_support',{token: destToken}));
                 return;
             }
-            const rate = yield call(getTokenTradeRate,srcToken, destToken, network);
-            console.log(`get rate ${srcToken} -> ${destToken}=${rate}`);
-            let trade = {
-                srcToken:srcToken,
-                destToken: destToken,
-                tradeRate: rate,
-            };
-            yield put(createAction('ERC20DexUpdateState')({trade:trade,isWaiting:false}));
+            const result = yield call(getTokenTradeRate,tokenList[srcToken].address, tokenList[destToken].address, srcQty, network);
+            if (result.status) {
+                console.log(`get rate ${srcToken} -> ${destToken}=${result.rate}`);
+                let trade = {
+                    srcToken: srcToken,
+                    destToken: destToken,
+                    tradeRate: result.rate,
+                };
+                yield put(createAction('ERC20DexUpdateState')({trade: trade, isWaiting: false}));
+            } else {
+                AppToast.show(strings(result.message), {
+                    position: AppToast.positions.CENTER
+                });
+                yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
+            }
         },
         *trade({payload},{call,put,select}){
             yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));

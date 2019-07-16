@@ -2,6 +2,8 @@ import HttpClient from '../utils/http_caller';
 import ApiCoder from 'web3-eth-abi';
 import {getBlockNumber} from "../coins/api";
 import {fromHexString} from "../utils";
+import BigNumber from 'bignumber.js';
+
 const NETWORK_URL = {
     'mainnet': 'https://api.kyber.network',
     'ropsten': 'https://ropsten-api.kyber.network',
@@ -15,20 +17,41 @@ const padTo32 = (hexString)=>{
     }
     return '0x'+hexString;
 };
+const ETHID = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
 const getTokenList = async (network)=>{
     try {
-        const url = `${NETWORK_URL[network]}/currencies`;
-        console.log('[kyber req getTokenList]=>',url);
-        const {data} = await HttpClient.get(url);
-        const {data: tokens} = data;
+        // get all tokens market
+        const marketUrl = `${NETWORK_URL[network]}/market`;
+        console.log('[kyber req getTokenTradeRate]=>',marketUrl);
+        const {data:rateResp} = await HttpClient.get(marketUrl);
+        let rateData = rateResp.data;
+        const rates = rateData.reduce((array,el)=>{
+            if (el.current_bid !== 0 && el.current_ask !== 0) {
+                array.push(el.base_symbol);
+            } else {
+                console.info("ignore token " + el.base_symbol + ":bid=" + el.current_bid + ", ask=" + el.current_ask);
+            }
+            return array;
+        }, ['ETH']
+        );
+
+        const tokenListUrl = `${NETWORK_URL[network]}/currencies`;
+        console.log('[kyber req getTokenList]=>',tokenListUrl);
+        const {data} = await HttpClient.get(tokenListUrl);
+        let tokens = data.data;
+
         return tokens.reduce((map, el) => {
-            map[el.symbol] = {
-                name: el.name,
-                address: el.address,
-                decimals: el.decimals,
-                reserves_src: el.reserves_src,
-                reserves_dest: el.reserves_dest,
-            };
+            // ignore tokens that one of ask and bid is zero
+            if (rates.indexOf(el.symbol) >= 0) {
+                map[el.symbol] = {
+                    name: el.name,
+                    address: el.address,
+                    decimals: el.decimals,
+                    reserves_src: el.reserves_src,
+                    reserves_dest: el.reserves_dest,
+                };
+            }
             return map;
         }, {});
     }catch (e) {
@@ -36,30 +59,76 @@ const getTokenList = async (network)=>{
     }
 };
 
-const getTokenTradeRate = async (sellToken, buyToken,network) =>{
-    try{
-        const url = `${NETWORK_URL[network]}/market`;
-        console.log('[kyber req getTokenTradeRate]=>',url);
-        const {data:rateResp} = await HttpClient.get(url);
-        const {data} = rateResp;
-        const rates = data.reduce((map,el)=>{
-            map[el.pair] = {
-                current_bid: el.current_bid,
-                current_ask: el.current_ask,
-            };
-            return map;
-        },{
-            'ETH_ETH':{
-                current_bid:1,
-                current_ask:1
-            }
-        });
-        //Assuming a 3% slippage rate,
-        const rate = rates[`ETH_${sellToken}`].current_bid / rates[`ETH_${buyToken}`].current_ask *0.97;
-        return rate.toFixed(6);
-    }catch (e) {
-        throw 'http request error:'+e;
+const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, qty, network) => {
+    if (!qty) qty = 1;
+    try {
+        let sell = qty;
+        if (sellTokenAddress !== ETHID) {
+            sell = await getSellQty(sellTokenAddress, qty, network);
+        }
+        let buy = await getApproximateBuyQty(buyTokenAddress, network);
+        console.log("sell:" + sell);
+        console.log("buy:" + buy);
+        const rate = BigNumber(sell).dividedBy(BigNumber(buy)).dividedBy(BigNumber(qty)).multipliedBy(0.97).toNumber();
+        return {status: true, rate: rate.toFixed(6)};
+    } catch (e) {
+        if (e.additional_data && e.additional_data.match(/reduce/)) {
+            return {status: false, message: 'token_exchange.toast_reduce_src_qty'};
+        }
+        return {status: false, message: 'token_exchange.toast_unknown_error'}
     }
+    // try{
+    //     const url = `${NETWORK_URL[network]}/market`;
+    //     console.log('[kyber req getTokenTradeRate]=>',url);
+    //     const {data:rateResp} = await HttpClient.get(url);
+    //     const {data} = rateResp;
+    //     const rates = data.reduce((map,el)=>{
+    //         map[el.pair] = {
+    //             current_bid: el.current_bid,
+    //             current_ask: el.current_ask,
+    //         };
+    //         return map;
+    //     },{
+    //         'ETH_ETH':{
+    //             current_bid:1,
+    //             current_ask:1
+    //         }
+    //     });
+    //     //Assuming a 3% slippage rate,
+    //     const rate = rates[`ETH_${sellToken}`].current_bid / rates[`ETH_${buyToken}`].current_ask *0.97;
+    //     return rate.toFixed(6);
+    // }catch (e) {
+    //     throw 'http request error:'+e;
+    // }
+};
+
+const getSellQty = async (tokenAddress, qty, network) => {
+    const url = `${NETWORK_URL[network]}/sell_rate?id=${tokenAddress}&qty=${qty}`;
+    console.log('[kyber req sell_rate]=>', url);
+
+    const {data: resp} = await HttpClient.get(url);
+    if (resp.error === true) {
+        console.log("resp.reason: " + resp.reason);
+        console.log("resp.additional_data: " + resp.additional_data);
+        throw resp;
+    }
+    console.log("sell resp:", resp);
+    return resp.data[0].dst_qty[0];
+};
+
+const getApproximateBuyQty = async (tokenAddress, network) => {
+    const QTY = 1;
+    const url = `${NETWORK_URL[network]}/buy_rate?id=${tokenAddress}&qty=${QTY}`;
+    console.log('[kyber req buy_rate]=>', url);
+
+    const {data: resp} = await HttpClient.get(url);
+    if (resp.error === true) {
+        console.log("resp.reason: " + resp.reason);
+        console.log("resp.additional_data: " + resp.additional_data);
+        throw resp;
+    }
+    console.log("buy resp: ", resp);
+    return resp.data[0].src_qty[0];
 };
 
 const genTradeData = async  (user_address, src_id, dst_id, src_qty, min_dst_qty, network)=>{
@@ -154,5 +223,6 @@ export {
     getEnabledStatus,
     getApproveAuthorizationTx,
     getExchangeHistory,
-    findSymbolByAddress
+    findSymbolByAddress,
+    ETHID,
 }

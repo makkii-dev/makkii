@@ -520,7 +520,7 @@ class Router extends PureComponent {
         console.log('currentScreen=>',currentScreen);
         if (currentScreen === "signed_dapps"||currentScreen === "signed_vault"||currentScreen === "signed_setting"||currentScreen === "signed_dex") {
             if(this.backClickCount === 1){
-                listenApp.stop(()=> BackHandler.exitApp());
+                BackHandler.exitApp();
                 this.props.dispatch(StackActions.reset({
                     index:0,
                     actions:[

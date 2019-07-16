@@ -263,7 +263,7 @@
     "label_account_not_found": "No Ethereum Accounts",
     "label_please_select_account": "Please select an account first.",
     "label_no_exchange_history": "No exchange history.",
-    "button_add_account": "Add",
+    "button_add_eth_account": "Add Ethereum account",
     "button_exchange_enable": "Exchange",
     "button_exchange_disable": "Insufficient account balance",
     "button_exchange_no_account": "No account",
@@ -277,10 +277,12 @@
     "alert_content_need_re-approve": "Allowance has been given but is insufficient, need re-approve authorization.",
     "title_approve": "Approve authorization",
     "title_revoke": "Revoke authorization",
-    "title_exchange": "Exchange request",
+    "title_exchange": "Exchange Request",
     "title_exchange_history": "Exchange History",
     "title_exchange_rules": "Exchange Notes",
-    "toast_waitApprove": "Please wait approval request confirmed"
+    "toast_waitApprove": "Please wait approval request confirmed",
+    "toast_unknown_error": "Kyber unknown error.",
+    "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again."
   },
   "backUp": {
     "title_backup_tips": "BackUp Tips",
