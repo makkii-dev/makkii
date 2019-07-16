@@ -22,11 +22,11 @@ export default {
             LTC: 0,
             TRX: 0,
         },
-        pinCodeEnabled: true,
-        touchIDEnabled: true,
+        pinCodeEnabled: false,
+        touchIDEnabled: false,
         explorer_server: 'mainnet', // only used in unused dapp_send. will remove later.
-        state_version: 1, // local state/db version, used to upgrade
-        version: '0.1.1', // app version
+        state_version: 2, // local state/db version, used to upgrade
+        version: '1.0.0', // app version
         currentAppState: 'active',
         leaveTime: 0,
         ignoreAppState: false,

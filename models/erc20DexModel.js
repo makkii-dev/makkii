@@ -15,6 +15,7 @@ import {popCustom} from "../utils/dva";
 import {Storage} from "../utils/storage";
 import BigNumber from 'bignumber.js';
 import {getExchangeRulesURL} from "../components/signed/dex/constants";
+import Config from 'react-native-config';
 
 const network = COINS.ETH.network;
 export default {
@@ -116,9 +117,10 @@ export default {
             const {srcToken,destToken,srcQty,destQty, account, dispatch} = payload;
             const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
             const lang = yield select(({settingsModel})=>settingsModel.lang);
+
             if('ETH'===srcToken){
                 //  no need approve
-                const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,destQty,network);
+                const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,destQty,Config.kyber_wallet_id, network);
                 yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
                 if(!tradeDatResp.error){
                     const rawTx = tradeDatResp.data[0];
@@ -204,7 +206,7 @@ export default {
                         ]
                     )
                 }else{
-                    const tradeDatResp = yield call(genTradeData,account.address,tokenList[srcToken].address, tokenList[destToken].address,srcQty,destQty,network);
+                    const tradeDatResp = yield call(genTradeData,account.address,tokenList[srcToken].address, tokenList[destToken].address,srcQty,destQty,Config.kyber_wallet_id, network);
                     if(!tradeDatResp.error){
                         const rawTx = tradeDatResp.data[0];
                         console.log('rawTx=>',rawTx);

@@ -28,8 +28,10 @@ export default {
         *loadStorage(action,{call,put}){
             // Don't need upgrade
             const payload = yield call(Storage.get, 'user');
-            keyStore.createByMnemonic(payload.mnemonic,'');
-            yield put(createAction('updateState')(payload));
+            if (payload) {
+                keyStore.createByMnemonic(payload.mnemonic, '');
+                yield put(createAction('updateState')(payload));
+            }
             return true;
         },
         *saveUser(action,{select,call}){
@@ -75,6 +77,7 @@ export default {
                 return {result:false, error:strings("register.error_dont_match")}
             }
             const mnemonic = generateMnemonic();
+            keyStore.createByMnemonic(mnemonic,'');
             const hashed_password = hashPassword(password);
             yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
             yield put(createAction('saveUser')());
@@ -88,6 +91,7 @@ export default {
                 return {result:false, error:strings("register.error_password")}
             }
             const hashed_password = hashPassword(password);
+            keyStore.createByMnemonic(mnemonic,'');
             yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
             yield put(createAction('saveUser')());
             return {result:true}

@@ -5,7 +5,7 @@ import tron_api from './tron';
 import btc_api from './btc+ltc';
 import Config from 'react-native-config';
 
-const isTestNet = false; //Config.is_testnet === 'true';
+const isTestNet = Config.is_testnet === 'true';
 
 export const COINS = {
     'AION': {

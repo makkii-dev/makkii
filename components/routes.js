@@ -15,6 +15,7 @@ import {
 import {connect} from 'react-redux';
 import DeviceInfo from "react-native-device-info";
 import {AppToast} from "../utils/AppToast";
+import {createAction} from "../utils/dva";
 import {navigationSafely} from '../utils'
 // ui
 import Scan                  	from './scan.js';
@@ -521,12 +522,7 @@ class Router extends PureComponent {
         if (currentScreen === "signed_dapps"||currentScreen === "signed_vault"||currentScreen === "signed_setting"||currentScreen === "signed_dex") {
             if(this.backClickCount === 1){
                 BackHandler.exitApp();
-                this.props.dispatch(StackActions.reset({
-                    index:0,
-                    actions:[
-                        NavigationActions.navigate({routeName:'unsigned_login'})
-                    ]
-                }));
+                this.props.dispatch(createAction('userModel/logOut')());
             }else{
                 this.prepare();
             }

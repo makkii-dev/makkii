@@ -59,8 +59,11 @@ const getTokenList = async (network)=>{
     }
 };
 
-const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, qty, network) => {
-    if (!qty) qty = 1;
+const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, _qty, network) => {
+    let qty = _qty - 0;
+    if (!qty)
+        qty = 1;
+
     try {
         let sell = qty;
         if (sellTokenAddress !== ETHID) {
@@ -131,9 +134,12 @@ const getApproximateBuyQty = async (tokenAddress, network) => {
     return resp.data[0].src_qty[0];
 };
 
-const genTradeData = async  (user_address, src_id, dst_id, src_qty, min_dst_qty, network)=>{
+const genTradeData = async  (user_address, src_id, dst_id, src_qty, min_dst_qty, wallet_id, network)=>{
     try{
-        const url = `${NETWORK_URL[network]}/trade_data?user_address=${user_address}&src_id=${src_id}&dst_id=${dst_id}&src_qty=${src_qty}&min_dst_qty=${min_dst_qty}&gas_price=medium`;
+        let url = `${NETWORK_URL[network]}/trade_data?user_address=${user_address}&src_id=${src_id}&dst_id=${dst_id}&src_qty=${src_qty}&min_dst_qty=${min_dst_qty}&gas_price=medium`;
+        if (wallet_id !== undefined && wallet_id.length > 0) {
+            url = url + '&wallet_id=' + wallet_id;
+        }
         console.log('[kyber req genTradeData]=>',url);
         const {data:tradeResp} = await HttpClient.get(url);
         return  tradeResp;
