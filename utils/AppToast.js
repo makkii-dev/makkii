@@ -5,7 +5,7 @@ class MyToast {
     constructor() {
         this.toast = null;
     }
-    show(message, options = {position: Toast.positions.BOTTOM, duration: Toast.durations.SHORT}){
+    show(message, options = {position: Toast.positions.CENTER, duration: Toast.durations.SHORT}){
         this.close();
         this.toast= Toast.show(message,options);
     }

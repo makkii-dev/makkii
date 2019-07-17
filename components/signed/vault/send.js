@@ -154,6 +154,7 @@ class Send extends Component {
 								title={strings('send.label_amount')}
 								style={styles.text_input}
 								value={amount+''}
+								editable={editable}
 								onChangeText={v => this.setState({amount: v})}
 								keyboardType={'decimal-pad'}
 								rightView={() =>
@@ -225,7 +226,7 @@ class Send extends Component {
 						{/*send button*/}
 						<View style={{ marginHorizontal:20, marginTop:20, marginBottom: 40}}>
 							<ComponentButton
-								disabled={!amount||!to}
+								disabled={(amount + '').length <= 0||!to}
 								title={strings('send_button')}
 								onPress={this.onTransfer}
 							/>
@@ -277,7 +278,7 @@ class Send extends Component {
 
 	checkZeroAmount =() => {
 		let amount = new BigNumber(this.state.amount);
-		if (amount.isZero()) {
+		if (amount.isZero() && this.state.data.length === 0) {
 			popCustom.show(
 				strings('alert_title_warning'),
 				strings('send.warning_send_zero'),

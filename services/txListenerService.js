@@ -51,7 +51,8 @@ const getOneTxStatus = async (tx)=>{
                     try{
                         const {timestamp} = await getBlockByNumber(symbol,newTx.blockNumber);
                         newTx.timestamp = fromHexString(timestamp, 16) * 1000;
-                    }catch{}
+                        console.log("newTx.timestamp:", newTx.timestamp);
+                    }catch(e){console.log("get block by number failed");}
                 }
                 return {newTx: newTx, symbol, listenerStatus:newListenerStatus, timestamp};
             }else{// stay wait

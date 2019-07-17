@@ -2,7 +2,9 @@ import * as React from 'react';
 import {
     FlatList,Dimensions,
     Image,
-    Text, TouchableOpacity,
+    Text,
+    TouchableOpacity,
+    ActivityIndicator,
     View
 } from 'react-native';
 import {connect} from "react-redux";
@@ -29,6 +31,10 @@ class ExchangeHistory extends React.Component {
                     :<View/>
             ),
         })
+    };
+
+    state = {
+        isLoading: true
     };
 
     onRefresh= ()=>{
@@ -69,6 +75,24 @@ class ExchangeHistory extends React.Component {
             Reload: this.onRefresh,
             showButton: !!currentAccount
         });
+    }
+
+    componentWillMount() {
+        setTimeout(() => {
+            const {dispatch,currentAccount} = this.props;
+            dispatch(createAction('accountsModel/getExchangeHistory')({user_address:currentAccount.address})).then(r=>{
+                if (this.isMount) {
+                    this.setState({
+                       isLoading: false
+                    });
+                }
+            })
+        }, 500);
+        this.isMount = true;
+    }
+
+    componentWillUnmount(): void {
+        this.isMount = false;
     }
 
     renderNoAccount=()=>{
@@ -135,26 +159,38 @@ class ExchangeHistory extends React.Component {
         )
     };
 
-
+    renderLoading = ()=>(
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <ActivityIndicator
+                animating={true}
+                color='red'
+                size="large"
+            />
+        </View>
+    );
 
     render(){
-        const {currentAccount,exchangeHistory} = this.props;
-        let content;
-        if(currentAccount){
-            if(exchangeHistory.length){
-                content = this.renderExchangeHistory(exchangeHistory)
-            }else{
-                content =  this.renderNoExchangeHistory();
+        if (this.state.isLoading) {
+            return this.renderLoading();
+        } else {
+            const {currentAccount, exchangeHistory} = this.props;
+            let content;
+            if (currentAccount) {
+                if (exchangeHistory.length) {
+                    content = this.renderExchangeHistory(exchangeHistory)
+                } else {
+                    content = this.renderNoExchangeHistory();
+                }
+            } else {
+                content = this.renderNoAccount();
             }
-        }else{
-            content = this.renderNoAccount();
+            return (
+                <View style={{flex: 1}}>
+                    {content}
+                    <Loading ref={'refLoading'}/>
+                </View>
+            )
         }
-        return (
-            <View style={{flex:1}}>
-                {content}
-                <Loading ref={'refLoading'}/>
-            </View>
-        )
 
     }
 }

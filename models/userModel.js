@@ -1,3 +1,4 @@
+import {DeviceEventEmitter} from 'react-native';
 import {Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
 import {accountKey, hashPassword, validatePassword} from "../utils";
@@ -106,6 +107,7 @@ export default {
                 index: 0,
                 actions:[NavigationActions.navigate({routeName:'signed_home'})]
             }));
+            DeviceEventEmitter.emit('check_all_transaction_status', {trigger: true});
         },
         *logOut(action, {put}){
             yield put(createAction('updateState')({isLogin:false}));
@@ -113,6 +115,7 @@ export default {
                 index: 0,
                 actions:[NavigationActions.navigate({routeName:'unsigned_login'})]
             }));
+            DeviceEventEmitter.emit('check_all_transaction_status', {trigger: false});
         },
     }
 }
