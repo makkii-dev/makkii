@@ -13,12 +13,6 @@ import {AppToast} from "../utils/AppToast";
 import {strings} from "../locales/i18n";
 const network = COINS.ETH.network;
 
-Array.prototype.remove = function(val) {
-    let index = this.indexOf(val);
-    if (index>-1) {
-        this.splice(index,1);
-    }
-};
 
 /*
 

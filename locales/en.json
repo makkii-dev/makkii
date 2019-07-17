@@ -284,17 +284,27 @@
     "toast_unknown_error": "Kyber unknown error.",
     "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again."
   },
-  "backUp": {
+  "backup": {
     "title_backup_tips": "BackUp Tips",
     "title_backup_mnemonic": "BackUp Mnemonic",
+    "title_confirm_mnemonic": "Confirm Mnemonic",
     "title_offline_storage": "Offline Storage",
     "title_dont_take_screenShot": "No ScreenShot",
     "label_warning_mnemonic": "Obtaining Mnemonic equals owning all assets",
     "label_backup_mnemonic": "Please write down the mnemonic\nIf your phone is lost, stolen, damaged, the mnemonic will be able to recover your assets",
     "label_offline_storage": "Please save it in a secure place, isolated from the internet\nPlease do not share or store the mnemonic in a network environment, such as email, albums, social apps and others",
     "label_dont_take_screenShot": "Please do not share or store the screenshots, which may be collected by third-party, resulting in loss of assets",
-    "label_understand": "UnderStand",
-    "button_next": "Next"
+    "label_understand": "Got it",
+    "label_header_backup_mnemonic": "Please write down mnemonic in the order and keep it in a secure place.",
+    "label_footer_backup_mnemonic": "Do not share with anyone",
+    "label_header_confirm_mnemonic": "Please select mnemonic phrase in correct order.",
+    "label_warning_incorrect_mnemonic": "Incorrect order of Mnemonic Phrase, please recheck",
+    "label_remainder_backup": "You have not backed up mnemonic",
+    "button_next": "Next",
+    "button_finish": "Finish",
+    "button_backup_now": "Backup Now",
+    "button_backup_later": "Later",
+    "toast_backup_succeed": "Backup succeeded"
   },
   "currency": {
     "title": "Exchange Rates",

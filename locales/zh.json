@@ -274,9 +274,10 @@
     "toast_unknown_error": "Kyber未知错误",
     "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量"
   },
-  "backUp": {
+  "backup": {
     "title_backup_tips": "备份提示",
     "title_backup_mnemonic": "备份助记词",
+    "title_confirm_mnemonic": "确认助记词",
     "title_offline_storage": "离线保管",
     "title_dont_take_screenShot": "请勿截屏",
     "label_warning_mnemonic": "获得助记词等于拥有钱包资产所有权",
@@ -284,7 +285,16 @@
     "label_offline_storage": "妥善保管至隔离网络的安全地方\n请勿将助记词在联网环境下分享和存储，比如邮件、相册、社交应用等",
     "label_dont_take_screenShot": "请勿截屏分享和存储，这将可能被第三方恶意软件收集，造成此产损失",
     "label_understand": "我知道了",
-    "button_next": "下一步"
+    "label_header_backup_mnemonic": "请按顺序准确抄写并备份至安全地方。",
+    "label_footer_backup_mnemonic": "请勿分享给任何人",
+    "label_header_confirm_mnemonic": "请按顺序点击助记词，以确认您正确备份。",
+    "label_warning_incorrect_mnemonic": "助记词顺序不正确，请重新检查",
+    "label_remainder_backup": "您还没有备份助记词",
+    "button_next": "下一步",
+    "button_finish": "完成",
+    "button_backup_now": "马上备份",
+    "button_backup_later": "稍后",
+    "toast_backup_succeed": "备份成功"
   },
   "currency": {
     "title": "兑换汇率",

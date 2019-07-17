@@ -16,6 +16,7 @@ export default {
         hashed_password: '',
         hashed_pinCode: '',
         mnemonic: '',
+        isBackUp: false,
         address_book:{},
     },
     reducers:{
@@ -39,6 +40,7 @@ export default {
                 hashed_password: userModel.hashed_password,
                 hashed_pinCode: userModel.hashed_pinCode,
                 mnemonic: userModel.mnemonic,
+                isBackUp: userModel.isBackUp,
                 address_book: userModel.address_book,
             }));
             yield call(Storage.set, 'user',toBeSaved);
@@ -92,12 +94,12 @@ export default {
             }
             const hashed_password = hashPassword(password);
             keyStore.createByMnemonic(mnemonic,'');
-            yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
+            yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', isBackUp:true, address_book:{}}));
             yield put(createAction('saveUser')());
             return {result:true}
         },
         *reset(action, {put}){
-            yield put(createAction('updateState')({hashed_password:'',mnemonic:'',hashed_pinCode:'', address_book:{}}));
+            yield put(createAction('updateState')({hashed_password:'',mnemonic:'',hashed_pinCode:'', isBackUp:false, address_book:{}}));
             yield put(createAction('saveUser')());
         },
         *login(action, {put}){
@@ -114,6 +116,10 @@ export default {
                 actions:[NavigationActions.navigate({routeName:'unsigned_login'})]
             }));
         },
+        *backupFinish(action, {put}){
+            yield put(createAction('updateState')({isBackUp: true}));
+            yield put(createAction('saveUser')());
+        }
     }
 }
 

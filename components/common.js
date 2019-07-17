@@ -705,6 +705,48 @@ class AddressComponent extends Component {
 	}
 }
 
+class MnemonicView extends Component{
+	static propTypes ={
+		canDelete: PropTypes.bool.isRequired,
+		disabled: PropTypes.bool.isRequired,
+		onSelected: PropTypes.func.isRequired,
+		text: PropTypes.string.isRequired,
+		color: PropTypes.string,
+	};
+
+	render() {
+		const {text, onSelected, color,canDelete,disabled} = this.props;
+		return (
+
+			<TouchableOpacity
+				disabled = {disabled}
+				onPress={onSelected}
+				activeOpacity={1}
+				style={{
+					backgroundColor:color||'lightgray',
+					marginHorizontal:5,
+					marginVertical:2,
+					padding:5,
+					borderColor: 'lightgray',
+					borderWidth: 1,
+					borderRadius:5,
+					height:30,
+				}}>
+				<Text style={{fontSize:12}}>{text}</Text>
+				{canDelete?<Image source={require('../assets/icon_popCustom_clear.png')} style={{
+					position: 'absolute',
+					right: -5,
+					top: -5,
+					width:10,
+					height:10,
+					tintColor:'gray',
+				}}/>:null}
+			</TouchableOpacity>
+		)
+	}
+
+}
+
 module.exports = {
 	ComponentButton,
 	ComponentTabBar,
@@ -722,5 +764,6 @@ module.exports = {
 	TransactionItem,
 	PendingComponent,
 	AddressComponent,
-	OptionButton
+	OptionButton,
+	MnemonicView
 };

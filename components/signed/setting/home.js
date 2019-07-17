@@ -21,6 +21,36 @@ class Home extends Component {
 		super(props);
 	}
 
+	toRecoveryPhrase=(route_url)=>{
+		const {navigationSafely} =  this.props.screenProps;
+		const {isBackUp, navigation} = this.props;
+		if(isBackUp){
+			navigationSafely({routeName:route_url})(this.props);
+		}else{
+			navigationSafely({onVerifySuccess:()=>{
+				popCustom.show(
+					strings('alert_title_warning'),
+					strings('backup.label_remainder_backup'),
+					[
+						{
+							text:strings('backup.button_backup_later'),
+							onPress: ()=>{}
+						},
+						{
+							text:strings('backup.button_backup_now'),
+							onPress: ()=>{
+								navigation.navigate('signed_backup_tips', {targetRoute: 'signed_setting'})
+							}
+
+						}
+					]
+					)
+				}})(this.props);
+		}
+	};
+
+
+
 	render(){
 		const {navigation,dispatch} = this.props;
 		const {navigationSafely} =  this.props.screenProps;
@@ -51,7 +81,7 @@ class Home extends Component {
 									leadIcon={item.icon}
 									onClick={() => {
 										if(item.title==='recovery_phrase.title'){
-											navigationSafely({routeName:item.route_url})(this.props);
+											this.toRecoveryPhrase(item.route_url);
 										}else {
 											navigation.navigate(item.route_url);
 										}
@@ -97,7 +127,8 @@ class Home extends Component {
 		);
 	}
 }
-const mapToState = ({settingsModel})=>({
+const mapToState = ({settingsModel, userModel})=>({
 	lang:settingsModel.lang,
+	isBackUp: userModel.isBackUp,
 });
 export default connect(mapToState)(Home);
