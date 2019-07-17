@@ -7143,6 +7143,11 @@ react-native-safe-area-view@^0.14.1:
   version "1.0.0"
   resolved "https://github.com/chaion/react-native-screenshot.git#c808666c7968ebc87c2bfd3e78b34f240c9d2084"
 
+react-native-sensitive-info@^5.4.2:
+  version "5.4.2"
+  resolved "https://registry.yarnpkg.com/react-native-sensitive-info/-/react-native-sensitive-info-5.4.2.tgz#d2454991707927f27b5cdedfe21a07f30a5afd22"
+  integrity sha512-C8eROsdK4/hPokgGXkAJ+FfDyF9ml48GyJHNT4pdVCbpA54Y3Ow6CTBKq6OE4djaBQsJ6Xim1iPNea25ark1fg==
+
 react-native-svg@^9.0.6:
   version "9.5.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.5.1.tgz#eb21fa7eb5d71649620541e6549c6ed425d80240"

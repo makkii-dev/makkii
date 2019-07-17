@@ -84,7 +84,6 @@ export default {
                         type: 'token',
                         token: {symbol:coinSymbol,tokenTx:pendingTokenTx }
                     };
-                    yield take('accountsModel/updateTransactions/@@end');
                     yield put(createAction('accountsModel/updateTransactions')(payload));
                 }
                 if(type&&type==='exchange'){
@@ -97,7 +96,6 @@ export default {
                         type: 'exchange',
                         exchange: data,
                     };
-                    yield take('accountsModel/updateTransactions/@@end');
                     yield put(createAction('accountsModel/updateTransactions')(payload));
                 }
 

@@ -445,7 +445,11 @@ const AppNavigator = createStackNavigator({
     },
     'simple_webview': {
         screen: SimpleWebView,
-        navigationOptions
+        navigationOptions:{
+            headerStyle: styles.headerStyle,
+            headerTitleStyle: styles.headerTitleStyle,
+            headerTitleAllowFontScaling: false,
+        }
     },
     "signed_backup_tips":{
         screen: BackUpTips,

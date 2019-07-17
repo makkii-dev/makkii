@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import SInfo from 'react-native-sensitive-info';
 
 function clear() {
     return AsyncStorage.clear()
@@ -32,6 +33,23 @@ function multiRemove(...keys) {
     return AsyncStorage.multiRemove([...keys])
 }
 
+const SensitiveConfigs = {
+    keychainService: 'MakkiiKeychain',
+    sharedPreferencesName: 'MakkiiSharedPrefs',
+};
+
+function Sset(key, value) {
+    return SInfo.setItem(key,value,SensitiveConfigs);
+}
+
+function Sget(key) {
+    return SInfo.getItem(key,SensitiveConfigs)
+}
+
+function Sremove(key) {
+    return SInfo.deleteItem(key,SensitiveConfigs)
+}
+
 const Storage = {
     clear,
     get,
@@ -40,4 +58,10 @@ const Storage = {
     multiGet,
     multiRemove,
 };
-export {Storage};
+
+const SensitiveStorage = {
+    get: Sget,
+    set: Sset,
+    remove: Sremove
+};
+export {Storage, SensitiveStorage};
