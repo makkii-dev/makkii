@@ -49,7 +49,7 @@ class Transaction extends Component {
 					<TransactionItemCell
 						key={'payment'}
 						style={{height:80}}
-						title={strings('transaction_detail.label_payment')}
+						title={strings('transaction_detail.label_sell')}
 						value={ srcQty + ' ' +srcToken}
 						valueTextAlign={'left'}
 					/>
@@ -58,7 +58,7 @@ class Transaction extends Component {
 					<TransactionItemCell
 						key={'exchanged'}
 						style={{height:80}}
-						title={strings('transaction_detail.label_exchanged')}
+						title={strings('transaction_detail.label_buy')}
 						value={ destQty + ' ' +destToken}
 						valueTextAlign={'left'}
 					/>

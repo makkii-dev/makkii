@@ -64,22 +64,26 @@ const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, _qty, networ
     if (!qty)
         qty = 1;
 
-    try {
         let sell = qty;
         if (sellTokenAddress !== ETHID) {
-            sell = await getSellQty(sellTokenAddress, qty, network);
+            try {
+                sell = await getSellQty(sellTokenAddress, qty, network);
+            } catch (e) {
+                if (e.additional_data && e.additional_data.match(/reduce/)) {
+                    return {status: false, message: 'token_exchange.toast_reduce_src_qty'};
+                }
+                return {status: false, message: 'token_exchange.toast_unknown_error'}
+            }
         }
-        let buy = await getApproximateBuyQty(buyTokenAddress, network);
-        console.log("sell:" + sell);
-        console.log("buy:" + buy);
-        const rate = BigNumber(sell).dividedBy(BigNumber(buy)).dividedBy(BigNumber(qty)).multipliedBy(0.97).toNumber();
-        return {status: true, rate: rate.toFixed(6)};
-    } catch (e) {
-        if (e.additional_data && e.additional_data.match(/reduce/)) {
-            return {status: false, message: 'token_exchange.toast_reduce_src_qty'};
+        try {
+            let buy = await getApproximateBuyQty(buyTokenAddress, network);
+            console.log("sell:" + sell);
+            console.log("buy:" + buy);
+            const rate = BigNumber(sell).dividedBy(BigNumber(buy)).dividedBy(BigNumber(qty)).multipliedBy(0.97).toNumber();
+            return {status: true, rate: rate.toFixed(6)};
+        } catch (e) {
+            return {status: false, message: 'token_exchange.toast_cant_buy'}
         }
-        return {status: false, message: 'token_exchange.toast_unknown_error'}
-    }
     // try{
     //     const url = `${NETWORK_URL[network]}/market`;
     //     console.log('[kyber req getTokenTradeRate]=>',url);

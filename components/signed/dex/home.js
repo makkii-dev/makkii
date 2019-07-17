@@ -26,6 +26,7 @@ import {DismissKeyboard} from "../../dimissKyboradView";
 import {getTokenIconUrl} from "../../../coins/api";
 import {DEX_MENU, getExchangeRulesURL} from "./constants";
 import {PopWindow} from "../vault/home_popwindow";
+import {AppToast} from "../../../utils/AppToast";
 
 const {width} = Dimensions.get('window');
 
@@ -178,7 +179,13 @@ class Home extends React.Component {
 		},()=>{
 			switch(select){
 				case DEX_MENU[0].title:
-					navigate('signed_Dex_exchange_history')(this.props);
+					if (this.props.currentAccount) {
+						navigate('signed_Dex_exchange_history')(this.props);
+					} else {
+						AppToast.show(strings('token_exchange.toast_no_selected_eth_account'), {
+							position: AppToast.positions.CENTER,
+						});
+					}
 					break;
 				case DEX_MENU[1].title:
 					const initialUrl = getExchangeRulesURL(this.props.lang);
@@ -483,6 +490,7 @@ const styles = {
 	textInputStyle:{
 		padding:0,
 		width:width-200,
+        marginLeft: 10
 	},
 	tokenNumberLabel:{
 		flexDirection:'row',

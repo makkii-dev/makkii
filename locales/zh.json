@@ -128,8 +128,8 @@
     "blockNumber_label": "块号#",
     "amount_label": "金额",
     "status_label": "状态",
-    "label_payment": "支付金额",
-    "label_exchanged": "换取金额",
+    "label_sell": "卖",
+    "label_buy": "买",
     "sendAgain_button": "重新发送",
     "viewInExplorer_button": "在Explorer中查看更多",
     "PENDING": "确认中",
@@ -270,9 +270,11 @@
     "title_exchange": "请求交易",
     "title_exchange_history": "兑换记录",
     "title_exchange_rules": "兑换说明",
-    "toast_waitApprove": "等待请求交易完成",
+    "toast_waitApprove": "等待授权请求交易确认",
     "toast_unknown_error": "Kyber未知错误",
-    "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量"
+    "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量",
+    "toast_cant_buy": "无法购买{{token}}代币",
+    "toast_no_selected_eth_account": "请先选择以太坊账号"
   },
   "backup": {
     "title_backup_tips": "备份提示",

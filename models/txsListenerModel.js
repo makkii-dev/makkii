@@ -1,3 +1,4 @@
+import {DeviceEventEmitter} from 'react-native';
 import {getTxsStatus} from "../services/txListenerService";
 import {accountKey} from "../utils";
 import {createAction} from "../utils/dva";
@@ -42,9 +43,51 @@ export default {
         txs: {},
     },
     reducers: {
-        addPendingTxs(state, {payload}) {
+        // updatePendingTxs(state, {payload}) {
+        //     const {newStatuses} = payload;
+        //     /*
+        //         array of {newTx, symbol, listenerStatus}
+        //      */
+        //     let newState = Object.assign({}, state);
+        //     newStatuses.forEach(newStatus => {
+        //         const {newTx, symbol, listenerStatus} = newStatus;
+        //         if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
+        //             delete newState.txs[newTx.hash]
+        //         } else {
+        //             let temp = newState.txs[newTx.hash];
+        //             temp.txObj = newTx;
+        //             temp.listenerStatus = listenerStatus;
+        //             newState.txs[newTx.hash] = temp;
+        //         }
+        //     });
+        //     return newState;
+        // },
+        txsListenerUpdateState(state,{payload}){
+            return {...state,...payload};
+        }
+    },
+    subscriptions:{
+      setup({dispatch}){
+          let timer;
+          DeviceEventEmitter.addListener('check_all_transaction_status', ({trigger})=> {
+              if (timer) clearInterval(timer);
+              if (trigger) {
+                  dispatch(createAction('checkAllTxs')());
+                  timer = setInterval(()=>{
+                      dispatch(createAction('checkAllTxs')());
+                  },10*1000);
+              } else {
+                  timer = null;
+              }
+          });
+      }
+    },
+    effects: {
+        *addPendingTxs({payload}, {call, put, select}) {
             console.log('add pending tx=>', payload);
             const {txObj, type, token, exchange, symbol, approve} = payload;
+
+            let {txs} = yield select(({txsListener}) => ({...txsListener}));
             let tx = {
                 txObj: txObj,
                 type: type,
@@ -59,42 +102,14 @@ export default {
                 : 'approve' === type?
                     tx = {...tx, approve: approve}
                     :null;
-            state.txs[txObj.hash] = tx;
-            return Object.assign({}, state);
+            txs[txObj.hash] = tx;
+
+            //save current pending tx;
+            yield call(Storage.set, 'pendingTx', txs);
+            yield put(createAction('txsListenerUpdateState')({txs: txs}));
         },
-        updatePendingTxs(state, {payload}) {
-            const {newStatuses} = payload;
-            /*
-                array of {newTx, symbol, listenerStatus}
-             */
-            let newState = Object.assign({}, state);
-            newStatuses.forEach(newStatus => {
-                const {newTx, symbol, listenerStatus} = newStatus;
-                if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
-                    delete newState.txs[newTx.hash]
-                } else {
-                    let temp = newState.txs[newTx.hash];
-                    temp.txObj = newTx;
-                    temp.listenerStatus = listenerStatus;
-                    newState.txs[newTx.hash] = temp;
-                }
-            });
-            return newState;
-        },
-        txsListenerUpdateState(state,{payload}){
-            return {...state,...payload};
-        }
-    },
-    subscriptions:{
-      setup({dispatch}){
-          setInterval(()=>{
-              dispatch(createAction('checkAllTxs')());
-          },10*1000)
-      }
-    },
-    effects: {
         *loadStorage(action,{call,select,put}){
-            const PendingTxs = yield call(Storage.get, 'pendingTx', false);
+            const PendingTxs = yield call(Storage.get, 'pendingTx', {});
             console.log('load pending Tx from storage => ', PendingTxs);
             yield put(createAction('txsListenerUpdateState')({ txs:PendingTxs }));
         },
@@ -103,10 +118,9 @@ export default {
             yield put(createAction('txsListenerUpdateState')({ txs:{} }));
         },
         *checkAllTxs(action, {call,put,select}) {
-            console.log('check all pending Tx;');
-            const txs = yield select(({txsListener}) => txsListener.txs);
-            //save current pending tx;
-            yield call(Storage.set, 'pendingTx', txs);
+            let {txs} = yield select(({txsListener}) => ({...txsListener}));
+            console.log('check all pending Tx;', txs);
+
             const oldStatuses = Object.values(txs).map(tx => ({
                 oldTx: tx.txObj,
                 symbol: tx.symbol,
@@ -115,14 +129,17 @@ export default {
             }));
             let loadBalanceKeys = [];
             if(oldStatuses.length>0) {
-                console.log('check all pending Tx;');
+                console.log('check all pending Tx.');
                 const newStatuses = yield call(getTxsStatus, oldStatuses);
                 for (let newStatus of newStatuses) {
                     const {newTx, symbol, listenerStatus: _listenerStatus, timestamp} = newStatus;
                     const listenerStatus = Date.now() - timestamp > TIMEOUT? 'UNCONFIRMED':_listenerStatus; // timeout
+                    txs[newTx.hash].listenerStatus = listenerStatus;
+                    txs[newTx.hash].txObj = newTx;
                     if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED'||listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
-                        AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`,{position:AppToast.positions.CENTER}));
+
+                        AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`),{position:AppToast.positions.CENTER});
                         loadBalanceKeys.push(accountKey(symbol,newTx.to));
                         loadBalanceKeys.push(accountKey(symbol,newTx.from));
                         //dispatch other actions;
@@ -149,9 +166,10 @@ export default {
                                 key: accountKey(symbol, newTx.to, tokenSymbol),
                             }));
                         }else if ('exchange'===type){
+                            console.log("newTx", newTx);
                             let exchange = {...txs[newTx.hash].exchange};
                             exchange.timestamp = newTx.timestamp;
-                            exchange.status = newTx.status;
+                            exchange.status = listenerStatus;
                             exchange.blockNumber = newTx.blockNumber;
                             exchange.hash = newTx.hash;
                             if(exchange.status==='CONFIRMED'){
@@ -173,9 +191,13 @@ export default {
                                 state:'delete',
                             }))
                         }
+                        delete txs[newTx.hash];
                     }
                 }
-                yield put(createAction('updatePendingTxs')({newStatuses: newStatuses}));
+                //save current pending tx;
+                yield call(Storage.set, 'pendingTx', txs);
+                yield put(createAction('txsListenerUpdateState')({txs: txs}));
+
                 loadBalanceKeys = loadBalanceKeys.unique();
                 if(loadBalanceKeys.length>0){
                     yield put(createAction('accountsModel/loadBalances')({keys: loadBalanceKeys}))

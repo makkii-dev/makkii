@@ -150,7 +150,7 @@ export default {
                 yield put(createAction('saveTransaction')({keys:Object.keys(payload.transactionsMap)}));
                 yield put(createAction('saveTokenLists')());
                 yield put(createAction('saveHdIndex')());
-                yield put(createAction('loadBalances')({keys:payload.accountsKey}));
+                yield put(createAction('loadBalances')({keys:payload.accountsKey, force: true}));
             }else{
                 const accountsKey = yield call(Storage.get, 'accountsKey', []);
                 // const accountsKey = [];
@@ -182,7 +182,7 @@ export default {
                     }
                 }
                 yield put(createAction('updateState')({accountsKey,transactionsMap,accountsMap,tokenLists,hd_index}));
-                yield put(createAction('loadBalances')({keys:accountsKey}));
+                yield put(createAction('loadBalances')({keys:accountsKey, force: true}));
             }
             return true;
         },
@@ -289,7 +289,7 @@ export default {
                 allHistory[el].srcQty = allHistory[el].srcQty / 10**tokenList[srcToken].decimals;
                 allHistory[el].destQty = allHistory[el].destQty / 10**tokenList[destToken].decimals;
             });
-            yield put(createAction('updateTransactions')({txs:allHistory,key:'ETH+'+user_address+'+ERC20DEX'}));
+            yield put(createAction('updateTransactions')({txs:allHistory,key:'ETH+'+user_address+'+ERC20DEX', force: false}));
             return true;
         },
         *updateTransactions({payload},{put,select}){

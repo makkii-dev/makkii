@@ -106,7 +106,7 @@ export default {
                 };
                 yield put(createAction('ERC20DexUpdateState')({trade: trade, isWaiting: false}));
             } else {
-                AppToast.show(strings(result.message), {
+                AppToast.show(strings(result.message, {token: destToken}), {
                     position: AppToast.positions.CENTER
                 });
                 yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
@@ -142,9 +142,9 @@ export default {
                 const txs_required = yield call(getEnabledStatus, account.address,tokenList[srcToken].address, network);
                 console.log('tx_required=>',txs_required);
                 const tokenApprovals = yield select(({ERC20Dex}) => ERC20Dex.tokenApprovals);
-                if(tokenApprovals[srcToken]){
+                if(tokenApprovals[account.address] && tokenApprovals[account.address][srcToken]){
                     yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
-                    AppToast.show(strings('token_exchange.toast_waitApprove',{position:AppToast.positions.TOP}));
+                    AppToast.show(strings('token_exchange.toast_waitApprove'),{position:AppToast.positions.CENTER});
                     return;
                 }
                 if(txs_required === 1){

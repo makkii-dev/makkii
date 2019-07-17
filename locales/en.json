@@ -129,8 +129,8 @@
     "blockNumber_label": "Block#",
     "amount_label": "Amount",
     "status_label": "Status",
-    "label_payment": "Payment amount",
-    "label_exchanged": "Exchanged amount",
+    "label_sell": "Sell",
+    "label_buy": "Buy",
     "sendAgain_button": "SEND AGAIN",
     "viewInExplorer_button": "VIEW IN EXPLORER",
     "PENDING": "PENDING",
@@ -282,7 +282,9 @@
     "title_exchange_rules": "Exchange Notes",
     "toast_waitApprove": "Please wait approval request confirmed",
     "toast_unknown_error": "Kyber unknown error.",
-    "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again."
+    "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again.",
+    "toast_cant_buy": "{{token}} token is not purchasable",
+    "toast_no_selected_eth_account": "Please select an ETH account"
   },
   "backup": {
     "title_backup_tips": "BackUp Tips",
