@@ -95,7 +95,7 @@ function validateAmount(amount) {
 
 function validateAdvancedAmount(amount) {
     // support match 1.
-    let reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]?)?))$/;
+    let reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]*)?))$/;
     return reg.test(amount) ;
 }
 

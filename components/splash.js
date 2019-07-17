@@ -10,27 +10,21 @@ import {Storage} from "../utils/storage";
 const loadStorage=(dispatch)=> new Promise((resolve, reject) => {
 	Storage.get('settings', {state_version: 2}).then(setting=>{
 		const current_state_version  = setting.state_version || 0;
-		Promise.race([
-			new Promise(resolve1 =>
-				Promise.all([
-					dispatch(createAction('userModel/loadStorage')({state_version: current_state_version})),
-					dispatch(createAction('accountsModel/loadStorage')({state_version: current_state_version, options: {network:setting.network||'mainnet'}})),
-					dispatch(createAction('settingsModel/loadStorage')({state_version: current_state_version})),
-					dispatch(createAction('ERC20Dex/loadStorage')({state_version: current_state_version})),
-					dispatch(createAction('txsListener/loadStorage')({state_version: current_state_version})),
-					new Promise(resolve2=>setTimeout(()=>{resolve2(2)},3*1000))
-				]).then(r=>{
-					console.log('resolve1');
-					resolve1(1)
-				})
-			),
-			new Promise(resolve2=>setTimeout(()=>{
-				console.log('resolve2');
-				resolve2(2)
-			},4*1000)),
-		]).then(r=>{
-			resolve(r);
-		})
+		let payload = {state_version: current_state_version, options: {network:setting.network||'mainnet'}};
+        Promise.all([
+        	new Promise(resolve1 =>
+            dispatch(createAction('userModel/loadStorage')(payload)).then(() =>
+                dispatch(createAction('accountsModel/loadStorage')(payload)).then(() =>
+                    dispatch(createAction('settingsModel/loadStorage')(payload)).then(() =>
+						dispatch(createAction('ERC20Dex/loadStorage')(payload)).then(() =>
+							dispatch(createAction('txsListener/loadStorage')(payload)).then( ()=>
+								resolve1()
+							)))))),
+
+            new Promise(resolve2=>setTimeout(()=>{resolve2()},3*1000))
+        ]).then(r=>{
+            resolve();
+        });
 	})
 });
 
@@ -47,7 +41,6 @@ class Splash extends Component {
 		const {navigate} = this.props.navigation;
 		const {dispatch} = this.props;
 		loadStorage(dispatch).then(r=>{
-			console.log('r=>',r);
 			navigate('unsigned_login')
 		})
 	}

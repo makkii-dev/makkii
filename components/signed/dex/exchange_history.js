@@ -195,8 +195,9 @@ class ExchangeHistory extends React.Component {
     }
 }
 
-const mapToState = ({accountsModel})=>{
-    const {currentAccount:key, accountsMap, transactionsMap} = accountsModel;
+const mapToState = ({accountsModel, ERC20Dex})=>{
+    const {accountsMap, transactionsMap} = accountsModel;
+    let key = ERC20Dex.currentAccount;
     const currentAccount = accountsMap[key];
     let exchangeHistory = [];
     let compareFn = (a, b) => {

@@ -32,7 +32,7 @@ class AccountList extends React.Component{
 
     selectAccount = (address)=>{
         const {dispatch} = this.props;
-        dispatch(createAction('accountsModel/updateState')({currentAccount:accountKey('ETH',address)}));
+        dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:accountKey('ETH',address)}));
         navigateBack(this.props);
     };
 

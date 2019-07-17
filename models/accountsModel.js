@@ -1,3 +1,4 @@
+import {DeviceEventEmitter} from 'react-native';
 import {accountKey, decrypt, encrypt} from "../utils";
 import {Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
@@ -141,7 +142,7 @@ export default {
     effects:{
         *loadStorage({payload},{call,select,put,take}){
             const {state_version, options}=payload;
-            yield take('userModel/loadStorage/@@end');
+
             const hashed_password = yield select(({userModel})=>userModel.hashed_password);
             console.log('loadStorage=>',payload);
             console.log('hashed_password=>',hashed_password);
@@ -402,6 +403,8 @@ export default {
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
             }));
+            DeviceEventEmitter.emit('add_new_account', account);
+
             const {symbol, address} =account;
             const key = accountKey(symbol, address);
             const newAccountsKey = [...accountsKey, key];

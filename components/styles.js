@@ -9,9 +9,9 @@ const FONT_COLOR = '#777676';
 
 export default styles = {
 	shadow:{
-		elevation:5,
+		elevation:2,
 		shadowColor:'black',
-		shadowOffset:{width:5,height:5},
+		shadowOffset:{width:2,height:2},
 		shadowOpacity: 0.3,
 	},
 	headerStyle: {

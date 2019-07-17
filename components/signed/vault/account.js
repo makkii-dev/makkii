@@ -176,11 +176,6 @@ class Account extends Component {
 				case ACCOUNT_MENU[1].title:
 					navigationSafely({routeName:'signed_vault_export_private_key', params:{privateKey: currentAccount.private_key}})({dispatch});
 					break;
-				case ACCOUNT_MENU[2].title:
-					// dispatch(createAction('ethTokenSwap/getTokenList')());
-					dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:currentAccount.address}));
-					navigate('signed_dex')({dispatch});
-					break;
 				default:
 			}
 		})

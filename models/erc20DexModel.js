@@ -1,4 +1,5 @@
 import {NavigationActions} from "react-navigation";
+import {DeviceEventEmitter} from 'react-native';
 import {
     genTradeData,
     getTokenList,
@@ -23,8 +24,8 @@ export default {
     state:{
         isLoading: true,
         isWaiting: false,
-        currentAccount: '',
         tokenList: {},
+        currentAccount: '',
         tokenApprovals:{}, // save; 2 states 'waitApprove'/'waitRevoke'
         trade:{
             srcToken: '',
@@ -37,14 +38,39 @@ export default {
             console.log('ERC20Dex payload=>',payload);
             return {...state, ...payload};
         },
-
+    },
+    subscriptions: {
+        setup({dispatch}) {
+            DeviceEventEmitter.addListener('add_new_account', (account)=> {
+                if (account.symbol === 'ETH') {
+                    dispatch(createAction('tryUpdateCurrentAccount')({address: account.address}));
+                }
+            });
+        }
     },
     effects:{
-        *loadStorage(action,{call,put}){
+        *loadStorage(action,{call,put, select, take}){
+            const accountsMap = yield select(({accountsModel}) => accountsModel.accountsMap);
+
+            let currentAccount = '';
+            for (let key of Object.keys(accountsMap)) {
+                if (key.startsWith("ETH+")) {
+                    currentAccount = key;
+                    break;
+                }
+            }
+
             const tokenApprovals = yield call(Storage.get, 'tokenApprovals', false);
             console.log('get tokenApprovals from storage => ', tokenApprovals);
-            yield put(createAction('ERC20DexUpdateState')({tokenApprovals}))
+            yield put(createAction('ERC20DexUpdateState')({tokenApprovals, currentAccount}))
             yield put(createAction('getTokenList')());
+        },
+        *tryUpdateCurrentAccount({payload}, {select, put}) {
+            const currentAccount = yield select(({ERC20Dex}) => ERC20Dex.currentAccount);
+            if (currentAccount.length <= 0) {
+                const {address} = payload;
+                yield put(createAction('ERC20DexUpdateState')({currentAccount: 'ETH+' + address}));
+            }
         },
         *reset(action, {call, put}){
             yield call(Storage.remove, 'tokenApprovals');
@@ -115,17 +141,17 @@ export default {
         *trade({payload},{call,put,select}){
             yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
             const {srcToken,destToken,srcQty,destQty, account, dispatch} = payload;
-            const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
+            const {tokenList, currentAccount} = yield select(({ERC20Dex})=>({...ERC20Dex}));
             const lang = yield select(({settingsModel})=>settingsModel.lang);
 
             if('ETH'===srcToken){
                 //  no need approve
-                const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,destQty,Config.kyber_wallet_id, network);
+                const tradeDatResp = yield call(genTradeData,account.address,ETHID, tokenList[destToken].address,srcQty,BigNumber(destQty).multipliedBy(0.97).toNumber(),Config.kyber_wallet_id, network);
                 yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
                 if(!tradeDatResp.error){
                     const rawTx = tradeDatResp.data[0];
                     console.log('rawTx=>',rawTx);
-                    yield put(createAction('accountsModel/updateState')({currentToken:''}));
+                    yield put(createAction('accountsModel/updateState')({currentToken:'', currentAccount: currentAccount}));
                     yield put(createAction('txSenderModel/updateState')({
                         ...rawTx,
                         gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),
@@ -133,6 +159,7 @@ export default {
                         amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber(),
                         editable:false,
                         txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}}));
+
                     yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title:strings('token_exchange.title_exchange'),}}));
                 }else{
                     AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);
@@ -210,7 +237,7 @@ export default {
                     if(!tradeDatResp.error){
                         const rawTx = tradeDatResp.data[0];
                         console.log('rawTx=>',rawTx);
-                        yield put(createAction('accountsModel/updateState')({currentToken:''}));
+                        yield put(createAction('accountsModel/updateState')({currentToken:'', currentAccount: currentAccount}));
                         yield put(createAction('txSenderModel/updateState')({
                             ...rawTx,
                             gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),
@@ -228,12 +255,12 @@ export default {
         },
         *enableTransfer({payload},{call,select,put}){
             yield put(createAction('ERC20DexUpdateState')({isWaiting: true}));
-            const tokenList = yield select(({ERC20Dex})=>ERC20Dex.tokenList);
+            const {tokenList, currentAccount} = yield select(({ERC20Dex})=>({...ERC20Dex}));
             const {token, account, title,type} = payload;
             const rawTx = yield call(getApproveAuthorizationTx,account.address,tokenList[token].address,network);
             console.log('rawTx=>', rawTx);
             yield put(createAction('ERC20DexUpdateState')({isWaiting: false}));
-            yield put(createAction('accountsModel/updateState')({currentToken:''}));
+            yield put(createAction('accountsModel/updateState')({currentToken:'', currentAccount: currentAccount}));
             yield put(createAction('txSenderModel/updateState')({
                 ...rawTx,
                 gasPrice: BigNumber(rawTx.gasPrice).shiftedBy(-9).toNumber(),

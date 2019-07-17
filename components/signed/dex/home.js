@@ -130,7 +130,6 @@ class Home extends React.Component {
 
 	onChangeDestTokenValue = (v)=>{
 		const {tradeRate} = this.state;
-		console.log("tradeRate:" + tradeRate);
 		if (validateAdvancedAmount(v) || v === '') {
 			this.setState({
 				srcQty: BigNumber(v || 0).dividedBy(BigNumber(tradeRate)).toNumber(),
@@ -160,7 +159,7 @@ class Home extends React.Component {
 		this.props.navigation.setParams({
 			showMenu: this.openMenu,
 		});
-		this.listenNavigation  =this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
+		this.listenNavigation = this.props.navigation.addListener('willBlur',()=>this.setState({showMenu:false}))
 	}
 	componentWillUnmount(): void {
 		this.listenNavigation.remove();
@@ -212,7 +211,7 @@ class Home extends React.Component {
 				<View style={{
 					...commonStyles.shadow,
 					borderRadius: 10,
-					marginVertical: 10,
+					marginTop: 20,
 					marginHorizontal:20,
 					paddingHorizontal: 10,
 					alignItems: 'flex-start',
@@ -320,6 +319,7 @@ class Home extends React.Component {
 		const {currentAccount} = this.props;
 		let buttonEnabled = false;
 		let hasToken = false;
+		let errorMsg = '';
 		if(currentAccount){
 			const {balance, tokens} = currentAccount;
 			hasToken = srcToken === 'ETH'?true:!!tokens[srcToken];
@@ -327,8 +327,20 @@ class Home extends React.Component {
 			const tokenCost = srcToken === 'ETH'? 0 : +srcQty;
 			const tokenBalance  = tokens[srcToken] || 0;
 			buttonEnabled = BigNumber(balance).toNumber()>=ethCost &&  BigNumber(tokenBalance).toNumber()>=tokenCost &&srcQty>0;
+			if (!buttonEnabled) {
+				if (!hasToken) {
+					errorMsg = strings('token_exchange.button_exchange_no_token',{token:srcToken});
+				} else if (srcQty > 0) {
+					errorMsg = strings('token_exchange.button_exchange_disable');
+				} else {
+					errorMsg = strings('token_exchange.button_exchange_invalid_number');
+				}
+			}
+		} else {
+			errorMsg = strings('token_exchange.button_exchange_no_account');
 		}
 		const popwindowTop = Platform.OS==='ios'?(getStatusBarHeight(true)+Header.HEIGHT):Header.HEIGHT;
+
 		return(
 			<DismissKeyboard>
 				<View style={{flex:1, backgroundColor:mainBgColor}}>
@@ -396,16 +408,18 @@ class Home extends React.Component {
 								<Text style={{fontStyle: 'italic', fontSize: 10}}> Powered by </Text>
 							</View>
 						</View>
+						{
+							(currentAccount !== undefined && buttonEnabled) ||
+							<View style={{flexDirection: 'row', marginHorizontal: 20, marginBottom: 10}}>
+								<Image source={require('../../../assets/warning.png')}
+									   resizeMode={'contain'}
+									   style={{width: 20, height: 20, tintColor: 'red', marginRight: 5}}
+								/>
+								<Text style={{color: 'gray'}}>{errorMsg}</Text>
+							</View>
+						}
 						<ComponentButton
-							title={currentAccount!==undefined?
-								buttonEnabled?
-									strings('token_exchange.button_exchange_enable'):
-									!hasToken?
-										strings('token_exchange.button_exchange_no_token',{token:srcToken})
-										: srcQty>0?
-											strings('token_exchange.button_exchange_disable')
-											:strings('token_exchange.button_exchange_invalid_number')
-								:strings('token_exchange.button_exchange_no_account')}
+							title={strings('token_exchange.button_exchange_enable')}
 							disabled={!buttonEnabled}
 							style={{
 								width:width-40,
@@ -444,12 +458,13 @@ class Home extends React.Component {
 }
 
 const mapToState = ({accountsModel, settingsModel, ERC20Dex})=>{
-    const currentAccount = accountsModel.accountsMap[accountsModel.currentAccount];
+    const currentAccount = accountsModel.accountsMap[ERC20Dex.currentAccount];
+
 	return {
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
-		currentAccount: currentAccount?currentAccount.symbol === 'ETH'?currentAccount:undefined:undefined,
+		currentAccount: currentAccount,
 		tokenList:ERC20Dex.tokenList,
 		lang:settingsModel.lang,
 	}
