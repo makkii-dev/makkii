@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Clipboard, Dimensions, NativeModules, Platform, NativeEventEmitter } from 'react-native';
-import { ComponentButton, InputMultiLines } from '../common.js';
+import { ComponentButton } from '../common.js';
 import {strings} from "../../locales/i18n";
 import defaultStyles from '../styles.js';
 import {mainBgColor} from '../style_util';
 import screenshotHelper from 'react-native-screenshot-helper';
 import {AppToast} from "../../utils/AppToast";
 import {createAction} from "../../utils/dva";
+import {MnemonicView} from "../common";
 
 const {width,height} = Dimensions.get('window');
 
@@ -45,14 +46,35 @@ class Mnemonic extends Component {
 		}
 	}
 
-	render(){
+
+	renderMnemonic = ()=>{
 		const {mnemonic} = this.props;
+		return mnemonic.split(' ').map(str=>{
+			return(
+				<MnemonicView
+					key={str}
+					canDelete={false}
+					disabled={true}
+					onSelected={()=>{}}
+					text={str}
+				/>
+			)
+		})
+	};
+
+	toBackup = ()=>{
+		const {navigation} = this.props;
+		navigation.navigate('signed_backup_tips');
+	};
+
+	render(){
 		const {dispatch} = this.props.navigation;
 		return (
 			<View style={{
 					flex: 1,
 					padding: 40,
                 	backgroundColor: mainBgColor,
+					alignItems: 'center'
 				}}
 			>
                 <Text style={{
@@ -67,28 +89,19 @@ class Mnemonic extends Component {
 					backgroundColor: 'white',
 					width: width - 80,
                     marginBottom: 100,
+					flexDirection: 'row', flexWrap: 'wrap'
 				}}>
-                    <InputMultiLines
-                        editable={false}
-                        value={mnemonic}
-                        style={{
-                            borderWidth: 0,
-                            fontSize: 18,
-                            fontWeight: 'normal',
-                            textAlignVertical: 'top'
-                        }}
-                    />
+					{this.renderMnemonic()}
 				</View>
                 <ComponentButton
-                    title={strings('unsigned_register_mnemonic.btn_copy')}
-                    onPress={e=>{
-                        Clipboard.setString(mnemonic);
-                        AppToast.show(strings('unsigned_register_mnemonic.toast_copy_mnemonic'));
-                    }}
+					style={{width: width-80}}
+                    title={strings('backup.button_backup_now')}
+                    onPress={this.toBackup}
                 />
 				<View style={{marginBottom: 20}} />
                 <ComponentButton
-                    title={strings('unsigned_register_mnemonic.btn_done')}
+					style={{width: width-80}}
+                    title={strings('backup.button_backup_later')}
                     onPress={e=>{
 						dispatch(createAction('userModel/login')());
 					}}

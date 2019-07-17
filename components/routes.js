@@ -60,9 +60,9 @@ import SimpleWebView         	from './WebViewComponent';
 import PinCodeScreen            from './pinCodeScreen';
 import SelectToken               from './signed/vault/select_token';
 import AddToken                 from './signed/vault/add_token';
-import backUpTips               from './signed/backup/backup_tips';
-
-
+import BackUpTips               from './signed/backup/backup_tips';
+import MnemonicBackUp           from './signed/backup/mnemonic_backup';
+import MnemonicConfirm          from './signed/backup/mnemonic_confirm';
 import {strings} from "../locales/i18n";
 import userModel from "../models/userModel";
 
@@ -445,15 +445,19 @@ const AppNavigator = createStackNavigator({
     },
     'simple_webview': {
         screen: SimpleWebView,
-        navigationOptions: {
-            headerStyle: styles.headerStyle,
-            headerTitleStyle: styles.headerTitleStyle,
-            headerTitleAllowFontScaling: false,
-        }
+        navigationOptions
     },
     "signed_backup_tips":{
-        screen: backUpTips,
-        navigationOptions,
+        screen: BackUpTips,
+        navigationOptions
+    },
+    "signed_backup_mnemonic":{
+        screen: MnemonicBackUp,
+        navigationOptions
+    },
+    "signed_confirm_mnemonic":{
+        screen: MnemonicConfirm,
+        navigationOptions
     }
 }, {
     initialRouteName: 'splash',
@@ -470,7 +474,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
         let newRoutes, newIndex;
         switch(action.type){
             case 'Navigation/NAVIGATE':
-                if (state.routes[state.routes.length - 1].routeName === 'unlock') {
+                if (!!state.routes[state.routes.length - 1].routeName.match( /^unlock$|^signed_backup_tips$|^signed_backup_mnemonic$|^signed_confirm_mnemonic$/)) {
                     newRoutes = state.routes.slice(0,state.routes.length-1);
                     newIndex = newRoutes.length;
                     return defaultGetStateForAction(action, {index:newIndex,routes:newRoutes});

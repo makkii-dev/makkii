@@ -107,7 +107,7 @@ class Send extends Component {
 	selectFromAddressBook=() => {
 		this.props.navigation.navigate('signed_setting_address_book', {
 			type: 'select',
-			filterSymbol: this.account.symbol,
+			filterSymbol: this.props.currentAccount.symbol,
 		});
 	};
 

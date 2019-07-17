@@ -108,6 +108,16 @@ if (!BigNumber.prototype.toNonExString) {
         }
     }
 }
+if (!Array.prototype.remove) {
+    Array.prototype.remove = function (val) {
+        let index = this.indexOf(val);
+        if (index > -1) {
+            this.splice(index, 1);
+        }
+    };
+}
+
+
 if (typeof btoa === 'undefined') {
     global.btoa = function (str) {
         return new Buffer(str, 'binary').toString('base64');

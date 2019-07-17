@@ -14,6 +14,7 @@ import defaultStyles from '../../styles.js';
 import {mainBgColor} from '../../style_util';
 import { strings } from '../../../locales/i18n';
 import {AppToast} from "../../../utils/AppToast";
+import {MnemonicView} from "../../common";
 
 const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
@@ -47,6 +48,21 @@ class Recovery extends Component {
 		}
 	}
 
+	renderMnemonic = ()=>{
+		const {mnemonic} = this.props;
+		return mnemonic.split(' ').map(str=>{
+			return(
+				<MnemonicView
+					key={str}
+					canDelete={false}
+					disabled={true}
+					onSelected={()=>{}}
+					text={str}
+				/>
+			)
+		})
+	};
+
 	render(){
 		const {mnemonic} = this.props;
 		return (
@@ -54,38 +70,30 @@ class Recovery extends Component {
 				<View style={{
 				    ...defaultStyles.shadow,
 					width: width - 40,
-                    height: width - 40,
+                    height: width - 70,
 					borderRadius: 5,
 					backgroundColor: 'white',
 					justifyContent: 'center',
 					alignItems: 'center',
 				}}>
 					<QRCode
-						size={200}
+						size={180}
 						value={mnemonic}
 					/>
 				</View>
 				<View style={{
 				    ...defaultStyles.shadow,
 					padding: 10,
-					height: 100,
+					height: 130,
 					borderTopLeftRadius:5,
 					borderTopRightRadius:5,
 					backgroundColor: 'white',
 					width: width - 40,
 					marginTop: 20,
 					marginBottom: -5,
+					flexDirection: 'row', flexWrap: 'wrap'
 				}}>
-                    <InputMultiLines
-						style={{
-							borderWidth: 0,
-							fontSize: 16,
-							fontWeight: 'normal',
-							textAlignVertical: 'top'
-						}}
-						editable={false}
-						value={mnemonic}
-					/>
+					{this.renderMnemonic()}
 				</View>
                 <ComponentButton
                     title={strings('copy_button')}
