@@ -461,14 +461,12 @@ export default {
             yield put(createAction('loadBalances')({keys:[currentAccount]}));
             return true;
         },
-        *deleteToken({payload:{symbol, address, tokenSymbol, take}}, {call,select,put}){
+        *deleteToken({payload:{symbol, address, tokenSymbol}}, {call,select,put}){
             const {accountsMap,transactionsMap} = yield select(({accountsModel})=> ({
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
             }));
 
-            yield take('loadBalances/@@end');
-            yield take('addAccount/@@end');
             const acckey = accountKey(symbol,address);
             const txKey = accountKey(symbol,address,tokenSymbol);
             let newAccountsMap = {...accountsMap};
