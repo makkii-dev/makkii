@@ -1,6 +1,6 @@
 import {DeviceEventEmitter} from 'react-native';
 import {accountKey, decrypt, encrypt} from "../utils";
-import {Storage} from "../utils/storage";
+import {SensitiveStorage, Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
 import {findSymbolByAddress, getExchangeHistory} from "../services/erc20DexService";
 import {COINS} from "../coins/support_coin_list";
@@ -38,9 +38,9 @@ export default {
         /*
             eg:
                 {
+                     private_key  saved in Sensitive storage
                     "AION+0xa0e08bf1df768bb3f40e795dd5c487889c17f6c54111f8d9a5553783a1e6c963":{  // key format is <symbol>'+'<address>; In storage , it will be saved with the key  'acc+'<symbol>'+'<address>
                         "address":"0xa0e08bf1df768bb3f40e795dd5c487889c17f6c54111f8d9a5553783a1e6c963",
-                        "private_key":"0e7ff5ec5e46ba057e0a9cfcb610a8560260fbfc2db92b08faba826dacac485eb6a639de25c0ca499d4161409b02f3a6e0ed0555bdbd56017f5fc9f3ce34e3d0", // In storage, it should be encrypted by hashed_password
                         "balance":"15309.17544544050208896", // balance will not be saved
                         "name":"aion1",
                         "symbol":"AION",
@@ -144,14 +144,17 @@ export default {
                 const  old_accounts_storage = yield call(Storage.get,'accounts',false, false);
                 let old_accounts = JSON.parse(decrypt(old_accounts_storage,hashed_password)||{});
                 old_accounts  = upgradeAccountsV0_V1(state_version,old_accounts,options);
-                const payload = upgradeAccountsV1_V2(old_accounts);
+                const {accountsKey,accountsMap,transactionsMap,tokenLists,privateKeyMap} = upgradeAccountsV1_V2(old_accounts);
                 const hd_index = yield call(Storage.get, 'userModel',{}).hd_index|| Object.keys(COINS).reduce((map,el)=>{map[el]={}; return map},{});
-                yield put(createAction('updateState')({...payload,hd_index}));
-                yield put(createAction('saveAccounts')({keys:Object.keys(payload.accountsMap)}));
-                yield put(createAction('saveTransaction')({keys:Object.keys(payload.transactionsMap)}));
+                for(let pk of Object.keys(privateKeyMap)){
+                    yield call(SensitiveStorage.set,pk,privateKeyMap[pk]);
+                }
+                yield put(createAction('updateState')({accountsKey,accountsMap,transactionsMap,tokenLists,hd_index}));
+                yield put(createAction('saveAccounts')({keys:Object.keys(accountsMap)}));
+                yield put(createAction('saveTransaction')({keys:Object.keys(transactionsMap)}));
                 yield put(createAction('saveTokenLists')());
                 yield put(createAction('saveHdIndex')());
-                yield put(createAction('loadBalances')({keys:payload.accountsKey, force: true}));
+                yield put(createAction('loadBalances')({keys:accountsKey, force: true}));
             }else{
                 const accountsKey = yield call(Storage.get, 'accountsKey', []);
                 // const accountsKey = [];
@@ -163,12 +166,7 @@ export default {
                     // recover account
                     const account = yield call(Storage.get, 'acc+'+key, {});
                     const {tokens} =  account;
-                    accountsMap[key] = account.private_key?{
-                        ...account,
-                        private_key: decrypt(account.private_key, hashed_password),
-                        balance:0,
-                        tokens:tokens.reduce((map,el)=>{map[el]=0;return map},{})
-                    }:{
+                    accountsMap[key] = {
                         ...account,
                         balance:0,
                         tokens:tokens.reduce((map,el)=>{map[el]=0;return map},{})
@@ -256,6 +254,7 @@ export default {
             for (let key of keys){
                 if(accountsMap[key]) {
                     newAccountsKey.remove(key);
+                    yield call(SensitiveStorage.remove, key);
                     const {type, address, symbol} = accountsMap[key];
                     if (type === '[local]') {
                         yield put(createAction('updateHdIndex')({symbol, address, code: 'delete'}))
@@ -309,6 +308,7 @@ export default {
                 return map;
             },{});
             newTransactionsMap[key] = {...newTransactionsMap[key],...txs,...pendingTxs};
+            console.log('newTransactionsMap[key]=>',newTransactionsMap[key]);
             yield put(createAction('updateState')({transactionsMap:newTransactionsMap}));
             if(needSave){
                 yield put(createAction('saveTransaction')({keys:[key]}));
@@ -328,7 +328,7 @@ export default {
                 AppToast.show(strings('message_no_more_data'));
                 return 0;
             }else{
-                yield put(createAction('updateTransactions')({txs:txs,key:accountKey(symbol,user_address,tokenSymbol),needSave, force: symbol!=='BTC'&&symbol!=='LTC'}));
+                yield put(createAction('updateTransactions')({txs:txs,key:accountKey(symbol,user_address,tokenSymbol),needSave, force: symbol==='BTC'||symbol==='LTC'}));
                 return Object.keys(txs).length;
             }
         },
@@ -391,15 +391,20 @@ export default {
             yield put(createAction('updateState')({hd_index:newHdIndex}));
             yield put(createAction('saveHdIndex')());
         },
-        *addAccount({payload:{account}}, {select,put}){
+        *addAccount({payload:{account:_account}}, {call, select,put}){
             const {accountsKey,accountsMap, transactionsMap} = yield select(({accountsModel})=> ({
                 accountsKey: accountsModel.accountsKey,
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
             }));
-            DeviceEventEmitter.emit('add_new_account', account);
+            DeviceEventEmitter.emit('add_new_account', _account);
 
-            const {symbol, address} =account;
+            const {symbol, address, private_key} =_account;
+            let account = {..._account};
+            delete account['private_key'];
+            if(private_key){
+                yield call(SensitiveStorage.set, accountKey(symbol,address), private_key);
+            }
             const key = accountKey(symbol, address);
             const newAccountsKey = [...accountsKey, key];
             const newAccountsMap = {...accountsMap, [key]:account};
@@ -475,6 +480,9 @@ export default {
             }
             yield put(createAction('updateState')({accountsMap:newAccountsMap, transactionsMap:newTransactionsMap}));
             yield put(createAction('saveAccounts')({keys:[acckey]}))
+        },
+        *getPrivateKey({payload:{key}},{call}){
+            return yield call(SensitiveStorage.get,key);
         }
 
     }
@@ -507,7 +515,7 @@ const upgradeAccountsV0_V1 = (state_version, old_accounts, options)=>{
 const upgradeAccountsV1_V2 = (old_accounts)=>{
     const accountsKey = Object.keys(old_accounts);
     let tokenLists = {};
-    const {accountsMap,transactionsMap} = accountsKey.reduce(({accountsMap,transactionsMap},k)=>{
+    const {accountsMap,transactionsMap, privateKeyMap} = accountsKey.reduce(({accountsMap,transactionsMap},k)=>{
         const symbol = k.slice(0,k.indexOf('+'));
         const accBaseKey =  k;
         const txBaseKey = k;
@@ -517,6 +525,10 @@ const upgradeAccountsV1_V2 = (old_accounts)=>{
             return map;
         },{});
         let body = {...old_accounts[k], tokens:newTokens};
+        if(body.privateKey){
+            privateKeyMap[accBaseKey]=body.privateKey
+        }
+        delete body['privateKey'];
         delete body['transactions'];
         accountsMap[accBaseKey] = body;
         transactionsMap[txBaseKey]= {...old_accounts[k].transactions};
@@ -529,9 +541,9 @@ const upgradeAccountsV1_V2 = (old_accounts)=>{
             transactionsMap[txKey]={...old_accounts[k].tokens[tokenSymbol].tokenTxs}
         });
         return {accountsMap,transactionsMap};
-    },{accountsMap:{},transactionsMap:{}});
+    },{accountsMap:{},transactionsMap:{},privateKeyMap:{}});
 
-    return {accountsKey,accountsMap,transactionsMap,tokenLists};
+    return {accountsKey,accountsMap,transactionsMap,tokenLists,privateKeyMap};
 };
 
 const compareFn = (a, b) => {

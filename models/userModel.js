@@ -1,8 +1,7 @@
 import {DeviceEventEmitter} from 'react-native';
-import {Storage} from "../utils/storage";
+import {SensitiveStorage, Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
 import {accountKey, hashPassword, validatePassword} from "../utils";
-import keyStore from "react-native-makkii-core";
 import {strings} from "../locales/i18n";
 import {NavigationActions, StackActions} from "react-navigation";
 import {generateMnemonic} from "../libs/aion-hd-wallet";
@@ -27,11 +26,15 @@ export default {
         }
     },
     effects:{
-        *loadStorage(action,{call,put}){
+        *loadStorage({payload:{state_version}},{call,put}){
             // Don't need upgrade
-            const payload = yield call(Storage.get, 'user');
+            const _payload = yield call(Storage.get, 'user');
+            let payload = {..._payload};
             if (payload) {
-                keyStore.createByMnemonic(payload.mnemonic, '');
+                if(state_version<2){
+                    SensitiveStorage.set('mnemonic', payload.mnemonic);
+                    delete payload['mnemonic'];
+                }
                 yield put(createAction('updateState')(payload));
             }
             return true;
@@ -80,13 +83,13 @@ export default {
                 return {result:false, error:strings("register.error_dont_match")}
             }
             const mnemonic = generateMnemonic();
-            keyStore.createByMnemonic(mnemonic,'');
+            yield call(SensitiveStorage.set, 'mnemonic', mnemonic);
             const hashed_password = hashPassword(password);
-            yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', address_book:{}}));
+            yield put(createAction('updateState')({hashed_password,hashed_pinCode:'', address_book:{}}));
             yield put(createAction('saveUser')());
-            return {result:true}
+            return {result:true, data:mnemonic}
         },
-        *recovery({payload}, {put}){
+        *recovery({payload}, {call, put}){
             const {password, password_confirm, mnemonic} = payload;
             if(!validatePassword(password)){
                 return {result:false, error:strings("register.error_password")}
@@ -94,13 +97,14 @@ export default {
                 return {result:false, error:strings("register.error_password")}
             }
             const hashed_password = hashPassword(password);
-            keyStore.createByMnemonic(mnemonic,'');
+            yield call(SensitiveStorage.set, 'mnemonic', mnemonic);
             yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', isBackUp:true, address_book:{}}));
             yield put(createAction('saveUser')());
             return {result:true}
         },
-        *reset(action, {put}){
-            yield put(createAction('updateState')({hashed_password:'',mnemonic:'',hashed_pinCode:'', isBackUp:false, address_book:{}}));
+        *reset(action, {call, put}){
+            yield call(SensitiveStorage.remove, 'mnemonic');
+            yield put(createAction('updateState')({hashed_password:'',hashed_pinCode:'', isBackUp:false, address_book:{}}));
             yield put(createAction('saveUser')());
         },
         *login(action, {put}){
@@ -122,6 +126,9 @@ export default {
         *backupFinish(action, {put}){
             yield put(createAction('updateState')({isBackUp: true}));
             yield put(createAction('saveUser')());
+        },
+        *getMnemonic(action, {call}){
+            return yield call(SensitiveStorage.get, 'mnemonic');
         }
     }
 }

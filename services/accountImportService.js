@@ -2,10 +2,12 @@ import keystore from 'react-native-makkii-core';
 import {COINS} from "../coins/support_coin_list";
 import wallet from "react-native-aion-hw-wallet";
 import {range} from '../utils';
+import {SensitiveStorage} from "../utils/storage";
 const getAccountFromMasterKey = async (symbol, index) =>{
     try {
+        const mnemonic = await SensitiveStorage.get('mnemonic');
         const coinType = keystore.CoinType.fromCoinSymbol(symbol);
-        return await keystore.getKey(coinType, 0, 0, index, COINS[symbol].isTestNet)
+        return await keystore.getKeyFromMnemonic(coinType, 0, 0, index, COINS[symbol].isTestNet,mnemonic)
     }catch (e) {
         console.log('getAccountFromMasterKey error=>',e);
         throw e

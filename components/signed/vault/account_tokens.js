@@ -88,7 +88,7 @@ class AccountTokens extends Component {
                     navigate('signed_vault_set_account_name')({dispatch});
                     break;
                 case ACCOUNT_MENU[1].title:
-                    navigationSafely({routeName:'signed_vault_export_private_key', params:{privateKey: currentAccount.private_key}})({dispatch});
+                    navigationSafely({routeName:'signed_vault_export_private_key', params:{currentAccount: accountKey(currentAccount.symbol, currentAccount.address)}})({dispatch});
                     break;
                 case ACCOUNT_MENU[2].title:
                     dispatch(createAction('ERC20Dex/ERC20DexUpdateState')({currentAccount:accountKey(currentAccount.symbol, currentAccount.address)}));

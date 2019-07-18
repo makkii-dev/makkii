@@ -39,7 +39,7 @@ class MnemonicConfirm extends React.Component{
     };
 
     state = {
-        toBeSelected: shuffle(this.props.mnemonic.split(' ')),
+        toBeSelected: shuffle(this.props.navigation.getParam('mnemonic','').split(' ')),
         selected:[],
         error: false,
         confirmed: false,
@@ -151,7 +151,7 @@ class MnemonicConfirm extends React.Component{
     };
 
     checkSelected = (selected)=>{
-        const {mnemonic} = this.props;
+        const mnemonic = this.props.navigation.getParam('mnemonic','');
         const selectedStr = selected.join(' ');
         return selectedStr === mnemonic.substr(0, selectedStr.length);
     };
@@ -182,11 +182,8 @@ class MnemonicConfirm extends React.Component{
     }
 }
 
-const mapToState = ({userModel})=>({
-    mnemonic: userModel.mnemonic,
-    // mnemonic: "transfer exhibit feel document display chalk response whisper strong walk shock ivory",
-});
-export default connect(mapToState)(MnemonicConfirm);
+
+export default connect()(MnemonicConfirm);
 
 
 const styles = {

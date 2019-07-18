@@ -89,7 +89,6 @@ class Account extends Component {
 	constructor(props){
 		super(props);
 		const {currentAccount} = this.props;
-		this.account_key = accountKey(currentAccount.symbol, currentAccount.address);
 		this.isMount = false;
 
 		this.state={
@@ -174,7 +173,7 @@ class Account extends Component {
                     navigate('signed_vault_set_account_name')({dispatch});
                     break;
 				case ACCOUNT_MENU[1].title:
-					navigationSafely({routeName:'signed_vault_export_private_key', params:{privateKey: currentAccount.private_key}})({dispatch});
+					navigationSafely({routeName:'signed_vault_export_private_key', params:{currentAccount: accountKey(currentAccount.symbol, currentAccount.address)}})({dispatch});
 					break;
 				default:
 			}

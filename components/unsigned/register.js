@@ -36,7 +36,7 @@ class Home extends Component {
 			.then(r=>{
 				if(r.result){
 					sendRegisterEventLog();
-					navigation.navigate('unsigned_register_mnemonic')
+					navigation.navigate('unsigned_register_mnemonic',{mnemonic: r.data})
 				}else{
 					alert_ok(strings('alert_title_error'),r.error);
 				}

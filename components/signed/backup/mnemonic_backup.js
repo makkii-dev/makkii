@@ -52,12 +52,13 @@ class MnemonicBackUp extends React.Component{
 
     nextStep = ()=>{
         const {navigation} = this.props;
+        const mnemonic = navigation.getParam('mnemonic','');
         const targetRoute = navigation.getParam('targetRoute');
-        navigation.navigate('signed_confirm_mnemonic', {targetRoute});
+        navigation.navigate('signed_confirm_mnemonic', {targetRoute, mnemonic:mnemonic});
     };
 
     renderMnemonic = ()=>{
-        const {mnemonic} = this.props;
+        const mnemonic = this.props.navigation.getParam('mnemonic','');
         return mnemonic.split(' ').map(str=>{
             return(
                 <MnemonicView
@@ -97,12 +98,9 @@ class MnemonicBackUp extends React.Component{
 
 }
 
-const mapToState = ({userModel})=>({
-    mnemonic: userModel.mnemonic,
-    // mnemonic: "transfer exhibit feel document display chalk response whisper strong walk shock ivory",
-});
 
-export default connect(mapToState)(MnemonicBackUp);
+
+export default connect()(MnemonicBackUp);
 
 
 const styles = {
