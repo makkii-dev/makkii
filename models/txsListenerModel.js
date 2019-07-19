@@ -67,20 +67,20 @@ export default {
         }
     },
     subscriptions:{
-      setup({dispatch}){
-          let timer;
-          DeviceEventEmitter.addListener('check_all_transaction_status', ({trigger})=> {
-              if (timer) clearInterval(timer);
-              if (trigger) {
-                  dispatch(createAction('checkAllTxs')());
-                  timer = setInterval(()=>{
-                      dispatch(createAction('checkAllTxs')());
-                  },10*1000);
-              } else {
-                  timer = null;
-              }
-          });
-      }
+        setup({dispatch}){
+            let timer;
+            DeviceEventEmitter.addListener('check_all_transaction_status', ({trigger})=> {
+                if (timer) clearInterval(timer);
+                if (trigger) {
+                    dispatch(createAction('checkAllTxs')());
+                    timer = setInterval(()=>{
+                        dispatch(createAction('checkAllTxs')());
+                    },10*1000);
+                } else {
+                    timer = null;
+                }
+            });
+        }
     },
     effects: {
         *addPendingTxs({payload}, {call, put, select}) {
@@ -138,8 +138,8 @@ export default {
                     txs[newTx.hash].txObj = newTx;
                     if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED'||listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
-
-                        AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`),{position:AppToast.positions.CENTER});
+                        if(listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED')
+                            AppToast.show(strings('toast_tx')+` ${newTx.hash} `+strings(`toast_${listenerStatus}`),{position:AppToast.positions.CENTER});
                         loadBalanceKeys.push(accountKey(symbol,newTx.to));
                         loadBalanceKeys.push(accountKey(symbol,newTx.from));
                         //dispatch other actions;

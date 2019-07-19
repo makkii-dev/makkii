@@ -48,7 +48,7 @@ class Mnemonic extends Component {
 
 
 	renderMnemonic = ()=>{
-		const {mnemonic} = this.props;
+		const mnemonic = this.props.navigation.getParam('mnemonic','');
 		return mnemonic.split(' ').map(str=>{
 			return(
 				<MnemonicView

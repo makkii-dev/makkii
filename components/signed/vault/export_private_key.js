@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     Clipboard,
     Platform,
-    PermissionsAndroid, ScrollView
+    PermissionsAndroid, ScrollView, ActivityIndicator
 } from 'react-native';
 
 import defaultStyles from '../../styles.js';
@@ -21,6 +21,8 @@ import {saveImage} from "../../../utils";
 import screenshotHelper from 'react-native-screenshot-helper';
 import {KeyboardAwareScrollView} from "react-native-keyboard-aware-scroll-view";
 import {AppToast} from "../../../utils/AppToast";
+import {createAction} from "../../../utils/dva";
+import {connect} from "react-redux";
 
 const MyscrollView = Platform.OS === 'ios'? KeyboardAwareScrollView:ScrollView;
 
@@ -36,10 +38,22 @@ class ExportPrivateKey extends React.Component{
             title: strings('export_private_key.title'),
         })
     };
+    state={
+        isLoading:true
+    };
     constructor(props){
         super(props);
-        const {navigation} = this.props;
-        this.privateKey = navigation.getParam('privateKey','');
+        const {navigation, dispatch} = this.props;
+        const accKey = navigation.getParam('currentAccount','');
+        console.log('acckey=>',accKey);
+        dispatch(createAction('accountsModel/getPrivateKey')({key:accKey}))
+            .then(pk=>{
+                console.log('pk=>',pk);
+                this.privateKey=pk;
+                this.setState({
+                    isLoading:false
+                });
+            })
     }
 
     componentDidMount() {
@@ -91,46 +105,65 @@ class ExportPrivateKey extends React.Component{
             });
         }
     }
-    render(){
-        return(
-            <MyscrollView style={styles.container}>
-                <Text style={styles.warningLabel}>{strings('export_private_key.warning')}</Text>
-                <View style={styles.qrCodeView}>
-                    <QRCode
-                        size={200}
-                        value={this.privateKey}
-                        getRef={ref => {
-                            this.qrcodeRef = ref;
-                        }}
-                    />
-                    <TouchableOpacity
-                        onPress={()=>{
-                            this.saveQRCode();
-                        }}
-                    >
-                        <Text style={styles.saveButton}>{strings('export_private_key.button_save_image')}</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.privateKeyView}>
-                    <InputMultiLines
-                        style={styles.privateKeyText}
-                        editable={false}
-                        value={this.privateKey}
-                    />
-                </View>
-                <ComponentButton
-                    title={strings('copy_button')}
-                    onPress={e => {
-                        Clipboard.setString(this.privateKey);
-                        AppToast.show(strings('toast_copy_success'));
-                    }}
+
+    // loading page
+    renderLoadingView() {
+        return (
+            <View style={{flex:1,alignItems:'center', justifyContent:'center', backgroundColor: mainBgColor}}>
+                <ActivityIndicator
+                    animating={true}
+                    color='red'
+                    size="large"
                 />
-            </MyscrollView>
-        )
+            </View>
+        );
+    }
+
+
+    render(){
+        if (this.state.isLoading) {
+            return this.renderLoadingView();
+        } else {
+            return (
+                <MyscrollView style={styles.container}>
+                    <Text style={styles.warningLabel}>{strings('export_private_key.warning')}</Text>
+                    <View style={styles.qrCodeView}>
+                        <QRCode
+                            size={200}
+                            value={this.privateKey}
+                            getRef={ref => {
+                                this.qrcodeRef = ref;
+                            }}
+                        />
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.saveQRCode();
+                            }}
+                        >
+                            <Text style={styles.saveButton}>{strings('export_private_key.button_save_image')}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.privateKeyView}>
+                        <InputMultiLines
+                            style={styles.privateKeyText}
+                            editable={false}
+                            value={this.privateKey}
+                        />
+                    </View>
+                    <ComponentButton
+                        title={strings('copy_button')}
+                        onPress={e => {
+                            Clipboard.setString(this.privateKey);
+                            AppToast.show(strings('toast_copy_success'));
+                        }}
+                    />
+                </MyscrollView>
+            )
+        }
     }
 }
 
-export default ExportPrivateKey;
+export default connect()(ExportPrivateKey);
 
 const styles= StyleSheet.create({
     container:{

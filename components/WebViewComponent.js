@@ -8,10 +8,11 @@ const {width} = Dimensions.get('window');
 class WebViewComponent extends Component {
     static navigationOptions = ({ navigation }) => {
         const { state } = navigation;
+        const GoBack = navigation.getParam('GoBack',()=>{});
         return {
             title: state.params.title,
             headerLeft:(
-                <TouchableOpacity onPress={()=>{navigation.state.params.GoBack&&navigation.state.params.GoBack()}} style={{
+                <TouchableOpacity onPress={()=>{GoBack()}} style={{
                     width: 48,
                     height: 48,
                     alignItems: 'center',
@@ -24,7 +25,6 @@ class WebViewComponent extends Component {
                     }} />
                 </TouchableOpacity>
             ),
-            headerRight: <View></View>
         };
     };
 
@@ -72,7 +72,7 @@ class WebViewComponent extends Component {
 
     onGoBack = ()=>{
         if(this.canGoBack) {
-            this.webViewRef.goBack();
+            this.refs['refWebView'].goBack();
         }else{
             this.props.navigation.goBack();
         }
@@ -84,7 +84,7 @@ class WebViewComponent extends Component {
             <View style={{flex: 1}}>
                 <WebView
                     source={this.initialUrl}
-                    ref={ref=>this.webViewRef=ref}
+                    ref={'refWebView'}
                     useWebKit={true}
                     cacheEnabled={false}
                     renderLoading={()=>this.renderLoading()}
@@ -92,6 +92,7 @@ class WebViewComponent extends Component {
                     onLoadStart={()=>this.handleProcessBar(true)}
                     onNavigationStateChange={(navState)=>{
                         this.canGoBack = navState.canGoBack;
+                        this.setState({WebViewProgress:0,showProgressBar:true})
                     }}
                     onLoadProgress={(e)=>{
                         this.setState({WebViewProgress: e.nativeEvent.progress});

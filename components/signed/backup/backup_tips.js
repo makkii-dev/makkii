@@ -5,6 +5,8 @@ import {strings} from "../../../locales/i18n";
 import defaultStyles from "../../styles";
 import {CheckBox} from "../../checkBox";
 import {ComponentButton} from "../../common";
+import {createAction} from "../../../utils/dva";
+import {connect} from "react-redux";
 
 const {width} = Dimensions.get('window');
 const TIPS = [
@@ -22,8 +24,7 @@ const TIPS = [
     }
 ];
 
-
-export default class BackUpTips extends React.Component {
+class BackUpTips extends React.Component {
     static navigationOptions = ({navigation}) => {
         return ({
             title: strings('backup.title_backup_tips'),
@@ -32,6 +33,12 @@ export default class BackUpTips extends React.Component {
     state={
         understand: false
     };
+
+    componentWillMount(): void {
+        this.props.dispatch(createAction('userModel/getMnemonic')())
+            .then(mnemonic=>this.mnemonic = mnemonic)
+    }
+
     renderContent = ({title, details})=>{
         return (
             <View style={styles.contentContainer}>
@@ -48,7 +55,7 @@ export default class BackUpTips extends React.Component {
     nextStep =()=>{
         const {navigation} = this.props;
         const targetRoute = navigation.getParam('targetRoute');
-        navigation.navigate('signed_backup_mnemonic', {targetRoute});
+        navigation.navigate('signed_backup_mnemonic', {targetRoute, mnemonic:this.mnemonic});
     };
 
     render(){
@@ -83,6 +90,7 @@ export default class BackUpTips extends React.Component {
         )
     }
 }
+export default connect()(BackUpTips);
 
 
 const styles = {
