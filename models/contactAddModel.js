@@ -26,7 +26,7 @@ export default {
             yield put(createAction('updateState')(init));
         },
         *parseScannedData({payload:{data}}, {call, select, put}){
-            const {symbol} = yield select(mapToConTactAddModal);
+            const {symbol} = yield select(mapToContactAddModel);
             const ret = yield call(parseScannedData, data, symbol);
             if(ret.result){
                 yield put(createAction('updateState')({...ret.data}));
@@ -34,8 +34,8 @@ export default {
             return ret.result;
         },
         *addContact({payload}, {call, put, select}){
-            const {address_book} = yield select(mapToUserModal);
-            const {symbol, address, name} = yield select(mapToConTactAddModal);
+            const {address_book} = yield select(mapToUserModel);
+            const {symbol, address, name} = yield select(mapToContactAddModel);
             const contactObj = {symbol, address, name, ...payload};
             const key = accountKey(contactObj.symbol, contactObj.address);
             const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
@@ -61,5 +61,5 @@ export default {
     }
 }
 
-const mapToConTactAddModal = ({contactAddModel})=>({...contactAddModel});
-const mapToUserModal = ({userModel})=>({...userModel});
+const mapToContactAddModel = ({contactAddModel})=>({...contactAddModel});
+const mapToUserModel = ({userModel})=>({...userModel});

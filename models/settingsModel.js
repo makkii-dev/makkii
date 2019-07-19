@@ -1,4 +1,4 @@
-import {DeviceEventEmitter, AppState} from 'react-native';
+import {Platform, DeviceEventEmitter, AppState, Linking, NativeModules} from 'react-native';
 import {Storage} from "../utils/storage";
 import {createAction} from "../utils/dva";
 import {getCoinPrices} from "../coins/api";
@@ -7,6 +7,9 @@ import {setLocale, strings} from "../locales/i18n";
 import TouchID from "react-native-touch-id";
 import DeviceInfo from "react-native-device-info";
 import {NavigationActions} from "react-navigation";
+import {getLatestVersion} from '../services/settingService';
+import {popCustom} from "../utils/dva";
+import RNFS from 'react-native-fs';
 
 export default {
     namespace:'settingsModel',
@@ -26,7 +29,7 @@ export default {
         touchIDEnabled: false,
         explorer_server: 'mainnet', // only used in unused dapp_send. will remove later.
         state_version: 2, // local state/db version, used to upgrade
-        version: '1.0.0', // app version
+        version: '1.0.1', // app version
         currentAppState: 'active',
         leaveTime: 0,
         ignoreAppState: false,
@@ -200,6 +203,73 @@ export default {
                 console.log('App has come to the background!');
                 yield put(createAction('updateState')({currentAppState:nextAppState, leaveTime: Date.now()}));
             }
+        },
+        *checkVersion({}, {select, call}) {
+            let currentVersionCode = DeviceInfo.getBuildNumber();
+            const {lang} = yield select(({settingsModel})=>({...settingsModel}));
+            let versionUpdateLanguage = lang;
+            if (lang === 'auto') {
+                versionUpdateLanguage = DeviceInfo.getDeviceLocale().substring(0, 2);
+            }
+            try {
+                const version = yield call(getLatestVersion, Platform.OS, currentVersionCode, versionUpdateLanguage);
+                console.log("latest version is: ", version);
+                if (version.versionCode <= currentVersionCode) {
+                    AppToast.show(strings('about.version_latest'));
+                } else {
+                    let options = [
+                        {
+                            text: strings('cancel_button'), onPress: () => {
+                            }
+                        },
+                        {
+                            text: strings('alert_button_upgrade'),
+                            onPress: () => {
+                                if (Platform.OS === 'android') {
+                                    setTimeout(() => upgradeForAndroid(version), 500);
+                                } else {
+                                    upgradeForIOS();
+                                }
+                            }
+                        }
+                    ];
+                    if (version.mandatory) {
+                        options.shift();
+                    }
+                    popCustom.show(strings('version_upgrade.alert_title_new_version'),
+                        generateUpdateMessage(version),
+                        options,
+                        {
+                            canHide: false,
+                            cancelable: false,
+                        });
+                }
+            } catch (e) {
+                console.log("get latest version failed: ", e);
+                AppToast.show(strings('version_upgrade.toast_get_latest_version_fail'));
+            }
+        },
+        *checkForceVersion({},{call, select}) {
+            let versionCode = DeviceInfo.getBuildNumber();
+            console.log("current version code: " + versionCode);
+            const {lang} = yield select(({settingsModel})=>({...settingsModel}));
+            console.log("select lang:" + lang);
+            let versionUpdateLanguage = lang;
+            if (lang === 'auto') {
+                versionUpdateLanguage = DeviceInfo.getDeviceLocale().substring(0, 2);
+            }
+            console.log("send lang:" + versionUpdateLanguage);
+
+            try {
+                const version = yield call(getLatestVersion, Platform.OS, versionCode, lang);
+                console.log("latest version: ", version);
+                if (versionCode !== version.versionCode && version.mandatory) {
+                    popupUpdateDialog(version);
+                }
+            } catch (e) {
+                console.log("get latest version failed: ", e);
+                // ignore this error
+            }
         }
     }
 }
@@ -228,11 +298,143 @@ const upgradeSettingsV1_V2=(old_settings)=>{
     return new_settings;
 };
 
-
 const updateLocale = (lang)=>{
     if(lang==='auto'){
         setLocale(DeviceInfo.getDeviceLocale());
     }else{
         setLocale(lang);
     }
+};
+
+const upgradeForIOS = () => {
+    // TODO: consider dynamic load this uri
+    Linking.openURL("https://itunes.apple.com/us/app/makkii/id1457952857?ls=1&mt=8").catch(error => {
+        console.log("open app store url failed: ", error);
+        AppToast.show(strings('version_upgrade.toast_to_appstore_fail'));
+    });
+};
+
+const upgradeForAndroid = (version) => {
+    var index = version.url.lastIndexOf('\/');
+    let filename = version.url.substring(index + 1, version.url.length);
+
+    let filePath = RNFS.CachesDirectoryPath + '/' + filename;
+    console.log("download to " + filePath);
+    let download = RNFS.downloadFile({
+        fromUrl: version.url,
+        toFile: filePath,
+        progress: res => {
+            let progress = res.bytesWritten / res.contentLength;
+            console.log("progress: " + progress);
+            popCustom.setProgress(progress);
+        },
+        progressDivider: 1
+    });
+    download.promise.then(result => {
+        popCustom.hide();
+        console.log("download result: ", result);
+        if (result.statusCode === 200) {
+            console.log("install apk: api level: " + DeviceInfo.getAPILevel() +
+                ",packageId: " + DeviceInfo.getBundleId() + ", filePath: " + filePath);
+            NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
+        } else {
+            AppToast.show(strings('version_upgrade.toast_download_fail'));
+        }
+    }, error => {
+        console.log("download file error:", error);
+        AppToast.show(strings('version_upgrade.toast_download_fail'));
+        popCustom.hide();
+    });
+
+    popCustom.show(strings('version_upgrade.label_downloading'), '', [
+        {
+            text: strings('cancel_button'),
+            onPress: ()=> {
+                console.log("cancel downloading.");
+                RNFS.stopDownload(download.jobId);
+            }
+        }
+    ], {
+        type: 'progress',
+        cancelable: false,
+        canHide: true,
+        callback: () => {},
+        progress: 0.01,
+    });
+};
+
+const generateUpdateMessage = (version) => {
+    let message = strings('version_upgrade.label_version') + ': ' + version.version;
+    if (version.updatesMap) {
+        let keys = Object.keys(version.updatesMap);
+        if (keys.length > 0) {
+            message = message + '\n' + strings('version_upgrade.label_updates') + ': \n' + version.updatesMap[keys[0]];
+        }
+    }
+    return message;
+}
+
+const popupUpdateDialog=(version) => {
+    popCustom.show(strings('version_upgrade.alert_title_new_version'),
+        generateUpdateMessage(version), [
+            {
+                text: strings('alert_button_upgrade'),
+                onPress: () => {
+                    if (Platform.OS === 'android') {
+                        setTimeout(() => forceUpgradeForAndroid(version), 500);
+                    } else {
+                        upgradeForIOS();
+                    }
+                }
+            }
+        ], {
+            forceExist: Platform.OS === 'ios',
+            canHide: false,
+            cancelable: false,
+        });
+};
+
+const forceUpgradeForAndroid = (version) => {
+    let index = version.url.lastIndexOf('\/');
+    let filename = version.url.substring(index + 1, version.url.length);
+
+    let filePath = RNFS.CachesDirectoryPath + '/' + filename;
+    console.log("download to " + filePath);
+
+    tryDownload(version, filePath);
+};
+
+const tryDownload=(version, filePath) => {
+    popCustom.show(strings('version_upgrade.label_downloading'), '', [], {
+        type: 'progress',
+        cancelable: false,
+        canHide: false,
+        callback: () => {
+        },
+        progress: 0.01,
+    });
+    let download = RNFS.downloadFile({
+        fromUrl: version.url,
+        toFile: filePath,
+        progress: res => {
+            let progress = res.bytesWritten / res.contentLength;
+            console.log("progress: " + progress);
+            popCustom.setProgress(progress);
+        },
+        progressDivider: 1
+    });
+    download.promise.then(result => {
+        popupUpdateDialog(version);
+        console.log("download result: ", result);
+        if (result.statusCode === 200) {
+            console.log("install apk: " + DeviceInfo.getAPILevel() + " " + DeviceInfo.getBundleId());
+            NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
+        } else {
+            AppToast.show(strings('version_upgrade.toast_download_fail'));
+        }
+    }, error => {
+        console.log("download error: ", error);
+        AppToast.show(strings('version_upgrade.toast_download_fail'));
+        popupUpdateDialog(version);
+    });
 };

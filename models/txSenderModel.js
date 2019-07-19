@@ -153,5 +153,3 @@ const mapToaccountsModel = ({accountsModel})=>{
         currentAccount
     })
 };
-
-const mapToTxSenderModal = ({txSenderModel})=>({...txSenderModel});

@@ -165,26 +165,6 @@ function deleteFile(filePath) {
     });
 }
 
-function getLatestVersion(platform, currentVersionCode, language) {
-    const url = Config.app_server_api + "/appVersion/latest" +
-        "?versionCode=" + currentVersionCode +
-        "&platform=" + platform +
-        "&lang=" + language;
-    console.log("request get latest version: " + url);
-
-    return fetchRequest(url, 'GET');
-}
-function generateUpdateMessage(version) {
-    let message = strings('version_upgrade.label_version') + ': ' + version.version;
-    if (version.updatesMap) {
-        let keys = Object.keys(version.updatesMap);
-        if (keys.length > 0) {
-            message = message + '\n' + strings('version_upgrade.label_updates') + ': \n' + version.updatesMap[keys[0]];
-        }
-    }
-    return message;
-}
-
 var isHexStrict = function (hex) {
     return ((_.isString(hex) || _.isNumber(hex)) && /^(-)?0x[0-9a-f]*$/i.test(hex));
 };
@@ -355,8 +335,6 @@ module.exports = {
     getStatusBarHeight:getStatusBarHeight,
     strLen: strLen,
     navigationSafely,
-    getLatestVersion: getLatestVersion,
-    generateUpdateMessage: generateUpdateMessage,
     range,
     accountKey,
     appendHexStart,

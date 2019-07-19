@@ -44,7 +44,7 @@ class ImportHdWallet extends React.Component {
     ImportAccount= () => {
         const {dispatch} = this.props;
         const select = this.refs['refSelectList'].getSelect();
-        dispatch(createAction('accountModal/fromLedger')({index:Object.values(select)[0].index}))
+        dispatch(createAction('accountsModel/fromLedger')({index:Object.values(select)[0].index}))
         navigate('signed_vault_set_account_name')({dispatch});
     };
 

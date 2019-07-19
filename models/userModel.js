@@ -48,13 +48,13 @@ export default {
             yield call(Storage.set, 'user',toBeSaved);
         },
         *addContact({payload:{contactObj}}, {select, put}){
-            let {address_book} = yield select(mapToUserModal);
+            let {address_book} = yield select(mapToUserModel);
             address_book[accountKey(contactObj.symbol, contactObj.address)] = contactObj;
             yield put(createAction('updateState')({address_book}));
             yield put(createAction('saveUser')());
         },
         *deteleContact({payload:{key}},{select, put}){
-            let {address_book} = yield select(mapToUserModal);
+            let {address_book} = yield select(mapToUserModel);
             delete address_book[key];
             yield put(createAction('updateState')({address_book}));
             yield put(createAction('saveUser')());
@@ -128,4 +128,4 @@ export default {
     }
 }
 
-const mapToUserModal = ({userModel})=>({...userModel});
+const mapToUserModel = ({userModel})=>({...userModel});
