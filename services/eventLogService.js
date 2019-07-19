@@ -75,6 +75,23 @@ const sendTransferEventLog = (coin, token, amount) => {
     }
 };
 
+const sendDexExchangeEventLog = (src_token, dst_token, src_qty, dst_qty, wallet_id) => {
+    try {
+        sendEventLog({
+            user: DeviceInfo.getDeviceId(),
+            event: 'DEX_EXCHANGE',
+            data: {
+                src_token: src_token,
+                src_qty: src_qty,
+                dst_token: dst_token,
+                dst_qty: dst_qty,
+                wallet_id: wallet_id,
+            }
+        });
+    } catch (e) {
+        console.log("send dex exchange event log error: " + e);
+    }
+};
 
 export {
     sendEventLog,
@@ -82,4 +99,5 @@ export {
     sendRegisterEventLog,
     sendRecoveryEventLog,
     sendTransferEventLog,
+    sendDexExchangeEventLog,
 }

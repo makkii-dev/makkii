@@ -106,7 +106,7 @@ export default {
                 private_key: accountImportModel.private_key,
                 derivationIndex: accountImportModel.derivationIndex,
             }));
-            let account = {symbol, address, type, name, tokens:{}};
+            let account = {symbol, address, type, name, tokens:{}, balance: 0};
             if(account.type === '[ledger]'){
                 account.derivationIndex = derivationIndex;
             }else{
