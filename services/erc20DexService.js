@@ -61,8 +61,11 @@ const getTokenList = async (network)=>{
 
 const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, _qty, network) => {
     let qty = _qty - 0;
-    if (!qty)
-        qty = 1;
+    if (!qty) {
+        // if qty is 1, sometimes kyber responds with  "pair address with ETH is under maintenance"
+        // kyber gives no answer of what it is.
+        qty = 2;
+    }
 
     let sell = qty;
     if (sellTokenAddress !== ETHID) {
@@ -85,7 +88,7 @@ const getTokenTradeRate = async (sellTokenAddress, buyTokenAddress, _qty, networ
         console.log("buy:" + buy);
         const rate = BigNumber(sell).dividedBy(BigNumber(buy)).dividedBy(BigNumber(qty)).toNumber();
         console.log("rate: " + rate);
-        return {status: true, rate: rate.toFixed(6)};
+        return {status: true, rate: rate.toFixed(8)};
     } catch (e) {
         return {status: false, message: 'token_exchange.toast_cant_buy'}
     }

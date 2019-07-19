@@ -17,6 +17,7 @@ import {Storage} from "../utils/storage";
 import BigNumber from 'bignumber.js';
 import {getExchangeRulesURL} from "../components/signed/dex/constants";
 import Config from 'react-native-config';
+import {sendDexExchangeEventLog} from '../services/eventLogService';
 
 const network = COINS.ETH.network;
 export default {
@@ -160,6 +161,7 @@ export default {
                         editable:false,
                         txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}}));
 
+                    sendDexExchangeEventLog(srcToken, destToken, srcQty, destQty * 0.97, Config.kyber_wallet_id);
                     yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title:strings('token_exchange.title_exchange'),}}));
                 }else{
                     AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);
@@ -233,7 +235,7 @@ export default {
                         ]
                     )
                 }else{
-                    const tradeDatResp = yield call(genTradeData,account.address,tokenList[srcToken].address, tokenList[destToken].address,srcQty,destQty,Config.kyber_wallet_id, network);
+                    const tradeDatResp = yield call(genTradeData,account.address,tokenList[srcToken].address, tokenList[destToken].address,srcQty,BigNumber(destQty).multipliedBy(0.97).toNumber(),Config.kyber_wallet_id, network);
                     if(!tradeDatResp.error){
                         const rawTx = tradeDatResp.data[0];
                         console.log('rawTx=>',rawTx);
@@ -245,6 +247,9 @@ export default {
                             amount:BigNumber(rawTx.value).shiftedBy(-18).toNumber(),
                             editable:false,
                             txType:{type:'exchange', data:{srcToken:srcToken,destToken:destToken,srcQty:srcQty,destQty:destQty, status:'PENDING'}}}));
+
+                        sendDexExchangeEventLog(srcToken, destToken, srcQty, destQty * 0.97, Config.kyber_wallet_id);
+
                         yield put(NavigationActions.navigate({routeName:'signed_vault_send', params:{title:strings('token_exchange.title_exchange'),}}))
                     }else{
                         AppToast.show(tradeDatResp["reason"] + tradeDatResp["additional_data"]);

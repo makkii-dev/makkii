@@ -460,11 +460,22 @@ class Home extends React.Component {
 const mapToState = ({accountsModel, settingsModel, ERC20Dex})=>{
     const currentAccount = accountsModel.accountsMap[ERC20Dex.currentAccount];
 
+    // extract balance as a prop, since currentAccount->token->balance change won't trigger render.
+	let balance;
+	if (currentAccount) {
+	    let current_token = ERC20Dex.trade.srcToken;
+		balance = currentAccount.balance;
+		if (current_token !== 'ETH' && currentAccount.tokens[current_token]) {
+			balance = currentAccount.tokens[current_token];
+		}
+	}
+
 	return {
 		trade:ERC20Dex.trade,
 		isLoading:ERC20Dex.isLoading,
 		isWaiting:ERC20Dex.isWaiting,
 		currentAccount: currentAccount,
+        balance: balance,
 		tokenList:ERC20Dex.tokenList,
 		lang:settingsModel.lang,
 	}

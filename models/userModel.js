@@ -5,6 +5,7 @@ import {accountKey, hashPassword, validatePassword} from "../utils";
 import {strings} from "../locales/i18n";
 import {NavigationActions, StackActions} from "react-navigation";
 import {generateMnemonic} from "../libs/aion-hd-wallet";
+import {sendLoginEventLog} from "../services/eventLogService";
 
 /*
     features: manage user base information
@@ -113,6 +114,7 @@ export default {
                 index: 0,
                 actions:[NavigationActions.navigate({routeName:'signed_home'})]
             }));
+            sendLoginEventLog();
             DeviceEventEmitter.emit('check_all_transaction_status', {trigger: true});
         },
         *logOut(action, {put}){
