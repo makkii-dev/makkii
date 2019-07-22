@@ -41,6 +41,7 @@ export default {
 
          */
         txs: {},
+        isWaiting: false,
     },
     reducers: {
         // updatePendingTxs(state, {payload}) {
@@ -118,9 +119,8 @@ export default {
             yield put(createAction('txsListenerUpdateState')({ txs:{} }));
         },
         *checkAllTxs(action, {call,put,select}) {
-            let {txs} = yield select(({txsListener}) => ({...txsListener}));
-            console.log('check all pending Tx;', txs);
-
+            let {txs, isWaiting} = yield select(({txsListener}) => ({...txsListener}));
+            if(isWaiting) return;
             const oldStatuses = Object.values(txs).map(tx => ({
                 oldTx: tx.txObj,
                 symbol: tx.symbol,
@@ -129,7 +129,8 @@ export default {
             }));
             let loadBalanceKeys = [];
             if(oldStatuses.length>0) {
-                console.log('check all pending Tx.');
+                console.log('check all pending Tx=>', txs);
+                yield put(createAction('txsListenerUpdateState')({ isWaiting:true }));
                 const newStatuses = yield call(getTxsStatus, oldStatuses);
                 for (let newStatus of newStatuses) {
                     const {newTx, symbol, listenerStatus: _listenerStatus, timestamp} = newStatus;
@@ -196,7 +197,7 @@ export default {
                 }
                 //save current pending tx;
                 yield call(Storage.set, 'pendingTx', txs);
-                yield put(createAction('txsListenerUpdateState')({txs: txs}));
+                yield put(createAction('txsListenerUpdateState')({txs: txs, isWaiting:false}));
 
                 loadBalanceKeys = loadBalanceKeys.unique();
                 if(loadBalanceKeys.length>0){

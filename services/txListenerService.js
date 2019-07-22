@@ -7,7 +7,10 @@ const WAIT_BLOCKS = 2;
  * @returns {Promise<any[]>} array of {newtx, symbol, listenerStatus}
  */
 const getTxsStatus = (txs)=>{
-    return Promise.all(txs.map(tx=>getOneTxStatus(tx)));
+    return Promise.race([
+            Promise.all(txs.map(tx=>getOneTxStatus(tx))),
+            new Promise(resolve => {setTimeout(()=>resolve([]), 8*1000)})
+        ]);
 };
 
 /***
