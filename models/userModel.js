@@ -16,7 +16,6 @@ export default {
         isLogin: false,
         hashed_password: '',
         hashed_pinCode: '',
-        mnemonic: '',
         isBackUp: false,
         address_book:{},
     },
@@ -31,7 +30,7 @@ export default {
             // Don't need upgrade
             const _payload = yield call(Storage.get, 'user');
             let payload = {..._payload};
-            if (payload) {
+            if (payload) {``
                 if(state_version<2){
                     SensitiveStorage.set('mnemonic', payload.mnemonic);
                     delete payload['mnemonic'];
@@ -44,7 +43,6 @@ export default {
             const toBeSaved = yield select(({userModel})=>({
                 hashed_password: userModel.hashed_password,
                 hashed_pinCode: userModel.hashed_pinCode,
-                mnemonic: userModel.mnemonic,
                 isBackUp: userModel.isBackUp,
                 address_book: userModel.address_book,
             }));
@@ -99,7 +97,7 @@ export default {
             }
             const hashed_password = hashPassword(password);
             yield call(SensitiveStorage.set, 'mnemonic', mnemonic);
-            yield put(createAction('updateState')({hashed_password,mnemonic,hashed_pinCode:'', isBackUp:true, address_book:{}}));
+            yield put(createAction('updateState')({hashed_password,hashed_pinCode:'', isBackUp:true, address_book:{}}));
             yield put(createAction('saveUser')());
             return {result:true}
         },
