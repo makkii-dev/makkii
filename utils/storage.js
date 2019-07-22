@@ -42,8 +42,10 @@ function Sset(key, value) {
     return SInfo.setItem(key,value,SensitiveConfigs);
 }
 
-function Sget(key) {
-    return SInfo.getItem(key,SensitiveConfigs)
+function Sget(key, defaultValue = null) {
+    return SInfo.getItem(key,SensitiveConfigs).then(
+        value => (value!==null?value:defaultValue)
+    )
 }
 
 function Sremove(key) {
