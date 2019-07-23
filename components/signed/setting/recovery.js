@@ -6,7 +6,8 @@ import {
 	Clipboard,
 	Platform,
 	NativeModules,
-	NativeEventEmitter} from 'react-native';
+	NativeEventEmitter, ScrollView
+} from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import QRCode from 'react-native-qrcode-svg';
 import {InputMultiLines, ComponentButton} from '../../common.js';
@@ -22,12 +23,12 @@ const {width} = Dimensions.get('window');
 
 class Recovery extends Component {
 	static navigationOptions = ({ navigation }) => {
-	    return {
+		return {
 			title: strings('recovery_phrase.title'),
-	    };
-    };
+		};
+	};
 
-	componentDidMount() {
+	componentWillMount() {
 		if (Platform.OS === 'android') {
 			screenshotHelper.disableTakeScreenshot();
 		} else {
@@ -49,7 +50,7 @@ class Recovery extends Component {
 	}
 
 	renderMnemonic = ()=>{
-		const {mnemonic} = this.props;
+		const mnemonic = this.props.navigation.getParam('mnemonic','');
 		return mnemonic.split(' ').map(str=>{
 			return(
 				<MnemonicView
@@ -64,51 +65,49 @@ class Recovery extends Component {
 	};
 
 	render(){
-		const {mnemonic} = this.props;
+		const mnemonic = this.props.navigation.getParam('mnemonic','');
 		return (
-			<View style={{...defaultStyles.container, backgroundColor: mainBgColor}}>
-				<View style={{
-				    ...defaultStyles.shadow,
-					width: width - 40,
-                    height: width - 70,
-					borderRadius: 5,
-					backgroundColor: 'white',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}>
-					<QRCode
-						size={180}
-						value={mnemonic}
+			<ScrollView>
+				<View style={{...defaultStyles.container, backgroundColor: mainBgColor}}>
+					<View style={{
+						...defaultStyles.shadow,
+						width: width - 40,
+						height: width - 70,
+						borderRadius: 5,
+						backgroundColor: 'white',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}>
+						<QRCode
+							size={180}
+							value={mnemonic}
+						/>
+					</View>
+					<View style={{
+						...defaultStyles.shadow,
+						padding: 10,
+						borderTopLeftRadius:5,
+						borderTopRightRadius:5,
+						backgroundColor: 'white',
+						width: width - 40,
+						marginTop: 20,
+						marginBottom: -5,
+						flexDirection: 'row', flexWrap: 'wrap'
+					}}>
+						{this.renderMnemonic()}
+					</View>
+					<ComponentButton
+						title={strings('copy_button')}
+						onPress={e => {
+							Clipboard.setString(mnemonic);
+							AppToast.show(strings('toast_copy_success'));
+						}}
 					/>
 				</View>
-				<View style={{
-				    ...defaultStyles.shadow,
-					padding: 10,
-					height: 130,
-					borderTopLeftRadius:5,
-					borderTopRightRadius:5,
-					backgroundColor: 'white',
-					width: width - 40,
-					marginTop: 20,
-					marginBottom: -5,
-					flexDirection: 'row', flexWrap: 'wrap'
-				}}>
-					{this.renderMnemonic()}
-				</View>
-                <ComponentButton
-                    title={strings('copy_button')}
-                    onPress={e => {
-                        Clipboard.setString(mnemonic);
-                        AppToast.show(strings('toast_copy_success'));
-                    }}
-                />
-			</View>
+			</ScrollView>
 		)
 	}
 }
 
-const mapToState = ({userModel})=>({
-	mnemonic: userModel.mnemonic,
-});
 
-export default connect(mapToState)(Recovery);
+export default connect()(Recovery);
