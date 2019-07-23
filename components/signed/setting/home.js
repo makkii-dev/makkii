@@ -24,8 +24,12 @@ class Home extends Component {
 	toRecoveryPhrase=(route_url)=>{
 		const {navigationSafely} =  this.props.screenProps;
 		const {isBackUp, navigation} = this.props;
+
 		if(isBackUp){
-			navigationSafely({routeName:route_url})(this.props);
+			this.props.dispatch(createAction('userModel/getMnemonic')())
+				.then(mnemonic=>{
+					navigationSafely({routeName:route_url,params:{mnemonic}})(this.props);
+				})
 		}else{
 			navigationSafely({onVerifySuccess:()=>{
 				popCustom.show(
@@ -39,6 +43,7 @@ class Home extends Component {
 						{
 							text:strings('backup.button_backup_now'),
 							onPress: ()=>{
+
 								navigation.navigate('signed_backup_tips', {targetRoute: 'signed_setting'})
 							}
 
