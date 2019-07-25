@@ -26,12 +26,12 @@ class Scan extends Component {
                     }}
                 >
                     {navigation.state.params.torch ?
-                        <Image source={require('../../assets/flash_off.png')} style={{
+                        <Image source={require('../../assets/icon_flash_off.png')} style={{
                             tintColor: 'white',
                             width: 20,
                             height: 20,
                         }}/> :
-                        <Image source={require('../../assets/flash_on.png')} style={{
+                        <Image source={require('../../assets/icon_flash_on.png')} style={{
                             tintColor: 'white',
                             width: 20,
                             height: 20,
@@ -169,7 +169,7 @@ class Scan extends Component {
 						<View style={styles.backgroundStyle}/>
 						<ImageBackground style={[styles.scanImage,{alignItems: 'center',justifyContent:'center'}]} imageStyle={styles.scanImage} source={require('../../assets/scan_border.png')}>
 							<Animated.View style={[animatedStyle]}>
-								<Image style={{width:240,tintColor:mainColor}} source={require('../../assets/scanBar.png')} resizeMode={'contain'}/>
+								<Image style={{width:240,tintColor:mainColor}} source={require('../../assets/scan_bar.png')} resizeMode={'contain'}/>
 							</Animated.View>
 						</ImageBackground>
 						{/*right view*/}

@@ -265,7 +265,7 @@ class Pin_code_screen extends React.Component {
                     { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color : mColor, fontSize:36}]}>{item}</Text>)}
                     {/*{ this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) }*/}
                     { this.cancel&&item === 'cancel'&& (<Image source={require('../../assets/arrow_back.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
-                    { item === 'delete'&& (<Image source={require('../../assets/delete_button.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
+                    { item === 'delete'&& (<Image source={require('../../assets/icon_delete.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
                     { item === 'finger'&& (<Image source={require('../../assets/icon_touch_id.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
                 </View>
             </TouchableOpacity>
@@ -334,7 +334,7 @@ class Pin_code_screen extends React.Component {
               style={{flex: 1, paddingTop: getStatusBarHeight(true), alignItems: 'center', justifyContent: 'center',
                   // backgroundColor: mainBgColor
               }}
-              source={require('../../assets/splash_bg.png')}
+              source={require('../../assets/bg_splash.png')}
           >
               {this.renderContent(unlockDescription,warningPincodeFail)}
           </ImageBackground>

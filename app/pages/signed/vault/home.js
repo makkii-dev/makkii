@@ -245,7 +245,7 @@ class HomeCenterComponent extends React.Component{
 							this.state.showFilter&&this.props.closeFilter();
 							this.setState({showFilter: !this.state.showFilter,showSort:false});
 						}}>
-							<Image source={require('../../../../assets/filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
+							<Image source={require('../../../../assets/icon_filter.png')} style={{...styles.sortHeaderImageStyle, tintColor:filterTintColor}}/>
 						</TouchableOpacity>
 						<TouchableOpacity activeOpacity={1} onPress={()=>{
 							this.props.onTouch();
@@ -253,7 +253,7 @@ class HomeCenterComponent extends React.Component{
 							this.state.showSort&&this.props.closeSort();
 							this.setState({showSort: !this.state.showSort, showFilter:false});
 						}}>
-							<Image source={require('../../../../assets/sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
+							<Image source={require('../../../../assets/icon_sort.png')} style={{...styles.sortHeaderImageStyle, tintColor:sortTintColor}}/>
 						</TouchableOpacity>
 					</View>
 					<View style={{flexDirection: 'row'}}>
@@ -267,7 +267,7 @@ class HomeCenterComponent extends React.Component{
 								   }}
 						/>
 						<View style={{height:40,width:40,justifyContent:'center', alignItems:'center', backgroundColor:mainColor, borderRadius:fixedWidth(10)}}>
-							<Image source={require('../../../../assets/search.png')}
+							<Image source={require('../../../../assets/icon_search.png')}
 								   style={{...styles.sortHeaderImageStyle, marginRight: 0, tintColor:'#fff'}}
 								   resizeMode={'contain'}
 							/>
@@ -555,7 +555,7 @@ class Home extends Component {
 					this.refs['refHomeCenter']&&this.refs['refHomeCenter'].closeAll();
 					Keyboard.dismiss();
 				}}>
-					<ImageBackground source={require("../../../../assets/vault_home_bg.png")} style={{flex:1,paddingTop:header_marginTop, backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
+					<ImageBackground source={require("../../../../assets/bg_vault_home.png")} style={{flex:1,paddingTop:header_marginTop, backgroundColor: mainBgColor}} imageStyle={{width:width, height: fixedHeight(686)}}>
 						{/*title bar*/}
 						<View style={{flexDirection:'row', justifyContent:'flex-end', marginTop:15, marginLeft:10,marginRight:10}}>
 							<TouchableOpacity style={{height:40, width:48, justifyContent:'center', alignItems:'center'}} onPress={()=>{
@@ -566,7 +566,7 @@ class Home extends Component {
 									usage: 'import'
 								});
 							}}>
-								<Image source={require('../../../../assets/ic_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
+								<Image source={require('../../../../assets/icon_add.png')} style={{height:24, width:24, tintColor:"#fff"}}/>
 							</TouchableOpacity>
 						</View>
 						<View style={{flexDirection:'row', justifyContent:'flex-start'}}>

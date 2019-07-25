@@ -166,7 +166,7 @@ class Receive extends Component {
 								}}
 								rightView={()=>
 									<TouchableOpacity onPress={()=>this.onRefresh()}>
-										<Image source={require('../../../../assets/refresh.png')} style={{width:20,height:20,tintColor:linkButtonColor}} resizeMode={'contain'}/>
+										<Image source={require('../../../../assets/icon_refresh.png')} style={{width:20,height:20,tintColor:linkButtonColor}} resizeMode={'contain'}/>
 									</TouchableOpacity>
 								}
 								unit={this.unit}

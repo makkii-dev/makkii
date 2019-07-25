@@ -62,7 +62,7 @@ class About extends Component {
 							height:50,
 						}}
 						resizeMode={'contain'}
-						source={require('../../../../assets/icon_app_logo.png')}
+						source={require('../../../../assets/logo_app.png')}
 					/>
 					<Text style={{
 						marginTop: 15,

@@ -3,11 +3,11 @@ import {strings} from "../../../../locales/i18n";
 const SORT = [
     {
         title: 'sort.balance',
-        image: require('../../../../assets/sort_by_balance.png'),
+        image: require('../../../../assets/icon_sort_by_balance.png'),
     },
     {
         title: 'sort.transaction',
-        image: require('../../../../assets/sort_by_transactions.png'),
+        image: require('../../../../assets/icon_sort_by_transactions.png'),
     },
 ];
 

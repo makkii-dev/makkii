@@ -26,9 +26,9 @@ const getExchangeRulesURL = (_lang) =>{
     const file_prefix = 'static/exchange_rule_';
     if (Platform.OS === 'ios') {
         if (lang === 'en') {
-            initialUrl = require('../../../' +　file_prefix + 'en.html');
+            initialUrl = require('../../../../' +　file_prefix + 'en.html');
         } else {
-            initialUrl = require('../../../' + file_prefix + 'zh.html');
+            initialUrl = require('../../../../' + file_prefix + 'zh.html');
         }
     } else {
         initialUrl = {uri: 'file:///android_asset/' + file_prefix + lang + ".html"};

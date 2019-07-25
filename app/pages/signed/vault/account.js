@@ -236,7 +236,7 @@ class Account extends Component {
 							   resizeMode={'contain'}
 						/>
 						<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-							<Image source={require('../../../../assets/refresh.png')}
+							<Image source={require('../../../../assets/icon_refresh.png')}
 								   style={{width: 20, height: 20, tintColor: 'gray', marginHorizontal: 10}}
 								   resizeMode={'contain'}/>
 							<Text style={{color: 'gray'}}>{strings('account_view.empty_label')}</Text>

@@ -64,7 +64,6 @@ import BackUpTips               from './pages/signed/backup/backup_tips';
 import MnemonicBackUp           from './pages/signed/backup/mnemonic_backup';
 import MnemonicConfirm          from './pages/signed/backup/mnemonic_confirm';
 import {strings} from "../locales/i18n";
-import userModel from "../models/user.model";
 
 const transitionConfig = () => {
     return {

@@ -71,7 +71,7 @@ class Login extends Component {
                         backgroundColor: mainBgColor,
                     }}
                     imageStyle={{width: width, height: fixedHeight(686)}}
-                    source={require('../../../assets/login_header_bg.png')}
+                    source={require('../../../assets/bg_login_header.png')}
 				>
 					<TouchableOpacity
 						style={{

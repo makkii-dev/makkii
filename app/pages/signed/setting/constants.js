@@ -6,7 +6,7 @@ const SETTINGS = [
     },
     {
         'title': 'pinCode.title',
-        'icon': require('../../../../assets/icon_setting_pinCode.png'),
+        'icon': require('../../../../assets/icon_setting_pin_code.png'),
         'route_url': 'signed_setting_pinCode'
     },
     {
@@ -21,17 +21,17 @@ const SETTINGS = [
     },
     {
         'title': 'currency.title',
-        'icon': require('../../../../assets/icon_currency.png'),
+        'icon': require('../../../../assets/icon_setting_currency.png'),
         'route_url':'signed_setting_currency'
     },
     {
         'title': 'address_book.title',
-        'icon': require('../../../../assets/icon_address_book.png'),
+        'icon': require('../../../../assets/icon_setting_address_book.png'),
         'route_url':'signed_setting_address_book'
     },
     {
         'title': 'advanced.title',
-        'icon': require('../../../../assets/icon_advance.png'),
+        'icon': require('../../../../assets/icon_setting_advance.png'),
         'route_url':'signed_setting_advanced'
     },
     {

@@ -142,7 +142,7 @@ class Send extends Component {
 														   resizeMode={'contain'}/>
 												</TouchableOpacity>
 												<TouchableOpacity onPress={() => this.selectFromAddressBook()}>
-													<Image source={require('../../../../assets/address_book_btn.png')}
+													<Image source={require('../../../../assets/icon_address_book.png')}
 														   style={{width: 20, height: 20, tintColor: '#000'}}
 														   resizeMode={'contain'}/>
 												</TouchableOpacity>

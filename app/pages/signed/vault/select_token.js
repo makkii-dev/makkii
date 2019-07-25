@@ -61,7 +61,7 @@ class SelectToken extends Component {
                     }>
                         <Image style={{width: 20, height: 20, marginRight: 20, tintColor: 'white'}}
                                resizeMode={'contain'}
-                               source={require('../../../../assets/clear.png')}
+                               source={require('../../../../assets/icon_clear.png')}
                                />
                     </TouchableOpacity>
                 :null

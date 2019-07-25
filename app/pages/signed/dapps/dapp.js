@@ -27,7 +27,7 @@ class Dapp extends Component {
             <TouchableOpacity activeOpacity={1} style={{height:48, width:48, justifyContent: 'center', alignItems: 'center', marginRight:10}} onPress={()=>{
                 navigation.state.params.Reload&&navigation.state.params.Reload();
             }}>
-                <Image source={require("../../../../assets/refresh.png")} style={{height:24,width:24,tintColor:'#fff'}} resizeMode={'contain'}/>
+                <Image source={require("../../../../assets/icon_refresh.png")} style={{height:24,width:24,tintColor:'#fff'}} resizeMode={'contain'}/>
             </TouchableOpacity>
         ),
         headerLeft:(

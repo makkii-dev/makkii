@@ -411,7 +411,7 @@ class Home extends React.Component {
 						{
 							(currentAccount !== undefined && buttonEnabled) ||
 							<View style={{flexDirection: 'row', marginHorizontal: 20, marginBottom: 10}}>
-								<Image source={require('../../../../assets/warning.png')}
+								<Image source={require('../../../../assets/icon_warning.png')}
 									   resizeMode={'contain'}
 									   style={{width: 20, height: 20, tintColor: 'red', marginRight: 5}}
 								/>

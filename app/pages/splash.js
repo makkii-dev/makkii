@@ -56,7 +56,7 @@ class Splash extends Component {
 					alignItems: 'center',
 					paddingTop: 150,
 				}}
-				source={require('../../assets/splash_bg.png')}
+				source={require('../../assets/bg_splash.png')}
 			>
 				<ComponentLogo/>
 				<Text style={{

@@ -120,7 +120,7 @@ class Transaction extends Component {
                                         Clipboard.setString(value1);
                                         AppToast.show(strings('toast_copy_success'));
                                     }}>
-                                        <Image source={require('../../../../assets/copy.png')}
+                                        <Image source={require('../../../../assets/icon_copy.png')}
                                                style={{width: 20, height: 20, tintColor: '#000'}} resizeMode={'contain'}/>
                                     </TouchableOpacity>
 									{
@@ -148,7 +148,7 @@ class Transaction extends Component {
 								Clipboard.setString(transaction.hash);
 								AppToast.show(strings('toast_copy_success'));
 							}}>
-								<Image source={require('../../../../assets/copy.png')} style={{width:20,height:20,tintColor:'#000'}} resizeMode={'contain'}/>
+								<Image source={require('../../../../assets/icon_copy.png')} style={{width:20,height:20,tintColor:'#000'}} resizeMode={'contain'}/>
 							</TouchableOpacity>}
 						/>
 						<TransactionItemCell

@@ -114,7 +114,7 @@ class ComponentLogo extends Component{
 					height:50,
 				}}
 				resizeMode={'contain'}
-				source={require('../../assets/icon_app_logo.png')}
+				source={require('../../assets/logo_app.png')}
 			/>
 		);
 	}
@@ -239,7 +239,7 @@ class SubTextInput extends Component{
 						this.props.unit !== undefined && this.props.changeUnit !== undefined &&
 						<TouchableOpacity style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}} onPress={this.props.changeUnit}>
                             <Text style={{fontSize:12, marginLeft:10, color: linkButtonColor}}>{this.props.unit}</Text>
-                            <Image source={require('../../assets/expand.png')} style={{width: 20, height: 20, tintColor:linkButtonColor}}/>
+                            <Image source={require('../../assets/icon_expand.png')} style={{width: 20, height: 20, tintColor:linkButtonColor}}/>
 						</TouchableOpacity>
 					}
 				</View>
@@ -277,13 +277,13 @@ class TransactionItemCell extends React.PureComponent {
 // ======================== v2 ========================================
 const Visible = () => <Image
 	style={{width:20,height:20}}
-	source={require('../../assets/visible.png')}
+	source={require('../../assets/icon_visible.png')}
     resizeMode={'contain'}
 />
 const Invisible = () => <Image
 	style={{width:20,height:20}}
     resizeMode={'contain'}
-	source={require('../../assets/invisible.png')}
+	source={require('../../assets/icon_invisible.png')}
 />
 
 class RightActionButton extends Component {
@@ -664,7 +664,7 @@ class AddressComponent extends Component {
 							Clipboard.setString(address);
 							AppToast.show(strings('toast_copy_success'));
 						}}>
-							<Image source={require("../../assets/copy.png")} style={{width:20, height:20}}/>
+							<Image source={require("../../assets/icon_copy.png")} style={{width:20, height:20}}/>
 						</TouchableOpacity>
 						<TouchableOpacity onPress={()=>{this.setState({showAllAddress:false})}}>
 							<View style={{height:20,backgroundColor:'rgba(255,255,255,0.1)', borderRadius:10, paddingHorizontal:10,justifyContent:'center'}}>
@@ -683,7 +683,7 @@ class AddressComponent extends Component {
 						Clipboard.setString(address);
 						AppToast.show(strings('toast_copy_success'));
 					}}>
-						<Image source={require("../../assets/copy.png")}
+						<Image source={require("../../assets/icon_copy.png")}
 							   style={{marginHorizontal: 10, width: 20, height: 20}}/>
 					</TouchableOpacity>
 					<TouchableOpacity onPress={() => {

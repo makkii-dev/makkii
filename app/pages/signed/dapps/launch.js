@@ -37,7 +37,7 @@ class Launch extends Component{
         return (
             <View style={{...defaultStyles.shadow,borderRadius:10, backgroundColor: 'white',flex:1,width:width-20,
                 paddingVertical:20, paddingHorizontal:10,alignItems:'center',justifyContent:'center'}}>
-                <Image source={require('../../../../assets/under-construction.png')} style={{width:80,height:80, tintColor: 'gray'}} resizeMode={'contain'}/>
+                <Image source={require('../../../../assets/empty_under_construction.png')} style={{width:80,height:80, tintColor: 'gray'}} resizeMode={'contain'}/>
                 <Text style={{color:'gray', textAlign: 'center', marginTop:20}}>{strings('dapp.unavailable_hint')}</Text>
             </View>
         )

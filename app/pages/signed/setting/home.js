@@ -112,7 +112,7 @@ class Home extends Component {
 						<Cell
 							bottomSeparator={false}
 							topSeparator={false}
-							leadIcon={require('../../../../assets/icon_signout.png')}
+							leadIcon={require('../../../../assets/icon_setting_signout.png')}
 							title={strings('logout')}
 							onClick={() => {
 								popCustom.show(
