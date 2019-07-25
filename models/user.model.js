@@ -4,7 +4,7 @@ import {createAction} from "../utils/dva";
 import {accountKey, hashPassword, validatePassword} from "../utils";
 import {strings} from "../locales/i18n";
 import {NavigationActions, StackActions} from "react-navigation";
-import {generateMnemonic} from "../libs/aion-hd-wallet";
+import bip39 from 'bip39';
 import {sendLoginEventLog} from "../services/event_log.service";
 
 /*
@@ -81,7 +81,7 @@ export default {
             if(password!==password_confirm){
                 return {result:false, error:strings("register.error_dont_match")}
             }
-            const mnemonic = generateMnemonic();
+            const mnemonic = bip39.generateMnemonic();
             yield call(SensitiveStorage.set, 'mnemonic', mnemonic);
             const hashed_password = hashPassword(password);
             yield put(createAction('updateState')({hashed_password,hashed_pinCode:'', address_book:{}}));
