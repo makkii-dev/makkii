@@ -31,8 +31,8 @@ const getAccountOrTokenBalance = async (payload) =>{
         }
         return {...payload, balance:balance};
     }catch (e) {
-        console.log('getAccountBalance error=>',e);
-        return {...payload, balance:0};
+        console.log(e);
+        return {...payload, balance:BigNumber(0)};
     }
 };
 
