@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {Image, View,Text,Keyboard, TouchableOpacity, Dimensions} from 'react-native';
 import {strings} from "../../../locales/i18n";
 import {InputMultiLines, ComponentButton, alert_ok} from '../../components/common';
-import {validateMnemonic} from "../../../libs/aion-hd-wallet";
+import {validateMnemonic} from '../../../utils'
 import defaultStyles from '../../styles';
 import {mainBgColor} from '../../style_util';
 
@@ -127,7 +127,7 @@ class Home extends Component {
                                 return;
 							}
 							this.props.navigation.navigate('unsigned_recovery_password', {
-								mnemonic: this.state.mnemonic
+								mnemonic: this.state.mnemonic.trim().split('/\s+/').join(' ')
 							});
 						}}
 					/>

@@ -4,6 +4,7 @@ import wallet from 'react-native-aion-hw-wallet';
 import RNFS from 'react-native-fs';
 import {strings} from '../locales/i18n';
 import {fetchRequest} from './others';
+import bip39 from 'bip39';
 import Config from 'react-native-config';
 
 import {popCustom,navigate} from "./dva";
@@ -102,6 +103,10 @@ function validateAdvancedAmount(amount) {
 function validatePositiveInteger(input) {
     let reg= /^[1-9][0-9]*$/;
     return reg.test(input);
+}
+function validateMnemonic(mnemonic) {
+    let mnemonic_format = mnemonic.trim().split(/\s+/).join(' ');
+    return bip39.validateMnemonic(mnemonic_format);
 }
 
 function hashPassword(password) {
@@ -326,6 +331,7 @@ module.exports = {
     generateQRCode: generateQRCode,
     validateAmount: validateAmount,
     validateAdvancedAmount: validateAdvancedAmount,
+    validateMnemonic,
     saveImage: saveImage,
     validatePositiveInteger: validatePositiveInteger,
     fetchRequest: fetchRequest,
