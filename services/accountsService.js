@@ -32,7 +32,7 @@ const getAccountOrTokenBalance = async (payload) =>{
         return {...payload, balance:balance};
     }catch (e) {
         console.log('getAccountBalance error=>',e);
-        throw e;
+        return {...payload, balance:0};
     }
 };
 

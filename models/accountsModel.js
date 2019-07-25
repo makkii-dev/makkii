@@ -513,7 +513,7 @@ const upgradeAccountsV0_V1 = (state_version, old_accounts, options)=>{
 const upgradeAccountsV1_V2 = (old_accounts)=>{
     const accountsKey = Object.keys(old_accounts);
     let tokenLists = {};
-    const {accountsMap,transactionsMap, privateKeyMap} = accountsKey.reduce(({accountsMap,transactionsMap},k)=>{
+    const {accountsMap,transactionsMap, privateKeyMap} = accountsKey.reduce(({accountsMap,transactionsMap,privateKeyMap},k)=>{
         const symbol = k.slice(0,k.indexOf('+'));
         const accBaseKey =  k;
         const txBaseKey = k;
@@ -523,10 +523,10 @@ const upgradeAccountsV1_V2 = (old_accounts)=>{
             return map;
         },{});
         let body = {...old_accounts[k], tokens:newTokens};
-        if(body.privateKey){
-            privateKeyMap[accBaseKey]=body.privateKey
+        if(body.private_key){
+            privateKeyMap[accBaseKey]=body.private_key
         }
-        delete body['privateKey'];
+        delete body['private_key'];
         delete body['transactions'];
         accountsMap[accBaseKey] = body;
         transactionsMap[txBaseKey]= {...old_accounts[k].transactions};
@@ -538,7 +538,7 @@ const upgradeAccountsV1_V2 = (old_accounts)=>{
             tokenLists[symbol] = {...tokenLists[symbol],[tokenSymbol]:tokenBody};
             transactionsMap[txKey]={...old_accounts[k].tokens[tokenSymbol].tokenTxs}
         });
-        return {accountsMap,transactionsMap};
+        return {accountsMap,transactionsMap,privateKeyMap};
     },{accountsMap:{},transactionsMap:{},privateKeyMap:{}});
 
     return {accountsKey,accountsMap,transactionsMap,tokenLists,privateKeyMap};
