@@ -28,7 +28,7 @@ const intToHex = (i) => {
     return hex.length % 2 ? '0' + hex : hex;
 };
 
-export class AionRlp {
+export class Aion_rlp {
     static encode = (input) => {
         if (input instanceof Array) {
             throw new Error('Use encodeList to encode arrays');
@@ -36,10 +36,12 @@ export class AionRlp {
         return RLP.encode(input);
     };
 
+    static decode = (input) => RLP.decode(input);
+
     static encodeLong = (input) => {
         let number = new BigNumber(input);
         if (!number.isGreaterThan(new BigNumber('0x00000000FFFFFFFF'))) {
-            return AionRlp.encode(input);
+            return Aion_rlp.encode(input);
         }
         return RLP.encode(padTo16Bytes(number));
     };

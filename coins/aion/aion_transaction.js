@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import blake2b from 'blake2b';
-import {AionRlp} from '../../libs/aion-hd-wallet/src/utils/rlp';
+import {Aion_rlp} from '../../utils/aion_rlp';
 import wallet from 'react-native-aion-hw-wallet';
 import keyStore from "react-native-makkii-core";
 import {toHex} from '../../utils';
@@ -101,26 +101,15 @@ export class AionTransaction {
      * @returns {*}
      */
     getEncodedRaw = ()=>{
-
-        let encodedTx = {};
-        encodedTx.nonce = AionRlp.encode(this.nonce);
-        encodedTx.to = AionRlp.encode(this.to);
-        encodedTx.valueHex = AionRlp.encode(this.valueHex);
-        encodedTx.data = AionRlp.encode(this.data);
-        encodedTx.timestampHex = AionRlp.encode(this.timestampHex);
-        encodedTx.gas = AionRlp.encodeLong(this.gas);
-        encodedTx.gasPrice = AionRlp.encodeLong(this.gasPrice);
-        encodedTx.type = AionRlp.encode(this.type);
-
-        return AionRlp.encodeList([
-            encodedTx.nonce,
-            encodedTx.to,
-            encodedTx.valueHex,
-            encodedTx.data,
-            encodedTx.timestampHex,
-            encodedTx.gas,
-            encodedTx.gasPrice,
-            encodedTx.type,
+        return Aion_rlp.encodeList([
+            Aion_rlp.encode(this.nonce),
+            Aion_rlp.encode(this.to),
+            Aion_rlp.encode(this.valueHex),
+            Aion_rlp.encode(this.data),
+            Aion_rlp.encode(this.timestampHex),
+            Aion_rlp.encodeLong(this.gas),
+            Aion_rlp.encodeLong(this.gasPrice),
+            Aion_rlp.encode(this.type),
         ]);
     };
     /**
@@ -132,34 +121,18 @@ export class AionTransaction {
         if(this.encoded){
             return this.encoded;
         }
-
-        let encodedTx = {};
-        encodedTx.nonce = AionRlp.encode(this.nonce);
-        encodedTx.to = AionRlp.encode(this.to);
-        encodedTx.valueHex = AionRlp.encode(this.valueHex);
-        encodedTx.data = AionRlp.encode(this.data);
-        encodedTx.timestampHex = AionRlp.encode(this.timestampHex);
-        encodedTx.gas = AionRlp.encodeLong(this.gas);
-        encodedTx.gasPrice = AionRlp.encodeLong(this.gasPrice);
-        encodedTx.type = AionRlp.encode(this.type);
-        encodedTx.fullSignature = AionRlp.encode(new Buffer(this.fullSignature));
-
-        let encoded = AionRlp.encodeList([
-            encodedTx.nonce,
-            encodedTx.to,
-            encodedTx.valueHex,
-            encodedTx.data,
-            encodedTx.timestampHex,
-            encodedTx.gas,
-            encodedTx.gasPrice,
-            encodedTx.type,
-            encodedTx.fullSignature,
+        let encoded = Aion_rlp.encodeList([
+            Aion_rlp.encode(this.nonce),
+            Aion_rlp.encode(this.to),
+            Aion_rlp.encode(this.valueHex),
+            Aion_rlp.encode(this.data),
+            Aion_rlp.encode(this.timestampHex),
+            Aion_rlp.encodeLong(this.gas),
+            Aion_rlp.encodeLong(this.gasPrice),
+            Aion_rlp.encode(this.type),
+            Aion_rlp.encode(Buffer.from(this.fullSignature)),
         ]);
         return toHex(encoded);
-    };
-
-    getRawHash = () => {
-        return blake2b(32).update(this.getEncodedRaw()).digest();
     };
 
     signByECKey = (private_key) => {
@@ -192,34 +165,17 @@ export class AionTransaction {
                 console.log('sign error => ', e);
                 reject(e)
             });
-
-            // keyStore.recoveKeyPairByPrivateKey(private_key,coinType).then(keyPair=>{
-            //     keyStore.sign(Crypto.toHex(rawHash), keyPair.private_key, 425).then(signature=>{
-            //         this.signature = hexString2Array(signature);
-            //         this.fullSignature = sigToBytes(this.signature, hexString2Array(keyPair.public_key));
-            //         resolve();
-            //     }).catch(e=>{
-            //         console.log('sign error => ', e);
-            //         reject(e)
-            //     })
-            // }).catch(e=>{
-            //     console.log('sign error => ', e);
-            //     reject(e)
-            // })
-
         });
     };
 
     signByLedger = (index) => {
         return new Promise((resolve, reject) => {
-            listenApp.ignore=true;
             wallet.getAccount(index).then(account => {
-                setTimeout(()=>listenApp.ignore=false,100);
                 if (account.address !== this.sender) {
                     reject(new Error('error.wrong_device'));
                     return;
                 }
-                wallet.sign(index, Object.values(this.getEncodedRaw())/*Object.values(this.getEncodedRaw())*/).then(signedTx => {
+                wallet.sign(index, Object.values(this.getEncodedRaw())).then(signedTx => {
                     this.signature = signedTx;
                     this.fullSignature = sigToBytes(this.signature, hexString2Array(account.publicKey));
                     resolve(this.getEncoded());
