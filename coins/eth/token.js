@@ -22,10 +22,10 @@ const fetchAccountTokenBalance = (contract_address, address, network) => new Pro
         if(res.data.result){
             resolve(new BigNumber(AbiCoder.decodeParameter('uint256',res.data.result)))
         }else {
-            reject('get account Balance failed:',res.data.error);
+            reject('get account Balance failed:'+res.data.error);
         }
     }).catch(e=>{
-        reject('get account Balance failed:',e);
+        reject('get account Balance failed:'+e);
     })
 });
 
