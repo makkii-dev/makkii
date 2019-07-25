@@ -3,18 +3,18 @@ import React, {Component} from 'react';
 
 
 // models
-import erc20DexModel from './models/erc20DexModel';
-import txListenerModel from './models/txsListenerModel';
-import accountsModel from './models/accountsModel';
-import accountImportModel from './models/accountImportModel'
-import tokenImportModel from './models/tokenImportModel';
-import txSenderModel  from './models/txSenderModel';
-import userModel      from './models/userModel';
-import settingsModel  from  './models/settingsModel';
-import contactAddModel from './models/contactAddModel';
-import dappsModel from './models/dappsModel';
+import erc20DexModel from './models/erc20_dex.model';
+import txListenerModel from './models/txs_listener.model';
+import accountsModel from './models/accounts.model';
+import accountImportModel from './models/account_import.model'
+import tokenImportModel from './models/token_import.model';
+import txSenderModel  from './models/tx_sender.model';
+import userModel      from './models/user.model';
+import settingsModel  from './models/settings.model';
+import contactAddModel from './models/contact_add.model';
+import dappsModel from './models/dapps.model';
 // store
-import Router, {routerReducer,routerMiddleware} from './components/routes';
+import Router, {routerReducer,routerMiddleware} from './app/routes';
 import dva, {createAction} from './utils/dva';
 
 

@@ -1,4 +1,4 @@
-import {AionTransaction} from "./AionTransaction";
+import {AionTransaction} from "./aion_transaction";
 import {CONTRACT_ABI} from './token';
 import BigNumber from "bignumber.js";
 import {getTransactionReceipt, getTransactionCount, sendSignedTransaction} from './jsonrpc';

@@ -1,7 +1,7 @@
 import React from 'react'
 import { create } from 'dva-core'
 import { Provider, connect } from 'react-redux'
-import PopupCustom from '../components/Popupcustom';
+import PopupCustom from '../app/components/PopupCustom';
 import {NavigationActions} from "react-navigation";
 
 export { connect }

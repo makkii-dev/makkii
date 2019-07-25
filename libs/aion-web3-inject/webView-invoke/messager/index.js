@@ -1,6 +1,6 @@
 // @flow
 
-import { createEventBus } from './event-bus'
+import { createEventBus } from './event_bus'
 
 class Deferred {
     promise: Promise<any>;
