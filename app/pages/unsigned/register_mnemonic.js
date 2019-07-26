@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Dimensions, NativeModules, Platform, NativeEventEmitter } from 'react-native';
+import {
+    View,
+    Text,
+    Dimensions,
+    NativeModules,
+    Platform,
+    NativeEventEmitter,
+    TouchableOpacity,
+} from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import { ComponentButton, MnemonicView } from '../../components/common';
 import { strings } from '../../../locales/i18n';
@@ -15,14 +23,33 @@ const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
 
 class Mnemonic extends Component {
-    static navigationOptions = () => {
+    static navigationOptions = ({ navigation }) => {
+        const backUpLater = navigation.getParam('backupLater', () => {});
         return {
             title: strings('unsigned_register_mnemonic.title'),
+            headerLeft: <View />,
+            headerRight: (
+                <TouchableOpacity
+                    onPress={() => {
+                        backUpLater();
+                    }}
+                    style={{
+                        width: 48,
+                        height: 48,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text style={{ color: 'white' }}>{strings('backup.button_backup_later')}</Text>
+                </TouchableOpacity>
+            ),
         };
     };
 
     async componentDidMount() {
-        console.log(`[route] ${this.props.navigation.state.routeName}`);
+        this.props.navigation.setParams({
+            backupLater: this.backupLater,
+        });
         if (Platform.OS === 'android') {
             screenshotHelper.disableTakeScreenshot();
         } else {
@@ -63,8 +90,11 @@ class Mnemonic extends Component {
         navigation.navigate('signed_backup_tips');
     };
 
+    backupLater = () => {
+        this.props.dispatch(createAction('userModel/login')());
+    };
+
     render() {
-        const { dispatch } = this.props.navigation;
         return (
             <View
                 style={{
@@ -101,14 +131,6 @@ class Mnemonic extends Component {
                     style={{ width: width - 80 }}
                     title={strings('backup.button_backup_now')}
                     onPress={this.toBackup}
-                />
-                <View style={{ marginBottom: 20 }} />
-                <ComponentButton
-                    style={{ width: width - 80 }}
-                    title={strings('backup.button_backup_later')}
-                    onPress={() => {
-                        dispatch(createAction('userModel/login')());
-                    }}
                 />
             </View>
         );

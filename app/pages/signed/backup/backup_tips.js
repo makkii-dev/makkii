@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Dimensions, Image, View, Text } from 'react-native';
+import { Dimensions, Image, View, Text, TouchableOpacity, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import { mainBgColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
 import defaultStyles from '../../../styles';
 import CheckBox from '../../../components/CheckBox';
 import { ComponentButton } from '../../../components/common';
-import { createAction } from '../../../../utils/dva';
+import { createAction, popCustom } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');
 const TIPS = [
@@ -25,9 +25,25 @@ const TIPS = [
 ];
 
 class BackUpTips extends React.Component {
-    static navigationOptions = () => {
+    static navigationOptions = ({ navigation }) => {
+        const goBack = navigation.getParam('goBack', () => {});
         return {
             title: strings('backup.title_backup_tips'),
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => {
+                        goBack();
+                    }}
+                    style={{
+                        width: 48,
+                        height: 48,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Text style={{ color: 'white' }}>{strings('cancel_button')}</Text>
+                </TouchableOpacity>
+            ),
         };
     };
 
@@ -36,10 +52,36 @@ class BackUpTips extends React.Component {
     };
 
     componentWillMount(): void {
+        this.props.navigation.setParams({
+            goBack: this.onBack,
+        });
+        BackHandler.addEventListener('hardwareBackPress', this.onBack);
         this.props
             .dispatch(createAction('userModel/getMnemonic')())
             .then(mnemonic => (this.mnemonic = mnemonic));
     }
+
+    componentWillUnmount(): void {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBack);
+    }
+
+    onBack = () => {
+        const { navigation, dispatch } = this.props;
+        const targetRoute = navigation.getParam('targetRoute');
+        popCustom.show(strings('alert_title_warning'), strings('backup.label_give_up'), [
+            { text: strings('cancel_button'), onPress: () => {} },
+            {
+                text: strings('alert_ok_button'),
+                onPress: () => {
+                    if (targetRoute) {
+                        navigation.navigate(targetRoute);
+                    } else {
+                        dispatch(createAction('userModel/login')());
+                    }
+                },
+            },
+        ]);
+    };
 
     renderContent = ({ title, details }) => {
         return (

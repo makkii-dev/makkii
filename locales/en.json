@@ -302,10 +302,11 @@
     "label_header_confirm_mnemonic": "Please select mnemonic phrase in correct order.",
     "label_warning_incorrect_mnemonic": "Incorrect order of Mnemonic Phrase, please recheck",
     "label_remainder_backup": "You have not backed up mnemonic",
+    "label_give_up": "backUp later?",
     "button_next": "Next",
     "button_finish": "Finish",
     "button_backup_now": "Backup Now",
-    "button_backup_later": "Later",
+    "button_backup_later": "Skip",
     "toast_backup_succeed": "Backup succeeded"
   },
   "currency": {

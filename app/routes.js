@@ -88,33 +88,36 @@ const transitionConfig = () => {
     };
 };
 
-const navigationOptions = ({ navigation }) => ({
-    headerRight: <View />,
-    headerLeft: (
-        <TouchableOpacity
-            onPress={() => {
-                navigation.goBack();
-            }}
-            style={{
-                width: 48,
-                height: 48,
-                alignItems: 'center',
-                justifyContent: 'center',
-            }}
-        >
-            <Image
-                source={require('../assets/arrow_back.png')}
-                style={{
-                    tintColor: 'white',
-                    width: 20,
-                    height: 20,
+const navigationOptions = ({ navigation, navigationOptions }) => {
+    return {
+        headerRight: <View />,
+        headerLeft: (
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.goBack();
                 }}
-            />
-        </TouchableOpacity>
-    ),
-    headerStyle: styles.headerStyle,
-    headerTitleStyle: styles.headerTitleStyle,
-});
+                style={{
+                    width: 48,
+                    height: 48,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Image
+                    source={require('../assets/arrow_back.png')}
+                    style={{
+                        tintColor: 'white',
+                        width: 20,
+                        height: 20,
+                    }}
+                />
+            </TouchableOpacity>
+        ),
+        headerStyle: styles.headerStyle,
+        headerTitleStyle: styles.headerTitleStyle,
+        ...navigationOptions,
+    };
+};
 
 const navigationOptionsWithoutShadow = ({ navigation }) => ({
     headerRight: <View />,
@@ -583,7 +586,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
             case 'Navigation/NAVIGATE':
                 if (
                     state.routes[state.routes.length - 1].routeName.match(
-                        /^unlock$|^signed_backup_tips$|^signed_backup_mnemonic$|^signed_confirm_mnemonic$/,
+                        /^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/,
                     )
                 ) {
                     newRoutes = state.routes.slice(0, state.routes.length - 1);
@@ -632,6 +635,9 @@ class Router extends PureComponent {
     backHandle = () => {
         const currentScreen = getActiveRouteName(this.props.router);
         console.log('currentScreen=>', currentScreen);
+        if (currentScreen === 'unsigned_register_mnemonic') {
+            return true;
+        }
         if (
             currentScreen === 'signed_dapps' ||
             currentScreen === 'signed_vault' ||
