@@ -7,8 +7,12 @@
     "test": "jest",
     "postinstall": "cd libs/aion-web3-inject; yarn; cd ../../node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
-    "lint": "eslint --fix app/ coins/ models/ services/ utils/"
+    "lint": "eslint app/ coins/ models/ services/ utils/ --fix --ext.js",
+    "pre-lint": "node check.js"
   },
+  "pre-commit": [
+    "pre-lint"
+  ],
   "dependencies": {
     "aion-web3": "1.1.5",
     "aion-web3-eth-abi": "1.1.5",
@@ -72,6 +76,7 @@
     "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
+    "pre-commit": "^1.2.2",
     "prettier": "^1.18.2",
     "prop-types": "^15.7.2",
     "react-test-renderer": "16.8.3",
