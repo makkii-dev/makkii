@@ -505,11 +505,10 @@ class Home extends Component {
                 dispatch(
                     createAction('accountsModel/loadBalances')({ keys: Object.keys(accounts) }),
                 ).then(r => {
-                    if (r) {
-                        this.setState({
-                            refreshing: false,
-                        });
-                    } else {
+                    this.setState({
+                        refreshing: false,
+                    });
+                    if (!r) {
                         AppToast.show(strings('wallet.toast_has_pending_transactions'), {
                             position: AppToast.positions.CENTER,
                         });

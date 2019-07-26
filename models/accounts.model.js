@@ -452,7 +452,7 @@ export default {
                 if (newAccountsMap[key]) {
                     const { address, symbol, tokens } = newAccountsMap[key];
                     if (!force && pendingTxsInvolved(pendingTxs, address)) {
-                        ret = ret | false;
+                        ret = ret && false;
                         continue;
                     }
                     const payloads = Object.keys(tokens).reduce(
