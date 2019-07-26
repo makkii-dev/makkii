@@ -1,17 +1,18 @@
-import React from 'react'
-import { create } from 'dva-core'
-import { Provider, connect } from 'react-redux'
+import React from 'react';
+import { create } from 'dva-core';
+import { Provider, connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 import PopupCustom from '../app/components/PopupCustom';
-import {NavigationActions} from "react-navigation";
 
-export { connect }
+export { connect };
 export const createAction = type => payload => ({ type, payload });
-export const navigate = (url,params={})=>({dispatch})=>{
-    dispatch(NavigationActions.navigate({routeName:url,params:params}));
+export const navigate = (url, params = {}) => ({ dispatch }) => {
+    dispatch(NavigationActions.navigate({ routeName: url, params }));
 };
-export const navigateBack = ({dispatch})=>{
+export const navigateBack = ({ dispatch }) => {
     dispatch(NavigationActions.back());
 };
+// eslint-disable-next-line import/no-mutable-exports
 export let popCustom;
 
 export default function(options) {
@@ -23,12 +24,19 @@ export default function(options) {
     app.start();
     // eslint-disable-next-line no-underscore-dangle
     const store = app._store;
+    // eslint-disable-next-line no-underscore-dangle
     app.store = app._store;
-    app.start = container => () => <Provider store={store}>
-        <PopupCustom ref={ref=>{popCustom=ref}}/>
-        {container}
-    </Provider>;
+    app.start = container => () => (
+        <Provider store={store}>
+            <PopupCustom
+                ref={ref => {
+                    popCustom = ref;
+                }}
+            />
+            {container}
+        </Provider>
+    );
     app.getStore = () => store;
 
-    return app
+    return app;
 }

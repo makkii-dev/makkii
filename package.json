@@ -6,10 +6,13 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "postinstall": "cd libs/aion-web3-inject; yarn; cd ../../node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules",
-    "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js"
+    "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
+    "lint": "eslint --fix app/ coins/ models/ services/ utils/"
   },
   "dependencies": {
     "aion-web3": "1.1.5",
+    "aion-web3-eth-abi": "1.1.5",
+    "aion-web3-eth-contract": "1.1.5",
     "axios": "^0.18.0",
     "bignumber.js": "^8.0.2",
     "bip39": "^2.5.0",
@@ -25,6 +28,7 @@
     "react-native-aion-hw-wallet": "https://github.com/chaion/lib-react-native-aion-hw.git",
     "react-native-camera": "^1.10.2",
     "react-native-config": "^0.11.7",
+    "react-native-crypto": "^2.1.2",
     "react-native-device-info": "^2.1.2",
     "react-native-fast-image": "^6.0.3",
     "react-native-fs": "^2.13.3",
@@ -56,11 +60,22 @@
   "devDependencies": {
     "@babel/core": "^7.4.5",
     "@babel/runtime": "^7.4.5",
+    "babel-eslint": "^10.0.2",
     "babel-jest": "^24.8.0",
     "babel-plugin-transform-remove-console": "^6.9.4",
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
     "jest": "^24.8.0",
     "metro-react-native-babel-preset": "^0.54.1",
-    "react-test-renderer": "16.8.3"
+    "prettier": "^1.18.2",
+    "prop-types": "^15.7.2",
+    "react-test-renderer": "16.8.3",
+    "underscore": "^1.9.1"
   },
   "jest": {
     "preset": "react-native"

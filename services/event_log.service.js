@@ -1,21 +1,22 @@
-import HttpClient from '../utils/http_caller';
+/* eslint-disable camelcase */
 import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
+import HttpClient from '../utils/http_caller';
 
-const sendEventLog = async (eventLog) => {
+const sendEventLog = async eventLog => {
     try {
         const url = `${Config.app_server_api}/eventlog`;
-        console.log("PUT " + url);
-        const {data: resp} = await HttpClient.put(url, eventLog, true);
-        console.log("response payload:", resp);
+        console.log(`PUT ${url}`);
+        const { data: resp } = await HttpClient.put(url, eventLog, true);
+        console.log('response payload:', resp);
         return resp;
     } catch (e) {
         throw e;
     }
 };
 
-const sendLoginEventLog = ()=> {
+const sendLoginEventLog = () => {
     try {
         sendEventLog({
             user: DeviceInfo.getDeviceId(),
@@ -23,13 +24,13 @@ const sendLoginEventLog = ()=> {
             data: {
                 platform: Platform.OS,
                 version: DeviceInfo.getVersion(),
-                versionCode: DeviceInfo.getBuildNumber()
-            }
+                versionCode: DeviceInfo.getBuildNumber(),
+            },
         });
     } catch (e) {
-        console.log("send login event log error: " + e);
+        console.log(`send login event log error: ${e}`);
     }
-}
+};
 
 const sendRegisterEventLog = () => {
     try {
@@ -38,10 +39,10 @@ const sendRegisterEventLog = () => {
             event: 'REGISTER',
             data: {
                 platform: Platform.OS,
-            }
+            },
         });
     } catch (e) {
-        console.log("send register event log error: " + e);
+        console.log(`send register event log error: ${e}`);
     }
 };
 
@@ -52,10 +53,10 @@ const sendRecoveryEventLog = () => {
             event: 'RECOVERY',
             data: {
                 platform: Platform.OS,
-            }
+            },
         });
     } catch (e) {
-        console.log("send recovery event log error: " + e);
+        console.log(`send recovery event log error: ${e}`);
     }
 };
 
@@ -65,13 +66,13 @@ const sendTransferEventLog = (coin, token, amount) => {
             user: DeviceInfo.getDeviceId(),
             event: 'TRANSFER',
             data: {
-                coin: coin,
-                token: token,
-                amount: amount,
-            }
+                coin,
+                token,
+                amount,
+            },
         });
     } catch (e) {
-        console.log("send transfer event log error: " + e);
+        console.log(`send transfer event log error: ${e}`);
     }
 };
 
@@ -81,15 +82,15 @@ const sendDexExchangeEventLog = (src_token, dst_token, src_qty, dst_qty, wallet_
             user: DeviceInfo.getDeviceId(),
             event: 'DEX_EXCHANGE',
             data: {
-                src_token: src_token,
-                src_qty: src_qty,
-                dst_token: dst_token,
-                dst_qty: dst_qty,
-                wallet_id: wallet_id,
-            }
+                src_token,
+                src_qty,
+                dst_token,
+                dst_qty,
+                wallet_id,
+            },
         });
     } catch (e) {
-        console.log("send dex exchange event log error: " + e);
+        console.log(`send dex exchange event log error: ${e}`);
     }
 };
 
@@ -100,4 +101,4 @@ export {
     sendRecoveryEventLog,
     sendTransferEventLog,
     sendDexExchangeEventLog,
-}
+};

@@ -1,4 +1,4 @@
-import React from  'react';
+import React from 'react';
 import {
     ImageBackground,
     Animated,
@@ -8,26 +8,43 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    Image, BackHandler,Platform,DeviceEventEmitter,
+    Image,
+    BackHandler,
+    Platform,
+    DeviceEventEmitter,
 } from 'react-native';
 import { connect } from 'react-redux';
-import {mainColor, mainBgColor} from '../style_util';
-import {getStatusBarHeight, hashPassword} from '../../utils';
 import TouchID from 'react-native-touch-id';
-import {strings} from "../../locales/i18n";
-import {AppToast} from "../components/AppToast";
-import {createAction} from "../../utils/dva";
+import { getStatusBarHeight, hashPassword } from '../../utils';
+import { strings } from '../../locales/i18n';
+import { AppToast } from '../components/AppToast';
+import { createAction } from '../../utils/dva';
 
-const {width,height} = Dimensions.get('window');
-const KeyboardData = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete"];
-const KeyboardDataWithTouchID = ["1", "2", "3", "4", "5", "6", "7", "8", "9", 'cancel', "0", "delete", "blank", "finger", "blank"];
+const { height } = Dimensions.get('window');
+const KeyboardData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete'];
+const KeyboardDataWithTouchID = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    'cancel',
+    '0',
+    'delete',
+    'blank',
+    'finger',
+    'blank',
+];
 const MaxPinCodeLength = 6;
-const isSmallScreen = height < 569
+const isSmallScreen = height < 569;
 
 const mColor = '#fff';
-class Pin_code_screen extends React.Component {
-
-    /***********************************************************
+class PinCodeScreen extends React.Component {
+    /** *********************************************************
      * 1. create pin Code process:
      *     create pinCode -> confirm pinCode -> another screen
      * (pinState)  1 -> 2
@@ -37,46 +54,57 @@ class Pin_code_screen extends React.Component {
      * 3. unlock screen
      *     enter pinCode -> another screen
      * (pinState) 0
-     ***********************************************************/
+     ********************************************************** */
 
     isShake = false;
+
     animatedValue = new Animated.Value(0);
+
     createPinCode = '';
-    constructor(props){
+
+    constructor(props) {
         super(props);
         this.errorCounts = 0;
-        this.isModifyPinCode =  this.props.navigation.getParam('isModifyPinCode', false);
-        this.onUnlockSuccess  = this.props.navigation.getParam('onUnlockSuccess', ()=>{});
+        this.isModifyPinCode = this.props.navigation.getParam('isModifyPinCode', false);
+        this.onUnlockSuccess = this.props.navigation.getParam('onUnlockSuccess', () => {});
         this.targetScreen = this.props.navigation.getParam('targetScreen');
-        this.targetScreenArgs = this.props.navigation.getParam('targetScreenArgs',{});
+        this.targetScreenArgs = this.props.navigation.getParam('targetScreenArgs', {});
         this.cancel = this.props.navigation.getParam('cancel', true);
-        this.state={
+        this.state = {
             pinCode: '',
             pinState: 0,
             errorMsg: null,
         };
     }
-    onGoback(){
-        this.cancel&&this.props.navigation.goBack();
+
+    // eslint-disable-next-line react/sort-comp
+    onGoback() {
+        this.cancel && this.props.navigation.goBack();
     }
+
     componentWillMount(): void {
-        this.setState({
-            // 0: unlock; 1: create pinCode; 2: confirm pinCode
-            pinState: this.props.hashed_pinCode===''?1:0,
-        },()=>{
-            this.onPressTouchId();
-        });
+        this.setState(
+            {
+                // 0: unlock; 1: create pinCode; 2: confirm pinCode
+                pinState: this.props.hashed_pinCode === '' ? 1 : 0,
+            },
+            () => {
+                this.onPressTouchId();
+            },
+        );
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.onGoback(); // works best when the goBack is async
             return true;
         });
-        const {touchIDEnabled=false} = this.props;
-        this.pincodelisten = touchIDEnabled? DeviceEventEmitter.addListener("APP_ACTIVE", this.onPressTouchId):null;
+        const { touchIDEnabled = false } = this.props;
+        this.pincodelisten = touchIDEnabled
+            ? DeviceEventEmitter.addListener('APP_ACTIVE', this.onPressTouchId)
+            : null;
     }
 
     componentWillUnmount(): void {
         this.backHandler.remove();
-        this.pincodelisten&&this.pincodelisten.remove();
+        this.pincodelisten && this.pincodelisten.remove();
     }
 
     renderDots(numberOfDots) {
@@ -90,7 +118,7 @@ class Pin_code_screen extends React.Component {
             borderRadius: 3,
             borderWidth: 1,
             borderColor: '#246ffa20',
-            marginHorizontal: 12
+            marginHorizontal: 12,
         };
         const styleBigDot = {
             width: 12,
@@ -98,116 +126,122 @@ class Pin_code_screen extends React.Component {
             borderRadius: 6,
             borderWidth: 1,
             borderColor: mColor,
-            marginHorizontal: 12
+            marginHorizontal: 12,
         };
         for (let i = 0; i < numberOfDots; i++) {
-            const backgroundColor = {backgroundColor: mColor};
-            const dotStyle = i < pinTyped ? styleBigDot: styleDot;
+            const backgroundColor = { backgroundColor: mColor };
+            const dotStyle = i < pinTyped ? styleBigDot : styleDot;
             const dot = <View style={[dotStyle, backgroundColor]} key={i} />;
-            dots.push(dot)
+            dots.push(dot);
         }
-        return dots
+        return dots;
     }
 
-    handleErrorCode(errorMsg){
-        const {dispatch} = this.props;
-        Animated.spring(
-            this.animatedValue,
-            {
-                toValue: this.isShake ? 0 : 1,
-                duration: 250,
-                tension: 80,
-                friction: 4
-            }
-        ).start();
-        this.isShake=!this.isShake;
-        this.errorCounts +=1;
-        if(this.errorCounts === 5){
+    // eslint-disable-next-line react/sort-comp
+    handleErrorCode(errorMsg) {
+        const { dispatch } = this.props;
+        Animated.spring(this.animatedValue, {
+            toValue: this.isShake ? 0 : 1,
+            duration: 250,
+            tension: 80,
+            friction: 4,
+        }).start();
+        this.isShake = !this.isShake;
+        this.errorCounts += 1;
+        if (this.errorCounts === 5) {
             AppToast.show(strings('pinCode.toast_please_login'));
             dispatch(createAction('userModel/logOut')());
         }
-        this.setState({pinCode: '',errorMsg})
+        this.setState({ pinCode: '', errorMsg });
     }
 
-    handleCreateCode(){
+    handleCreateCode() {
         const { pinCode } = this.state;
         this.createPinCode = pinCode;
         this.setState({
             pinCode: '',
             pinState: 2,
-        })
+        });
     }
 
-    handleConfirmCode(){
-        const {dispatch} = this.props;
+    handleConfirmCode() {
+        const { dispatch } = this.props;
         const { pinCode } = this.state;
-        if (pinCode !== this.createPinCode){
+        if (pinCode !== this.createPinCode) {
             this.handleErrorCode('pinCode_not_match');
             return false;
-        }else {
-            const hashed_pinCode = hashPassword(pinCode);
-            dispatch(createAction('userModel/updatePinCode')({hashed_pinCode}));
-            return true;
         }
+        const hashedPinCode = hashPassword(pinCode);
+        dispatch(createAction('userModel/updatePinCode')({ hashed_pinCode: hashedPinCode }));
+        return true;
     }
 
-    checkPinCode(){
-        const {pinCode , pinState} = this.state;
-        if(pinState === 0 ){
+    checkPinCode() {
+        const { pinCode, pinState } = this.state;
+        if (pinState === 0) {
             // unlock
-            const hashed_pinCode = hashPassword(pinCode);
-            if(hashed_pinCode === this.props.hashed_pinCode){
-                if(this.isModifyPinCode){
+            const hashedPinCode = hashPassword(pinCode);
+            if (hashedPinCode === this.props.hashed_pinCode) {
+                if (this.isModifyPinCode) {
                     this.setState({
                         pinCode: '',
                         pinState: 1,
-                    })
-                }else {
-                    setTimeout(()=>{
-                        this.onUnlockSuccess&&this.onUnlockSuccess();
+                    });
+                } else {
+                    setTimeout(() => {
+                        this.onUnlockSuccess && this.onUnlockSuccess();
                         console.log('this.targetScreen', this.targetScreen);
-                        this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
-                        this.targetScreen||this.props.navigation.goBack();
-                    },100);
+                        this.targetScreen &&
+                            this.props.navigation.navigate(
+                                this.targetScreen,
+                                this.targetScreenArgs,
+                            );
+                        this.targetScreen || this.props.navigation.goBack();
+                    }, 100);
                 }
-            }else {
-                this.handleErrorCode('pinCode_invalid')
+            } else {
+                this.handleErrorCode('pinCode_invalid');
             }
-        }else if (pinState === 1) {
-            this.handleCreateCode()
-        }else if (pinState === 2) {
-            this.handleConfirmCode() &&setTimeout(()=>{
-                this.onUnlockSuccess&&this.onUnlockSuccess();
-                console.log('this.targetScreen', this.targetScreen);
-                this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
-                this.targetScreen||this.props.navigation.goBack();
-            },100);
+        } else if (pinState === 1) {
+            this.handleCreateCode();
+        } else if (pinState === 2) {
+            this.handleConfirmCode() &&
+                setTimeout(() => {
+                    this.onUnlockSuccess && this.onUnlockSuccess();
+                    console.log('this.targetScreen', this.targetScreen);
+                    this.targetScreen &&
+                        this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
+                    this.targetScreen || this.props.navigation.goBack();
+                }, 100);
         }
+    }
+
+    onPressNumber = number => {
+        this.state.pinCode.length <= MaxPinCodeLength &&
+            this.setState(
+                {
+                    pinCode: this.state.pinCode + number,
+                    errorMsg: null,
+                },
+                () => {
+                    if (this.state.pinCode.length === MaxPinCodeLength) {
+                        this.checkPinCode();
+                    }
+                },
+            );
     };
 
-
-    onPressNumber =(number)=>{
-        this.state.pinCode.length<=MaxPinCodeLength&&(this.setState({
-            pinCode: this.state.pinCode + number,
-            errorMsg: null,
-        },()=>{
-            if(this.state.pinCode.length === MaxPinCodeLength){
-                this.checkPinCode();
-            }
-        }));
-    };
-
-    onPressDelete = ()=>{
+    onPressDelete = () => {
         this.setState({
-            pinCode: this.state.pinCode.slice(0, this.state.pinCode.length-1),
+            pinCode: this.state.pinCode.slice(0, this.state.pinCode.length - 1),
             errorMsg: null,
-        })
+        });
     };
 
-    onPressTouchId = ()=>{
+    onPressTouchId = () => {
         console.log('onPressTouchId');
-        const {touchIDEnabled=false, dispatch} = this.props;
-        if (touchIDEnabled===false||this.isModifyPinCode===true ){
+        const { touchIDEnabled = false, dispatch } = this.props;
+        if (touchIDEnabled === false || this.isModifyPinCode === true) {
             return;
         }
         const optionalConfigObject = {
@@ -220,135 +254,197 @@ class Pin_code_screen extends React.Component {
             unifiedErrors: true, // use unified error messages (default false)
             passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
-        Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:true})):null;
+        // eslint-disable-next-line no-unused-expressions
+        Platform.OS === 'ios'
+            ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }))
+            : null;
         TouchID.authenticate('', optionalConfigObject)
-            .then(success => {
-                Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:false})):null;
-                this.onUnlockSuccess&&this.onUnlockSuccess();
+            .then(() => {
+                Platform.OS === 'ios'
+                    ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }))
+                    : null;
+                this.onUnlockSuccess && this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
-                this.targetScreen&&this.props.navigation.navigate(this.targetScreen,this.targetScreenArgs);
-                this.targetScreen||this.props.navigation.goBack();
+                this.targetScreen &&
+                    this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
+                this.targetScreen || this.props.navigation.goBack();
             })
             .catch(error => {
-                Platform.OS === 'ios'?dispatch(createAction('settingsModel/updateState')({ignoreAppState:false})):null;
-                if(error.code!=='USER_CANCELED'&&error.code!=='SYSTEM_CANCELED'){
-                   listenApp.currentAppState==='active'&&AppToast.show(strings(`pinCode.touchID_${error.code}`));
+                Platform.OS === 'ios'
+                    ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }))
+                    : null;
+                if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
+                    listenApp.currentAppState === 'active' &&
+                        AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
-                Platform.OS === 'ios'?setTimeout(()=>listenApp.ignore = false, 100):null;
+                Platform.OS === 'ios' ? setTimeout(() => (listenApp.ignore = false), 100) : null;
             });
     };
 
-    renderItem = ({item}) => {
-        const disabled = item==="blank"||(item==='cancel'&&this.cancel===false);
-        const noBorder = true;//item==="blank"||item==='cancel' || item === 'delete';
-        const itemBorder = noBorder?{}:{
-            borderRadius : 75 / 2,
-            borderWidth: 1,
-            borderColor: mColor};
+    renderItem = ({ item }) => {
+        const disabled = item === 'blank' || (item === 'cancel' && this.cancel === false);
+        const noBorder = true; // item==="blank"||item==='cancel' || item === 'delete';
+        const itemBorder = noBorder
+            ? {}
+            : {
+                  borderRadius: 75 / 2,
+                  borderWidth: 1,
+                  borderColor: mColor,
+              };
         return (
             <TouchableOpacity
                 disabled={disabled}
-                style={[styles.keyboardViewItem,itemBorder, {backgroundColor: 'transparent'}]}
+                style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}
                 onPress={() => {
-                    if(item!== 'cancel' && item !== 'delete' && item!=='finger'){
-                        this.onPressNumber(item)
-                    } else if (item === 'delete'){
-                        this.onPressDelete()
-                    } else if (item === 'cancel'){
-                        this.cancel&&this.props.navigation.goBack(); // can cancel
+                    if (item !== 'cancel' && item !== 'delete' && item !== 'finger') {
+                        this.onPressNumber(item);
+                    } else if (item === 'delete') {
+                        this.onPressDelete();
+                    } else if (item === 'cancel') {
+                        this.cancel && this.props.navigation.goBack(); // can cancel
                     } else if (item === 'finger') {
-                        this.onPressTouchId()
+                        this.onPressTouchId();
                     }
                 }}
+            >
+                <View
+                    style={[
+                        styles.keyboardViewItem,
+                        itemBorder,
+                        { backgroundColor: 'transparent' },
+                    ]}
                 >
-                <View style={[styles.keyboardViewItem,itemBorder,{backgroundColor: 'transparent'}]}>
-                    { item !== 'cancel'&&item!=='delete'&&item !== 'finger'&&item !== 'blank' &&(<Text style={[styles.keyboardViewItemText, {color : mColor, fontSize:36}]}>{item}</Text>)}
-                    {/*{ this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) }*/}
-                    { this.cancel&&item === 'cancel'&& (<Image source={require('../../assets/arrow_back.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
-                    { item === 'delete'&& (<Image source={require('../../assets/icon_delete.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
-                    { item === 'finger'&& (<Image source={require('../../assets/icon_touch_id.png')} style={{tintColor: mColor, width:30, height:30}} resizeMode={'contain'}/>)}
+                    {item !== 'cancel' &&
+                        item !== 'delete' &&
+                        item !== 'finger' &&
+                        item !== 'blank' && (
+                            <Text
+                                style={[
+                                    styles.keyboardViewItemText,
+                                    { color: mColor, fontSize: 36 },
+                                ]}
+                            >
+                                {item}
+                            </Text>
+                        )}
+                    {/* { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) } */}
+                    {this.cancel && item === 'cancel' && (
+                        <Image
+                            source={require('../../assets/arrow_back.png')}
+                            style={{ tintColor: mColor, width: 30, height: 30 }}
+                            resizeMode="contain"
+                        />
+                    )}
+                    {item === 'delete' && (
+                        <Image
+                            source={require('../../assets/icon_delete.png')}
+                            style={{ tintColor: mColor, width: 30, height: 30 }}
+                            resizeMode="contain"
+                        />
+                    )}
+                    {item === 'finger' && (
+                        <Image
+                            source={require('../../assets/icon_touch_id.png')}
+                            style={{ tintColor: mColor, width: 30, height: 30 }}
+                            resizeMode="contain"
+                        />
+                    )}
                 </View>
             </TouchableOpacity>
-        )
+        );
     };
-    renderContent(unlockDescription,warningPincodeFail){
-        const {touchIDEnabled} = this.props;
+
+    renderContent(unlockDescription, warningPincodeFail) {
+        const { touchIDEnabled } = this.props;
         const animationShake = this.animatedValue.interpolate({
             inputRange: [0, 0.3, 0.7, 1],
             outputRange: [0, -20, 20, 0],
-            useNativeDriver: true
+            useNativeDriver: true,
         });
         return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between'}}>
-                <View style={{marginTop: 20, alignItems:'center'}}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+                <View style={{ marginTop: 20, alignItems: 'center' }}>
                     <Text style={styles.desText}>{unlockDescription}</Text>
                     <Text style={styles.warningField}>{warningPincodeFail}</Text>
                     <Animated.View
-                        style={[styles.pinField, {
-                            transform: [
-                                {
-                                    translateX: animationShake
-                                }
-                            ]
-                        }]}
+                        style={[
+                            styles.pinField,
+                            {
+                                transform: [
+                                    {
+                                        translateX: animationShake,
+                                    },
+                                ],
+                            },
+                        ]}
                     >
                         {this.renderDots(MaxPinCodeLength)}
                     </Animated.View>
                 </View>
-                <View style={{height: 450, marginBottom: 20}}>
+                <View style={{ height: 450, marginBottom: 20 }}>
                     <FlatList
-                        style={{marginTop:20}}
+                        style={{ marginTop: 20 }}
                         contentContainerStyle={{
                             flexDirection: 'column',
-                            alignItems   : 'flex-start',
+                            alignItems: 'flex-start',
                         }}
                         scrollEnabled={false}
                         horizontal={false}
-                        vertical={true}
+                        vertical
                         numColumns={3}
                         renderItem={this.renderItem}
-                        data={touchIDEnabled&&!this.isModifyPinCode?KeyboardDataWithTouchID:KeyboardData}
+                        data={
+                            touchIDEnabled && !this.isModifyPinCode
+                                ? KeyboardDataWithTouchID
+                                : KeyboardData
+                        }
                         keyExtractor={(val, index) => index.toString()}
                     />
                 </View>
             </View>
-        )
+        );
     }
 
-    render(){
-        const {pinState,errorMsg} = this.state;
+    render() {
+        const { pinState, errorMsg } = this.state;
         let unlockDescription;
         let warningPincodeFail;
-        if (pinState === 0){
-            unlockDescription = strings('pinCode.pinCode_enter')
-        }else if (pinState === 1) {
-            unlockDescription = strings('pinCode.pinCode_create')
-        }else {
-            unlockDescription = strings('pinCode.pinCode_confirm')
+        if (pinState === 0) {
+            unlockDescription = strings('pinCode.pinCode_enter');
+        } else if (pinState === 1) {
+            unlockDescription = strings('pinCode.pinCode_create');
+        } else {
+            unlockDescription = strings('pinCode.pinCode_confirm');
         }
-        if(errorMsg&&errorMsg!==''){
-            warningPincodeFail = strings(`pinCode.${errorMsg}`) + ' ' +strings('pinCode.label_remaining_attempts',{count:5-this.errorCounts});
+        if (errorMsg && errorMsg !== '') {
+            warningPincodeFail = `${strings(`pinCode.${errorMsg}`)} ${strings(
+                'pinCode.label_remaining_attempts',
+                { count: 5 - this.errorCounts },
+            )}`;
         }
         return (
-          <ImageBackground
-              style={{flex: 1, paddingTop: getStatusBarHeight(true), alignItems: 'center', justifyContent: 'center',
-                  // backgroundColor: mainBgColor
-              }}
-              source={require('../../assets/bg_splash.png')}
-          >
-              {this.renderContent(unlockDescription,warningPincodeFail)}
-          </ImageBackground>
-        )
+            <ImageBackground
+                style={{
+                    flex: 1,
+                    paddingTop: getStatusBarHeight(true),
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    // backgroundColor: mainBgColor
+                }}
+                source={require('../../assets/bg_splash.png')}
+            >
+                {this.renderContent(unlockDescription, warningPincodeFail)}
+            </ImageBackground>
+        );
     }
-
 }
 
-const mapToState = ({userModel, settingsModel })=>({
+const mapToState = ({ userModel, settingsModel }) => ({
     hashed_pinCode: userModel.hashed_pinCode,
     touchIDEnabled: settingsModel.touchIDEnabled,
-})
+});
 
-export default connect(mapToState)(Pin_code_screen);
+export default connect(mapToState)(PinCodeScreen);
 
 const styles = StyleSheet.create({
     desText: {
@@ -360,24 +456,24 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        height: 15
+        height: 15,
     },
     warningField: {
         color: '#ff3300',
         fontSize: 16,
         marginVertical: 20,
-        height:20,
+        height: 20,
     },
     keyboardViewItem: {
-        alignItems : 'center',
-        justifyContent : 'center',
-        height : 75,
-        width : 75,
-        marginHorizontal : 20,
-        marginVertical : 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 75,
+        width: 75,
+        marginHorizontal: 20,
+        marginVertical: 5,
     },
     keyboardViewItemText: {
-        fontFamily:Platform.OS === 'ios' ? 'Courier' : 'monospace',
-        fontSize  : 20,
+        fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
+        fontSize: 20,
     },
 });

@@ -1,12 +1,9 @@
 import React from 'react';
-import {Animated, PanResponder, StyleSheet, View} from 'react-native';
-
+import { Animated, PanResponder, StyleSheet, View } from 'react-native';
 
 import PropTypes from 'prop-types';
 
-
-const emptyFunction = ()=>{};
-
+const emptyFunction = () => {};
 
 // NOTE: Eventually convert these consts to an input object of configurations
 
@@ -38,7 +35,6 @@ const RIGHT_SWIPE_BOUNCE_BACK_DURATION = 300;
  */
 const RIGHT_SWIPE_THRESHOLD = 30 * SLOW_SPEED_SWIPE_FACTOR;
 
-
 /**
  * Creates a swipable row that allows taps on the main item and a custom View
  * on the item hidden behind the row. Typically this should be used in
@@ -46,20 +42,7 @@ const RIGHT_SWIPE_THRESHOLD = 30 * SLOW_SPEED_SWIPE_FACTOR;
  * used in a normal ListView. See the renderRow for SwipeableListView to see how
  * to use this component separately.
  */
-export default class SwipeCell extends React.PureComponent{
-
-    constructor(props){
-        super(props);
-        this._previousLeft = CLOSED_LEFT_POSITION;
-        this.state={
-            currentLeft: new Animated.Value(this._previousLeft),
-            isSwipeableViewRendered: false,
-            rowHeight: (null: ?number),
-        };
-        this._panResponder = {};
-
-    }
-
+export default class SwipeCell extends React.PureComponent {
     static propTypes = {
         children: PropTypes.any,
         isOpen: PropTypes.bool,
@@ -84,8 +67,7 @@ export default class SwipeCell extends React.PureComponent{
         swipeThreshold: PropTypes.number.isRequired,
     };
 
-
-    static defaultProps  = {
+    static defaultProps = {
         isOpen: false,
         preventSwipeRight: false,
         swipeEnabled: true,
@@ -97,10 +79,22 @@ export default class SwipeCell extends React.PureComponent{
         swipeThreshold: 30,
     };
 
+    constructor(props) {
+        super(props);
+        this._previousLeft = CLOSED_LEFT_POSITION;
+        this.state = {
+            currentLeft: new Animated.Value(this._previousLeft),
+            isSwipeableViewRendered: false,
+            rowHeight: (null: ?number),
+        };
+        this._panResponder = {};
+    }
+
     componentWillMount() {
         this._panResponder = PanResponder.create({
-            onMoveShouldSetPanResponderCapture: this
-                ._handleMoveShouldSetPanResponderCapture.bind(this),
+            onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture.bind(
+                this,
+            ),
             onPanResponderGrant: this._handlePanResponderGrant.bind(this),
             onPanResponderMove: this._handlePanResponderMove.bind(this),
             onPanResponderRelease: this._handlePanResponderEnd.bind(this),
@@ -115,7 +109,7 @@ export default class SwipeCell extends React.PureComponent{
              * Do the on mount bounce after a delay because if we animate when other
              * app are loading, the animation will be laggy
              */
-            let that = this;
+            const that = this;
             setTimeout(() => {
                 that._animateBounceBack(ON_MOUNT_BOUNCE_DURATION);
             }, ON_MOUNT_BOUNCE_DELAY);
@@ -132,6 +126,12 @@ export default class SwipeCell extends React.PureComponent{
         }
     }
 
+    _onSwipeableViewLayout = evt => {
+        this.setState({
+            isSwipeableViewRendered: true,
+            rowHeight: evt.nativeEvent.layout.height,
+        });
+    };
 
     close() {
         this.props.onClose();
@@ -146,10 +146,11 @@ export default class SwipeCell extends React.PureComponent{
         return this._isValidSwipe(gestureState);
     }
 
-    _handlePanResponderGrant(evt, gestureState) {}
+    // eslint-disable-next-line class-methods-use-this
+    _handlePanResponderGrant() {}
 
     _handlePanResponderMove(evt, gestureState) {
-        if(this.props.swipeEnabled === false&&!this.props.isOpen){
+        if (this.props.swipeEnabled === false && !this.props.isOpen) {
             return;
         }
         if (this._isSwipingExcessivelyRightFromClosedPosition(gestureState)) {
@@ -172,19 +173,23 @@ export default class SwipeCell extends React.PureComponent{
 
     _swipeFullSpeed(gestureState) {
         let newLeft = this._previousLeft + gestureState.dx;
-        const leftBorder = - this.props.maxSwipeDistance;
-        const rightBorder = this.props.preventSwipeRight? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
-        newLeft = newLeft > rightBorder? rightBorder : newLeft;
-        newLeft = newLeft < leftBorder? leftBorder : newLeft;
+        const leftBorder = -this.props.maxSwipeDistance;
+        const rightBorder = this.props.preventSwipeRight
+            ? CLOSED_LEFT_POSITION
+            : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        newLeft = newLeft > rightBorder ? rightBorder : newLeft;
+        newLeft = newLeft < leftBorder ? leftBorder : newLeft;
         this.state.currentLeft.setValue(newLeft);
     }
 
     _swipeSlowSpeed(gestureState) {
         let newLeft = this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR;
-        const leftBorder = - this.props.maxSwipeDistance;
-        const rightBorder = this.props.preventSwipeRight? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
-        newLeft = newLeft > rightBorder? rightBorder : newLeft;
-        newLeft = newLeft < leftBorder? leftBorder : newLeft;
+        const leftBorder = -this.props.maxSwipeDistance;
+        const rightBorder = this.props.preventSwipeRight
+            ? CLOSED_LEFT_POSITION
+            : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        newLeft = newLeft > rightBorder ? rightBorder : newLeft;
+        newLeft = newLeft < leftBorder ? leftBorder : newLeft;
         this.state.currentLeft.setValue(newLeft);
     }
 
@@ -196,13 +201,8 @@ export default class SwipeCell extends React.PureComponent{
          */
         const gestureStateDx = gestureState.dx;
         return (
-            this._isSwipingRightFromClosed(gestureState) &&
-            gestureStateDx > RIGHT_SWIPE_THRESHOLD
+            this._isSwipingRightFromClosed(gestureState) && gestureStateDx > RIGHT_SWIPE_THRESHOLD
         );
-    }
-
-    _onPanResponderTerminationRequest(evt, gestureState) {
-        return false;
     }
 
     _animateTo(toValue, duration = SWIPE_DURATION, callback = emptyFunction) {
@@ -217,7 +217,7 @@ export default class SwipeCell extends React.PureComponent{
     }
 
     _animateToOpenPosition() {
-        const maxSwipeDistance =  this.props.maxSwipeDistance;
+        const { maxSwipeDistance } = this.props;
         this._animateTo(-maxSwipeDistance);
     }
 
@@ -235,9 +235,9 @@ export default class SwipeCell extends React.PureComponent{
          * at the same speed the user swiped (or the speed threshold)
          */
         const duration = Math.abs(
-            (this.props.maxSwipeDistance - Math.abs(distMoved)) / speed/1.5,
+            (this.props.maxSwipeDistance - Math.abs(distMoved)) / speed / 1.5,
         );
-        const maxSwipeDistance = this.props.maxSwipeDistance;
+        const { maxSwipeDistance } = this.props;
         this._animateTo(-maxSwipeDistance, duration);
     }
 
@@ -282,7 +282,7 @@ export default class SwipeCell extends React.PureComponent{
     }
 
     _handlePanResponderEnd(evt, gestureState) {
-        if(this.props.swipeEnabled === false &&!this.props.isOpen ){
+        if (this.props.swipeEnabled === false && !this.props.isOpen) {
             return;
         }
         const horizontalDistance = gestureState.dx;
@@ -295,31 +295,21 @@ export default class SwipeCell extends React.PureComponent{
                 // Swiped right
                 this._animateToClosedPosition();
                 this.props.onClose();
-
             }
+        } else if (this._previousLeft === CLOSED_LEFT_POSITION) {
+            this._animateToClosedPosition();
         } else {
-            if (this._previousLeft === CLOSED_LEFT_POSITION) {
-                this._animateToClosedPosition();
-            } else {
-                this._animateToOpenPosition();
-            }
+            this._animateToOpenPosition();
         }
 
         this.props.onSwipeEnd();
     }
 
-    _onSwipeableViewLayout(evt) {
-        this.setState({
-            isSwipeableViewRendered: true,
-            rowHeight: evt.nativeEvent.layout.height,
-        });
-    }
-    render(){
+    render() {
         let slideOutView;
         if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
             slideOutView = (
-                <View
-                    style={{...styles.slideOutContainer, ...this.props.style}}>
+                <View style={{ ...styles.slideOutContainer, ...this.props.style }}>
                     {this.props.slideoutView}
                 </View>
             );
@@ -328,8 +318,9 @@ export default class SwipeCell extends React.PureComponent{
         // The swipeable item
         const swipeableView = (
             <Animated.View
-                onLayout={this._onSwipeableViewLayout.bind(this)}
-                style={{transform: [{translateX: this.state.currentLeft}]}}>
+                onLayout={this._onSwipeableViewLayout}
+                style={{ transform: [{ translateX: this.state.currentLeft }] }}
+            >
                 {this.props.children}
             </Animated.View>
         );

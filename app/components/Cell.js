@@ -1,16 +1,7 @@
-import React, {Component} from 'react';
-import {
-    StyleSheet,
-    View,
-    Image,
-    Text,
-    TouchableOpacity,
-} from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
 
 export default class Cell extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         let titlePadLeft = 0;
         if (this.props.leadIcon) {
@@ -18,7 +9,7 @@ export default class Cell extends Component {
         }
         return (
             <TouchableOpacity onPress={this.props.onClick}>
-                <View style={styles.cellContainer} >
+                <View style={styles.cellContainer}>
                     <Image
                         source={this.props.leadIcon}
                         style={{
@@ -27,14 +18,15 @@ export default class Cell extends Component {
                             position: 'absolute',
                             left: 5,
                         }}
-                        resizeMode={'contain'}
+                        resizeMode="contain"
                     />
-                    <Text style={{...styles.titleText, paddingLeft: titlePadLeft}}>{this.props.title}</Text>
-                    <Image style={styles.icon}
-                           source={require('../../assets/arrow_right.png')} />
+                    <Text style={{ ...styles.titleText, paddingLeft: titlePadLeft }}>
+                        {this.props.title}
+                    </Text>
+                    <Image style={styles.icon} source={require('../../assets/arrow_right.png')} />
                 </View>
             </TouchableOpacity>
-        )
+        );
     }
 }
 
@@ -48,13 +40,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         width: 24,
-        height: 24
+        height: 24,
     },
     cellContainer: {
         backgroundColor: 'white',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: 14
-    }
+        padding: 14,
+    },
 });
