@@ -107,10 +107,11 @@ class MnemonicBackUp extends React.Component {
 
     renderMnemonic = () => {
         const mnemonic = this.props.navigation.getParam('mnemonic', '');
+        let i = 0;
         return mnemonic.split(' ').map(str => {
             return (
                 <MnemonicView
-                    key={str}
+                    key={`${i++}`}
                     canDelete={false}
                     disabled
                     onSelected={() => {}}

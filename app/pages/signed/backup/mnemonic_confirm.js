@@ -16,6 +16,7 @@ import { strings } from '../../../../locales/i18n';
 import { ComponentButton, MnemonicView } from '../../../components/common';
 import { AppToast } from '../../../components/AppToast';
 import { createAction } from '../../../../utils/dva';
+import { range } from '../../../../utils';
 
 const nativeBridge = NativeModules.RNScreenshotHelper;
 const NativeModule = new NativeEventEmitter(nativeBridge);
@@ -37,7 +38,7 @@ class MnemonicConfirm extends React.Component {
     };
 
     state = {
-        toBeSelected: shuffle(this.props.navigation.getParam('mnemonic', '').split(' ')),
+        toBeSelected: shuffle(range(0, 12, 1)),
         selected: [],
         error: false,
         confirmed: false,
@@ -66,38 +67,42 @@ class MnemonicConfirm extends React.Component {
 
     renderSelected = () => {
         const { selected } = this.state;
-        const mnemonic = selected.map(str => {
+        const mnemonic = this.props.navigation.getParam('mnemonic', '').split(/\s+/);
+        const mnemonicView = selected.map(index => {
             return (
                 <MnemonicView
-                    key={str}
+                    key={`${index}`}
                     canDelete
                     disabled={false}
-                    onSelected={() => this.onDelete(str)}
-                    text={str}
+                    onSelected={() => this.onDelete(index)}
+                    text={mnemonic[index]}
                 />
             );
         });
         const height = Math.max(2, Math.max(2, Math.ceil(selected.length / 4))) * 35 + 20;
 
-        return <View style={{ ...styles.MnemonicContainerWithBorder, height }}>{mnemonic}</View>;
+        return (
+            <View style={{ ...styles.MnemonicContainerWithBorder, height }}>{mnemonicView}</View>
+        );
     };
 
     renderToBeSelected = () => {
         const { toBeSelected } = this.state;
-        const mnemonic = toBeSelected.map(str => {
+        const mnemonic = this.props.navigation.getParam('mnemonic', '').split(/\s+/);
+        const mnemonicView = toBeSelected.map(index => {
             return (
                 <MnemonicView
-                    key={str}
+                    key={`${index}`}
                     color="white"
                     canDelete={false}
                     disabled={false}
-                    onSelected={() => this.onSelected(str)}
-                    text={str}
+                    onSelected={() => this.onSelected(index)}
+                    text={mnemonic[index]}
                 />
             );
         });
         const height = Math.max(2, Math.max(2, Math.ceil(toBeSelected.length / 4))) * 35 + 20;
-        return <View style={{ ...styles.MnemonicContainer, height }}>{mnemonic}</View>;
+        return <View style={{ ...styles.MnemonicContainer, height }}>{mnemonicView}</View>;
     };
 
     onSelected = item => {
@@ -143,7 +148,7 @@ class MnemonicConfirm extends React.Component {
 
     checkSelected = selected => {
         const mnemonic = this.props.navigation.getParam('mnemonic', '');
-        const selectedStr = selected.join(' ');
+        const selectedStr = selected.map(index => mnemonic.split(/\s+/)[index]).join(' ');
         return selectedStr === mnemonic.substr(0, selectedStr.length);
     };
 
