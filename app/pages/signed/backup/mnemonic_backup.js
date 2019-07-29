@@ -34,7 +34,7 @@ class MnemonicBackUp extends React.Component {
                         goBack();
                     }}
                     style={{
-                        width: 48,
+                        paddingLeft: 10,
                         height: 48,
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -75,19 +75,27 @@ class MnemonicBackUp extends React.Component {
     onBack = () => {
         const { navigation, dispatch } = this.props;
         const targetRoute = navigation.getParam('targetRoute');
-        popCustom.show(strings('alert_title_warning'), strings('backup.label_give_up'), [
-            { text: strings('cancel_button'), onPress: () => {} },
-            {
-                text: strings('alert_ok_button'),
-                onPress: () => {
-                    if (targetRoute) {
-                        navigation.navigate(targetRoute);
-                    } else {
-                        dispatch(createAction('userModel/login')());
-                    }
+        const isFocused = this.props.navigation.isFocused();
+        if (isFocused) {
+            popCustom.show(strings('alert_title_warning'), strings('backup.label_give_up'), [
+                {
+                    text: strings('cancel_button'),
+                    onPress: () => {},
                 },
-            },
-        ]);
+                {
+                    text: strings('alert_ok_button'),
+                    onPress: () => {
+                        if (targetRoute) {
+                            navigation.navigate(targetRoute);
+                        } else {
+                            dispatch(createAction('userModel/login')());
+                        }
+                    },
+                },
+            ]);
+            return true;
+        }
+        return false;
     };
 
     nextStep = () => {
