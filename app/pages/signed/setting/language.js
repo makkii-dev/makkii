@@ -14,12 +14,6 @@ class Language extends Component {
     static navigationOptions = ({ navigation, screenProps: { t, lang } }) => {
         return {
             title: t('language.title', { locale: lang }),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: (
                 <RightActionButton
                     onPress={() => {

@@ -28,12 +28,6 @@ class AddToken extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings('add_token.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: (
                 <RightActionButton
                     btnTitle={strings('add_token.btn_add_token')}

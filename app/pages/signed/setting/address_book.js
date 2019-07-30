@@ -25,12 +25,6 @@ class AddressBook extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings('address_book.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight:
                 navigation.getParam('type', 'edit') === 'edit' ? (
                     <RightActionButton

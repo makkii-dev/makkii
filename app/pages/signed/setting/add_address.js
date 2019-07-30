@@ -34,12 +34,6 @@ class AddAddress extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings('add_address.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: (
                 <RightActionButton
                     btnTitle={strings('add_address.btn_save')}

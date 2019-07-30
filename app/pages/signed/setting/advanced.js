@@ -16,12 +16,6 @@ class Advanced extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: strings('advanced.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: (
                 <RightActionButton
                     onPress={() => {

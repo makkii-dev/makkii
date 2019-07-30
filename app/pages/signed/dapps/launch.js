@@ -10,11 +10,6 @@ const { width } = Dimensions.get('window');
 class Launch extends Component {
     static navigationOptions = ({ screenProps: { t, lan } }) => ({
         title: t('menuRef.title_dapps', { locale: lan }),
-        headerTitleStyle: {
-            alignSelf: 'center',
-            textAlign: 'center',
-            flex: 1,
-        },
         headerRight: <View />,
     });
 

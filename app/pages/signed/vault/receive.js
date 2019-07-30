@@ -50,11 +50,6 @@ class Receive extends Component {
     static navigationOptions = () => {
         return {
             title: strings('receive.title'),
-            headerTitleStyle: {
-                alignItems: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: <View />,
         };
     };

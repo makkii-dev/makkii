@@ -39,11 +39,6 @@ class Send extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: navigation.getParam('title', strings('send.title')),
-            headerTitleStyle: {
-                alignItems: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
             headerRight: <View />,
         };
     };
