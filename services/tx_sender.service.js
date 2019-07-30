@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { sendAll } from 'react-native-makkii-core/coins/btc+ltc/api/tools';
 import { COINS } from '../client/support_coin_list';
 import { validateBalanceSufficiency, sendTransaction } from '../client/api';
-import keystore from '../client/keystore';
+import { validateAddress } from '../client/keystore';
 import { isJsonString, validateAmount } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
@@ -11,7 +11,7 @@ const validateTxObj = async (txObj, account) => {
     const { symbol } = account;
     // validate 'to'
     try {
-        let ret = await keystore.validateAddress(to, symbol);
+        let ret = await validateAddress(to, symbol);
         if (!ret) {
             return { result: false, err: 'error_format_recipient' };
         }
@@ -59,7 +59,7 @@ const parseScannedData = async (data, currentAccount) => {
             ret = false;
         } else {
             try {
-                const ret1 = await keystore.validateAddress(receiver, currentAccount.symbol);
+                const ret1 = await validateAddress(receiver, currentAccount.symbol);
                 const ret2 = amount ? await validateAmount(amount) : true;
                 ret = ret1 && ret2;
                 if (ret) {
@@ -72,7 +72,7 @@ const parseScannedData = async (data, currentAccount) => {
         }
     } else {
         try {
-            ret = await keystore.validateAddress(data, currentAccount.symbol);
+            ret = await validateAddress(data, currentAccount.symbol);
             if (ret) {
                 retData.to = data;
             }

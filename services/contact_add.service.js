@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { isJsonString } from '../utils';
-import keystore from '../client/keystore';
+import { validateAddress as validateAddress_ } from '../client/keystore';
 
 const parseScannedData = async (data, symbol) => {
     let ret;
@@ -8,7 +8,7 @@ const parseScannedData = async (data, symbol) => {
     if (isJsonString(data)) {
         const { receiver, coin } = JSON.parse(data);
         try {
-            ret = await keystore.validateAddress(receiver, coin || symbol);
+            ret = await validateAddress_(receiver, coin || symbol);
             retData.address = receiver;
             retData.symbol = coin || symbol;
         } catch (e) {
@@ -16,7 +16,7 @@ const parseScannedData = async (data, symbol) => {
         }
     } else {
         try {
-            ret = await keystore.validateAddress(data, symbol);
+            ret = await validateAddress_(data, symbol);
             retData.address = data;
             retData.symbol = symbol;
         } catch (e) {
@@ -27,7 +27,7 @@ const parseScannedData = async (data, symbol) => {
 };
 const validateAddress = async (address, symbol) => {
     try {
-        return await keystore.validateAddress(address, symbol);
+        return await validateAddress_(address, symbol);
     } catch (e) {
         return false;
     }

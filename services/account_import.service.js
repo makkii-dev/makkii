@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import wallet from 'react-native-aion-hw-wallet';
-import keystore from '../client/keystore';
+import { getKeyFromMnemonic, recoverKeyPairByPrivateKey } from '../client/keystore';
 import { range } from '../utils';
 import { SensitiveStorage } from '../utils/storage';
 
 const getAccountFromMasterKey = async (symbol, index) => {
     try {
         const mnemonic = await SensitiveStorage.get('mnemonic');
-        return await keystore.getKeyFromMnemonic(symbol, index, mnemonic);
+        return await getKeyFromMnemonic(symbol, index, mnemonic);
     } catch (e) {
         console.log('getAccountFromMasterKey error=>', e);
         throw e;
@@ -17,7 +17,7 @@ const getAccountFromMasterKey = async (symbol, index) => {
 const getAccountFromPrivateKey = async (symbol, private_key) => {
     try {
         console.log('getAccountFromPrivateKey=>', symbol);
-        return await keystore.recoverKeyPairByPrivateKey(private_key, symbol);
+        return await recoverKeyPairByPrivateKey(private_key, symbol);
     } catch (e) {
         console.log('getAccountFromPrivateKey error=>', e);
         throw e;
