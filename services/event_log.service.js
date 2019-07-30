@@ -2,7 +2,7 @@
 import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
-import HttpClient from '../utils/http_caller';
+import { HttpClient } from 'react-native-makkii-core';
 
 const sendEventLog = async eventLog => {
     try {

@@ -1,9 +1,10 @@
 import { apiClient } from 'react-native-makkii-core';
 import Config from 'react-native-config';
+import { COINS } from './support_coin_list';
 
 const isTestNet = Config.is_testnet === 'true';
 
-const client = apiClient(['AION', 'ETH', 'BTC', 'LTC', 'TRX'], isTestNet);
+const client = apiClient(Object.keys(COINS), isTestNet);
 const getBlockByNumber = client.getBlockByNumber;
 const getTransactionExplorerUrl = client.getTransactionExplorerUrl;
 const getTransactionsByAddress = client.getTransactionsByAddress;

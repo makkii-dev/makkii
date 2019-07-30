@@ -1,7 +1,7 @@
 import { CameraRoll, Dimensions, Platform, StatusBar } from 'react-native';
 import blake2b from 'blake2b';
 import wallet from 'react-native-aion-hw-wallet';
-import RNFS from 'react-native-fs';
+import * as RNFS from 'react-native-fs';
 import bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
 import { strings } from '../locales/i18n';

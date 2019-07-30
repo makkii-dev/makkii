@@ -1,9 +1,10 @@
 import { keystoreClient } from 'react-native-makkii-core';
 import Config from 'react-native-config';
+import { COINS } from './support_coin_list';
 
 const isTestNet = Config.is_testnet === 'true';
 
-const client = keystoreClient(['AION', 'ETH', 'BTC', 'LTC', 'TRX'], isTestNet);
+const client = keystoreClient(Object.keys(COINS), isTestNet);
 
 const signTransaction = client.signTransaction;
 const getKey = client.getKey;

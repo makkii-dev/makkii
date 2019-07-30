@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import Config from 'react-native-config';
-import HttpClient from '../utils/http_caller';
+import { HttpClient } from 'react-native-makkii-core';
 
 const getLatestVersion = async (platform, versionCode, lang) => {
     const url =

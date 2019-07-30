@@ -7584,7 +7584,7 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
 
 "react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git#dev":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-makkii-core.git#526186350587084961df1488bc6688243e8e8ff3"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#1da406e113f69f114344369a52539339c19a77d1"
   dependencies:
     "@tronscan/client" "^0.2.48"
     aion-rlp "^0.0.1"

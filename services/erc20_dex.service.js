@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
-import HttpClient from '../utils/http_caller';
+import { HttpClient } from 'react-native-makkii-core';
 import { getBlockNumber } from '../client/api';
 import { fromHexString } from '../utils';
 
