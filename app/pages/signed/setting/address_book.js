@@ -14,9 +14,9 @@ import SwipeCell from '../../../components/SwipeCell';
 import { fixedHeight, mainBgColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
 import { RightActionButton } from '../../../components/common';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 import { accountKey } from '../../../../utils';
-import { formatAddress1Line } from '../../../../coins/api';
+import { formatAddress1Line } from '../../../../client/api';
 import { createAction, popCustom } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');

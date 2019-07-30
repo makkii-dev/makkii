@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { getLedgerMessage, validateAmount, validatePositiveInteger } from '../../../../utils';
-import { validateAddress, sendTransaction } from '../../../../coins/api';
+import { validateAddress, sendTransaction } from '../../../../client/api';
 import { ComponentButton, SubTextInput, alertOk } from '../../../components/common';
 import defaultStyles from '../../../styles';
 import { linkButtonColor, mainBgColor } from '../../../style_util';

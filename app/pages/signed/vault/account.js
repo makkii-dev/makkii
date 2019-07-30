@@ -23,8 +23,8 @@ import defaultStyles from '../../../styles';
 import { PopWindow } from './home_popwindow';
 import { ACCOUNT_MENU } from './constants';
 import { TransactionItem, AddressComponent } from '../../../components/common';
-import { COINS } from '../../../../coins/support_coin_list';
-import { sameAddress } from '../../../../coins/api';
+import { COINS } from '../../../../client/support_coin_list';
+import { sameAddress } from '../../../../client/api';
 import { createAction, navigate } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');

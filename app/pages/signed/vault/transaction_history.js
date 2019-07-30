@@ -2,7 +2,7 @@ import React from 'react';
 import { View, FlatList, Image, Text, ActivityIndicator, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
-import { sameAddress } from '../../../../coins/api';
+import { sameAddress } from '../../../../client/api';
 import { ImportListFooter, TransactionItem } from '../../../components/common';
 import { mainBgColor } from '../../../style_util';
 import { createAction, navigate } from '../../../../utils/dva';

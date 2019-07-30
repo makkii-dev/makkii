@@ -1,9 +1,4 @@
 import Config from 'react-native-config';
-import aionApi from './aion';
-import ethApi from './eth';
-import tronApi from './tron';
-// import eos_api from './eos';
-import btcApi from './btc+ltc';
 
 const isTestNet = Config.is_testnet === 'true';
 
@@ -20,7 +15,6 @@ export const COINS = {
         defaultGasLimitForContract: '90000',
         network: isTestNet ? 'mastery' : 'mainnet',
         isTestNet,
-        api: aionApi,
     },
     BTC: {
         name: 'BITCOIN',
@@ -30,7 +24,6 @@ export const COINS = {
         gasPriceUnit: '',
         network: isTestNet ? 'BTCTEST' : 'BTC',
         isTestNet,
-        api: btcApi,
     },
     ETH: {
         name: 'ETHEREUM',
@@ -45,7 +38,6 @@ export const COINS = {
         defaultGasLimitForContract: '60000',
         network: isTestNet ? 'ropsten' : 'mainnet',
         isTestNet,
-        api: ethApi,
     },
     // 'EOS': {
     //     name: 'EOS',
@@ -63,7 +55,6 @@ export const COINS = {
         gasPriceUnit: '',
         network: isTestNet ? 'LTCTEST' : 'LTC',
         isTestNet,
-        api: btcApi,
     },
     TRX: {
         name: 'TRON',
@@ -73,6 +64,5 @@ export const COINS = {
         txFeeSupport: false,
         network: isTestNet ? 'shasta' : 'mainnet',
         isTestNet,
-        api: tronApi,
     },
 };

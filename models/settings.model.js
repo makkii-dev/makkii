@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 import RNFS from 'react-native-fs';
 import { Storage } from '../utils/storage';
 import { createAction, popCustom } from '../utils/dva';
-import { getCoinPrices } from '../coins/api';
+import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
 import { getLatestVersion } from '../services/setting.service';

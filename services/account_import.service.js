@@ -1,22 +1,13 @@
 /* eslint-disable camelcase */
-import keystore from 'react-native-makkii-core';
 import wallet from 'react-native-aion-hw-wallet';
-import { COINS } from '../coins/support_coin_list';
+import keystore from '../client/keystore';
 import { range } from '../utils';
 import { SensitiveStorage } from '../utils/storage';
 
 const getAccountFromMasterKey = async (symbol, index) => {
     try {
         const mnemonic = await SensitiveStorage.get('mnemonic');
-        const coinType = keystore.CoinType.fromCoinSymbol(symbol);
-        return await keystore.getKeyFromMnemonic(
-            coinType,
-            0,
-            0,
-            index,
-            COINS[symbol].isTestNet,
-            mnemonic,
-        );
+        return await keystore.getKeyFromMnemonic(symbol, index, mnemonic);
     } catch (e) {
         console.log('getAccountFromMasterKey error=>', e);
         throw e;
@@ -26,12 +17,7 @@ const getAccountFromMasterKey = async (symbol, index) => {
 const getAccountFromPrivateKey = async (symbol, private_key) => {
     try {
         console.log('getAccountFromPrivateKey=>', symbol);
-        const coinType = keystore.CoinType.fromCoinSymbol(symbol);
-        return await keystore.recoverKeyPairByPrivateKey(
-            private_key,
-            coinType,
-            COINS[symbol].isTestNet,
-        );
+        return await keystore.recoverKeyPairByPrivateKey(private_key, symbol);
     } catch (e) {
         console.log('getAccountFromPrivateKey error=>', e);
         throw e;

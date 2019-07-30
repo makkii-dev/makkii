@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import FastImage from 'react-native-fast-image';
-import { getTokenIconUrl } from '../../../../coins/api';
-import { COINS } from '../../../../coins/support_coin_list';
+import { getTokenIconUrl } from '../../../../client/api';
+import { COINS } from '../../../../client/support_coin_list';
 import { createAction, navigateBack } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');

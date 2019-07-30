@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 import { createAction } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');

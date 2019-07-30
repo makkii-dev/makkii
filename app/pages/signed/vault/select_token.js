@@ -18,8 +18,8 @@ import FastImage from 'react-native-fast-image';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { mainBgColor } from '../../../style_util';
-import { COINS } from '../../../../coins/support_coin_list';
-import { getTokenIconUrl } from '../../../../coins/api';
+import { COINS } from '../../../../client/support_coin_list';
+import { getTokenIconUrl } from '../../../../client/api';
 import { createAction } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');

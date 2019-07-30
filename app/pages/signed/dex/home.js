@@ -24,11 +24,11 @@ import { createAction, navigate } from '../../../../utils/dva';
 import Loading from '../../../components/Loading';
 import commonStyles from '../../../styles';
 import { mainBgColor } from '../../../style_util';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 
 import { getStatusBarHeight, validateAdvancedAmount } from '../../../../utils';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
-import { getTokenIconUrl } from '../../../../coins/api';
+import { getTokenIconUrl } from '../../../../client/api';
 import { DEX_MENU, getExchangeRulesURL } from './constants';
 import { PopWindow } from '../vault/home_popwindow';
 import { AppToast } from '../../../components/AppToast';

@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
-import { sameAddress, getTransactionExplorerUrl } from '../../../../coins/api';
+import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
 import { linkButtonColor, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { AppToast } from '../../../components/AppToast';

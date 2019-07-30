@@ -17,7 +17,7 @@ import { strings } from '../../../../locales/i18n';
 import { mainBgColor, linkButtonColor } from '../../../style_util';
 import { RightActionButton, SubTextInput } from '../../../components/common';
 import defaultStyles from '../../../styles';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 import { createAction } from '../../../../utils/dva';
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;

@@ -5,7 +5,7 @@ import {
     fetchAccountTokenTransferHistory,
     getBalance,
     fetchAccountTokenBalance,
-} from '../coins/api';
+} from '../client/api';
 
 const getTransactionsHistory = async (symbol, address, page, size) => {
     try {

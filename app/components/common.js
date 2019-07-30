@@ -22,7 +22,7 @@ import {
     rightBtnColorEnable,
     linkButtonColor,
 } from '../style_util';
-import { formatAddress1Line } from '../../coins/api';
+import { formatAddress1Line } from '../../client/api';
 import { AppToast } from './AppToast';
 import { popCustom } from '../../utils/dva';
 

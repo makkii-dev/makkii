@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { fetchTokenDetail, getTopTokens, searchTokens } from '../coins/api';
+import { fetchTokenDetail, getTopTokens, searchTokens } from '../client/api';
 import { createAction } from '../utils/dva';
 
 const initToken = {

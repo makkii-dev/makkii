@@ -4,7 +4,7 @@ import { accountKey, decrypt, encrypt } from '../utils';
 import { SensitiveStorage, Storage } from '../utils/storage';
 import { createAction } from '../utils/dva';
 import { findSymbolByAddress, getExchangeHistory } from '../services/erc20_dex.service';
-import { COINS } from '../coins/support_coin_list';
+import { COINS } from '../client/support_coin_list';
 import {
     getAccountBalances,
     getTransactionsHistory,

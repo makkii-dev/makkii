@@ -16,12 +16,12 @@ import {
 import BigNumber from 'bignumber.js';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
-import { sameAddress } from '../../../../coins/api';
+import { sameAddress } from '../../../../client/api';
 import Loading from '../../../components/Loading';
 import { ComponentButton, SubTextInput } from '../../../components/common';
 import { linkButtonColor, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, popCustom } from '../../../../utils/dva';
 

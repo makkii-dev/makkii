@@ -2,7 +2,7 @@
 import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
 import HttpClient from '../utils/http_caller';
-import { getBlockNumber } from '../coins/api';
+import { getBlockNumber } from '../client/api';
 import { fromHexString } from '../utils';
 
 const NETWORK_URL = {

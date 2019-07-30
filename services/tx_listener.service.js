@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { getBlockByNumber, getBlockNumber, getTransactionStatus } from '../coins/api';
+import { getBlockByNumber, getBlockNumber, getTransactionStatus } from '../client/api';
 import { fromHexString } from '../utils';
 
 const WAIT_BLOCKS = 2;

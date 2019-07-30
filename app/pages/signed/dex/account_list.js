@@ -3,7 +3,7 @@ import { View, FlatList, Image, Text, Button, Dimensions, TouchableOpacity } fro
 import { connect } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import { mainBgColor } from '../../../style_util';
-import { COINS } from '../../../../coins/support_coin_list';
+import { COINS } from '../../../../client/support_coin_list';
 import { renderAddress } from './home';
 import commonStyles from '../../../styles';
 import { strings } from '../../../../locales/i18n';

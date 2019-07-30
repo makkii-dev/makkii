@@ -7,7 +7,7 @@ import { Storage } from '../utils/storage';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
 import { findSymbolByAddress, getExchangeHistory } from '../services/erc20_dex.service';
-import { COINS } from '../coins/support_coin_list';
+import { COINS } from '../client/support_coin_list';
 
 const ERC20DEX_NETWORK = COINS.ETH.network;
 const TIMEOUT = 10 * 60 * 1000;

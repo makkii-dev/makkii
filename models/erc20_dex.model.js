@@ -14,7 +14,7 @@ import {
 import { createAction, navigate, popCustom } from '../utils/dva';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
-import { COINS } from '../coins/support_coin_list';
+import { COINS } from '../client/support_coin_list';
 
 import { Storage } from '../utils/storage';
 import { getExchangeRulesURL } from '../app/pages/signed/dex/constants';

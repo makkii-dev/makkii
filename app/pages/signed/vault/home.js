@@ -35,8 +35,8 @@ import {
 } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { accountKey, getStatusBarHeight } from '../../../../utils';
-import { COINS } from '../../../../coins/support_coin_list';
-import { formatAddress1Line } from '../../../../coins/api';
+import { COINS } from '../../../../client/support_coin_list';
+import { formatAddress1Line } from '../../../../client/api';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, navigate, popCustom } from '../../../../utils/dva';
 
