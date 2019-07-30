@@ -6,15 +6,7 @@ const isTestNet = Config.is_testnet === 'true';
 
 const client = keystoreClient(Object.keys(COINS), isTestNet);
 
-const signTransaction = client.signTransaction;
-const getKey = client.getKey;
-const setMnemonic = client.setMnemonic;
-const generateMnemonic = client.generateMnemonic;
-const recoverKeyPairByPrivateKey = client.recoverKeyPairByPrivateKey;
-const validateAddress = client.validateAddress;
-const getKeyFromMnemonic = client.getKeyFromMnemonic;
-
-export {
+export const {
     signTransaction,
     getKey,
     setMnemonic,
@@ -22,4 +14,4 @@ export {
     recoverKeyPairByPrivateKey,
     validateAddress,
     getKeyFromMnemonic,
-};
+} = client;
