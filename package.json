@@ -39,7 +39,7 @@
     "react-native-install-apk": "https://github.com/leoaion/react-native-install-apk.git",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-local-barcode-recognizer": "https://github.com/chaion/react-native-local-barcode-recognizer.git",
-    "react-native-makkii-core": "https://github.com/chaion/react-native-makkii-core.git#dev",
+    "react-native-makkii-core": "https://github.com/chaion/react-native-makkii-core.git",
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-root-toast": "^3.0.2",
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",

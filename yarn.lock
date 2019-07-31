@@ -7390,7 +7390,7 @@ query-string@^5.0.1:
     object-assign "^4.1.0"
     strict-uri-encode "^1.0.0"
 
-query-string@^6.3.0, query-string@^6.4.2:
+query-string@^6.4.2:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-6.7.0.tgz#7e92bf8525140cf8c5ebf500f26716b0de5b7023"
   integrity sha512-oQ01H1jrgDRbPq5SjtJF470S418GOrKkds+fpvAt6DQatHXl7bmkaJulHbTIM+QNGtoPpa8f5k9W3Zk50zXRPQ==
@@ -7582,9 +7582,9 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
   version "0.0.2"
   resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#6d004c2e5a99d5fbc9e3f575088395f561d44901"
 
-"react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git#dev":
+"react-native-makkii-core@https://github.com/chaion/react-native-makkii-core.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-makkii-core.git#1da406e113f69f114344369a52539339c19a77d1"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#9134f97b9d6c74d5d6d511fb4c4b9d63726aafb2"
   dependencies:
     "@tronscan/client" "^0.2.48"
     aion-rlp "^0.0.1"
@@ -8149,7 +8149,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rlp@^2.0.0, rlp@^2.2.2, rlp@^2.2.3:
+rlp@^2.0.0, rlp@^2.2.3:
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.2.3.tgz#7f94aef86cec412df87d5ea1d8cb116a47d45f0e"
   integrity sha512-l6YVrI7+d2vpW6D6rS05x2Xrmq8oW7v3pieZOJKBEdjuTF4Kz/iwk55Zyh1Zaz+KOB2kC8+2jZlp2u9L4tTzCQ==

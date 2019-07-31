@@ -1,9 +1,10 @@
 // libs
 import React from 'react';
-
-// models
+import { setCurrentServer } from 'react-native-makkii-core';
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
+import Config from 'react-native-config';
+// models
 import erc20DexModel from './models/erc20_dex.model';
 import txListenerModel from './models/txs_listener.model';
 import accountsModel from './models/accounts.model';
@@ -20,6 +21,9 @@ import dva, { createAction } from './utils/dva';
 
 import data from './data';
 
+// eslint-disable-next-line camelcase
+const { app_server_static, app_server_api } = Config;
+setCurrentServer({ app_server_static, app_server_api });
 const app = dva({
     models: [
         erc20DexModel,
