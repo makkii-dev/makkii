@@ -16,7 +16,7 @@ import { strings } from '../../../../locales/i18n';
 import { RightActionButton, SubTextInput } from '../../../components/common';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
-import { validateAddress } from '../../../../client/api';
+import { validateAddress } from '../../../../client/keystore';
 import Loading from '../../../components/Loading';
 import { AppToast } from '../../../components/AppToast';
 import { createAction } from '../../../../utils/dva';
