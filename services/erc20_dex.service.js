@@ -32,9 +32,7 @@ const getTokenList = async network => {
                 if (el.current_bid !== 0 && el.current_ask !== 0) {
                     array.push(el.base_symbol);
                 } else {
-                    console.info(
-                        `ignore token ${el.base_symbol}:bid=${el.current_bid}, ask=${el.current_ask}`,
-                    );
+                    console.info(`ignore token ${el.base_symbol}:bid=${el.current_bid}, ask=${el.current_ask}`);
                 }
                 return array;
             },
@@ -129,15 +127,7 @@ const getApproximateBuyQty = async (tokenAddress, network) => {
     return resp.data[0].src_qty[0];
 };
 
-const genTradeData = async (
-    user_address,
-    src_id,
-    dst_id,
-    src_qty,
-    min_dst_qty,
-    wallet_id,
-    network,
-) => {
+const genTradeData = async (user_address, src_id, dst_id, src_qty, min_dst_qty, wallet_id, network) => {
     try {
         let url = `${NETWORK_URL[network]}/trade_data?user_address=${user_address}&src_id=${src_id}&dst_id=${dst_id}&src_qty=${src_qty}&min_dst_qty=${min_dst_qty}&gas_price=medium`;
         if (wallet_id !== undefined && wallet_id.length > 0) {
@@ -183,8 +173,7 @@ const getApproveAuthorizationTx = async (user_id, token_id, network) => {
 
 const getExchangeHistory = async (user_id, network, txhash = undefined) => {
     try {
-        const base_url =
-            network === 'mainnet' ? 'https://api.etherscan.io' : 'https://api-ropsten.etherscan.io';
+        const base_url = network === 'mainnet' ? 'https://api.etherscan.io' : 'https://api-ropsten.etherscan.io';
         const latestBlock = await getBlockNumber('ETH');
         const fromBlock = latestBlock - 100000;
         const url = `${base_url}/api?module=logs&action=getLogs&fromBlock=${fromBlock}&toBlock=latest&address=0x818e6fecd516ecc3849daf6845e3ec868087b755&topic0=0x1849bd6a030a1bca28b83437fd3de96f3d27a5d172fa7e9c78e7b61468928a39&topic0_1_opr=and&topic1=${padTo32(
@@ -194,10 +183,7 @@ const getExchangeHistory = async (user_id, network, txhash = undefined) => {
         const { data: exchangeHistoryResp } = await HttpClient.get(url);
         const { result } = exchangeHistoryResp;
         const history = result.reduce((map, el) => {
-            const res = ApiCoder.decodeParameters(
-                ['address', 'address', 'uint256', 'uint256'],
-                el.data,
-            );
+            const res = ApiCoder.decodeParameters(['address', 'address', 'uint256', 'uint256'], el.data);
             map[el.transactionHash] = {
                 srcToken: res[0],
                 destToken: res[1],
@@ -228,13 +214,4 @@ const findSymbolByAddress = (tokenList, address) => {
     return null;
 };
 
-export {
-    getTokenList,
-    getTokenTradeRate,
-    genTradeData,
-    getEnabledStatus,
-    getApproveAuthorizationTx,
-    getExchangeHistory,
-    findSymbolByAddress,
-    ETHID,
-};
+export { getTokenList, getTokenTradeRate, genTradeData, getEnabledStatus, getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress, ETHID };

@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    Image,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    View,
-    Dimensions,
-    StyleSheet,
-    PixelRatio,
-} from 'react-native';
+import { Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
@@ -70,11 +61,7 @@ class SelectCoin extends Component {
                         {`${item.name}/${item.symbol}`}
                     </Text>
                 </View>
-                <Image
-                    style={{ width: 24, height: 24 }}
-                    source={require('../../../../assets/arrow_right.png')}
-                    resizeMode="contain"
-                />
+                <Image style={{ width: 24, height: 24 }} source={require('../../../../assets/arrow_right.png')} resizeMode="contain" />
             </TouchableOpacity>
         );
     };
@@ -89,13 +76,7 @@ class SelectCoin extends Component {
                     paddingTop: 20,
                 }}
             >
-                <FlatList
-                    style={{ width }}
-                    data={Object.values(COINS)}
-                    renderItem={this.renderItem}
-                    ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    keyExtractor={item => item.name}
-                />
+                <FlatList style={{ width }} data={Object.values(COINS)} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.name} />
             </View>
         );
     }

@@ -90,9 +90,7 @@ export default {
             return true;
         },
         *reset(action, { put }) {
-            yield put(
-                createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }),
-            );
+            yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
             yield put(createAction('saveSettings')());
         },
         *saveSettings(action, { call, select }) {
@@ -182,9 +180,7 @@ export default {
         *switchPinCode(action, { select, put }) {
             const { pinCodeEnabled } = yield select(mapToSettings);
             if (pinCodeEnabled) {
-                yield put(
-                    createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }),
-                );
+                yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
             } else {
                 yield put(createAction('updateState')({ pinCodeEnabled: true }));
             }
@@ -218,13 +214,7 @@ export default {
             },
             { put, select },
         ) {
-            const {
-                currentAppState,
-                pinCodeEnabled,
-                leaveTime,
-                login_session_timeout,
-                ignoreAppState,
-            } = yield select(mapToSettings);
+            const { currentAppState, pinCodeEnabled, leaveTime, login_session_timeout, ignoreAppState } = yield select(mapToSettings);
             const { isLogin } = yield select(mapToUsers);
             if (ignoreAppState || !isLogin) {
                 return;
@@ -262,12 +252,7 @@ export default {
                 versionUpdateLanguage = DeviceInfo.getDeviceLocale().substring(0, 2);
             }
             try {
-                const version = yield call(
-                    getLatestVersion,
-                    Platform.OS,
-                    currentVersionCode,
-                    versionUpdateLanguage,
-                );
+                const version = yield call(getLatestVersion, Platform.OS, currentVersionCode, versionUpdateLanguage);
                 console.log('latest version is: ', version);
                 if (version.versionCode <= currentVersionCode) {
                     AppToast.show(strings('about.version_latest'));
@@ -291,15 +276,10 @@ export default {
                     if (version.mandatory) {
                         options.shift();
                     }
-                    popCustom.show(
-                        strings('version_upgrade.alert_title_new_version'),
-                        generateUpdateMessage(version),
-                        options,
-                        {
-                            canHide: false,
-                            cancelable: false,
-                        },
-                    );
+                    popCustom.show(strings('version_upgrade.alert_title_new_version'), generateUpdateMessage(version), options, {
+                        canHide: false,
+                        cancelable: false,
+                    });
                 }
             } catch (e) {
                 console.log('get latest version failed: ', e);
@@ -364,12 +344,10 @@ const updateLocale = lang => {
 
 const upgradeForIOS = () => {
     // TODO: consider dynamic load this uri
-    Linking.openURL('https://itunes.apple.com/us/app/makkii/id1457952857?ls=1&mt=8').catch(
-        error => {
-            console.log('open app store url failed: ', error);
-            AppToast.show(strings('version_upgrade.toast_to_appstore_fail'));
-        },
-    );
+    Linking.openURL('https://itunes.apple.com/us/app/makkii/id1457952857?ls=1&mt=8').catch(error => {
+        console.log('open app store url failed: ', error);
+        AppToast.show(strings('version_upgrade.toast_to_appstore_fail'));
+    });
 };
 
 const upgradeForAndroid = version => {
@@ -393,14 +371,8 @@ const upgradeForAndroid = version => {
             popCustom.hide();
             console.log('download result: ', result);
             if (result.statusCode === 200) {
-                console.log(
-                    `install apk: api level: ${DeviceInfo.getAPILevel()},packageId: ${DeviceInfo.getBundleId()}, filePath: ${filePath}`,
-                );
-                NativeModules.InstallApk.install(
-                    DeviceInfo.getAPILevel(),
-                    DeviceInfo.getBundleId(),
-                    filePath,
-                );
+                console.log(`install apk: api level: ${DeviceInfo.getAPILevel()},packageId: ${DeviceInfo.getBundleId()}, filePath: ${filePath}`);
+                NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
             } else {
                 AppToast.show(strings('version_upgrade.toast_download_fail'));
             }
@@ -439,9 +411,7 @@ const generateUpdateMessage = version => {
     if (version.updatesMap) {
         let keys = Object.keys(version.updatesMap);
         if (keys.length > 0) {
-            message = `${message}\n${strings('version_upgrade.label_updates')}: \n${
-                version.updatesMap[keys[0]]
-            }`;
+            message = `${message}\n${strings('version_upgrade.label_updates')}: \n${version.updatesMap[keys[0]]}`;
         }
     }
     return message;
@@ -505,11 +475,7 @@ const tryDownload = (version, filePath) => {
             console.log('download result: ', result);
             if (result.statusCode === 200) {
                 console.log(`install apk: ${DeviceInfo.getAPILevel()} ${DeviceInfo.getBundleId()}`);
-                NativeModules.InstallApk.install(
-                    DeviceInfo.getAPILevel(),
-                    DeviceInfo.getBundleId(),
-                    filePath,
-                );
+                NativeModules.InstallApk.install(DeviceInfo.getAPILevel(), DeviceInfo.getBundleId(), filePath);
             } else {
                 AppToast.show(strings('version_upgrade.toast_download_fail'));
             }

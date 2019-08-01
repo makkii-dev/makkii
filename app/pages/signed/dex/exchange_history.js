@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-    FlatList,
-    Dimensions,
-    Image,
-    Text,
-    TouchableOpacity,
-    ActivityIndicator,
-    View,
-} from 'react-native';
+import { FlatList, Dimensions, Image, Text, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import { fixedWidthFont, mainBgColor } from '../../../style_util';
@@ -36,11 +28,7 @@ class ExchangeHistory extends React.Component {
                         navigation.state.params.Reload && navigation.state.params.Reload();
                     }}
                 >
-                    <Image
-                        source={require('../../../../assets/icon_refresh.png')}
-                        style={{ height: 24, width: 24, tintColor: '#fff' }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
                 </TouchableOpacity>
             ) : (
                 <View />
@@ -125,11 +113,7 @@ class ExchangeHistory extends React.Component {
     renderNoAccount = () => {
         return (
             <View style={styles.container}>
-                <Image
-                    source={require('../../../../assets/empty_transactions.png')}
-                    style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                    resizeMode="contain"
-                />
+                <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                 <Text>{strings('token_exchange.label_please_select_account')}</Text>
             </View>
         );
@@ -138,11 +122,7 @@ class ExchangeHistory extends React.Component {
     renderNoExchangeHistory = () => {
         return (
             <View style={styles.container}>
-                <Image
-                    source={require('../../../../assets/empty_transactions.png')}
-                    style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                    resizeMode="contain"
-                />
+                <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                 <Text>{strings('token_exchange.label_no_exchange_history')}</Text>
             </View>
         );
@@ -159,21 +139,14 @@ class ExchangeHistory extends React.Component {
                         <PendingComponent status={status} />
                     </View>
                     <View style={styles.transactionBody}>
-                        <Image
-                            source={require('../../../../assets/icon_curved_arrow.png')}
-                            style={{ width: 10, height: 10 }}
-                        />
+                        <Image source={require('../../../../assets/icon_curved_arrow.png')} style={{ width: 10, height: 10 }} />
                         <View style={styles.transactionLabel1}>
                             <View style={styles.transactionLabel2}>
-                                <Text style={{ fontWeight: 'bold', fontFamily: fixedWidthFont }}>
-                                    {srcToken}:
-                                </Text>
+                                <Text style={{ fontWeight: 'bold', fontFamily: fixedWidthFont }}>{srcToken}:</Text>
                                 <Text style={{ marginLeft: 20 }}>{srcQty}</Text>
                             </View>
                             <View style={styles.transactionLabel2}>
-                                <Text style={{ fontWeight: 'bold', fontFamily: fixedWidthFont }}>
-                                    {destToken}:
-                                </Text>
+                                <Text style={{ fontWeight: 'bold', fontFamily: fixedWidthFont }}>{destToken}:</Text>
                                 <Text style={{ marginLeft: 20 }}>{destQty}</Text>
                             </View>
                         </View>
@@ -186,11 +159,7 @@ class ExchangeHistory extends React.Component {
     renderExchangeHistory = exchangeHistory => {
         return (
             <View style={styles.container}>
-                <FlatList
-                    data={exchangeHistory}
-                    renderItem={this.renderItem}
-                    keyExtractor={(item, index) => `${index}`}
-                />
+                <FlatList data={exchangeHistory} renderItem={this.renderItem} keyExtractor={(item, index) => `${index}`} />
             </View>
         );
     };

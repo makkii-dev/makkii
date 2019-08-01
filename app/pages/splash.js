@@ -19,11 +19,7 @@ const loadStorage = dispatch =>
                     dispatch(createAction('userModel/loadStorage')(payload)).then(() =>
                         dispatch(createAction('accountsModel/loadStorage')(payload)).then(() =>
                             dispatch(createAction('settingsModel/loadStorage')(payload)).then(() =>
-                                dispatch(createAction('ERC20Dex/loadStorage')(payload)).then(() =>
-                                    dispatch(createAction('txsListener/loadStorage')(payload)).then(
-                                        () => resolve1(),
-                                    ),
-                                ),
+                                dispatch(createAction('ERC20Dex/loadStorage')(payload)).then(() => dispatch(createAction('txsListener/loadStorage')(payload)).then(() => resolve1())),
                             ),
                         ),
                     ),

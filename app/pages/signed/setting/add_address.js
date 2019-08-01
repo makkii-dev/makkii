@@ -1,17 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import {
-    Text,
-    Platform,
-    View,
-    TouchableOpacity,
-    StyleSheet,
-    Keyboard,
-    Image,
-    PixelRatio,
-    Dimensions,
-    ScrollView,
-} from 'react-native';
+import { Text, Platform, View, TouchableOpacity, StyleSheet, Keyboard, Image, PixelRatio, Dimensions, ScrollView } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor, linkButtonColor } from '../../../style_util';
@@ -91,9 +80,7 @@ class AddAddress extends Component {
         navigation.navigate('scan', {
             success: 'signed_setting_add_address',
             validate: (data, callback) => {
-                dispatch(
-                    createAction('contactAddModel/parseScannedData')({ data: data.data }),
-                ).then(res => {
+                dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {
                     res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
                 });
             },
@@ -103,11 +90,7 @@ class AddAddress extends Component {
     updateEditStatus = (name, address) => {
         const { symbol } = this.state;
         const { name: _name, address: _address } = this.props.contactObj;
-        const allValid =
-            symbol !== undefined &&
-            name.length !== 0 &&
-            address.length !== 0 &&
-            (name !== _name || address !== _address);
+        const allValid = symbol !== undefined && name.length !== 0 && address.length !== 0 && (name !== _name || address !== _address);
         if (allValid !== this.props.navigation.getParam('isEdited')) {
             this.props.navigation.setParams({
                 isEdited: allValid,
@@ -125,15 +108,8 @@ class AddAddress extends Component {
         const coinName = `${COINS[symbol].name}/${symbol}`;
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                <MyscrollView
-                    contentContainerStyle={{ justifyContent: 'center' }}
-                    keyboardShouldPersistTaps="always"
-                >
-                    <TouchableOpacity
-                        style={{ flex: 1 }}
-                        activeOpacity={1}
-                        onPress={() => Keyboard.dismiss()}
-                    >
+                <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
+                    <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                         <View style={{ ...styles.containerView, marginVertical: 30 }}>
                             <SubTextInput
                                 title={strings('add_address.label_coin_type')}
@@ -144,9 +120,7 @@ class AddAddress extends Component {
                                 rightView={() =>
                                     editable ? (
                                         <TouchableOpacity onPress={this.selectCoin}>
-                                            <Text style={{ color: linkButtonColor }}>
-                                                {strings('add_address.btn_select_coin')}
-                                            </Text>
+                                            <Text style={{ color: linkButtonColor }}>{strings('add_address.btn_select_coin')}</Text>
                                         </TouchableOpacity>
                                     ) : null
                                 }
@@ -176,11 +150,7 @@ class AddAddress extends Component {
                                 rightView={() =>
                                     editable ? (
                                         <TouchableOpacity onPress={() => this.scan()}>
-                                            <Image
-                                                source={require('../../../../assets/icon_scan.png')}
-                                                style={{ width: 20, height: 20, tintColor: '#000' }}
-                                                resizeMode="contain"
-                                            />
+                                            <Image source={require('../../../../assets/icon_scan.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
                                         </TouchableOpacity>
                                     ) : null
                                 }

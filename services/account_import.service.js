@@ -51,9 +51,4 @@ const getLedgerStatus = async () => {
     }
 };
 
-export {
-    getAccountFromMasterKey,
-    getAccountFromPrivateKey,
-    getAccountsFromLedger,
-    getLedgerStatus,
-};
+export { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getLedgerStatus };

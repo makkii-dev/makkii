@@ -37,14 +37,12 @@ class Currency extends Component {
         const { dispatch, navigation } = this.props;
         const newCurrency = Object.keys(this.refs.refSelectList.getSelect())[0];
         this.refs.refLoading.show();
-        dispatch(createAction('settingsModel/updateFiatCurrency')({ currency: newCurrency })).then(
-            r => {
-                this.refs.refLoading.hide();
-                if (r) {
-                    navigation.goBack();
-                }
-            },
-        );
+        dispatch(createAction('settingsModel/updateFiatCurrency')({ currency: newCurrency })).then(r => {
+            this.refs.refLoading.hide();
+            if (r) {
+                navigation.goBack();
+            }
+        });
     };
 
     render() {
@@ -452,9 +450,7 @@ class Currency extends Component {
                             defaultKey={currentCurrency}
                             onItemSelected={() => {
                                 this.props.navigation.setParams({
-                                    isEdited:
-                                        currentCurrency !==
-                                        Object.keys(this.refs.refSelectList.getSelect())[0],
+                                    isEdited: currentCurrency !== Object.keys(this.refs.refSelectList.getSelect())[0],
                                 });
                             }}
                         />

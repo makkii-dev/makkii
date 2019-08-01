@@ -1,18 +1,5 @@
 import React from 'react';
-import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    NativeModules,
-    NativeEventEmitter,
-    TouchableOpacity,
-    Clipboard,
-    Platform,
-    PermissionsAndroid,
-    ScrollView,
-    ActivityIndicator,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions, NativeModules, NativeEventEmitter, TouchableOpacity, Clipboard, Platform, PermissionsAndroid, ScrollView, ActivityIndicator } from 'react-native';
 
 import QRCode from 'react-native-qrcode-svg';
 import screenshotHelper from 'react-native-screenshot-helper';
@@ -82,15 +69,10 @@ class ExportPrivateKey extends React.Component {
         if (this.qrcodeRef) {
             if (Platform.OS === 'android') {
                 // check storage permission first.
-                const storagePermission = await PermissionsAndroid.check(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                );
+                const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
                 console.log(`storagePermission: ${storagePermission}`);
                 if (!storagePermission) {
-                    alertOk(
-                        strings('alert_title_error'),
-                        strings('receive.no_permission_save_file'),
-                    );
+                    alertOk(strings('alert_title_error'), strings('receive.no_permission_save_file'));
                     return;
                 }
             }
@@ -151,17 +133,11 @@ class ExportPrivateKey extends React.Component {
                             this.saveQRCode();
                         }}
                     >
-                        <Text style={styles.saveButton}>
-                            {strings('export_private_key.button_save_image')}
-                        </Text>
+                        <Text style={styles.saveButton}>{strings('export_private_key.button_save_image')}</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.privateKeyView}>
-                    <InputMultiLines
-                        style={styles.privateKeyText}
-                        editable={false}
-                        value={this.privateKey}
-                    />
+                    <InputMultiLines style={styles.privateKeyText} editable={false} value={this.privateKey} />
                 </View>
                 <ComponentButton
                     title={strings('copy_button')}

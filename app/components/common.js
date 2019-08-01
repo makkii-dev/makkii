@@ -1,27 +1,10 @@
 import React, { Component } from 'react';
-import {
-    View,
-    TextInput,
-    Text,
-    Image,
-    TouchableOpacity,
-    ActivityIndicator,
-    PixelRatio,
-    Dimensions,
-    Clipboard,
-} from 'react-native';
+import { View, TextInput, Text, Image, TouchableOpacity, ActivityIndicator, PixelRatio, Dimensions, Clipboard } from 'react-native';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import styles from '../styles';
 import { strings } from '../../locales/i18n';
-import {
-    mainColor,
-    mainColorAlpha,
-    fontColor,
-    rightBtnColorDisable,
-    rightBtnColorEnable,
-    linkButtonColor,
-} from '../style_util';
+import { mainColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor } from '../style_util';
 import { formatAddress1Line } from '../../client/api';
 import { AppToast } from './AppToast';
 import { popCustom } from '../../utils/dva';
@@ -41,18 +24,9 @@ class ComponentTabBar extends Component {
     };
 
     render() {
-        const walletTintColor =
-            this.props.active === 'wallet'
-                ? this.props.activeTintColor
-                : this.props.inactiveTintColor;
-        const dappTintColor =
-            this.props.active === 'dapp'
-                ? this.props.activeTintColor
-                : this.props.inactiveTintColor;
-        const settingsTintColor =
-            this.props.active === 'settings'
-                ? this.props.activeTintColor
-                : this.props.inactiveTintColor;
+        const walletTintColor = this.props.active === 'wallet' ? this.props.activeTintColor : this.props.inactiveTintColor;
+        const dappTintColor = this.props.active === 'dapp' ? this.props.activeTintColor : this.props.inactiveTintColor;
+        const settingsTintColor = this.props.active === 'settings' ? this.props.activeTintColor : this.props.inactiveTintColor;
         return (
             <View style={{ ...this.props.style }}>
                 <TouchableOpacity
@@ -79,9 +53,7 @@ class ComponentTabBar extends Component {
                             }}
                             resizeMode="contain"
                         />
-                        <Text style={{ fontSize: 8, color: walletTintColor }}>
-                            {strings('menuRef.title_wallet')}
-                        </Text>
+                        <Text style={{ fontSize: 8, color: walletTintColor }}>{strings('menuRef.title_wallet')}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -108,9 +80,7 @@ class ComponentTabBar extends Component {
                             }}
                             resizeMode="contain"
                         />
-                        <Text style={{ fontSize: 8, color: dappTintColor }}>
-                            {strings('menuRef.title_dapps')}
-                        </Text>
+                        <Text style={{ fontSize: 8, color: dappTintColor }}>{strings('menuRef.title_dapps')}</Text>
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -137,9 +107,7 @@ class ComponentTabBar extends Component {
                             }}
                             resizeMode="contain"
                         />
-                        <Text style={{ fontSize: 8, color: settingsTintColor }}>
-                            {strings('menuRef.title_settings')}
-                        </Text>
+                        <Text style={{ fontSize: 8, color: settingsTintColor }}>{strings('menuRef.title_settings')}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -258,30 +226,18 @@ class ImportListFooter extends React.PureComponent {
         if (this.props.footerState === 1) {
             return (
                 <View style={{ height: 30, alignItems: 'center', justifyContent: 'flex-start' }}>
-                    {this.props.hasSeparator ? (
-                        <View
-                            style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }}
-                        />
-                    ) : null}
-                    <Text style={{ color: '#000', fontSize: 14, marginVertical: 5 }}>
-                        {strings('no_more_data_label')}
-                    </Text>
+                    {this.props.hasSeparator ? <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} /> : null}
+                    <Text style={{ color: '#000', fontSize: 14, marginVertical: 5 }}>{strings('no_more_data_label')}</Text>
                 </View>
             );
         }
         if (this.props.footerState === 2) {
             return (
                 <View>
-                    {this.props.hasSeparator ? (
-                        <View
-                            style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }}
-                        />
-                    ) : null}
+                    {this.props.hasSeparator ? <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} /> : null}
                     <View style={styles.ImportList.footer}>
                         <ActivityIndicator style={{ paddingRight: 10 }} />
-                        <Text style={{ color: '#000', fontSize: 14 }}>
-                            {strings('fetch_data_label')}
-                        </Text>
+                        <Text style={{ color: '#000', fontSize: 14 }}>{strings('fetch_data_label')}</Text>
                     </View>
                 </View>
             );
@@ -322,9 +278,7 @@ class SubTextInput extends Component {
                         flex: 1,
                     }}
                 >
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000', flex: 1 }}>
-                        {this.props.title}
-                    </Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000', flex: 1 }}>{this.props.title}</Text>
                     {this.props.rightView && this.props.rightView()}
                 </View>
                 <View
@@ -336,9 +290,7 @@ class SubTextInput extends Component {
                     }}
                 >
                     <TextInput {...this.props} />
-                    {this.props.unit !== undefined && this.props.changeUnit === undefined && (
-                        <Text style={{ fontSize: 12, marginLeft: 10 }}>{this.props.unit}</Text>
-                    )}
+                    {this.props.unit !== undefined && this.props.changeUnit === undefined && <Text style={{ fontSize: 12, marginLeft: 10 }}>{this.props.unit}</Text>}
                     {this.props.unit !== undefined && this.props.changeUnit !== undefined && (
                         <TouchableOpacity
                             style={{
@@ -348,13 +300,8 @@ class SubTextInput extends Component {
                             }}
                             onPress={this.props.changeUnit}
                         >
-                            <Text style={{ fontSize: 12, marginLeft: 10, color: linkButtonColor }}>
-                                {this.props.unit}
-                            </Text>
-                            <Image
-                                source={require('../../assets/icon_expand.png')}
-                                style={{ width: 20, height: 20, tintColor: linkButtonColor }}
-                            />
+                            <Text style={{ fontSize: 12, marginLeft: 10, color: linkButtonColor }}>{this.props.unit}</Text>
+                            <Image source={require('../../assets/icon_expand.png')} style={{ width: 20, height: 20, tintColor: linkButtonColor }} />
                         </TouchableOpacity>
                     )}
                 </View>
@@ -394,9 +341,7 @@ class TransactionItemCell extends React.PureComponent {
                         height: 20,
                     }}
                 >
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>
-                        {this.props.title}
-                    </Text>
+                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>{this.props.title}</Text>
                     {this.props.rightView && this.props.rightView()}
                 </View>
                 <TextInput
@@ -418,20 +363,8 @@ class TransactionItemCell extends React.PureComponent {
 }
 
 // ======================== v2 ========================================
-const Visible = () => (
-    <Image
-        style={{ width: 20, height: 20 }}
-        source={require('../../assets/icon_visible.png')}
-        resizeMode="contain"
-    />
-);
-const Invisible = () => (
-    <Image
-        style={{ width: 20, height: 20 }}
-        resizeMode="contain"
-        source={require('../../assets/icon_invisible.png')}
-    />
-);
+const Visible = () => <Image style={{ width: 20, height: 20 }} source={require('../../assets/icon_visible.png')} resizeMode="contain" />;
+const Invisible = () => <Image style={{ width: 20, height: 20 }} resizeMode="contain" source={require('../../assets/icon_invisible.png')} />;
 
 class RightActionButton extends Component {
     render() {
@@ -614,9 +547,7 @@ class TextInputWithTitle extends Component {
     render() {
         return (
             <View>
-                <View
-                    style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}
-                >
+                <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                     <Text
                         style={{
                             marginBottom: 5,
@@ -654,11 +585,7 @@ class TextInputWithTitle extends Component {
                         onFocus={() => this.props.onFocus()}
                         value={this.props.value}
                     />
-                    {this.props.trailingText ? (
-                        <Text style={{ color: fontColor, fontSize: 16 }}>
-                            {this.props.trailingText}
-                        </Text>
-                    ) : null}
+                    {this.props.trailingText ? <Text style={{ color: fontColor, fontSize: 16 }}>{this.props.trailingText}</Text> : null}
                 </View>
             </View>
         );
@@ -711,23 +638,11 @@ class PendingComponent extends React.Component {
     }
 
     render() {
-        if (
-            this.props.status === 'FAILED' ||
-            this.props.status === 'CONFIRMED' ||
-            this.props.status === 'UNCONFIRMED'
-        ) {
-            return (
-                <Text style={{ textAlign: 'left' }}>
-                    {strings(`transaction_detail.${this.props.status}`)}
-                </Text>
-            );
+        if (this.props.status === 'FAILED' || this.props.status === 'CONFIRMED' || this.props.status === 'UNCONFIRMED') {
+            return <Text style={{ textAlign: 'left' }}>{strings(`transaction_detail.${this.props.status}`)}</Text>;
         }
         const tail = '.'.repeat(this.state.waiting);
-        return (
-            <Text style={{ textAlign: 'left' }}>
-                {strings(`transaction_detail.${this.props.status}`) + tail}
-            </Text>
-        );
+        return <Text style={{ textAlign: 'left' }}>{strings(`transaction_detail.${this.props.status}`) + tail}</Text>;
     }
 }
 
@@ -741,17 +656,10 @@ class TransactionItem extends React.PureComponent {
 
     render() {
         const { transaction, onPress, isSender, symbol } = this.props;
-        const timestamp =
-            transaction.timestamp === undefined
-                ? ''
-                : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
-        const m = new BigNumber(transaction.value)
-            .toExponential()
-            .match(/\d(?:\.(\d*))?e([+-]\d+)/);
+        const timestamp = transaction.timestamp === undefined ? '' : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
+        const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
         const fixed = Math.min(8, Math.max(0, (m[1] || '').length - m[2]));
-        const value = isSender
-            ? `-${new BigNumber(transaction.value).toFixed(fixed)}`
-            : `+${new BigNumber(transaction.value).toFixed(fixed)}`;
+        const value = isSender ? `-${new BigNumber(transaction.value).toFixed(fixed)}` : `+${new BigNumber(transaction.value).toFixed(fixed)}`;
         const valueColor = isSender ? 'red' : 'green';
 
         return (
@@ -804,24 +712,9 @@ class AddressComponent extends Component {
     static renderAddress66(address) {
         return (
             <View>
-                <Text style={styles.addressFontStyle}>
-                    {`${address.substring(0, 4)} ${address.substring(4, 10)} ${address.substring(
-                        10,
-                        16,
-                    )} ${address.substring(16, 22)}`}
-                </Text>
-                <Text style={styles.addressFontStyle}>
-                    {`${address.substring(22, 26)} ${address.substring(26, 32)} ${address.substring(
-                        32,
-                        38,
-                    )} ${address.substring(38, 44)}`}
-                </Text>
-                <Text style={styles.addressFontStyle}>
-                    {`${address.substring(44, 48)} ${address.substring(48, 54)} ${address.substring(
-                        54,
-                        60,
-                    )} ${address.substring(60, 66)}`}
-                </Text>
+                <Text style={styles.addressFontStyle}>{`${address.substring(0, 4)} ${address.substring(4, 10)} ${address.substring(10, 16)} ${address.substring(16, 22)}`}</Text>
+                <Text style={styles.addressFontStyle}>{`${address.substring(22, 26)} ${address.substring(26, 32)} ${address.substring(32, 38)} ${address.substring(38, 44)}`}</Text>
+                <Text style={styles.addressFontStyle}>{`${address.substring(44, 48)} ${address.substring(48, 54)} ${address.substring(54, 60)} ${address.substring(60, 66)}`}</Text>
             </View>
         );
     }
@@ -830,16 +723,10 @@ class AddressComponent extends Component {
         return (
             <View>
                 <Text style={styles.addressFontStyle}>
-                    {`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(
-                        8,
-                        12,
-                    )} ${address.substring(12, 16)} ${address.substring(16, 21)}`}
+                    {`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(8, 12)} ${address.substring(12, 16)} ${address.substring(16, 21)}`}
                 </Text>
                 <Text style={styles.addressFontStyle}>
-                    {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(
-                        29,
-                        33,
-                    )} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
+                    {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(29, 33)} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
                 </Text>
             </View>
         );
@@ -883,10 +770,7 @@ class AddressComponent extends Component {
                                 AppToast.show(strings('toast_copy_success'));
                             }}
                         >
-                            <Image
-                                source={require('../../assets/icon_copy.png')}
-                                style={{ width: 20, height: 20 }}
-                            />
+                            <Image source={require('../../assets/icon_copy.png')} style={{ width: 20, height: 20 }} />
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => {
@@ -902,9 +786,7 @@ class AddressComponent extends Component {
                                     justifyContent: 'center',
                                 }}
                             >
-                                <Text style={styles.addressFontStyle}>
-                                    {strings('account_view.collapse_button')}
-                                </Text>
+                                <Text style={styles.addressFontStyle}>{strings('account_view.collapse_button')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -927,10 +809,7 @@ class AddressComponent extends Component {
                         AppToast.show(strings('toast_copy_success'));
                     }}
                 >
-                    <Image
-                        source={require('../../assets/icon_copy.png')}
-                        style={{ marginHorizontal: 10, width: 20, height: 20 }}
-                    />
+                    <Image source={require('../../assets/icon_copy.png')} style={{ marginHorizontal: 10, width: 20, height: 20 }} />
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => {
@@ -946,9 +825,7 @@ class AddressComponent extends Component {
                             justifyContent: 'center',
                         }}
                     >
-                        <Text style={styles.addressFontStyle}>
-                            {strings('account_view.show_all_button')}
-                        </Text>
+                        <Text style={styles.addressFontStyle}>{strings('account_view.show_all_button')}</Text>
                     </View>
                 </TouchableOpacity>
             </View>

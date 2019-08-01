@@ -1,17 +1,5 @@
 import * as React from 'react';
-import {
-    View,
-    DeviceEventEmitter,
-    TouchableOpacity,
-    Text,
-    BackHandler,
-    ScrollView,
-    Keyboard,
-    StyleSheet,
-    Dimensions,
-    PixelRatio,
-    Platform,
-} from 'react-native';
+import { View, DeviceEventEmitter, TouchableOpacity, Text, BackHandler, ScrollView, Keyboard, StyleSheet, Dimensions, PixelRatio, Platform } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -74,8 +62,7 @@ class DappSend extends React.Component {
     }
 
     onGoback = () => {
-        this.state.isSend ||
-            DeviceEventEmitter.emit(this.message, { cancel: true, data: "I'm cancel" });
+        this.state.isSend || DeviceEventEmitter.emit(this.message, { cancel: true, data: "I'm cancel" });
         this.props.navigation.goBack();
     };
 
@@ -147,27 +134,15 @@ class DappSend extends React.Component {
             return false;
         }
         // 2. < total balance
-        console.log(
-            `gasPrice(${this.state.gasPrice}) * gasLimit(${this.state.gasLimit}):${parseFloat(
-                this.state.gasPrice,
-            ) * parseInt(this.state.gasLimit)}`,
-        );
-        console.log(
-            `amount+gasfee:${parseFloat(this.state.amount) +
-                (parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit)) /
-                    Math.pow(10, 9)}`,
-        );
+        console.log(`gasPrice(${this.state.gasPrice}) * gasLimit(${this.state.gasLimit}):${parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit)}`);
+        console.log(`amount+gasfee:${parseFloat(this.state.amount) + (parseFloat(this.state.gasPrice) * parseInt(this.state.gasLimit)) / Math.pow(10, 9)}`);
         console.log(`total balance: ${this.account.balance}`);
 
         const gasLimit = new BigNumber(this.state.gasLimit);
         const gasPrice = new BigNumber(this.state.gasPrice);
         const amount = new BigNumber(this.state.amount);
         const balance = new BigNumber(this.account.balance);
-        if (
-            amount
-                .plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9)))
-                .isGreaterThan(balance)
-        ) {
+        if (amount.plus(gasPrice.multipliedBy(gasLimit).dividedBy(BigNumber(10).pow(9))).isGreaterThan(balance)) {
             alertOk(strings('alert_title_error'), strings('send.error_insufficient_amount'));
             return false;
         }
@@ -199,13 +174,7 @@ class DappSend extends React.Component {
                         }}
                     >
                         <View style={{ ...styles.containerView, marginTop: 30 }}>
-                            <SubTextInput
-                                title={strings('send.label_sender')}
-                                style={styles.text_input}
-                                value={this.state.from}
-                                multiline
-                                editable={false}
-                            />
+                            <SubTextInput title={strings('send.label_sender')} style={styles.text_input} value={this.state.from} multiline editable={false} />
 
                             <SubTextInput
                                 title={strings('send.label_receiver')}
@@ -216,20 +185,8 @@ class DappSend extends React.Component {
                                 placeholder={strings('send.hint_recipient')}
                             />
 
-                            <SubTextInput
-                                title={strings('send.label_amount')}
-                                style={styles.text_input}
-                                value={this.state.amount}
-                                editable={false}
-                                unit="AION"
-                            />
-                            <SubTextInput
-                                title={strings('send.label_data')}
-                                style={styles.text_input}
-                                value={this.state.data}
-                                multiline
-                                editable={false}
-                            />
+                            <SubTextInput title={strings('send.label_amount')} style={styles.text_input} value={this.state.amount} editable={false} unit="AION" />
+                            <SubTextInput title={strings('send.label_data')} style={styles.text_input} value={this.state.data} multiline editable={false} />
                         </View>
 
                         {/* advanced button */}
@@ -249,11 +206,7 @@ class DappSend extends React.Component {
                                     marginHorizontal: 20,
                                 }}
                             >
-                                {strings(
-                                    this.state.showAdvanced
-                                        ? 'send.hide_advanced'
-                                        : 'send.show_advanced',
-                                )}
+                                {strings(this.state.showAdvanced ? 'send.hide_advanced' : 'send.show_advanced')}
                             </Text>
                         </TouchableOpacity>
 
@@ -279,10 +232,7 @@ class DappSend extends React.Component {
 
                         {/* send button */}
                         <View style={{ marginHorizontal: 20, marginTop: 20, marginBottom: 40 }}>
-                            <ComponentButton
-                                title={strings('send_button')}
-                                onPress={this.transfer}
-                            />
+                            <ComponentButton title={strings('send_button')} onPress={this.transfer} />
                         </View>
                     </TouchableOpacity>
                 </MyScrollView>

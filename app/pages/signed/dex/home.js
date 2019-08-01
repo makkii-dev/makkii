@@ -1,16 +1,5 @@
 import * as React from 'react';
-import {
-    View,
-    Image,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    ActivityIndicator,
-    Platform,
-    ScrollView,
-    Dimensions,
-} from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
 
 import { Header } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -39,16 +28,10 @@ const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollVie
 export const renderAddress = address => (
     <View>
         <Text style={{ ...commonStyles.addressFontStyle, color: '#000' }}>
-            {`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(
-                8,
-                12,
-            )} ${address.substring(12, 16)} ${address.substring(16, 21)}`}
+            {`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(8, 12)} ${address.substring(12, 16)} ${address.substring(16, 21)}`}
         </Text>
         <Text style={{ ...commonStyles.addressFontStyle, color: '#000' }}>
-            {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(
-                29,
-                33,
-            )} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
+            {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(29, 33)} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
         </Text>
     </View>
 );
@@ -69,11 +52,7 @@ class Home extends React.Component {
                     }}
                     onPress={showMenu}
                 >
-                    <Image
-                        source={require('../../../../assets/icon_account_menu.png')}
-                        style={{ width: 25, height: 25, tintColor: '#fff' }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
                 </TouchableOpacity>
             ),
         };
@@ -96,19 +75,13 @@ class Home extends React.Component {
         this.props.navigation.setParams({
             showMenu: this.openMenu,
         });
-        this.listenNavigation = this.props.navigation.addListener('willBlur', () =>
-            this.setState({ showMenu: false }),
-        );
+        this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
     componentWillReceiveProps(nextProps) {
         const { isLoading, trade } = this.props;
         const { isLoading: nextisLoading, trade: nextTrade } = nextProps;
-        const res =
-            isLoading !== nextisLoading ||
-            trade.destToken !== nextTrade.destToken ||
-            trade.srcToken !== nextTrade.srcToken ||
-            trade.tradeRate !== nextTrade.tradeRate;
+        const res = isLoading !== nextisLoading || trade.destToken !== nextTrade.destToken || trade.srcToken !== nextTrade.srcToken || trade.tradeRate !== nextTrade.tradeRate;
         if (res) {
             const { srcQty, destQty } = this.state;
             let newState = {
@@ -287,18 +260,12 @@ class Home extends React.Component {
                             >
                                 {strings('token_exchange.label_current_account')}
                             </Text>
-                            <Image
-                                source={require('../../../../assets/arrow_right.png')}
-                                style={{ width: 24, height: 24 }}
-                            />
+                            <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
                         </View>
                     </TouchableOpacity>
                     <TouchableWithoutFeedback onPress={() => this.toAccountDetail(item)}>
                         <View style={styles.accountContainerWithShadow}>
-                            <Image
-                                source={COINS[item.symbol].icon}
-                                style={{ marginRight: 10, width: 24, height: 24 }}
-                            />
+                            <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
                             <View style={{ flex: 1, paddingVertical: 10 }}>
                                 <View
                                     style={{
@@ -307,10 +274,7 @@ class Home extends React.Component {
                                         alignItems: 'center',
                                     }}
                                 >
-                                    <Text
-                                        style={{ ...styles.accountSubTextFontStyle1, width: '70%' }}
-                                        numberOfLines={1}
-                                    >
+                                    <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
                                         {item.name}
                                     </Text>
                                     <Text
@@ -322,9 +286,7 @@ class Home extends React.Component {
                                         {new BigNumber(balance).toFixed(4)}
                                     </Text>
                                 </View>
-                                <View
-                                    style={{ ...styles.accountSubContainer, alignItems: 'center' }}
-                                >
+                                <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>
                                     {renderAddress(item.address)}
                                     <Text style={styles.accountSubTextFontStyle2}>{symbol}</Text>
                                 </View>
@@ -364,10 +326,7 @@ class Home extends React.Component {
                         >
                             {strings('token_exchange.label_select_account')}
                         </Text>
-                        <Image
-                            source={require('../../../../assets/arrow_right.png')}
-                            style={{ width: 24, height: 24 }}
-                        />
+                        <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
                     </View>
                 </TouchableOpacity>
             </View>
@@ -388,13 +347,7 @@ class Home extends React.Component {
         }
         try {
             const fastIcon = getTokenIconUrl('ETH', tokenSymbol, tokenList[tokenSymbol].address);
-            return (
-                <FastImage
-                    style={{ width: 24, height: 24 }}
-                    source={{ uri: fastIcon }}
-                    resizeMode={FastImage.resizeMode.contain}
-                />
-            );
+            return <FastImage style={{ width: 24, height: 24 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />;
         } catch (e) {
             const Icon = COINS.ETH.default_token_icon;
             return <Image style={{ width: 24, height: 24 }} source={Icon} resizeMode="contain" />;
@@ -413,10 +366,7 @@ class Home extends React.Component {
             const ethCost = srcToken === 'ETH' ? +srcQty + 0.0043 : 0.0014;
             const tokenCost = srcToken === 'ETH' ? 0 : +srcQty;
             const tokenBalance = tokens[srcToken] || 0;
-            buttonEnabled =
-                BigNumber(balance).toNumber() >= ethCost &&
-                BigNumber(tokenBalance).toNumber() >= tokenCost &&
-                srcQty > 0;
+            buttonEnabled = BigNumber(balance).toNumber() >= ethCost && BigNumber(tokenBalance).toNumber() >= tokenCost && srcQty > 0;
             if (!buttonEnabled) {
                 if (!hasToken) {
                     errorMsg = strings('token_exchange.button_exchange_no_token', {
@@ -431,8 +381,7 @@ class Home extends React.Component {
         } else {
             errorMsg = strings('token_exchange.button_exchange_no_account');
         }
-        const popwindowTop =
-            Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popwindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
 
         return (
             <DismissKeyboardView>
@@ -448,9 +397,7 @@ class Home extends React.Component {
                             </View>
                             <View style={styles.tokenView}>
                                 <View style={styles.tokenNumberLabel}>
-                                    <Text style={{ fontSize: 16 }}>
-                                        {strings('token_exchange.label_sell')}
-                                    </Text>
+                                    <Text style={{ fontSize: 16 }}>{strings('token_exchange.label_sell')}</Text>
                                     <TextInput
                                         style={styles.textInputStyle}
                                         value={`${srcQty}`}
@@ -466,25 +413,16 @@ class Home extends React.Component {
                                     <View style={styles.tokenLabel}>
                                         {this.getTokenIcon(srcToken)}
                                         <Text style={{ fontSize: 16 }}>{srcToken}</Text>
-                                        <Image
-                                            source={require('../../../../assets/arrow_right.png')}
-                                            style={{ width: 24, height: 24 }}
-                                        />
+                                        <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
                                     </View>
                                 </TouchableOpacity>
                             </View>
                             <TouchableWithoutFeedback onPress={this.onExchangeSrc2dest}>
-                                <Image
-                                    source={require('../../../../assets/icon_exchange.png')}
-                                    style={{ width: 20, height: 20 }}
-                                    resizeMode="contain"
-                                />
+                                <Image source={require('../../../../assets/icon_exchange.png')} style={{ width: 20, height: 20 }} resizeMode="contain" />
                             </TouchableWithoutFeedback>
                             <View style={styles.tokenView}>
                                 <View style={styles.tokenNumberLabel}>
-                                    <Text style={{ fontSize: 16 }}>
-                                        {strings('token_exchange.label_buy')}
-                                    </Text>
+                                    <Text style={{ fontSize: 16 }}>{strings('token_exchange.label_buy')}</Text>
                                     <TextInput
                                         style={styles.textInputStyle}
                                         value={`${destQty}`}
@@ -500,19 +438,13 @@ class Home extends React.Component {
                                     <View style={styles.tokenLabel}>
                                         {this.getTokenIcon(destToken)}
                                         <Text style={{ fontSize: 16 }}>{`${destToken}`}</Text>
-                                        <Image
-                                            source={require('../../../../assets/arrow_right.png')}
-                                            style={{ width: 24, height: 24 }}
-                                        />
+                                        <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
                                     </View>
                                 </TouchableOpacity>
                             </View>
                             <View style={{ flexDirection: 'row-reverse', width: '100%' }}>
                                 <Text style={{ fontSize: 10 }}>Kyber.Network</Text>
-                                <Text style={{ fontStyle: 'italic', fontSize: 10 }}>
-                                    {' '}
-                                    Powered by{' '}
-                                </Text>
+                                <Text style={{ fontStyle: 'italic', fontSize: 10 }}> Powered by </Text>
                             </View>
                         </View>
                         {(currentAccount !== undefined && buttonEnabled) || (

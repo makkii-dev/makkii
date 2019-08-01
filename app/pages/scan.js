@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Image,
-    ImageBackground,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    StyleSheet,
-    Animated,
-    Text,
-} from 'react-native';
+import { View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Animated, Text } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import ImagePicker from 'react-native-image-picker';
 import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
@@ -155,11 +146,7 @@ class Scan extends Component {
                         flexDirection: 'column',
                         justifyContent: 'center',
                     }}
-                    flashMode={
-                        this.state.torch
-                            ? RNCamera.Constants.FlashMode.torch
-                            : RNCamera.Constants.FlashMode.off
-                    }
+                    flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
                     captureAudio={false}
                     onBarCodeRead={e => {
                         if (validate && success) {
@@ -187,20 +174,9 @@ class Scan extends Component {
                     <View style={styles.centerView}>
                         {/* left view */}
                         <View style={styles.backgroundStyle} />
-                        <ImageBackground
-                            style={[
-                                styles.scanImage,
-                                { alignItems: 'center', justifyContent: 'center' },
-                            ]}
-                            imageStyle={styles.scanImage}
-                            source={require('../../assets/scan_border.png')}
-                        >
+                        <ImageBackground style={[styles.scanImage, { alignItems: 'center', justifyContent: 'center' }]} imageStyle={styles.scanImage} source={require('../../assets/scan_border.png')}>
                             <Animated.View style={[animatedStyle]}>
-                                <Image
-                                    style={{ width: 240, tintColor: mainColor }}
-                                    source={require('../../assets/scan_bar.png')}
-                                    resizeMode="contain"
-                                />
+                                <Image style={{ width: 240, tintColor: mainColor }} source={require('../../assets/scan_bar.png')} resizeMode="contain" />
                             </Animated.View>
                         </ImageBackground>
                         {/* right view */}
@@ -212,14 +188,8 @@ class Scan extends Component {
                 {/* add from album */}
                 <TouchableWithoutFeedback onPress={this.openImageLibrary}>
                     <View style={styles.buttonStyle}>
-                        <Image
-                            source={require('../../assets/icon_album.png')}
-                            style={{ height: 20, width: 20, tintColor: '#fff' }}
-                            resizeMode="contain"
-                        />
-                        <Text style={{ marginLeft: 10, color: '#fff', fontSize: 16 }}>
-                            {strings('scan.add_photos_button')}
-                        </Text>
+                        <Image source={require('../../assets/icon_album.png')} style={{ height: 20, width: 20, tintColor: '#fff' }} resizeMode="contain" />
+                        <Text style={{ marginLeft: 10, color: '#fff', fontSize: 16 }}>{strings('scan.add_photos_button')}</Text>
                     </View>
                 </TouchableWithoutFeedback>
             </View>

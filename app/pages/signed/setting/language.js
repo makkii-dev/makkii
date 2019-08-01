@@ -75,9 +75,7 @@ class Language extends Component {
                         defaultKey={currentLanguage}
                         onItemSelected={() => {
                             this.props.navigation.setParams({
-                                isEdited:
-                                    currentLanguage !==
-                                    Object.keys(this.refs.refSelectList.getSelect())[0],
+                                isEdited: currentLanguage !== Object.keys(this.refs.refSelectList.getSelect())[0],
                             });
                         }}
                     />

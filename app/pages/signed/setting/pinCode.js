@@ -56,9 +56,7 @@ class PinCode extends React.Component {
                             popCustom.hide();
                             this.onVerifySuccess();
                         } else {
-                            popCustom.setErrorMsg(
-                                strings('unsigned_login.error_incorrect_password'),
-                            );
+                            popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'));
                         }
                     },
                 },
@@ -108,11 +106,7 @@ class PinCode extends React.Component {
                 </View>
                 <View style={styles.CellView}>
                     <Text style={[styles.textStyle]}>{strings('pinCode.touchID_button')}</Text>
-                    <Switch
-                        disabled={!pinCodeEnabled}
-                        value={touchIDEnabled}
-                        onValueChange={this.handleToggleTouchIDSwitch}
-                    />
+                    <Switch disabled={!pinCodeEnabled} value={touchIDEnabled} onValueChange={this.handleToggleTouchIDSwitch} />
                 </View>
                 <TouchableOpacity
                     disabled={!pinCodeEnabled}
@@ -126,14 +120,8 @@ class PinCode extends React.Component {
                     }}
                 >
                     <View style={styles.CellView}>
-                        <Text style={[styles.textStyle, disableTextStyle]}>
-                            {strings('pinCode.modify_button')}
-                        </Text>
-                        <Image
-                            source={require('../../../../assets/arrow_right.png')}
-                            style={{ width: 20, height: 20 }}
-                            resizeMode="contain"
-                        />
+                        <Text style={[styles.textStyle, disableTextStyle]}>{strings('pinCode.modify_button')}</Text>
+                        <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 20, height: 20 }} resizeMode="contain" />
                     </View>
                 </TouchableOpacity>
                 <Loading ref="refLoading" />

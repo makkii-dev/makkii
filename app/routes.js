@@ -1,16 +1,7 @@
-import {
-    createBottomTabNavigator,
-    createStackNavigator,
-    BottomTabBar,
-    NavigationActions,
-} from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, BottomTabBar, NavigationActions } from 'react-navigation';
 import React, { PureComponent } from 'react';
 import { View, TouchableOpacity, Image, BackHandler, Easing, Animated } from 'react-native';
-import {
-    createReduxContainer,
-    createNavigationReducer,
-    createReactNavigationReduxMiddleware,
-} from 'react-navigation-redux-helpers';
+import { createReduxContainer, createNavigationReducer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
 import { AppToast } from './components/AppToast';
@@ -584,11 +575,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
         let newIndex;
         switch (action.type) {
             case 'Navigation/NAVIGATE':
-                if (
-                    state.routes[state.routes.length - 1].routeName.match(
-                        /^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/,
-                    )
-                ) {
+                if (state.routes[state.routes.length - 1].routeName.match(/^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/)) {
                     newRoutes = state.routes.slice(0, state.routes.length - 1);
                     newIndex = newRoutes.length;
                     return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });
@@ -597,12 +584,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
 
             case 'Navigation/BACK':
                 if (state.routes && state.routes.length > 0) {
-                    newRoutes = state.routes.filter(
-                        r =>
-                            r.routeName !== 'scan' &&
-                            r.routeName !== 'splash' &&
-                            r.routeName !== 'unlock',
-                    );
+                    newRoutes = state.routes.filter(r => r.routeName !== 'scan' && r.routeName !== 'splash' && r.routeName !== 'unlock');
                     newIndex = newRoutes.length - 1;
                     return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });
                 }
@@ -638,12 +620,7 @@ class Router extends PureComponent {
         if (currentScreen === 'unsigned_register_mnemonic') {
             return true;
         }
-        if (
-            currentScreen === 'signed_dapps' ||
-            currentScreen === 'signed_vault' ||
-            currentScreen === 'signed_setting' ||
-            currentScreen === 'signed_dex'
-        ) {
+        if (currentScreen === 'signed_dapps' || currentScreen === 'signed_vault' || currentScreen === 'signed_setting' || currentScreen === 'signed_dex') {
             if (this.backClickCount === 1) {
                 BackHandler.exitApp();
                 this.props.dispatch(createAction('userModel/logOut')());
@@ -667,13 +644,7 @@ class Router extends PureComponent {
     }
 
     render() {
-        const {
-            lang,
-            dispatch,
-            router,
-            pinCodeEnabled,
-            hashed_password: hashedPassword,
-        } = this.props;
+        const { lang, dispatch, router, pinCodeEnabled, hashed_password: hashedPassword } = this.props;
         return (
             <App
                 dispatch={dispatch}
@@ -681,9 +652,7 @@ class Router extends PureComponent {
                 screenProps={{
                     t: strings,
                     lang: lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang,
-                    navigationSafely: ({ routeName, params, onVerifySuccess = undefined }) => ({
-                        dispatch,
-                    }) => {
+                    navigationSafely: ({ routeName, params, onVerifySuccess = undefined }) => ({ dispatch }) => {
                         navigationSafely(pinCodeEnabled, hashedPassword, {
                             routeName,
                             params,

@@ -1,14 +1,4 @@
-import {
-    Dimensions,
-    View,
-    TouchableOpacity,
-    Keyboard,
-    PixelRatio,
-    StyleSheet,
-    Image,
-    ScrollView,
-    Platform,
-} from 'react-native';
+import { Dimensions, View, TouchableOpacity, Keyboard, PixelRatio, StyleSheet, Image, ScrollView, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -117,10 +107,7 @@ class AddToken extends Component {
         const { contractAddr } = this.state;
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                <MyscrollView
-                    contentContainerStyle={{ justifyContent: 'center' }}
-                    keyboardShouldPersistTaps="always"
-                >
+                <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         activeOpacity={1}
@@ -136,51 +123,27 @@ class AddToken extends Component {
                                 multiline
                                 onChangeText={v => {
                                     this.setState({ contractAddr: v }, () => {
-                                        validateAddress(v, this.props.currentAccount.symbol).then(
-                                            result => {
-                                                if (result) {
-                                                    this.fetchTokenDetail(v);
-                                                } else {
-                                                    this.props.navigation.setParams({
-                                                        isEdited: false,
-                                                    });
-                                                }
-                                            },
-                                        );
+                                        validateAddress(v, this.props.currentAccount.symbol).then(result => {
+                                            if (result) {
+                                                this.fetchTokenDetail(v);
+                                            } else {
+                                                this.props.navigation.setParams({
+                                                    isEdited: false,
+                                                });
+                                            }
+                                        });
                                     });
                                 }}
                                 placeholder={strings('add_token.hint_contract_address')}
                                 rightView={() => (
                                     <TouchableOpacity onPress={() => this.scan()}>
-                                        <Image
-                                            source={require('../../../../assets/icon_scan.png')}
-                                            style={{ width: 20, height: 20, tintColor: '#000' }}
-                                            resizeMode="contain"
-                                        />
+                                        <Image source={require('../../../../assets/icon_scan.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
                                     </TouchableOpacity>
                                 )}
                             />
-                            <SubTextInput
-                                title={strings('add_token.label_token_name')}
-                                style={styles.text_input}
-                                value={`${name}`}
-                                multiline={false}
-                                editable={false}
-                            />
-                            <SubTextInput
-                                title={strings('add_token.label_symbol')}
-                                style={styles.text_input}
-                                value={`${symbol}`}
-                                multiline={false}
-                                editable={false}
-                            />
-                            <SubTextInput
-                                title={strings('add_token.label_decimals')}
-                                style={styles.text_input}
-                                value={`${tokenDecimal}`}
-                                multiline={false}
-                                editable={false}
-                            />
+                            <SubTextInput title={strings('add_token.label_token_name')} style={styles.text_input} value={`${name}`} multiline={false} editable={false} />
+                            <SubTextInput title={strings('add_token.label_symbol')} style={styles.text_input} value={`${symbol}`} multiline={false} editable={false} />
+                            <SubTextInput title={strings('add_token.label_decimals')} style={styles.text_input} value={`${tokenDecimal}`} multiline={false} editable={false} />
                         </View>
                     </TouchableOpacity>
                 </MyscrollView>

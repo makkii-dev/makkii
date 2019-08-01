@@ -98,13 +98,7 @@ export default {
                 symbol,
                 timestamp: Date.now(),
             };
-            type === 'token'
-                ? (tx = { ...tx, token })
-                : type === 'exchange'
-                ? (tx = { ...tx, exchange })
-                : type === 'approve'
-                ? (tx = { ...tx, approve })
-                : null;
+            type === 'token' ? (tx = { ...tx, token }) : type === 'exchange' ? (tx = { ...tx, exchange }) : type === 'approve' ? (tx = { ...tx, approve }) : null;
             txs[txObj.hash] = tx;
 
             // save current pending tx;
@@ -136,23 +130,13 @@ export default {
                 const newStatuses = yield call(getTxsStatus, oldStatuses);
                 for (let newStatus of newStatuses) {
                     const { newTx, symbol, listenerStatus: _listenerStatus, timestamp } = newStatus;
-                    const listenerStatus =
-                        Date.now() - timestamp > TIMEOUT ? 'UNCONFIRMED' : _listenerStatus; // timeout
+                    const listenerStatus = Date.now() - timestamp > TIMEOUT ? 'UNCONFIRMED' : _listenerStatus; // timeout
                     txs[newTx.hash].listenerStatus = listenerStatus;
                     txs[newTx.hash].txObj = newTx;
-                    if (
-                        listenerStatus === 'CONFIRMED' ||
-                        listenerStatus === 'FAILED' ||
-                        listenerStatus === 'UNCONFIRMED'
-                    ) {
+                    if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED' || listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
                         if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED')
-                            AppToast.show(
-                                `${strings('toast_tx')} ${newTx.hash} ${strings(
-                                    `toast_${listenerStatus}`,
-                                )}`,
-                                { position: AppToast.positions.CENTER },
-                            );
+                            AppToast.show(`${strings('toast_tx')} ${newTx.hash} ${strings(`toast_${listenerStatus}`)}`, { position: AppToast.positions.CENTER });
                         loadBalanceKeys.push(accountKey(symbol, newTx.to));
                         loadBalanceKeys.push(accountKey(symbol, newTx.from));
                         // dispatch other actions;
@@ -195,18 +179,10 @@ export default {
                             exchange.hash = newTx.hash;
                             if (exchange.status === 'CONFIRMED') {
                                 // get newest dest_qty
-                                const tokenList = yield select(
-                                    ({ ERC20Dex }) => ERC20Dex.tokenList,
-                                );
-                                const history = yield call(
-                                    getExchangeHistory,
-                                    newTx.from,
-                                    ERC20DEX_NETWORK,
-                                    newTx.hash,
-                                );
+                                const tokenList = yield select(({ ERC20Dex }) => ERC20Dex.tokenList);
+                                const history = yield call(getExchangeHistory, newTx.from, ERC20DEX_NETWORK, newTx.hash);
                                 const symbol = findSymbolByAddress(tokenList, history.destToken);
-                                exchange.destQty =
-                                    history.destQty / 10 ** tokenList[symbol].decimals;
+                                exchange.destQty = history.destQty / 10 ** tokenList[symbol].decimals;
                             }
                             yield put(
                                 createAction('accountsModel/updateTransactions')({
@@ -233,9 +209,7 @@ export default {
 
                 loadBalanceKeys = loadBalanceKeys.unique();
                 if (loadBalanceKeys.length > 0) {
-                    yield put(
-                        createAction('accountsModel/loadBalances')({ keys: loadBalanceKeys }),
-                    );
+                    yield put(createAction('accountsModel/loadBalances')({ keys: loadBalanceKeys }));
                 }
             }
         },

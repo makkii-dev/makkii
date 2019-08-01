@@ -32,19 +32,14 @@ class ImportPrivateKey extends Component {
         Keyboard.dismiss();
         const { dispatch } = this.props;
         const { private_key: privateKey } = this.state;
-        dispatch(
-            createAction('accountImportModel/fromPrivateKey')({ private_key: privateKey }),
-        ).then(r => {
+        dispatch(createAction('accountImportModel/fromPrivateKey')({ private_key: privateKey })).then(r => {
             console.log(`r:${r}`);
             if (r === 2) {
                 // already imported
                 AppToast.show(strings('import_private_key.already_existed'), { position: 0 });
             } else if (r === 3) {
                 // invalid  private key
-                alertOk(
-                    strings('alert_title_error'),
-                    strings('import_private_key.error_invalid_private_key'),
-                );
+                alertOk(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
             } else {
                 navigate('signed_vault_set_account_name')({ dispatch });
             }
@@ -83,10 +78,7 @@ class ImportPrivateKey extends Component {
                     });
                 }
 
-                callback(
-                    res ? data.data : null,
-                    res ? '' : strings('import_private_key.error_invalid_private_key'),
-                );
+                callback(res ? data.data : null, res ? '' : strings('import_private_key.error_invalid_private_key'));
             },
         });
     };

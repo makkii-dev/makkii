@@ -103,13 +103,7 @@ export class PopWindow extends React.Component {
                                         }}
                                     >
                                         <View style={this.props.itemStyle}>
-                                            {item.image ? (
-                                                <Image
-                                                    source={item.image}
-                                                    style={this.props.imageStyle}
-                                                    resizeMode="contain"
-                                                />
-                                            ) : null}
+                                            {item.image ? <Image source={item.image} style={this.props.imageStyle} resizeMode="contain" /> : null}
                                             <Text numberOfLines={1} style={this.props.fontStyle}>
                                                 {strings(item.title)}
                                             </Text>

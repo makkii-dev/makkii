@@ -28,24 +28,20 @@ class Home extends Component {
         } else {
             navigationSafely({
                 onVerifySuccess: () => {
-                    popCustom.show(
-                        strings('alert_title_warning'),
-                        strings('backup.label_remainder_backup'),
-                        [
-                            {
-                                text: strings('backup.button_backup_later'),
-                                onPress: () => {},
+                    popCustom.show(strings('alert_title_warning'), strings('backup.label_remainder_backup'), [
+                        {
+                            text: strings('backup.button_backup_later'),
+                            onPress: () => {},
+                        },
+                        {
+                            text: strings('backup.button_backup_now'),
+                            onPress: () => {
+                                navigation.navigate('signed_backup_tips', {
+                                    targetRoute: 'signed_setting',
+                                });
                             },
-                            {
-                                text: strings('backup.button_backup_now'),
-                                onPress: () => {
-                                    navigation.navigate('signed_backup_tips', {
-                                        targetRoute: 'signed_setting',
-                                    });
-                                },
-                            },
-                        ],
-                    );
+                        },
+                    ]);
                 },
             })(this.props);
         }
@@ -117,19 +113,15 @@ class Home extends Component {
                             leadIcon={require('../../../../assets/icon_setting_signout.png')}
                             title={strings('logout')}
                             onClick={() => {
-                                popCustom.show(
-                                    strings('alert_title_warning'),
-                                    strings('setting.confirm_logout'),
-                                    [
-                                        { text: strings('cancel_button'), onPress: () => {} },
-                                        {
-                                            text: strings('alert_ok_button'),
-                                            onPress: () => {
-                                                dispatch(createAction('userModel/logOut')());
-                                            },
+                                popCustom.show(strings('alert_title_warning'), strings('setting.confirm_logout'), [
+                                    { text: strings('cancel_button'), onPress: () => {} },
+                                    {
+                                        text: strings('alert_ok_button'),
+                                        onPress: () => {
+                                            dispatch(createAction('userModel/logOut')());
                                         },
-                                    ],
-                                );
+                                    },
+                                ]);
                             }}
                         />
                     </View>

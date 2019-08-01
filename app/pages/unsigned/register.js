@@ -30,9 +30,7 @@ class Home extends Component {
     register = () => {
         const { dispatch, navigation } = this.props;
         const { password, password_confirm: passwordConfirm } = this.state;
-        dispatch(
-            createAction('userModel/register')({ password_confirm: passwordConfirm, password }),
-        ).then(r => {
+        dispatch(createAction('userModel/register')({ password_confirm: passwordConfirm, password })).then(r => {
             if (r.result) {
                 sendRegisterEventLog();
                 navigation.navigate('unsigned_register_mnemonic', { mnemonic: r.data });
@@ -45,25 +43,21 @@ class Home extends Component {
     beforeRegister = () => {
         const { dispatch, hashed_password: hashedPassword } = this.props;
         if (hashedPassword !== '') {
-            popCustom.show(
-                strings('alert_title_warning'),
-                strings('register.warning_register_again'),
-                [
-                    { text: strings('cancel_button'), onPress: () => {} },
-                    {
-                        text: strings('alert_ok_button'),
-                        onPress: () => {
-                            Promise.all([
-                                dispatch(createAction('userModel/reset')()),
-                                dispatch(createAction('accountsModel/reset')()),
-                                dispatch(createAction('settingsModel/reset')()),
-                                dispatch(createAction('ERC20Dex/reset')()),
-                                dispatch(createAction('txSenderModel/reset')()),
-                            ]).then(() => this.register());
-                        },
+            popCustom.show(strings('alert_title_warning'), strings('register.warning_register_again'), [
+                { text: strings('cancel_button'), onPress: () => {} },
+                {
+                    text: strings('alert_ok_button'),
+                    onPress: () => {
+                        Promise.all([
+                            dispatch(createAction('userModel/reset')()),
+                            dispatch(createAction('accountsModel/reset')()),
+                            dispatch(createAction('settingsModel/reset')()),
+                            dispatch(createAction('ERC20Dex/reset')()),
+                            dispatch(createAction('txSenderModel/reset')()),
+                        ]).then(() => this.register());
                     },
-                ],
-            );
+                },
+            ]);
         } else {
             this.register();
         }
@@ -127,11 +121,7 @@ class Home extends Component {
                         }}
                     />
                     <View style={{ marginTop: 40 }} />
-                    <ComponentButton
-                        disabled={passwordConfirm.length === 0 || password.length === 0}
-                        title={strings('register.button_register')}
-                        onPress={this.beforeRegister}
-                    />
+                    <ComponentButton disabled={passwordConfirm.length === 0 || password.length === 0} title={strings('register.button_register')} onPress={this.beforeRegister} />
                 </View>
             </TouchableOpacity>
         );

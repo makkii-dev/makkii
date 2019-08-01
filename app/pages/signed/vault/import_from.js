@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    Platform,
-    Image,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    View,
-    Dimensions,
-    StyleSheet,
-    PixelRatio,
-} from 'react-native';
+import { Platform, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
 import { IMPORT_SOURCE } from './constants';
@@ -86,11 +76,7 @@ class ImportFrom extends Component {
                         {strings(item.title)}
                     </Text>
                 </View>
-                <Image
-                    style={{ width: 24, height: 24 }}
-                    source={require('../../../../assets/arrow_right.png')}
-                    resizeMode="contain"
-                />
+                <Image style={{ width: 24, height: 24 }} source={require('../../../../assets/arrow_right.png')} resizeMode="contain" />
             </TouchableOpacity>
         );
     };
@@ -113,13 +99,7 @@ class ImportFrom extends Component {
                     paddingTop: 20,
                 }}
             >
-                <FlatList
-                    style={{ width }}
-                    data={data}
-                    renderItem={this.renderItem}
-                    ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    keyExtractor={item => item.title}
-                />
+                <FlatList style={{ width }} data={data} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.title} />
                 <Loading ref="refLoading" />
             </View>
         );

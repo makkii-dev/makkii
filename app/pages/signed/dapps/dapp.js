@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Dimensions,
-    DeviceEventEmitter,
-    ActivityIndicator,
-    TouchableOpacity,
-    Image,
-    Platform,
-    BackHandler,
-} from 'react-native';
+import { View, Dimensions, DeviceEventEmitter, ActivityIndicator, TouchableOpacity, Image, Platform, BackHandler } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as RNFS from 'react-native-fs';
 import createInvoke from '../../../../libs/aion-web3-inject/webView-invoke/native';
@@ -35,11 +26,7 @@ class Dapp extends Component {
                     navigation.state.params.Reload && navigation.state.params.Reload();
                 }}
             >
-                <Image
-                    source={require('../../../../assets/icon_refresh.png')}
-                    style={{ height: 24, width: 24, tintColor: '#fff' }}
-                    resizeMode="contain"
-                />
+                <Image source={require('../../../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
             </TouchableOpacity>
         ),
         headerLeft: (
@@ -261,8 +248,7 @@ class Dapp extends Component {
                         }}
                         onLoadEnd={() => {
                             setTimeout(() => {
-                                this.updateCurrentNetwork &&
-                                    this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
+                                this.updateCurrentNetwork && this.updateCurrentNetwork(this.props.setting.endpoint_wallet);
                                 this.updateCurrentAddress && this.updateCurrentAddress(this.wallet);
                             }, 500);
                         }}

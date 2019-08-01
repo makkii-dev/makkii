@@ -3,14 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import { DeviceEventEmitter } from 'react-native';
 import BigNumber from 'bignumber.js';
 import Config from 'react-native-config';
-import {
-    genTradeData,
-    getTokenList,
-    getTokenTradeRate,
-    getEnabledStatus,
-    getApproveAuthorizationTx,
-    ETHID,
-} from '../services/erc20_dex.service';
+import { genTradeData, getTokenList, getTokenTradeRate, getEnabledStatus, getApproveAuthorizationTx, ETHID } from '../services/erc20_dex.service';
 import { createAction, navigate, popCustom } from '../utils/dva';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
@@ -71,9 +64,7 @@ export default {
             const currentAccount = yield select(({ ERC20Dex }) => ERC20Dex.currentAccount);
             if (currentAccount.length <= 0) {
                 const { address } = payload;
-                yield put(
-                    createAction('ERC20DexUpdateState')({ currentAccount: `ETH+${address}` }),
-                );
+                yield put(createAction('ERC20DexUpdateState')({ currentAccount: `ETH+${address}` }));
             }
         },
         *reset(action, { call, put }) {
@@ -100,13 +91,7 @@ export default {
             const destToken = Object.keys(lists)[1];
             console.log(`${srcToken} ${lists[srcToken].address}`);
             console.log(`${destToken} ${lists[destToken].address}`);
-            const result = yield call(
-                getTokenTradeRate,
-                lists[srcToken].address,
-                lists[destToken].address,
-                1,
-                network,
-            );
+            const result = yield call(getTokenTradeRate, lists[srcToken].address, lists[destToken].address, 1, network);
             if (result.status) {
                 console.log(`get rate ${srcToken} -> ${destToken}=${result.rate}`);
                 const trade = {
@@ -122,9 +107,7 @@ export default {
                     }),
                 );
             } else {
-                yield put(
-                    createAction('ERC20DexUpdateState')({ isLoading: false, tokenList: lists }),
-                );
+                yield put(createAction('ERC20DexUpdateState')({ isLoading: false, tokenList: lists }));
             }
         },
         *updateTrade({ payload }, { call, put, select }) {
@@ -139,13 +122,7 @@ export default {
                 AppToast.show(strings('token_exchange.toast_not_support', { token: destToken }));
                 return;
             }
-            const result = yield call(
-                getTokenTradeRate,
-                tokenList[srcToken].address,
-                tokenList[destToken].address,
-                srcQty,
-                network,
-            );
+            const result = yield call(getTokenTradeRate, tokenList[srcToken].address, tokenList[destToken].address, srcQty, network);
             if (result.status) {
                 console.log(`get rate ${srcToken} -> ${destToken}=${result.rate}`);
                 let trade = {
@@ -215,13 +192,7 @@ export default {
                         }),
                     );
 
-                    sendDexExchangeEventLog(
-                        srcToken,
-                        destToken,
-                        srcQty,
-                        destQty * 0.97,
-                        Config.kyber_wallet_id,
-                    );
+                    sendDexExchangeEventLog(srcToken, destToken, srcQty, destQty * 0.97, Config.kyber_wallet_id);
                     yield put(
                         NavigationActions.navigate({
                             routeName: 'signed_vault_send',
@@ -233,12 +204,7 @@ export default {
                 }
             } else {
                 // check enabledStatus
-                const txs_required = yield call(
-                    getEnabledStatus,
-                    account.address,
-                    tokenList[srcToken].address,
-                    network,
-                );
+                const txs_required = yield call(getEnabledStatus, account.address, tokenList[srcToken].address, network);
                 console.log('tx_required=>', txs_required);
                 const tokenApprovals = yield select(({ ERC20Dex }) => ERC20Dex.tokenApprovals);
                 if (tokenApprovals[account.address] && tokenApprovals[account.address][srcToken]) {
@@ -250,76 +216,68 @@ export default {
                 }
                 if (txs_required === 1) {
                     // No allowance so approve to maximum amount (2^255)
-                    popCustom.show(
-                        strings('token_exchange.alert_title_need_authorization'),
-                        strings('token_exchange.alert_content_need_approve', { token: srcToken }),
-                        [
-                            {
-                                text: strings('token_exchange.alert_button_why_need_authorization'),
-                                onPress: () => {
-                                    const initialUrl = getExchangeRulesURL(lang);
-                                    navigate('simple_webview', {
-                                        title: strings('token_exchange.title_exchange_rules'),
-                                        initialUrl,
-                                    })({ dispatch });
-                                },
+                    popCustom.show(strings('token_exchange.alert_title_need_authorization'), strings('token_exchange.alert_content_need_approve', { token: srcToken }), [
+                        {
+                            text: strings('token_exchange.alert_button_why_need_authorization'),
+                            onPress: () => {
+                                const initialUrl = getExchangeRulesURL(lang);
+                                navigate('simple_webview', {
+                                    title: strings('token_exchange.title_exchange_rules'),
+                                    initialUrl,
+                                })({ dispatch });
                             },
-                            {
-                                text: strings('cancel_button'),
-                                onPress: () => {},
-                            },
+                        },
+                        {
+                            text: strings('cancel_button'),
+                            onPress: () => {},
+                        },
 
-                            {
-                                text: strings('token_exchange.alert_button_approve'),
-                                onPress: () => {
-                                    dispatch(
-                                        createAction('ERC20Dex/enableTransfer')({
-                                            token: srcToken,
-                                            account,
-                                            title: strings('token_exchange.title_approve'),
-                                            type: 'waitApprove',
-                                        }),
-                                    );
-                                },
+                        {
+                            text: strings('token_exchange.alert_button_approve'),
+                            onPress: () => {
+                                dispatch(
+                                    createAction('ERC20Dex/enableTransfer')({
+                                        token: srcToken,
+                                        account,
+                                        title: strings('token_exchange.title_approve'),
+                                        type: 'waitApprove',
+                                    }),
+                                );
                             },
-                        ],
-                    );
+                        },
+                    ]);
                 } else if (txs_required === 2) {
                     // Allowance has been given but is insufficient.
                     // Have to approve to 0 first to avoid this issue https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729
-                    popCustom.show(
-                        strings('token_exchange.alert_title_need_authorization'),
-                        strings('token_exchange.alert_content_need_re-approve'),
-                        [
-                            {
-                                text: strings('token_exchange.alert_button_why_need_authorization'),
-                                onPress: () => {
-                                    const initialUrl = getExchangeRulesURL(lang);
-                                    navigate('simple_webview', {
-                                        title: strings('token_exchange.title_exchange_rules'),
-                                        initialUrl,
-                                    })({ dispatch });
-                                },
+                    popCustom.show(strings('token_exchange.alert_title_need_authorization'), strings('token_exchange.alert_content_need_re-approve'), [
+                        {
+                            text: strings('token_exchange.alert_button_why_need_authorization'),
+                            onPress: () => {
+                                const initialUrl = getExchangeRulesURL(lang);
+                                navigate('simple_webview', {
+                                    title: strings('token_exchange.title_exchange_rules'),
+                                    initialUrl,
+                                })({ dispatch });
                             },
-                            {
-                                text: strings('cancel_button'),
-                                onPress: () => {},
+                        },
+                        {
+                            text: strings('cancel_button'),
+                            onPress: () => {},
+                        },
+                        {
+                            text: strings('token_exchange.alert_button_approve'),
+                            onPress: () => {
+                                dispatch(
+                                    createAction('ERC20Dex/enableTransfer')({
+                                        token: srcToken,
+                                        account,
+                                        title: strings('token_exchange.title_revoke'),
+                                        type: 'waitRevoke',
+                                    }),
+                                );
                             },
-                            {
-                                text: strings('token_exchange.alert_button_approve'),
-                                onPress: () => {
-                                    dispatch(
-                                        createAction('ERC20Dex/enableTransfer')({
-                                            token: srcToken,
-                                            account,
-                                            title: strings('token_exchange.title_revoke'),
-                                            type: 'waitRevoke',
-                                        }),
-                                    );
-                                },
-                            },
-                        ],
-                    );
+                        },
+                    ]);
                 } else {
                     const tradeDatResp = yield call(
                         genTradeData,
@@ -366,13 +324,7 @@ export default {
                             }),
                         );
 
-                        sendDexExchangeEventLog(
-                            srcToken,
-                            destToken,
-                            srcQty,
-                            destQty * 0.97,
-                            Config.kyber_wallet_id,
-                        );
+                        sendDexExchangeEventLog(srcToken, destToken, srcQty, destQty * 0.97, Config.kyber_wallet_id);
 
                         yield put(
                             NavigationActions.navigate({
@@ -391,12 +343,7 @@ export default {
             yield put(createAction('ERC20DexUpdateState')({ isWaiting: true }));
             const { tokenList, currentAccount } = yield select(({ ERC20Dex }) => ({ ...ERC20Dex }));
             const { token, account, title, type } = payload;
-            const rawTx = yield call(
-                getApproveAuthorizationTx,
-                account.address,
-                tokenList[token].address,
-                network,
-            );
+            const rawTx = yield call(getApproveAuthorizationTx, account.address, tokenList[token].address, network);
             console.log('rawTx=>', rawTx);
             yield put(createAction('ERC20DexUpdateState')({ isWaiting: false }));
             yield put(
@@ -422,9 +369,7 @@ export default {
                     },
                 }),
             );
-            yield put(
-                NavigationActions.navigate({ routeName: 'signed_vault_send', params: { title } }),
-            );
+            yield put(NavigationActions.navigate({ routeName: 'signed_vault_send', params: { title } }));
         },
     },
 };

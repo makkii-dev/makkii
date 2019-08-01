@@ -1,19 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    TouchableOpacity,
-    Text,
-    PixelRatio,
-    Image,
-    RefreshControl,
-    Keyboard,
-    Dimensions,
-    StyleSheet,
-    FlatList,
-    Platform,
-    ActivityIndicator,
-} from 'react-native';
+import { View, TouchableOpacity, Text, PixelRatio, Image, RefreshControl, Keyboard, Dimensions, StyleSheet, FlatList, Platform, ActivityIndicator } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { getStatusBarHeight, accountKey } from '../../../../utils';
@@ -101,13 +88,7 @@ class Account extends Component {
                         if (hasMenu) showMenu();
                     }}
                 >
-                    {hasMenu ? (
-                        <Image
-                            source={require('../../../../assets/icon_account_menu.png')}
-                            style={{ width: 30, height: 30, tintColor: '#fff' }}
-                            resizeMode="contain"
-                        />
-                    ) : null}
+                    {hasMenu ? <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 30, height: 30, tintColor: '#fff' }} resizeMode="contain" /> : null}
                 </TouchableOpacity>
             ),
         };
@@ -134,9 +115,7 @@ class Account extends Component {
     componentWillMount() {
         this.fetchAccountTransactions();
         this.isMount = true;
-        this.listenNavigation = this.props.navigation.addListener('willBlur', () =>
-            this.setState({ showMenu: false }),
-        );
+        this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
     componentWillReceiveProps(nextProps): void {
@@ -158,10 +137,7 @@ class Account extends Component {
             createAction('accountsModel/getTransactionHistory')({
                 user_address: currentAccount.address,
                 symbol: currentAccount.symbol,
-                tokenSymbol:
-                    currentAccount.coinSymbol === currentAccount.symbol
-                        ? ''
-                        : currentAccount.coinSymbol,
+                tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol ? '' : currentAccount.coinSymbol,
                 page: 0,
                 size: 5,
                 needSave: true,
@@ -215,10 +191,7 @@ class Account extends Component {
                         navigationSafely({
                             routeName: 'signed_vault_export_private_key',
                             params: {
-                                currentAccount: accountKey(
-                                    currentAccount.symbol,
-                                    currentAccount.address,
-                                ),
+                                currentAccount: accountKey(currentAccount.symbol, currentAccount.address),
                             },
                         })({ dispatch });
                         break;
@@ -276,11 +249,7 @@ class Account extends Component {
                         backgroundColor: mainBgColor,
                     }}
                 >
-                    <Image
-                        source={require('../../../../assets/empty_transactions.png')}
-                        style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                     <View
                         style={{
                             flexDirection: 'row',
@@ -330,22 +299,12 @@ class Account extends Component {
                 renderItem={({ item }) => (
                     <TransactionItem
                         transaction={item}
-                        isSender={sameAddress(
-                            currentAccount.symbol,
-                            currentAccount.address,
-                            item.from,
-                        )}
+                        isSender={sameAddress(currentAccount.symbol, currentAccount.address, item.from)}
                         symbol={currentAccount.coinSymbol}
                         onPress={() => this.toTxDetail(item)}
                     />
                 )}
-                refreshControl={
-                    <RefreshControl
-                        refreshing={this.state.refreshing}
-                        onRefresh={() => this.onRefresh(currentAccount.address)}
-                        title="loading"
-                    />
-                }
+                refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={() => this.onRefresh(currentAccount.address)} title="loading" />}
             />
         );
     }
@@ -354,12 +313,8 @@ class Account extends Component {
         const { currentAccount, transactions } = this.props;
         const { address, type, coinSymbol, balance } = currentAccount;
         const accountBalanceText = `${new BigNumber(balance).toNotExString()} ${coinSymbol}`;
-        const accountBalanceTextFontSize = Math.max(
-            Math.min(32, (200 * PixelRatio.get()) / (accountBalanceText.length + 4) - 5),
-            16,
-        );
-        const popWindowTop =
-            Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const accountBalanceTextFontSize = Math.max(Math.min(32, (200 * PixelRatio.get()) / (accountBalanceText.length + 4) - 5), 16);
+        const popWindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
@@ -367,11 +322,7 @@ class Account extends Component {
 
         return (
             <View style={{ flex: 1, backgroundColor: mainColor }}>
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={{ flex: 1 }}
-                    onPress={() => Keyboard.dismiss()}
-                >
+                <TouchableOpacity activeOpacity={1} style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
                     <View
                         style={{
                             justifyContent: 'space-between',
@@ -381,9 +332,7 @@ class Account extends Component {
                             backgroundColor: mainColor,
                         }}
                     >
-                        <Text style={{ fontSize: accountBalanceTextFontSize, color: '#fff' }}>
-                            {accountBalanceText}
-                        </Text>
+                        <Text style={{ fontSize: accountBalanceTextFontSize, color: '#fff' }}>{accountBalanceText}</Text>
                         <AddressComponent address={address} symbol={currentAccount.symbol} />
                     </View>
                     <View
@@ -405,14 +354,9 @@ class Account extends Component {
                             }}
                             onPress={this.toSend}
                         >
-                            <Text style={{ fontSize: 16, color: '#fff' }}>
-                                {strings('account_view.send_button')}
-                            </Text>
+                            <Text style={{ fontSize: 16, color: '#fff' }}>{strings('account_view.send_button')}</Text>
                         </TouchableOpacity>
-                        <Image
-                            source={require('../../../../assets/separate.png')}
-                            style={{ height: 40, width: 2, tintColor: '#fff' }}
-                        />
+                        <Image source={require('../../../../assets/separate.png')} style={{ height: 40, width: 2, tintColor: '#fff' }} />
                         <TouchableOpacity
                             style={{
                                 width: width / 2,
@@ -422,9 +366,7 @@ class Account extends Component {
                             }}
                             onPress={this.toReceive}
                         >
-                            <Text style={{ fontSize: 16, color: '#fff' }}>
-                                {strings('account_view.receive_button')}
-                            </Text>
+                            <Text style={{ fontSize: 16, color: '#fff' }}>{strings('account_view.receive_button')}</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -441,14 +383,8 @@ class Account extends Component {
                             backgroundColor: '#fff',
                         }}
                     >
-                        <Image
-                            source={require('../../../../assets/rectangle.png')}
-                            resizeMode="contain"
-                            style={{ width: 5, height: 30 }}
-                        />
-                        <Text style={{ marginLeft: 10, fontSize: 16, color: '#000' }}>
-                            {strings('account_view.transaction_history_label')}
-                        </Text>
+                        <Image source={require('../../../../assets/rectangle.png')} resizeMode="contain" style={{ width: 5, height: 30 }} />
+                        <Text style={{ marginLeft: 10, fontSize: 16, color: '#000' }}>{strings('account_view.transaction_history_label')}</Text>
                         <View
                             style={{
                                 flex: 1,
@@ -467,21 +403,12 @@ class Account extends Component {
                                 }}
                                 onPress={this.toHistory}
                             >
-                                <Text style={{ fontSize: 12, color: linkButtonColor }}>
-                                    {strings('account_view.complete_button')}
-                                </Text>
-                                <Image
-                                    source={require('../../../../assets/arrow_right.png')}
-                                    style={{ height: 20, width: 20, tintColor: 'gray' }}
-                                />
+                                <Text style={{ fontSize: 12, color: linkButtonColor }}>{strings('account_view.complete_button')}</Text>
+                                <Image source={require('../../../../assets/arrow_right.png')} style={{ height: 20, width: 20, tintColor: 'gray' }} />
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                        {transactions.length > 0
-                            ? this.renderTransactions(transactions)
-                            : this.renderEmpty()}
-                    </View>
+                    <View style={{ flex: 1, backgroundColor: mainBgColor }}>{transactions.length > 0 ? this.renderTransactions(transactions) : this.renderEmpty()}</View>
                 </TouchableOpacity>
                 {/* Menu Pop window */}
                 {this.state.showMenu ? (
@@ -512,8 +439,7 @@ const mapToState = ({ accountsModel }) => {
     const currentAccount = {
         ...accountsMap[key],
         coinSymbol: currentToken === '' ? accountsMap[key].symbol : currentToken,
-        balance:
-            currentToken === '' ? accountsMap[key].balance : accountsMap[key].tokens[currentToken],
+        balance: currentToken === '' ? accountsMap[key].balance : accountsMap[key].tokens[currentToken],
     };
     const txKey = currentToken === '' ? key : `${key}+${currentToken}`;
     const compareFn = (a, b) => {

@@ -94,11 +94,4 @@ const sendDexExchangeEventLog = (src_token, dst_token, src_qty, dst_qty, wallet_
     }
 };
 
-export {
-    sendEventLog,
-    sendLoginEventLog,
-    sendRegisterEventLog,
-    sendRecoveryEventLog,
-    sendTransferEventLog,
-    sendDexExchangeEventLog,
-};
+export { sendEventLog, sendLoginEventLog, sendRegisterEventLog, sendRecoveryEventLog, sendTransferEventLog, sendDexExchangeEventLog };

@@ -1,14 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Image,
-    Text,
-    TouchableOpacity,
-    FlatList,
-    View,
-    Dimensions,
-    StyleSheet,
-    PixelRatio,
-} from 'react-native';
+import { Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeCell from '../../../components/SwipeCell';
 import { fixedHeight, mainBgColor } from '../../../style_util';
@@ -144,9 +135,7 @@ class AddressBook extends Component {
                                     backgroundColor: '#fe0000',
                                 }}
                             >
-                                <Text style={{ fontSize: 14, color: '#fff' }}>
-                                    {strings('delete_button')}
-                                </Text>
+                                <Text style={{ fontSize: 14, color: '#fff' }}>{strings('delete_button')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -179,10 +168,7 @@ class AddressBook extends Component {
                             resizeMode="contain"
                         />
                         <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
-                            <Text
-                                numberOfLines={1}
-                                style={{ ...styles.nameStyle, marginBottom: 10 }}
-                            >
+                            <Text numberOfLines={1} style={{ ...styles.nameStyle, marginBottom: 10 }}>
                                 {item.name}
                             </Text>
                             <Text numberOfLines={1} style={styles.addressStyle}>
@@ -190,10 +176,7 @@ class AddressBook extends Component {
                             </Text>
                         </View>
                     </View>
-                    <Image
-                        style={{ width: 24, height: 24 }}
-                        source={require('../../../../assets/arrow_right.png')}
-                    />
+                    <Image style={{ width: 24, height: 24 }} source={require('../../../../assets/arrow_right.png')} />
                 </TouchableOpacity>
             </SwipeCell>
         );
@@ -216,11 +199,7 @@ class AddressBook extends Component {
                         alignItems: 'center',
                     }}
                 >
-                    <Image
-                        source={require('../../../../assets/empty_transactions.png')}
-                        style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                     <Text>{strings('address_book.label_address_book_empty')}</Text>
                 </View>
             </View>
@@ -253,13 +232,7 @@ class AddressBook extends Component {
                     this.setState({ openRowKey: null });
                 }}
             >
-                <FlatList
-                    style={{ width }}
-                    data={itemsFiltered}
-                    renderItem={this.renderItem}
-                    ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    keyExtractor={item => item.address}
-                />
+                <FlatList style={{ width }} data={itemsFiltered} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.address} />
             </TouchableOpacity>
         ) : (
             this.renderEmpty()

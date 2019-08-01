@@ -1,15 +1,5 @@
 import * as React from 'react';
-import {
-    View,
-    Text,
-    Image,
-    Dimensions,
-    Platform,
-    NativeModules,
-    NativeEventEmitter,
-    BackHandler,
-    TouchableOpacity,
-} from 'react-native';
+import { View, Text, Image, Dimensions, Platform, NativeModules, NativeEventEmitter, BackHandler, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import screenshotHelper from 'react-native-screenshot-helper';
 import { strings } from '../../../../locales/i18n';
@@ -109,15 +99,7 @@ class MnemonicBackUp extends React.Component {
         const mnemonic = this.props.navigation.getParam('mnemonic', '');
         let i = 0;
         return mnemonic.split(' ').map(str => {
-            return (
-                <MnemonicView
-                    key={`${i++}`}
-                    canDelete={false}
-                    disabled
-                    onSelected={() => {}}
-                    text={str}
-                />
-            );
+            return <MnemonicView key={`${i++}`} canDelete={false} disabled onSelected={() => {}} text={str} />;
         });
     };
 
@@ -132,19 +114,11 @@ class MnemonicBackUp extends React.Component {
             >
                 <View style={styles.container}>
                     <Text>{strings('backup.label_header_backup_mnemonic')}</Text>
-                    <Image
-                        source={require('../../../../assets/icon_backup_mnemonic.png')}
-                        style={{ width: 40, height: 40, marginVertical: 10 }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/icon_backup_mnemonic.png')} style={{ width: 40, height: 40, marginVertical: 10 }} resizeMode="contain" />
                     <View style={styles.MnemonicContainer}>{this.renderMnemonic()}</View>
                     <Text>{strings('backup.label_footer_backup_mnemonic')}</Text>
                 </View>
-                <ComponentButton
-                    style={{ width: width - 40 }}
-                    onPress={this.nextStep}
-                    title={strings('backup.button_next')}
-                />
+                <ComponentButton style={{ width: width - 40 }} onPress={this.nextStep} title={strings('backup.button_next')} />
             </View>
         );
     }

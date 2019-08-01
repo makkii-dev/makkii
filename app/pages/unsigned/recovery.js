@@ -137,10 +137,7 @@ class Home extends Component {
                         title={strings('recovery.button_confirm')}
                         onPress={() => {
                             if (!validateMnemonic(this.state.mnemonic)) {
-                                alertOk(
-                                    strings('alert_title_error'),
-                                    strings('recovery.error_invalid_mnemonic'),
-                                );
+                                alertOk(strings('alert_title_error'), strings('recovery.error_invalid_mnemonic'));
                                 return;
                             }
                             this.props.navigation.navigate('unsigned_recovery_password', {

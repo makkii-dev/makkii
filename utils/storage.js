@@ -6,9 +6,7 @@ function clear() {
 }
 
 function get(key, defaultValue = null, needParse = true) {
-    return AsyncStorage.getItem(key).then(value =>
-        value !== null ? (needParse ? JSON.parse(value) : value) : defaultValue,
-    );
+    return AsyncStorage.getItem(key).then(value => (value !== null ? (needParse ? JSON.parse(value) : value) : defaultValue));
 }
 
 function set(key, value) {
@@ -43,9 +41,7 @@ function Sset(key, value) {
 }
 
 function Sget(key, defaultValue = null) {
-    return SInfo.getItem(key, SensitiveConfigs).then(value =>
-        value !== null ? value : defaultValue,
-    );
+    return SInfo.getItem(key, SensitiveConfigs).then(value => (value !== null ? value : defaultValue));
 }
 
 function Sremove(key) {

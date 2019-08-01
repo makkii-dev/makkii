@@ -92,9 +92,7 @@ export default class SwipeCell extends React.PureComponent {
 
     componentWillMount() {
         this._panResponder = PanResponder.create({
-            onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture.bind(
-                this,
-            ),
+            onMoveShouldSetPanResponderCapture: this._handleMoveShouldSetPanResponderCapture.bind(this),
             onPanResponderGrant: this._handlePanResponderGrant.bind(this),
             onPanResponderMove: this._handlePanResponderMove.bind(this),
             onPanResponderRelease: this._handlePanResponderEnd.bind(this),
@@ -174,9 +172,7 @@ export default class SwipeCell extends React.PureComponent {
     _swipeFullSpeed(gestureState) {
         let newLeft = this._previousLeft + gestureState.dx;
         const leftBorder = -this.props.maxSwipeDistance;
-        const rightBorder = this.props.preventSwipeRight
-            ? CLOSED_LEFT_POSITION
-            : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        const rightBorder = this.props.preventSwipeRight ? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
         newLeft = newLeft > rightBorder ? rightBorder : newLeft;
         newLeft = newLeft < leftBorder ? leftBorder : newLeft;
         this.state.currentLeft.setValue(newLeft);
@@ -185,9 +181,7 @@ export default class SwipeCell extends React.PureComponent {
     _swipeSlowSpeed(gestureState) {
         let newLeft = this._previousLeft + gestureState.dx / SLOW_SPEED_SWIPE_FACTOR;
         const leftBorder = -this.props.maxSwipeDistance;
-        const rightBorder = this.props.preventSwipeRight
-            ? CLOSED_LEFT_POSITION
-            : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
+        const rightBorder = this.props.preventSwipeRight ? CLOSED_LEFT_POSITION : CLOSED_LEFT_POSITION + RIGHT_SWIPE_THRESHOLD;
         newLeft = newLeft > rightBorder ? rightBorder : newLeft;
         newLeft = newLeft < leftBorder ? leftBorder : newLeft;
         this.state.currentLeft.setValue(newLeft);
@@ -200,9 +194,7 @@ export default class SwipeCell extends React.PureComponent {
          * functionally.
          */
         const gestureStateDx = gestureState.dx;
-        return (
-            this._isSwipingRightFromClosed(gestureState) && gestureStateDx > RIGHT_SWIPE_THRESHOLD
-        );
+        return this._isSwipingRightFromClosed(gestureState) && gestureStateDx > RIGHT_SWIPE_THRESHOLD;
     }
 
     _animateTo(toValue, duration = SWIPE_DURATION, callback = emptyFunction) {
@@ -226,17 +218,12 @@ export default class SwipeCell extends React.PureComponent {
          * Ensure the speed is at least the set speed threshold to prevent a slow
          * swiping animation
          */
-        speed =
-            speed > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD
-                ? speed
-                : HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
+        speed = speed > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD ? speed : HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
         /**
          * Calculate the duration the row should take to swipe the remaining distance
          * at the same speed the user swiped (or the speed threshold)
          */
-        const duration = Math.abs(
-            (this.props.maxSwipeDistance - Math.abs(distMoved)) / speed / 1.5,
-        );
+        const duration = Math.abs((this.props.maxSwipeDistance - Math.abs(distMoved)) / speed / 1.5);
         const { maxSwipeDistance } = this.props;
         this._animateTo(-maxSwipeDistance, duration);
     }
@@ -250,20 +237,12 @@ export default class SwipeCell extends React.PureComponent {
     }
 
     _animateBounceBack(duration) {
-        this._animateTo(
-            -RIGHT_SWIPE_BOUNCE_BACK_DISTANCE,
-            duration,
-            this._animateToClosedPositionDuringBounce(),
-        );
+        this._animateTo(-RIGHT_SWIPE_BOUNCE_BACK_DISTANCE, duration, this._animateToClosedPositionDuringBounce());
     }
 
     // Ignore swipes due to user's finger moving slightly when tapping
     _isValidSwipe(gestureState) {
-        if (
-            this.props.preventSwipeRight &&
-            this._previousLeft === CLOSED_LEFT_POSITION &&
-            gestureState.dx > 0
-        ) {
+        if (this.props.preventSwipeRight && this._previousLeft === CLOSED_LEFT_POSITION && gestureState.dx > 0) {
             return false;
         }
 
@@ -275,10 +254,7 @@ export default class SwipeCell extends React.PureComponent {
          * If user has swiped past a certain distance, animate the rest of the way
          * if they let go
          */
-        return (
-            Math.abs(gestureState.dx) > this.props.swipeThreshold ||
-            gestureState.vx > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD
-        );
+        return Math.abs(gestureState.dx) > this.props.swipeThreshold || gestureState.vx > HORIZONTAL_FULL_SWIPE_SPEED_THRESHOLD;
     }
 
     _handlePanResponderEnd(evt, gestureState) {
@@ -308,19 +284,12 @@ export default class SwipeCell extends React.PureComponent {
     render() {
         let slideOutView;
         if (this.state.isSwipeableViewRendered && this.state.rowHeight) {
-            slideOutView = (
-                <View style={{ ...styles.slideOutContainer, ...this.props.style }}>
-                    {this.props.slideoutView}
-                </View>
-            );
+            slideOutView = <View style={{ ...styles.slideOutContainer, ...this.props.style }}>{this.props.slideoutView}</View>;
         }
 
         // The swipeable item
         const swipeableView = (
-            <Animated.View
-                onLayout={this._onSwipeableViewLayout}
-                style={{ transform: [{ translateX: this.state.currentLeft }] }}
-            >
+            <Animated.View onLayout={this._onSwipeableViewLayout} style={{ transform: [{ translateX: this.state.currentLeft }] }}>
                 {this.props.children}
             </Animated.View>
         );

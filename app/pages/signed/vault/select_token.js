@@ -1,19 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import {
-    ActivityIndicator,
-    Button,
-    Dimensions,
-    FlatList,
-    Image,
-    Keyboard,
-    PixelRatio,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { ActivityIndicator, Button, Dimensions, FlatList, Image, Keyboard, PixelRatio, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
@@ -69,11 +56,7 @@ class SelectToken extends Component {
                             navigation.state.params.searchToken('');
                         }}
                     >
-                        <Image
-                            style={{ width: 20, height: 20, marginRight: 20, tintColor: 'white' }}
-                            resizeMode="contain"
-                            source={require('../../../../assets/icon_clear.png')}
-                        />
+                        <Image style={{ width: 20, height: 20, marginRight: 20, tintColor: 'white' }} resizeMode="contain" source={require('../../../../assets/icon_clear.png')} />
                     </TouchableOpacity>
                 ) : null,
         };
@@ -128,9 +111,7 @@ class SelectToken extends Component {
     searchToken = keyword => {
         this.refs.refLoading.show(null, { position: 'top' });
         const { dispatch } = this.props;
-        const action = keyword.length
-            ? createAction('tokenImportModel/searchTokens')({ keyword })
-            : createAction('tokenImportModel/getTopTokens')();
+        const action = keyword.length ? createAction('tokenImportModel/searchTokens')({ keyword }) : createAction('tokenImportModel/getTopTokens')();
         dispatch(action).then(len => {
             if (this.isMount) {
                 this.refs.refLoading.hide();
@@ -161,25 +142,15 @@ class SelectToken extends Component {
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {fastIcon !== undefined ? (
-                        <FastImage
-                            style={{ width: 30, height: 30 }}
-                            source={{ uri: fastIcon }}
-                            resizeMode={FastImage.resizeMode.contain}
-                        />
+                        <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
                     ) : icon !== undefined ? (
-                        <Image
-                            style={{ width: 30, height: 30 }}
-                            source={icon}
-                            resizeMode="contain"
-                        />
+                        <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                     ) : null}
                     <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                         {`${symbol}-${name}`}
                     </Text>
                 </View>
-                {isAdded ? (
-                    <Text numberOfLines={1}>{strings('select_coin.label_is_added')}</Text>
-                ) : null}
+                {isAdded ? <Text numberOfLines={1}>{strings('select_coin.label_is_added')}</Text> : null}
             </TouchableOpacity>
         );
     };
@@ -223,21 +194,10 @@ class SelectToken extends Component {
                     backgroundColor: mainBgColor,
                 }}
             >
-                <View
-                    style={{ width, height: 180, justifyContent: 'center', alignItems: 'center' }}
-                >
-                    <Image
-                        source={require('../../../../assets/empty_account.png')}
-                        style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                        resizeMode="contain"
-                    />
-                    <Text style={{ color: 'gray', marginBottom: 20 }}>
-                        {strings('select_coin.no_token_found')}
-                    </Text>
-                    <Button
-                        title={strings('select_coin.btn_custom_token')}
-                        onPress={this.addCustomToken}
-                    />
+                <View style={{ width, height: 180, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../../../../assets/empty_account.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
+                    <Text style={{ color: 'gray', marginBottom: 20 }}>{strings('select_coin.no_token_found')}</Text>
+                    <Button title={strings('select_coin.btn_custom_token')} onPress={this.addCustomToken} />
                 </View>
             </View>
         );
@@ -246,11 +206,7 @@ class SelectToken extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                {this.state.isLoading
-                    ? this.renderLoadingView()
-                    : this.props.token_lists.length !== 0
-                    ? this.renderData()
-                    : this.renderEmptyView()}
+                {this.state.isLoading ? this.renderLoadingView() : this.props.token_lists.length !== 0 ? this.renderData() : this.renderEmptyView()}
                 <Loading ref="refLoading" />
             </View>
         );

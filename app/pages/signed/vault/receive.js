@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Text,
-    TouchableWithoutFeedback,
-    PermissionsAndroid,
-    Platform,
-    TouchableOpacity,
-    Keyboard,
-    Image,
-    Dimensions,
-    ScrollView,
-} from 'react-native';
+import { View, Text, TouchableWithoutFeedback, PermissionsAndroid, Platform, TouchableOpacity, Keyboard, Image, Dimensions, ScrollView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SubTextInput, alertOk } from '../../../components/common';
@@ -73,11 +62,7 @@ class Receive extends Component {
         const { currentAccount } = this.props;
         // refresh
         this.setState({
-            qrCodeValue: generateQRCode(
-                this.state.amount,
-                currentAccount.address,
-                currentAccount.coinSymbol,
-            ),
+            qrCodeValue: generateQRCode(this.state.amount, currentAccount.address, currentAccount.coinSymbol),
         });
     }
 
@@ -91,15 +76,10 @@ class Receive extends Component {
         if (this.qrcodeRef) {
             if (Platform.OS === 'android') {
                 // check storage permission first.
-                const storagePermission = await PermissionsAndroid.check(
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                );
+                const storagePermission = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
                 console.log(`storagePermission: ${storagePermission}`);
                 if (!storagePermission) {
-                    alertOk(
-                        strings('alert_title_error'),
-                        strings('receive.no_permission_save_file'),
-                    );
+                    alertOk(strings('alert_title_error'), strings('receive.no_permission_save_file'));
                     return;
                 }
             }
@@ -133,10 +113,7 @@ class Receive extends Component {
                     Keyboard.dismiss();
                 }}
             >
-                <MyScrollView
-                    style={{ backgroundColor: mainColor }}
-                    keyboardShouldPersistTaps="always"
-                >
+                <MyScrollView style={{ backgroundColor: mainColor }} keyboardShouldPersistTaps="always">
                     <View
                         style={{
                             flex: 1,
@@ -147,10 +124,7 @@ class Receive extends Component {
                             alignItems: 'center',
                         }}
                     >
-                        <View
-                            style={{ backgroundColor: '#fff', width: width - 60, borderRadius: 10 }}
-                            contentContainerStyle={{ alignItems: 'center' }}
-                        >
+                        <View style={{ backgroundColor: '#fff', width: width - 60, borderRadius: 10 }} contentContainerStyle={{ alignItems: 'center' }}>
                             <View
                                 style={{
                                     height: 60,
@@ -162,14 +136,9 @@ class Receive extends Component {
                                     borderTopStartRadius: 10,
                                 }}
                             >
-                                <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>
-                                    {strings('receive.instruction')}
-                                </Text>
+                                <Text style={{ color: 'black', fontSize: 20, fontWeight: 'bold' }}>{strings('receive.instruction')}</Text>
                             </View>
-                            <TouchableWithoutFeedback
-                                onLongPress={() => this.longPressCode()}
-                                onPress={() => Keyboard.dismiss()}
-                            >
+                            <TouchableWithoutFeedback onLongPress={() => this.longPressCode()} onPress={() => Keyboard.dismiss()}>
                                 <View style={{ alignItems: 'center', margin: 10, marginTop: 20 }}>
                                     <QRCode
                                         value={this.state.qrCodeValue}
@@ -180,13 +149,8 @@ class Receive extends Component {
                                     />
                                 </View>
                             </TouchableWithoutFeedback>
-                            <TouchableOpacity
-                                style={{ alignItems: 'center', margin: 10, marginBottom: 20 }}
-                            >
-                                <Text
-                                    style={{ color: linkButtonColor }}
-                                    onPress={() => this.saveQRCode()}
-                                >
+                            <TouchableOpacity style={{ alignItems: 'center', margin: 10, marginBottom: 20 }}>
+                                <Text style={{ color: linkButtonColor }} onPress={() => this.saveQRCode()}>
                                     {strings('receive.button_save_receive_code')}
                                 </Text>
                             </TouchableOpacity>

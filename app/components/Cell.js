@@ -20,9 +20,7 @@ export default class Cell extends Component {
                         }}
                         resizeMode="contain"
                     />
-                    <Text style={{ ...styles.titleText, paddingLeft: titlePadLeft }}>
-                        {this.props.title}
-                    </Text>
+                    <Text style={{ ...styles.titleText, paddingLeft: titlePadLeft }}>{this.props.title}</Text>
                     <Image style={styles.icon} source={require('../../assets/arrow_right.png')} />
                 </View>
             </TouchableOpacity>

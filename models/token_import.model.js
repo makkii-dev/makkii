@@ -74,11 +74,7 @@ export default {
                 };
             });
             try {
-                const { name, symbol, decimals } = yield call(
-                    fetchTokenDetail,
-                    currentAccount.symbol,
-                    address,
-                );
+                const { name, symbol, decimals } = yield call(fetchTokenDetail, currentAccount.symbol, address);
                 const tokenToBeImported = {
                     contractAddr: address,
                     name,

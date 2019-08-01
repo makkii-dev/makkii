@@ -1,18 +1,5 @@
 import React from 'react';
-import {
-    ImageBackground,
-    Animated,
-    View,
-    Text,
-    Dimensions,
-    FlatList,
-    TouchableOpacity,
-    StyleSheet,
-    Image,
-    BackHandler,
-    Platform,
-    DeviceEventEmitter,
-} from 'react-native';
+import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform, DeviceEventEmitter } from 'react-native';
 import { connect } from 'react-redux';
 import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
@@ -22,23 +9,7 @@ import { createAction } from '../../utils/dva';
 
 const { height } = Dimensions.get('window');
 const KeyboardData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete'];
-const KeyboardDataWithTouchID = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    'cancel',
-    '0',
-    'delete',
-    'blank',
-    'finger',
-    'blank',
-];
+const KeyboardDataWithTouchID = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete', 'blank', 'finger', 'blank'];
 const MaxPinCodeLength = 6;
 const isSmallScreen = height < 569;
 
@@ -97,9 +68,7 @@ class PinCodeScreen extends React.Component {
             return true;
         });
         const { touchIDEnabled = false } = this.props;
-        this.pincodelisten = touchIDEnabled
-            ? DeviceEventEmitter.addListener('APP_ACTIVE', this.onPressTouchId)
-            : null;
+        this.pincodelisten = touchIDEnabled ? DeviceEventEmitter.addListener('APP_ACTIVE', this.onPressTouchId) : null;
     }
 
     componentWillUnmount(): void {
@@ -191,11 +160,7 @@ class PinCodeScreen extends React.Component {
                     setTimeout(() => {
                         this.onUnlockSuccess && this.onUnlockSuccess();
                         console.log('this.targetScreen', this.targetScreen);
-                        this.targetScreen &&
-                            this.props.navigation.navigate(
-                                this.targetScreen,
-                                this.targetScreenArgs,
-                            );
+                        this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
                         this.targetScreen || this.props.navigation.goBack();
                     }, 100);
                 }
@@ -209,8 +174,7 @@ class PinCodeScreen extends React.Component {
                 setTimeout(() => {
                     this.onUnlockSuccess && this.onUnlockSuccess();
                     console.log('this.targetScreen', this.targetScreen);
-                    this.targetScreen &&
-                        this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
+                    this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
                     this.targetScreen || this.props.navigation.goBack();
                 }, 100);
         }
@@ -255,27 +219,19 @@ class PinCodeScreen extends React.Component {
             passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
         // eslint-disable-next-line no-unused-expressions
-        Platform.OS === 'ios'
-            ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }))
-            : null;
+        Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true })) : null;
         TouchID.authenticate('', optionalConfigObject)
             .then(() => {
-                Platform.OS === 'ios'
-                    ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }))
-                    : null;
+                Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
                 this.onUnlockSuccess && this.onUnlockSuccess();
                 console.log('this.targetScreen', this.targetScreen);
-                this.targetScreen &&
-                    this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
+                this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
                 this.targetScreen || this.props.navigation.goBack();
             })
             .catch(error => {
-                Platform.OS === 'ios'
-                    ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }))
-                    : null;
+                Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
                 if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
-                    listenApp.currentAppState === 'active' &&
-                        AppToast.show(strings(`pinCode.touchID_${error.code}`));
+                    listenApp.currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
                 Platform.OS === 'ios' ? setTimeout(() => (listenApp.ignore = false), 100) : null;
             });
@@ -307,48 +263,12 @@ class PinCodeScreen extends React.Component {
                     }
                 }}
             >
-                <View
-                    style={[
-                        styles.keyboardViewItem,
-                        itemBorder,
-                        { backgroundColor: 'transparent' },
-                    ]}
-                >
-                    {item !== 'cancel' &&
-                        item !== 'delete' &&
-                        item !== 'finger' &&
-                        item !== 'blank' && (
-                            <Text
-                                style={[
-                                    styles.keyboardViewItemText,
-                                    { color: mColor, fontSize: 36 },
-                                ]}
-                            >
-                                {item}
-                            </Text>
-                        )}
+                <View style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}>
+                    {item !== 'cancel' && item !== 'delete' && item !== 'finger' && item !== 'blank' && <Text style={[styles.keyboardViewItemText, { color: mColor, fontSize: 36 }]}>{item}</Text>}
                     {/* { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) } */}
-                    {this.cancel && item === 'cancel' && (
-                        <Image
-                            source={require('../../assets/arrow_back.png')}
-                            style={{ tintColor: mColor, width: 30, height: 30 }}
-                            resizeMode="contain"
-                        />
-                    )}
-                    {item === 'delete' && (
-                        <Image
-                            source={require('../../assets/icon_delete.png')}
-                            style={{ tintColor: mColor, width: 30, height: 30 }}
-                            resizeMode="contain"
-                        />
-                    )}
-                    {item === 'finger' && (
-                        <Image
-                            source={require('../../assets/icon_touch_id.png')}
-                            style={{ tintColor: mColor, width: 30, height: 30 }}
-                            resizeMode="contain"
-                        />
-                    )}
+                    {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
+                    {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
+                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
                 </View>
             </TouchableOpacity>
         );
@@ -393,11 +313,7 @@ class PinCodeScreen extends React.Component {
                         vertical
                         numColumns={3}
                         renderItem={this.renderItem}
-                        data={
-                            touchIDEnabled && !this.isModifyPinCode
-                                ? KeyboardDataWithTouchID
-                                : KeyboardData
-                        }
+                        data={touchIDEnabled && !this.isModifyPinCode ? KeyboardDataWithTouchID : KeyboardData}
                         keyExtractor={(val, index) => index.toString()}
                     />
                 </View>
@@ -417,10 +333,7 @@ class PinCodeScreen extends React.Component {
             unlockDescription = strings('pinCode.pinCode_confirm');
         }
         if (errorMsg && errorMsg !== '') {
-            warningPincodeFail = `${strings(`pinCode.${errorMsg}`)} ${strings(
-                'pinCode.label_remaining_attempts',
-                { count: 5 - this.errorCounts },
-            )}`;
+            warningPincodeFail = `${strings(`pinCode.${errorMsg}`)} ${strings('pinCode.label_remaining_attempts', { count: 5 - this.errorCounts })}`;
         }
         return (
             <ImageBackground

@@ -49,25 +49,15 @@ class Advanced extends Component {
     };
 
     updateAdvancedSettings = () => {
-        const {
-            login_session_timeout: _login_session_timeout,
-            exchange_refresh_interval: _exchange_refresh_interval,
-            dispatch,
-        } = this.props;
+        const { login_session_timeout: _login_session_timeout, exchange_refresh_interval: _exchange_refresh_interval, dispatch } = this.props;
         const { login_session_timeout, exchange_refresh_interval } = this.state;
         if (!validatePositiveInteger(login_session_timeout)) {
-            alertOk(
-                strings('alert_title_error'),
-                strings('advanced.error_invalid_login_session_timeout'),
-            );
+            alertOk(strings('alert_title_error'), strings('advanced.error_invalid_login_session_timeout'));
             return;
         }
 
         if (!validatePositiveInteger(exchange_refresh_interval)) {
-            alertOk(
-                strings('alert_title_error'),
-                strings('advanced.error_invalid_exchange_refresh_interval'),
-            );
+            alertOk(strings('alert_title_error'), strings('advanced.error_invalid_exchange_refresh_interval'));
             return;
         }
         if (_login_session_timeout !== login_session_timeout) {
@@ -124,19 +114,12 @@ class Advanced extends Component {
                             <TouchableOpacity
                                 onPress={() => {
                                     Keyboard.dismiss();
-                                    AppToast.show(
-                                        strings('advanced.description_login_session_timeout'),
-                                        {
-                                            position: AppToast.positions.CENTER,
-                                        },
-                                    );
+                                    AppToast.show(strings('advanced.description_login_session_timeout'), {
+                                        position: AppToast.positions.CENTER,
+                                    });
                                 }}
                             >
-                                <Image
-                                    source={require('../../../../assets/icon_question.png')}
-                                    style={{ width: 20, height: 20, tintColor: 'gray' }}
-                                    resizeMode="contain"
-                                />
+                                <Image source={require('../../../../assets/icon_question.png')} style={{ width: 20, height: 20, tintColor: 'gray' }} resizeMode="contain" />
                             </TouchableOpacity>
                         )}
                         trailingText={strings('advanced.label_minute')}

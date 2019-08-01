@@ -98,10 +98,7 @@ class About extends Component {
                         paddingRight: 10,
                     }}
                 >
-                    <Cell
-                        title={strings('about.version_update_button')}
-                        onClick={this.checkVersion}
-                    />
+                    <Cell title={strings('about.version_update_button')} onClick={this.checkVersion} />
                 </View>
                 <View
                     style={{
@@ -119,22 +116,14 @@ class About extends Component {
                         }}
                     >
                         <TouchableOpacity onPress={this.viewTerms}>
-                            <Text style={{ ...defaultStyles.center_text, color: linkButtonColor }}>
-                                {' '}
-                                {strings('about.terms_label')}{' '}
-                            </Text>
+                            <Text style={{ ...defaultStyles.center_text, color: linkButtonColor }}> {strings('about.terms_label')} </Text>
                         </TouchableOpacity>
                         <Text style={defaultStyles.center_text}>{strings('about.label_and')}</Text>
                         <TouchableOpacity onPress={this.viewPrivacy}>
-                            <Text style={{ ...defaultStyles.center_text, color: linkButtonColor }}>
-                                {' '}
-                                {strings('about.policy_label')}{' '}
-                            </Text>
+                            <Text style={{ ...defaultStyles.center_text, color: linkButtonColor }}> {strings('about.policy_label')} </Text>
                         </TouchableOpacity>
                     </View>
-                    <Text style={defaultStyles.center_text}>
-                        {strings('about.copyright_label')}
-                    </Text>
+                    <Text style={defaultStyles.center_text}>{strings('about.copyright_label')}</Text>
                 </View>
             </View>
         );

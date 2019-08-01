@@ -1,18 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Text,
-    Image,
-    TouchableOpacity,
-    ScrollView,
-    Dimensions,
-    StyleSheet,
-    Linking,
-    Keyboard,
-    PixelRatio,
-    Platform,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Linking, Keyboard, PixelRatio, Platform } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
@@ -91,11 +79,9 @@ class Send extends Component {
         navigation.navigate('scan', {
             success: 'signed_vault_send',
             validate: (data, callback) => {
-                dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(
-                    res => {
-                        res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
-                    },
-                );
+                dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(res => {
+                    res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
+                });
             },
         });
     };
@@ -114,10 +100,7 @@ class Send extends Component {
         const coinUsed = gasPrice * gasLimit * 10 ** -9 || 0;
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                <MyscrollView
-                    contentContainerStyle={{ justifyContent: 'center' }}
-                    keyboardShouldPersistTaps="always"
-                >
+                <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
                     <TouchableOpacity
                         style={{ flex: 1 }}
                         activeOpacity={1}
@@ -137,10 +120,7 @@ class Send extends Component {
                                 rightView={() =>
                                     editable ? (
                                         <View style={{ flexDirection: 'row' }}>
-                                            <TouchableOpacity
-                                                onPress={() => this.scan()}
-                                                style={{ marginRight: 10 }}
-                                            >
+                                            <TouchableOpacity onPress={() => this.scan()} style={{ marginRight: 10 }}>
                                                 <Image
                                                     source={require('../../../../assets/icon_scan.png')}
                                                     style={{
@@ -151,9 +131,7 @@ class Send extends Component {
                                                     resizeMode="contain"
                                                 />
                                             </TouchableOpacity>
-                                            <TouchableOpacity
-                                                onPress={() => this.selectFromAddressBook()}
-                                            >
+                                            <TouchableOpacity onPress={() => this.selectFromAddressBook()}>
                                                 <Image
                                                     source={require('../../../../assets/icon_address_book.png')}
                                                     style={{
@@ -178,23 +156,13 @@ class Send extends Component {
                                 rightView={() =>
                                     editable ? (
                                         <TouchableOpacity onPress={this.sendAll}>
-                                            <Text style={{ color: linkButtonColor }}>
-                                                {strings('send.button_send_all')}
-                                            </Text>
+                                            <Text style={{ color: linkButtonColor }}>{strings('send.button_send_all')}</Text>
                                         </TouchableOpacity>
                                     ) : null
                                 }
                                 unit={currentAccount.coinSymbol}
                             />
-                            {data ? (
-                                <SubTextInput
-                                    title={strings('send.label_data')}
-                                    style={styles.text_input}
-                                    value={data}
-                                    multiline
-                                    editable={false}
-                                />
-                            ) : null}
+                            {data ? <SubTextInput title={strings('send.label_data')} style={styles.text_input} value={data} multiline editable={false} /> : null}
                         </View>
 
                         {/* advanced button */}
@@ -215,11 +183,7 @@ class Send extends Component {
                                             marginHorizontal: 20,
                                         }}
                                     >
-                                        {strings(
-                                            showAdvanced
-                                                ? 'send.hide_advanced'
-                                                : 'send.show_advanced',
-                                        )}
+                                        {strings(showAdvanced ? 'send.hide_advanced' : 'send.show_advanced')}
                                     </Text>
                                 </TouchableOpacity>
 
@@ -241,9 +205,7 @@ class Send extends Component {
                                             keyboardType="decimal-pad"
                                         />
                                         <Text style={{ width: '100%', color: 'black' }}>
-                                            {`${coinUsed.toFixed(5)} ${currentAccount.symbol} ≈  ${(
-                                                coinUsed * coinPrice
-                                            ).toFixed(5)} ${fiatCurrency}`}
+                                            {`${coinUsed.toFixed(5)} ${currentAccount.symbol} ≈  ${(coinUsed * coinPrice).toFixed(5)} ${fiatCurrency}`}
                                         </Text>
                                     </View>
                                 ) : null}
@@ -252,11 +214,7 @@ class Send extends Component {
 
                         {/* send button */}
                         <View style={{ marginHorizontal: 20, marginTop: 20, marginBottom: 40 }}>
-                            <ComponentButton
-                                disabled={`${amount}`.length <= 0 || !to}
-                                title={strings('send_button')}
-                                onPress={this.onTransfer}
-                            />
+                            <ComponentButton disabled={`${amount}`.length <= 0 || !to} title={strings('send_button')} onPress={this.onTransfer} />
                         </View>
                     </TouchableOpacity>
                 </MyscrollView>

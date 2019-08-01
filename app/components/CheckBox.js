@@ -26,23 +26,13 @@ class CheckBox extends React.PureComponent {
     render() {
         const { textRight, imageStyle } = this.props;
         const { isChecked } = this.state;
-        const BoxImage = isChecked
-            ? require('../../assets/icon_check.png')
-            : require('../../assets/icon_uncheck.png');
-        const textView =
-            textRight && React.isValidElement(textRight) ? (
-                textRight
-            ) : textRight && typeof textRight === 'string' ? (
-                <Text>{textRight}</Text>
-            ) : null;
+        const BoxImage = isChecked ? require('../../assets/icon_check.png') : require('../../assets/icon_uncheck.png');
+        const textView = textRight && React.isValidElement(textRight) ? textRight : textRight && typeof textRight === 'string' ? <Text>{textRight}</Text> : null;
         return (
             <View style={this.props.style}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity activeOpacity={1} onPress={this.onPressCheck}>
-                        <Image
-                            source={BoxImage}
-                            style={{ width: 24, height: 24, ...imageStyle, marginRight: 5 }}
-                        />
+                        <Image source={BoxImage} style={{ width: 24, height: 24, ...imageStyle, marginRight: 5 }} />
                     </TouchableOpacity>
                     {textView}
                 </View>

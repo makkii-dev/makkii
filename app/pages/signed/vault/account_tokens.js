@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    RefreshControl,
-    Platform,
-    PixelRatio,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    Dimensions,
-    TouchableOpacity,
-    FlatList,
-} from 'react-native';
+import { RefreshControl, Platform, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
@@ -50,9 +39,7 @@ class AccountTokens extends Component {
                 </Text>
             ),
             headerRight: (
-                <View
-                    style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-                >
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                     <TouchableOpacity
                         style={{
                             width: 48,
@@ -64,11 +51,7 @@ class AccountTokens extends Component {
                             navigation.state.params.selectTokens();
                         }}
                     >
-                        <Image
-                            style={{ width: 25, height: 25, tintColor: 'white' }}
-                            resizeMode="contain"
-                            source={require('../../../../assets/icon_add.png')}
-                        />
+                        <Image style={{ width: 25, height: 25, tintColor: 'white' }} resizeMode="contain" source={require('../../../../assets/icon_add.png')} />
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{
@@ -79,11 +62,7 @@ class AccountTokens extends Component {
                         }}
                         onPress={showMenu}
                     >
-                        <Image
-                            source={require('../../../../assets/icon_account_menu.png')}
-                            style={{ width: 25, height: 25, tintColor: '#fff' }}
-                            resizeMode="contain"
-                        />
+                        <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
                     </TouchableOpacity>
                 </View>
             ),
@@ -106,9 +85,7 @@ class AccountTokens extends Component {
 
     componentWillMount() {
         this.isMount = true;
-        this.listenNavigation = this.props.navigation.addListener('willBlur', () =>
-            this.setState({ showMenu: false }),
-        );
+        this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
     componentWillReceiveProps(nextProps): void {
@@ -193,20 +170,14 @@ class AccountTokens extends Component {
                         navigationSafely({
                             routeName: 'signed_vault_export_private_key',
                             params: {
-                                currentAccount: accountKey(
-                                    currentAccount.symbol,
-                                    currentAccount.address,
-                                ),
+                                currentAccount: accountKey(currentAccount.symbol, currentAccount.address),
                             },
                         })({ dispatch });
                         break;
                     case ACCOUNT_MENU[2].title:
                         dispatch(
                             createAction('ERC20Dex/ERC20DexUpdateState')({
-                                currentAccount: accountKey(
-                                    currentAccount.symbol,
-                                    currentAccount.address,
-                                ),
+                                currentAccount: accountKey(currentAccount.symbol, currentAccount.address),
                             }),
                         );
                         navigate('signed_dex')({ dispatch });
@@ -301,9 +272,7 @@ class AccountTokens extends Component {
                                     borderRadius: 5,
                                 }}
                             >
-                                <Text style={{ fontSize: 14, color: '#fff' }}>
-                                    {strings('delete_button')}
-                                </Text>
+                                <Text style={{ fontSize: 14, color: '#fff' }}>{strings('delete_button')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -334,25 +303,15 @@ class AccountTokens extends Component {
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         {imageIcon !== undefined ? (
-                            <Image
-                                style={{ width: 30, height: 30 }}
-                                source={imageIcon}
-                                resizeMode="contain"
-                            />
+                            <Image style={{ width: 30, height: 30 }} source={imageIcon} resizeMode="contain" />
                         ) : fastImageUrl !== undefined ? (
-                            <FastImage
-                                style={{ width: 30, height: 30 }}
-                                source={{ uri: fastImageUrl }}
-                                resizeMode={FastImage.resizeMode.contain}
-                            />
+                            <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastImageUrl }} resizeMode={FastImage.resizeMode.contain} />
                         ) : null}
                         <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                             {name}
                         </Text>
                     </View>
-                    <Text numberOfLines={1}>{`${new BigNumber(balance).toFixed(
-                        4,
-                    )} ${symbol}`}</Text>
+                    <Text numberOfLines={1}>{`${new BigNumber(balance).toFixed(4)} ${symbol}`}</Text>
                 </TouchableOpacity>
             </SwipeCell>
         );
@@ -361,8 +320,7 @@ class AccountTokens extends Component {
     render() {
         const { currentAccount, tokenList } = this.props;
 
-        const popWindowTop =
-            Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popWindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (currentAccount.type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
@@ -403,25 +361,12 @@ class AccountTokens extends Component {
                             marginBottom: 10,
                         }}
                     >
-                        <Image
-                            style={{ width: 20, height: 20, marginRight: 10 }}
-                            resizeMode="contain"
-                            source={COINS[currentAccount.symbol].icon}
-                        />
-                        <Text style={{ color: '#fff', marginRight: 20 }}>
-                            {COINS[currentAccount.symbol].name}
-                        </Text>
-                        <Image
-                            style={{ width: 20, height: 20, marginRight: 10, tintColor: '#fff' }}
-                            resizeMode="contain"
-                            source={typeIcon}
-                        />
+                        <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={COINS[currentAccount.symbol].icon} />
+                        <Text style={{ color: '#fff', marginRight: 20 }}>{COINS[currentAccount.symbol].name}</Text>
+                        <Image style={{ width: 20, height: 20, marginRight: 10, tintColor: '#fff' }} resizeMode="contain" source={typeIcon} />
                         <Text style={{ color: '#fff' }}>{typeText}</Text>
                     </View>
-                    <AddressComponent
-                        address={currentAccount.address}
-                        symbol={currentAccount.symbol}
-                    />
+                    <AddressComponent address={currentAccount.address} symbol={currentAccount.symbol} />
                 </View>
                 <FlatList
                     style={{ flex: 1, width }}
@@ -433,13 +378,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         });
                     }}
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.refreshing}
-                            onRefresh={this.loadBalances}
-                            title="ContextMenu"
-                        />
-                    }
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
                 />
                 {/* Menu Pop window */}
                 {this.state.showMenu ? (

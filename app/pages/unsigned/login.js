@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    Linking,
-    Keyboard,
-    Dimensions,
-    ImageBackground,
-    BackHandler,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Linking, Keyboard, Dimensions, ImageBackground, BackHandler } from 'react-native';
 import { ComponentLogo, PasswordInput, ComponentButton, alertOk } from '../../components/common';
 import { hashPassword } from '../../../utils';
 import { fixedHeight, linkButtonColor, mainBgColor } from '../../style_util';
@@ -60,10 +51,7 @@ class Login extends Component {
         } else if (hashedPassword === hashPassword(password)) {
             dispatch(createAction('userModel/login')());
         } else {
-            alertOk(
-                strings('alert_title_error'),
-                strings('unsigned_login.error_incorrect_password'),
-            );
+            alertOk(strings('alert_title_error'), strings('unsigned_login.error_incorrect_password'));
         }
     };
 
@@ -121,12 +109,7 @@ class Login extends Component {
                                 });
                             }}
                         />
-                        <ComponentButton
-                            style={{ marginTop: 30 }}
-                            disabled={this.state.password.length === 0}
-                            onPress={this.Login}
-                            title={strings('unsigned_login.btn_login')}
-                        />
+                        <ComponentButton style={{ marginTop: 30 }} disabled={this.state.password.length === 0} onPress={this.Login} title={strings('unsigned_login.btn_login')} />
                         <View
                             style={{
                                 flexDirection: 'row',
@@ -136,14 +119,10 @@ class Login extends Component {
                             }}
                         >
                             <TouchableOpacity onPress={this.toRegister}>
-                                <Text style={{ color: linkButtonColor }}>
-                                    {strings('unsigned_login.btn_register')}
-                                </Text>
+                                <Text style={{ color: linkButtonColor }}>{strings('unsigned_login.btn_register')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={this.toRecovery}>
-                                <Text style={{ color: linkButtonColor }}>
-                                    {strings('unsigned_login.btn_recovery')}
-                                </Text>
+                                <Text style={{ color: linkButtonColor }}>{strings('unsigned_login.btn_recovery')}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

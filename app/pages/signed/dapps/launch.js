@@ -41,14 +41,8 @@ class Launch extends Component {
                     justifyContent: 'center',
                 }}
             >
-                <Image
-                    source={require('../../../../assets/empty_under_construction.png')}
-                    style={{ width: 80, height: 80, tintColor: 'gray' }}
-                    resizeMode="contain"
-                />
-                <Text style={{ color: 'gray', textAlign: 'center', marginTop: 20 }}>
-                    {strings('dapp.unavailable_hint')}
-                </Text>
+                <Image source={require('../../../../assets/empty_under_construction.png')} style={{ width: 80, height: 80, tintColor: 'gray' }} resizeMode="contain" />
+                <Text style={{ color: 'gray', textAlign: 'center', marginTop: 20 }}>{strings('dapp.unavailable_hint')}</Text>
             </View>
         );
     }
@@ -97,12 +91,10 @@ class Launch extends Component {
                     >
                         <Text style={styles.dappName}>{this.dapp.name}</Text>
                         <Text>
-                            {strings('dapp.author_label')} :
-                            <Text style={{ color: '#33691e' }}> {this.dapp.author}</Text>
+                            {strings('dapp.author_label')} :<Text style={{ color: '#33691e' }}> {this.dapp.author}</Text>
                         </Text>
                         <Text>
-                            {strings('dapp.type_label')} :
-                            <Text style={{ color: '#33691e' }}> {strings(this.dapp.type)}</Text>
+                            {strings('dapp.type_label')} :<Text style={{ color: '#33691e' }}> {strings(this.dapp.type)}</Text>
                         </Text>
                         <View
                             style={{
@@ -122,11 +114,7 @@ class Launch extends Component {
                                         borderRadius: 5,
                                     }}
                                 >
-                                    <Text
-                                        style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}
-                                    >
-                                        {strings('dapp.launch_button')}
-                                    </Text>
+                                    <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>{strings('dapp.launch_button')}</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -153,14 +141,8 @@ class Launch extends Component {
                         alignItems: 'center',
                     }}
                 >
-                    <Image
-                        source={this.dapp.screenShot}
-                        style={{ width: width - 40, height: 80 }}
-                        resizeMode="contain"
-                    />
-                    <Text style={{ marginHorizontal: 10, marginTop: 20 }}>
-                        {this.dapp.description}
-                    </Text>
+                    <Image source={this.dapp.screenShot} style={{ width: width - 40, height: 80 }} resizeMode="contain" />
+                    <Text style={{ marginHorizontal: 10, marginTop: 20 }}>{this.dapp.description}</Text>
                 </View>
             </View>
         );
@@ -168,11 +150,7 @@ class Launch extends Component {
 
     render() {
         this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
-        return (
-            <View style={{ flex: 1, padding: 10, backgroundColor: mainBgColor }}>
-                {this.dapp ? this.renderDApp() : this.renderUnavailable()}
-            </View>
-        );
+        return <View style={{ flex: 1, padding: 10, backgroundColor: mainBgColor }}>{this.dapp ? this.renderDApp() : this.renderUnavailable()}</View>;
     }
 }
 

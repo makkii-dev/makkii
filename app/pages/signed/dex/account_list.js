@@ -38,10 +38,7 @@ class AccountList extends React.Component {
         return (
             <TouchableOpacity onPress={() => this.selectAccount(item.address)}>
                 <View style={styles.accountContainerWithShadow}>
-                    <Image
-                        source={COINS[item.symbol].icon}
-                        style={{ marginRight: 10, width: 24, height: 24 }}
-                    />
+                    <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
                     <View style={{ flex: 1, paddingVertical: 10 }}>
                         <View
                             style={{
@@ -50,10 +47,7 @@ class AccountList extends React.Component {
                                 alignItems: 'center',
                             }}
                         >
-                            <Text
-                                style={{ ...styles.accountSubTextFontStyle1, width: '70%' }}
-                                numberOfLines={1}
-                            >
+                            <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
                                 {item.name}
                             </Text>
                             <Text
@@ -85,21 +79,10 @@ class AccountList extends React.Component {
                     backgroundColor: mainBgColor,
                 }}
             >
-                <View
-                    style={{ width, height: 180, justifyContent: 'center', alignItems: 'center' }}
-                >
-                    <Image
-                        source={require('../../../../assets/empty_account.png')}
-                        style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                        resizeMode="contain"
-                    />
-                    <Text style={{ color: 'gray', marginBottom: 20 }}>
-                        {strings('token_exchange.label_account_not_found')}
-                    </Text>
-                    <Button
-                        title={strings('token_exchange.button_add_eth_account')}
-                        onPress={this.addAccount}
-                    />
+                <View style={{ width, height: 180, justifyContent: 'center', alignItems: 'center' }}>
+                    <Image source={require('../../../../assets/empty_account.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
+                    <Text style={{ color: 'gray', marginBottom: 20 }}>{strings('token_exchange.label_account_not_found')}</Text>
+                    <Button title={strings('token_exchange.button_add_eth_account')} onPress={this.addAccount} />
                 </View>
             </View>
         );
@@ -112,11 +95,7 @@ class AccountList extends React.Component {
         }
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                <FlatList
-                    data={accounts}
-                    renderItem={this.renderItem}
-                    keyExtractor={(item, index) => `${index}`}
-                />
+                <FlatList data={accounts} renderItem={this.renderItem} keyExtractor={(item, index) => `${index}`} />
             </View>
         );
     }

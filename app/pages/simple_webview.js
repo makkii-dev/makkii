@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    ActivityIndicator,
-    BackHandler,
-    Dimensions,
-    Image,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { ProgressBar } from '../components/ProgressBar';
 

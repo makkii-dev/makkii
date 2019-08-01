@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Text,
-    Dimensions,
-    NativeModules,
-    Platform,
-    NativeEventEmitter,
-    TouchableOpacity,
-} from 'react-native';
+import { View, Text, Dimensions, NativeModules, Platform, NativeEventEmitter, TouchableOpacity } from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import { ComponentButton, MnemonicView } from '../../components/common';
 import { strings } from '../../../locales/i18n';
@@ -73,15 +65,7 @@ class Mnemonic extends Component {
     renderMnemonic = () => {
         const mnemonic = this.props.navigation.getParam('mnemonic', '');
         return mnemonic.split(' ').map(str => {
-            return (
-                <MnemonicView
-                    key={str}
-                    canDelete={false}
-                    disabled
-                    onSelected={() => {}}
-                    text={str}
-                />
-            );
+            return <MnemonicView key={str} canDelete={false} disabled onSelected={() => {}} text={str} />;
         });
     };
 
@@ -127,11 +111,7 @@ class Mnemonic extends Component {
                 >
                     {this.renderMnemonic()}
                 </View>
-                <ComponentButton
-                    style={{ width: width - 80 }}
-                    title={strings('backup.button_backup_now')}
-                    onPress={this.toBackup}
-                />
+                <ComponentButton style={{ width: width - 80 }} title={strings('backup.button_backup_now')} onPress={this.toBackup} />
             </View>
         );
     }

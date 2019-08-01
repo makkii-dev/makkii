@@ -5,12 +5,7 @@ import { SensitiveStorage, Storage } from '../utils/storage';
 import { createAction } from '../utils/dva';
 import { findSymbolByAddress, getExchangeHistory } from '../services/erc20_dex.service';
 import { COINS } from '../client/support_coin_list';
-import {
-    getAccountBalances,
-    getTransactionsHistory,
-    getTransfersHistory,
-    pendingTxsInvolved,
-} from '../services/accounts.service';
+import { getAccountBalances, getTransactionsHistory, getTransfersHistory, pendingTxsInvolved } from '../services/accounts.service';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
 
@@ -145,13 +140,7 @@ export default {
                 const old_accounts_storage = yield call(Storage.get, 'accounts', false, false);
                 let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || {});
                 old_accounts = upgradeAccountsV0_V1(state_version, old_accounts, options);
-                const {
-                    accountsKey,
-                    accountsMap,
-                    transactionsMap,
-                    tokenLists,
-                    privateKeyMap,
-                } = upgradeAccountsV1_V2(old_accounts);
+                const { accountsKey, accountsMap, transactionsMap, tokenLists, privateKeyMap } = upgradeAccountsV1_V2(old_accounts);
                 const hd_index = yield call(Storage.get, 'userModel', {}).hd_index ||
                     Object.keys(COINS).reduce((map, el) => {
                         map[el] = {};
@@ -203,18 +192,10 @@ export default {
                     // recover tx;
                     transactionsMap[key] = yield call(Storage.get, `tx+${key}`, {});
                     for (let tokenSymbol of tokens) {
-                        transactionsMap[`${key}+${tokenSymbol}`] = yield call(
-                            Storage.get,
-                            `tx+${key}+${tokenSymbol}`,
-                            {},
-                        );
+                        transactionsMap[`${key}+${tokenSymbol}`] = yield call(Storage.get, `tx+${key}+${tokenSymbol}`, {});
                     }
                     if (account.symbol === 'ETH') {
-                        transactionsMap[`${key}+ERC20DEX`] = yield call(
-                            Storage.get,
-                            `tx+${key}+ERC20DEX`,
-                            {},
-                        );
+                        transactionsMap[`${key}+ERC20DEX`] = yield call(Storage.get, `tx+${key}+ERC20DEX`, {});
                     }
                 }
                 yield put(
@@ -237,13 +218,11 @@ export default {
         *saveAccounts({ payload }, { call, select }) {
             // Adding account and changing account name need to be saved
             const { keys } = payload;
-            const { accountsKey, accountsMap, hashed_password } = yield select(
-                ({ accountsModel, userModel }) => ({
-                    accountsKey: accountsModel.accountsKey,
-                    accountsMap: accountsModel.accountsMap,
-                    hashed_password: userModel.hashed_password,
-                }),
-            );
+            const { accountsKey, accountsMap, hashed_password } = yield select(({ accountsModel, userModel }) => ({
+                accountsKey: accountsModel.accountsKey,
+                accountsMap: accountsModel.accountsMap,
+                hashed_password: userModel.hashed_password,
+            }));
             // save accountsKey
             yield call(Storage.set, 'accountsKey', accountsKey);
             // save account
@@ -262,9 +241,7 @@ export default {
         },
         *saveTransaction({ payload }, { call, select }) {
             const { keys } = payload;
-            const transactionsMap = yield select(
-                ({ accountsModel }) => accountsModel.transactionsMap,
-            );
+            const transactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
             for (let key of keys) {
                 const txs = transactionsMap[key];
                 // only saved recent 20 tx;
@@ -291,13 +268,7 @@ export default {
             yield call(Storage.set, 'hdIndex', hd_index);
         },
         *deleteAccounts({ payload }, { call, select, put }) {
-            const {
-                accountsKey,
-                accountsMap,
-                transactionsMap,
-                hd_index,
-                isGettingBalance,
-            } = yield select(({ accountsModel }) => ({
+            const { accountsKey, accountsMap, transactionsMap, hd_index, isGettingBalance } = yield select(({ accountsModel }) => ({
                 accountsKey: accountsModel.accountsKey,
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
@@ -321,9 +292,7 @@ export default {
                     yield call(SensitiveStorage.remove, key);
                     const { type, address, symbol } = accountsMap[key];
                     if (type === '[local]') {
-                        yield put(
-                            createAction('updateHdIndex')({ symbol, address, code: 'delete' }),
-                        );
+                        yield put(createAction('updateHdIndex')({ symbol, address, code: 'delete' }));
                     }
                     delete newAccountsMap[key];
                     yield call(Storage.remove, `acc+${key}`);
@@ -360,8 +329,7 @@ export default {
                 allHistory[el].srcToken = srcToken;
                 allHistory[el].destToken = destToken;
                 allHistory[el].srcQty = allHistory[el].srcQty / 10 ** tokenList[srcToken].decimals;
-                allHistory[el].destQty =
-                    allHistory[el].destQty / 10 ** tokenList[destToken].decimals;
+                allHistory[el].destQty = allHistory[el].destQty / 10 ** tokenList[destToken].decimals;
             });
             yield put(
                 createAction('updateTransactions')({
@@ -374,9 +342,7 @@ export default {
         },
         *updateTransactions({ payload }, { put, select }) {
             const { key, txs, force = true, needSave = true } = payload;
-            const oldTransactionsMap = yield select(
-                ({ accountsModel }) => accountsModel.transactionsMap,
-            );
+            const oldTransactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
             let newTransactionsMap = { ...oldTransactionsMap };
             if (newTransactionsMap[key] === undefined && !force) {
                 // Not mandatory to add
@@ -408,14 +374,7 @@ export default {
             if (tokenSymbol && tokenSymbol !== '') {
                 const tokenLists = yield select(({ accountsModel }) => accountsModel.tokenLists);
                 const contractAddr = tokenLists[symbol][tokenSymbol].contractAddr;
-                txs = yield call(
-                    getTransfersHistory,
-                    symbol,
-                    user_address,
-                    contractAddr,
-                    page,
-                    size,
-                );
+                txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size);
             } else {
                 txs = yield call(getTransactionsHistory, symbol, user_address, page, size);
             }
@@ -436,13 +395,11 @@ export default {
         *loadBalances({ payload }, { call, select, put }) {
             const { keys, force = false } = payload;
             console.log('loadBalances=>', payload);
-            const { oldAccountsMap, tokenLists, isGettingBalance } = yield select(
-                ({ accountsModel }) => ({
-                    oldAccountsMap: accountsModel.accountsMap,
-                    tokenLists: accountsModel.tokenLists,
-                    isGettingBalance: accountsModel.isGettingBalance,
-                }),
-            );
+            const { oldAccountsMap, tokenLists, isGettingBalance } = yield select(({ accountsModel }) => ({
+                oldAccountsMap: accountsModel.accountsMap,
+                tokenLists: accountsModel.tokenLists,
+                isGettingBalance: accountsModel.isGettingBalance,
+            }));
             if (isGettingBalance) return;
             yield put(createAction('updateState')({ isGettingBalance: true }));
             const pendingTxs = yield select(({ txsListener }) => txsListener.txs);
@@ -515,13 +472,11 @@ export default {
             },
             { call, select, put },
         ) {
-            const { accountsKey, accountsMap, transactionsMap } = yield select(
-                ({ accountsModel }) => ({
-                    accountsKey: accountsModel.accountsKey,
-                    accountsMap: accountsModel.accountsMap,
-                    transactionsMap: accountsModel.transactionsMap,
-                }),
-            );
+            const { accountsKey, accountsMap, transactionsMap } = yield select(({ accountsModel }) => ({
+                accountsKey: accountsModel.accountsKey,
+                accountsMap: accountsModel.accountsMap,
+                transactionsMap: accountsModel.transactionsMap,
+            }));
             DeviceEventEmitter.emit('add_new_account', _account);
 
             const { symbol, address, private_key } = _account;
@@ -551,13 +506,11 @@ export default {
             },
             { select, put },
         ) {
-            const { currentAccount, accountsMap, isGettingBalance } = yield select(
-                ({ accountsModel }) => ({
-                    currentAccount: accountsModel.currentAccount,
-                    accountsMap: accountsModel.accountsMap,
-                    isGettingBalance: accountsModel.isGettingBalance,
-                }),
-            );
+            const { currentAccount, accountsMap, isGettingBalance } = yield select(({ accountsModel }) => ({
+                currentAccount: accountsModel.currentAccount,
+                accountsMap: accountsModel.accountsMap,
+                isGettingBalance: accountsModel.isGettingBalance,
+            }));
             if (isGettingBalance) {
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {
                     position: AppToast.positions.TOP,
@@ -575,13 +528,7 @@ export default {
             },
             { select, put },
         ) {
-            const {
-                tokenLists,
-                accountsMap,
-                currentAccount,
-                transactionsMap,
-                isGettingBalance,
-            } = yield select(({ accountsModel }) => ({
+            const { tokenLists, accountsMap, currentAccount, transactionsMap, isGettingBalance } = yield select(({ accountsModel }) => ({
                 currentAccount: accountsModel.currentAccount,
                 tokenLists: accountsModel.tokenLists,
                 accountsMap: accountsModel.accountsMap,
@@ -620,9 +567,7 @@ export default {
                 }),
             );
             yield put(createAction('saveAccounts')({ keys: [currentAccount] }));
-            yield put(
-                createAction('saveTransaction')({ keys: [`${currentAccount}+${tokenSymbol}`] }),
-            );
+            yield put(createAction('saveTransaction')({ keys: [`${currentAccount}+${tokenSymbol}`] }));
             yield put(createAction('saveTokenLists')());
             yield put(createAction('loadBalances')({ keys: [currentAccount] }));
             return true;
@@ -676,12 +621,9 @@ const upgradeAccountsV0_V1 = (state_version, old_accounts, options) => {
             let account = Object.assign({}, old_accounts[k]);
             // remove account network in transactions and tokens
             delete account.isDefault;
-            account.transactions =
-                typeof account.transactions === 'object' ? account.transactions : {};
+            account.transactions = typeof account.transactions === 'object' ? account.transactions : {};
             account.tokens = typeof account.tokens === 'object' ? account.tokens : {};
-            account.transactions = account.transactions[options.network]
-                ? account.transactions[options.network]
-                : {};
+            account.transactions = account.transactions[options.network] ? account.transactions[options.network] : {};
             account.tokens = account.tokens[options.network] ? account.tokens[options.network] : {};
             account.symbol = account.symbol ? account.symbol : 'AION';
 

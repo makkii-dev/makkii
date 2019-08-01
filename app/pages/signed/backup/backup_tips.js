@@ -56,9 +56,7 @@ class BackUpTips extends React.Component {
             goBack: this.onBack,
         });
         BackHandler.addEventListener('hardwareBackPress', this.onBack);
-        this.props
-            .dispatch(createAction('userModel/getMnemonic')())
-            .then(mnemonic => (this.mnemonic = mnemonic));
+        this.props.dispatch(createAction('userModel/getMnemonic')()).then(mnemonic => (this.mnemonic = mnemonic));
     }
 
     componentWillUnmount(): void {
@@ -94,9 +92,7 @@ class BackUpTips extends React.Component {
     renderContent = ({ title, details }) => {
         return (
             <View style={styles.contentContainer}>
-                <Text style={{ fontWeight: 'bold', color: '#000' }}>{`•\t\t\t${strings(
-                    title,
-                )}`}</Text>
+                <Text style={{ fontWeight: 'bold', color: '#000' }}>{`•\t\t\t${strings(title)}`}</Text>
                 <Text style={{ marginLeft: 20, color: '#000' }}>{strings(details)}</Text>
             </View>
         );
@@ -125,11 +121,7 @@ class BackUpTips extends React.Component {
             >
                 <View style={styles.container}>
                     <Text>{strings('backup.label_warning_mnemonic')}</Text>
-                    <Image
-                        source={require('../../../../assets/icon_safety.png')}
-                        style={{ width: 40, height: 40, marginVertical: 10 }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/icon_safety.png')} style={{ width: 40, height: 40, marginVertical: 10 }} resizeMode="contain" />
                     {this.renderContent(TIPS[0])}
                     {this.renderContent(TIPS[1])}
                     {this.renderContent(TIPS[2])}
@@ -141,12 +133,7 @@ class BackUpTips extends React.Component {
                         textRight={<Text>{strings('backup.label_understand')}</Text>}
                     />
                 </View>
-                <ComponentButton
-                    style={{ width: width - 40 }}
-                    disabled={!this.state.understand}
-                    onPress={this.nextStep}
-                    title={strings('backup.button_next')}
-                />
+                <ComponentButton style={{ width: width - 40 }} disabled={!this.state.understand} onPress={this.nextStep} title={strings('backup.button_next')} />
             </View>
         );
     }

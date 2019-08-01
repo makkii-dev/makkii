@@ -1,11 +1,6 @@
 /* eslint-disable camelcase */
 import { createAction } from '../utils/dva';
-import {
-    getAllBalance,
-    parseScannedData,
-    sendTx,
-    validateTxObj,
-} from '../services/tx_sender.service';
+import { getAllBalance, parseScannedData, sendTx, validateTxObj } from '../services/tx_sender.service';
 import { alertOk } from '../app/components/common';
 import { strings } from '../locales/i18n';
 import { accountKey, getLedgerMessage } from '../utils';
@@ -83,11 +78,7 @@ export default {
             const ret = yield call(sendTx, txObj, currentAccount);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
             if (ret.result) {
-                sendTransferEventLog(
-                    symbol,
-                    symbol === coinSymbol ? null : coinSymbol,
-                    new BigNumber(txObj.amount),
-                );
+                sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));
                 // dispatch tx to accountsModel;
                 const {
                     data: { pendingTx, pendingTokenTx },

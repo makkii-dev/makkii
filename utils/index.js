@@ -90,12 +90,7 @@ function getLedgerMessage(errorCode) {
     if (errorCode === wallet.NO_PERMISSION) {
         return strings('ledger.error_permission_denied');
     }
-    if (
-        errorCode === wallet.GENERAL_ERROR ||
-        errorCode === wallet.INVALID_ACCOUNT_TYPE ||
-        errorCode === wallet.INVALID_TX_PAYLOAD ||
-        errorCode === wallet.OPEN_DEVICE_FAIL
-    ) {
+    if (errorCode === wallet.GENERAL_ERROR || errorCode === wallet.INVALID_ACCOUNT_TYPE || errorCode === wallet.INVALID_TX_PAYLOAD || errorCode === wallet.OPEN_DEVICE_FAIL) {
         return strings('ledger.error_general');
     }
     if (errorCode === 'error.wrong_device') {
@@ -113,8 +108,7 @@ function generateQRCode(amount, address, coin = 'AION') {
 }
 
 function saveImage(base64, imageFileName) {
-    const storeLocation =
-        Platform.OS === 'ios' ? `${RNFS.DocumentDirectoryPath}` : `${RNFS.PicturesDirectoryPath}`;
+    const storeLocation = Platform.OS === 'ios' ? `${RNFS.DocumentDirectoryPath}` : `${RNFS.PicturesDirectoryPath}`;
     const filePath = `${storeLocation}/${imageFileName}`;
     return new Promise((resolve, reject) => {
         RNFS.writeFile(filePath, base64, 'base64').then(
@@ -169,14 +163,7 @@ function hexToAscii(hex) {
 
 function isIphoneX() {
     const dimen = Dimensions.get('window');
-    return (
-        Platform.OS === 'ios' &&
-        !Platform.isPad &&
-        !Platform.isTVOS &&
-        (dimen.height === 812 ||
-            dimen.width === 812 ||
-            (dimen.height === 896 || dimen.width === 896))
-    );
+    return Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS && (dimen.height === 812 || dimen.width === 812 || (dimen.height === 896 || dimen.width === 896));
 }
 
 function ifIphoneX(iphoneXStyle, regularStyle) {
@@ -207,16 +194,10 @@ function strLen(str) {
     return len;
 }
 
-const mainnetUrl =
-    'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
-const masteryUrl =
-    'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
+const mainnetUrl = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
+const masteryUrl = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
 // const masteryUrl = 'http://192.168.50.105:8545';
-const navigationSafely = (
-    pinCodeEnabled,
-    hashedPassword,
-    { routeName, params, onVerifySuccess = undefined },
-) => ({ dispatch }) => {
+const navigationSafely = (pinCodeEnabled, hashedPassword, { routeName, params, onVerifySuccess = undefined }) => ({ dispatch }) => {
     pinCodeEnabled ||
         popCustom.show(
             strings('alert_title_warning'),
@@ -237,9 +218,7 @@ const navigationSafely = (
                             onVerifySuccess && onVerifySuccess();
                             onVerifySuccess || navigate(routeName, params)({ dispatch });
                         } else {
-                            popCustom.setErrorMsg(
-                                strings('unsigned_login.error_incorrect_password'),
-                            );
+                            popCustom.setErrorMsg(strings('unsigned_login.error_incorrect_password'));
                         }
                     },
                 },

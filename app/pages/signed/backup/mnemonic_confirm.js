@@ -1,14 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import {
-    Dimensions,
-    Image,
-    NativeEventEmitter,
-    NativeModules,
-    Platform,
-    Text,
-    View,
-} from 'react-native';
+import { Dimensions, Image, NativeEventEmitter, NativeModules, Platform, Text, View } from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import defaultStyles from '../../../styles';
 import { mainBgColor } from '../../../style_util';
@@ -69,37 +61,18 @@ class MnemonicConfirm extends React.Component {
         const { selected } = this.state;
         const mnemonic = this.props.navigation.getParam('mnemonic', '').split(/\s+/);
         const mnemonicView = selected.map(index => {
-            return (
-                <MnemonicView
-                    key={`${index}`}
-                    canDelete
-                    disabled={false}
-                    onSelected={() => this.onDelete(index)}
-                    text={mnemonic[index]}
-                />
-            );
+            return <MnemonicView key={`${index}`} canDelete disabled={false} onSelected={() => this.onDelete(index)} text={mnemonic[index]} />;
         });
         const height = Math.max(2, Math.max(2, Math.ceil(selected.length / 4))) * 35 + 20;
 
-        return (
-            <View style={{ ...styles.MnemonicContainerWithBorder, height }}>{mnemonicView}</View>
-        );
+        return <View style={{ ...styles.MnemonicContainerWithBorder, height }}>{mnemonicView}</View>;
     };
 
     renderToBeSelected = () => {
         const { toBeSelected } = this.state;
         const mnemonic = this.props.navigation.getParam('mnemonic', '').split(/\s+/);
         const mnemonicView = toBeSelected.map(index => {
-            return (
-                <MnemonicView
-                    key={`${index}`}
-                    color="white"
-                    canDelete={false}
-                    disabled={false}
-                    onSelected={() => this.onSelected(index)}
-                    text={mnemonic[index]}
-                />
-            );
+            return <MnemonicView key={`${index}`} color="white" canDelete={false} disabled={false} onSelected={() => this.onSelected(index)} text={mnemonic[index]} />;
         });
         const height = Math.max(2, Math.max(2, Math.ceil(toBeSelected.length / 4))) * 35 + 20;
         return <View style={{ ...styles.MnemonicContainer, height }}>{mnemonicView}</View>;
@@ -164,11 +137,7 @@ class MnemonicConfirm extends React.Component {
             >
                 <View style={styles.container}>
                     <Text>{strings('backup.label_header_confirm_mnemonic')}</Text>
-                    <Image
-                        source={require('../../../../assets/icon_confirm_mnemonic.png')}
-                        style={{ width: 40, height: 40, marginVertical: 10 }}
-                        resizeMode="contain"
-                    />
+                    <Image source={require('../../../../assets/icon_confirm_mnemonic.png')} style={{ width: 40, height: 40, marginVertical: 10 }} resizeMode="contain" />
                     <Text
                         style={{
                             ...styles.WarningText,
@@ -180,12 +149,7 @@ class MnemonicConfirm extends React.Component {
                     {this.renderSelected()}
                     {this.renderToBeSelected()}
                 </View>
-                <ComponentButton
-                    disabled={!confirmed}
-                    style={{ width: width - 40 }}
-                    onPress={this.onFinish}
-                    title={strings('backup.button_finish')}
-                />
+                <ComponentButton disabled={!confirmed} style={{ width: width - 40 }} onPress={this.onFinish} title={strings('backup.button_finish')} />
             </View>
         );
     }

@@ -116,11 +116,7 @@ class Password extends Component {
                         }}
                     />
                 </View>
-                <ComponentButton
-                    disabled={passwordConfirm.length === 0 || password.length === 0}
-                    title={strings('recovery_password.button_reset')}
-                    onPress={this.beforeRecovery}
-                />
+                <ComponentButton disabled={passwordConfirm.length === 0 || password.length === 0} title={strings('recovery_password.button_reset')} onPress={this.beforeRecovery} />
             </TouchableOpacity>
         );
     }

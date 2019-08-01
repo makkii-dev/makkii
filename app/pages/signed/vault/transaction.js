@@ -1,15 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    View,
-    Text,
-    Image,
-    Clipboard,
-    TouchableOpacity,
-    Linking,
-    ScrollView,
-    Dimensions,
-} from 'react-native';
+import { View, Text, Image, Clipboard, TouchableOpacity, Linking, ScrollView, Dimensions } from 'react-native';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
@@ -47,24 +38,8 @@ class Transaction extends Component {
             if (type === 'exchange') {
                 const { srcToken, srcQty, destToken, destQty } = data;
                 const content = [];
-                content.push(
-                    <TransactionItemCell
-                        key="payment"
-                        style={{ height: 80 }}
-                        title={strings('transaction_detail.label_sell')}
-                        value={`${srcQty} ${srcToken}`}
-                        valueTextAlign="left"
-                    />,
-                );
-                content.push(
-                    <TransactionItemCell
-                        key="exchanged"
-                        style={{ height: 80 }}
-                        title={strings('transaction_detail.label_buy')}
-                        value={`${destQty} ${destToken}`}
-                        valueTextAlign="left"
-                    />,
-                );
+                content.push(<TransactionItemCell key="payment" style={{ height: 80 }} title={strings('transaction_detail.label_sell')} value={`${srcQty} ${srcToken}`} valueTextAlign="left" />);
+                content.push(<TransactionItemCell key="exchanged" style={{ height: 80 }} title={strings('transaction_detail.label_buy')} value={`${destQty} ${destToken}`} valueTextAlign="left" />);
                 return content;
             }
         } else {
@@ -95,14 +70,9 @@ class Transaction extends Component {
 
     render() {
         const { transaction } = this;
-        const timestamp =
-            transaction.timestamp === undefined
-                ? ''
-                : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
+        const timestamp = transaction.timestamp === undefined ? '' : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
         const ifSender = sameAddress(this.account.symbol, this.account.address, transaction.from);
-        const title1 = ifSender
-            ? strings('transaction_detail.receiver_label')
-            : strings('transaction_detail.sender_label');
+        const title1 = ifSender ? strings('transaction_detail.receiver_label') : strings('transaction_detail.sender_label');
         const value1 = ifSender ? transaction.to : transaction.from;
         const accKey = accountKey(this.account.symbol, value1);
         let inAddressBook;
@@ -141,35 +111,17 @@ class Transaction extends Component {
                                             AppToast.show(strings('toast_copy_success'));
                                         }}
                                     >
-                                        <Image
-                                            source={require('../../../../assets/icon_copy.png')}
-                                            style={{ width: 20, height: 20, tintColor: '#000' }}
-                                            resizeMode="contain"
-                                        />
+                                        <Image source={require('../../../../assets/icon_copy.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
                                     </TouchableOpacity>
                                     {inAddressBook ? null : (
-                                        <TouchableOpacity
-                                            onPress={() =>
-                                                this.addToAddressBook(value1, this.account.symbol)
-                                            }
-                                            style={{ marginLeft: 10 }}
-                                        >
-                                            <Image
-                                                source={require('../../../../assets/icon_add_address.png')}
-                                                style={{ width: 20, height: 20, tintColor: '#000' }}
-                                                resizeMode="contain"
-                                            />
+                                        <TouchableOpacity onPress={() => this.addToAddressBook(value1, this.account.symbol)} style={{ marginLeft: 10 }}>
+                                            <Image source={require('../../../../assets/icon_add_address.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
                                         </TouchableOpacity>
                                     )}
                                 </View>
                             )}
                         />
-                        <TransactionItemCell
-                            style={{ height: 80 }}
-                            title={strings('transaction_detail.timestamp_label')}
-                            value={timestamp}
-                            valueTextAlign="left"
-                        />
+                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.timestamp_label')} value={timestamp} valueTextAlign="left" />
                         <TransactionItemCell
                             style={{ height: 100 }}
                             title={strings('transaction_detail.transactionHash_label')}
@@ -182,29 +134,15 @@ class Transaction extends Component {
                                         AppToast.show(strings('toast_copy_success'));
                                     }}
                                 >
-                                    <Image
-                                        source={require('../../../../assets/icon_copy.png')}
-                                        style={{ width: 20, height: 20, tintColor: '#000' }}
-                                        resizeMode="contain"
-                                    />
+                                    <Image source={require('../../../../assets/icon_copy.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
                                 </TouchableOpacity>
                             )}
                         />
-                        <TransactionItemCell
-                            style={{ height: 80 }}
-                            title={strings('transaction_detail.blockNumber_label')}
-                            value={transaction.blockNumber}
-                            valueTextAlign="left"
-                        />
+                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.blockNumber_label')} value={transaction.blockNumber} valueTextAlign="left" />
 
                         {this.renderAdditionData()}
 
-                        <TransactionItemCell
-                            style={{ height: 80 }}
-                            title={strings('transaction_detail.status_label')}
-                            value={<PendingComponent status={transaction.status} />}
-                            valueTextAlign="left"
-                        />
+                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.status_label')} value={<PendingComponent status={transaction.status} />} valueTextAlign="left" />
                     </View>
                     <View
                         style={{
@@ -216,9 +154,7 @@ class Transaction extends Component {
                         }}
                     >
                         <TouchableOpacity onPress={this.onViewInExplorer}>
-                            <Text style={{ color: linkButtonColor }}>
-                                {strings('transaction_detail.viewInExplorer_button')}
-                            </Text>
+                            <Text style={{ color: linkButtonColor }}>{strings('transaction_detail.viewInExplorer_button')}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

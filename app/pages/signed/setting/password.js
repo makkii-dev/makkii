@@ -81,9 +81,7 @@ class Password extends Component {
         // update password
         const { dispatch } = this.props;
         const newHashedPassword = hashPassword(this.state.password_new);
-        dispatch(
-            createAction('userModel/updatePassword')({ hashed_password: newHashedPassword }),
-        ).then(() => {
+        dispatch(createAction('userModel/updatePassword')({ hashed_password: newHashedPassword })).then(() => {
             AppToast.show(strings('toast_update_success'), {
                 position: AppToast.positions.CENTER,
                 onHidden: () => {
@@ -107,9 +105,7 @@ class Password extends Component {
                     paddingRight: 20,
                 }}
             >
-                <Text style={{ ...defaultStyles.instruction, marginTop: 20, marginBottom: 20 }}>
-                    {strings('password.password_format')}
-                </Text>
+                <Text style={{ ...defaultStyles.instruction, marginTop: 20, marginBottom: 20 }}>{strings('password.password_format')}</Text>
                 <View
                     style={{
                         ...defaultStyles.shadow,
@@ -127,11 +123,7 @@ class Password extends Component {
                             this.setState({
                                 password_current: e,
                             });
-                            this.updateEditStatus(
-                                e,
-                                this.state.password_new,
-                                this.state.password_confirm,
-                            );
+                            this.updateEditStatus(e, this.state.password_new, this.state.password_confirm);
                         }}
                     />
                     <View style={{ marginBottom: 20 }} />
@@ -143,11 +135,7 @@ class Password extends Component {
                             this.setState({
                                 password_new: e,
                             });
-                            this.updateEditStatus(
-                                e,
-                                this.state.password_confirm,
-                                this.state.password_current,
-                            );
+                            this.updateEditStatus(e, this.state.password_confirm, this.state.password_current);
                         }}
                     />
                     <View style={{ marginBottom: 20 }} />
@@ -159,11 +147,7 @@ class Password extends Component {
                             this.setState({
                                 password_confirm: e,
                             });
-                            this.updateEditStatus(
-                                e,
-                                this.state.password_new,
-                                this.state.password_current,
-                            );
+                            this.updateEditStatus(e, this.state.password_new, this.state.password_current);
                         }}
                     />
                 </View>

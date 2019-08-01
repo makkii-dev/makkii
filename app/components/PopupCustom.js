@@ -1,17 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Animated,
-    Modal,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    View,
-    Image,
-    TextInput,
-    Keyboard,
-    Platform,
-} from 'react-native';
+import { Animated, Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, Image, TextInput, Keyboard, Platform } from 'react-native';
 import { mainColor, mainBgColor } from '../style_util';
 import { ProgressBar } from './ProgressBar';
 // import PropTypes from 'prop-types'
@@ -92,9 +80,7 @@ export default class PopupCustom extends Component {
                         }}
                     >
                         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={[styles.textButton, styleTextDisable, textStyle]}>
-                                {btn.text}
-                            </Text>
+                            <Text style={[styles.textButton, styleTextDisable, textStyle]}>{btn.text}</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
@@ -122,15 +108,9 @@ export default class PopupCustom extends Component {
             return <View key="invisible" />;
         }
         return (
-            <View
-                key="visible"
-                style={{ position: 'absolute', right: 0, top: Platform.OS === 'ios' ? 13 : 17 }}
-            >
+            <View key="visible" style={{ position: 'absolute', right: 0, top: Platform.OS === 'ios' ? 13 : 17 }}>
                 <TouchableOpacity onPress={this.clearText}>
-                    <Image
-                        source={require('../../assets/icon_popCustom_clear.png')}
-                        style={styles.iconClose}
-                    />
+                    <Image source={require('../../assets/icon_popCustom_clear.png')} style={styles.iconClose} />
                 </TouchableOpacity>
             </View>
         );
@@ -210,19 +190,7 @@ export default class PopupCustom extends Component {
     }
 
     render() {
-        const {
-            visible,
-            title,
-            content,
-            type,
-            errorMsg,
-            valueInput,
-            buttons,
-            callback,
-            cancelable,
-            offsetY,
-            progress,
-        } = this.state;
+        const { visible, title, content, type, errorMsg, valueInput, buttons, callback, cancelable, offsetY, progress } = this.state;
         const contentPaddingVertical =
             type === 'input'
                 ? {
@@ -234,9 +202,7 @@ export default class PopupCustom extends Component {
                   };
         const titleColor = mainColor;
         const contentMarginTop = type === 'input' ? { marginTop: 8 } : { marginTop: 20 };
-        const renderContent = (
-            <Text style={[styles.contentPopup, contentMarginTop]}>{content}</Text>
-        );
+        const renderContent = <Text style={[styles.contentPopup, contentMarginTop]}>{content}</Text>;
         return (
             <Modal animationType="none" transparent visible={visible} onRequestClose={() => {}}>
                 <TouchableWithoutFeedback
@@ -260,9 +226,7 @@ export default class PopupCustom extends Component {
                             <View style={[styles.contentField, contentPaddingVertical]}>
                                 <Text style={[styles.titlePopup, titleColor]}>{title}</Text>
                                 {content !== '' && renderContent}
-                                {errorMsg !== '' && (
-                                    <Text style={styles.errorText}>{errorMsg}</Text>
-                                )}
+                                {errorMsg !== '' && <Text style={styles.errorText}>{errorMsg}</Text>}
                                 {type === 'input' && (
                                     <View>
                                         <TextInput
@@ -278,16 +242,8 @@ export default class PopupCustom extends Component {
                                     </View>
                                 )}
                                 {type === 'progress' && (
-                                    <View
-                                        style={{ marginTop: 10, flexDirection: 'row', width: 250 }}
-                                    >
-                                        <ProgressBar
-                                            style={{ height: 20 }}
-                                            width={200}
-                                            progress={progress}
-                                            color={mainColor}
-                                            onComplete={callback}
-                                        />
+                                    <View style={{ marginTop: 10, flexDirection: 'row', width: 250 }}>
+                                        <ProgressBar style={{ height: 20 }} width={200} progress={progress} color={mainColor} onComplete={callback} />
                                         <Text
                                             style={{
                                                 marginLeft: 10,

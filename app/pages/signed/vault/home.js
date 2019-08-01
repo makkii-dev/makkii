@@ -25,14 +25,7 @@ import SwipeCell from '../../../components/SwipeCell';
 import { strings } from '../../../../locales/i18n';
 import { OptionButton, ComponentButton } from '../../../components/common';
 import { SORT } from './constants';
-import {
-    fixedWidth,
-    fixedHeight,
-    mainColor,
-    linkButtonColor,
-    mainBgColor,
-    fixedWidthFont,
-} from '../../../style_util';
+import { fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor, fixedWidthFont } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { accountKey, getStatusBarHeight } from '../../../../utils';
 import { COINS } from '../../../../client/support_coin_list';
@@ -147,8 +140,7 @@ class HomeCenterComponent extends React.Component {
     }
 
     closeAll = () => {
-        (this.state.showFilter || this.state.showSort) &&
-            this.setState({ showFilter: false, showSort: false });
+        (this.state.showFilter || this.state.showSort) && this.setState({ showFilter: false, showSort: false });
         this.setState({
             currentFilter: this.props.currentFilter,
         });
@@ -161,10 +153,7 @@ class HomeCenterComponent extends React.Component {
     containsOption = option => {
         if (this.state.currentFilter.length > 0) {
             for (let i = 0; i < this.state.currentFilter.length; i++) {
-                if (
-                    this.state.currentFilter[i].type === option.type &&
-                    this.state.currentFilter[i].key === option.key
-                ) {
+                if (this.state.currentFilter[i].type === option.type && this.state.currentFilter[i].key === option.key) {
                     return true;
                 }
             }
@@ -175,10 +164,7 @@ class HomeCenterComponent extends React.Component {
     unselectOption = option => {
         if (this.state.currentFilter.length > 0) {
             for (let i = 0; i < this.state.currentFilter.length; i++) {
-                if (
-                    this.state.currentFilter[i].type === option.type &&
-                    this.state.currentFilter[i].key === option.key
-                ) {
+                if (this.state.currentFilter[i].type === option.type && this.state.currentFilter[i].key === option.key) {
                     const cf = this.state.currentFilter;
                     this.setState({
                         currentFilter: cf.filter((value, index) => index !== i),
@@ -307,10 +293,7 @@ class HomeCenterComponent extends React.Component {
                                 });
                             }}
                         >
-                            <Image
-                                source={require('../../../../assets/icon_sort.png')}
-                                style={{ ...styles.sortHeaderImageStyle, tintColor: sortTintColor }}
-                            />
+                            <Image source={require('../../../../assets/icon_sort.png')} style={{ ...styles.sortHeaderImageStyle, tintColor: sortTintColor }} />
                         </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row' }}>
@@ -351,11 +334,7 @@ class HomeCenterComponent extends React.Component {
                 </View>
                 {// filter list
                 this.state.showFilter ? (
-                    <TouchableOpacity
-                        activeOpacity={1}
-                        style={{ marginTop: 10, width: '100%' }}
-                        onPress={() => {}}
-                    >
+                    <TouchableOpacity activeOpacity={1} style={{ marginTop: 10, width: '100%' }} onPress={() => {}}>
                         {this.renderFilters()}
                         <ComponentButton
                             title={strings('confirm_button')}
@@ -389,21 +368,12 @@ class HomeCenterComponent extends React.Component {
                                         marginVertical: 10,
                                     }}
                                 >
-                                    {item.image ? (
-                                        <Image
-                                            source={item.image}
-                                            style={{ width: 20, height: 20 }}
-                                            resizeMode="contain"
-                                        />
-                                    ) : null}
+                                    {item.image ? <Image source={item.image} style={{ width: 20, height: 20 }} resizeMode="contain" /> : null}
                                     <Text
                                         numberOfLines={1}
                                         style={{
                                             marginLeft: 40,
-                                            color:
-                                                item.title === this.props.currentSort
-                                                    ? linkButtonColor
-                                                    : 'black',
+                                            color: item.title === this.props.currentSort ? linkButtonColor : 'black',
                                         }}
                                     >
                                         {strings(item.title)}
@@ -458,15 +428,12 @@ class Home extends Component {
 
     async requestStoragePermission() {
         try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                {
-                    title: strings('permission_storage_title'),
-                    message: strings('permission_storage_message'),
-                    buttonPositive: strings('ok_button'),
-                    buttonNegative: strings('cancel_button'),
-                },
-            );
+            const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
+                title: strings('permission_storage_title'),
+                message: strings('permission_storage_message'),
+                buttonPositive: strings('ok_button'),
+                buttonNegative: strings('cancel_button'),
+            });
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
                 console.log('storage permission is granted');
             } else {
@@ -502,9 +469,7 @@ class Home extends Component {
                 refreshing: true,
             },
             () => {
-                dispatch(
-                    createAction('accountsModel/loadBalances')({ keys: Object.keys(accounts) }),
-                ).then(r => {
+                dispatch(createAction('accountsModel/loadBalances')({ keys: Object.keys(accounts) })).then(r => {
                     this.setState({
                         refreshing: false,
                     });
@@ -577,9 +542,7 @@ class Home extends Component {
             this.setState({ openRowKey: null });
         } else {
             const { dispatch } = this.props;
-            const targetUri = COINS[item.symbol].tokenSupport
-                ? 'signed_vault_account_tokens'
-                : 'signed_vault_account';
+            const targetUri = COINS[item.symbol].tokenSupport ? 'signed_vault_account_tokens' : 'signed_vault_account';
             dispatch(
                 createAction('accountsModel/updateState')({
                     currentAccount: accountKey(item.symbol, item.address),
@@ -647,12 +610,8 @@ class Home extends Component {
                                 this.onDeleteAccount(Key);
                             }}
                         >
-                            <View
-                                style={{ ...styles.accountSlideButton, backgroundColor: '#fe0000' }}
-                            >
-                                <Text style={{ fontSize: 14, color: '#fff' }}>
-                                    {strings('delete_button')}
-                                </Text>
+                            <View style={{ ...styles.accountSlideButton, backgroundColor: '#fe0000' }}>
+                                <Text style={{ fontSize: 14, color: '#fff' }}>{strings('delete_button')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -683,10 +642,7 @@ class Home extends Component {
                                     alignItems: 'center',
                                 }}
                             >
-                                <Text
-                                    style={{ ...styles.accountSubTextFontStyle1, width: '70%' }}
-                                    numberOfLines={1}
-                                >
+                                <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
                                     {item.name}
                                 </Text>
                                 <Text
@@ -723,12 +679,7 @@ class Home extends Component {
     };
 
     render() {
-        const {
-            accounts,
-            totalBalance,
-            fiat_currency: fiatCurrency,
-            isGettingBalance,
-        } = this.props;
+        const { accounts, totalBalance, fiat_currency: fiatCurrency, isGettingBalance } = this.props;
         let renderAccounts = sortAccounts(Object.values(accounts), this.state.sortOrder);
         renderAccounts = filterAccounts(renderAccounts, this.state.filter);
         renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
@@ -779,31 +730,21 @@ class Home extends Component {
                                     });
                                 }}
                             >
-                                <Image
-                                    source={require('../../../../assets/icon_add.png')}
-                                    style={{ height: 24, width: 24, tintColor: '#fff' }}
-                                />
+                                <Image source={require('../../../../assets/icon_add.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} />
                             </TouchableOpacity>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
-                            <Text style={{ marginLeft: 30, color: '#fff', fontSize: 20 }}>
-                                {strings('wallet.fiat_total')}:
-                            </Text>
+                            <Text style={{ marginLeft: 30, color: '#fff', fontSize: 20 }}>{strings('wallet.fiat_total')}:</Text>
                         </View>
-                        <View
-                            style={{ alignItems: 'center', justifyContent: 'center', height: 80 }}
-                        >
+                        <View style={{ alignItems: 'center', justifyContent: 'center', height: 80 }}>
                             {!isGettingBalance ? (
                                 <Text style={{ color: '#fff', fontSize: 40 }} numberOfLines={1}>
-                                    {totalBalance.toNumber().toFixed(2)}{' '}
-                                    {strings(`currency.${fiatCurrency}_unit`)}
+                                    {totalBalance.toNumber().toFixed(2)} {strings(`currency.${fiatCurrency}_unit`)}
                                 </Text>
                             ) : (
                                 <View style={{ flexDirection: 'row' }}>
                                     <ActivityIndicator animating color="white" size="small" />
-                                    <Text style={{ marginLeft: 10, fontSize: 16, color: 'white' }}>
-                                        {strings('label_loading')}
-                                    </Text>
+                                    <Text style={{ marginLeft: 10, fontSize: 16, color: 'white' }}>{strings('label_loading')}</Text>
                                 </View>
                             )}
                         </View>
@@ -821,13 +762,7 @@ class Home extends Component {
                                         openRowKey: null,
                                     });
                                 }}
-                                refreshControl={
-                                    <RefreshControl
-                                        refreshing={this.state.refreshing}
-                                        onRefresh={this.fetchAccountsBalance}
-                                        title="Loading"
-                                    />
-                                }
+                                refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.fetchAccountsBalance} title="Loading" />}
                             />
                         ) : (
                             <View
@@ -848,9 +783,7 @@ class Home extends Component {
                                     resizeMode="contain"
                                 />
                                 <Text style={{ fontSize: 16, color: 'gray' }}>
-                                    {Object.keys(this.props.accounts).length
-                                        ? strings('wallet.no_satisfied_accounts')
-                                        : strings('wallet.import_accounts_hint')}
+                                    {Object.keys(this.props.accounts).length ? strings('wallet.no_satisfied_accounts') : strings('wallet.import_accounts_hint')}
                                 </Text>
                             </View>
                         )}
@@ -866,9 +799,7 @@ class Home extends Component {
                                 backgroundColor: '#fff',
                                 width: width - 40,
                                 position: 'absolute',
-                                top:
-                                    fixedHeight(500) +
-                                    (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight),
+                                top: fixedHeight(500) + (Platform.OS === 'ios' ? 20 : StatusBar.currentHeight),
                                 right: 20,
                                 padding: 20,
                             }}
@@ -894,11 +825,7 @@ const mapToState = ({ accountsModel, settingsModel }) => {
             ...accountsMap[el],
             txNumber: Object.keys(transactionsMap[el]).length,
         };
-        totalBalance = totalBalance.plus(
-            BigNumber(accountsMap[el].balance).multipliedBy(
-                BigNumber(settingsModel.coinPrices[accountsMap[el].symbol]),
-            ),
-        );
+        totalBalance = totalBalance.plus(BigNumber(accountsMap[el].balance).multipliedBy(BigNumber(settingsModel.coinPrices[accountsMap[el].symbol])));
         return map;
     }, {});
     return {

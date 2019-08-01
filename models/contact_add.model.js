@@ -46,13 +46,10 @@ export default {
             const key = accountKey(contactObj.symbol, contactObj.address);
             const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
             if (!ret) {
-                AppToast.show(
-                    strings('add_address.error_address_format', { coin: contactObj.symbol }),
-                    {
-                        duration: Toast.durations.LONG,
-                        position: Toast.positions.CENTER,
-                    },
-                );
+                AppToast.show(strings('add_address.error_address_format', { coin: contactObj.symbol }), {
+                    duration: Toast.durations.LONG,
+                    position: Toast.positions.CENTER,
+                });
                 return false;
             }
             if (address_book[key]) {

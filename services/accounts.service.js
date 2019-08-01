@@ -1,11 +1,6 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
-import {
-    getTransactionsByAddress,
-    fetchAccountTokenTransferHistory,
-    getBalance,
-    fetchAccountTokenBalance,
-} from '../client/api';
+import { getTransactionsByAddress, fetchAccountTokenTransferHistory, getBalance, fetchAccountTokenBalance } from '../client/api';
 
 const getTransactionsHistory = async (symbol, address, page, size) => {
     try {
@@ -18,14 +13,7 @@ const getTransactionsHistory = async (symbol, address, page, size) => {
 
 const getTransfersHistory = async (symbol, address, contractAddr, page, size) => {
     try {
-        return await fetchAccountTokenTransferHistory(
-            symbol,
-            address,
-            contractAddr,
-            null,
-            page,
-            size,
-        );
+        return await fetchAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size);
     } catch (e) {
         console.log('getTransfersHistory error=>', e);
         throw e;

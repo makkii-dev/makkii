@@ -1,13 +1,5 @@
 import * as React from 'react';
-import {
-    View,
-    Dimensions,
-    FlatList,
-    ActivityIndicator,
-    Image,
-    Text,
-    TouchableOpacity,
-} from 'react-native';
+import { View, Dimensions, FlatList, ActivityIndicator, Image, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import { getTokenIconUrl } from '../../../../client/api';
@@ -60,11 +52,7 @@ class ExchangeTokenList extends React.PureComponent {
                 onPress={() => this.onSelectToken(symbol)}
             >
                 {fastIcon !== undefined ? (
-                    <FastImage
-                        style={{ width: 30, height: 30 }}
-                        source={{ uri: fastIcon }}
-                        resizeMode={FastImage.resizeMode.contain}
-                    />
+                    <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
                 ) : icon !== undefined ? (
                     <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                 ) : null}
@@ -77,12 +65,7 @@ class ExchangeTokenList extends React.PureComponent {
 
     renderList = data => (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <FlatList
-                style={{ width }}
-                data={data}
-                keyExtractor={(item, index) => `${index}`}
-                renderItem={this.renderItem}
-            />
+            <FlatList style={{ width }} data={data} keyExtractor={(item, index) => `${index}`} renderItem={this.renderItem} />
         </View>
     );
 

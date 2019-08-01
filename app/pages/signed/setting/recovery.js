@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    Dimensions,
-    View,
-    Clipboard,
-    Platform,
-    NativeModules,
-    NativeEventEmitter,
-    ScrollView,
-} from 'react-native';
+import { Dimensions, View, Clipboard, Platform, NativeModules, NativeEventEmitter, ScrollView } from 'react-native';
 import screenshotHelper from 'react-native-screenshot-helper';
 import QRCode from 'react-native-qrcode-svg';
 import { ComponentButton, MnemonicView } from '../../../components/common';
@@ -52,15 +44,7 @@ class Recovery extends Component {
     renderMnemonic = () => {
         const mnemonic = this.props.navigation.getParam('mnemonic', '');
         return mnemonic.split(' ').map(str => {
-            return (
-                <MnemonicView
-                    key={str}
-                    canDelete={false}
-                    disabled
-                    onSelected={() => {}}
-                    text={str}
-                />
-            );
+            return <MnemonicView key={str} canDelete={false} disabled onSelected={() => {}} text={str} />;
         });
     };
 

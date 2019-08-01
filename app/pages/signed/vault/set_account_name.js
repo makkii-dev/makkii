@@ -1,20 +1,12 @@
 import React from 'react';
-import {
-    View,
-    TextInput,
-    StyleSheet,
-    Dimensions,
-    Text,
-    TouchableOpacity,
-    Keyboard,
-} from 'react-native';
+import { View, TextInput, StyleSheet, Dimensions, Text, TouchableOpacity, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { RightActionButton } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor, mainColor } from '../../../style_util';
 import { strLen } from '../../../../utils';
 import { createAction } from '../../../../utils/dva';
-import { AppToast} from "../../../components/AppToast";
+import { AppToast } from '../../../components/AppToast';
 
 const { width } = Dimensions.get('window');
 
@@ -52,13 +44,9 @@ class SetAccountNameScreen extends React.Component {
         const { textValue } = this.state;
         this.setState({ editable: false }, () => {
             if (usage === 'import_account') {
-                dispatch(
-                    createAction('accountImportModel/importAccount')({ name: textValue }),
-                ).then(() => navigation.navigate('signed_vault'));
+                dispatch(createAction('accountImportModel/importAccount')({ name: textValue })).then(() => navigation.navigate('signed_vault'));
             } else if (usage === 'change_account_name') {
-                dispatch(
-                    createAction('accountsModel/changeCurrentAccountName')({ name: textValue }),
-                ).then(() => navigation.goBack());
+                dispatch(createAction('accountsModel/changeCurrentAccountName')({ name: textValue })).then(() => navigation.goBack());
             }
         });
     };
@@ -94,14 +82,7 @@ class SetAccountNameScreen extends React.Component {
                 }}
             >
                 <View style={styles.container}>
-                    <TextInput
-                        style={styles.textInputStyle}
-                        value={textValue}
-                        editable={editable}
-                        multiline={false}
-                        autoFocus
-                        onChangeText={this.onChangeText}
-                    />
+                    <TextInput style={styles.textInputStyle} value={textValue} editable={editable} multiline={false} autoFocus onChangeText={this.onChangeText} />
                     <Text style={styles.labelStyle}>{strings('account_name_hint')}</Text>
                 </View>
             </TouchableOpacity>

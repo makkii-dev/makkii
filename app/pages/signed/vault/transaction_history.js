@@ -41,10 +41,7 @@ class TransactionHistory extends React.Component {
             createAction('accountsModel/getTransactionHistory')({
                 user_address: currentAccount.address,
                 symbol: currentAccount.symbol,
-                tokenSymbol:
-                    currentAccount.coinSymbol === currentAccount.symbol
-                        ? ''
-                        : currentAccount.coinSymbol,
+                tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol ? '' : currentAccount.coinSymbol,
                 page,
                 size,
                 needSave: false,
@@ -143,12 +140,7 @@ class TransactionHistory extends React.Component {
                         onEndReached={() => {
                             this._onEndReached();
                         }}
-                        ListFooterComponent={() => (
-                            <ImportListFooter
-                                hasSeparator={false}
-                                footerState={this.state.footerState}
-                            />
-                        )}
+                        ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={this.state.footerState} />}
                     />
                 ) : (
                     <View
@@ -159,11 +151,7 @@ class TransactionHistory extends React.Component {
                             alignItems: 'center',
                         }}
                     >
-                        <Image
-                            source={require('../../../../assets/empty_transactions.png')}
-                            style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }}
-                            resizeMode="contain"
-                        />
+                        <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                         <Text style={{ color: 'gray' }}>{strings('account_view.empty_label')}</Text>
                     </View>
                 )}
@@ -177,8 +165,7 @@ const mapToState = ({ accountsModel }) => {
     const currentAccount = {
         ...accountsMap[key],
         coinSymbol: currentToken === '' ? accountsMap[key].symbol : currentToken,
-        balance:
-            currentToken === '' ? accountsMap[key].balance : accountsMap[key].tokens[currentToken],
+        balance: currentToken === '' ? accountsMap[key].balance : accountsMap[key].tokens[currentToken],
     };
     const txKey = currentToken === '' ? key : `${key}+${currentToken}`;
     const compareFn = (a, b) => {

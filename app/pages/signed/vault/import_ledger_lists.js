@@ -37,9 +37,7 @@ class ImportHdWallet extends React.Component {
     ImportAccount = () => {
         const { dispatch } = this.props;
         const select = this.refs.refSelectList.getSelect();
-        dispatch(
-            createAction('accountsModel/fromLedger')({ index: Object.values(select)[0].index }),
-        );
+        dispatch(createAction('accountsModel/fromLedger')({ index: Object.values(select)[0].index }));
         navigate('signed_vault_set_account_name')({ dispatch });
     };
 
@@ -107,15 +105,9 @@ class ImportHdWallet extends React.Component {
                     data={accountLists}
                     cellLeftView={item => {
                         const { address } = item;
-                        return (
-                            <Text style={{ flex: 1 }}>
-                                {`${address.substring(0, 10)}...${address.substring(54)}`}
-                            </Text>
-                        );
+                        return <Text style={{ flex: 1 }}>{`${address.substring(0, 10)}...${address.substring(54)}`}</Text>;
                     }}
-                    ListFooterComponent={() => (
-                        <ImportListFooter footerState={this.state.footerState} />
-                    )}
+                    ListFooterComponent={() => <ImportListFooter footerState={this.state.footerState} />}
                     onEndReached={() => {
                         this._onEndReached();
                     }}

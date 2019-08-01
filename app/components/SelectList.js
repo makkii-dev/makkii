@@ -36,13 +36,7 @@ class SelectCell extends React.Component {
             >
                 {/* <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingHorizontal: 20}}> */}
                 {element}
-                {this.props.select && (
-                    <Image
-                        source={require('../../assets/icon_checked.png')}
-                        style={{ width: 20, height: 20, marginLeft: 20 }}
-                        resizeMode="contain"
-                    />
-                )}
+                {this.props.select && <Image source={require('../../assets/icon_checked.png')} style={{ width: 20, height: 20, marginLeft: 20 }} resizeMode="contain" />}
                 {/* </View> */}
             </TouchableOpacity>
         );
@@ -111,9 +105,7 @@ export default class SelectList extends React.Component {
                     />
                 )}
                 keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={() => (
-                    <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />
-                )}
+                ItemSeparatorComponent={() => <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />}
             />
         );
     }
