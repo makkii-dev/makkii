@@ -250,9 +250,13 @@ class AccountTokens extends Component {
 
     toAccounts = tokenSymbol => {
         const { dispatch, currentAccount } = this.props;
-        if (tokenSymbol !== currentAccount.symbol) {
-            dispatch(createAction('accountsModel/updateState')({ currentToken: tokenSymbol }));
-        }
+        console.log('tokenSymbol=>', tokenSymbol);
+        console.log('currentAccount.symbol=>', currentAccount.symbol);
+        dispatch(
+            createAction('accountsModel/updateState')({
+                currentToken: tokenSymbol !== currentAccount.symbol ? tokenSymbol : '',
+            }),
+        );
         navigate('signed_vault_account')({ dispatch });
     };
 

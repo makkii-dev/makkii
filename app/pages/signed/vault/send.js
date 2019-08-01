@@ -108,9 +108,10 @@ class Send extends Component {
     };
 
     render() {
-        const { currentAccount, editable } = this.props;
+        const { currentAccount, editable, coinPrice, fiat_currency: fiatCurrency } = this.props;
         const { to, amount, data, gasPrice, gasLimit, showAdvanced } = this.state;
         const showAdvancedOption = COINS[currentAccount.symbol].txFeeSupport;
+        const coinUsed = gasPrice * gasLimit * 10 ** -9 || 0;
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
                 <MyscrollView
@@ -239,6 +240,11 @@ class Send extends Component {
                                             onChangeText={v => this.setState({ gasLimit: v })}
                                             keyboardType="decimal-pad"
                                         />
+                                        <Text style={{ width: '100%', color: 'black' }}>
+                                            {`${coinUsed.toFixed(5)} ${currentAccount.symbol} ≈  ${(
+                                                coinUsed * coinPrice
+                                            ).toFixed(5)} ${fiatCurrency}`}
+                                        </Text>
                                     </View>
                                 ) : null}
                             </View>
@@ -393,7 +399,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapToState = ({ accountsModel, txSenderModel }) => {
+const mapToState = ({ accountsModel, txSenderModel, settingsModel }) => {
     const { to, amount, data, gasLimit, gasPrice, editable } = txSenderModel;
     const { currentAccount: key, currentToken, accountsMap } = accountsModel;
     const currentAccount = {
@@ -404,6 +410,8 @@ const mapToState = ({ accountsModel, txSenderModel }) => {
         currentAccount,
         txObj: { to, amount, data, gasLimit, gasPrice },
         editable,
+        coinPrice: settingsModel.coinPrices[currentAccount.symbol],
+        fiat_currency: settingsModel.fiat_currency,
     };
 };
 

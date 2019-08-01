@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import wallet from 'react-native-aion-hw-wallet';
-import { getKeyFromMnemonic, recoverKeyPairByPrivateKey } from '../client/keystore';
+import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger } from '../client/keystore';
 import { range } from '../utils';
 import { SensitiveStorage } from '../utils/storage';
 
@@ -26,7 +26,7 @@ const getAccountFromPrivateKey = async (symbol, private_key) => {
 
 const getOneAccountFromLedger = async (symbol, index) => {
     try {
-        const { address } = await wallet.getAccount(index);
+        const { address } = await getKeyByLedger(symbol, index);
         return { index, address };
     } catch (e) {
         throw e;

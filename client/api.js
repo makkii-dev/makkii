@@ -1,4 +1,4 @@
-import { apiClient } from 'react-native-makkii-core';
+import { apiClient } from 'makkii-coins';
 import Config from 'react-native-config';
 import { COINS } from './support_coin_list';
 
@@ -7,6 +7,7 @@ const isTestNet = Config.is_testnet === 'true';
 const client = apiClient(Object.keys(COINS), isTestNet);
 
 export const {
+    getTokenIconUrl,
     getBlockByNumber,
     getTransactionExplorerUrl,
     getTransactionsByAddress,
@@ -15,14 +16,13 @@ export const {
     getBalance,
     sendTransaction,
     sameAddress,
-    getCoinPrices,
     formatAddress1Line,
     validateBalanceSufficiency,
+    getCoinPrices,
     fetchTokenDetail,
     fetchAccountTokenTransferHistory,
     fetchAccountTokens,
     fetchAccountTokenBalance,
-    searchTokens,
     getTopTokens,
-    getTokenIconUrl,
+    searchTokens,
 } = client;

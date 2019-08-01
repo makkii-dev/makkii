@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
-import { sendAll } from 'react-native-makkii-core/coins/btc+ltc/api/tools';
+import { sendAll } from 'makkii-coins/coins/btc+ltc/api/tools';
 import { COINS } from '../client/support_coin_list';
 import { validateBalanceSufficiency, sendTransaction } from '../client/api';
 import { validateAddress } from '../client/keystore';

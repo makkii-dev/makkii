@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import Config from 'react-native-config';
-import { HttpClient } from 'react-native-makkii-core';
+import { HttpClient } from 'makkii-coins';
 
 const getLatestVersion = async (platform, versionCode, lang) => {
     const url =

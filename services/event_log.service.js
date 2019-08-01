@@ -2,7 +2,7 @@
 import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
-import { HttpClient } from 'react-native-makkii-core';
+import { HttpClient } from 'makkii-coins';
 
 const sendEventLog = async eventLog => {
     try {
