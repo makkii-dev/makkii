@@ -14,6 +14,7 @@ import { strings } from '../../../../locales/i18n';
 import { mainBgColor, mainColor } from '../../../style_util';
 import { strLen } from '../../../../utils';
 import { createAction } from '../../../../utils/dva';
+import { AppToast} from "../../../components/AppToast";
 
 const { width } = Dimensions.get('window');
 
