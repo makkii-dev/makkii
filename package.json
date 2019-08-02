@@ -46,7 +46,7 @@
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-sensitive-info": "^5.4.2",
     "react-native-svg": "^9.0.6",
-    "react-native-touch-id": "^4.4.1",
+    "react-native-touch-id": "https://github.com/chaion/react-native-touch-id.git",
     "react-native-webview": "https://github.com/chaion/makkii-react-native-webview.git#upstream-injectjavascriptbeforedocumentload",
     "react-navigation": "^3.4.1",
     "react-navigation-redux-helpers": "^3.0.2",
