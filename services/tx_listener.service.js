@@ -28,7 +28,10 @@ const getOneTxStatus = async tx => {
         let newListenerStatus = listenerStatus;
         console.log(`tx[${oldTx.hash}] listenerStatus=>${listenerStatus}`);
         if (listenerStatus === 'waitReceipt') {
-            const { status, blockNumber } = await getTransactionStatus(symbol, oldTx.hash);
+            const { status, blockNumber, gasUsed } = await getTransactionStatus(symbol, oldTx.hash);
+            if (symbol === 'ETH' || symbol === 'AION') {
+                newTx.fee = gasUsed * newTx.gasPrice * 10 ** -18;
+            }
             newTx.blockNumber = blockNumber;
             if (status) {
                 // success

@@ -141,7 +141,9 @@ class Transaction extends Component {
                         <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.blockNumber_label')} value={transaction.blockNumber} valueTextAlign="left" />
 
                         {this.renderAdditionData()}
-
+                        {transaction.fee ? (
+                            <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.label_fee')} value={`${transaction.fee} ${this.account.coinSymbol}`} valueTextAlign="left" />
+                        ) : null}
                         <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.status_label')} value={<PendingComponent status={transaction.status} />} valueTextAlign="left" />
                     </View>
                     <View

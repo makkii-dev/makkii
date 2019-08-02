@@ -34,6 +34,7 @@ class SimpleWebView extends Component {
                     />
                 </TouchableOpacity>
             ),
+            headerRight: <View />,
         };
     };
 

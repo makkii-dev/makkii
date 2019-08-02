@@ -130,6 +130,7 @@
     "status_label": "状态",
     "label_sell": "卖",
     "label_buy": "买",
+    "label_fee": "费用",
     "sendAgain_button": "重新发送",
     "viewInExplorer_button": "在Explorer中查看更多",
     "PENDING": "确认中",

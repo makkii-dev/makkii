@@ -5877,7 +5877,7 @@ makeerror@1.0.x:
 
 "makkii-coins@https://github.com/chaion/react-native-makkii-core.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-makkii-core.git#815871b67d3633e69bb5555bca78fa61a01f13a6"
+  resolved "https://github.com/chaion/react-native-makkii-core.git#615e4d733f830a1caf606aeff9c5265e4fa94850"
   dependencies:
     "@tronscan/client" "^0.2.48"
     aion-rlp "^0.0.1"
