@@ -1,10 +1,11 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
 import { sendAll } from 'makkii-coins/coins/btc+ltc/api/tools';
+import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';
 import { validateBalanceSufficiency, sendTransaction } from '../client/api';
-import { validateAddress } from '../client/keystore';
-import { isJsonString, validateAmount } from '../utils';
+import { validateAddress as validateAddress_ } from '../client/keystore';
+import { validateAmount } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
     const { to, amount, gasPrice, gasLimit } = txObj;
@@ -53,31 +54,21 @@ const getAllBalance = async (currentAccount, options) => {
 const parseScannedData = async (data, currentAccount) => {
     let ret;
     let retData = {};
-    if (isJsonString(data)) {
-        const { receiver, amount } = JSON.parse(data);
-        if (!receiver) {
-            ret = false;
-        } else {
-            try {
-                const ret1 = await validateAddress(receiver, currentAccount.symbol);
-                const ret2 = amount ? await validateAmount(amount) : true;
-                ret = ret1 && ret2;
-                if (ret) {
-                    retData.to = receiver;
-                    retData.amount = amount || '';
-                }
-            } catch (e) {
-                ret = false;
-            }
+    const coinName = COINS[currentAccount.symbol].name.toLowerCase();
+    try {
+        const { address, options } = decode(data, coinName);
+        const { amount } = options;
+        const ret1 = await validateAddress(address, currentAccount.symbol);
+        const ret2 = amount ? validateAmount(amount) : true;
+        ret = ret1 && ret2;
+        if (ret) {
+            retData.to = address;
+            retData.amount = amount || '';
         }
-    } else {
-        try {
-            ret = await validateAddress(data, currentAccount.symbol);
-            if (ret) {
-                retData.to = data;
-            }
-        } catch (e) {
-            ret = false;
+    } catch (e) {
+        ret = await validateAddress(data, currentAccount.symbol);
+        if (ret) {
+            retData.to = data;
         }
     }
     return { result: ret, data: retData };
@@ -93,6 +84,14 @@ const sendTx = async (txObj, currentAccount) => {
     } catch (e) {
         console.log('sendTransaction error=>', e);
         return { result: false, error: e };
+    }
+};
+
+const validateAddress = async (address, symbol) => {
+    try {
+        return await validateAddress_(address, symbol);
+    } catch (e) {
+        return false;
     }
 };
 

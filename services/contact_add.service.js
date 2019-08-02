@@ -1,26 +1,31 @@
 /* eslint-disable camelcase */
-import { isJsonString } from '../utils';
+import { decode } from 'bip21';
 import { validateAddress as validateAddress_ } from '../client/keystore';
+import { COINS } from '../client/support_coin_list';
+
+const MAPNAME2SYMBOL = Object.keys(COINS).reduce((map, el) => {
+    map[COINS[el].name.toLowerCase()] = el;
+    return map;
+}, {});
 
 const parseScannedData = async (data, symbol) => {
     let ret;
     let retData = {};
-    if (isJsonString(data)) {
-        const { receiver, coin } = JSON.parse(data);
-        try {
-            ret = await validateAddress_(receiver, coin || symbol);
-            retData.address = receiver;
-            retData.symbol = coin || symbol;
-        } catch (e) {
-            ret = false;
+    const coinScheme = data.substr(0, data.indexOf(':'));
+    const coin = MAPNAME2SYMBOL[coinScheme];
+
+    if (coin) {
+        const { address } = decode(data, COINS[coin].name.toLowerCase());
+        ret = await validateAddress(address, coin);
+        if (ret) {
+            retData.address = address;
+            retData.symbol = coin;
         }
     } else {
-        try {
-            ret = await validateAddress_(data, symbol);
-            retData.address = data;
+        ret = await validateAddress(data, symbol);
+        if (ret) {
+            retData.address = address;
             retData.symbol = symbol;
-        } catch (e) {
-            ret = false;
         }
     }
     return { result: ret, data: retData };
