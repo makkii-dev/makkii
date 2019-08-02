@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {FlatList, TouchableOpacity, View, Image, StyleSheet, PixelRatio, Text} from 'react-native';
+import { FlatList, TouchableOpacity, View, Image, PixelRatio } from 'react-native';
 
-
-class SelectCell extends React.Component{
-    static propTypes ={
+class SelectCell extends React.Component {
+    static propTypes = {
         item: PropTypes.object.isRequired,
         itemHeight: PropTypes.number.isRequired,
         cellLeftView: PropTypes.func.isRequired,
@@ -12,102 +11,102 @@ class SelectCell extends React.Component{
         select: PropTypes.bool.isRequired,
     };
 
-    shouldComponentUpdate(nextProps,nextState){
-        return (this.props.item.key !== nextProps.item.key || this.props.select !== nextProps.select);
+    shouldComponentUpdate(nextProps) {
+        return this.props.item.key !== nextProps.item.key || this.props.select !== nextProps.select;
     }
 
-
-    onPress(key){
-        this.props.onItemSelected(key,!this.props.select)
+    onPress(key) {
+        this.props.onItemSelected(key, !this.props.select);
     }
 
-    render(){
-        const {item,cellLeftView} = this.props;
+    render() {
+        const { item, cellLeftView } = this.props;
         const element = cellLeftView(item.value);
         return (
             <TouchableOpacity
-                style={{backgroundColor: 'transparent', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center'/*, flex:1*/, height:this.props.itemHeight, paddingHorizontal: 20}}
-                onPress={()=>this.onPress(item.key)}
+                style={{
+                    backgroundColor: 'transparent',
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                    alignItems: 'center' /* , flex:1 */,
+                    height: this.props.itemHeight,
+                    paddingHorizontal: 20,
+                }}
+                onPress={() => this.onPress(item.key)}
             >
-                {/*<View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingHorizontal: 20}}>*/}
-                    {element}
-                    {this.props.select&&<Image
-                        source={require('../../assets/icon_checked.png')}
-                        style={{width:20,height:20,marginLeft:20}}
-                        resizeMode={'contain'}
-                    />}
-                {/*</View>*/}
+                {/* <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingHorizontal: 20}}> */}
+                {element}
+                {this.props.select && <Image source={require('../../assets/icon_checked.png')} style={{ width: 20, height: 20, marginLeft: 20 }} resizeMode="contain" />}
+                {/* </View> */}
             </TouchableOpacity>
-        )
+        );
     }
-
 }
 
-export default class SelectList extends  React.Component {
-    static propTypes= {
+export default class SelectList extends React.Component {
+    static propTypes = {
         data: PropTypes.object.isRequired,
         cellLeftView: PropTypes.func.isRequired,
-        isMultiSelect:PropTypes.bool,
+        isMultiSelect: PropTypes.bool,
         itemHeight: PropTypes.number,
         defaultKey: PropTypes.string,
         onItemSelected: PropTypes.func,
     };
-    static defaultProps={
+
+    static defaultProps = {
         isMultiSelect: false,
-        itemHeight:50,
+        itemHeight: 50,
         defaultKey: undefined,
     };
-    state={
+
+    state = {
         needRefresh: false,
     };
 
-
-    constructor(props){
+    constructor(props) {
         super(props);
-        const {defaultKey} = this.props;
-        defaultKey&&(this.select={[defaultKey]:this.props.data[defaultKey]});
-        defaultKey||(this.select={})
+        const { defaultKey } = this.props;
+        defaultKey && (this.select = { [defaultKey]: this.props.data[defaultKey] });
+        defaultKey || (this.select = {});
     }
 
-
-    onPress(key, select){
-        if (!this.props.isMultiSelect){
-            select&&(this.select={[key]:this.props.data[key]});
-        }else{
-            select&&(this.select[key]=this.props.data[key]);
-            select||(delete this.select[key]);
+    onPress(key, select) {
+        if (!this.props.isMultiSelect) {
+            select && (this.select = { [key]: this.props.data[key] });
+        } else {
+            select && (this.select[key] = this.props.data[key]);
+            select || delete this.select[key];
         }
-        this.setState({needRefresh:!this.state.needRefresh});
+        this.setState({ needRefresh: !this.state.needRefresh });
         this.props.onItemSelected && this.props.onItemSelected();
     }
 
-    getSelect(){
+    getSelect() {
         return this.select;
     }
 
-    render(){
+    render() {
         const propsData = this.props.data;
-        let data= {};
-        Object.keys(propsData).map(key=>{
-            data[key]={'key':key,'value':propsData[key]}
+        const data = {};
+        Object.keys(propsData).map(key => {
+            data[key] = { key, value: propsData[key] };
         });
-        return(
+        return (
             <FlatList
                 {...this.props}
                 data={Object.values(data)}
-                renderItem={({item})=>
+                renderItem={({ item }) => (
                     <SelectCell
                         item={item}
                         itemHeight={this.props.itemHeight}
-                        onItemSelected={(key,select)=>this.onPress(key,select)}
+                        onItemSelected={(key, select) => this.onPress(key, select)}
                         cellLeftView={this.props.cellLeftView}
-                        select={this.select[item.key]!==undefined}
+                        select={this.select[item.key] !== undefined}
                     />
-                }
-                keyExtractor={(item,index)=>index.toString()}
-                ItemSeparatorComponent={()=><View style={{backgroundColor:'lightgray',height:1 / PixelRatio.get()}}/>}
+                )}
+                keyExtractor={(item, index) => index.toString()}
+                ItemSeparatorComponent={() => <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />}
             />
-        )
+        );
     }
-
 }

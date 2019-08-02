@@ -1,36 +1,33 @@
-import React, {Component} from 'react';
-import {Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio} from 'react-native';
-import SwipeCell from '../../../components/SwipeCell';
-import {fixedHeight, mainBgColor} from '../../../style_util';
+import React, { Component } from 'react';
+import { Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
+import SwipeCell from '../../../components/SwipeCell';
+import { fixedHeight, mainBgColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
-import {RightActionButton} from '../../../components/common';
-import {COINS} from "../../../../coins/support_coin_list";
-import {accountKey} from '../../../../utils';
-import {formatAddress1Line} from '../../../../coins/api';
-import {createAction, popCustom} from "../../../../utils/dva";
+import { RightActionButton } from '../../../components/common';
+import { COINS } from '../../../../client/support_coin_list';
+import { accountKey } from '../../../../utils';
+import { formatAddress1Line } from '../../../../client/api';
+import { createAction, popCustom } from '../../../../utils/dva';
 
-const {width} = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 class AddressBook extends Component {
-    static navigationOptions = ({navigation}) => {
-        return ({
+    static navigationOptions = ({ navigation }) => {
+        return {
             title: strings('address_book.title'),
-            headerTitleStyle: {
-                fontSize: 20,
-                alignSelf: 'center',
-                textAlign: 'center',
-                flex: 1,
-            },
-            headerRight: (
-                navigation.getParam('type', 'edit') === 'edit'?<RightActionButton
-                    btnTitle={strings('address_book.btn_add')}
-                    onPress={() => {
-                        navigation.navigate('signed_setting_add_address')
-                    }}
-                />:<RightActionButton btnTitle={' '} onPresss={() => {}}/>
-            )
-        });
+            headerRight:
+                navigation.getParam('type', 'edit') === 'edit' ? (
+                    <RightActionButton
+                        btnTitle={strings('address_book.btn_add')}
+                        onPress={() => {
+                            navigation.navigate('signed_setting_add_address');
+                        }}
+                    />
+                ) : (
+                    <RightActionButton btnTitle=" " onPresss={() => {}} />
+                ),
+        };
     };
 
     constructor(props) {
@@ -41,7 +38,6 @@ class AddressBook extends Component {
             openRowKey: null,
         };
     }
-
 
     onSwipeOpen(Key: any) {
         this.setState({
@@ -56,46 +52,58 @@ class AddressBook extends Component {
     }
 
     onDelete(key) {
-        const {dispatch} = this.props;
+        const { dispatch } = this.props;
         popCustom.show(
             strings('alert_title_warning'),
             strings('address_book.warning_delete_address'),
             [
-                {text: strings('cancel_button'), onPress:()=>this.setState({openRowKey: null})},
-                {text: strings('delete_button'), onPress:()=>{
-                        this.setState({
-                            openRowKey: null,
-                        }, ()=>setTimeout(() => {
-                            // delete address locally
-                            dispatch(createAction('userModel/deleteContact')({key}));
-                        }));
-                    }}
+                {
+                    text: strings('cancel_button'),
+                    onPress: () => this.setState({ openRowKey: null }),
+                },
+                {
+                    text: strings('delete_button'),
+                    onPress: () => {
+                        this.setState(
+                            {
+                                openRowKey: null,
+                            },
+                            () =>
+                                setTimeout(() => {
+                                    // delete address locally
+                                    dispatch(createAction('userModel/deleteContact')({ key }));
+                                }),
+                        );
+                    },
+                },
             ],
-            {cancelable: false}
+            { cancelable: false },
         );
     }
 
     onSelect(item) {
-        const {dispatch, navigation} = this.props;
+        const { dispatch, navigation } = this.props;
         if (this.state.openRowKey === null) {
-            if(this.type === 'select'){
-                dispatch(createAction('txSenderModel/updateState')({to:item.address}));
+            if (this.type === 'select') {
+                dispatch(createAction('txSenderModel/updateState')({ to: item.address }));
                 navigation.goBack();
-            }else {
-                dispatch(createAction('contactAddModel/updateState')({
-                    symbol:item.symbol,
-                    name: item.name,
-                    address: item.address,
-                    editable: false,
-                }));
+            } else {
+                dispatch(
+                    createAction('contactAddModel/updateState')({
+                        symbol: item.symbol,
+                        name: item.name,
+                        address: item.address,
+                        editable: false,
+                    }),
+                );
                 navigation.navigate('signed_setting_add_address');
             }
-        }else{
-            this.setState({openRowKey: null});
+        } else {
+            this.setState({ openRowKey: null });
         }
     }
 
-    render_item= ({item, index}) => {
+    renderItem = ({ item }) => {
         const cellHeight = 80;
         return (
             <SwipeCell
@@ -103,33 +111,39 @@ class AddressBook extends Component {
                 onOpen={() => this.onSwipeOpen(item.address)}
                 onClose={() => this.onSwipeClose()}
                 slideoutView={
-                    <View style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        flex: 1,
-                        backgroundColor:'transparent',
-                        height: cellHeight,
-                        justifyContent:'flex-end'}}>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            flex: 1,
+                            backgroundColor: 'transparent',
+                            height: cellHeight,
+                            justifyContent: 'flex-end',
+                        }}
+                    >
                         <TouchableOpacity
-                            onPress={()=>{
+                            onPress={() => {
                                 this.onDelete(accountKey(item.symbol, item.address));
-                            }}>
-                            <View style={{
-                                width: fixedHeight(186),
-                                justifyContent: 'center',
-                                height: cellHeight,
-                                alignItems: 'center',
-                                backgroundColor: '#fe0000',
-                            }}>
-                                <Text style={{fontSize:14,color:'#fff'}}>{strings('delete_button')}</Text>
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: fixedHeight(186),
+                                    justifyContent: 'center',
+                                    height: cellHeight,
+                                    alignItems: 'center',
+                                    backgroundColor: '#fe0000',
+                                }}
+                            >
+                                <Text style={{ fontSize: 14, color: '#fff' }}>{strings('delete_button')}</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
                 }
                 isOpen={item.address === this.state.openRowKey}
                 swipeEnabled={this.state.openRowKey === null && this.type !== 'select'}
-                preventSwipeRight={true}
-                shouldBounceOnMount={true}
+                preventSwipeRight
+                shouldBounceOnMount
             >
                 <TouchableOpacity
                     activeOpacity={1}
@@ -144,89 +158,92 @@ class AddressBook extends Component {
                     }}
                     onPress={() => this.onSelect(item)}
                 >
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <Image source={COINS[item.symbol].icon}
-                               style={{
-                                   width: 30,
-                                   height: 30,
-                               }}
-                               resizeMode={'contain'}
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image
+                            source={COINS[item.symbol].icon}
+                            style={{
+                                width: 30,
+                                height: 30,
+                            }}
+                            resizeMode="contain"
                         />
-                        <View style={{flexDirection: 'column', paddingLeft: 10}}>
-                            <Text numberOfLines={1} style={{...styles.nameStyle, marginBottom: 10}}>{item.name}</Text>
-                            <Text numberOfLines={1} style={styles.addressStyle}>{formatAddress1Line(item.symbol, item.address)}</Text>
+                        <View style={{ flexDirection: 'column', paddingLeft: 10 }}>
+                            <Text numberOfLines={1} style={{ ...styles.nameStyle, marginBottom: 10 }}>
+                                {item.name}
+                            </Text>
+                            <Text numberOfLines={1} style={styles.addressStyle}>
+                                {formatAddress1Line(item.symbol, item.address)}
+                            </Text>
                         </View>
                     </View>
-                    <Image style={{width: 24, height: 24}}
-                           source={require('../../../../assets/arrow_right.png')} />
+                    <Image style={{ width: 24, height: 24 }} source={require('../../../../assets/arrow_right.png')} />
                 </TouchableOpacity>
             </SwipeCell>
-        )
+        );
     };
 
     renderEmpty() {
         return (
-            <View style={{
-                backgroundColor: mainBgColor,
-                alignItems: 'center',
-                justifyContent: 'center',
-                flex: 1,
-            }}>
-                <View style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-                    <Image source={require('../../../../assets/empty_transactions.png')}
-                           style={{width: 80, height: 80, tintColor: 'gray', marginBottom: 20}}
-                           resizeMode={'contain'}
-                    />
+            <View
+                style={{
+                    backgroundColor: mainBgColor,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flex: 1,
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
                     <Text>{strings('address_book.label_address_book_empty')}</Text>
                 </View>
             </View>
-        )
+        );
     }
 
     render() {
-        let address_book_items = Object.values(this.props.address_book);
+        const addressBookItems = Object.values(this.props.address_book);
         let itemsFiltered = [];
         if (this.filterSymbol !== undefined) {
-            address_book_items.forEach(addr => {
+            addressBookItems.forEach(addr => {
                 if (addr.symbol === this.filterSymbol) {
                     itemsFiltered.push(addr);
                 }
             });
         } else {
-            itemsFiltered = address_book_items;
+            itemsFiltered = addressBookItems;
         }
 
-        return (
-            itemsFiltered.length > 0?
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={{
-                        backgroundColor: mainBgColor,
-                        alignItems: 'center',
-                        flex: 1,
-                        paddingTop: 20,
-                    }}
-                    onPress={() => {
-                        this.setState({openRowKey: null});
-                    }}
-                >
-                    <FlatList
-                        style={{width: width}}
-                        data={itemsFiltered}
-                        renderItem={this.render_item}
-                        ItemSeparatorComponent={()=><View style={styles.divider}/>}
-                        keyExtractor={(item, index)=>item.address}
-                    />
-                </TouchableOpacity>:
-                this.renderEmpty()
-        )
+        return itemsFiltered.length > 0 ? (
+            <TouchableOpacity
+                activeOpacity={1}
+                style={{
+                    backgroundColor: mainBgColor,
+                    alignItems: 'center',
+                    flex: 1,
+                    paddingTop: 20,
+                }}
+                onPress={() => {
+                    this.setState({ openRowKey: null });
+                }}
+            >
+                <FlatList style={{ width }} data={itemsFiltered} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.address} />
+            </TouchableOpacity>
+        ) : (
+            this.renderEmpty()
+        );
     }
 }
 
 const styles = StyleSheet.create({
     divider: {
         height: 1 / PixelRatio.get(),
-        backgroundColor: '#dfdfdf'
+        backgroundColor: '#dfdfdf',
     },
     nameStyle: {
         fontSize: 14,
@@ -235,10 +252,10 @@ const styles = StyleSheet.create({
     addressStyle: {
         fontSize: 12,
         color: 'gray',
-    }
+    },
 });
 
-const mapToState = ({userModel})=>({
+const mapToState = ({ userModel }) => ({
     address_book: userModel.address_book,
 });
 

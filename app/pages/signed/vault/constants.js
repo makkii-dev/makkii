@@ -1,4 +1,4 @@
-import {strings} from "../../../../locales/i18n";
+import { strings } from '../../../../locales/i18n';
 
 const SORT = [
     {
@@ -56,12 +56,12 @@ const ACCOUNT_MENU = [
     },
     {
         title: 'account_view.menu_token_exchange',
-        image: require('../../../../assets/icon_token_exchange.png')
-    }
+        image: require('../../../../assets/icon_token_exchange.png'),
+    },
 ];
 
 const COINS = {
-    'AION': {
+    AION: {
         name: 'AION',
         symbol: 'AION',
         icon: require('../../../../assets/coin_aion.png'),
@@ -71,14 +71,14 @@ const COINS = {
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '90000',
     },
-    'BTC': {
+    BTC: {
         name: 'BITCOIN',
         symbol: 'BTC',
         icon: require('../../../../assets/coin_btc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
     },
-    'ETH': {
+    ETH: {
         name: 'ETHEREUM',
         symbol: 'ETH',
         icon: require('../../../../assets/coin_eth.png'),
@@ -87,27 +87,27 @@ const COINS = {
         defaultGasPrice: '20',
         defaultGasLimit: '21000',
     },
-    'EOS': {
+    EOS: {
         name: 'EOS',
         symbol: 'EOS',
         icon: require('../../../../assets/coin_eos.png'),
         tokenSupport: false,
         gasPriceUnit: '',
     },
-    'LTC': {
+    LTC: {
         name: 'LITECOIN',
         symbol: 'LTC',
         icon: require('../../../../assets/coin_ltc.png'),
         tokenSupport: false,
         gasPriceUnit: '',
     },
-    'TRON': {
+    TRON: {
         name: 'TRON',
         symbol: 'TRX',
         icon: require('../../../../assets/coin_trx.png'),
         tokenSupport: false,
         gasPriceUnit: '',
-    }
+    },
 };
 
 const IMPORT_SOURCE = [
@@ -126,12 +126,13 @@ const IMPORT_SOURCE = [
     {
         title: 'vault_import_source.from_ledger',
         icon: require('../../../../assets/account_le_symbol.png'),
-    }
+    },
 ];
 
-const getAccountConstants =(type)=>{
-    let typeIcon, typeText;
-    switch(type) {
+const getAccountConstants = type => {
+    let typeIcon;
+    let typeText;
+    switch (type) {
         case '[ledger]':
             typeIcon = require('../../../../assets/account_le_symbol.png');
             typeText = strings('vault_import_source.from_ledger');
@@ -144,15 +145,15 @@ const getAccountConstants =(type)=>{
             typeIcon = require('../../../../assets/account_mk_symbol.png');
             typeText = strings('vault_import_source.from_hd_wallet');
     }
-    return ({typeIcon, typeText});
+    return { typeIcon, typeText };
 };
 
-module.exports={
-    SORT: SORT,
-    FILTER: FILTER,
-    MENU: MENU,
-    ACCOUNT_MENU:ACCOUNT_MENU,
-    COINS: COINS,
-    IMPORT_SOURCE: IMPORT_SOURCE,
+module.exports = {
+    SORT,
+    FILTER,
+    MENU,
+    ACCOUNT_MENU,
+    COINS,
+    IMPORT_SOURCE,
     getAccountConstants,
 };

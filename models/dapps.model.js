@@ -1,11 +1,10 @@
+/* eslint-disable camelcase */
 export default {
     namespace: 'dappsModel',
-    state:{
-
+    state: {},
+    reducers: {
+        updateState(state, { payload }) {
+            return { ...state, ...payload };
+        },
     },
-    reducers:{
-      updateState(state, {payload}){
-          return {...state,...payload};
-      }
-    },
-}
+};

@@ -292,6 +292,7 @@
     "label_header_confirm_mnemonic": "请按顺序点击助记词，以确认您正确备份。",
     "label_warning_incorrect_mnemonic": "助记词顺序不正确，请重新检查",
     "label_remainder_backup": "您还没有备份助记词",
+    "label_give_up": "放弃备份?",
     "button_next": "下一步",
     "button_finish": "完成",
     "button_backup_now": "马上备份",

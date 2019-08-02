@@ -1,39 +1,46 @@
 // @flow
 
-import { createMessager } from './messager/index'
+import { createMessager } from './messager/index';
 
-const isBrowser = typeof window !== 'undefined'
+const isBrowser = typeof window !== 'undefined';
 
-const { bind, define, listener, ready, fn, addEventListener, removeEventListener, isConnect } = createMessager(
-    (data: any) => { isBrowser && window.ReactNativeWebView && window.ReactNativeWebView.postMessage(JSON.stringify(data)) }
-);
+const {
+    bind,
+    define,
+    listener,
+    ready,
+    fn,
+    addEventListener,
+    removeEventListener,
+    isConnect,
+} = createMessager((data: any) => {
+    isBrowser &&
+        window.ReactNativeWebView &&
+        window.ReactNativeWebView.postMessage(JSON.stringify(data));
+});
 
 if (isBrowser) {
-
-    let originalPostMessage = window['originalPostMessage']
+    let originalPostMessage = window.originalPostMessage;
 
     if (originalPostMessage) {
-        ready()
+        ready();
     } else {
         const descriptor: any = {
-            get: function () {
-                return originalPostMessage
+            get() {
+                return originalPostMessage;
             },
-            set: function (value) {
-                originalPostMessage = value
+            set(value) {
+                originalPostMessage = value;
                 if (originalPostMessage) {
-                    setTimeout(ready, 50)
+                    setTimeout(ready, 50);
                 }
-            }
+            },
         };
-        Object.defineProperty(window, 'originalPostMessage', descriptor)
+        Object.defineProperty(window, 'originalPostMessage', descriptor);
     }
     document.addEventListener('FROM_RN', e => {
         listener(e.data);
-    })
-
+    });
 }
 
-export {
-    bind, define, fn, addEventListener, removeEventListener, isConnect
-}
+export { bind, define, fn, addEventListener, removeEventListener, isConnect };

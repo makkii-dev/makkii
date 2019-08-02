@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
-import {
-    StyleSheet,
-    View,
-    ActivityIndicator,
-    Text,
-    Dimensions
-} from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Text, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 
-const {width, height} = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export default class Loading extends Component {
     static propTypes = {
         isShow: PropTypes.bool,
-        message: PropTypes.string
+        message: PropTypes.string,
     };
 
     constructor(props) {
@@ -21,37 +15,18 @@ export default class Loading extends Component {
         this.state = {
             message: null,
             isShow: false,
-        }
+        };
     }
 
-    componentWillReceiveProps(nextProps){
-        const {message, isShow} = this.props;
-        const {message: nextMessage, isShow: nextIsShow} = nextProps;
-        if(message!==nextMessage||isShow!==nextIsShow){
+    componentWillReceiveProps(nextProps) {
+        const { message, isShow } = this.props;
+        const { message: nextMessage, isShow: nextIsShow } = nextProps;
+        if (message !== nextMessage || isShow !== nextIsShow) {
             this.setState({
-                message:nextMessage,
-                isShow:nextIsShow
-            })
+                message: nextMessage,
+                isShow: nextIsShow,
+            });
         }
-    }
-
-    render() {
-        let align, paddingTop;
-        if (this.position === 'top') {
-            paddingTop = 50;
-            align = 'flex-start';
-        } else {
-            paddingTop = 0;
-            align = 'center';
-        }
-        return this.state.isShow ?(
-            <View style={{...styles.container, paddingTop: paddingTop, justifyContent: align}}>
-                <View style={styles.progressContainer}>
-                    <ActivityIndicator animating={true} size='large' color='white'/>
-                    {this.state.message && <Text style={styles.defaultText} numberOfLines={1}>{this.state.message}</Text>}
-                </View>
-            </View>
-        ): (null)
     }
 
     show(message = null, params) {
@@ -60,7 +35,7 @@ export default class Loading extends Component {
         }
         this.setState({
             isShow: true,
-            message: message,
+            message,
         });
     }
 
@@ -71,6 +46,30 @@ export default class Loading extends Component {
             message: null,
         });
     }
+
+    render() {
+        let align;
+        let paddingTop;
+        if (this.position === 'top') {
+            paddingTop = 50;
+            align = 'flex-start';
+        } else {
+            paddingTop = 0;
+            align = 'center';
+        }
+        return this.state.isShow ? (
+            <View style={{ ...styles.container, paddingTop, justifyContent: align }}>
+                <View style={styles.progressContainer}>
+                    <ActivityIndicator animating size="large" color="white" />
+                    {this.state.message && (
+                        <Text style={styles.defaultText} numberOfLines={1}>
+                            {this.state.message}
+                        </Text>
+                    )}
+                </View>
+            </View>
+        ) : null;
+    }
 }
 
 const styles = StyleSheet.create({
@@ -80,8 +79,8 @@ const styles = StyleSheet.create({
         elevation: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        width: width,
-        height: height,
+        width,
+        height,
     },
     progressContainer: {
         borderRadius: 8,
@@ -93,5 +92,5 @@ const styles = StyleSheet.create({
     defaultText: {
         color: '#FFF',
         fontSize: 15,
-    }
+    },
 });
