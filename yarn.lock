@@ -7681,9 +7681,9 @@ react-native-tab-view@^1.2.0, react-native-tab-view@^1.4.1:
   dependencies:
     prop-types "^15.6.1"
 
-"react-native-touch-id@https://github.com/chaion/react-native-touch-id.git":
+"react-native-touch-id@https://github.com/chaion/react-native-touch-id.git#alban/fix-fp-colors":
   version "4.4.1"
-  resolved "https://github.com/chaion/react-native-touch-id.git#2e7c4bcd0aedad01e45708fbb831fcc70fc48264"
+  resolved "https://github.com/chaion/react-native-touch-id.git#13b7c6cf4ca6fb5b7e8896724dc92d687efed853"
 
 "react-native-webview@https://github.com/chaion/makkii-react-native-webview.git#upstream-injectjavascriptbeforedocumentload":
   version "5.7.0"

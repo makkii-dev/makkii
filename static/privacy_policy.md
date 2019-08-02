@@ -9,32 +9,41 @@
 ### Permissions
 
 * Camera Permission
-  Your camera will only be used for reading QR codes. Camera images will never leave your device.
+
+Your camera will only be used for reading QR codes. Camera images will never leave your device.
 
 * Storage Permission
-  Makkii requires storage permission only to store qrcode to album.
+
+Makkii requires storage permission only to store QR codes to album.
 
 ### User Data
 
 * Password
+
 Password will be encryted and stored on your device, it will never leave your device.
 
 * Private Keys/Mnemonic Phrase
+
 Your private keys and mnemonic phrase will be encrypted and stored on your device, it will never leave your device.
 
 * Blockchain Transactions
+
 Your blockchain transactions may be relayed through servers("nodes") and will be publicly visible due to the public nature of distributed ledger systems.
 
 * Secure Communication with our Servers
+
 All communications from Makkii app to our server is under HTTPS.
 
 * Communication with Third-Party Servers
+
 Exchange rates, balances, transactions and other blockchain information may be read from, or relayed to third-party servers. We cannot guarantee the privacy of your internent connection.
 
 * Aggregate Usage Statistics
+
 We may collect usage information in order to improve function or UI, but will only use this information in an aggregated, anonymized fashion, and never in association with your personally identifying information.
 
 * All User Information is Confidential
+
 Your personally identifying information will be kept strictly confidential and never provided to third parties (other than in an aggregated, anonymized report such as number of users per month).
 
 ### Privacy Questions
