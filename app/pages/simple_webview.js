@@ -53,6 +53,7 @@ class SimpleWebView extends Component {
     }
 
     componentWillMount() {
+        this.mount = true;
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.onGoBack(); // works best when the goBack is async
             return true;
@@ -60,11 +61,12 @@ class SimpleWebView extends Component {
     }
 
     componentWillUnmount() {
+        this.mount = false;
         this.backHandler.remove();
     }
 
     handleProcessBar = v => {
-        this.setState({ WebViewProgress: 0, showProgressBar: v });
+        this.mount && this.setState({ WebViewProgress: 0, showProgressBar: v });
     };
 
     renderLoading = () => {
@@ -103,10 +105,10 @@ class SimpleWebView extends Component {
                     onLoadStart={() => this.handleProcessBar(true)}
                     onNavigationStateChange={navState => {
                         this.canGoBack = navState.canGoBack;
-                        this.setState({ WebViewProgress: 0, showProgressBar: true });
+                        this.mount && this.setState({ WebViewProgress: 0, showProgressBar: true });
                     }}
                     onLoadProgress={e => {
-                        this.setState({ WebViewProgress: e.nativeEvent.progress });
+                        this.mount && this.setState({ WebViewProgress: e.nativeEvent.progress });
                     }}
                 />
                 {this.state.showProgressBar ? (
