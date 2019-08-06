@@ -3,6 +3,8 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.dylanvann.fastimage.FastImageViewPackage;
@@ -42,6 +44,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTimerPackage(),
+            new ReactNativePushNotificationPackage(),
             new RNSensitiveInfoPackage(),
             new ReactNativeConfigPackage(),
             new FastImageViewPackage(),
