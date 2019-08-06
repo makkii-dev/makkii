@@ -7,6 +7,7 @@ import { mainColor, mainBgColor } from '../../style_util';
 import defaultStyles from '../../styles';
 import { createAction, popCustom } from '../../../utils/dva';
 import { sendRegisterEventLog } from '../../../services/event_log.service';
+import { validatePassword } from '../../../utils';
 
 const { width, height } = Dimensions.get('window');
 
@@ -42,7 +43,13 @@ class Home extends Component {
 
     beforeRegister = () => {
         const { dispatch, hashed_password: hashedPassword } = this.props;
-        if (hashedPassword !== '') {
+        const { password, password_confirm: passwordConfirm } = this.state;
+
+        if (!validatePassword(password)) {
+            alertOk(strings('alert_title_error'), strings('register.error_password'));
+        } else if (password !== passwordConfirm) {
+            alertOk(strings('alert_title_error'), strings('register.error_dont_match'));
+        } else if (hashedPassword !== '') {
             popCustom.show(strings('alert_title_warning'), strings('register.warning_register_again'), [
                 { text: strings('cancel_button'), onPress: () => {} },
                 {
