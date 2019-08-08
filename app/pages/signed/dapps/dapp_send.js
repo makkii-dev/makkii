@@ -3,9 +3,10 @@ import { View, DeviceEventEmitter, TouchableOpacity, Text, BackHandler, ScrollVi
 import BigNumber from 'bignumber.js';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { validator } from 'lib-common-util-js';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
-import { getLedgerMessage, validateAmount, validatePositiveInteger } from '../../../../utils';
+import { getLedgerMessage } from '../../../../utils';
 import { sendTransaction } from '../../../../client/api';
 import { validateAddress } from '../../../../client/keystore';
 import { ComponentButton, SubTextInput, alertOk } from '../../../components/common';
@@ -129,7 +130,7 @@ class DappSend extends React.Component {
 
         // validate amount
         // 1. amount format
-        if (!validateAmount(this.state.amount)) {
+        if (!validator.validateAmount(this.state.amount)) {
             alertOk(strings('alert_title_error'), strings('send.error_format_amount'));
             return false;
         }
@@ -148,13 +149,13 @@ class DappSend extends React.Component {
         }
 
         // validate gas price
-        if (!validateAmount(this.state.gasPrice)) {
+        if (!validator.validateAmount(this.state.gasPrice)) {
             alertOk(strings('alert_title_error'), strings('send.error_invalid_gas_price'));
             return false;
         }
 
         // validate gas limit
-        if (!validatePositiveInteger(this.state.gasLimit)) {
+        if (!validator.validatePositiveInteger(this.state.gasLimit)) {
             alertOk(strings('alert_title_error'), strings('send.error_invalid_gas_limit'));
             return false;
         }

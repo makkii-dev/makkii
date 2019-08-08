@@ -2,7 +2,6 @@ import { CameraRoll, Dimensions, Platform, StatusBar } from 'react-native';
 import blake2b from 'blake2b';
 import wallet from 'react-native-aion-hw-wallet';
 import * as RNFS from 'react-native-fs';
-import bip39 from 'bip39';
 import BigNumber from 'bignumber.js';
 import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
@@ -48,27 +47,10 @@ function validatePrivateKey(privateKey, symbol = 'AION') {
     return true;
 }
 
-function validateAmount(amount) {
-    const reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]+)?))$/;
-    return reg.test(amount);
-}
-
 function validateAdvancedAmount(amount) {
     // support match 1.
     const reg = /^[0-9]?((\.[0-9]+)|([0-9]+(\.[0-9]*)?))$/;
     return reg.test(amount);
-}
-
-function validatePositiveInteger(input) {
-    const reg = /^[1-9][0-9]*$/;
-    return reg.test(input);
-}
-function validateMnemonic(mnemonic) {
-    const mnemonicFormat = mnemonic
-        .trim()
-        .split(/\s+/)
-        .join(' ');
-    return bip39.validateMnemonic(mnemonicFormat);
 }
 
 function hashPassword(password) {
@@ -299,11 +281,8 @@ module.exports = {
     getLedgerMessage,
     validatePrivateKey,
     generateQRCode,
-    validateAmount,
     validateAdvancedAmount,
-    validateMnemonic,
     saveImage,
-    validatePositiveInteger,
     mainnetUrl,
     masteryUrl,
     getStatusBarHeight,
