@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import { DeviceEventEmitter } from 'react-native';
+import BackgroundTimer from 'react-native-background-timer';
 import { getTxsStatus } from '../services/tx_listener.service';
 import { accountKey } from '../utils';
 import { createAction } from '../utils/dva';
@@ -8,6 +9,7 @@ import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
 import { findSymbolByAddress, getExchangeHistory } from '../services/erc20_dex.service';
 import { COINS } from '../client/support_coin_list';
+import { Notification } from '../services/notification.service';
 
 const ERC20DEX_NETWORK = COINS.ETH.network;
 const TIMEOUT = 10 * 60 * 1000;
@@ -73,10 +75,10 @@ export default {
         setup({ dispatch }) {
             let timer;
             DeviceEventEmitter.addListener('check_all_transaction_status', ({ trigger }) => {
-                if (timer) clearInterval(timer);
+                if (timer) BackgroundTimer.clearInterval(timer);
                 if (trigger) {
                     dispatch(createAction('checkAllTxs')());
-                    timer = setInterval(() => {
+                    timer = BackgroundTimer.setInterval(() => {
                         dispatch(createAction('checkAllTxs')());
                     }, 10 * 1000);
                 } else {
@@ -135,8 +137,14 @@ export default {
                     txs[newTx.hash].txObj = newTx;
                     if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED' || listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
-                        if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED')
-                            AppToast.show(`${strings('toast_tx')} ${newTx.hash} ${strings(`toast_${listenerStatus}`)}`, { position: AppToast.positions.CENTER });
+                        if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
+                            const { currentAppState } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+                            if (currentAppState === 'active') {
+                                AppToast.show(`${strings('toast_tx')} ${newTx.hash} ${strings(`toast_${listenerStatus}`)}`, { position: AppToast.positions.CENTER });
+                            } else {
+                                Notification.localNotif(`${strings('send.toast_tx_notice')}`, `${strings('toast_tx')} ${newTx.hash} ${strings(`toast_${listenerStatus}`)}`);
+                            }
+                        }
                         loadBalanceKeys.push(accountKey(symbol, newTx.to));
                         loadBalanceKeys.push(accountKey(symbol, newTx.from));
                         // dispatch other actions;

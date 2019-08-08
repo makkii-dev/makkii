@@ -3,8 +3,10 @@ import blake2b from 'blake2b';
 import wallet from 'react-native-aion-hw-wallet';
 import * as RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
+import { encode } from 'bip21';
 import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
+import { COINS } from '../client/support_coin_list';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require('crypto-js');
@@ -82,11 +84,7 @@ function getLedgerMessage(errorCode) {
 }
 
 function generateQRCode(amount, address, coin = 'AION') {
-    const obj = {};
-    obj.receiver = address;
-    obj.amount = amount;
-    obj.coin = coin;
-    return JSON.stringify(obj);
+    return encode(address, { amount }, COINS[coin].name.toLowerCase());
 }
 
 function saveImage(base64, imageFileName) {

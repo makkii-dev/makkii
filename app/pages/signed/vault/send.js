@@ -304,13 +304,9 @@ class Send extends Component {
         dispatch(createAction('txSenderModel/sendTx')({ txObj })).then(r => {
             this.refs.refLoading.hide();
             if (r) {
-                AppToast.show(strings('send.toast_tx_sent'), {
-                    onHidden: () => {
-                        // reset txSenderModel
-                        dispatch(createAction('txSenderModel/reset')());
-                        navigation.goBack();
-                    },
-                });
+                dispatch(createAction('txSenderModel/reset')());
+                navigation.goBack();
+                AppToast.show(strings('send.toast_tx_sent'));
             }
         });
     };

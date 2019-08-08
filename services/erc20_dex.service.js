@@ -175,7 +175,7 @@ const getExchangeHistory = async (user_id, network, txhash = undefined) => {
     try {
         const base_url = network === 'mainnet' ? 'https://api.etherscan.io' : 'https://api-ropsten.etherscan.io';
         const latestBlock = await getBlockNumber('ETH');
-        const fromBlock = latestBlock - 100000;
+        const fromBlock = latestBlock - 3000000;
         const url = `${base_url}/api?module=logs&action=getLogs&fromBlock=${fromBlock}&toBlock=latest&address=0x818e6fecd516ecc3849daf6845e3ec868087b755&topic0=0x1849bd6a030a1bca28b83437fd3de96f3d27a5d172fa7e9c78e7b61468928a39&topic0_1_opr=and&topic1=${padTo32(
             user_id,
         )}`;

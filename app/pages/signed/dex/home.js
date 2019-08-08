@@ -15,7 +15,7 @@ import commonStyles from '../../../styles';
 import { mainBgColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
 
-import { getStatusBarHeight, validateAdvancedAmount } from '../../../../utils';
+import { accountKey, getStatusBarHeight, validateAdvancedAmount } from '../../../../utils';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
 import { getTokenIconUrl } from '../../../../client/api';
 import { DEX_MENU, getExchangeRulesURL } from './constants';
@@ -167,7 +167,14 @@ class Home extends React.Component {
     };
 
     toAccountDetail = item => {
-        navigate('signed_vault_account_tokens', { account: item })(this.props);
+        const { dispatch } = this.props;
+        dispatch(
+            createAction('accountsModel/updateState')({
+                currentAccount: accountKey(item.symbol, item.address),
+                currentToken: '',
+            }),
+        );
+        navigate('signed_vault_account_tokens')(this.props);
     };
 
     onTrade = () => {

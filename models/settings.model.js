@@ -4,6 +4,7 @@ import TouchID from 'react-native-touch-id';
 import DeviceInfo from 'react-native-device-info';
 import { NavigationActions } from 'react-navigation';
 import RNFS from 'react-native-fs';
+import BackgroundTimer from 'react-native-background-timer';
 import { Storage } from '../utils/storage';
 import { createAction, popCustom } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
@@ -42,9 +43,9 @@ export default {
                 const { exchange_refresh_interval } = params;
                 console.log('update_exchange_refresh_interval=>', exchange_refresh_interval);
                 if (listener) {
-                    clearInterval(listener);
+                    BackgroundTimer.clearInterval(listener);
                 } else {
-                    listener = setInterval(() => {
+                    listener = BackgroundTimer.setInterval(() => {
                         dispatch(createAction('getCoinPrices')());
                     }, exchange_refresh_interval * 60 * 1000);
                 }

@@ -117,7 +117,7 @@ export default {
                 return { result: false, error: strings('register.error_password') };
             }
             if (password !== password_confirm) {
-                return { result: false, error: strings('register.error_password') };
+                return { result: false, error: strings('register.error_dont_match') };
             }
             const hashed_password = hashPassword(password);
             yield call(SensitiveStorage.set, 'mnemonic', mnemonic);
