@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
-import { getBlockByNumber, getBlockNumber, getTransactionStatus } from '../client/api';
 import { hexutil } from 'lib-common-util-js';
+import { getBlockByNumber, getBlockNumber, getTransactionStatus } from '../client/api';
 
 const WAIT_BLOCKS = 2;
 /** *

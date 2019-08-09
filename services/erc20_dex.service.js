@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
-import { HttpClient } from 'lib-common-util-js';
+import { HttpClient, hexutil } from 'lib-common-util-js';
 import { getBlockNumber } from '../client/api';
-import { hexutil} from 'lib-common-util-js';
 
 const NETWORK_URL = {
     mainnet: 'https://api.kyber.network',

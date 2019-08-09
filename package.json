@@ -25,7 +25,7 @@
     "crypto-js": "^3.1.9-1",
     "dva-core": "^1.4.0",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git",
-    "makkii-coins": "https://github.com/chaion/react-native-makkii-core.git",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
     "react-native": "0.59.9",
