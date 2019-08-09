@@ -174,9 +174,6 @@ function strLen(str) {
     return len;
 }
 
-const mainnetUrl = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
-const masteryUrl = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
-// const masteryUrl = 'http://192.168.50.105:8545';
 const navigationSafely = (pinCodeEnabled, hashedPassword, { routeName, params, onVerifySuccess = undefined }) => ({ dispatch }) => {
     pinCodeEnabled ||
         popCustom.show(
@@ -281,8 +278,6 @@ module.exports = {
     generateQRCode,
     validateAdvancedAmount,
     saveImage,
-    mainnetUrl,
-    masteryUrl,
     getStatusBarHeight,
     strLen,
     navigationSafely,
