@@ -7,6 +7,7 @@ import { encode } from 'bip21';
 import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
 import { COINS } from '../client/support_coin_list';
+import { hexutil} from 'lib-common-util-js';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require('crypto-js');
@@ -123,24 +124,6 @@ function deleteFile(filePath) {
         });
 }
 
-function hexToAscii(hex) {
-    // if (!isHexStrict(hex))
-    //     throw new Error('The parameter must be a valid HEX string.');
-
-    let str = '';
-    let i = 0;
-    const l = hex.length;
-    if (hex.substring(0, 2) === '0x') {
-        i = 2;
-    }
-    for (; i < l; i += 2) {
-        const code = parseInt(hex.substr(i, 2), 16);
-        str += String.fromCharCode(code);
-    }
-
-    return str;
-}
-
 function isIphoneX() {
     const dimen = Dimensions.get('window');
     return Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS && (dimen.height === 812 || dimen.width === 812 || (dimen.height === 896 || dimen.width === 896));
@@ -224,37 +207,26 @@ function range(start, end, step) {
     return arr;
 }
 
-function appendHexStart(str) {
-    const str1 = str.startsWith('0x') ? str.substring(2) : str;
-    const str2 = str1.length % 2 ? `0${str1}` : str1;
-    return `0x${str2}`;
-}
-
 function toHex(value) {
     if (!value) {
         return '0x00';
     }
     if (typeof value === 'string') {
-        return appendHexStart(value);
+        return hexutil.appendHexStart(value);
     }
     if (value instanceof Buffer) {
-        return appendHexStart(value.toString('hex'));
+        return hexutil.appendHexStart(value.toString('hex'));
     }
     if (typeof value === 'number') {
-        return appendHexStart(value.toString(16));
+        return hexutil.appendHexStart(value.toString(16));
     }
     if (value instanceof Uint8Array) {
-        return appendHexStart(Buffer.from(value).toString('hex'));
+        return hexutil.appendHexStart(Buffer.from(value).toString('hex'));
     }
     if (BigNumber.isBigNumber(value)) {
-        return appendHexStart(value.toString(16));
+        return hexutil.appendHexStart(value.toString(16));
     }
     throw value;
-}
-
-function fromHexString(str) {
-    const strNo0x = str.startsWith('0x') ? str.substring(2) : str;
-    return parseInt(strNo0x, 16);
 }
 
 const isJsonString = data => {
@@ -283,9 +255,6 @@ module.exports = {
     navigationSafely,
     range,
     accountKey,
-    appendHexStart,
     toHex,
-    fromHexString,
-    hexToAscii,
     isJsonString,
 };
