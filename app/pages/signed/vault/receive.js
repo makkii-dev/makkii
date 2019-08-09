@@ -3,11 +3,12 @@ import { connect } from 'react-redux';
 import { View, Text, TouchableWithoutFeedback, PermissionsAndroid, Platform, TouchableOpacity, Keyboard, Image, Dimensions, ScrollView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { validator } from 'lib-common-util-js';
 import { SubTextInput, alertOk } from '../../../components/common';
 import { linkButtonColor, mainColor } from '../../../style_util';
 
 import { strings } from '../../../../locales/i18n';
-import { generateQRCode, validateAmount, saveImage } from '../../../../utils';
+import { generateQRCode, saveImage } from '../../../../utils';
 import ContextMenu from '../../../components/ContextMenu';
 import { AppToast } from '../../../components/AppToast';
 
@@ -55,7 +56,7 @@ class Receive extends Component {
 
     onRefresh() {
         // validate
-        if (!validateAmount(this.state.amount)) {
+        if (!validator.validateAmount(this.state.amount)) {
             alertOk(strings('alert_title_error'), strings('invalid_amount'));
             return;
         }

@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Dimensions, View, TouchableOpacity, Keyboard, Image } from 'react-native';
+import { validator } from 'lib-common-util-js';
 import { strings } from '../../../../locales/i18n';
-import { validatePositiveInteger } from '../../../../utils';
 import { TextInputWithTitle, RightActionButton, alertOk } from '../../../components/common';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
@@ -51,12 +51,12 @@ class Advanced extends Component {
     updateAdvancedSettings = () => {
         const { login_session_timeout: _login_session_timeout, exchange_refresh_interval: _exchange_refresh_interval, dispatch } = this.props;
         const { login_session_timeout, exchange_refresh_interval } = this.state;
-        if (!validatePositiveInteger(login_session_timeout)) {
+        if (!validator.validatePositiveInteger(login_session_timeout)) {
             alertOk(strings('alert_title_error'), strings('advanced.error_invalid_login_session_timeout'));
             return;
         }
 
-        if (!validatePositiveInteger(exchange_refresh_interval)) {
+        if (!validator.validatePositiveInteger(exchange_refresh_interval)) {
             alertOk(strings('alert_title_error'), strings('advanced.error_invalid_exchange_refresh_interval'));
             return;
         }

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Image, View, Text, Keyboard, TouchableOpacity, Dimensions } from 'react-native';
+import { validator } from 'lib-common-util-js';
 import { strings } from '../../../locales/i18n';
 import { InputMultiLines, ComponentButton, alertOk } from '../../components/common';
-import { validateMnemonic } from '../../../utils';
 import defaultStyles from '../../styles';
 import { mainBgColor } from '../../style_util';
 
@@ -69,7 +69,7 @@ class Home extends Component {
         this.props.navigation.navigate('scan', {
             success: 'unsigned_recovery',
             validate(data, callback) {
-                const pass = validateMnemonic(data.data);
+                const pass = validator.validateMnemonic(data.data);
                 callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
             },
         });
@@ -136,7 +136,7 @@ class Home extends Component {
                     <ComponentButton
                         title={strings('recovery.button_confirm')}
                         onPress={() => {
-                            if (!validateMnemonic(this.state.mnemonic)) {
+                            if (!validator.validateMnemonic(this.state.mnemonic)) {
                                 alertOk(strings('alert_title_error'), strings('recovery.error_invalid_mnemonic'));
                                 return;
                             }

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
-import { HttpClient } from 'makkii-coins';
+import { HttpClient } from 'lib-common-util-js';
 import { getBlockNumber } from '../client/api';
 import { fromHexString } from '../utils';
 

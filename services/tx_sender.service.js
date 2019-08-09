@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
 import { sendAll } from 'makkii-coins/coins/btc+ltc/api/tools';
+import { validator } from 'lib-common-util-js';
 import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';
 import { validateBalanceSufficiency, sendTransaction } from '../client/api';
 import { validateAddress as validateAddress_ } from '../client/keystore';
-import { validateAmount } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
     const { to, amount, gasPrice, gasLimit } = txObj;
@@ -59,7 +59,7 @@ const parseScannedData = async (data, currentAccount) => {
         const { address, options } = decode(data, coinName);
         const { amount } = options;
         const ret1 = await validateAddress(address, currentAccount.symbol);
-        const ret2 = amount ? validateAmount(amount) : true;
+        const ret2 = amount ? validator.validateAmount(amount) : true;
         ret = ret1 && ret2;
         if (ret) {
             retData.to = address;
