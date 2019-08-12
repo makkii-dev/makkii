@@ -7,6 +7,7 @@ import defaultStyles from '../../styles';
 import { mainBgColor } from '../../style_util';
 import { createAction, popCustom } from '../../../utils/dva';
 import { sendRecoveryEventLog } from '../../../services/event_log.service';
+import { validatePassword } from '../../../utils';
 
 const { width } = Dimensions.get('window');
 
@@ -47,7 +48,12 @@ class Password extends Component {
 
     beforeRecovery = () => {
         const { dispatch, hashed_password: hashedPassword } = this.props;
-        if (hashedPassword !== '') {
+        const { password, password_confirm: passwordConfirm } = this.state;
+        if (!validatePassword(password)) {
+            alertOk(strings('alert_title_error'), strings('register.error_password'));
+        } else if (password !== passwordConfirm) {
+            alertOk(strings('alert_title_error'), strings('register.error_dont_match'));
+        } else if (hashedPassword !== '') {
             popCustom.show(strings('alert_title_warning'), strings('recovery.warning_mnemonic'), [
                 { text: strings('cancel_button'), onPress: () => {} },
                 {
