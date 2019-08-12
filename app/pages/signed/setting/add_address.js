@@ -80,6 +80,7 @@ class AddAddress extends Component {
         navigation.navigate('scan', {
             success: 'signed_setting_add_address',
             validate: (data, callback) => {
+                console.log("validating code.....");
                 dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {
                     res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
                 });

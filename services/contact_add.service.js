@@ -24,7 +24,7 @@ const parseScannedData = async (data, symbol) => {
     } else {
         ret = await validateAddress(data, symbol);
         if (ret) {
-            retData.address = address;
+            retData.address = data;
             retData.symbol = symbol;
         }
     }

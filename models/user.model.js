@@ -66,7 +66,7 @@ export default {
             yield put(createAction('updateState')({ address_book }));
             yield put(createAction('saveUser')());
         },
-        *deteleContact(
+        *deleteContact(
             {
                 payload: { key },
             },

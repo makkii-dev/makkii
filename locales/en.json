@@ -570,7 +570,7 @@
     "label_name": "Name",
     "label_address": "Address",
     "hint_name": "Please enter name",
-    "hint_address": "Please enter a valid address",
+    "hint_address": "Please enter account address",
     "error_address_exists": "This address already exists in address book.",
     "error_address_format": "Invalid {{coin}} address",
     "toast_address_saved": "Saved to address book.",
