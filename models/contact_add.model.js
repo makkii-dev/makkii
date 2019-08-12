@@ -52,7 +52,11 @@ export default {
                 });
                 return false;
             }
-            if (address_book[key]) {
+            if (
+                Object.keys(address_book)
+                    .map(k => k.toLowerCase())
+                    .indexOf(key.toLowerCase()) > 0
+            ) {
                 AppToast.show(strings('add_address.error_address_exists'), {
                     duration: AppToast.durations.LONG,
                     position: AppToast.positions.CENTER,
