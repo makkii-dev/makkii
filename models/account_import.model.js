@@ -148,14 +148,16 @@ export default {
                 account.derivationIndex = derivationIndex;
             } else {
                 account.private_key = private_key;
-                yield put(
-                    createAction('accountsModel/updateHdIndex')({
-                        symbol,
-                        address,
-                        index: hdIndex,
-                        code: 'add',
-                    }),
-                );
+                if (account.type === '[local]') {
+                    yield put(
+                        createAction('accountsModel/updateHdIndex')({
+                            symbol,
+                            address,
+                            index: hdIndex,
+                            code: 'add',
+                        }),
+                    );
+                }
             }
             yield put(createAction('accountsModel/addAccount')({ account }));
             yield put(createAction('updateState')(init));

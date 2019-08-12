@@ -622,6 +622,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.5.5":
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
+  integrity sha512-28QvEGyQyNkB0/m2B4FU7IEZGK2NUrcMtT6BZEFALTguLk+AUT6ofsHtPk5QyjAdUkpMJ+/Em+quwz4HOt30AQ==
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.0.0", "@babel/template@^7.1.0", "@babel/template@^7.4.0", "@babel/template@^7.4.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.4.4.tgz#f4b88d1225689a08f5bc3a17483545be9e4ed237"
@@ -5802,11 +5809,12 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git":
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git", "lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#84543b9793e63f4dbd99da9de2a1285a39fc9f78":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#bdcccb4477e230e5fafe139f628b150b2ae78fae"
+  resolved "https://github.com/chaion/lib-common-util-js.git#84543b9793e63f4dbd99da9de2a1285a39fc9f78"
   dependencies:
     axios "^0.19.0"
+    bignumber.js "^9.0.0"
     bip39 "^2.5.0"
     querystring "^0.2.0"
 
@@ -5922,10 +5930,11 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#a2c29f045fd9593890a1b3a2d6f3ef0416c2f1e0":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#b6d5d3fa64415b49e4e006cc1ddf1349e96667dc"
+  resolved "https://github.com/chaion/makkii-coins.git#a2c29f045fd9593890a1b3a2d6f3ef0416c2f1e0"
   dependencies:
+    "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
     aion-rlp "^0.0.1"
     aion-web3-eth-abi "1.1.5"
