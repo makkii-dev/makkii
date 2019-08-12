@@ -2303,17 +2303,6 @@ bip32@^2.0.3:
     typeforce "^1.11.5"
     wif "^2.0.6"
 
-bip39@^2.5.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/bip39/-/bip39-2.6.0.tgz#9e3a720b42ec8b3fbe4038f1e445317b6a99321c"
-  integrity sha512-RrnQRG2EgEoqO24ea+Q/fftuPUZLmrEM3qNhhGsA3PbaXaCW791LTzPuVyx/VprXQcTbPJ3K3UeTna8ZnVl2sg==
-  dependencies:
-    create-hash "^1.1.0"
-    pbkdf2 "^3.0.9"
-    randombytes "^2.0.1"
-    safe-buffer "^5.0.1"
-    unorm "^1.3.3"
-
 bip39@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/bip39/-/bip39-3.0.2.tgz#2baf42ff3071fc9ddd5103de92e8f80d9257ee32"
@@ -5809,13 +5798,13 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git", "lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#84543b9793e63f4dbd99da9de2a1285a39fc9f78":
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#84543b9793e63f4dbd99da9de2a1285a39fc9f78"
+  resolved "https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897"
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
-    bip39 "^2.5.0"
+    bip39 "^3.0.2"
     querystring "^0.2.0"
 
 "lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git":
@@ -5930,9 +5919,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#a2c29f045fd9593890a1b3a2d6f3ef0416c2f1e0":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#1e5113ad39b8a2ab92bf40f55a7e6b106a4e9e4f":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#a2c29f045fd9593890a1b3a2d6f3ef0416c2f1e0"
+  resolved "https://github.com/chaion/makkii-coins.git#1e5113ad39b8a2ab92bf40f55a7e6b106a4e9e4f"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
@@ -5951,7 +5940,7 @@ makeerror@1.0.x:
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
     hdkey "^1.1.1"
-    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git"
+    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897"
     lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git"
     querystring "^0.2.0"
     rlp "^2.2.3"
@@ -9270,7 +9259,7 @@ universalify@^0.1.0:
   resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
 
-unorm@^1.3.3, unorm@^1.4.1:
+unorm@^1.4.1:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/unorm/-/unorm-1.5.0.tgz#01fa9b76f1c60f7916834605c032aa8962c3f00a"
   integrity sha512-sMfSWoiRaXXeDZSXC+YRZ23H4xchQpwxjpw1tmfR+kgbBCaOgln4NI0LXejJIhnBuKINrB3WRn+ZI8IWssirVw==
