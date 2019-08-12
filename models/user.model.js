@@ -72,9 +72,10 @@ export default {
             },
             { select, put },
         ) {
-            let { address_book } = yield select(mapToUserModel);
-            delete address_book[key];
-            yield put(createAction('updateState')({ address_book }));
+            const { address_book } = yield select(mapToUserModel);
+            let new_address_book = { ...address_book };
+            delete new_address_book[key];
+            yield put(createAction('updateState')({ address_book: new_address_book }));
             yield put(createAction('saveUser')());
         },
         *updatePassword({ payload }, { select, put }) {
