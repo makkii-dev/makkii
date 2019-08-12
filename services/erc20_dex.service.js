@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
-import { HttpClient } from 'lib-common-util-js';
+import { HttpClient, hexutil } from 'lib-common-util-js';
 import { getBlockNumber } from '../client/api';
-import { fromHexString } from '../utils';
 
 const NETWORK_URL = {
     mainnet: 'https://api.kyber.network',
@@ -189,8 +188,8 @@ const getExchangeHistory = async (user_id, network, txhash = undefined) => {
                 destToken: res[1],
                 srcQty: res[2],
                 destQty: res[3],
-                timestamp: fromHexString(el.timeStamp, 16) * 1000,
-                blockNumber: fromHexString(el.blockNumber, 16),
+                timestamp: hexutil.hexStringToInt(el.timeStamp) * 1000,
+                blockNumber: hexutil.hexStringToInt(el.blockNumber),
                 status: 'CONFIRMED',
                 hash: el.transactionHash,
             };

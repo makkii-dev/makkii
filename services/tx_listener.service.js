@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
+import { hexutil } from 'lib-common-util-js';
 import { getBlockByNumber, getBlockNumber, getTransactionStatus } from '../client/api';
-import { fromHexString } from '../utils';
 
 const WAIT_BLOCKS = 2;
 /** *
@@ -47,7 +47,7 @@ const getOneTxStatus = async tx => {
             if (symbol === 'ETH') {
                 try {
                     const { timestamp } = await getBlockByNumber(symbol, blockNumber);
-                    newTx.timestamp = fromHexString(timestamp, 16) * 1000;
+                    newTx.timestamp = hexutil.hexStringToInt(timestamp) * 1000;
                 } catch {
                     //
                 }
@@ -62,7 +62,7 @@ const getOneTxStatus = async tx => {
             if (symbol === 'ETH') {
                 try {
                     const { timestamp } = await getBlockByNumber(symbol, newTx.blockNumber);
-                    newTx.timestamp = fromHexString(timestamp, 16) * 1000;
+                    newTx.timestamp = hexutil.hexStringToInt(timestamp) * 1000;
                     console.log('newTx.timestamp:', newTx.timestamp);
                 } catch (e) {
                     console.log('get block by number failed');

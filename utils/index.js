@@ -4,6 +4,7 @@ import wallet from 'react-native-aion-hw-wallet';
 import * as RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import { encode } from 'bip21';
+import { hexutil } from 'lib-common-util-js';
 import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
 import { COINS } from '../client/support_coin_list';
@@ -123,24 +124,6 @@ function deleteFile(filePath) {
         });
 }
 
-function hexToAscii(hex) {
-    // if (!isHexStrict(hex))
-    //     throw new Error('The parameter must be a valid HEX string.');
-
-    let str = '';
-    let i = 0;
-    const l = hex.length;
-    if (hex.substring(0, 2) === '0x') {
-        i = 2;
-    }
-    for (; i < l; i += 2) {
-        const code = parseInt(hex.substr(i, 2), 16);
-        str += String.fromCharCode(code);
-    }
-
-    return str;
-}
-
 function isIphoneX() {
     const dimen = Dimensions.get('window');
     return Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS && (dimen.height === 812 || dimen.width === 812 || (dimen.height === 896 || dimen.width === 896));
@@ -174,9 +157,6 @@ function strLen(str) {
     return len;
 }
 
-const mainnetUrl = 'https://api.nodesmith.io/v1/aion/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780';
-const masteryUrl = 'https://api.nodesmith.io/v1/aion/testnet/jsonrpc?apiKey=651546401ff0418d9b0d5a7f3ebc2f8c';
-// const masteryUrl = 'http://192.168.50.105:8545';
 const navigationSafely = (pinCodeEnabled, hashedPassword, { routeName, params, onVerifySuccess = undefined }) => ({ dispatch }) => {
     pinCodeEnabled ||
         popCustom.show(
@@ -227,37 +207,26 @@ function range(start, end, step) {
     return arr;
 }
 
-function appendHexStart(str) {
-    const str1 = str.startsWith('0x') ? str.substring(2) : str;
-    const str2 = str1.length % 2 ? `0${str1}` : str1;
-    return `0x${str2}`;
-}
-
 function toHex(value) {
     if (!value) {
         return '0x00';
     }
     if (typeof value === 'string') {
-        return appendHexStart(value);
+        return hexutil.appendHexStart(value);
     }
     if (value instanceof Buffer) {
-        return appendHexStart(value.toString('hex'));
+        return hexutil.appendHexStart(value.toString('hex'));
     }
     if (typeof value === 'number') {
-        return appendHexStart(value.toString(16));
+        return hexutil.appendHexStart(value.toString(16));
     }
     if (value instanceof Uint8Array) {
-        return appendHexStart(Buffer.from(value).toString('hex'));
+        return hexutil.appendHexStart(Buffer.from(value).toString('hex'));
     }
     if (BigNumber.isBigNumber(value)) {
-        return appendHexStart(value.toString(16));
+        return hexutil.appendHexStart(value.toString(16));
     }
     throw value;
-}
-
-function fromHexString(str) {
-    const strNo0x = str.startsWith('0x') ? str.substring(2) : str;
-    return parseInt(strNo0x, 16);
 }
 
 const isJsonString = data => {
@@ -281,16 +250,11 @@ module.exports = {
     generateQRCode,
     validateAdvancedAmount,
     saveImage,
-    mainnetUrl,
-    masteryUrl,
     getStatusBarHeight,
     strLen,
     navigationSafely,
     range,
     accountKey,
-    appendHexStart,
     toHex,
-    fromHexString,
-    hexToAscii,
     isJsonString,
 };
