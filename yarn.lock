@@ -5798,9 +5798,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897":
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897"
+  resolved "https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d"
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
@@ -5919,9 +5919,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#1e5113ad39b8a2ab92bf40f55a7e6b106a4e9e4f":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#037e5791e4d06ea32a1bc6ebe1fc689aa86e9612":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#1e5113ad39b8a2ab92bf40f55a7e6b106a4e9e4f"
+  resolved "https://github.com/chaion/makkii-coins.git#037e5791e4d06ea32a1bc6ebe1fc689aa86e9612"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
@@ -5940,7 +5940,7 @@ makeerror@1.0.x:
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
     hdkey "^1.1.1"
-    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#0b6a77959cf258b0fe138865cd9ddeaa73291897"
+    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d"
     lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git"
     querystring "^0.2.0"
     rlp "^2.2.3"

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { DeviceEventEmitter } from 'react-native';
 import { NavigationActions, StackActions } from 'react-navigation';
-import bip39 from 'bip39';
+import * as bip39 from 'bip39';
 import { SensitiveStorage, Storage } from '../utils/storage';
 import { createAction } from '../utils/dva';
 import { accountKey, hashPassword, validatePassword } from '../utils';
