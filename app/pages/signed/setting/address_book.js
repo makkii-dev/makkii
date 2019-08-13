@@ -14,16 +14,12 @@ const { width } = Dimensions.get('window');
 
 class AddressBook extends Component {
     static navigationOptions = ({ navigation }) => {
+        const onAdd = navigation.getParam('onAdd', () => {});
         return {
             title: strings('address_book.title'),
             headerRight:
                 navigation.getParam('type', 'edit') === 'edit' ? (
-                    <RightActionButton
-                        btnTitle={strings('address_book.btn_add')}
-                        onPress={() => {
-                            navigation.navigate('signed_setting_add_address');
-                        }}
-                    />
+                    <RightActionButton btnTitle={strings('address_book.btn_add')} onPress={() => onAdd()} />
                 ) : (
                     <RightActionButton btnTitle=" " onPresss={() => {}} />
                 ),
@@ -37,6 +33,9 @@ class AddressBook extends Component {
         this.state = {
             openRowKey: null,
         };
+        props.navigation.setParams({
+            onAdd: this.onAdd,
+        });
     }
 
     onSwipeOpen(Key: any) {
@@ -50,6 +49,12 @@ class AddressBook extends Component {
             openRowKey: null,
         });
     }
+
+    onAdd = () => {
+        const { navigation, dispatch } = this.props;
+        dispatch(createAction('contactAddModel/reset')());
+        navigation.navigate('signed_setting_add_address');
+    };
 
     onDelete(key) {
         const { dispatch } = this.props;

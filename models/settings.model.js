@@ -222,6 +222,7 @@ export default {
             }
             if (currentAppState.match(/inactive|background/) && nextAppState === 'active') {
                 console.log('App has come to the foreground!');
+                popCustom.hide();
                 const diff = Date.now() - leaveTime;
                 if (diff > login_session_timeout * 60 * 1000) {
                     yield put(createAction('userModel/logOut')());
