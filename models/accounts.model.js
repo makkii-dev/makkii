@@ -371,12 +371,17 @@ export default {
             { call, select, put },
         ) {
             let txs;
-            if (tokenSymbol && tokenSymbol !== '') {
-                const tokenLists = yield select(({ accountsModel }) => accountsModel.tokenLists);
-                const contractAddr = tokenLists[symbol][tokenSymbol].contractAddr;
-                txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size);
-            } else {
-                txs = yield call(getTransactionsHistory, symbol, user_address, page, size);
+            try {
+                if (tokenSymbol && tokenSymbol !== '') {
+                    const tokenLists = yield select(({ accountsModel }) => accountsModel.tokenLists);
+                    const contractAddr = tokenLists[symbol][tokenSymbol].contractAddr;
+                    txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size);
+                } else {
+                    txs = yield call(getTransactionsHistory, symbol, user_address, page, size);
+                }
+            } catch (e) {
+                AppToast.show(strings('error_connect_remote_server'));
+                return 0;
             }
             if (Object.keys(txs).length === 0) {
                 AppToast.show(strings('message_no_more_data'));

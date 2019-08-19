@@ -1,26 +1,41 @@
 import * as React from 'react';
 import { View, Image, TouchableOpacity, Text } from 'react-native';
 import PropTypes from 'prop-types';
+import { mainColor } from '../style_util';
 
 class CheckBox extends React.PureComponent {
     static propTypes = {
+        beforeCheck: PropTypes.func,
+        beforeUncheck: PropTypes.func,
         onCheck: PropTypes.func,
         onUncheck: PropTypes.func,
-        textRight: PropTypes.element.isRequired || PropTypes.string.isRequired,
+        textRight: PropTypes.oneOfType([PropTypes.element, PropTypes.string]).isRequired,
         imageStyle: PropTypes.object,
+        initValue: PropTypes.bool,
     };
 
     state = {
-        isChecked: false,
+        isChecked: this.props.initValue || false,
     };
+
+    componentWillReceiveProps({ initValue }) {
+        if (this.props.initValue !== initValue) {
+            this.setState({
+                isChecked: initValue,
+            });
+        }
+    }
 
     onPressCheck = () => {
         const { isChecked } = this.state;
-        const { onUncheck, onCheck } = this.props;
+        const { onUncheck, onCheck, beforeCheck, beforeUncheck } = this.props;
         isChecked ? onUncheck && onUncheck() : onCheck && onCheck();
-        this.setState({
-            isChecked: !isChecked,
-        });
+        let ret = isChecked ? beforeCheck && beforeCheck() : beforeUncheck && beforeUncheck();
+        if (ret) {
+            this.setState({
+                isChecked: !isChecked,
+            });
+        }
     };
 
     render() {
@@ -32,7 +47,16 @@ class CheckBox extends React.PureComponent {
             <View style={this.props.style}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableOpacity activeOpacity={1} onPress={this.onPressCheck}>
-                        <Image source={BoxImage} style={{ width: 24, height: 24, ...imageStyle, marginRight: 5 }} />
+                        <Image
+                            source={BoxImage}
+                            style={{
+                                width: 24,
+                                height: 24,
+                                ...imageStyle,
+                                marginRight: 5,
+                                tintColor: mainColor,
+                            }}
+                        />
                     </TouchableOpacity>
                     {textView}
                 </View>

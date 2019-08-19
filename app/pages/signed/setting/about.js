@@ -4,7 +4,7 @@ import { Image, View, Text, Dimensions, TouchableOpacity } from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
-import Cell from '../../../components/Cell';
+import { Cell } from '../../../components/Cell';
 import { strings } from '../../../../locales/i18n';
 import defaultStyles from '../../../styles';
 import { linkButtonColor, mainBgColor } from '../../../style_util';

@@ -240,6 +240,16 @@ const isJsonString = data => {
     return false;
 };
 
+function getParameterCaseInsensitive(object, key) {
+    let ret;
+    for (let e of object) {
+        if (e.toLowerCase() === key.toLowerCase()) {
+            ret = object[e];
+            break;
+        }
+    }
+    return ret;
+}
 module.exports = {
     encrypt,
     decrypt,
@@ -257,4 +267,5 @@ module.exports = {
     accountKey,
     toHex,
     isJsonString,
+    getParameterCaseInsensitive,
 };

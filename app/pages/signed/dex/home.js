@@ -1,20 +1,18 @@
 import * as React from 'react';
 import { View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
-
 import { Header } from 'react-navigation';
 import { connect } from 'react-redux';
 import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BigNumber from 'bignumber.js';
-
 import { strings } from '../../../../locales/i18n';
 import { ComponentButton } from '../../../components/common';
+import { AccountBar } from '../../../components/AccountBar';
 import { createAction, navigate } from '../../../../utils/dva';
 import Loading from '../../../components/Loading';
 import commonStyles from '../../../styles';
 import { mainBgColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
-
 import { accountKey, getStatusBarHeight, validateAdvancedAmount } from '../../../../utils';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
 import { getTokenIconUrl } from '../../../../client/api';
@@ -25,16 +23,6 @@ import { AppToast } from '../../../components/AppToast';
 const { width } = Dimensions.get('window');
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
-export const renderAddress = address => (
-    <View>
-        <Text style={{ ...commonStyles.addressFontStyle, color: '#000' }}>
-            {`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(8, 12)} ${address.substring(12, 16)} ${address.substring(16, 21)}`}
-        </Text>
-        <Text style={{ ...commonStyles.addressFontStyle, color: '#000' }}>
-            {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(29, 33)} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
-        </Text>
-    </View>
-);
 
 class Home extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
@@ -159,7 +147,7 @@ class Home extends React.Component {
     };
 
     selectAccount = () => {
-        navigate('signed_Dex_account_list')(this.props);
+        navigate('signed_Dex_account_list', { type: 'ETH', usage: 'Dex' })(this.props);
     };
 
     selectToken = flow => {
@@ -226,120 +214,6 @@ class Home extends React.Component {
         );
     };
 
-    renderAccount = item => {
-        if (item) {
-            const { srcToken } = this.state;
-            let { balance } = item;
-            let { symbol } = item;
-            if (srcToken !== 'ETH' && item.tokens[srcToken]) {
-                balance = item.tokens[srcToken];
-                symbol = srcToken;
-            }
-            return (
-                <View
-                    style={{
-                        ...commonStyles.shadow,
-                        borderRadius: 10,
-                        marginTop: 20,
-                        marginHorizontal: 20,
-                        paddingHorizontal: 10,
-                        alignItems: 'flex-start',
-                        backgroundColor: '#fff',
-                        width: width - 40,
-                    }}
-                >
-                    <TouchableOpacity onPress={this.selectAccount}>
-                        <View
-                            style={{
-                                width: '100%',
-                                paddingVertical: 10,
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                borderBottomWidth: 0.2,
-                                borderBottomColor: 'lightgray',
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    fontSize: 16,
-                                    fontWeight: 'bold',
-                                }}
-                            >
-                                {strings('token_exchange.label_current_account')}
-                            </Text>
-                            <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
-                        </View>
-                    </TouchableOpacity>
-                    <TouchableWithoutFeedback onPress={() => this.toAccountDetail(item)}>
-                        <View style={styles.accountContainerWithShadow}>
-                            <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
-                            <View style={{ flex: 1, paddingVertical: 10 }}>
-                                <View
-                                    style={{
-                                        ...styles.accountSubContainer,
-                                        width: '100%',
-                                        alignItems: 'center',
-                                    }}
-                                >
-                                    <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
-                                        {item.name}
-                                    </Text>
-                                    <Text
-                                        style={{
-                                            ...styles.accountSubTextFontStyle1,
-                                            fontWeight: 'bold',
-                                        }}
-                                    >
-                                        {new BigNumber(balance).toFixed(4)}
-                                    </Text>
-                                </View>
-                                <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>
-                                    {renderAddress(item.address)}
-                                    <Text style={styles.accountSubTextFontStyle2}>{symbol}</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </View>
-            );
-        }
-        return (
-            <View
-                style={{
-                    ...commonStyles.shadow,
-                    borderRadius: 10,
-                    marginVertical: 10,
-                    marginHorizontal: 20,
-                    paddingHorizontal: 10,
-                    alignItems: 'flex-start',
-                    backgroundColor: '#fff',
-                    width: width - 40,
-                }}
-            >
-                <TouchableOpacity onPress={this.selectAccount}>
-                    <View
-                        style={{
-                            width: '100%',
-                            paddingVertical: 10,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                fontWeight: 'bold',
-                            }}
-                        >
-                            {strings('token_exchange.label_select_account')}
-                        </Text>
-                        <Image source={require('../../../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
-                    </View>
-                </TouchableOpacity>
-            </View>
-        );
-    };
-
     renderLoading = () => (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <ActivityIndicator animating color="red" size="large" />
@@ -394,7 +268,7 @@ class Home extends React.Component {
             <DismissKeyboardView>
                 <View style={{ flex: 1, backgroundColor: mainBgColor }}>
                     <MyscrollView style={{ width }} keyboardShouldPersistTaps="always">
-                        {this.renderAccount(currentAccount)}
+                        <AccountBar currentAccount={currentAccount} selectAccount={this.selectAccount} toAccountDetail={this.toAccountDetail} currentToken={srcToken} />
                         <View style={styles.container1}>
                             <View style={{ width: '100%', alignItems: 'flex-start' }}>
                                 <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
@@ -583,24 +457,6 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    accountContainerWithShadow: {
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        paddingHorizontal: 15,
-    },
-    accountSubContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
-    accountSubTextFontStyle1: {
-        fontSize: 14,
-        color: '#000',
-    },
-    accountSubTextFontStyle2: {
-        fontSize: 12,
-        color: 'gray',
     },
     divider: {
         height: 0.5,

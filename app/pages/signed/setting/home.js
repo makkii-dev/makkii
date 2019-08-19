@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Dimensions, FlatList, PixelRatio, ScrollView } from 'react-native';
-import Cell from '../../../components/Cell';
+import { Cell } from '../../../components/Cell';
 import { strings } from '../../../../locales/i18n';
 import { SETTINGS } from './constants';
 import { mainBgColor } from '../../../style_util';

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import { mainBgColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
-import { renderAddress } from './home';
+import { renderAddress } from '../../../components/AccountBar';
 import commonStyles from '../../../styles';
 import { strings } from '../../../../locales/i18n';
 import { createAction, navigate, navigateBack } from '../../../../utils/dva';
@@ -18,25 +18,41 @@ class AccountList extends React.Component {
         };
     };
 
+    constructor(props) {
+        super(props);
+        this.accountType = this.props.navigation.getParam('type', 'ETH');
+        this.usage = this.props.navigation.getParam('usage', 'Dex');
+    }
+
     addAccount = () => {
         const { dispatch } = this.props;
-        dispatch(createAction('accountImportModel/updateState')({ symbol: 'ETH' }));
+        dispatch(createAction('accountImportModel/updateState')({ symbol: this.accountType }));
         navigate('signed_vault_import_from')(this.props);
     };
 
-    selectAccount = address => {
+    selectAccount = ({ symbol, address }) => {
         const { dispatch } = this.props;
-        dispatch(
-            createAction('ERC20Dex/ERC20DexUpdateState')({
-                currentAccount: accountKey('ETH', address),
-            }),
-        );
+        if (typeof this.usage === 'function') {
+            this.usage({ symbol, address });
+        } else if (this.usage === 'Dex') {
+            dispatch(
+                createAction('ERC20Dex/ERC20DexUpdateState')({
+                    currentAccount: accountKey(symbol, address),
+                }),
+            );
+        } else if (this.usage === 'pokket') {
+            dispatch(
+                createAction('pokketModel/updateState')({
+                    currentAccount: accountKey(symbol, address),
+                }),
+            );
+        }
         navigateBack(this.props);
     };
 
     renderItem = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => this.selectAccount(item.address)}>
+            <TouchableOpacity onPress={() => this.selectAccount(item)}>
                 <View style={styles.accountContainerWithShadow}>
                     <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
                     <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -60,7 +76,7 @@ class AccountList extends React.Component {
                             </Text>
                         </View>
                         <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>
-                            {renderAddress(item.address)}
+                            {renderAddress(item.address, item.symbol)}
                             <Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
                         </View>
                     </View>
@@ -81,15 +97,23 @@ class AccountList extends React.Component {
             >
                 <View style={{ width, height: 180, justifyContent: 'center', alignItems: 'center' }}>
                     <Image source={require('../../../../assets/empty_account.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
-                    <Text style={{ color: 'gray', marginBottom: 20 }}>{strings('token_exchange.label_account_not_found')}</Text>
-                    <Button title={strings('token_exchange.button_add_eth_account')} onPress={this.addAccount} />
+                    <Text style={{ color: 'gray', marginBottom: 20 }}>{strings(`token_exchange.label_${this.accountType}_account_not_found`)}</Text>
+                    <Button title={strings(`token_exchange.button_add_${this.accountType}_account`)} onPress={this.addAccount} />
                 </View>
             </View>
         );
     };
 
     render() {
-        const { accounts } = this.props;
+        const { accounts: accounts_ } = this.props;
+        const accounts = Object.values(
+            Object.keys(accounts_)
+                .filter(k => k.startsWith(this.accountType))
+                .reduce((map, el) => {
+                    map[el] = accounts_[el];
+                    return map;
+                }, {}),
+        );
         if (accounts.length === 0) {
             return this.renderEmpty();
         }
@@ -104,14 +128,7 @@ class AccountList extends React.Component {
 const mapToState = ({ accountsModel }) => {
     const { accountsMap } = accountsModel;
     return {
-        accounts: Object.values(
-            Object.keys(accountsMap)
-                .filter(k => k.toLowerCase().startsWith('eth'))
-                .reduce((map, el) => {
-                    map[el] = accountsMap[el];
-                    return map;
-                }, {}),
-        ),
+        accounts: accountsMap,
     };
 };
 

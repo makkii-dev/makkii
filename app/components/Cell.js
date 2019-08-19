@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { View, Image, PixelRatio, Text, TouchableOpacity, TextInput } from 'react-native';
+import PropTypes from 'prop-types';
 
-export default class Cell extends Component {
+export class Cell extends Component {
     render() {
         let titlePadLeft = 0;
         if (this.props.leadIcon) {
@@ -28,7 +29,76 @@ export default class Cell extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+export class Cell2 extends Component {
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+    };
+
+    render() {
+        return (
+            <View style={{ ...styles.cellContainer, width: '100%', borderBottomWidth: 1 / PixelRatio.get(), borderColor: 'gray', paddingBottom: 5 }}>
+                <Text style={{ ...styles.titleText, fontWeight: 'bold' }}>{this.props.title}</Text>
+                <Text style={{ fontSize: 12 }}>{this.props.value}</Text>
+            </View>
+        );
+    }
+}
+
+export class CellInput extends Component {
+    static propTypes = {
+        title: PropTypes.string.isRequired,
+        rightView: PropTypes.func,
+        unit: PropTypes.string,
+        isRequired: PropTypes.bool,
+        textAlign: PropTypes.string,
+    };
+
+    render() {
+        const { isRequired } = this.props;
+        return (
+            <View
+                style={{
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    width: '100%',
+                    paddingHorizontal: 14,
+                    paddingTop: 14,
+                    borderBottomWidth: 1 / PixelRatio.get(),
+                    borderColor: 'gray',
+                }}
+            >
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'flex-start',
+                        height: 20,
+                        width: '100%',
+                    }}
+                >
+                    <Text style={{ ...styles.titleText, fontWeight: 'bold' }}>
+                        {this.props.title} {isRequired && <Text style={{ ...styles.titleText, color: 'red' }}>*</Text>}
+                    </Text>
+                    {this.props.rightView()}
+                </View>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                    }}
+                >
+                    <TextInput {...this.props} style={{ ...this.props.style, color: 'gray', padding: 0, width: this.props.unit ? '90%' : '100%', textAlign: this.props.textAlign || 'left' }} />
+                    {this.props.unit && <Text style={{ fontSize: 12, marginLeft: 10 }}>{this.props.unit}</Text>}
+                </View>
+            </View>
+        );
+    }
+}
+
+const styles = {
     titleText: {
         fontSize: 15,
         color: 'black',
@@ -47,4 +117,4 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         padding: 14,
     },
-});
+};

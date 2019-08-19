@@ -28,7 +28,7 @@ import VaultTransactionHistory from './pages/signed/vault/transaction_history';
 import VaultSetAccountName from './pages/signed/vault/set_account_name';
 import VaultExportPrivateKey from './pages/signed/vault/export_private_key';
 import DappsDapp from './pages/signed/dapps/dapp';
-import DappsLaunch from './pages/signed/dapps/launch';
+// import DappsLaunch from './pages/signed/dapps/launch';
 import DappsSend from './pages/signed/dapps/dapp_send';
 import Dex from './pages/signed/dex/home';
 import DexTAccountList from './pages/signed/dex/account_list';
@@ -52,6 +52,10 @@ import AddToken from './pages/signed/vault/add_token';
 import BackUpTips from './pages/signed/backup/backup_tips';
 import MnemonicBackUp from './pages/signed/backup/mnemonic_backup';
 import MnemonicConfirm from './pages/signed/backup/mnemonic_confirm';
+import PokketHome from './pages/signed/pokket/home';
+import PokketProduct from './pages/signed/pokket/product';
+import PokketOrderList from './pages/signed/pokket/order_list';
+import PokketOrderDetail from './pages/signed/pokket/order_detail';
 
 import { strings } from '../locales/i18n';
 import styles from './styles';
@@ -177,12 +181,23 @@ const tabNavigator = createBottomTabNavigator(
                 },
             },
         }),
-        signed_dapps: createStackNavigator({
-            signed_dapps: {
-                screen: DappsLaunch,
+        // signed_dapps: createStackNavigator({
+        //     signed_dapps: {
+        //         screen: DappsLaunch,
+        //         navigationOptions: {
+        //             headerLeft: null,
+        //             headerRight: null,
+        //             headerStyle: styles.headerStyle,
+        //             headerTitleStyle: styles.headerTitleStyle,
+        //             headerTitleAllowFontScaling: false,
+        //         },
+        //     },
+        // }),
+        signed_pokket: createStackNavigator({
+            signed_pokket: {
+                screen: PokketHome,
                 navigationOptions: {
-                    headerLeft: null,
-                    headerRight: null,
+                    headerLeft: <View />,
                     headerStyle: styles.headerStyle,
                     headerTitleStyle: styles.headerTitleStyle,
                     headerTitleAllowFontScaling: false,
@@ -234,8 +249,8 @@ const tabNavigator = createBottomTabNavigator(
                         const { routeName } = scene.route;
                         return routeName === 'signed_vault'
                             ? strings('menuRef.title_wallet')
-                            : routeName === 'signed_dapps'
-                            ? strings('menuRef.title_dapps')
+                            : routeName === 'signed_pokket'
+                            ? strings('menuRef.title_pokket')
                             : routeName === 'signed_setting'
                             ? strings('menuRef.title_settings')
                             : strings('menuRef.title_dex');
@@ -255,9 +270,9 @@ const tabNavigator = createBottomTabNavigator(
                                 }}
                                 resizeMode="contain"
                             />
-                        ) : routeName === 'signed_dapps' ? (
+                        ) : routeName === 'signed_pokket' ? (
                             <Image
-                                source={require('../assets/tab_app.png')}
+                                source={require('../assets/tab_finance.png')}
                                 style={{
                                     width: 24,
                                     height: 24,
@@ -555,6 +570,18 @@ const AppNavigator = createStackNavigator(
         },
         signed_confirm_mnemonic: {
             screen: MnemonicConfirm,
+            navigationOptions,
+        },
+        signed_pokket_product: {
+            screen: PokketProduct,
+            navigationOptions,
+        },
+        signed_pokket_order_list: {
+            screen: PokketOrderList,
+            navigationOptions,
+        },
+        signed_pokket_order_detail: {
+            screen: PokketOrderDetail,
             navigationOptions,
         },
     },
