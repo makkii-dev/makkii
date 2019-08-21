@@ -242,9 +242,10 @@ class Send extends Component {
     };
 
     checkSameAddress = () => {
+        const { editable } = this.props;
         const { address, symbol } = this.props.currentAccount;
         const { to } = this.state;
-        if (sameAddress(symbol, address, to)) {
+        if (editable && sameAddress(symbol, address, to)) {
             popCustom.show(
                 strings('alert_title_warning'),
                 strings('send.warning_send_to_itself'),
@@ -265,8 +266,9 @@ class Send extends Component {
     };
 
     checkZeroAmount = () => {
+        const { editable } = this.props;
         const amount = new BigNumber(this.state.amount);
-        if (amount.isZero() && this.state.data.length === 0) {
+        if (editable && amount.isZero() && this.state.data.length === 0) {
             popCustom.show(
                 strings('alert_title_warning'),
                 strings('send.warning_send_zero'),
@@ -293,7 +295,7 @@ class Send extends Component {
 
     dispatchTxObj = () => {
         this.refs.refLoading.show();
-        const { dispatch, navigation } = this.props;
+        const { dispatch, navigation, targetRoute } = this.props;
         const txObj = {
             to: this.state.to,
             amount: this.state.amount,
@@ -305,7 +307,7 @@ class Send extends Component {
             this.refs.refLoading.hide();
             if (r) {
                 dispatch(createAction('txSenderModel/reset')());
-                navigation.goBack();
+                typeof targetRoute === 'string' ? navigation.goBack() : navigation.navigate(targetRoute);
                 AppToast.show(strings('send.toast_tx_sent'));
             }
         });
@@ -366,6 +368,7 @@ const mapToState = ({ accountsModel, txSenderModel, settingsModel }) => {
         editable,
         coinPrice: settingsModel.coinPrices[currentAccount.symbol],
         fiat_currency: settingsModel.fiat_currency,
+        targetRoute: txSenderModel.targetRoute,
     };
 };
 

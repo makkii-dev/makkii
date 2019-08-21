@@ -38,7 +38,7 @@ const getOrders = async ({ addresses = '', page = 0, size = 25 }) => {
 const createOrder = async payload => {
     const url = `${baseurl}/pokket/order`;
     try {
-        console.log('[Pokket createOrder req]=>', url);
+        console.log('[Pokket createOrder req]=>', url, payload);
         const resp = await HttpClient.put(url, payload, true);
         console.log('[Pokket createOrder resp]=>', resp.data);
         if (!resp.data.code) {
@@ -69,4 +69,32 @@ const toggleAutoRoll = async ({ autoRoll, orderId }) => {
     }
 };
 
-export { getProducts, getOrders, createOrder, toggleAutoRoll };
+const getBaseData = async () => {
+    try {
+        const btcUrl = `${baseurl}/pokket/deposit/btc_address`;
+        const ethUrl = `${baseurl}/pokket/deposit/eth_address`;
+        const totalInvestmentUrl = `${baseurl}/pokket/statistic/totalInvestment`;
+        const { data: btcAddress } = await HttpClient.get(btcUrl);
+        const { data: ethAddress } = await HttpClient.get(ethUrl);
+        const { data: totalInvestment } = await HttpClient.get(totalInvestmentUrl);
+        console.log(`get statistic eth=>${ethAddress} btc=>${btcAddress} totalInvestment=>${totalInvestment}`);
+        return { btcAddress, ethAddress, totalInvestment };
+    } catch (e) {
+        console.log('[Pokket toggleAutoRoll error]=>', e);
+        return { error: e };
+    }
+};
+
+const customBroadCastTx = (order, toAddress) => async ({ txObj, encoded }) => {
+    order.rawTransaction = encoded;
+    const resp = await createOrder(order);
+    if (resp.orderId) {
+        // broadCastTx success
+        const pendingTx = { ...txObj, hash: resp.investTransactionHash, status: 'PENDING' };
+        const pendingTokenTx = order.token !== 'BTC' || order.token !== 'ETH' ? { ...txObj, to: toAddress, value: order.amount, hash: resp.investTransactionHash, status: 'PENDING' } : undefined;
+        return { result: true, data: { pendingTx, pendingTokenTx } };
+    }
+    return { result: false, error: {} };
+};
+
+export { getProducts, getOrders, createOrder, toggleAutoRoll, getBaseData, customBroadCastTx };

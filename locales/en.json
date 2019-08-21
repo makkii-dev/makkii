@@ -524,7 +524,7 @@
     "pinCode_create": "Enter your PIN code",
     "pinCode_confirm": "Confirm your PIN code",
     "toast_please_login": "Please login in again",
-    "label_remaining_attempts": "remaining attempts:{{count}}",
+    "label_remaining_attempts": "remaining attempts:{{count}}"
   },
   "dapp": {
     "launch_button": "Launch",
@@ -578,7 +578,7 @@
     "error_address_format": "Invalid {{coin}} address",
     "toast_address_saved": "Saved to address book.",
     "label_coin_type": "Coin",
-    "btn_select_coin": "Select Coin",
+    "btn_select_coin": "Select Coin"
   },
   "vault_import_coin": {
     "title": "Select Coin"
@@ -593,10 +593,11 @@
   },
   "pokket": {
     "title": "pokket",
-    "title_myOrder": "My Order",
+    "title_myOrder": "My Orders",
     "title_order_detail": "Order Detail",
-    "label_weekly_rate": "Weekly interest",
-    "label_yearly_rate": "Yearly interest",
+    "label_weekly_rate": "Wkly .%",
+    "label_yearly_rate": "Ann .%",
+    "label_rate": "Interest Rate",
     "label_remaining_quote": "Remaining quote",
     "label_min_amount": "Minimum invest amount",
     "label_end_date": "End date",
@@ -618,13 +619,18 @@
     "label_WAIT_COLLATERAL_DEPOSIT": "Wait collateral deposit",
     "label_IN_PROGRESS": "In progress",
     "label_COMPLETE": "Complete",
+    "label_fill_required": "Please fill in the required fields",
+    "label_current_totalInvestment": "Deposited amount to Date",
+    "label_glossary": "If the price of the token against TUSD rises by more than or equal to 10% during the deposit period, it will return TUSD equivalent to 110% of the principal plus interest.",
     "placeholder_investment_amount": "The investment amount must not exceed the remaining amount",
     "placeholder_income_address": "When the income is TUSD ,The ETH address is used to return the income. If the product is not BTC, this column can be left blank and the proceeds will be returned to the purchase address.",
     "button_buy": "buy",
     "toast_create_order_failed": "Create order failed",
     "toast_modify_order_failed": "Modify order failed",
     "toast_create_order_success": "Create order success",
-    "toast_no_token": "Please add token: {{token}} first"
+    "toast_no_token": "Please add token: {{token}} first",
+    "toast_invalid_amount": "Invalid amount",
+    "toast_invalid_address": "Invalid income address"
   },
   "app_name": "Makkii",
   "logout": "Sign Out",

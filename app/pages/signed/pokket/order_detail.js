@@ -8,7 +8,7 @@ import { strings } from '../../../../locales/i18n';
 import commonStyles from '../../../styles';
 import { Cell2, CellInput } from '../../../components/Cell';
 import { AppToast } from '../../../components/AppToast';
-import CheckBox from '../../../components/CheckBox';
+// import CheckBox from '../../../components/CheckBox';
 import { COINS } from '../../../../client/support_coin_list';
 import { accountKey } from '../../../../utils';
 import Loading from '../../../components/Loading';
@@ -54,9 +54,9 @@ class OrderDetail extends React.Component {
     };
 
     render() {
-        const { amount, token, tokenFullName, investorAddress, weeklyInterestRate, yearlyInterestRate, startTime, token2Collateral, orderId, status, autoRoll, result } = this.props.order;
-        const profits1 = `${((amount || 0) * (1 + weeklyInterestRate)).toFixed(2)}${token}`;
-        const profits2 = `${((amount || 0) * 1.1 * token2Collateral).toFixed(2)}TUSD`;
+        const { amount, token, tokenFullName, investorAddress, weeklyInterestRate, yearlyInterestRate, startTime, token2Collateral, orderId, status, /* autoRoll, */ result } = this.props.order;
+        const profits1 = `${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)}${token}`;
+        const profits2 = `${((amount || 0) * (1.1 + weeklyInterestRate / 100) * token2Collateral).toFixed(2)}TUSD`;
         let actualProfits = null;
         if (result) {
             actualProfits = result.match(/LESS_THAN/) ? profits1 : profits2;
@@ -80,18 +80,8 @@ class OrderDetail extends React.Component {
                             underlineColorAndroid="transparent"
                         />
                         <Cell2 title={strings('pokket.label_fixed_deposits')} value={`${amount} ${token}`} />
-                        <Cell2
-                            title={strings('pokket.label_weekly_rate')}
-                            value={`${BigNumber(yearlyInterestRate)
-                                .times(100)
-                                .toNumber()}%`}
-                        />
-                        <Cell2
-                            title={strings('pokket.label_yearly_rate')}
-                            value={`${BigNumber(weeklyInterestRate)
-                                .times(100)
-                                .toNumber()}%`}
-                        />
+                        <Cell2 title={strings('pokket.label_weekly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()}%`} />
+                        <Cell2 title={strings('pokket.label_yearly_rate')} value={`${BigNumber(weeklyInterestRate).toNumber()}%`} />
                         <Cell2 title={strings('pokket.label_start_date')} value={`${new Date(startTime).Format('dd/MM/yyyy')}`} />
                         <Cell2 title={strings('pokket.label_end_date')} value={`${new Date(endTime).Format('dd/MM/yyyy')}`} />
                         {status !== 'COMPLETE' ? (
@@ -118,15 +108,15 @@ class OrderDetail extends React.Component {
                             underlineColorAndroid="transparent"
                         />
                         <Cell2 title={strings('pokket.label_status')} value={strings(`pokket.label_${status}`)} />
-                        {status !== 'COMPLETE' ? (
-                            <CheckBox
-                                style={{ marginTop: 10 }}
-                                initValue={!!autoRoll}
-                                beforeCheck={() => this.toggleAutoRoll({ autoRoll: false, orderId })}
-                                beforeUncheck={() => this.toggleAutoRoll({ autoRoll: true, orderId })}
-                                textRight={strings('pokket.label_autoRoll')}
-                            />
-                        ) : null}
+                        {/* {status !== 'COMPLETE' ? ( */}
+                        {/*    <CheckBox */}
+                        {/*        style={{ marginTop: 10 }} */}
+                        {/*        initValue={!!autoRoll} */}
+                        {/*        beforeCheck={() => this.toggleAutoRoll({ autoRoll: false, orderId })} */}
+                        {/*        beforeUncheck={() => this.toggleAutoRoll({ autoRoll: true, orderId })} */}
+                        {/*        textRight={strings('pokket.label_autoRoll')} */}
+                        {/*    /> */}
+                        {/* ) : null} */}
                     </View>
                     <Loading ref="refLoading" />
                 </MyscrollView>

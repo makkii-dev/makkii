@@ -8,6 +8,8 @@ import commonStyles from '../../../styles';
 import { Carousel } from '../../../components/carousel';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
+import { SortButton } from '../../../components/common';
+import { formatMoney } from '../../../../utils';
 
 const { width } = Dimensions.get('window');
 
@@ -36,8 +38,12 @@ class PokketHome extends React.Component {
     state = {
         keyword: '',
         isLoading: true,
-        focusedSearch: new Animated.Value(0),
+        noNetwork: false,
+        focusedSearch: false,
+        listsDesc: true,
     };
+
+    focusedAnimated = new Animated.Value(0);
 
     constructor(props) {
         super(props);
@@ -49,7 +55,7 @@ class PokketHome extends React.Component {
     componentWillMount(): void {
         this.isMount = true;
         setTimeout(() => {
-            this.searchProduct('');
+            this.checkNetWork();
         }, 500);
     }
 
@@ -63,7 +69,8 @@ class PokketHome extends React.Component {
     };
 
     toggle = isActive => {
-        Animated.timing(this.state.focusedSearch, {
+        this.setState({ focusedSearch: isActive });
+        Animated.timing(this.focusedAnimated, {
             toValue: isActive ? 1 : 0,
             duration: 200,
         }).start();
@@ -81,10 +88,6 @@ class PokketHome extends React.Component {
                 dispatch(createAction('pokketModel/getProducts')({ keyword })).then(len => {
                     if (this.isMount) {
                         isLoading || this.refs.refLoading.hide();
-                        isLoading &&
-                            this.setState({
-                                isLoading: false,
-                            });
                         if (len === 0) {
                             Keyboard.dismiss();
                         }
@@ -92,6 +95,31 @@ class PokketHome extends React.Component {
                 });
             },
         );
+    };
+
+    checkNetWork = () => {
+        const { dispatch } = this.props;
+        Promise.all([dispatch(createAction('pokketModel/getProducts')({ keyword: '' })), dispatch(createAction('pokketModel/getRemoteData')())])
+            .then(([len, { error }]) => {
+                console.log('len=>', len);
+                if (error) {
+                    this.setState({
+                        isLoading: false,
+                        noNetwork: true,
+                    });
+                } else {
+                    this.setState({
+                        isLoading: false,
+                        noNetwork: false,
+                    });
+                }
+            })
+            .catch(() => {
+                this.setState({
+                    isLoading: false,
+                    noNetwork: true,
+                });
+            });
     };
 
     toProductDetail = ({ token, tokenFullName }) => {
@@ -108,10 +136,13 @@ class PokketHome extends React.Component {
     }
 
     renderCarousel() {
+        const { totalInvestment } = this.props;
         return (
             <Carousel delay={5000} style={{ width, height: 120 }} autoplay currentPage={0} bullets>
-                <View style={[styles.slide, { backgroundColor: 'red' }]}>
-                    <Text>Page 1</Text>
+                <View style={[styles.slide, { backgroundColor: 'transparent' }]}>
+                    <Text>
+                        {`${strings('pokket.label_current_totalInvestment')}:`} <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{`$${formatMoney(totalInvestment)}`}</Text>
+                    </Text>
                 </View>
                 <View style={[styles.slide, { backgroundColor: 'green' }]}>
                     <Text>Page 2</Text>
@@ -128,9 +159,11 @@ class PokketHome extends React.Component {
 
     renderProducts() {
         const { products } = this.props;
+        const { listsDesc } = this.state;
+        const products_ = listsDesc ? products.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
         return (
             <FlatList
-                data={products}
+                data={products_}
                 style={{ backgroundColor: mainBgColor }}
                 keyExtractor={(item, index) => `${index}`}
                 renderItem={({ item }) => {
@@ -145,15 +178,11 @@ class PokketHome extends React.Component {
                                 </View>
                                 <View style={styles.productBody}>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(yearlyInterestRate)
-                                            .times(100)
-                                            .toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(yearlyInterestRate).toNumber()}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_yearly_rate')}</Text>
                                     </View>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(weeklyInterestRate)
-                                            .times(100)
-                                            .toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(weeklyInterestRate).toNumber()}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_weekly_rate')}</Text>
                                     </View>
                                 </View>
@@ -166,7 +195,7 @@ class PokketHome extends React.Component {
     }
 
     renderContent() {
-        const { keyword, focusedSearch } = this.state;
+        const { keyword, focusedSearch, listsDesc } = this.state;
         return (
             <DismissKeyboardView>
                 <View style={{ flex: 1, backgroundColor: mainBgColor, alignItems: 'center' }}>
@@ -187,9 +216,9 @@ class PokketHome extends React.Component {
                                 style={[
                                     styles.searchBar,
                                     {
-                                        width: focusedSearch.interpolate({
+                                        width: this.focusedAnimated.interpolate({
                                             inputRange: [0, 1],
-                                            outputRange: [100, 300],
+                                            outputRange: [100, 250],
                                         }),
                                     },
                                 ]}
@@ -205,6 +234,16 @@ class PokketHome extends React.Component {
                                     onChangeText={this.searchProduct}
                                 />
                             </Animated.View>
+                            <SortButton
+                                onPress={() => {
+                                    this.setState({
+                                        listsDesc: !listsDesc,
+                                    });
+                                }}
+                                style={{ marginLeft: 10 }}
+                                title={focusedSearch ? '' : strings('pokket.label_rate')}
+                                desc={listsDesc}
+                            />
                         </View>
                     </View>
                     {/* products */}
@@ -215,10 +254,44 @@ class PokketHome extends React.Component {
         );
     }
 
+    renderNoNetWork() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity
+                    style={{
+                        ...commonStyles.shadow,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        flex: 1,
+                        width: width - 20,
+                        marginVertical: 20,
+                        marginHorizontal: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                        this.setState(
+                            {
+                                isLoading: true,
+                            },
+                            () => this.checkNetWork(),
+                        );
+                    }}
+                >
+                    <Image source={require('../../../../assets/empty_under_construction.png')} style={{ width: 80, height: 80, tintColor: 'gray' }} resizeMode="contain" />
+                    <Text style={{ color: 'gray', textAlign: 'center', marginTop: 20 }}>{strings('error_connect_remote_server')}</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     render() {
-        const { isLoading } = this.state;
+        const { isLoading, noNetwork } = this.state;
         if (isLoading) {
             return this.renderLoading();
+        }
+        if (noNetwork) {
+            return this.renderNoNetWork();
         }
         return this.renderContent();
     }
@@ -227,7 +300,7 @@ class PokketHome extends React.Component {
 const mapToState = ({ pokketModel }) => {
     return {
         products: Object.values(pokketModel.products),
-        isFetching: pokketModel.isFetching,
+        totalInvestment: pokketModel.totalInvestment,
     };
 };
 

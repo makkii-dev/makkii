@@ -15,6 +15,8 @@ const init = {
     gasLimit: '',
     editable: true,
     txType: {},
+    customBroadCast: null,
+    targetRoute: undefined,
 };
 
 export default {
@@ -70,13 +72,14 @@ export default {
             { call, select, put },
         ) {
             const { currentAccount: _currentAccount } = yield select(mapToaccountsModel);
-            const txType = yield select(({ txSenderModel }) => txSenderModel.txType);
+            const { txType, customBroadCast } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
             const { address, symbol, coinSymbol, type: accountType } = _currentAccount;
             const pk = yield call(SensitiveStorage.get, accountKey(symbol, address), '');
             let currentAccount = { ..._currentAccount, private_key: pk };
             const { type, data } = txType;
-            const ret = yield call(sendTx, txObj, currentAccount);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+            let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
+            ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
             if (ret.result) {
                 sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));
                 // dispatch tx to accountsModel;

@@ -6,13 +6,4 @@ const isTestNet = Config.is_testnet === 'true';
 
 const client = keystoreClient(Object.keys(COINS), isTestNet);
 
-export const {
-    signTransaction,
-    getKey,
-    getKeyByLedger,
-    setMnemonic,
-    generateMnemonic,
-    recoverKeyPairByPrivateKey,
-    validateAddress,
-    getKeyFromMnemonic,
-} = client;
+export const { signTransaction, getKey, getKeyByLedger, signByLedger, setMnemonic, generateMnemonic, recoverKeyPairByPrivateKey, validateAddress, getKeyFromMnemonic } = client;

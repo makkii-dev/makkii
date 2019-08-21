@@ -9,7 +9,7 @@ import { validateAddress as validateAddress_ } from '../client/keystore';
 
 const validateTxObj = async (txObj, account) => {
     const { to, amount, gasPrice, gasLimit } = txObj;
-    const { symbol } = account;
+    const { symbol, coinSymbol } = account;
     // validate 'to'
     try {
         let ret = await validateAddress(to, symbol);
@@ -25,8 +25,9 @@ const validateTxObj = async (txObj, account) => {
         gasPrice,
         network: COINS[symbol].network,
     };
-    return await validateBalanceSufficiency(account, symbol, amount, extra_params);
-    // Todo validate other flds
+    console.log(account, coinSymbol, amount, extra_params);
+    return await validateBalanceSufficiency(account, coinSymbol, amount, extra_params);
+    // Todo validate other fields
 };
 
 const getAllBalance = async (currentAccount, options) => {
@@ -74,12 +75,12 @@ const parseScannedData = async (data, currentAccount) => {
     return { result: ret, data: retData };
 };
 
-const sendTx = async (txObj, currentAccount) => {
+const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     const { symbol, coinSymbol } = currentAccount;
     const { gasPrice, gasLimit, amount, to, data } = txObj;
     const extra_params = COINS[symbol].txFeeSupport ? { gasPrice: gasPrice * 1e9, gasLimit: gasLimit - 0 } : {};
     try {
-        const res = await sendTransaction(currentAccount, coinSymbol, to, BigNumber(amount), extra_params, data);
+        const res = await sendTransaction(currentAccount, coinSymbol, to, BigNumber(amount), extra_params, data, shouldBroadCast);
         return { result: true, data: res };
     } catch (e) {
         console.log('sendTransaction error=>', e);

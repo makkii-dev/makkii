@@ -137,6 +137,7 @@ export default {
                     txs[newTx.hash].txObj = newTx;
                     if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED' || listenerStatus === 'UNCONFIRMED') {
                         console.log(`tx:[${newTx.hash}] => ${listenerStatus}`);
+                        newTx.status = listenerStatus;
                         if (listenerStatus === 'CONFIRMED' || listenerStatus === 'FAILED') {
                             const { currentAppState } = yield select(({ settingsModel }) => ({ ...settingsModel }));
                             if (currentAppState === 'active') {

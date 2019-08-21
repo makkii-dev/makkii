@@ -1,4 +1,5 @@
-import { createOrder, getOrders, getProducts, toggleAutoRoll } from '../services/pokket.service';
+import { NavigationActions } from 'react-navigation';
+import { customBroadCastTx, getBaseData, getOrders, getProducts, toggleAutoRoll } from '../services/pokket.service';
 import { createAction } from '../utils/dva';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
@@ -12,6 +13,9 @@ export default {
         currentAccount: '',
         currentProduct: '',
         currentOrder: '',
+        btcAddress: '',
+        ethAddress: '',
+        totalInvestment: '',
     },
     reducers: {
         updateState(state, { payload }) {
@@ -21,6 +25,14 @@ export default {
     },
     subscriptions: {},
     effects: {
+        *getRemoteData(action, { call, put }) {
+            const { btcAddress, ethAddress, totalInvestment, error } = yield call(getBaseData);
+            if (error) {
+                return { error };
+            }
+            yield put(createAction('updateState')({ btcAddress, ethAddress, totalInvestment }));
+            return {};
+        },
         *getProducts({ payload }, { call, put }) {
             const { keyword = '' } = payload;
             const products = yield call(getProducts, keyword);
@@ -44,15 +56,20 @@ export default {
             yield put(createAction('updateState')({ orders: { ...orders, ...ret } }));
             return Object.keys(ret).length;
         },
-        *createOrder({ payload }, { call, select, put }) {
-            const order = yield call(createOrder, payload);
-            if (JSON.stringify(order) === '{}') {
-                AppToast.show(strings('pokket.toast_create_order_failed'));
-            } else {
-                const { orders } = yield select(mapToPokketModel);
-                AppToast.show(strings('pokket.toast_create_order_success'));
-                yield put(createAction('updateState')({ orders: { ...orders, [order.orderId]: order } }));
-            }
+        *createOrder({ payload }, { select, put }) {
+            const { currentAccount, currentProduct, ethAddress, btcAddress } = yield select(mapToPokketModel);
+            const { amount } = payload;
+            yield put(createAction('accountsModel/updateState')({ currentAccount, currentToken: currentProduct }));
+            const toAddress = currentProduct === 'BTC' ? btcAddress : ethAddress;
+            const payload_ = {
+                editable: false,
+                to: toAddress,
+                amount,
+                customBroadCast: customBroadCastTx(payload, toAddress),
+                targetRoute: 'signed_pokket_product',
+            };
+            yield put(createAction('txSenderModel/updateState')(payload_));
+            yield put(NavigationActions.navigate({ routeName: 'signed_vault_send' }));
         },
         *setCurrentProduct({ payload }, { select, put }) {
             const { token } = payload;

@@ -878,8 +878,18 @@ class MnemonicView extends Component {
         );
     }
 }
+const SortButton = ({ title, desc, ...props }) => {
+    const imageSource = desc ? require('../../assets/arrow_desc.png') : require('../../assets/arrow_asc.png');
+    return (
+        <TouchableOpacity {...props} style={{ ...props.style, flexDirection: 'row' }}>
+            <Text>{title}</Text>
+            <Image style={{ marginLeft: 10, width: 20, height: 20, tintColor: mainColor }} source={imageSource} />
+        </TouchableOpacity>
+    );
+};
 
 module.exports = {
+    SortButton,
     ComponentButton,
     ComponentTabBar,
     ComponentLogo,
