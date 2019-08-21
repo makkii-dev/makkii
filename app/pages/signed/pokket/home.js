@@ -161,7 +161,7 @@ class PokketHome extends React.Component {
         const { products } = this.props;
         const { listsDesc } = this.state;
         const products_ = listsDesc ? products.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
-        return (
+        return products.length ? (
             <FlatList
                 data={products_}
                 style={{ backgroundColor: mainBgColor }}
@@ -191,6 +191,17 @@ class PokketHome extends React.Component {
                     );
                 }}
             />
+        ) : (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
+                <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray', marginBottom: 20 }} resizeMode="contain" />
+                <Text style={{ color: 'gray' }}>{strings('pokket.label_no_products')}</Text>
+            </View>
         );
     }
 
@@ -218,12 +229,12 @@ class PokketHome extends React.Component {
                                     {
                                         width: this.focusedAnimated.interpolate({
                                             inputRange: [0, 1],
-                                            outputRange: [100, 250],
+                                            outputRange: [180, 250],
                                         }),
                                     },
                                 ]}
                             >
-                                <Image source={require('../../../../assets/icon_search.png')} resizeMode="contain" style={{ width: 25, height: 25, tintColor: mainColor }} />
+                                <Image source={require('../../../../assets/icon_search.png')} resizeMode="contain" style={{ width: 20, height: 20, tintColor: mainColor }} />
                                 <TextInput
                                     style={{ width: '100%', height: 30, padding: 0, marginLeft: 5 }}
                                     onFocus={() => this.toggle(true)}
@@ -231,6 +242,7 @@ class PokketHome extends React.Component {
                                     value={keyword}
                                     maxLength={10}
                                     multiline={false}
+                                    placeholder={strings('pokket.placeholder_filter_by_token')}
                                     onChangeText={this.searchProduct}
                                 />
                             </Animated.View>
@@ -351,6 +363,7 @@ const styles = {
         borderColor: 'black',
         borderRadius: 5,
         alignItems: 'center',
+        paddingHorizontal: 5,
         marginVertical: 10,
         marginLeft: 10,
     },
