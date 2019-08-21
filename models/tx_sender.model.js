@@ -121,6 +121,7 @@ export default {
                     yield put(createAction('accountsModel/updateTransactions')(payload2));
                 }
                 if (type && type === 'exchange') {
+                    data.hash = pendingTx.hash;
                     const payload = {
                         key: accountKey(symbol, address, 'ERC20DEX'),
                         txs: { [pendingTx.hash]: data },

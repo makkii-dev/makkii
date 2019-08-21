@@ -181,6 +181,7 @@ const getExchangeHistory = async (user_id, network, txhash = undefined) => {
         console.log('[kyber req getExchangeHistory]=>', url);
         const { data: exchangeHistoryResp } = await HttpClient.get(url);
         const { result } = exchangeHistoryResp;
+        console.log('[kyber resp getExchangeHistory]=>', result);
         const history = result.reduce((map, el) => {
             const res = ApiCoder.decodeParameters(['address', 'address', 'uint256', 'uint256'], el.data);
             map[el.transactionHash] = {

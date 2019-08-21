@@ -38,21 +38,26 @@ export class AccountBar extends React.Component {
         toAccountDetail: PropTypes.func.isRequired,
     };
 
-    shouldComponentUpdate({ currentAccount, currentToken }): boolean {
-        const { currentAccount: currentAccount_, currentToken: currentToken_ } = this.props;
-        return JSON.stringify(currentAccount_) !== JSON.stringify(currentAccount) || currentToken !== currentToken_;
-    }
+    // shouldComponentUpdate({ currentAccount, currentToken }): boolean {
+    //     const { currentAccount: currentAccount_, currentToken: currentToken_ } = this.props;
+    //     console.log('[AccountBar] currentAccount_=>', currentAccount_);
+    //     console.log('[AccountBar] currentToken_=>', currentToken_);
+    //     console.log('[AccountBar] currentAccount=>', currentAccount);
+    //     console.log('[AccountBar] currentToken=>', currentToken);
+    //     console.log('[AccountBar] shouldComponentUpdate=>', JSON.stringify(currentAccount_) !== JSON.stringify(currentAccount) || currentToken !== currentToken_);
+    //     return JSON.stringify(currentAccount_) !== JSON.stringify(currentAccount) || currentToken !== currentToken_;
+    // }
 
     render() {
         const { currentAccount, currentToken, selectAccount, toAccountDetail } = this.props;
-
+        console.log('[AccountBar] [render] currentAccount=>', currentAccount);
+        console.log('[AccountBar] [render] currentToken=>', currentToken);
         if (currentAccount) {
-            let { balance } = currentAccount;
-            let { symbol } = currentAccount;
-            if (currentToken !== 'ETH' && currentAccount.tokens[currentToken]) {
-                balance = currentAccount.tokens[currentToken];
-                symbol = currentToken;
-            }
+            const balance = currentToken !== 'ETH' && currentAccount.tokens[currentToken] ? currentAccount.tokens[currentToken] : currentAccount.balance;
+            const symbol = currentToken !== 'ETH' && currentAccount.tokens[currentToken] ? currentToken : 'ETH';
+
+            console.log('[AccountBar] [render] balance=>', balance);
+            console.log('[AccountBar] [render] symbol=>', symbol);
             return (
                 <View
                     style={{
@@ -108,7 +113,7 @@ export class AccountBar extends React.Component {
                                             fontWeight: 'bold',
                                         }}
                                     >
-                                        {new BigNumber(balance).toFixed(4)}
+                                        {BigNumber(balance).toFixed(4)}
                                     </Text>
                                 </View>
                                 <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>

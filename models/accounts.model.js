@@ -180,6 +180,10 @@ export default {
                 for (let key of accountsKey) {
                     // recover account
                     const account = yield call(Storage.get, `acc+${key}`, {});
+                    if (!account.address) {
+                        accountsKey.remove(key);
+                        continue;
+                    }
                     const { tokens } = account;
                     accountsMap[key] = {
                         ...account,
@@ -303,6 +307,8 @@ export default {
                         delete newTransactionsMap[`${key}+${tokenSymbol}`];
                         yield call(Storage.remove, `tx+${key}+${tokenSymbol}`);
                     }
+                    delete newTransactionsMap[`${key}+ERC20DEX`];
+                    yield call(Storage.remove, `tx+${key}+ERC20DEX`);
                 }
             }
             yield call(Storage.set, 'accountsKey', newAccountsKey);
@@ -323,6 +329,8 @@ export default {
         ) {
             const tokenList = yield select(({ ERC20Dex }) => ERC20Dex.tokenList);
             let allHistory = yield call(getExchangeHistory, user_address, network);
+            const TransactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
+            const isFirst = !TransactionsMap[`ETH+${user_address}+ERC20DEX`];
             Object.keys(allHistory).forEach(el => {
                 const srcToken = findSymbolByAddress(tokenList, allHistory[el].srcToken);
                 const destToken = findSymbolByAddress(tokenList, allHistory[el].destToken);
@@ -335,7 +343,7 @@ export default {
                 createAction('updateTransactions')({
                     txs: allHistory,
                     key: `ETH+${user_address}+ERC20DEX`,
-                    force: false,
+                    force: isFirst || false,
                 }),
             );
             return true;
@@ -358,7 +366,7 @@ export default {
                       return map;
                   }, {});
             newTransactionsMap[key] = { ...newTransactionsMap[key], ...txs, ...pendingTxs };
-            console.log('newTransactionsMap[key]=>', newTransactionsMap[key]);
+            console.log(`newTransactionsMap[${key}]=>`, newTransactionsMap[key]);
             yield put(createAction('updateState')({ transactionsMap: newTransactionsMap }));
             if (needSave) {
                 yield put(createAction('saveTransaction')({ keys: [key] }));
