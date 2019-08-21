@@ -307,7 +307,7 @@ class Send extends Component {
             this.refs.refLoading.hide();
             if (r) {
                 dispatch(createAction('txSenderModel/reset')());
-                typeof targetRoute === 'string' ? navigation.goBack() : navigation.navigate(targetRoute);
+                typeof targetRoute !== 'string' ? navigation.goBack() : navigation.navigate(targetRoute);
                 AppToast.show(strings('send.toast_tx_sent'));
             }
         });
