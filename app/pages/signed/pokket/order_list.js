@@ -88,18 +88,8 @@ class OrderList extends React.Component {
 
                 <View style={styles.orderBody}>
                     <View style={styles.orderBodyRate}>
-                        <SimpleCell
-                            title={strings('pokket.label_yearly_rate')}
-                            value={`${BigNumber(yearlyInterestRate)
-                                .times(100)
-                                .toNumber()}%`}
-                        />
-                        <SimpleCell
-                            title={strings('pokket.label_weekly_rate')}
-                            value={`${BigNumber(weeklyInterestRate)
-                                .times(100)
-                                .toNumber()}%`}
-                        />
+                        <SimpleCell title={strings('pokket.label_yearly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()}%`} />
+                        <SimpleCell title={strings('pokket.label_weekly_rate')} value={`${BigNumber(weeklyInterestRate).toNumber()}%`} />
                     </View>
                     <View style={styles.orderBodyProfit}>
                         <SimpleCell title={strings('pokket.label_fixed_deposits')} value={`${amount} ${token}`} />
