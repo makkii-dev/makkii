@@ -411,24 +411,23 @@ class Account extends Component {
                     <View style={{ flex: 1, backgroundColor: mainBgColor }}>{transactions.length > 0 ? this.renderTransactions(transactions) : this.renderEmpty()}</View>
                 </TouchableOpacity>
                 {/* Menu Pop window */}
-                {this.state.showMenu ? (
-                    <PopWindow
-                        backgroundColor="rgba(52,52,52,0.54)"
-                        onClose={select => this.onCloseMenu(select)}
-                        data={menuArray}
-                        containerPosition={{ position: 'absolute', top: popWindowTop, right: 5 }}
-                        imageStyle={{ width: 20, height: 20, marginRight: 10 }}
-                        fontStyle={{ fontSize: 12, color: '#000' }}
-                        itemStyle={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            marginVertical: 10,
-                        }}
-                        containerBackgroundColor="#fff"
-                        ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    />
-                ) : null}
+                <PopWindow
+                    backgroundColor="rgba(52,52,52,0.54)"
+                    onClose={select => this.onCloseMenu(select)}
+                    data={menuArray}
+                    visible={this.state.showMenu}
+                    containerPosition={{ position: 'absolute', top: popWindowTop, right: 5 }}
+                    imageStyle={{ width: 20, height: 20, marginRight: 10 }}
+                    fontStyle={{ fontSize: 12, color: '#000' }}
+                    itemStyle={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginVertical: 10,
+                    }}
+                    containerBackgroundColor="#fff"
+                    ItemSeparatorComponent={() => <View style={styles.divider} />}
+                />
             </View>
         );
     }

@@ -13,6 +13,7 @@ export class PopWindow extends React.Component {
         imageStyle: PropTypes.object,
         backgroundColor: PropTypes.string,
         containerBackgroundColor: PropTypes.string,
+        visible: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -54,8 +55,9 @@ export class PopWindow extends React.Component {
     }
 
     render() {
+        const { visible } = this.props;
         return (
-            <Modal animationType="none" transparent visible onRequestClose={() => {}}>
+            <Modal animationType="none" transparent visible={visible} onRequestClose={() => {}}>
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{

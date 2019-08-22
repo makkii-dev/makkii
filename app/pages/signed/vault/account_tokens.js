@@ -381,24 +381,23 @@ class AccountTokens extends Component {
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
                 />
                 {/* Menu Pop window */}
-                {this.state.showMenu ? (
-                    <PopWindow
-                        backgroundColor="rgba(52,52,52,0.54)"
-                        onClose={select => this.onCloseMenu(select)}
-                        data={menuArray}
-                        containerPosition={{ position: 'absolute', top: popWindowTop, right: 5 }}
-                        imageStyle={{ width: titleFontSize, height: 20, marginRight: 10 }}
-                        fontStyle={{ fontSize: 12, color: '#000' }}
-                        itemStyle={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            marginVertical: 10,
-                        }}
-                        containerBackgroundColor="#fff"
-                        ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    />
-                ) : null}
+                <PopWindow
+                    backgroundColor="rgba(52,52,52,0.54)"
+                    onClose={select => this.onCloseMenu(select)}
+                    data={menuArray}
+                    visible={this.state.showMenu}
+                    containerPosition={{ position: 'absolute', top: popWindowTop, right: 5 }}
+                    imageStyle={{ width: titleFontSize, height: 20, marginRight: 10 }}
+                    fontStyle={{ fontSize: 12, color: '#000' }}
+                    itemStyle={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginVertical: 10,
+                    }}
+                    containerBackgroundColor="#fff"
+                    ItemSeparatorComponent={() => <View style={styles.divider} />}
+                />
             </TouchableOpacity>
         );
     }

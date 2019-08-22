@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform, DeviceEventEmitter } from 'react-native';
+import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, InteractionManager, StyleSheet, Image, BackHandler, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
@@ -54,26 +54,27 @@ class PinCodeScreen extends React.Component {
     }
 
     componentWillMount(): void {
-        this.setState(
-            {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
                 // 0: unlock; 1: create pinCode; 2: confirm pinCode
                 pinState: this.props.hashed_pinCode === '' ? 1 : 0,
-            },
-            () => {
-                this.onPressTouchId();
-            },
-        );
-        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-            this.onGoback(); // works best when the goBack is async
-            return true;
+            });
+            this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+                this.onGoback(); // works best when the goBack is async
+                return true;
+            });
         });
-        const { touchIDEnabled = false } = this.props;
-        this.pincodelisten = touchIDEnabled ? DeviceEventEmitter.addListener('APP_ACTIVE', this.onPressTouchId) : null;
+    }
+
+    componentWillReceiveProps({ currentAppState, showTouchIdDialog }): void {
+        const { currentAppState: currentAppState_ } = this.props;
+        if (showTouchIdDialog && currentAppState_ !== currentAppState && currentAppState === 'active') {
+            this.onPressTouchId();
+        }
     }
 
     componentWillUnmount(): void {
         this.backHandler.remove();
-        this.pincodelisten && this.pincodelisten.remove();
     }
 
     renderDots(numberOfDots) {
@@ -203,7 +204,6 @@ class PinCodeScreen extends React.Component {
     };
 
     onPressTouchId = () => {
-        console.log('onPressTouchId');
         const { touchIDEnabled = false, dispatch } = this.props;
         if (touchIDEnabled === false || this.isModifyPinCode === true) {
             return;
@@ -355,6 +355,8 @@ class PinCodeScreen extends React.Component {
 const mapToState = ({ userModel, settingsModel }) => ({
     hashed_pinCode: userModel.hashed_pinCode,
     touchIDEnabled: settingsModel.touchIDEnabled,
+    currentAppState: settingsModel.currentAppState,
+    showTouchIdDialog: settingsModel.showTouchIdDialog,
 });
 
 export default connect(mapToState)(PinCodeScreen);

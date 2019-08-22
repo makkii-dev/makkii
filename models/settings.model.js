@@ -35,6 +35,7 @@ export default {
         currentAppState: 'active',
         leaveTime: 0,
         ignoreAppState: false,
+        showTouchIdDialog: true,
     },
     subscriptions: {
         setupListenerCoinPrice({ dispatch }) {
@@ -220,13 +221,10 @@ export default {
             if (ignoreAppState || !isLogin) {
                 return;
             }
-            if (currentAppState.match(/inactive|background/) && nextAppState === 'active') {
+            if (currentAppState === 'active' && nextAppState.match(/inactive|background/)) {
                 console.log('App has come to the foreground!');
                 popCustom.hide();
-                const diff = Date.now() - leaveTime;
-                if (diff > login_session_timeout * 60 * 1000) {
-                    yield put(createAction('userModel/logOut')());
-                } else if (pinCodeEnabled) {
+                if (pinCodeEnabled) {
                     yield put(
                         NavigationActions.navigate({
                             routeName: 'unlock',
@@ -234,16 +232,27 @@ export default {
                         }),
                     );
                 }
-                yield put(createAction('updateState')({ currentAppState: nextAppState }));
+                yield put(createAction('updateState')({ currentAppState: nextAppState, leaveTime: Date.now() }));
             }
-            if (currentAppState === 'active' && nextAppState.match(/inactive|background/)) {
+            if (currentAppState.match(/inactive|background/) && nextAppState === 'active') {
                 console.log('App has come to the background!');
-                yield put(
-                    createAction('updateState')({
-                        currentAppState: nextAppState,
-                        leaveTime: Date.now(),
-                    }),
-                );
+                const diff = Date.now() - leaveTime;
+                if (leaveTime && diff > login_session_timeout * 60 * 1000) {
+                    yield put(createAction('userModel/logOut')());
+                    yield put(
+                        createAction('updateState')({
+                            currentAppState: nextAppState,
+                            showTouchIdDialog: false,
+                        }),
+                    );
+                } else {
+                    yield put(
+                        createAction('updateState')({
+                            currentAppState: nextAppState,
+                            showTouchIdDialog: true,
+                        }),
+                    );
+                }
             }
         },
         *checkVersion(action, { select, call }) {
