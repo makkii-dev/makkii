@@ -16,6 +16,7 @@ export default {
         btcAddress: '',
         ethAddress: '',
         totalInvestment: '',
+        banners: [],
     },
     reducers: {
         updateState(state, { payload }) {
@@ -26,11 +27,11 @@ export default {
     subscriptions: {},
     effects: {
         *getRemoteData(action, { call, put }) {
-            const { btcAddress, ethAddress, totalInvestment, error } = yield call(getBaseData);
+            const { btcAddress, ethAddress, totalInvestment, banners, error } = yield call(getBaseData);
             if (error) {
                 return { error };
             }
-            yield put(createAction('updateState')({ btcAddress, ethAddress, totalInvestment }));
+            yield put(createAction('updateState')({ btcAddress, ethAddress, totalInvestment, banners }));
             return {};
         },
         *getProducts({ payload }, { call, put }) {

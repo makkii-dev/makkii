@@ -74,13 +74,15 @@ const getBaseData = async () => {
         const btcUrl = `${baseurl}/pokket/deposit/btc_address`;
         const ethUrl = `${baseurl}/pokket/deposit/eth_address`;
         const totalInvestmentUrl = `${baseurl}/pokket/statistic/totalInvestment`;
+        const bannersUrl = `${baseurl}/pokket/banners`;
         const { data: btcAddress } = await HttpClient.get(btcUrl);
         const { data: ethAddress } = await HttpClient.get(ethUrl);
         const { data: totalInvestment } = await HttpClient.get(totalInvestmentUrl);
-        console.log(`get statistic eth=>${ethAddress} btc=>${btcAddress} totalInvestment=>${totalInvestment}`);
-        return { btcAddress, ethAddress, totalInvestment };
+        const { data: banners } = await HttpClient.get(bannersUrl);
+        console.log(`get statistic eth=>${ethAddress} btc=>${btcAddress} totalInvestment=>${totalInvestment} banners=>${banners}`);
+        return { btcAddress, ethAddress, totalInvestment, banners };
     } catch (e) {
-        console.log('[Pokket toggleAutoRoll error]=>', e);
+        console.log('[Pokket getBaseData error]=>', e);
         return { error: e };
     }
 };

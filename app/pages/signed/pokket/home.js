@@ -135,24 +135,24 @@ class PokketHome extends React.Component {
         );
     }
 
-    renderCarousel() {
-        const { totalInvestment } = this.props;
+    renderBanners() {
+        const { totalInvestment, banners } = this.props;
+        const bannersViews = banners.reduce((arr, el, index) => {
+            arr.push(
+                <View style={styles.slide} key={`${index}`}>
+                    <Image style={{ height: 120, width }} source={{ uri: el }} resizeMode="stretch" />
+                </View>,
+            );
+            return arr;
+        }, []);
         return (
             <Carousel delay={5000} style={{ width, height: 120 }} autoplay currentPage={0} bullets>
-                <View style={[styles.slide, { backgroundColor: 'transparent' }]}>
+                <View style={styles.slide} key="totalInvestment">
                     <Text>
                         {`${strings('pokket.label_current_totalInvestment')}:`} <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{`$${formatMoney(totalInvestment)}`}</Text>
                     </Text>
                 </View>
-                <View style={[styles.slide, { backgroundColor: 'green' }]}>
-                    <Text>Page 2</Text>
-                </View>
-                <View style={[styles.slide, { backgroundColor: 'blue' }]}>
-                    <Text>Page 3</Text>
-                </View>
-                <View style={[styles.slide, { backgroundColor: 'yellow' }]}>
-                    <Text>Page 4</Text>
-                </View>
+                {bannersViews}
             </Carousel>
         );
     }
@@ -211,7 +211,7 @@ class PokketHome extends React.Component {
             <DismissKeyboardView>
                 <View style={{ flex: 1, backgroundColor: mainBgColor, alignItems: 'center' }}>
                     {/* billboard */}
-                    {this.renderCarousel()}
+                    {this.renderBanners()}
                     {/* search bar */}
                     <View
                         style={{
@@ -313,6 +313,7 @@ const mapToState = ({ pokketModel }) => {
     return {
         products: Object.values(pokketModel.products),
         totalInvestment: pokketModel.totalInvestment,
+        banners: pokketModel.banners,
     };
 };
 
