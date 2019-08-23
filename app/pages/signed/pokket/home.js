@@ -388,7 +388,6 @@ const styles = {
         marginVertical: 10,
         borderRadius: 10,
         width: width - 40,
-        height: 80,
         backgroundColor: '#fff',
         padding: 10,
     },
@@ -398,6 +397,7 @@ const styles = {
         alignItems: 'center',
         borderBottomWidth: 1 / PixelRatio.get(),
         borderColor: 'gray',
+        paddingBottom: 10,
     },
     productBody: {
         flexDirection: 'row',

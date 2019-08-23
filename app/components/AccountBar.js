@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { PixelRatio, Dimensions, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import PropTypes from 'prop-types';
 import commonStyles from '../styles';
@@ -74,11 +74,11 @@ export class AccountBar extends React.Component {
                     <TouchableOpacity onPress={selectAccount}>
                         <View
                             style={{
-                                width: '100%',
+                                width: width - 40 - 20,
                                 paddingVertical: 10,
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
-                                borderBottomWidth: 0.2,
+                                borderBottomWidth: 1 / PixelRatio.get(),
                                 borderBottomColor: 'lightgray',
                             }}
                         >

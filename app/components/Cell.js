@@ -37,7 +37,7 @@ export class Cell2 extends Component {
 
     render() {
         return (
-            <View style={{ ...styles.cellContainer, width: '100%', borderBottomWidth: 1 / PixelRatio.get(), borderColor: 'gray', paddingBottom: 5 }}>
+            <View style={{ ...styles.cellContainer, width: '100%', borderBottomWidth: 1 / PixelRatio.get(), borderColor: 'lightgray', paddingBottom: 5, marginBottom: 1 }}>
                 <Text style={{ ...styles.titleText, fontWeight: 'bold' }}>{this.props.title}</Text>
                 <Text style={{ fontSize: 12 }}>{this.props.value}</Text>
             </View>
@@ -65,7 +65,7 @@ export class CellInput extends Component {
                     paddingHorizontal: 14,
                     paddingTop: 14,
                     borderBottomWidth: 1 / PixelRatio.get(),
-                    borderColor: 'gray',
+                    borderColor: 'lightgray',
                 }}
             >
                 <View
@@ -95,7 +95,7 @@ export class CellInput extends Component {
                         style={{ ...this.props.style, color: 'gray', padding: 0, width: '100%', paddingRight: this.props.unit ? 50 : 0, textAlign: this.props.textAlign || 'left' }}
                     />
                     {this.props.unit && (
-                        <View style={{ position: 'absolute', right: 0, bottom: 0 }}>
+                        <View style={{ position: 'absolute', right: 0, bottom: 5 }}>
                             <Text style={{ fontSize: 12 }}>{this.props.unit}</Text>
                         </View>
                     )}
