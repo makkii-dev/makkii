@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
+import { Header } from 'react-navigation';
 import { connect, createAction } from '../../../../utils/dva';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
 import { mainBgColor, mainColor } from '../../../style_util';
@@ -9,27 +10,29 @@ import { Carousel } from '../../../components/carousel';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { SortButton } from '../../../components/common';
-import { formatMoney } from '../../../../utils';
+import { formatMoney, getStatusBarHeight } from '../../../../utils';
+import { PopWindow } from '../vault/home_popwindow';
+import { POKKET_FAQ_URL, POKKET_MENU } from './constants';
 
 const { width } = Dimensions.get('window');
 
 class PokketHome extends React.Component {
     static navigationOptions = ({ navigation, screenProps }) => {
         const { t, lang } = screenProps;
-        const toMyOrder = navigation.getParam('toMyOrder', () => {});
+        const showMenu = navigation.getParam('showMenu', () => {});
         return {
             title: t('pokket.title', { locale: lang }),
             headerRight: (
                 <TouchableOpacity
                     style={{
+                        width: 48,
                         height: 48,
                         alignItems: 'center',
                         justifyContent: 'center',
-                        paddingHorizontal: 20,
                     }}
-                    onPress={toMyOrder}
+                    onPress={showMenu}
                 >
-                    <Text style={{ color: '#fff' }}>{t('pokket.title_myOrder', { locale: lang })}</Text>
+                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
                 </TouchableOpacity>
             ),
         };
@@ -41,6 +44,7 @@ class PokketHome extends React.Component {
         noNetwork: false,
         focusedSearch: false,
         listsDesc: true,
+        showMenu: false,
     };
 
     focusedAnimated = new Animated.Value(0);
@@ -48,7 +52,7 @@ class PokketHome extends React.Component {
     constructor(props) {
         super(props);
         this.props.navigation.setParams({
-            toMyOrder: this.toMyOrder,
+            showMenu: this.openMenu,
         });
     }
 
@@ -63,9 +67,33 @@ class PokketHome extends React.Component {
         this.isMount = false;
     }
 
-    toMyOrder = () => {
+    openMenu = () => {
+        this.setState({
+            showMenu: true,
+        });
+    };
+
+    onCloseMenu = select => {
         const { navigation } = this.props;
-        navigation.navigate('signed_pokket_order_list');
+        this.setState(
+            {
+                showMenu: false,
+            },
+            () => {
+                switch (select) {
+                    case POKKET_MENU[0].title:
+                        navigation.navigate('signed_pokket_order_list');
+                        break;
+                    case POKKET_MENU[1].title:
+                        navigation.navigate('simple_webview', {
+                            title: strings(POKKET_MENU[1].title),
+                            initialUrl: { uri: POKKET_FAQ_URL },
+                        });
+                        break;
+                    default:
+                }
+            },
+        );
     };
 
     toggle = isActive => {
@@ -146,9 +174,9 @@ class PokketHome extends React.Component {
             return arr;
         }, []);
         return (
-            <Carousel delay={5000} style={{ width, height: 120 }} autoplay currentPage={0} bullets>
-                <View style={styles.slide} key="totalInvestment">
-                    <Text>
+            <Carousel delay={5000} style={{ width, height: 120 }} autoplay currentPage={0} bullets chosenBulletStyle={{ backgroundColor: mainColor }} bulletStyle={{ borderColor: mainColor }}>
+                <View style={{ ...styles.slide, backgroundColor: 'white' }} key="totalInvestment">
+                    <Text style={{ color: 'black' }}>
                         {`${strings('pokket.label_current_totalInvestment')}:`} <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{`$${formatMoney(totalInvestment)}`}</Text>
                     </Text>
                 </View>
@@ -173,8 +201,11 @@ class PokketHome extends React.Component {
                         <TouchableOpacity onPress={() => this.toProductDetail(item)}>
                             <View style={styles.productContainer}>
                                 <View style={styles.productHeader}>
-                                    <Text>{`${token}/${tokenFullName}`}</Text>
-                                    <Text>{remainingQuota}</Text>
+                                    <Text style={{ fontSize: 12 }}>{`${token}/${tokenFullName}`}</Text>
+                                    <View style={{ width: '45%', flexDirection: 'row', justifyContent: 'space-around' }}>
+                                        <Text style={{ fontSize: 12 }}>{strings('pokket.label_remaining_quote')}: </Text>
+                                        <Text style={{ fontSize: 12 }}>{formatMoney(remainingQuota)}</Text>
+                                    </View>
                                 </View>
                                 <View style={styles.productBody}>
                                     <View style={styles.productLabel}>
@@ -298,14 +329,35 @@ class PokketHome extends React.Component {
     }
 
     render() {
-        const { isLoading, noNetwork } = this.state;
-        if (isLoading) {
-            return this.renderLoading();
-        }
-        if (noNetwork) {
-            return this.renderNoNetWork();
-        }
-        return this.renderContent();
+        const { isLoading, noNetwork, showMenu } = this.state;
+        const popwindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        return (
+            <View style={{ flex: 1 }}>
+                {isLoading ? this.renderLoading() : noNetwork ? this.renderNoNetWork() : this.renderContent()}
+                {/* Menu Pop window */}
+                <PopWindow
+                    backgroundColor="rgba(52,52,52,0.54)"
+                    onClose={select => this.onCloseMenu(select)}
+                    visible={showMenu}
+                    data={POKKET_MENU}
+                    containerPosition={{
+                        position: 'absolute',
+                        top: popwindowTop,
+                        right: 5,
+                    }}
+                    imageStyle={{ width: 20, height: 20, marginRight: 10 }}
+                    fontStyle={{ fontSize: 12, color: '#000' }}
+                    itemStyle={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginVertical: 10,
+                    }}
+                    containerBackgroundColor="#fff"
+                    ItemSeparatorComponent={() => <View style={styles.divider} />}
+                />
+            </View>
+        );
     }
 }
 
@@ -367,5 +419,9 @@ const styles = {
         paddingHorizontal: 5,
         marginVertical: 10,
         marginLeft: 10,
+    },
+    divider: {
+        height: 0.5,
+        backgroundColor: '#dfdfdf',
     },
 };

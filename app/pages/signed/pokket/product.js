@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import BigNumber from 'bignumber.js';
 import { validator } from 'lib-common-util-js';
 import { connect, createAction, navigate } from '../../../../utils/dva';
-import { accountKey } from '../../../../utils';
+import { accountKey, formatMoney } from '../../../../utils';
 import { AccountBar } from '../../../components/AccountBar';
 import { mainBgColor } from '../../../style_util';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
@@ -140,7 +140,7 @@ class Product extends React.Component {
             const nativeCost = token === 'BTC' ? 0.00015 : token === 'ETH' ? +amount + 0.0009 : 0.00021;
             const tokenCost = token === 'ETH' || token === 'BTC' ? 0 : +amount;
             const tokenBalance = tokens[token] || 0;
-            buttonEnabled = notBlank && BigNumber(balance).toNumber() >= nativeCost && BigNumber(tokenBalance).toNumber() >= tokenCost && amount > 0;
+            buttonEnabled = notBlank && BigNumber(balance).toNumber() >= nativeCost && BigNumber(tokenBalance).toNumber() >= tokenCost && amount > minInvestAmount;
             if (!buttonEnabled) {
                 if (!notBlank) {
                     errorMsg = strings('pokket.label_fill_required');
@@ -166,8 +166,8 @@ class Product extends React.Component {
                         <View style={styles.body}>
                             <Cell2 title={strings('pokket.label_weekly_rate')} value={`${BigNumber(weeklyInterestRate).toNumber()} %`} />
                             <Cell2 title={strings('pokket.label_yearly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()} %`} />
-                            <Cell2 title={strings('pokket.label_remaining_quote')} value={`${remainingQuota}`} />
-                            <Cell2 title={strings('pokket.label_min_amount')} value={`${minInvestAmount}`} />
+                            <Cell2 title={strings('pokket.label_remaining_quote')} value={`${formatMoney(remainingQuota)}`} />
+                            <Cell2 title={strings('pokket.label_min_amount')} value={`${formatMoney(minInvestAmount)}`} />
                             <Cell2 title={strings('pokket.label_end_date')} value={`${expiryDate}`} />
                             <CellInput
                                 title={strings('pokket.label_investment_amount')}

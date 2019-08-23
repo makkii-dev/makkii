@@ -361,28 +361,27 @@ class Home extends React.Component {
                     </MyscrollView>
                     <Loading isShow={this.props.isWaiting} />
                     {/* Menu Pop window */}
-                    {showMenu ? (
-                        <PopWindow
-                            backgroundColor="rgba(52,52,52,0.54)"
-                            onClose={select => this.onCloseMenu(select)}
-                            data={DEX_MENU}
-                            containerPosition={{
-                                position: 'absolute',
-                                top: popwindowTop,
-                                right: 5,
-                            }}
-                            imageStyle={{ width: 20, height: 20, marginRight: 10 }}
-                            fontStyle={{ fontSize: 12, color: '#000' }}
-                            itemStyle={{
-                                flexDirection: 'row',
-                                justifyContent: 'flex-start',
-                                alignItems: 'center',
-                                marginVertical: 10,
-                            }}
-                            containerBackgroundColor="#fff"
-                            ItemSeparatorComponent={() => <View style={styles.divider} />}
-                        />
-                    ) : null}
+                    <PopWindow
+                        backgroundColor="rgba(52,52,52,0.54)"
+                        onClose={select => this.onCloseMenu(select)}
+                        visible={showMenu}
+                        data={DEX_MENU}
+                        containerPosition={{
+                            position: 'absolute',
+                            top: popwindowTop,
+                            right: 5,
+                        }}
+                        imageStyle={{ width: 20, height: 20, marginRight: 10 }}
+                        fontStyle={{ fontSize: 12, color: '#000' }}
+                        itemStyle={{
+                            flexDirection: 'row',
+                            justifyContent: 'flex-start',
+                            alignItems: 'center',
+                            marginVertical: 10,
+                        }}
+                        containerBackgroundColor="#fff"
+                        ItemSeparatorComponent={() => <View style={styles.divider} />}
+                    />
                 </View>
             </DismissKeyboardView>
         );

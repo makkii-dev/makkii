@@ -90,8 +90,15 @@ export class CellInput extends Component {
                         width: '100%',
                     }}
                 >
-                    <TextInput {...this.props} style={{ ...this.props.style, color: 'gray', padding: 0, width: this.props.unit ? '90%' : '100%', textAlign: this.props.textAlign || 'left' }} />
-                    {this.props.unit && <Text style={{ fontSize: 12, marginLeft: 10 }}>{this.props.unit}</Text>}
+                    <TextInput
+                        {...this.props}
+                        style={{ ...this.props.style, color: 'gray', padding: 0, width: '100%', paddingRight: this.props.unit ? 50 : 0, textAlign: this.props.textAlign || 'left' }}
+                    />
+                    {this.props.unit && (
+                        <View style={{ position: 'absolute', right: 0, bottom: 0 }}>
+                            <Text style={{ fontSize: 12 }}>{this.props.unit}</Text>
+                        </View>
+                    )}
                 </View>
             </View>
         );
