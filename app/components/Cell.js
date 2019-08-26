@@ -66,6 +66,7 @@ export class CellInput extends Component {
                     paddingTop: 14,
                     borderBottomWidth: 1 / PixelRatio.get(),
                     borderColor: 'lightgray',
+                    marginBottom: 1,
                 }}
             >
                 <View
