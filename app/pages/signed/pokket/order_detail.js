@@ -54,7 +54,20 @@ class OrderDetail extends React.Component {
     };
 
     render() {
-        const { amount, token, tokenFullName, investorAddress, weeklyInterestRate, yearlyInterestRate, createTime, startTime, token2Collateral, orderId, status, /* autoRoll, */ result } = this.props.order;
+        const {
+            amount,
+            token,
+            tokenFullName,
+            investorAddress,
+            weeklyInterestRate,
+            yearlyInterestRate,
+            createTime,
+            startTime,
+            token2Collateral,
+            orderId,
+            status,
+            /* autoRoll, */ result,
+        } = this.props.order;
         const profits1 = `${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)} ${token}`;
         const profits2 = `${((amount || 0) * (1.1 + weeklyInterestRate / 100) * token2Collateral).toFixed(2)} TUSD`;
         let actualProfits = null;
@@ -103,10 +116,10 @@ class OrderDetail extends React.Component {
                         <Cell2 title={strings('pokket.label_yearly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()}%`} />
                         {status !== 'WAIT_COLLATERAL_DEPOSIT' && status !== 'WAIT_INVEST_TX_CONFIRM' ? (
                             <Cell2 title={strings('pokket.label_start_date')} value={`${new Date(startTime).Format('yyyy/MM/dd')}`} />
-                        ):null}
+                        ) : null}
                         {status !== 'WAIT_COLLATERAL_DEPOSIT' && status !== 'WAIT_INVEST_TX_CONFIRM' ? (
-                        <Cell2 title={strings('pokket.label_end_date')} value={`${new Date(endTime).Format('yyyy/MM/dd')}`} />
-                        ):null}
+                            <Cell2 title={strings('pokket.label_end_date')} value={`${new Date(endTime).Format('yyyy/MM/dd')}`} />
+                        ) : null}
                         {status !== 'COMPLETE' ? (
                             <Cell2 title={strings('pokket.label_expected_profits')} value={`${profits1} ${strings('label_or')} ${profits2}`} />
                         ) : (

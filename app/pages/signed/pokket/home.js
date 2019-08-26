@@ -202,7 +202,9 @@ class PokketHome extends React.Component {
                             <View style={styles.productContainer}>
                                 <View style={styles.productHeader}>
                                     <Text style={{ fontSize: 12 }}>{`${token}/${tokenFullName}`}</Text>
-                                    <Text style={{ fontSize: 12 }}>{strings('pokket.label_remaining_quote')}: {formatMoney(remainingQuota)}</Text>
+                                    <Text style={{ fontSize: 12 }}>
+                                        {strings('pokket.label_remaining_quote')}: {formatMoney(remainingQuota)}
+                                    </Text>
                                 </View>
                                 <View style={styles.productBody}>
                                     <View style={styles.productLabel}>
