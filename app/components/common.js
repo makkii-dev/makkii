@@ -314,6 +314,7 @@ class TransactionItemCell extends React.PureComponent {
     static propTypes = {
         rightView: PropTypes.func,
         valueTextAlign: PropTypes.string.isRequired,
+        titleStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -324,12 +325,12 @@ class TransactionItemCell extends React.PureComponent {
         return (
             <View
                 style={{
-                    ...this.props.style,
                     backgroundColor: '#fff',
                     padding: 10,
                     width: '100%',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    ...this.props.style,
                 }}
             >
                 <View
@@ -341,22 +342,26 @@ class TransactionItemCell extends React.PureComponent {
                         height: 20,
                     }}
                 >
-                    <Text style={{ fontSize: 16, fontWeight: 'bold', color: '#000' }}>{this.props.title}</Text>
+                    <Text style={this.props.titleStyle || { fontSize: 16, fontWeight: 'bold', color: '#000' }}>{this.props.title}</Text>
                     {this.props.rightView && this.props.rightView()}
                 </View>
-                <TextInput
-                    style={{
-                        width: '100%',
-                        borderBottomColor: '#000',
-                        borderBottomWidth: 1 / PixelRatio.get(),
-                        textAlign: this.props.valueTextAlign,
-                        paddingBottom: 5,
-                    }}
-                    editable={false}
-                    multiline
-                >
-                    {this.props.value}
-                </TextInput>
+                {this.props.children}
+                {this.props.children ? null : (
+                    <TextInput
+                        style={{
+                            width: '100%',
+                            borderBottomColor: '#000',
+                            borderBottomWidth: 1 / PixelRatio.get(),
+                            textAlign: this.props.valueTextAlign,
+                            paddingBottom: 5,
+                            color: 'gray',
+                        }}
+                        editable={false}
+                        multiline
+                    >
+                        {this.props.value}
+                    </TextInput>
+                )}
             </View>
         );
     }
@@ -657,10 +662,14 @@ class TransactionItem extends React.PureComponent {
     render() {
         const { transaction, onPress, isSender, symbol } = this.props;
         const timestamp = transaction.timestamp === undefined ? '' : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
-        const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
-        const fixed = Math.min(8, Math.max(0, (m[1] || '').length - m[2]));
-        const value = isSender ? `-${new BigNumber(transaction.value).toFixed(fixed)}` : `+${new BigNumber(transaction.value).toFixed(fixed)}`;
-        const valueColor = isSender ? 'red' : 'green';
+        let value;
+        let valueColor;
+        if (symbol !== 'BTC' && symbol !== 'LTC') {
+            const m = new BigNumber(transaction.value).toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
+            const fixed = Math.min(8, Math.max(0, (m[1] || '').length - m[2]));
+            value = isSender ? `-${new BigNumber(transaction.value).toFixed(fixed)}` : `+${new BigNumber(transaction.value).toFixed(fixed)}`;
+            valueColor = isSender ? 'red' : 'green';
+        }
 
         return (
             <TouchableOpacity
@@ -695,9 +704,11 @@ class TransactionItem extends React.PureComponent {
                     }}
                 >
                     <Text>{`${transaction.hash.substring(0, 16)}...`}</Text>
-                    <Text style={{ color: valueColor }}>
-                        {value} <Text>{symbol}</Text>
-                    </Text>
+                    {value ? (
+                        <Text style={{ color: valueColor }}>
+                            {value} <Text>{symbol}</Text>
+                        </Text>
+                    ) : null}
                 </View>
             </TouchableOpacity>
         );
