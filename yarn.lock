@@ -7668,6 +7668,11 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
   version "0.0.2"
   resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#6d004c2e5a99d5fbc9e3f575088395f561d44901"
 
+react-native-modal-translucent@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal-translucent/-/react-native-modal-translucent-3.0.1.tgz#29945ca76b25f13fcbacd77ce91364c1dda6252b"
+  integrity sha512-gBQpm0TutnPex8G243e5h3+sNs760dmwkyWhDlnz088IiHDpGzLhNzlVDcB+FISuQEA4bntxV6IlCeVWxnt4XA==
+
 react-native-progress-circle@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-native-progress-circle/-/react-native-progress-circle-2.0.1.tgz#6a034bef69a13c3b7f1a33722527046d088c233d"

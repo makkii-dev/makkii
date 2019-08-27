@@ -17,7 +17,7 @@ import { accountKey, getStatusBarHeight, validateAdvancedAmount } from '../../..
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
 import { getTokenIconUrl } from '../../../../client/api';
 import { DEX_MENU, getExchangeRulesURL } from './constants';
-import { PopWindow } from '../vault/home_popwindow';
+import { PopupMenu } from '../../../components/PopUpMenu';
 import { AppToast } from '../../../components/AppToast';
 
 const { width } = Dimensions.get('window');
@@ -262,7 +262,7 @@ class Home extends React.Component {
         } else {
             errorMsg = strings('token_exchange.button_exchange_no_account');
         }
-        const popwindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
 
         return (
             <DismissKeyboardView>
@@ -361,14 +361,14 @@ class Home extends React.Component {
                     </MyscrollView>
                     <Loading isShow={this.props.isWaiting} />
                     {/* Menu Pop window */}
-                    <PopWindow
+                    <PopupMenu
                         backgroundColor="rgba(52,52,52,0.54)"
                         onClose={select => this.onCloseMenu(select)}
                         visible={showMenu}
                         data={DEX_MENU}
                         containerPosition={{
                             position: 'absolute',
-                            top: popwindowTop,
+                            top: popWindowTop,
                             right: 5,
                         }}
                         imageStyle={{ width: 20, height: 20, marginRight: 10 }}

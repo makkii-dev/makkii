@@ -1,9 +1,9 @@
 import React from 'react';
 import { FlatList, Text, TouchableOpacity, View, Image, Animated, Modal } from 'react-native';
 import PropTypes from 'prop-types';
-import { strings } from '../../../../locales/i18n';
+import { strings } from '../../locales/i18n';
 
-export class PopWindow extends React.Component {
+export class PopupMenu extends React.Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
         onClose: PropTypes.func.isRequired,
@@ -43,15 +43,20 @@ export class PopWindow extends React.Component {
         },
     };
 
-    state = {
-        animation: new Animated.Value(0.3),
-    };
+    animation = new Animated.Value(0.3);
 
-    componentDidMount(): void {
-        Animated.timing(this.state.animation, {
-            toValue: 1,
-            duration: 100,
-        }).start();
+    componentWillReceiveProps({ visible }): void {
+        const { visible: visible_ } = this.props;
+        if (visible_ !== visible) {
+            setTimeout(
+                () =>
+                    Animated.timing(this.animation, {
+                        toValue: visible ? 1 : 0.3,
+                        duration: 200,
+                    }).start(),
+                50,
+            );
+        }
     }
 
     render() {
@@ -74,12 +79,28 @@ export class PopWindow extends React.Component {
                         <Animated.View
                             style={{
                                 ...this.props.containerPosition,
-                                transform: [{ scale: this.state.animation }],
+                                transform: [
+                                    {
+                                        scale: this.animation,
+                                    },
+                                    {
+                                        translateY: this.animation.interpolate({
+                                            inputRange: [0.3, 1],
+                                            outputRange: [-10, 0],
+                                        }),
+                                    },
+                                    {
+                                        translateX: this.animation.interpolate({
+                                            inputRange: [0.3, 1],
+                                            outputRange: [10, 0],
+                                        }),
+                                    },
+                                ],
                             }}
                         >
                             <View style={{ alignItems: 'flex-end' }}>
                                 <Image
-                                    source={require('../../../../assets/arrow_up.png')}
+                                    source={require('../../assets/arrow_up.png')}
                                     style={{
                                         marginRight: 15,
                                         width: 20,
