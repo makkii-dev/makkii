@@ -10,7 +10,7 @@ import { createAction, popCustom } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
-import { getLatestVersion } from '../services/setting.service';
+import { getLatestVersion, getRemoteSettings } from '../services/setting.service';
 
 export default {
     namespace: 'settingsModel',
@@ -36,6 +36,7 @@ export default {
         leaveTime: 0,
         ignoreAppState: false,
         showTouchIdDialog: true,
+        bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
     },
     subscriptions: {
         setupListenerCoinPrice({ dispatch }) {
@@ -89,7 +90,16 @@ export default {
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
+            yield put(createAction('getRemoteSettings')());
             return true;
+        },
+        *getRemoteSettings(action, { select, call, put }) {
+            const { pokket } = yield call(getRemoteSettings);
+            let bottomBarTab = yield select(({ settingsModel }) => settingsModel.bottomBarTab);
+            if (!pokket) {
+                bottomBarTab.remove('signed_pokket');
+            }
+            yield put(createAction('updateState')({ bottomBarTab }));
         },
         *reset(action, { put }) {
             yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));

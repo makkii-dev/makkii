@@ -5,7 +5,8 @@
     "title_wallet": "钱包",
     "title_dapps": "应用",
     "title_dex": "市场",
-    "title_pokket": "理财"
+    "title_pokket": "理财",
+    "title_news": "资讯"
   },
   "unsigned_login": {
     "error_login": "登录失败",
@@ -636,6 +637,10 @@
     "toast_no_token": "请先添加token: {{token}}",
     "toast_invalid_amount": "无效的金额",
     "toast_invalid_address": "无效的收益地址"
+  },
+  "news": {
+    "title_news": "新闻",
+    "title_flash": "快讯"
   },
   "app_name": "Makkii",
   "logout": "退出",

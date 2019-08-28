@@ -40,6 +40,7 @@
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
 		CB3E8CE9E717483480C6F16C /* libRNSensitiveInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2F1D514EA14C1CA33FA849 /* libRNSensitiveInfo.a */; };
 		F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */; };
+		952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0832F60C483D4933BAB8EC02 /* libRNReanimated.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -529,6 +530,8 @@
 		AE2F1D514EA14C1CA33FA849 /* libRNSensitiveInfo.a */ = {isa = PBXFileReference; name = "libRNSensitiveInfo.a"; path = "libRNSensitiveInfo.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9E3F853CE57E480189D47C45 /* RNBackgroundTimer.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundTimer.xcodeproj"; path = "../node_modules/react-native-background-timer/ios/RNBackgroundTimer.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */ = {isa = PBXFileReference; name = "libRNBackgroundTimer.a"; path = "libRNBackgroundTimer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; name = "RNReanimated.xcodeproj"; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		0832F60C483D4933BAB8EC02 /* libRNReanimated.a */ = {isa = PBXFileReference; name = "libRNReanimated.a"; path = "libRNReanimated.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -566,6 +569,7 @@
 				33528369AEF44A4082D95A91 /* libReactNativeConfig.a in Frameworks */,
 				CB3E8CE9E717483480C6F16C /* libRNSensitiveInfo.a in Frameworks */,
 				F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */,
+				952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -915,6 +919,7 @@
 				1CB3F45B1D2945C892D62A93 /* ReactNativeConfig.xcodeproj */,
 				00875BD6CEFA4C67B9FAC79B /* RNSensitiveInfo.xcodeproj */,
 				9E3F853CE57E480189D47C45 /* RNBackgroundTimer.xcodeproj */,
+				E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1622,6 +1627,7 @@
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1633,6 +1639,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
@@ -1677,6 +1684,7 @@
 					"$(SRCROOT)/../node_modules/react-native-config/ios/ReactNativeConfig",
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
+					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1688,6 +1696,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",

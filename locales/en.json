@@ -5,7 +5,8 @@
     "title_wallet": "Wallet",
     "title_dapps": "DApps",
     "title_dex": "Dex",
-    "title_pokket": "Finance"
+    "title_pokket": "Finance",
+    "title_news": "News"
   },
   "unsigned_login": {
     "error_login": "Login fail",
@@ -636,6 +637,10 @@
     "toast_no_token": "Please add token: {{token}} first",
     "toast_invalid_amount": "Invalid amount",
     "toast_invalid_address": "Invalid income address"
+  },
+  "news": {
+    "title_news": "News",
+    "title_flash": "Flash"
   },
   "app_name": "Makkii",
   "logout": "Sign Out",

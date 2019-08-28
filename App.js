@@ -14,6 +14,7 @@ import settingsModel from './models/settings.model';
 import contactAddModel from './models/contact_add.model';
 import dappsModel from './models/dapps.model';
 import pokketModel from './models/pokket.model';
+import newsModel from './models/news.model';
 // store
 import Router, { routerReducer, routerMiddleware } from './app/routes';
 import dva, { createAction } from './utils/dva';
@@ -22,7 +23,7 @@ import data from './data';
 
 // eslint-disable-next-line camelcase
 const app = dva({
-    models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel, tokenImportModel, txSenderModel, userModel, settingsModel, contactAddModel, dappsModel, pokketModel],
+    models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel, tokenImportModel, txSenderModel, userModel, settingsModel, contactAddModel, dappsModel, pokketModel, newsModel],
     extraReducers: {
         router: routerReducer,
     },
@@ -37,10 +38,10 @@ store.dispatch(createAction('dappsModel/updateState')({ ...data.dapps }));
 
 const App = app.start(<Router />);
 
-YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been', 'Async Storage has', 'requires main queue setup']);
+YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been', 'Async Storage has', 'requires main queue setup.', 'Accessing view manager']);
 const _console = _.clone(console);
 console.warn = message => {
-    if (message.indexOf('Setting a timer') <= -1 && message.indexOf('WebView has been') <= -1 && message.indexOf('Async Storage has') <= -1) {
+    if (!message.match(/|Setting a timer|WebView has been|Async Storage has|Accessing view manager|/)) {
         _console.warn(message);
     }
 };

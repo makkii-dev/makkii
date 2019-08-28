@@ -1,9 +1,10 @@
-import { createBottomTabNavigator, createStackNavigator, BottomTabBar, NavigationActions } from 'react-navigation';
+import { createBottomTabNavigator, createStackNavigator, NavigationActions } from 'react-navigation';
 import React, { PureComponent } from 'react';
 import { View, TouchableOpacity, Image, BackHandler, Easing, Animated } from 'react-native';
 import { createReduxContainer, createNavigationReducer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import BottomTabBar_ from 'react-navigation-selective-tab-bar';
 import { AppToast } from './components/AppToast';
 import { createAction } from '../utils/dva';
 import { navigationSafely } from '../utils';
@@ -56,6 +57,7 @@ import PokketHome from './pages/signed/pokket/home';
 import PokketProduct from './pages/signed/pokket/product';
 import PokketOrderList from './pages/signed/pokket/order_list';
 import PokketOrderDetail from './pages/signed/pokket/order_detail';
+import NewsHome from './pages/signed/news/home';
 
 import { strings } from '../locales/i18n';
 import styles from './styles';
@@ -170,6 +172,30 @@ const navigationOptionsWithoutRight = ({ navigation }) => ({
     headerTitleStyle: styles.headerTitleStyle,
     headerTitleAllowFontScaling: false,
 });
+const BottomTabBar = connect(({ settingsModel }) => ({ display: settingsModel.bottomBarTab }))(BottomTabBar_);
+
+const TabConstant = {
+    signed_vault: {
+        text: 'menuRef.title_wallet',
+        image: require('../assets/tab_wallet.png'),
+    },
+    signed_pokket: {
+        text: 'menuRef.title_pokket',
+        image: require('../assets/tab_finance.png'),
+    },
+    signed_dex: {
+        text: 'menuRef.title_dex',
+        image: require('../assets/icon_token_exchange.png'),
+    },
+    signed_news: {
+        text: 'menuRef.title_news',
+        image: require('../assets/tab_news.png'),
+    },
+    signed_setting: {
+        text: 'menuRef.title_settings',
+        image: require('../assets/tab_settings.png'),
+    },
+};
 
 const tabNavigator = createBottomTabNavigator(
     {
@@ -215,6 +241,12 @@ const tabNavigator = createBottomTabNavigator(
                 },
             },
         }),
+        signed_news: createStackNavigator({
+            signed_news: {
+                screen: NewsHome,
+                navigationOptions,
+            },
+        }),
         signed_setting: createStackNavigator({
             signed_setting: {
                 screen: Setting,
@@ -247,56 +279,14 @@ const tabNavigator = createBottomTabNavigator(
                     adaptive
                     getLabelText={scene => {
                         const { routeName } = scene.route;
-                        return routeName === 'signed_vault'
-                            ? strings('menuRef.title_wallet')
-                            : routeName === 'signed_pokket'
-                            ? strings('menuRef.title_pokket')
-                            : routeName === 'signed_setting'
-                            ? strings('menuRef.title_settings')
-                            : strings('menuRef.title_dex');
+                        return strings(TabConstant[routeName].text);
                     }}
                     renderIcon={scene => {
                         const { route, tintColor } = scene;
                         const { routeName } = route;
-                        return routeName === 'signed_vault' ? (
+                        return (
                             <Image
-                                source={require('../assets/tab_wallet.png')}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    marginTop: 2,
-                                    opacity: 0.6,
-                                    tintColor,
-                                }}
-                                resizeMode="contain"
-                            />
-                        ) : routeName === 'signed_pokket' ? (
-                            <Image
-                                source={require('../assets/tab_finance.png')}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    marginTop: 2,
-                                    opacity: 0.6,
-                                    tintColor,
-                                }}
-                                resizeMode="contain"
-                            />
-                        ) : routeName === 'signed_setting' ? (
-                            <Image
-                                source={require('../assets/tab_settings.png')}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                    marginTop: 2,
-                                    opacity: 0.6,
-                                    tintColor,
-                                }}
-                                resizeMode="contain"
-                            />
-                        ) : (
-                            <Image
-                                source={require('../assets/icon_token_exchange.png')}
+                                source={TabConstant[routeName].image}
                                 style={{
                                     width: 24,
                                     height: 24,

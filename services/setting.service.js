@@ -9,4 +9,8 @@ const getLatestVersion = async (platform, versionCode, lang) => {
     return data;
 };
 
-export { getLatestVersion };
+const getRemoteSettings = async () => {
+    return await new Promise(resolve => setTimeout(() => resolve({ pokket: true }), 1000));
+};
+
+export { getLatestVersion, getRemoteSettings };
