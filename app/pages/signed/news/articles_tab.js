@@ -1,15 +1,14 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, ActivityIndicator, RefreshControl, SectionList, TouchableOpacity, Image } from 'react-native';
-import { ReadMore } from '../../../components/ReadMore';
+import { View, Text, FlatList, ActivityIndicator, RefreshControl, Image, PixelRatio, TouchableOpacity } from 'react-native';
 import { createAction } from '../../../../utils/dva';
 import { mainBgColor } from '../../../style_util';
 import { ImportListFooter } from '../../../components/common';
-import { compareDate } from '../../../../utils';
-import { strings } from '../../../../locales/i18n';
+import { dateDiff } from '../../../../utils';
 import commonStyles from '../../../styles';
+import { strings } from '../../../../locales/i18n';
 
-class FlashTab extends React.Component {
+class ArticlesTab extends React.Component {
     state = {
         isLoading: true,
         refreshing: false,
@@ -19,7 +18,7 @@ class FlashTab extends React.Component {
     async componentDidMount(): void {
         this.isMount = true;
         setTimeout(() => {
-            this.fetchFlashNews(1);
+            this.fetchArticles(1);
         }, 200);
     }
 
@@ -28,10 +27,10 @@ class FlashTab extends React.Component {
     }
 
     // eslint-disable-next-line react/sort-comp
-    fetchFlashNews = page_ => {
+    fetchArticles = page_ => {
         const { nextPage, dispatch } = this.props;
         const page = page_ === undefined ? nextPage : page_;
-        dispatch(createAction('newsModel/getFlash')({ page })).then(r => {
+        dispatch(createAction('newsModel/getArticles')({ page })).then(r => {
             if (r === 0) {
                 this.isMount &&
                     this.setState({
@@ -44,7 +43,7 @@ class FlashTab extends React.Component {
                     this.setState({
                         isLoading: false,
                         refreshing: false,
-                        footerState: r === 20 ? 0 : 1,
+                        footerState: r === 10 ? 0 : 1,
                     });
             }
         });
@@ -61,7 +60,7 @@ class FlashTab extends React.Component {
                 footerState: 2,
             },
             () => {
-                setTimeout(() => this.fetchFlashNews(), 500);
+                setTimeout(() => this.fetchArticles(), 500);
             },
         );
     }
@@ -75,16 +74,13 @@ class FlashTab extends React.Component {
                 refreshing: true,
             },
             () => {
-                setTimeout(() => this.fetchFlashNews(1), 500);
+                setTimeout(() => this.fetchArticles(1), 500);
             },
         );
     }
 
-    toNewsOrigin = link => {
-        this.props.navigation.navigate('simple_webview', {
-            title: strings('news.title_flash'),
-            initialUrl: { uri: link },
-        });
+    toArticle = key => {
+        this.props.navigation.navigate('signed_news_article_detail', { key });
     };
 
     // loading page
@@ -103,28 +99,24 @@ class FlashTab extends React.Component {
         );
     }
 
-    renderTimeBar = ({ section }) => {
-        const { timestamp } = section;
-        const timestamp_ = new Date(timestamp);
-        return (
-            <View style={{ width: '100%', paddingHorizontal: 10, height: 30, justifyContent: 'center', backgroundColor: mainBgColor }}>
-                <Text>{`${timestamp_.Format('MM/dd')} ${strings(`time.weekday${timestamp_.getDay()}`)}`}</Text>
-            </View>
-        );
-    };
-
     renderItem = ({ item }) => {
-        const { timestamp, title, content, referLink } = item;
+        const { title, origin, timestamp, imageUrl } = item;
+
+        const timeText = dateDiff(timestamp);
         return (
-            <View style={{ padding: 10, marginLeft: 10, borderLeftWidth: 1, borderColor: mainBgColor }}>
-                <Text>{new Date(timestamp).Format('hh:mm', 24)}</Text>
-                <Text style={{ fontSize: 15, marginVertical: 10, fontWeight: 'bold' }}>{title}</Text>
-                <ReadMore numberOfLines={3} onPressReferLink={this.toNewsOrigin} referLink={referLink}>
-                    <Text>{content}</Text>
-                </ReadMore>
-                {/* render dot */}
-                <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: mainBgColor, position: 'absolute', top: 15, left: -5 }} />
-            </View>
+            <TouchableOpacity
+                onPress={() => this.toArticle(timestamp)}
+                activeOpacity={1}
+                style={{ width: '100%', padding: 10, paddingVertical: 20, flexDirection: 'row', alignItem: 'center', justifyContent: 'space-between' }}
+            >
+                <View style={{ width: '65%', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold' }} numberOfLines={2}>
+                        {title}
+                    </Text>
+                    <Text style={{ color: 'gray' }}>{`${strings(`news.origin_${origin}`)}  ${timeText}`}</Text>
+                </View>
+                <Image style={{ width: 100, height: 75 }} resizeMode="contain" source={{ uri: imageUrl }} />
+            </TouchableOpacity>
         );
     };
 
@@ -160,24 +152,31 @@ class FlashTab extends React.Component {
     }
 
     render() {
-        const { flashNews } = this.props;
         const { isLoading, refreshing, footerState } = this.state;
+        const { articles } = this.props;
         if (isLoading) {
             return this.renderLoadingView();
         }
-        if (flashNews.length === 0) {
+        if (articles.length === 0) {
             return this.renderNoNetWork();
         }
         return (
             <View style={{ flex: 1 }}>
-                <SectionList
+                <FlatList
                     style={{ backgroundColor: '#fff' }}
                     stickySectionHeadersEnabled
-                    bounces={false}
                     renderItem={this.renderItem}
-                    renderSectionHeader={this.renderTimeBar}
                     keyExtractor={(item, index) => `${index}`}
-                    sections={flashNews}
+                    data={articles}
+                    ItemSeparatorComponent={() => (
+                        <View
+                            style={{
+                                height: 1 / PixelRatio.get(),
+                                marginHorizontal: 10,
+                                backgroundColor: 'lightgray',
+                            }}
+                        />
+                    )}
                     onEndReached={() => this.onEndReached()}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} title="ContextMenu" />}
@@ -188,24 +187,11 @@ class FlashTab extends React.Component {
 }
 
 const mapToState = ({ newsModel }) => {
-    const flashNews_ = Object.values(newsModel.flash).sort((a, b) => {
-        return b.timestamp - a.timestamp;
-    });
-    let tmp = [];
-    let timestampKey;
-    const flashNews = flashNews_.reduce((arr, el) => {
-        if (timestampKey === undefined || compareDate(timestampKey, el.timestamp)) {
-            if (timestampKey) {
-                arr.push({ timestamp: timestampKey, data: tmp });
-                tmp = [];
-            }
-            timestampKey = new Date(el.timestamp).setHours(0, 0, 0, 0);
-        }
-        tmp.push(el);
-        return arr;
-    }, []);
-    flashNews.push({ timestamp: timestampKey, data: tmp });
-    return { flashNews, nextPage: newsModel.flashNextPage };
+    return {
+        articles: Object.values(newsModel.articles).sort((a, b) => {
+            return b.timestamp - a.timestamp;
+        }),
+        nextPage: newsModel.articleNextPage,
+    };
 };
-
-export default connect(mapToState)(FlashTab);
+export default connect(mapToState)(ArticlesTab);

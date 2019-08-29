@@ -58,6 +58,7 @@ import PokketProduct from './pages/signed/pokket/product';
 import PokketOrderList from './pages/signed/pokket/order_list';
 import PokketOrderDetail from './pages/signed/pokket/order_detail';
 import NewsHome from './pages/signed/news/home';
+import NewsArticle from './pages/signed/news/article_detial';
 
 import { strings } from '../locales/i18n';
 import styles from './styles';
@@ -244,7 +245,13 @@ const tabNavigator = createBottomTabNavigator(
         signed_news: createStackNavigator({
             signed_news: {
                 screen: NewsHome,
-                navigationOptions,
+                navigationOptions: {
+                    headerLeft: null,
+                    headerRight: null,
+                    headerStyle: styles.headerStyle,
+                    headerTitleStyle: styles.headerTitleStyle,
+                    headerTitleAllowFontScaling: false,
+                },
             },
         }),
         signed_setting: createStackNavigator({
@@ -574,13 +581,16 @@ const AppNavigator = createStackNavigator(
             screen: PokketOrderDetail,
             navigationOptions,
         },
+        signed_news_article_detail: {
+            screen: NewsArticle,
+            navigationOptions,
+        },
     },
     {
         initialRouteName: 'splash',
         // initialRouteName: 'signed_backup_tips',
         swipeEnabled: false,
         animationEnabled: false,
-        lazy: true,
         transitionConfig,
     },
 );

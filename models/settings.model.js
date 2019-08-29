@@ -10,7 +10,7 @@ import { createAction, popCustom } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
-import { getLatestVersion, getRemoteSettings } from '../services/setting.service';
+import { getLatestVersion, getSupportedModule } from '../services/setting.service';
 
 export default {
     namespace: 'settingsModel',
@@ -90,14 +90,20 @@ export default {
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
-            yield put(createAction('getRemoteSettings')());
+            yield put(createAction('getSupportedModule')());
             return true;
         },
-        *getRemoteSettings(action, { select, call, put }) {
-            const { pokket } = yield call(getRemoteSettings);
+        *getSupportedModule(action, { select, call, put }) {
+            const supportedModule = yield call(getSupportedModule);
             let bottomBarTab = yield select(({ settingsModel }) => settingsModel.bottomBarTab);
-            if (!pokket) {
+            if (!supportedModule.includes('Pokket')) {
                 bottomBarTab.remove('signed_pokket');
+            }
+            if (!supportedModule.includes('News')) {
+                bottomBarTab.remove('signed_news');
+            }
+            if (!supportedModule.includes('Keyber')) {
+                bottomBarTab.remove('signed_dex');
             }
             yield put(createAction('updateState')({ bottomBarTab }));
         },

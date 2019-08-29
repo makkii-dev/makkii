@@ -639,8 +639,23 @@
     "toast_invalid_address": "无效的收益地址"
   },
   "news": {
-    "title_news": "新闻",
-    "title_flash": "快讯"
+    "title_articles": "文章",
+    "title_flash": "快讯",
+    "button_refer_link": "来源链接",
+    "label_disclaimer": "免责声明：本文转载仅为传递更多市场信息，不代表Makkii的观点和立场，请自行参考",
+    "origin_chainnews": "链闻"
+  },
+  "time": {
+    "weekday0": "星期日",
+    "weekday1": "星期一",
+    "weekday2": "星期二",
+    "weekday3": "星期三",
+    "weekday4": "星期四",
+    "weekday5": "星期五",
+    "weekday6": "星期六",
+    "hourAgo": "{{hour}}小时前",
+    "minuteAgo": "{{minute}}分钟前",
+    "justNow": "刚刚"
   },
   "app_name": "Makkii",
   "logout": "退出",

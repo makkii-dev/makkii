@@ -1639,10 +1639,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1696,10 +1692,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

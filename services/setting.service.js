@@ -4,13 +4,26 @@ import { HttpClient } from 'lib-common-util-js';
 
 const getLatestVersion = async (platform, versionCode, lang) => {
     const url = `${Config.app_server_api}/appVersion/latest?versionCode=${versionCode}&platform=${platform}&lang=${lang}`;
-    console.log(`GET ${url}`);
-    const { data } = await HttpClient.get(url);
-    return data;
+    console.log(`getLatestVersion ${url}`);
+    try {
+        const { data } = await HttpClient.get(url);
+        return data;
+    } catch (e) {
+        return {};
+    }
 };
 
-const getRemoteSettings = async () => {
-    return await new Promise(resolve => setTimeout(() => resolve({ pokket: true }), 1000));
+const getSupportedModule = async () => {
+    const url = `${Config.app_server_api}/config`;
+    console.log(`getRemoteConfig ${url}`);
+    try {
+        const {
+            data: { supportedModule },
+        } = await HttpClient.get(url);
+        return supportedModule;
+    } catch (e) {
+        return [];
+    }
 };
 
-export { getLatestVersion, getRemoteSettings };
+export { getLatestVersion, getSupportedModule };

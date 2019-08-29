@@ -639,8 +639,23 @@
     "toast_invalid_address": "Invalid income address"
   },
   "news": {
-    "title_news": "News",
-    "title_flash": "Flash"
+    "title_articles": "Articles",
+    "title_flash": "Flash",
+    "button_refer_link": "Reference",
+    "label_disclaimer": "Disclaimer: This article reprints only to convey more market information, does not represent Makkii's views and positions, please refer to it yourself",
+    "origin_chainnews": "ChainNews"
+  },
+  "time": {
+    "weekday0": "Sunday",
+    "weekday1": "Monday",
+    "weekday2": "Tuesday",
+    "weekday3": "Wednesday",
+    "weekday4": "Thursday",
+    "weekday5": "Friday",
+    "weekday6": "Saturday",
+    "hourAgo": "{{hour}} hour ago",
+    "minuteAgo": "{{minute}} minute ago",
+    "justNow": "just now"
   },
   "app_name": "Makkii",
   "logout": "Sign Out",
