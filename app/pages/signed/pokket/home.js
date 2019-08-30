@@ -13,31 +13,11 @@ import { SortButton } from '../../../components/common';
 import { formatMoney, getStatusBarHeight } from '../../../../utils';
 import { PopupMenu } from '../../../components/PopUpMenu';
 import { POKKET_FAQ_URL, POKKET_MENU } from './constants';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
 class PokketHome extends React.Component {
-    static navigationOptions = ({ navigation, screenProps }) => {
-        const { t, lang } = screenProps;
-        const showMenu = navigation.getParam('showMenu', () => {});
-        return {
-            title: t('pokket.title', { locale: lang }),
-            headerRight: (
-                <TouchableOpacity
-                    style={{
-                        width: 48,
-                        height: 48,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onPress={showMenu}
-                >
-                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
-                </TouchableOpacity>
-            ),
-        };
-    };
-
     state = {
         keyword: '',
         isLoading: true,
@@ -49,15 +29,10 @@ class PokketHome extends React.Component {
 
     focusedAnimated = new Animated.Value(0);
 
-    constructor(props) {
-        super(props);
-        this.props.navigation.setParams({
-            showMenu: this.openMenu,
-        });
-    }
-
     componentWillMount(): void {
         this.isMount = true;
+        this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
+
         setTimeout(() => {
             this.checkNetWork();
         }, 500);
@@ -65,6 +40,7 @@ class PokketHome extends React.Component {
 
     componentWillUnmount(): void {
         this.isMount = false;
+        this.listenNavigation.remove();
     }
 
     openMenu = () => {
@@ -333,6 +309,22 @@ class PokketHome extends React.Component {
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         return (
             <View style={{ flex: 1 }}>
+                <CustomHeader
+                    title={strings('pokket.title')}
+                    headerRight={
+                        <TouchableOpacity
+                            style={{
+                                width: 48,
+                                height: 48,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={this.openMenu}
+                        >
+                            <Image source={require('../../../..//assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
+                        </TouchableOpacity>
+                    }
+                />
                 {isLoading ? this.renderLoading() : noNetwork ? this.renderNoNetWork() : this.renderContent()}
                 {/* Menu Pop window */}
                 <PopupMenu

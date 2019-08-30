@@ -6,15 +6,9 @@ import FlashTab from './flash_tab';
 import ArticlesTab from './articles_tab';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor, mainColor } from '../../../style_util';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 export default class NewsHome extends React.Component {
-    static navigationOptions = ({ screenProps }) => {
-        const { t, lang } = screenProps;
-        return {
-            title: t('menuRef.title_news', { locale: lang }),
-        };
-    };
-
     state = {
         index: 0,
         routes: [{ key: 'first', title: strings('news.title_articles') }, { key: 'second', title: strings('news.title_flash') }],
@@ -64,6 +58,7 @@ export default class NewsHome extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
+                <CustomHeader title={strings('menuRef.title_news')} />
                 <TabView navigationState={this.state} renderScene={this.renderScene} renderTabBar={this.renderTabBar} onIndexChange={this.handleIndexChange} swipeEnabled={false} />
             </View>
         );

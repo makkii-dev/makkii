@@ -1,6 +1,6 @@
 import { createBottomTabNavigator, createStackNavigator, NavigationActions } from 'react-navigation';
 import React, { PureComponent } from 'react';
-import { View, TouchableOpacity, Image, BackHandler, Easing, Animated } from 'react-native';
+import { View, TouchableOpacity, Image, BackHandler } from 'react-native';
 import { createReduxContainer, createNavigationReducer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
@@ -62,29 +62,6 @@ import NewsArticle from './pages/signed/news/article_detial';
 
 import { strings } from '../locales/i18n';
 import styles from './styles';
-
-const transitionConfig = () => {
-    return {
-        transitionSpec: {
-            duration: 0,
-            easing: Easing.out(Easing.poly(4)),
-            timing: Animated.timing,
-            useNativeDriver: true,
-        },
-        screenInterpolator: sceneProps => {
-            const { layout, position, scene } = sceneProps;
-            const thisSceneIndex = scene.index;
-            const width = layout.initWidth;
-
-            const translateX = position.interpolate({
-                inputRange: [thisSceneIndex - 1, thisSceneIndex],
-                outputRange: [width, 0],
-            });
-
-            return { transform: [{ translateX }] };
-        },
-    };
-};
 
 const navigationOptions = ({ navigation, navigationOptions }) => {
     return {
@@ -198,74 +175,42 @@ const TabConstant = {
     },
 };
 
+const getCurrentRoute = navigationState => {
+    if (!navigationState) {
+        return null;
+    }
+    if (!navigationState.routes) {
+        return navigationState;
+    }
+
+    const route = navigationState.routes[navigationState.index];
+    if (route.routes) {
+        return getCurrentRoute(route);
+    }
+
+    return route;
+};
+
 const tabNavigator = createBottomTabNavigator(
     {
-        signed_vault: createStackNavigator({
-            signed_vault: {
-                screen: Vault,
-                navigationOptions: {
-                    header: null,
-                },
-            },
-        }),
-        // signed_dapps: createStackNavigator({
-        //     signed_dapps: {
-        //         screen: DappsLaunch,
-        //         navigationOptions: {
-        //             headerLeft: null,
-        //             headerRight: null,
-        //             headerStyle: styles.headerStyle,
-        //             headerTitleStyle: styles.headerTitleStyle,
-        //             headerTitleAllowFontScaling: false,
-        //         },
-        //     },
-        // }),
-        signed_pokket: createStackNavigator({
-            signed_pokket: {
-                screen: PokketHome,
-                navigationOptions: {
-                    headerLeft: <View />,
-                    headerStyle: styles.headerStyle,
-                    headerTitleStyle: styles.headerTitleStyle,
-                    headerTitleAllowFontScaling: false,
-                },
-            },
-        }),
-        signed_dex: createStackNavigator({
-            signed_dex: {
-                screen: Dex,
-                navigationOptions: {
-                    headerLeft: <View />,
-                    headerStyle: styles.headerStyle,
-                    headerTitleStyle: styles.headerTitleStyle,
-                    headerTitleAllowFontScaling: false,
-                },
-            },
-        }),
-        signed_news: createStackNavigator({
-            signed_news: {
-                screen: NewsHome,
-                navigationOptions: {
-                    headerLeft: null,
-                    headerRight: null,
-                    headerStyle: styles.headerStyle,
-                    headerTitleStyle: styles.headerTitleStyle,
-                    headerTitleAllowFontScaling: false,
-                },
-            },
-        }),
-        signed_setting: createStackNavigator({
-            signed_setting: {
-                screen: Setting,
-                navigationOptions: {
-                    headerLeft: null,
-                    headerRight: null,
-                    headerStyle: styles.headerStyle,
-                    headerTitleStyle: styles.headerTitleStyle,
-                    headerTitleAllowFontScaling: false,
-                },
-            },
-        }),
+        signed_vault: {
+            screen: Vault,
+        },
+        // signed_dapps: {
+        //     screen: DappsLaunch,
+        // },
+        signed_pokket: {
+            screen: PokketHome,
+        },
+        signed_dex: {
+            screen: Dex,
+        },
+        signed_news: {
+            screen: NewsHome,
+        },
+        signed_setting: {
+            screen: Setting,
+        },
     },
     {
         initialRouteName: 'signed_vault',
@@ -590,8 +535,21 @@ const AppNavigator = createStackNavigator(
         initialRouteName: 'splash',
         // initialRouteName: 'signed_backup_tips',
         swipeEnabled: false,
-        animationEnabled: false,
-        transitionConfig,
+        // cardShadowEnabled: false,
+        // headerTransitionPreset: 'uikit',
+        mode: 'modal',
+        // cardStyle: { backgroundColor: 'transparent', opacity: 1 },
+        transitionConfig: () => {
+            return {
+                containerStyle: {
+                    backgroundColor: 'transparent',
+                },
+                transitionSpec: {
+                    duration: 100,
+                    useNativeDriver: true,
+                },
+            };
+        },
     },
 );
 
@@ -642,12 +600,11 @@ class Router extends PureComponent {
     }
 
     backHandle = () => {
-        const currentScreen = getActiveRouteName(this.props.router);
-        console.log('currentScreen=>', currentScreen);
+        const { routeName: currentScreen } = getCurrentRoute(this.props.router);
         if (currentScreen === 'unsigned_register_mnemonic') {
             return true;
         }
-        if (currentScreen === 'signed_dapps' || currentScreen === 'signed_vault' || currentScreen === 'signed_setting' || currentScreen === 'signed_dex') {
+        if (currentScreen.match(/^signed_dapps$|^signed_vault$|^signed_setting$|^signed_dex$|^signed_news$|^signed_pokket$/)) {
             if (this.backClickCount === 1) {
                 BackHandler.exitApp();
                 this.props.dispatch(createAction('userModel/logOut')());
@@ -704,14 +661,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(Router);
-
-const getActiveRouteName = navigationState => {
-    if (!navigationState) {
-        return null;
-    }
-    const route = navigationState.routes[navigationState.index];
-    if (route.routes) {
-        return getActiveRouteName(route);
-    }
-    return route.routeName;
-};

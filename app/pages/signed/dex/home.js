@@ -19,33 +19,13 @@ import { getTokenIconUrl } from '../../../../client/api';
 import { DEX_MENU, getExchangeRulesURL } from './constants';
 import { PopupMenu } from '../../../components/PopUpMenu';
 import { AppToast } from '../../../components/AppToast';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 
 class Home extends React.Component {
-    static navigationOptions = ({ navigation, screenProps }) => {
-        const { t, lang } = screenProps;
-        const showMenu = navigation.getParam('showMenu', () => {});
-        return {
-            title: t('token_exchange.title', { locale: lang }),
-            headerRight: (
-                <TouchableOpacity
-                    style={{
-                        width: 48,
-                        height: 48,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onPress={showMenu}
-                >
-                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
-                </TouchableOpacity>
-            ),
-        };
-    };
-
     state = {
         srcToken: this.props.trade.srcToken,
         destToken: this.props.trade.destToken,
@@ -60,9 +40,6 @@ class Home extends React.Component {
     destQtyFocused = false;
 
     componentWillMount(): void {
-        this.props.navigation.setParams({
-            showMenu: this.openMenu,
-        });
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
@@ -389,7 +366,27 @@ class Home extends React.Component {
 
     render() {
         const { isLoading } = this.props;
-        return isLoading ? this.renderLoading() : this.renderContent();
+        return (
+            <View style={{ flex: 1 }}>
+                <CustomHeader
+                    title={strings('token_exchange.title')}
+                    headerRight={
+                        <TouchableOpacity
+                            style={{
+                                width: 48,
+                                height: 48,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={this.openMenu}
+                        >
+                            <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
+                        </TouchableOpacity>
+                    }
+                />
+                {isLoading ? this.renderLoading() : this.renderContent()}
+            </View>
+        );
     }
 }
 
