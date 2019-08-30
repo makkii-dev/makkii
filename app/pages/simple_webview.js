@@ -34,21 +34,38 @@ class SimpleWebView extends Component {
                     />
                 </TouchableOpacity>
             ),
-            headerRight: <View />,
+            headerRight: (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        height: 48,
+                        width: 48,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        marginRight: 10,
+                    }}
+                    onPress={() => {
+                        navigation.state.params.Reload && navigation.state.params.Reload();
+                    }}
+                >
+                    <Image source={require('../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
+                </TouchableOpacity>
+            ),
         };
     };
 
     constructor(props) {
         super(props);
 
-        this.initialUrl = this.props.navigation.state.params.initialUrl;
+        this.initialUrl = this.props.navigation.getParam('initialUrl');
+        this.title = this.props.navigation.getParam('title');
         this.state = {
             WebViewProgress: 0,
             showProgressBar: true,
         };
-
         this.props.navigation.setParams({
             GoBack: () => this.onGoBack(),
+            Reload: () => this.onReload(),
         });
     }
 
@@ -92,6 +109,11 @@ class SimpleWebView extends Component {
         }
     };
 
+    onReload = () => {
+        this.handleProcessBar(true);
+        this.refs.refWebView.reload();
+    };
+
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -102,9 +124,13 @@ class SimpleWebView extends Component {
                     cacheEnabled={false}
                     renderLoading={() => this.renderLoading()}
                     startInLoadingState
-                    onLoadStart={() => this.handleProcessBar(true)}
+                    onLoadStart={navState => {
+                        this.title || this.props.navigation.setParams({ title: navState.title });
+                        this.handleProcessBar(true);
+                    }}
                     onNavigationStateChange={navState => {
                         this.canGoBack = navState.canGoBack;
+                        this.title || this.props.navigation.setParams({ title: navState.title });
                         this.mount && this.setState({ WebViewProgress: 0, showProgressBar: true });
                     }}
                     onLoadProgress={e => {

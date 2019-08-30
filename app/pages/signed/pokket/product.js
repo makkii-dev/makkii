@@ -74,6 +74,7 @@ class Product extends React.Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
+            isModal: true,
             success: 'signed_pokket_product',
             validate: (data, callback) => {
                 console.log('validating code.....');

@@ -65,6 +65,7 @@ class ImportPrivateKey extends Component {
     scan = () => {
         console.log('this.props.symbol=>', this.props.symbol);
         this.props.navigation.navigate('scan', {
+            isModal: true,
             success: 'signed_vault_import_private_key',
             validate: (data, callback) => {
                 console.log('scanned data=>', data);

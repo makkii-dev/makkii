@@ -1,6 +1,6 @@
 import { createBottomTabNavigator, createStackNavigator, NavigationActions } from 'react-navigation';
 import React, { PureComponent } from 'react';
-import { View, TouchableOpacity, Image, BackHandler } from 'react-native';
+import { View, TouchableOpacity, Image, BackHandler, Animated, Easing, Platform } from 'react-native';
 import { createReduxContainer, createNavigationReducer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
@@ -537,16 +537,48 @@ const AppNavigator = createStackNavigator(
         swipeEnabled: false,
         // cardShadowEnabled: false,
         // headerTransitionPreset: 'uikit',
-        mode: 'modal',
-        // cardStyle: { backgroundColor: 'transparent', opacity: 1 },
+        cardStyle: { backgroundColor: 'transparent', opacity: 1 },
         transitionConfig: () => {
             return {
                 containerStyle: {
                     backgroundColor: 'transparent',
                 },
                 transitionSpec: {
-                    duration: 100,
+                    duration: 300,
+                    easing: Easing.out(Easing.poly(4)),
+                    timing: Animated.timing,
                     useNativeDriver: true,
+                },
+                screenInterpolator: ({ layout, position, scene }) => {
+                    const { index } = scene;
+                    const { initWidth } = layout;
+                    const { route } = scene;
+                    const params = route.params || {};
+                    const isModal = params.isModal;
+                    if (isModal) {
+                        let start = 0;
+                        if (Platform.OS !== 'ios') {
+                            start = 0.005;
+                        }
+
+                        const scale = position.interpolate({
+                            inputRange: [index - 1, index],
+                            outputRange: [start, 1],
+                        });
+
+                        return { transform: [{ scale }] };
+                    }
+                    const translateX = position.interpolate({
+                        inputRange: [index - 1, index, index + 1],
+                        outputRange: [initWidth, 0, 0],
+                    });
+
+                    const opacity = position.interpolate({
+                        inputRange: [index - 1, index - 0.99, index],
+                        outputRange: [0, 1, 1],
+                    });
+
+                    return { opacity, transform: [{ translateX }] };
                 },
             };
         },

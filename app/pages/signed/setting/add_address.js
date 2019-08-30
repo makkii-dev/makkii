@@ -79,6 +79,7 @@ class AddAddress extends Component {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
             success: 'signed_setting_add_address',
+            isModal: true,
             validate: (data, callback) => {
                 console.log('validating code.....');
                 dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {

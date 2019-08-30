@@ -77,6 +77,7 @@ class Send extends Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
+            isModal: true,
             success: 'signed_vault_send',
             validate: (data, callback) => {
                 dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(res => {

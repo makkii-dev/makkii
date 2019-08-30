@@ -75,6 +75,7 @@ class AddToken extends Component {
 
     scan = () => {
         this.props.navigation.navigate('scan', {
+            isModal: true,
             success: 'signed_add_token',
             validate: (data, callback) => {
                 validateAddress(data.data, this.props.currentAccount.symbol).then(result => {

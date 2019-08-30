@@ -244,7 +244,7 @@ export default {
                     yield put(
                         NavigationActions.navigate({
                             routeName: 'unlock',
-                            params: { cancel: false },
+                            params: { cancel: false, isModal: true },
                         }),
                     );
                 }

@@ -191,6 +191,7 @@ const navigationSafely = (pinCodeEnabled, hashedPassword, { routeName, params, o
         );
     pinCodeEnabled &&
         navigate('unlock', {
+            isModal: true,
             targetScreen: routeName,
             targetScreenArgs: params,
             onUnlockSuccess: onVerifySuccess,

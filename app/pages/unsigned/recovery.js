@@ -67,6 +67,7 @@ class Home extends Component {
 
     scan = () => {
         this.props.navigation.navigate('scan', {
+            isModal: true,
             success: 'unsigned_recovery',
             validate(data, callback) {
                 const pass = validator.validateMnemonic(data.data);

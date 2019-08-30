@@ -42,7 +42,7 @@ class Splash extends Component {
         const { navigate } = this.props.navigation;
         const { dispatch } = this.props;
         loadStorage(dispatch).then(() => {
-            navigate('unsigned_login');
+            navigate('unsigned_login', { isModal: true });
         });
     }
 
