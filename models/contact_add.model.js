@@ -37,7 +37,7 @@ export default {
             if (ret.result) {
                 yield put(createAction('updateState')({ ...ret.data }));
             }
-            return ret.result;
+            return ret;
         },
         *addContact({ payload }, { call, put, select }) {
             const { address_book } = yield select(mapToUserModel);

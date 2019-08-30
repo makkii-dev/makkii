@@ -1,6 +1,6 @@
 import { createBottomTabNavigator, createStackNavigator, NavigationActions } from 'react-navigation';
 import React, { PureComponent } from 'react';
-import { View, TouchableOpacity, Image, BackHandler, Animated, Easing, Platform } from 'react-native';
+import { View, TouchableOpacity, Image, BackHandler, Animated, Easing } from 'react-native';
 import { createReduxContainer, createNavigationReducer, createReactNavigationReduxMiddleware } from 'react-navigation-redux-helpers';
 import { connect } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
@@ -538,13 +538,21 @@ const AppNavigator = createStackNavigator(
         // cardShadowEnabled: false,
         // headerTransitionPreset: 'uikit',
         cardStyle: { backgroundColor: 'transparent', opacity: 1 },
-        transitionConfig: () => {
+        transitionConfig: ({ scenes }) => {
+            const prevScene = scenes[scenes.length - 2];
+            const nextScene = scenes[scenes.length - 1];
+            // console.log('scenes=>',scenes);
+            // console.log('prevScene=>', prevScene);
+            // console.log('nextScene=>', nextScene);
+            const checkRouteName = routeName => routeName.match(/^scan$|^unlock$/);
+            const animatedDisable = (prevScene && checkRouteName(prevScene.route.routeName)) || (nextScene && checkRouteName(nextScene.route.routeName));
+            // const animatedDisable = false;
             return {
                 containerStyle: {
                     backgroundColor: 'transparent',
                 },
                 transitionSpec: {
-                    duration: 300,
+                    duration: animatedDisable ? 0 : 300,
                     easing: Easing.out(Easing.poly(4)),
                     timing: Animated.timing,
                     useNativeDriver: true,
@@ -554,19 +562,14 @@ const AppNavigator = createStackNavigator(
                     const { initWidth } = layout;
                     const { route } = scene;
                     const params = route.params || {};
-                    const isModal = params.isModal;
-                    if (isModal) {
-                        let start = 0;
-                        if (Platform.OS !== 'ios') {
-                            start = 0.005;
-                        }
-
-                        const scale = position.interpolate({
+                    const transition = params.transition || 'default';
+                    if (transition === 'modal') {
+                        const opacity = position.interpolate({
                             inputRange: [index - 1, index],
-                            outputRange: [start, 1],
+                            outputRange: [0, 1],
                         });
 
-                        return { transform: [{ scale }] };
+                        return { opacity };
                     }
                     const translateX = position.interpolate({
                         inputRange: [index - 1, index, index + 1],
@@ -590,26 +593,15 @@ AppNavigator.router.getStateForAction = (action, state) => {
     if (state) {
         let newRoutes;
         let newIndex;
-        switch (action.type) {
-            case 'Navigation/NAVIGATE':
-                if (state.routes[state.routes.length - 1].routeName.match(/^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/)) {
-                    newRoutes = state.routes.slice(0, state.routes.length - 1);
-                    newIndex = newRoutes.length;
-                    return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });
-                }
-                return defaultGetStateForAction(action, state);
-
-            case 'Navigation/BACK':
-                if (state.routes && state.routes.length > 0) {
-                    newRoutes = state.routes.filter(r => r.routeName !== 'scan' && r.routeName !== 'splash' && r.routeName !== 'unlock');
-                    newIndex = newRoutes.length - 1;
-                    return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });
-                }
-                return defaultGetStateForAction(action, state);
-
-            default:
-                return defaultGetStateForAction(action, state);
+        if (action.type === 'Navigation/NAVIGATE') {
+            if (state.routes[state.routes.length - 1].routeName.match(/^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/)) {
+                newRoutes = state.routes.slice(0, state.routes.length - 1);
+                newIndex = newRoutes.length;
+                return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });
+            }
+            return defaultGetStateForAction(action, state);
         }
+        return defaultGetStateForAction(action, state);
     }
     return defaultGetStateForAction(action, state);
 };

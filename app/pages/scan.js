@@ -49,6 +49,10 @@ class Scan extends Component {
         };
     };
 
+    state = {
+        focusedScreen: false,
+    };
+
     constructor(props) {
         super(props);
         this.animatedValue = new Animated.Value(-120);
@@ -67,7 +71,16 @@ class Scan extends Component {
 
     componentDidMount() {
         console.log(`[route] ${this.props.navigation.state.routeName}`);
+        this.isMount = true;
+        const { navigation } = this.props;
+        navigation.addListener('willFocus', () => this.isMount && this.setState({ focusedScreen: true }));
+        navigation.addListener('willBlur', () => this.isMount && this.setState({ focusedScreen: false }));
+
         this.scannerLineMove();
+    }
+
+    componentWillUnmount(): void {
+        this.isMount = false;
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -112,7 +125,7 @@ class Scan extends Component {
 
     getQrcode = data => {
         if (data) {
-            const { validate, success } = this.props.navigation.state.params;
+            const { validate } = this.props.navigation.state.params;
             LocalBarcodeRecognizer.decode(data, { codeTypes: ['qr'] })
                 .then(result => {
                     console.log('result', result);
@@ -121,7 +134,7 @@ class Scan extends Component {
                     }
                     validate({ data: result }, (res, message = '') => {
                         if (res) {
-                            this.props.navigation.navigate(success, { scanned: result });
+                            this.props.navigation.goBack();
                         } else {
                             AppToast.show(message);
                         }
@@ -137,7 +150,11 @@ class Scan extends Component {
         const animatedStyle = {
             transform: [{ translateY: this.animatedValue }],
         };
-        const { validate, success } = this.props.navigation.state.params;
+        const { validate } = this.props.navigation.state.params;
+        const { focusedScreen } = this.state;
+        if (!focusedScreen) {
+            return <View />;
+        }
         return (
             <View style={{ width: '100%', height: '100%' }}>
                 <RNCamera
@@ -149,10 +166,10 @@ class Scan extends Component {
                     flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
                     captureAudio={false}
                     onBarCodeRead={e => {
-                        if (validate && success) {
+                        if (validate) {
                             validate(e, (result, message = '') => {
                                 if (result) {
-                                    this.props.navigation.navigate(success, { scanned: e.data });
+                                    this.props.navigation.goBack();
                                 } else {
                                     // slow down toast log
                                     const now = Date.now();

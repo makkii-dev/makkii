@@ -75,7 +75,7 @@ class PinCodeScreen extends React.Component {
     }
 
     componentWillUnmount(): void {
-        this.backHandler.remove();
+        this.backHandler && this.backHandler.remove();
     }
 
     renderDots(numberOfDots) {

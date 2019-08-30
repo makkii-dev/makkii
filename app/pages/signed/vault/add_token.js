@@ -45,17 +45,6 @@ class AddToken extends Component {
         });
     }
 
-    async componentWillReceiveProps(props) {
-        const oldData = this.props.navigation.getParam('scanned');
-        const scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== '' && oldData !== scannedData) {
-            this.setState({
-                contractAddr: scannedData,
-            });
-            this.fetchTokenDetail(scannedData);
-        }
-    }
-
     addToken = () => {
         const { symbol, name, tokenDecimal } = this.props;
         const { contractAddr } = this.state;
@@ -75,16 +64,25 @@ class AddToken extends Component {
 
     scan = () => {
         this.props.navigation.navigate('scan', {
-            isModal: true,
-            success: 'signed_add_token',
             validate: (data, callback) => {
-                validateAddress(data.data, this.props.currentAccount.symbol).then(result => {
-                    if (result) {
-                        callback(true);
-                    } else {
+                validateAddress(data.data, this.props.currentAccount.symbol)
+                    .then(result => {
+                        if (result) {
+                            callback(true);
+                            // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
+                            setTimeout(() => {
+                                this.setState({
+                                    contractAddr: data.data,
+                                });
+                                this.fetchTokenDetail(data.data);
+                            }, 300);
+                        } else {
+                            callback(false, strings('error_invalid_qrcode'));
+                        }
+                    })
+                    .catch(() => {
                         callback(false, strings('error_invalid_qrcode'));
-                    }
-                });
+                    });
             },
         });
     };

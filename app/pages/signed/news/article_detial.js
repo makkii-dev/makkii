@@ -70,6 +70,12 @@ const MarkdownStyles = {
 };
 
 class ArticleDetail extends React.Component {
+    static navigationOptions = () => {
+        return {
+            title: strings('news.title_article_details'),
+        };
+    };
+
     constructor(props) {
         super(props);
         const articleKey = this.props.navigation.getParam('key');

@@ -44,7 +44,7 @@ class FlashTab extends React.Component {
                     this.setState({
                         isLoading: false,
                         refreshing: false,
-                        footerState: r === 20 ? 0 : 1,
+                        footerState: r > 0 ? 0 : 1,
                     });
             }
         });

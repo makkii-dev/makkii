@@ -641,6 +641,7 @@
   "news": {
     "title_articles": "文章",
     "title_flash": "快讯",
+    "title_article_details": "文章详情",
     "button_refer_link": "来源链接",
     "label_disclaimer": "免责声明：本文转载仅为传递更多市场信息，不代表Makkii的观点和立场，请自行参考",
     "origin_chainnews": "链闻"

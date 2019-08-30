@@ -7,6 +7,7 @@ import { SETTINGS } from './constants';
 import defaultStyles from '../../../styles';
 import { createAction, popCustom } from '../../../../utils/dva';
 import { CustomHeader } from '../../../components/CustomHeader';
+import { mainBgColor } from '../../../style_util';
 
 const { width } = Dimensions.get('window');
 
@@ -44,7 +45,7 @@ class Home extends Component {
     render() {
         const { navigation, dispatch } = this.props;
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: mainBgColor }}>
                 <CustomHeader title={strings('menuRef.title_settings')} />
                 <ScrollView style={{ width }} contentContainerStyle={{ alignItems: 'center' }}>
                     <View

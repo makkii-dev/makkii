@@ -49,7 +49,7 @@ export default {
             if (ret.result) {
                 yield put(createAction('updateState')({ ...ret.data }));
             }
-            return ret.result;
+            return ret;
         },
         *validateTxObj(
             {

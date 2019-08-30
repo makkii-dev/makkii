@@ -641,6 +641,7 @@
   "news": {
     "title_articles": "Articles",
     "title_flash": "Flash",
+    "title_article_details": "Articles detail",
     "button_refer_link": "Reference",
     "label_disclaimer": "Disclaimer: This article reprints only to convey more market information, does not represent Makkii's views and positions, please refer to it yourself",
     "origin_chainnews": "ChainNews"

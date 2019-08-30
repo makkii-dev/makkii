@@ -78,12 +78,20 @@ class AddAddress extends Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
-            success: 'signed_setting_add_address',
-            isModal: true,
             validate: (data, callback) => {
                 console.log('validating code.....');
                 dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {
-                    res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
+                    if (res.result) {
+                        callback(true);
+                        // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
+                        setTimeout(() => {
+                            this.setState({
+                                ...res.data,
+                            });
+                        }, 300);
+                    } else {
+                        callback(false, strings('error_invalid_qrcode'));
+                    }
                 });
             },
         });

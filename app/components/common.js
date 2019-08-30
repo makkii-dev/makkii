@@ -209,9 +209,7 @@ class InputMultiLines extends Component {
                 numberOfLines={this.props.numberOfLines}
                 multiline
                 value={this.props.value}
-                onChangeText={val => {
-                    this.props.onChangeText(val);
-                }}
+                onChangeText={this.props.onChangeText}
             />
         );
     }
