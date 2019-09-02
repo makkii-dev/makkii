@@ -102,7 +102,7 @@ export default {
             if (!supportedModule.includes('News')) {
                 bottomBarTab.remove('signed_news');
             }
-            if (!supportedModule.includes('Keyber')) {
+            if (!supportedModule.includes('Kyber')) {
                 bottomBarTab.remove('signed_dex');
             }
             yield put(createAction('updateState')({ bottomBarTab }));

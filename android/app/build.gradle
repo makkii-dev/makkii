@@ -191,7 +191,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-screens')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-modal-translucent')
     implementation project(':react-native-background-timer')

@@ -52,7 +52,6 @@
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-reanimated": "^1.2.0",
     "react-native-root-toast": "^3.0.2",
-    "react-native-screens": "^1.0.0-alpha.23",
     "react-native-screenshot-helper": "https://github.com/chaion/react-native-screenshot.git",
     "react-native-sensitive-info": "^5.5.0",
     "react-native-svg": "^9.0.6",

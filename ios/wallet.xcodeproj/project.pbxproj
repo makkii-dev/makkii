@@ -41,7 +41,6 @@
 		CB3E8CE9E717483480C6F16C /* libRNSensitiveInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2F1D514EA14C1CA33FA849 /* libRNSensitiveInfo.a */; };
 		F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */; };
 		952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0832F60C483D4933BAB8EC02 /* libRNReanimated.a */; };
-		E2FF250A8D8F4A9B9069F497 /* libRNScreens.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D6F21B92B484FDB9FE0CDCE /* libRNScreens.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -533,8 +532,6 @@
 		2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */ = {isa = PBXFileReference; name = "libRNBackgroundTimer.a"; path = "libRNBackgroundTimer.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; name = "RNReanimated.xcodeproj"; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		0832F60C483D4933BAB8EC02 /* libRNReanimated.a */ = {isa = PBXFileReference; name = "libRNReanimated.a"; path = "libRNReanimated.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
-		88D83B1BBCC24763A6D68152 /* RNScreens.xcodeproj */ = {isa = PBXFileReference; name = "RNScreens.xcodeproj"; path = "../node_modules/react-native-screens/ios/RNScreens.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		1D6F21B92B484FDB9FE0CDCE /* libRNScreens.a */ = {isa = PBXFileReference; name = "libRNScreens.a"; path = "libRNScreens.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -573,7 +570,6 @@
 				CB3E8CE9E717483480C6F16C /* libRNSensitiveInfo.a in Frameworks */,
 				F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */,
 				952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */,
-				E2FF250A8D8F4A9B9069F497 /* libRNScreens.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -924,7 +920,6 @@
 				00875BD6CEFA4C67B9FAC79B /* RNSensitiveInfo.xcodeproj */,
 				9E3F853CE57E480189D47C45 /* RNBackgroundTimer.xcodeproj */,
 				E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */,
-				88D83B1BBCC24763A6D68152 /* RNScreens.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1633,7 +1628,6 @@
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1645,7 +1639,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1688,7 +1681,6 @@
 					"$(SRCROOT)/../node_modules/react-native-sensitive-info/ios/RNSensitiveInfo",
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
-					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1700,7 +1692,6 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
