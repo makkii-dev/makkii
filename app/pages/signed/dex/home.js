@@ -254,13 +254,13 @@ class Home extends React.Component {
                         token: srcToken,
                     });
                 } else if (srcQty > 0) {
-                    errorMsg = strings('token_exchange.button_exchange_disable');
+                    errorMsg = strings('token_exchange.label_exchange_insufficient_balance');
                 } else {
-                    errorMsg = strings('token_exchange.button_exchange_invalid_number');
+                    errorMsg = strings('token_exchange.label_exchange_invalid_number');
                 }
             }
         } else {
-            errorMsg = strings('token_exchange.button_exchange_no_account');
+            errorMsg = strings('token_exchange.label_exchange_no_account');
         }
         const popwindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
 

@@ -149,14 +149,16 @@ class Product extends React.Component {
                     errorMsg = strings('token_exchange.button_exchange_no_token', {
                         token,
                     });
-                } else if (amount > 0) {
-                    errorMsg = strings('token_exchange.button_exchange_disable');
+                } else if (amount <= 0) {
+                    errorMsg = strings('token_exchange.label_exchange_invalid_number');
+                } else if (amount < minInvestAmount) {
+                    errorMsg = strings('pokket.label_violate_min_deposit');
                 } else {
-                    errorMsg = strings('token_exchange.button_exchange_invalid_number');
+                    errorMsg = strings('token_exchange.label_exchange_insufficient_balance');
                 }
             }
         } else {
-            errorMsg = strings('token_exchange.button_exchange_no_account');
+            errorMsg = strings('token_exchange.label_exchange_no_account');
         }
         return (
             <DismissKeyboardView>
