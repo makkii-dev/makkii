@@ -50,14 +50,10 @@ export class AccountBar extends React.Component {
 
     render() {
         const { currentAccount, currentToken, selectAccount, toAccountDetail } = this.props;
-        console.log('[AccountBar] [render] currentAccount=>', currentAccount);
-        console.log('[AccountBar] [render] currentToken=>', currentToken);
         if (currentAccount) {
             const balance = currentToken !== 'ETH' && currentAccount.tokens[currentToken] ? currentAccount.tokens[currentToken] : currentAccount.balance;
             const symbol = currentToken !== 'ETH' && currentAccount.tokens[currentToken] ? currentToken : 'ETH';
 
-            console.log('[AccountBar] [render] balance=>', balance);
-            console.log('[AccountBar] [render] symbol=>', symbol);
             return (
                 <View
                     style={{

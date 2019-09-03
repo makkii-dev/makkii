@@ -134,6 +134,8 @@
     "label_sell": "Sell",
     "label_buy": "Buy",
     "label_fee": "Fee",
+    "label_input": "Input",
+    "label_output": "Output",
     "sendAgain_button": "SEND AGAIN",
     "viewInExplorer_button": "VIEW IN EXPLORER",
     "PENDING": "PENDING",

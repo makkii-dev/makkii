@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Platform, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { connect, createAction } from '../../../../utils/dva';
@@ -11,7 +11,7 @@ import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { SortButton } from '../../../components/common';
 import { formatMoney, getStatusBarHeight } from '../../../../utils';
-import { PopWindow } from '../vault/home_popwindow';
+import { PopupMenu } from '../../../components/PopUpMenu';
 import { POKKET_FAQ_URL, POKKET_MENU } from './constants';
 
 const { width } = Dimensions.get('window');
@@ -329,19 +329,19 @@ class PokketHome extends React.Component {
 
     render() {
         const { isLoading, noNetwork, showMenu } = this.state;
-        const popwindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         return (
             <View style={{ flex: 1 }}>
                 {isLoading ? this.renderLoading() : noNetwork ? this.renderNoNetWork() : this.renderContent()}
                 {/* Menu Pop window */}
-                <PopWindow
+                <PopupMenu
                     backgroundColor="rgba(52,52,52,0.54)"
                     onClose={select => this.onCloseMenu(select)}
                     visible={showMenu}
                     data={POKKET_MENU}
                     containerPosition={{
                         position: 'absolute',
-                        top: popwindowTop,
+                        top: popWindowTop,
                         right: 5,
                     }}
                     imageStyle={{ width: 20, height: 20, marginRight: 10 }}

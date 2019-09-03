@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, PixelRatio, Image, RefreshControl, Keyboard, Dimensions, StyleSheet, FlatList, Platform, ActivityIndicator } from 'react-native';
+import { View, TouchableOpacity, Text, PixelRatio, Image, RefreshControl, Keyboard, Dimensions, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { getStatusBarHeight, accountKey } from '../../../../utils';
 import { strings } from '../../../../locales/i18n';
 import { mainColor, mainBgColor, linkButtonColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
-import { PopWindow } from './home_popwindow';
+import { PopupMenu } from '../../../components/PopUpMenu';
 import { ACCOUNT_MENU } from './constants';
 import { TransactionItem, AddressComponent } from '../../../components/common';
 import { COINS } from '../../../../client/support_coin_list';
@@ -314,7 +314,7 @@ class Account extends Component {
         const { address, type, coinSymbol, balance } = currentAccount;
         const accountBalanceText = `${new BigNumber(balance).toNotExString()} ${coinSymbol}`;
         const accountBalanceTextFontSize = Math.max(Math.min(32, (200 * PixelRatio.get()) / (accountBalanceText.length + 4) - 5), 16);
-        const popWindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
@@ -411,7 +411,7 @@ class Account extends Component {
                     <View style={{ flex: 1, backgroundColor: mainBgColor }}>{transactions.length > 0 ? this.renderTransactions(transactions) : this.renderEmpty()}</View>
                 </TouchableOpacity>
                 {/* Menu Pop window */}
-                <PopWindow
+                <PopupMenu
                     backgroundColor="rgba(52,52,52,0.54)"
                     onClose={select => this.onCloseMenu(select)}
                     data={menuArray}

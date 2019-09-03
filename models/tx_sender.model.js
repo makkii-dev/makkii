@@ -86,22 +86,41 @@ export default {
                 const {
                     data: { pendingTx, pendingTokenTx },
                 } = ret;
-                const payloadTx1 = {
-                    key: accountKey(symbol, pendingTx.from),
-                    txs: { [pendingTx.hash]: pendingTx },
-                };
-                const payloadTx2 = {
-                    key: accountKey(symbol, pendingTx.to),
-                    txs: { [pendingTx.hash]: pendingTx },
-                    force: false,
-                };
+                if (symbol !== 'BTC' && symbol !== 'LTC') {
+                    const payloadTxFrom = {
+                        key: accountKey(symbol, pendingTx.from),
+                        txs: { [pendingTx.hash]: pendingTx },
+                    };
+                    const payloadTxTo = {
+                        key: accountKey(symbol, pendingTx.to),
+                        txs: { [pendingTx.hash]: pendingTx },
+                        force: false,
+                    };
+                    yield put(createAction('accountsModel/updateTransactions')(payloadTxFrom));
+                    yield put(createAction('accountsModel/updateTransactions')(payloadTxTo));
+                }
+                if (symbol === 'BTC' || symbol === 'LTC') {
+                    for (let vin of pendingTx.from) {
+                        const payloadTxFrom = {
+                            key: accountKey(symbol, vin.addr),
+                            txs: { [pendingTx.hash]: pendingTx },
+                        };
+                        yield put(createAction('accountsModel/updateTransactions')(payloadTxFrom));
+                    }
+                    for (let vout of pendingTx.to) {
+                        const payloadTxTo = {
+                            key: accountKey(symbol, vout.addr),
+                            txs: { [pendingTx.hash]: pendingTx },
+                            force: false,
+                        };
+                        yield put(createAction('accountsModel/updateTransactions')(payloadTxTo));
+                    }
+                }
                 let payloadTxListener = {
                     txObj: pendingTx,
                     type: 'normal',
                     symbol,
                 };
-                yield put(createAction('accountsModel/updateTransactions')(payloadTx1));
-                yield put(createAction('accountsModel/updateTransactions')(payloadTx2));
                 if (pendingTokenTx) {
                     const payload1 = {
                         key: accountKey(symbol, pendingTokenTx.from, coinSymbol),
@@ -145,8 +164,9 @@ export default {
                 }
 
                 // dispatch tx to tx listener
-                yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
-
+                if (symbol !== 'BTC' && symbol !== 'LTC') {
+                    yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
+                }
                 yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
                 return true;
             }

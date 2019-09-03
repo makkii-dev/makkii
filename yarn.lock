@@ -5919,9 +5919,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#820800fae03e2c08a13c68f1ace0d5de6dc6596f":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#2d95b8937ae85ce79ca09eb4c70c6df378a7ef7c":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#820800fae03e2c08a13c68f1ace0d5de6dc6596f"
+  resolved "https://github.com/chaion/makkii-coins.git#2d95b8937ae85ce79ca09eb4c70c6df378a7ef7c"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
@@ -7667,6 +7667,11 @@ react-native-keyboard-aware-scroll-view@^0.8.0:
 "react-native-local-barcode-recognizer@https://github.com/chaion/react-native-local-barcode-recognizer.git":
   version "0.0.2"
   resolved "https://github.com/chaion/react-native-local-barcode-recognizer.git#6d004c2e5a99d5fbc9e3f575088395f561d44901"
+
+react-native-modal-translucent@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-modal-translucent/-/react-native-modal-translucent-3.0.1.tgz#29945ca76b25f13fcbacd77ce91364c1dda6252b"
+  integrity sha512-gBQpm0TutnPex8G243e5h3+sNs760dmwkyWhDlnz088IiHDpGzLhNzlVDcB+FISuQEA4bntxV6IlCeVWxnt4XA==
 
 react-native-progress-circle@^2.0.1:
   version "2.0.1"

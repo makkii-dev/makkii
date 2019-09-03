@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, Clipboard, TouchableOpacity, Linking, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Image, Clipboard, TouchableOpacity, Linking, ScrollView, Dimensions, PixelRatio } from 'react-native';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
-import { linkButtonColor, mainBgColor } from '../../../style_util';
+import { fixedWidthFont, linkButtonColor, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { AppToast } from '../../../components/AppToast';
 import { createAction } from '../../../../utils/dva';
@@ -68,9 +68,69 @@ class Transaction extends Component {
         navigation.navigate('signed_setting_add_address');
     };
 
-    render() {
+    renderBTCAddresses = (arr, label, symbol) => {
+        const views = arr.reduce((views, el, index) => {
+            let inAddressBook;
+            let addressName;
+            const accKey = accountKey(symbol, el.addr);
+            if (
+                Object.keys(this.props.address_book)
+                    .map(e => e.toLowerCase())
+                    .indexOf(accKey.toLowerCase()) >= 0
+            ) {
+                inAddressBook = true;
+                addressName = this.props.address_book[accKey].name;
+            } else {
+                inAddressBook = false;
+            }
+            views.push(
+                <TransactionItemCell
+                    key={`${index}`}
+                    title={`${strings(`transaction_detail.${label}`)} ${index + 1}`}
+                    rightView={() => (
+                        <View style={{ flexDirection: 'row' }}>
+                            <TouchableOpacity
+                                onPress={() => {
+                                    Clipboard.setString(el.addr);
+                                    AppToast.show(strings('toast_copy_success'));
+                                }}
+                            >
+                                <Image source={require('../../../../assets/icon_copy.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
+                            </TouchableOpacity>
+                            {inAddressBook ? null : (
+                                <TouchableOpacity onPress={() => this.addToAddressBook(el.addr, this.account.symbol)} style={{ marginLeft: 10 }}>
+                                    <Image source={require('../../../../assets/icon_add_address.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
+                                </TouchableOpacity>
+                            )}
+                        </View>
+                    )}
+                >
+                    <View style={{ width: '100%', borderBottomColor: '#000', borderBottomWidth: 1 / PixelRatio.get() }}>
+                        <Text style={{ fontSize: 12, fontFamily: fixedWidthFont }}>{inAddressBook ? `${addressName}:(${el.addr})` : el.addr}</Text>
+                        <Text style={{ width: '100%', textAlign: 'right' }}>{`${el.value} ${symbol}`}</Text>
+                    </View>
+                </TransactionItemCell>,
+            );
+            return views;
+        }, []);
+        return <View style={{ width: '100%' }}>{views}</View>;
+    };
+
+    renderBTC = () => {
+        const { from, to } = this.transaction;
+        const { symbol } = this.account;
+        const fromView = this.renderBTCAddresses(from, 'label_input', symbol);
+        const toView = this.renderBTCAddresses(to, 'label_output', symbol);
+        return (
+            <View style={styles.BTCTxBody}>
+                <TransactionItemCell title={strings('transaction_detail.sender_label')}>{fromView}</TransactionItemCell>
+                <TransactionItemCell title={strings('transaction_detail.receiver_label')}>{toView}</TransactionItemCell>
+            </View>
+        );
+    };
+
+    renderNormal = () => {
         const { transaction } = this;
-        const timestamp = transaction.timestamp === undefined ? '' : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
         const ifSender = sameAddress(this.account.symbol, this.account.address, transaction.from);
         const title1 = ifSender ? strings('transaction_detail.receiver_label') : strings('transaction_detail.sender_label');
         const value1 = ifSender ? transaction.to : transaction.from;
@@ -85,6 +145,36 @@ class Transaction extends Component {
         }
 
         return (
+            <TransactionItemCell
+                style={{ height: 100 }}
+                title={title1}
+                value={inAddressBook ? `${addressName}:(${value1})` : value1}
+                valueTextAlign="left"
+                rightView={() => (
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity
+                            onPress={() => {
+                                Clipboard.setString(value1);
+                                AppToast.show(strings('toast_copy_success'));
+                            }}
+                        >
+                            <Image source={require('../../../../assets/icon_copy.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
+                        </TouchableOpacity>
+                        {inAddressBook ? null : (
+                            <TouchableOpacity onPress={() => this.addToAddressBook(value1, this.account.symbol)} style={{ marginLeft: 10 }}>
+                                <Image source={require('../../../../assets/icon_add_address.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
+                            </TouchableOpacity>
+                        )}
+                    </View>
+                )}
+            />
+        );
+    };
+
+    render() {
+        const { transaction, account } = this;
+        const timestamp = transaction.timestamp === undefined ? '' : new Date(transaction.timestamp).Format('yyyy/MM/dd hh:mm');
+        return (
             <ScrollView style={{ backgroundColor: mainBgColor, height, width }}>
                 <View style={{ flex: 1, width, paddingHorizontal: 20 }}>
                     <View
@@ -98,32 +188,9 @@ class Transaction extends Component {
                             backgroundColor: 'white',
                         }}
                     >
+                        {account.symbol !== 'BTC' && account.symbol !== 'LTC' ? this.renderNormal() : this.renderBTC()}
+                        <TransactionItemCell title={strings('transaction_detail.timestamp_label')} value={timestamp} valueTextAlign="left" />
                         <TransactionItemCell
-                            style={{ height: 100 }}
-                            title={title1}
-                            value={inAddressBook ? `${addressName}:(${value1})` : value1}
-                            valueTextAlign="left"
-                            rightView={() => (
-                                <View style={{ flexDirection: 'row' }}>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            Clipboard.setString(value1);
-                                            AppToast.show(strings('toast_copy_success'));
-                                        }}
-                                    >
-                                        <Image source={require('../../../../assets/icon_copy.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
-                                    </TouchableOpacity>
-                                    {inAddressBook ? null : (
-                                        <TouchableOpacity onPress={() => this.addToAddressBook(value1, this.account.symbol)} style={{ marginLeft: 10 }}>
-                                            <Image source={require('../../../../assets/icon_add_address.png')} style={{ width: 20, height: 20, tintColor: '#000' }} resizeMode="contain" />
-                                        </TouchableOpacity>
-                                    )}
-                                </View>
-                            )}
-                        />
-                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.timestamp_label')} value={timestamp} valueTextAlign="left" />
-                        <TransactionItemCell
-                            style={{ height: 100 }}
                             title={strings('transaction_detail.transactionHash_label')}
                             value={transaction.hash}
                             valueTextAlign="left"
@@ -138,13 +205,11 @@ class Transaction extends Component {
                                 </TouchableOpacity>
                             )}
                         />
-                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.blockNumber_label')} value={transaction.blockNumber} valueTextAlign="left" />
+                        <TransactionItemCell title={strings('transaction_detail.blockNumber_label')} value={transaction.blockNumber} valueTextAlign="left" />
 
-                        {this.renderAdditionData()}
-                        {transaction.fee ? (
-                            <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.label_fee')} value={`${transaction.fee} ${this.account.coinSymbol}`} valueTextAlign="left" />
-                        ) : null}
-                        <TransactionItemCell style={{ height: 80 }} title={strings('transaction_detail.status_label')} value={<PendingComponent status={transaction.status} />} valueTextAlign="left" />
+                        {account.symbol !== 'BTC' && account.symbol !== 'LTC' ? this.renderAdditionData() : null}
+                        {transaction.fee ? <TransactionItemCell title={strings('transaction_detail.label_fee')} value={`${transaction.fee} ${this.account.coinSymbol}`} valueTextAlign="left" /> : null}
+                        <TransactionItemCell title={strings('transaction_detail.status_label')} value={<PendingComponent status={transaction.status} />} valueTextAlign="left" />
                     </View>
                     <View
                         style={{
@@ -169,3 +234,18 @@ const mapToState = ({ userModel }) => ({
     address_book: userModel.address_book,
 });
 export default connect(mapToState)(Transaction);
+
+const styles = {
+    BTCTxBody: {
+        alignItems: 'center',
+    },
+    BTCTxSubLabel: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    BTCTxSubItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+};

@@ -5,10 +5,11 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "postinstall": "cd libs/aion-web3-inject; yarn; cd ../../node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules",
+    "postinstall": "npm run fix-modal;cd libs/aion-web3-inject; yarn; cd ../../node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
     "lint": "eslint app/  models/ services/ utils/ --fix --ext .js",
-    "pre-lint": "node check.js"
+    "pre-lint": "node check.js",
+    "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js"
   },
   "pre-commit": [
     "lint",
@@ -25,7 +26,7 @@
     "crypto-js": "^3.1.9-1",
     "dva-core": "^1.4.0",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#820800fae03e2c08a13c68f1ace0d5de6dc6596f",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#2d95b8937ae85ce79ca09eb4c70c6df378a7ef7c",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
     "react-native": "0.59.9",
@@ -43,6 +44,7 @@
     "react-native-install-apk": "https://github.com/leoaion/react-native-install-apk.git",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-local-barcode-recognizer": "https://github.com/chaion/react-native-local-barcode-recognizer.git",
+    "react-native-modal-translucent": "^3.0.1",
     "react-native-progress-circle": "^2.0.1",
     "react-native-push-notification": "3.1.3",
     "react-native-qrcode-svg": "^5.1.2",

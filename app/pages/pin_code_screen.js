@@ -59,6 +59,7 @@ class PinCodeScreen extends React.Component {
                 // 0: unlock; 1: create pinCode; 2: confirm pinCode
                 pinState: this.props.hashed_pinCode === '' ? 1 : 0,
             });
+            this.cancel && this.onPressTouchId();
             this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
                 this.onGoback(); // works best when the goBack is async
                 return true;

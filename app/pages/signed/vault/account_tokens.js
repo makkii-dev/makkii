@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { RefreshControl, Platform, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
+import { RefreshControl, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
@@ -10,7 +10,7 @@ import { mainBgColor, fixedHeight, mainColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
 import SwipeCell from '../../../components/SwipeCell';
 import { getTokenIconUrl } from '../../../../client/api';
-import { PopWindow } from './home_popwindow';
+import { PopupMenu } from '../../../components/PopUpMenu';
 import { ACCOUNT_MENU, getAccountConstants } from './constants';
 import { AddressComponent } from '../../../components/common';
 import defaultStyles from '../../../styles';
@@ -320,7 +320,7 @@ class AccountTokens extends Component {
     render() {
         const { currentAccount, tokenList } = this.props;
 
-        const popWindowTop = Platform.OS === 'ios' ? getStatusBarHeight(true) + Header.HEIGHT : Header.HEIGHT;
+        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (currentAccount.type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
@@ -381,7 +381,7 @@ class AccountTokens extends Component {
                     refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
                 />
                 {/* Menu Pop window */}
-                <PopWindow
+                <PopupMenu
                     backgroundColor="rgba(52,52,52,0.54)"
                     onClose={select => this.onCloseMenu(select)}
                     data={menuArray}
