@@ -88,6 +88,7 @@ class Password extends Component {
                     padding: 40,
                     backgroundColor: mainBgColor,
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View
                     style={{

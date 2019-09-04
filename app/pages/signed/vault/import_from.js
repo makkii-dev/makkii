@@ -62,7 +62,6 @@ class ImportFrom extends Component {
                 onPress={() => {
                     item.callback();
                 }}
-                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
@@ -99,6 +98,7 @@ class ImportFrom extends Component {
                     flex: 1,
                     paddingTop: 20,
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <FlatList style={{ width }} data={data} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.title} />
                 <Loading ref="refLoading" />

@@ -196,6 +196,7 @@ class AddressBook extends Component {
                     justifyContent: 'center',
                     flex: 1,
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View
                     style={{
@@ -236,6 +237,7 @@ class AddressBook extends Component {
                 onPress={() => {
                     this.setState({ openRowKey: null });
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <FlatList style={{ width }} data={itemsFiltered} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.address} />
             </TouchableOpacity>
