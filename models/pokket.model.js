@@ -47,10 +47,10 @@ export default {
                 const { accountsMap } = yield select(mapToAccountModel);
                 address1 = Object.keys(accountsMap)
                     .filter(k => k.startsWith('BTC') || k.startsWith('ETH'))
-                    .reduce((str, el) => {
-                        str = str === '' ? str + accountsMap[el].address.toLowerCase() : `${str},${accountsMap[el].address.toLowerCase()}`;
-                        return str;
-                    }, '');
+                    .reduce((arr, el) => {
+                        arr.push(accountsMap[el].address.toLowerCase());
+                        return arr;
+                    }, []);
             }
             const ret = yield call(getOrders, { addresses: address1, page, size });
             const { orders } = yield select(mapToPokketModel);

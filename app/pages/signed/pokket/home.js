@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, FlatList, Image, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { connect, createAction } from '../../../../utils/dva';
@@ -81,31 +81,16 @@ class PokketHome extends React.Component {
     };
 
     searchProduct = keyword => {
-        const { isLoading } = this.state;
-        isLoading || this.refs.refLoading.show(null, { position: 'top' });
-        const { dispatch } = this.props;
-        this.setState(
-            {
-                keyword,
-            },
-            () => {
-                dispatch(createAction('pokketModel/getProducts')({ keyword })).then(len => {
-                    if (this.isMount) {
-                        isLoading || this.refs.refLoading.hide();
-                        if (len === 0) {
-                            Keyboard.dismiss();
-                        }
-                    }
-                });
-            },
-        );
+        this.setState({
+            keyword,
+        });
     };
 
     checkNetWork = () => {
         const { dispatch } = this.props;
         Promise.all([dispatch(createAction('pokketModel/getProducts')({ keyword: '' })), dispatch(createAction('pokketModel/getRemoteData')())])
+            // eslint-disable-next-line no-unused-vars
             .then(([len, { error }]) => {
-                console.log('len=>', len);
                 if (error) {
                     this.setState({
                         isLoading: false,
@@ -164,9 +149,10 @@ class PokketHome extends React.Component {
 
     renderProducts() {
         const { products } = this.props;
-        const { listsDesc } = this.state;
-        const products_ = listsDesc ? products.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
-        return products.length ? (
+        const { listsDesc, keyword } = this.state;
+        let products_ = keyword !== '' ? products.filter(v => v.token.toLowerCase().indexOf(keyword) >= 0 || v.tokenFullName.toLowerCase().indexOf(keyword) >= 0) : products;
+        products_ = listsDesc ? products_.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products_.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
+        return products_.length ? (
             <FlatList
                 data={products_}
                 style={{ backgroundColor: mainBgColor }}

@@ -237,7 +237,7 @@ class Home extends React.Component {
                 }
             }
         } else {
-            errorMsg = strings('token_exchange.button_exchange_no_account');
+            errorMsg = strings('token_exchange.button_exchange_no_ETH_account');
         }
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
 

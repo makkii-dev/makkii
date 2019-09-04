@@ -5839,18 +5839,18 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d":
+"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#1c060a6e220c8193f3633573bfda36a933069a9f":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d"
+  resolved "https://github.com/chaion/lib-common-util-js.git#1c060a6e220c8193f3633573bfda36a933069a9f"
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
     bip39 "^3.0.2"
     querystring "^0.2.0"
 
-"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git":
+"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b":
   version "0.0.1"
-  resolved "https://github.com/chaion/lib-hw-ledger-js.git#5774bf066f8bdeadb871ccff6426ccd7c78f5ccc"
+  resolved "https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b"
   dependencies:
     "@ledgerhq/hw-transport" "^4.68.2"
 
@@ -5967,9 +5967,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#bf51a21c8a7c4f972bee252e880159034555ae77":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#5b66682a318bb9823f1ccb2878c57de4c6f79e52":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#bf51a21c8a7c4f972bee252e880159034555ae77"
+  resolved "https://github.com/chaion/makkii-coins.git#5b66682a318bb9823f1ccb2878c57de4c6f79e52"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
@@ -5988,8 +5988,8 @@ makeerror@1.0.x:
     ethereumjs-tx "^1.3.7"
     ethereumjs-util "^6.1.0"
     hdkey "^1.1.1"
-    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#06c139509e56c334b8109aad2fa21c836233290d"
-    lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git"
+    lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#1c060a6e220c8193f3633573bfda36a933069a9f"
+    lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b"
     querystring "^0.2.0"
     rlp "^2.2.3"
     scrypt.js "^0.3.0"

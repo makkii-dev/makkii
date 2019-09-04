@@ -5,8 +5,8 @@ import Animated from 'react-native-reanimated';
 import FlashTab from './flash_tab';
 import ArticlesTab from './articles_tab';
 import { strings } from '../../../../locales/i18n';
-import { mainBgColor, mainColor } from '../../../style_util';
-import { CustomHeader } from '../../../components/CustomHeader';
+import { mainBgColor } from '../../../style_util';
+import { CustomHeader, HeaderHeight } from '../../../components/CustomHeader';
 
 export default class NewsHome extends React.Component {
     state = {
@@ -34,31 +34,33 @@ export default class NewsHome extends React.Component {
 
     renderTabBar = props => {
         const { index, routes } = this.state;
-        const labelStyle = { paddingHorizontal: 5 };
+        const labelStyle = { paddingHorizontal: 5, fontWeight: 'bold', fontSize: 18, color: 'white' };
         const inputRange = props.navigationState.routes.map((x, i) => i);
-        const fontSize = i =>
-            Animated.interpolate(props.position, {
-                inputRange,
-                outputRange: inputRange.map(index => (index === i ? 18 : 12)),
-            });
+        const translateX = Animated.interpolate(props.position, {
+            inputRange,
+            outputRange: [-80, 80],
+        });
 
         return (
-            <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => this.handleIndexChange(0)}>
-                    <Animated.Text style={[labelStyle, { color: index === 0 ? mainColor : 'black', fontSize: fontSize(0) }]}>{routes[0].title}</Animated.Text>
-                </TouchableOpacity>
-                <Text>/</Text>
-                <TouchableOpacity onPress={() => this.handleIndexChange(1)}>
-                    <Animated.Text style={[labelStyle, { color: index === 1 ? mainColor : 'black', fontSize: fontSize(1) }]}>{routes[1].title}</Animated.Text>
-                </TouchableOpacity>
-            </View>
+            <CustomHeader>
+                <View style={{ height: HeaderHeight, justifyContent: 'flex-start', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 240, height: HeaderHeight - 2, alignItems: 'center', paddingHorizontal: 20 }}>
+                        <TouchableOpacity onPress={() => this.handleIndexChange(0)}>
+                            <Text style={{ ...labelStyle, color: index === 0 ? '#ffffff' : '#d3d3d3' }}>{routes[0].title}</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.handleIndexChange(1)}>
+                            <Text style={{ ...labelStyle, color: index === 1 ? '#ffffff' : '#d3d3d3' }}>{routes[1].title}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <Animated.View style={{ width: 80, height: 2, backgroundColor: 'white', transform: [{ translateX }] }} />
+                </View>
+            </CustomHeader>
         );
     };
 
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
-                <CustomHeader title={strings('menuRef.title_news')} />
                 <TabView navigationState={this.state} renderScene={this.renderScene} renderTabBar={this.renderTabBar} onIndexChange={this.handleIndexChange} swipeEnabled={false} />
             </View>
         );
