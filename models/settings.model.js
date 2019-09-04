@@ -94,18 +94,21 @@ export default {
             return true;
         },
         *getSupportedModule(action, { select, call, put }) {
-            const supportedModule = yield call(getSupportedModule);
-            let bottomBarTab = yield select(({ settingsModel }) => settingsModel.bottomBarTab);
-            if (!supportedModule.includes('Pokket')) {
-                bottomBarTab.remove('signed_pokket');
+            const { result, data: supportedModule } = yield call(getSupportedModule);
+            if (result) {
+                let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+                lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
+                if (!supportedModule.includes('Pokket')) {
+                    bottomBarTab.remove('signed_pokket');
+                }
+                if (!supportedModule.includes('News') || lang.indexOf('en') >= 0) {
+                    bottomBarTab.remove('signed_news');
+                }
+                if (!supportedModule.includes('Kyber')) {
+                    bottomBarTab.remove('signed_dex');
+                }
+                yield put(createAction('updateState')({ bottomBarTab }));
             }
-            if (!supportedModule.includes('News')) {
-                bottomBarTab.remove('signed_news');
-            }
-            if (!supportedModule.includes('Kyber')) {
-                bottomBarTab.remove('signed_dex');
-            }
-            yield put(createAction('updateState')({ bottomBarTab }));
         },
         *reset(action, { put }) {
             yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
@@ -180,10 +183,25 @@ export default {
             {
                 payload: { lang },
             },
-            { put },
+            { call, select, put },
         ) {
             updateLocale(lang);
-            yield put(createAction('updateState')({ lang }));
+            let { bottomBarTab } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+            const lang_ = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
+
+            if (lang_.indexOf('en') >= 0) {
+                bottomBarTab.remove('signed_news');
+            } else {
+                // try add signed_news
+                const { result, data: supportedModule } = yield call(getSupportedModule);
+                if (result) {
+                    if (supportedModule.includes('News')) {
+                        bottomBarTab = [...bottomBarTab.slice(0, -1), 'signed_news', ...bottomBarTab.slice(-1)];
+                    }
+                }
+            }
+
+            yield put(createAction('updateState')({ lang, bottomBarTab }));
             yield put(createAction('saveSettings')());
         },
         *updateLoginSessionTimeOut(

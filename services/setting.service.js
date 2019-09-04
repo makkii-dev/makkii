@@ -20,9 +20,9 @@ const getSupportedModule = async () => {
         const {
             data: { supportedModule },
         } = await HttpClient.get(url);
-        return supportedModule;
+        return { result: true, data: supportedModule };
     } catch (e) {
-        return [];
+        return { result: false };
     }
 };
 
