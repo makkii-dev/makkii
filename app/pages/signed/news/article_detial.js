@@ -83,8 +83,14 @@ class ArticleDetail extends React.Component {
         this.article = this.props.articles[articleKey];
     }
 
+    toNewsOrigin = link => {
+        this.props.navigation.navigate('simple_webview', {
+            initialUrl: { uri: link },
+        });
+    };
+
     render() {
-        const { title, content, origin, timestamp } = this.article;
+        const { title, content, origin, timestamp, referLink } = this.article;
         const rerender = new AstRenderer({ ...renderRules, ...rules(this.props.navigation) }, { ...renderStyles, ...MarkdownStyles });
         rerender.render = nodes => {
             const children = nodes.map(v => rerender.renderNode(v, []));
@@ -92,6 +98,9 @@ class ArticleDetail extends React.Component {
                 <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#000' }}>{title}</Text>,
                 <Text style={{ marginVertical: 20 }}> {`${strings(`news.origin_${origin}`)}  ${new Date(timestamp).Format('yyyy-MM-dd hh:mm')}`}</Text>,
                 ...children,
+                <Text style={{ color: linkButtonColor, marginVertical: 10, textDecorationLine: 'underline' }} onPress={() => this.toNewsOrigin(referLink)}>
+                    {strings('news.button_refer_link')}
+                </Text>,
                 <Text style={{ marginVertical: 15, fontWeight: 'bold' }}>{strings('news.label_disclaimer')}</Text>,
             ];
             return (
