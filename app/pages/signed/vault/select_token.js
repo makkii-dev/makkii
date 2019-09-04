@@ -124,6 +124,30 @@ class SelectToken extends Component {
 
     renderItem = ({ item }) => {
         const cellHeight = 60;
+        if (typeof item === 'string') {
+            return (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        backgroundColor: '#fff',
+                        justifyContent: 'space-between',
+                        height: cellHeight,
+                    }}
+                    onPress={this.addCustomToken}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={{ width: 30, height: 30 }} source={require('../../../../assets/icon_add_border.png')} resizeMode="contain" />
+                        <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
+                            {strings('select_coin.btn_custom_token')}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
         const { symbol, name, fastIcon, icon, isAdded } = item;
         return (
             <TouchableOpacity
@@ -175,10 +199,10 @@ class SelectToken extends Component {
             >
                 <FlatList
                     style={{ width }}
-                    data={this.props.token_lists}
+                    data={['custom', ...this.props.token_lists]}
                     renderItem={this.renderItem}
                     ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    keyExtractor={item => item.contractAddr}
+                    keyExtractor={item => (typeof item === 'string' ? 'custom' : item.contractAddr)}
                 />
             </View>
         );
