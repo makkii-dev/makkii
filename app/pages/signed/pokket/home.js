@@ -128,7 +128,8 @@ class PokketHome extends React.Component {
 
     toProductDetail = ({ token, tokenFullName }) => {
         const { dispatch, navigation } = this.props;
-        dispatch(createAction('pokketModel/setCurrentProduct')({ token })).then(() => navigation.navigate('signed_pokket_product', { title: `${token}/${tokenFullName}` }));
+        dispatch(createAction('pokketModel/setCurrentProduct')({ token }));
+        navigation.navigate('signed_pokket_product', { title: `${token}/${tokenFullName}` });
     };
 
     renderLoading() {
@@ -185,11 +186,15 @@ class PokketHome extends React.Component {
                                 </View>
                                 <View style={styles.productBody}>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(yearlyInterestRate).toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(yearlyInterestRate)
+                                            .toNumber()
+                                            .toFixed(4)}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_yearly_rate')}</Text>
                                     </View>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(weeklyInterestRate).toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(weeklyInterestRate)
+                                            .toNumber()
+                                            .toFixed(4)}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_weekly_rate')}</Text>
                                     </View>
                                 </View>

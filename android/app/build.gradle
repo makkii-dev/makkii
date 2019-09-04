@@ -123,6 +123,9 @@ android {
       prod {
         // Pre-compile run ENVFILE=.env.prod
       }
+      pokket{
+        applicationIdSuffix ".pokket"
+      }
     }
     signingConfigs {
             release {
@@ -191,7 +194,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-screens')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-modal-translucent')
     implementation project(':react-native-background-timer')

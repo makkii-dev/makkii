@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { View, Text, ScrollView, Dimensions, Image } from 'react-native';
+import { View, Text, FlatList, Image } from 'react-native';
 import { connect } from 'react-redux';
-import Markdown from 'react-native-markdown-renderer';
+import Markdown, { AstRenderer } from 'react-native-markdown-renderer';
+import renderRules from 'react-native-markdown-renderer/src/lib/renderRules';
+import { styles as renderStyles } from 'react-native-markdown-renderer/src/lib/styles';
 import { linkButtonColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
-
-const { width } = Dimensions.get('window');
 
 const rules = navigation => {
     return {
@@ -40,9 +40,10 @@ const MarkdownStyles = {
         textDecorationLine: 'underline',
     },
     heading: {
-        marginVertical: 20,
+        paddingVertical: 20,
         color: '#000000',
         fontWeight: 'bold',
+        lineHeight: undefined,
     },
     heading1: {
         fontSize: 32,
@@ -84,18 +85,27 @@ class ArticleDetail extends React.Component {
 
     render() {
         const { title, content, origin, timestamp } = this.article;
-        return (
-            <ScrollView style={{ width }} contentContainerStyle={{ alignItems: 'center' }}>
-                <View style={{ flex: 1, paddingHorizontal: 15, backgroundColor: '#fff' }}>
-                    <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#000' }}>{title}</Text>
-                    <Text style={{ marginVertical: 20 }}> {`${strings(`news.origin_${origin}`)}  ${new Date(timestamp).Format('yyyy-MM-dd hh:mm')}`}</Text>
-                    <Markdown style={MarkdownStyles} rules={rules(this.props.navigation)}>
-                        {content}
-                    </Markdown>
-                    <Text style={{ marginVertical: 15, fontWeight: 'bold' }}>{strings('news.label_disclaimer')}</Text>
-                </View>
-            </ScrollView>
-        );
+        const rerender = new AstRenderer({ ...renderRules, ...rules(this.props.navigation) }, { ...renderStyles, ...MarkdownStyles });
+        rerender.render = nodes => {
+            const children = nodes.map(v => rerender.renderNode(v, []));
+            const data = [
+                <Text style={{ fontSize: 25, fontWeight: 'bold', color: '#000' }}>{title}</Text>,
+                <Text style={{ marginVertical: 20 }}> {`${strings(`news.origin_${origin}`)}  ${new Date(timestamp).Format('yyyy-MM-dd hh:mm')}`}</Text>,
+                ...children,
+                <Text style={{ marginVertical: 15, fontWeight: 'bold' }}>{strings('news.label_disclaimer')}</Text>,
+            ];
+            return (
+                <FlatList
+                    style={{ flex: 1, paddingHorizontal: 15, backgroundColor: '#fff' }}
+                    data={data}
+                    renderItem={({ item }) => {
+                        return item;
+                    }}
+                    keyExtractor={(item, index) => `${index}`}
+                />
+            );
+        };
+        return <Markdown renderer={rerender}>{content}</Markdown>;
     }
 }
 

@@ -117,7 +117,7 @@ class AddAddress extends Component {
         const { name, symbol, address } = this.state;
         const coinName = `${COINS[symbol].name}/${symbol}`;
         return (
-            <View style={{ flex: 1, backgroundColor: mainBgColor }}>
+            <View style={{ flex: 1, backgroundColor: mainBgColor }} accessibilityLabel={this.props.navigation.state.routeName}>
                 <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
                     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                         <View style={{ ...styles.containerView, marginVertical: 30 }}>

@@ -537,6 +537,7 @@ const AppNavigator = createStackNavigator(
         swipeEnabled: false,
         // cardShadowEnabled: false,
         // headerTransitionPreset: 'uikit',
+        // mode: 'modal',
         cardStyle: { backgroundColor: 'transparent', opacity: 1 },
         transitionConfig: ({ scenes }) => {
             const prevScene = scenes[scenes.length - 2];

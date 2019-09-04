@@ -62,6 +62,7 @@ class ImportFrom extends Component {
                 onPress={() => {
                     item.callback();
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image

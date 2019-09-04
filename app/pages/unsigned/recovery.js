@@ -87,6 +87,7 @@ class Home extends Component {
                     height,
                     alignItems: 'center',
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View
                     style={{

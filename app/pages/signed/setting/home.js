@@ -45,7 +45,7 @@ class Home extends Component {
     render() {
         const { navigation, dispatch } = this.props;
         return (
-            <View style={{ flex: 1, backgroundColor: mainBgColor }}>
+            <View style={{ flex: 1, backgroundColor: mainBgColor }} accessibilityLabel={this.props.navigation.state.routeName}>
                 <CustomHeader title={strings('menuRef.title_settings')} />
                 <ScrollView style={{ width }} contentContainerStyle={{ alignItems: 'center' }}>
                     <View
