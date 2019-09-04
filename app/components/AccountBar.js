@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PixelRatio, Dimensions, Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { PixelRatio, Dimensions, Image, Text, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import PropTypes from 'prop-types';
 import commonStyles from '../styles';
@@ -89,7 +89,7 @@ export class AccountBar extends React.Component {
                             <Image source={require('../../assets/arrow_right.png')} style={{ width: 24, height: 24 }} />
                         </View>
                     </TouchableOpacity>
-                    <TouchableWithoutFeedback onPress={() => toAccountDetail(currentAccount)}>
+                    <TouchableOpacity onPress={() => toAccountDetail(currentAccount)}>
                         <View style={styles.accountContainerWithShadow}>
                             <Image source={COINS[currentAccount.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
                             <View style={{ flex: 1, paddingVertical: 10 }}>
@@ -118,7 +118,7 @@ export class AccountBar extends React.Component {
                                 </View>
                             </View>
                         </View>
-                    </TouchableWithoutFeedback>
+                    </TouchableOpacity>
                 </View>
             );
         }
@@ -166,6 +166,7 @@ const styles = {
         justifyContent: 'flex-start',
         alignItems: 'center',
         paddingHorizontal: 15,
+        width: width - 40 - 20,
     },
     accountSubContainer: {
         flexDirection: 'row',

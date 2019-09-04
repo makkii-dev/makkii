@@ -135,6 +135,9 @@ class Product extends React.Component {
         let buttonEnabled = false;
         let hasToken = false;
         let errorMsg = '';
+        if (!currentProduct) {
+            return <View />;
+        }
         if (currentAccount) {
             const notBlank = amount.length > 0 && (token !== 'BTC' || RetAddress.length > 0);
             const { balance, tokens = {} } = currentAccount;
