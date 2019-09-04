@@ -87,6 +87,7 @@ class Mnemonic extends Component {
                     backgroundColor: mainBgColor,
                     alignItems: 'center',
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <Text
                     style={{
