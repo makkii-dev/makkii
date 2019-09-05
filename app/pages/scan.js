@@ -185,6 +185,12 @@ class Scan extends Component {
                             this.props.navigation.goBack();
                         }
                     }}
+                    androidCameraPermissionOptions={{
+                        title: strings('wallet.title_permission_camera'),
+                        message: strings('wallet.message_permission_camera'),
+                        buttonPositive: strings('ok_button'),
+                        buttonNegative: strings('cancel_button'),
+                    }}
                 >
                     {/* up view */}
                     <View style={styles.backgroundStyle} />

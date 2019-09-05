@@ -213,7 +213,9 @@
     "toast_has_pending_transactions": "There are pending transactions, please wait.",
     "section_title_add_from": "Add from",
     "section_title_coin_type": "Coin Type",
-    "toast_is_getting_balance": "Getting account balance, please try later"
+    "toast_is_getting_balance": "Getting account balance, please try later",
+    "title_permission_camera": "Permission to use camera",
+    "message_permission_camera": "We need your permission to use your camera"
   },
   "language": {
     "title": "Language",
