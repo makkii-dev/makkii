@@ -5976,9 +5976,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#4f70b38428ba1612f14ea184502b0cfd9748c6a5":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#49fce978cba9e9add7c565b4131da9a0579c7771":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#4f70b38428ba1612f14ea184502b0cfd9748c6a5"
+  resolved "https://github.com/chaion/makkii-coins.git#49fce978cba9e9add7c565b4131da9a0579c7771"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
