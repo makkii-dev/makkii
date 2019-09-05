@@ -103,8 +103,8 @@ android {
         applicationId "com.chaion.makkii"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.0"
+        versionCode 12
+        versionName "1.1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -124,6 +124,7 @@ android {
         // Pre-compile run ENVFILE=.env.prod
       }
       pokket{
+        // Pre-compile run ENVFILE=.env.pokket
         applicationIdSuffix ".pokket"
       }
     }
