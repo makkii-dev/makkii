@@ -284,7 +284,7 @@
     "toast_waitApprove": "等待授权请求交易确认",
     "toast_unknown_error": "Kyber未知错误",
     "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量",
-    "toast_cant_buy": "无法购买{{token}}代币",
+    "toast_cant_buy": "网络中没有足够的{{token}}代币",
     "toast_no_selected_eth_account": "请先选择以太坊账号"
   },
   "backup": {

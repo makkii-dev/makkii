@@ -294,7 +294,7 @@
     "toast_waitApprove": "Please wait approval request confirmed",
     "toast_unknown_error": "Kyber unknown error.",
     "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again.",
-    "toast_cant_buy": "{{token}} token is not purchasable",
+    "toast_cant_buy": "{{token}} token is not enough in the network",
     "toast_no_selected_eth_account": "Please select an ETH account"
   },
   "backup": {
