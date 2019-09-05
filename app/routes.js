@@ -58,7 +58,7 @@ import PokketProduct from './pages/signed/pokket/product';
 import PokketOrderList from './pages/signed/pokket/order_list';
 import PokketOrderDetail from './pages/signed/pokket/order_detail';
 import NewsHome from './pages/signed/news/home';
-import NewsArticle from './pages/signed/news/article_detial';
+import NewsArticle from './pages/signed/news/article_detail';
 
 import { strings } from '../locales/i18n';
 import styles from './styles';
