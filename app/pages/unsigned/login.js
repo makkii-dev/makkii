@@ -72,7 +72,6 @@ class Login extends Component {
                 }}
                 imageStyle={{ width, height: fixedHeight(686) }}
                 source={require('../../../assets/bg_login_header.png')}
-                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <TouchableOpacity
                     style={{
@@ -93,6 +92,7 @@ class Login extends Component {
                             backgroundColor: 'white',
                             paddingHorizontal: 20,
                         }}
+                        accessibilityLabel={this.props.navigation.state.routeName}
                     >
                         <View style={{ alignItems: 'center', marginBottom: 60 }}>
                             <ComponentLogo
