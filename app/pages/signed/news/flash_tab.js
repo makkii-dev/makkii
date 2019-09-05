@@ -14,6 +14,7 @@ class FlashTab extends React.Component {
         isLoading: true,
         refreshing: false,
         footerState: 0,
+        isShowToTop: false,
     };
 
     async componentDidMount(): void {
@@ -159,9 +160,22 @@ class FlashTab extends React.Component {
         );
     }
 
+    _onScroll = e => {
+        const offsetY = e.nativeEvent.contentOffset.y;
+        if (offsetY > 100 && this.state.isShowToTop === false) {
+            this.setState({
+                isShowToTop: true,
+            });
+        } else if (offsetY <= 100 && this.state.isShowToTop === true) {
+            this.setState({
+                isShowToTop: false,
+            });
+        }
+    };
+
     render() {
         const { flashNews } = this.props;
-        const { isLoading, refreshing, footerState } = this.state;
+        const { isLoading, refreshing, footerState, isShowToTop } = this.state;
         if (isLoading) {
             return this.renderLoadingView();
         }
@@ -172,7 +186,9 @@ class FlashTab extends React.Component {
             <View style={{ flex: 1 }}>
                 <SectionList
                     style={{ backgroundColor: '#fff' }}
+                    ref="listRef"
                     stickySectionHeadersEnabled
+                    onScroll={this._onScroll}
                     bounces={false}
                     renderItem={this.renderItem}
                     renderSectionHeader={this.renderTimeBar}
@@ -182,6 +198,31 @@ class FlashTab extends React.Component {
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
                     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} title="ContextMenu" />}
                 />
+                {isShowToTop ? (
+                    <TouchableOpacity
+                        activeOpacity={1}
+                        style={{
+                            elevation: 8,
+                            shadowColor: 'black',
+                            shadowOffset: { width: 5, height: 5 },
+                            shadowOpacity: 0.3,
+                            position: 'absolute',
+                            right: 10,
+                            bottom: 20,
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                            backgroundColor: '#ffffff',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                            this.refs.listRef && this.refs.listRef.scrollToLocation({ animated: true, itemIndex: 0, sectionIndex: 0 });
+                        }}
+                    >
+                        <Image source={require('../../../../assets/arrow_asc.png')} style={{ width: 20, height: 20 }} resizeMode="contain" />
+                    </TouchableOpacity>
+                ) : null}
             </View>
         );
     }
