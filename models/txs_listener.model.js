@@ -167,16 +167,18 @@ export default {
                             let newTokenTx = Object.assign({}, tokenTx);
                             newTokenTx.timestamp = newTx.timestamp;
                             newTokenTx.status = newTx.status;
+                            loadBalanceKeys.push(accountKey(symbol, newTokenTx.to));
+                            loadBalanceKeys.push(accountKey(symbol, newTokenTx.from));
                             yield put(
                                 createAction('accountsModel/updateTransactions')({
-                                    txs: { [newTx.hash]: newTx },
-                                    key: accountKey(symbol, newTx.from, tokenSymbol),
+                                    txs: { [newTx.hash]: newTokenTx },
+                                    key: accountKey(symbol, newTokenTx.from, tokenSymbol),
                                 }),
                             );
                             yield put(
                                 createAction('accountsModel/updateTransactions')({
-                                    txs: { [newTx.hash]: newTx },
-                                    key: accountKey(symbol, newTx.to, tokenSymbol),
+                                    txs: { [newTx.hash]: newTokenTx },
+                                    key: accountKey(symbol, newTokenTx.to, tokenSymbol),
                                 }),
                             );
                         } else if (type === 'exchange') {

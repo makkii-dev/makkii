@@ -134,8 +134,6 @@ export default {
             const { state_version, options } = payload;
 
             const hashed_password = yield select(({ userModel }) => userModel.hashed_password);
-            console.log('loadStorage=>', payload);
-            console.log('hashed_password=>', hashed_password);
             if (state_version < 2) {
                 const old_accounts_storage = yield call(Storage.get, 'accounts', false, false);
                 let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || {});
@@ -349,8 +347,13 @@ export default {
             return true;
         },
         *updateTransactions({ payload }, { put, select }) {
+            console.log('updateTransactions=>', payload);
             const { key, txs, force = true, needSave = true } = payload;
             const oldTransactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
+            const accountsKey = yield select(({ accountsModel }) => accountsModel.accountsKey);
+            if (!accountsKey.includes(/\w+\+\w+/.exec(key)[0])) {
+                return;
+            }
             let newTransactionsMap = { ...oldTransactionsMap };
             if (newTransactionsMap[key] === undefined && !force) {
                 // Not mandatory to add
@@ -366,7 +369,6 @@ export default {
                       return map;
                   }, {});
             newTransactionsMap[key] = { ...newTransactionsMap[key], ...txs, ...pendingTxs };
-            console.log(`newTransactionsMap[${key}]=>`, newTransactionsMap[key]);
             yield put(createAction('updateState')({ transactionsMap: newTransactionsMap }));
             if (needSave) {
                 yield put(createAction('saveTransaction')({ keys: [key] }));

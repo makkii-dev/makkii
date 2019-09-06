@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, InteractionManager, StyleSheet, Image, BackHandler, Platform } from 'react-native';
+import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
@@ -53,13 +53,11 @@ class PinCodeScreen extends React.Component {
         this.cancel && this.props.navigation.goBack();
     }
 
-    componentWillMount(): void {
-        InteractionManager.runAfterInteractions(() => {
-            this.cancel && this.onPressTouchId();
-            this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-                this.onGoback(); // works best when the goBack is async
-                return true;
-            });
+    componentDidMount(): void {
+        this.cancel && this.onPressTouchId();
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoback(); // works best when the goBack is async
+            return true;
         });
     }
 

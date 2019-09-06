@@ -65,6 +65,7 @@ class Password extends Component {
                             dispatch(createAction('settingsModel/reset')()),
                             dispatch(createAction('ERC20Dex/reset')()),
                             dispatch(createAction('txSenderModel/reset')()),
+                            dispatch(createAction('txsListener/reset')()),
                         ]).then(this.recovery);
                     },
                 },

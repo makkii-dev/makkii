@@ -30,7 +30,7 @@ class Login extends Component {
 
         Linking.addEventListener('url', this.handleOpenURL);
 
-        this.props.dispatch(createAction('settingsModel/checkForceVersion')());
+        // this.props.dispatch(createAction('settingsModel/checkForceVersion')());
     }
 
     componentWillUnmount() {
