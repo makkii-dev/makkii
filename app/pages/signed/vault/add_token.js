@@ -57,7 +57,7 @@ class AddToken extends Component {
         const { dispatch, navigation } = this.props;
         dispatch(createAction('accountsModel/addTokenToCurrentAccount')({ token })).then(r => {
             if (r) {
-                dispatch(createAction('contactAddModel/reset')());
+                dispatch(createAction('tokenImportModel/reset')());
                 navigation.navigate('signed_vault_account_tokens');
             }
         });
