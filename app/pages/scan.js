@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Animated, Text } from 'react-native';
+import { View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Animated, Text, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import ImagePicker from 'react-native-image-picker';
 import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
@@ -124,13 +124,13 @@ class Scan extends Component {
     };
 
     getQrcode = data => {
+        this.setState({ focusedScreen: false });
         if (data) {
             const { validate } = this.props.navigation.state.params;
             LocalBarcodeRecognizer.decode(data, { codeTypes: ['qr'] })
                 .then(result => {
-                    console.log('result', result);
                     if (result === '') {
-                        throw 'error';
+                        AppToast.show(strings('scan.decode_fail'));
                     }
                     validate({ data: result }, (res, message = '') => {
                         if (res) {
@@ -139,6 +139,7 @@ class Scan extends Component {
                             AppToast.show(message);
                         }
                     });
+                    this.setState({ focusedScreen: true });
                 })
                 .catch(() => {
                     AppToast.show(strings('scan.decode_fail'));
@@ -153,7 +154,11 @@ class Scan extends Component {
         const { validate } = this.props.navigation.state.params;
         const { focusedScreen } = this.state;
         if (!focusedScreen) {
-            return <View />;
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator animating color="red" size="large" />
+                </View>
+            );
         }
         return (
             <View style={{ width: '100%', height: '100%' }}>

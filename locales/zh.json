@@ -119,6 +119,7 @@
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？",
     "warning_send_zero": "您的发送金额为０，请确认是否继续？",
     "toast_unsupported_token": "不支持的代币: {{token}}",
+    "toast_changed_token": "请注意，已切换至代币 {{token}}",
     "error_invalid_gas_price": "燃料单价不正确",
     "error_invalid_gas_limit": "燃料上限不正确"
   },

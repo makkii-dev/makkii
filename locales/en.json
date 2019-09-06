@@ -121,7 +121,8 @@
     "cancel": "Cancel",
     "warning_send_to_itself": "Sender and recipient are the same. Are you sure to continue?",
     "warning_send_zero": "You are sending 0 AION. Are you sure to continue?",
-    "toast_unsupported_token": "Unsupported token {{token}}"
+    "toast_unsupported_token": "Unsupported token {{token}}",
+    "toast_changed_token": "Pay attention， you have switched to token {{token}}"
   },
   "transaction_detail": {
     "title": "Transaction Detail",

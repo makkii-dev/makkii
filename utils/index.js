@@ -84,8 +84,9 @@ function getLedgerMessage(errorCode) {
     return strings('ledger.error_general');
 }
 
-function generateQRCode(amount, address, coin = 'AION') {
-    return encode(address, { amount }, COINS[coin].name.toLowerCase());
+function generateQRCode(amount, address, coin = 'AION', contractAddress, decimal) {
+    console.log('generateQRCode=>', amount, address, coin, contractAddress, decimal);
+    return encode(address, { amount, contractAddress, decimal }, COINS[coin].name.toLowerCase());
 }
 
 function saveImage(base64, imageFileName) {

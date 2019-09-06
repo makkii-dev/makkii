@@ -47,10 +47,10 @@ class Receive extends Component {
     constructor(props) {
         super(props);
         this.qrcodeRef = null;
-        const { currentAccount } = this.props;
+        const { currentAccount, currentToken } = this.props;
         this.state = {
             amount: '0',
-            qrCodeValue: generateQRCode('0', currentAccount.address, currentAccount.coinSymbol),
+            qrCodeValue: generateQRCode('0', currentAccount.address, currentAccount.symbol, currentToken.contractAddr, currentToken.tokenDecimal),
         };
     }
 
@@ -60,10 +60,10 @@ class Receive extends Component {
             alertOk(strings('alert_title_error'), strings('invalid_amount'));
             return;
         }
-        const { currentAccount } = this.props;
+        const { currentAccount, currentToken } = this.props;
         // refresh
         this.setState({
-            qrCodeValue: generateQRCode(this.state.amount, currentAccount.address, currentAccount.coinSymbol),
+            qrCodeValue: generateQRCode(this.state.amount, currentAccount.address, currentAccount.symbol, currentToken.contractAddr, currentToken.tokenDecimal),
         });
     }
 
@@ -256,13 +256,15 @@ class Receive extends Component {
 }
 
 const mapToState = ({ accountsModel }) => {
-    const { currentAccount: key, currentToken, accountsMap } = accountsModel;
+    const { currentAccount: key, currentToken: tokenKey, accountsMap, tokenLists } = accountsModel;
     const currentAccount = {
         ...accountsMap[key],
-        coinSymbol: currentToken === '' ? accountsMap[key].symbol : currentToken,
+        coinSymbol: tokenKey === '' ? accountsMap[key].symbol : tokenKey,
     };
+    const tokens = tokenLists[currentAccount.symbol] || {};
     return {
         currentAccount,
+        currentToken: tokens[tokenKey] || {},
     };
 };
 

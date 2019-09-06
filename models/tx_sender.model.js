@@ -6,6 +6,8 @@ import { strings } from '../locales/i18n';
 import { accountKey, getLedgerMessage } from '../utils';
 import { sendTransferEventLog } from '../services/event_log.service';
 import { SensitiveStorage } from '../utils/storage';
+import { AppToast } from '../app/components/AppToast';
+import { fetchTokenDetail } from '../client/api';
 
 const init = {
     to: '',
@@ -43,10 +45,29 @@ export default {
             },
             { call, select, put },
         ) {
-            console.log('data=>', data);
             const { currentAccount } = yield select(mapToaccountsModel);
             let ret = yield call(parseScannedData, data, currentAccount);
             if (ret.result) {
+                const { contractAddress } = ret.data;
+                if (contractAddress) {
+                    try {
+                        const { symbol } = yield call(fetchTokenDetail, currentAccount.symbol, contractAddress);
+                        if (!currentAccount.tokens[symbol]) {
+                            AppToast.show(strings('token_exchange.button_exchange_no_token', { token: symbol }));
+                            return ret;
+                        }
+                        if (symbol !== currentAccount.coinSymbol) {
+                            AppToast.show(strings('send.toast_changed_token', { token: symbol }));
+                        }
+                        yield put(createAction('accountsModel/updateState')({ currentToken: symbol }));
+                    } catch (e) {
+                        return { result: false };
+                    }
+                } else if (currentAccount.symbol !== currentAccount.coinSymbol) {
+                    AppToast.show(strings('send.toast_changed_token', { token: currentAccount.symbol }));
+                    yield put(createAction('accountsModel/updateState')({ currentToken: '' }));
+                }
+
                 yield put(createAction('updateState')({ ...ret.data }));
             }
             return ret;
