@@ -14,6 +14,11 @@ import { getExchangeRulesURL } from '../app/pages/signed/dex/constants';
 import { sendDexExchangeEventLog } from '../services/event_log.service';
 
 const network = COINS.ETH.network;
+const initTrade = {
+    srcToken: '',
+    destToken: '',
+    tradeRate: 1,
+};
 export default {
     namespace: 'ERC20Dex',
     state: {
@@ -22,11 +27,7 @@ export default {
         tokenList: {},
         currentAccount: '',
         tokenApprovals: {}, // save; 2 states 'waitApprove'/'waitRevoke'
-        trade: {
-            srcToken: '',
-            destToken: '',
-            tradeRate: 1,
-        },
+        trade: initTrade,
     },
     reducers: {
         ERC20DexUpdateState(state, { payload }) {
@@ -37,6 +38,7 @@ export default {
     subscriptions: {
         setup({ dispatch }) {
             DeviceEventEmitter.addListener('add_new_account', account => {
+                console.log('add_new_account', account);
                 if (account.symbol === 'ETH') {
                     dispatch(createAction('tryUpdateCurrentAccount')({ address: account.address }));
                 }
@@ -62,6 +64,7 @@ export default {
         },
         *tryUpdateCurrentAccount({ payload }, { select, put }) {
             const currentAccount = yield select(({ ERC20Dex }) => ERC20Dex.currentAccount);
+            console.log('tryUpdateCurrentAccount=>', payload, currentAccount);
             if (currentAccount.length <= 0) {
                 const { address } = payload;
                 yield put(createAction('ERC20DexUpdateState')({ currentAccount: `ETH+${address}` }));
@@ -69,7 +72,7 @@ export default {
         },
         *reset(action, { call, put }) {
             yield call(Storage.remove, 'tokenApprovals');
-            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals: {} }));
+            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals: {}, currentAccount: '', trade: initTrade }));
         },
         *updateTokenApproval({ payload }, { call, select, put }) {
             const oldTokenApprovals = yield select(({ ERC20Dex }) => ERC20Dex.tokenApprovals);
