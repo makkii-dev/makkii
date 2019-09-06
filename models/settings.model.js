@@ -217,6 +217,7 @@ export default {
             const { pinCodeEnabled } = yield select(mapToSettings);
             if (pinCodeEnabled) {
                 yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
+                yield put(createAction('userModel/updatePinCode')({ hashed_pinCode: '' }));
             } else {
                 yield put(createAction('updateState')({ pinCodeEnabled: true }));
             }
