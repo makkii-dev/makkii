@@ -305,8 +305,10 @@ export default {
                         delete newTransactionsMap[`${key}+${tokenSymbol}`];
                         yield call(Storage.remove, `tx+${key}+${tokenSymbol}`);
                     }
-                    delete newTransactionsMap[`${key}+ERC20DEX`];
-                    yield call(Storage.remove, `tx+${key}+ERC20DEX`);
+                    if (symbol === 'ETH') {
+                        delete newTransactionsMap[`${key}+ERC20DEX`];
+                        yield call(Storage.remove, `tx+${key}+ERC20DEX`);
+                    }
                 }
             }
             yield call(Storage.set, 'accountsKey', newAccountsKey);
@@ -318,6 +320,7 @@ export default {
                     hd_index: newHdIndex,
                 }),
             );
+            yield put(createAction('ERC20Dex/tryUpdateCurrentAccount')());
         },
         *getExchangeHistory(
             {

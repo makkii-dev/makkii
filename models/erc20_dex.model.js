@@ -46,28 +46,29 @@ export default {
         },
     },
     effects: {
-        *loadStorage(action, { call, put, select }) {
-            const accountsMap = yield select(({ accountsModel }) => accountsModel.accountsMap);
-
-            let currentAccount = '';
-            for (let key of Object.keys(accountsMap)) {
-                if (key.startsWith('ETH+')) {
-                    currentAccount = key;
-                    break;
-                }
-            }
-
+        *loadStorage(action, { call, put }) {
             const tokenApprovals = yield call(Storage.get, 'tokenApprovals', false);
-            console.log('get tokenApprovals from storage => ', tokenApprovals);
-            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals, currentAccount }));
+            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals }));
+            yield put(createAction('tryUpdateCurrentAccount')({ force: true }));
             yield put(createAction('getTokenList')());
         },
-        *tryUpdateCurrentAccount({ payload }, { select, put }) {
+        *tryUpdateCurrentAccount({ payload = {} }, { select, put }) {
+            const { address } = payload;
             const currentAccount = yield select(({ ERC20Dex }) => ERC20Dex.currentAccount);
-            console.log('tryUpdateCurrentAccount=>', payload, currentAccount);
-            if (currentAccount.length <= 0) {
-                const { address } = payload;
-                yield put(createAction('ERC20DexUpdateState')({ currentAccount: `ETH+${address}` }));
+            if (!address || currentAccount.indexOf(address) >= 0 || currentAccount.length <= 0) {
+                const accountsMap = yield select(({ accountsModel }) => accountsModel.accountsMap);
+                let _currentAccount = '';
+                if (accountsMap[`ETH+${address}`]) {
+                    _currentAccount = `ETH+${address}`;
+                } else {
+                    for (let key of Object.keys(accountsMap)) {
+                        if (key.startsWith('ETH+')) {
+                            _currentAccount = key;
+                            break;
+                        }
+                    }
+                }
+                yield put(createAction('ERC20DexUpdateState')({ currentAccount: _currentAccount }));
             }
         },
         *reset(action, { call, put }) {
