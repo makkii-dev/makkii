@@ -318,14 +318,14 @@ class AccountTokens extends Component {
     };
 
     render() {
-        const { currentAccount, tokenList } = this.props;
+        const { currentAccount, tokenList, supportDex } = this.props;
 
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (currentAccount.type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
         }
-        if (COINS[currentAccount.symbol].tokenExchangeSupport) {
+        if (COINS[currentAccount.symbol].tokenExchangeSupport && supportDex) {
             menuArray.push(ACCOUNT_MENU[2]);
         }
 
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapToState = ({ accountsModel }) => {
+const mapToState = ({ accountsModel, settingsModel }) => {
     const { currentAccount: key, accountsMap, tokenLists } = accountsModel;
     const currentAccount = { ...accountsMap[key] };
     const { symbol } = currentAccount;
@@ -442,6 +442,7 @@ const mapToState = ({ accountsModel }) => {
     return {
         currentAccount,
         tokenList: tokens,
+        supportDex: settingsModel.bottomBarTab.includes('signed_dex'),
     };
 };
 export default connect(mapToState)(AccountTokens);
