@@ -30,7 +30,7 @@ class CheckBox extends React.PureComponent {
         const { isChecked } = this.state;
         const { onUncheck, onCheck, beforeCheck, beforeUncheck } = this.props;
         isChecked ? onUncheck && onUncheck() : onCheck && onCheck();
-        let ret = isChecked ? beforeCheck && beforeCheck() : beforeUncheck && beforeUncheck();
+        let ret = isChecked ? (beforeCheck ? beforeCheck() : true) : beforeUncheck ? beforeUncheck() : true;
         if (ret) {
             this.setState({
                 isChecked: !isChecked,

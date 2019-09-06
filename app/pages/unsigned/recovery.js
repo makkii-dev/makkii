@@ -51,25 +51,19 @@ class Home extends Component {
         });
     }
 
-    async componentDidMount() {
-        console.log(`[route] ${this.props.navigation.state.routeName}`);
-    }
-
-    async componentWillReceiveProps(props) {
-        const scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== 'scanned' && scannedData !== this.oldScannedData) {
-            this.oldScannedData = scannedData;
-            this.setState({
-                mnemonic: scannedData,
-            });
-        }
-    }
-
     scan = () => {
         this.props.navigation.navigate('scan', {
-            validate(data, callback) {
+            validate: (data, callback) => {
                 const pass = validator.validateMnemonic(data.data);
                 callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
+                // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
+                if (pass) {
+                    setTimeout(() => {
+                        this.setState({
+                            mnemonic: data.data,
+                        });
+                    }, 300);
+                }
             },
         });
     };
