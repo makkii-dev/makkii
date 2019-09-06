@@ -53,12 +53,12 @@ export default {
             yield put(createAction('getTokenList')());
         },
         *tryUpdateCurrentAccount({ payload = {} }, { select, put }) {
-            const { address } = payload;
+            const { address, force } = payload;
             const currentAccount = yield select(({ ERC20Dex }) => ERC20Dex.currentAccount);
-            if (!address || currentAccount.indexOf(address) >= 0 || currentAccount.length <= 0) {
+            if (!force || currentAccount.indexOf(address) >= 0 || currentAccount.length <= 0) {
                 const accountsMap = yield select(({ accountsModel }) => accountsModel.accountsMap);
                 let _currentAccount = '';
-                if (accountsMap[`ETH+${address}`]) {
+                if (address) {
                     _currentAccount = `ETH+${address}`;
                 } else {
                     for (let key of Object.keys(accountsMap)) {
@@ -73,7 +73,7 @@ export default {
         },
         *reset(action, { call, put }) {
             yield call(Storage.remove, 'tokenApprovals');
-            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals: {}, currentAccount: '', trade: initTrade }));
+            yield put(createAction('ERC20DexUpdateState')({ tokenApprovals: {}, currentAccount: '' }));
         },
         *updateTokenApproval({ payload }, { call, select, put }) {
             const oldTokenApprovals = yield select(({ ERC20Dex }) => ERC20Dex.tokenApprovals);

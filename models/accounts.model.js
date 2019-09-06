@@ -320,7 +320,7 @@ export default {
                     hd_index: newHdIndex,
                 }),
             );
-            yield put(createAction('ERC20Dex/tryUpdateCurrentAccount')());
+            yield put(createAction('ERC20Dex/tryUpdateCurrentAccount')({ force: true }));
         },
         *getExchangeHistory(
             {
