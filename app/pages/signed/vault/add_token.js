@@ -69,17 +69,12 @@ class AddToken extends Component {
                 validateAddress(data.data, this.props.currentAccount.symbol)
                     .then(result => {
                         if (result) {
-                            callback(true);
-                            // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
-                            setTimeout(() => {
-                                this.setState({
-                                    contractAddr: data.data,
-                                });
-                                this.fetchTokenDetail(data.data);
-                            }, 300);
-                        } else {
-                            callback(false, strings('error_invalid_qrcode'));
+                            this.setState({
+                                contractAddr: data.data,
+                            });
+                            this.fetchTokenDetail(data.data);
                         }
+                        callback(result, result ? '' : strings('error_invalid_qrcode'));
                     })
                     .catch(() => {
                         callback(false, strings('error_invalid_qrcode'));

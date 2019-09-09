@@ -56,14 +56,12 @@ class Home extends Component {
             validate: (data, callback) => {
                 const pass = validator.validateMnemonic(data.data);
                 callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
-                // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
                 if (pass) {
-                    setTimeout(() => {
-                        this.setState({
-                            mnemonic: data.data,
-                        });
-                    }, 300);
+                    this.setState({
+                        mnemonic: data.data,
+                    });
                 }
+                callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
             },
         });
     };

@@ -53,6 +53,8 @@ class Scan extends Component {
         focusedScreen: false,
     };
 
+    isVerifying = false;
+
     constructor(props) {
         super(props);
         this.animatedValue = new Animated.Value(-120);
@@ -132,14 +134,20 @@ class Scan extends Component {
                     if (result === '') {
                         AppToast.show(strings('scan.decode_fail'));
                     }
-                    validate({ data: result }, (res, message = '') => {
-                        if (res) {
-                            this.props.navigation.goBack();
-                        } else {
-                            AppToast.show(message);
+                    if (validate) {
+                        if (!this.isVerifying) {
+                            this.isVerifying = true;
+                            validate({ data: result }, (res, message = '') => {
+                                if (res) {
+                                    this.props.navigation.goBack();
+                                } else {
+                                    AppToast.show(message);
+                                }
+                                this.isVerifying = false;
+                            });
+                            this.setState({ focusedScreen: true });
                         }
-                    });
-                    this.setState({ focusedScreen: true });
+                    }
                 })
                 .catch(() => {
                     AppToast.show(strings('scan.decode_fail'));
@@ -172,20 +180,25 @@ class Scan extends Component {
                     captureAudio={false}
                     onBarCodeRead={e => {
                         if (validate) {
-                            validate(e, (result, message = '') => {
-                                if (result) {
-                                    this.props.navigation.goBack();
-                                } else {
-                                    // slow down toast log
-                                    const now = Date.now();
-                                    if (now - this.state.toast > 1000) {
-                                        AppToast.show(message);
-                                        this.setState({
-                                            toast: now,
-                                        });
+                            if (!this.isVerifying) {
+                                this.isVerifying = true;
+                                validate(e, (result, message = '') => {
+                                    if (result) {
+                                        this.props.navigation.goBack();
+                                    } else {
+                                        // slow down toast log
+                                        const now = Date.now();
+                                        if (now - this.state.toast > 1000) {
+                                            AppToast.show(message);
+                                            this.isMount &&
+                                                this.setState({
+                                                    toast: now,
+                                                });
+                                        }
                                     }
-                                }
-                            });
+                                    this.isVerifying = false;
+                                });
+                            }
                         } else {
                             this.props.navigation.goBack();
                         }

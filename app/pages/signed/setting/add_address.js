@@ -82,16 +82,11 @@ class AddAddress extends Component {
                 console.log('validating code.....');
                 dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {
                     if (res.result) {
-                        callback(true);
-                        // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
-                        setTimeout(() => {
-                            this.setState({
-                                ...res.data,
-                            });
-                        }, 300);
-                    } else {
-                        callback(false, strings('error_invalid_qrcode'));
+                        this.setState({
+                            ...res.data,
+                        });
                     }
+                    callback(res.result, res.result ? '' : strings('error_invalid_qrcode'));
                 });
             },
         });

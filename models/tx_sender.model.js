@@ -8,6 +8,7 @@ import { sendTransferEventLog } from '../services/event_log.service';
 import { SensitiveStorage } from '../utils/storage';
 import { AppToast } from '../app/components/AppToast';
 import { fetchTokenDetail } from '../client/api';
+import { COINS } from '../client/support_coin_list';
 
 const init = {
     to: '',
@@ -53,8 +54,7 @@ export default {
                     try {
                         const { symbol } = yield call(fetchTokenDetail, currentAccount.symbol, contractAddress);
                         if (!currentAccount.tokens[symbol]) {
-                            AppToast.show(strings('token_exchange.button_exchange_no_token', { token: symbol }));
-                            return ret;
+                            return { result: false, error: strings('token_exchange.button_exchange_no_token', { token: symbol }) };
                         }
                         if (symbol !== currentAccount.coinSymbol) {
                             AppToast.show(strings('send.toast_changed_token', { token: symbol }));
@@ -67,8 +67,9 @@ export default {
                     AppToast.show(strings('send.toast_changed_token', { token: currentAccount.symbol }));
                     yield put(createAction('accountsModel/updateState')({ currentToken: '' }));
                 }
-
-                yield put(createAction('updateState')({ ...ret.data }));
+                yield put(
+                    createAction('updateState')({ gasLimit: contractAddress ? COINS[currentAccount.symbol].defaultGasLimitForContract : COINS[currentAccount.symbol].defaultGasLimit, ...ret.data }),
+                );
             }
             return ret;
         },

@@ -78,15 +78,12 @@ class Product extends React.Component {
                 console.log('validating code.....');
                 dispatch(createAction('pokketModel/parseScannedData')({ data: data.data })).then(res => {
                     const { result, data } = res;
-                    result ? callback(true) : callback(false, strings('error_invalid_qrcode'));
                     if (result) {
-                        setTimeout(() => {
-                            // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
-                            this.setState({
-                                RetAddress: data.address,
-                            });
-                        }, 300);
+                        this.setState({
+                            RetAddress: data.address,
+                        });
                     }
+                    result ? callback(true) : callback(false, strings('error_invalid_qrcode'));
                 });
             },
         });

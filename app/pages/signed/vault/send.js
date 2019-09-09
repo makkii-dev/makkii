@@ -79,17 +79,13 @@ class Send extends Component {
         navigation.navigate('scan', {
             validate: (data, callback) => {
                 dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(res => {
+                    console.log('result=>+++++++++++++++++++++', res);
                     if (res.result) {
-                        callback(true);
-                        // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
-                        setTimeout(() => {
-                            this.setState({
-                                ...res.data,
-                            });
-                        }, 300);
-                    } else {
-                        callback(false, strings('error_invalid_qrcode'));
+                        this.setState({
+                            ...res.data,
+                        });
                     }
+                    callback(res.result, res.result ? '' : res.error || strings('error_invalid_qrcode'));
                 });
             },
         });

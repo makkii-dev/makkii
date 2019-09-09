@@ -66,23 +66,20 @@ class ImportPrivateKey extends Component {
         this.props.navigation.navigate('scan', {
             validate: (data, callback) => {
                 const res = validatePrivateKey(data.data, this.props.symbol);
-                callback(res ? data.data : null, res ? '' : strings('import_private_key.error_invalid_private_key'));
 
                 if (res) {
-                    setTimeout(() => {
-                        // TODO back from scan may trigger 'onChangeText'(? unknown reason), which will reset TextInput;  so should delay to wait reset
-                        this.setState(
-                            {
-                                private_key: data.data,
-                            },
-                            () => {
-                                this.props.navigation.setParams({
-                                    isEdited: true,
-                                });
-                            },
-                        );
-                    }, 300);
+                    this.setState(
+                        {
+                            private_key: data.data,
+                        },
+                        () => {
+                            this.props.navigation.setParams({
+                                isEdited: true,
+                            });
+                        },
+                    );
                 }
+                callback(res ? data.data : null, res ? '' : strings('import_private_key.error_invalid_private_key'));
             },
         });
     };
