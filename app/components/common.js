@@ -366,8 +366,8 @@ class TransactionItemCell extends React.PureComponent {
 }
 
 // ======================== v2 ========================================
-const Visible = () => <Image style={{ width: 20, height: 20 }} source={require('../../assets/icon_visible.png')} resizeMode="contain" />;
-const Invisible = () => <Image style={{ width: 20, height: 20 }} resizeMode="contain" source={require('../../assets/icon_invisible.png')} />;
+const Visible = () => <Image style={{ width: 20, height: 20, tintColor: mainColor }} source={require('../../assets/icon_visible.png')} />;
+const Invisible = () => <Image style={{ width: 20, height: 20, tintColor: mainColor }} source={require('../../assets/icon_invisible.png')} />;
 
 class RightActionButton extends Component {
     render() {

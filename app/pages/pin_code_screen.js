@@ -261,9 +261,9 @@ class PinCodeScreen extends React.Component {
                 <View style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}>
                     {item !== 'cancel' && item !== 'delete' && item !== 'finger' && item !== 'blank' && <Text style={[styles.keyboardViewItemText, { color: mColor, fontSize: 36 }]}>{item}</Text>}
                     {/* { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) } */}
-                    {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
-                    {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
-                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
+                    {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
+                    {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
+                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
                 </View>
             </TouchableOpacity>
         );

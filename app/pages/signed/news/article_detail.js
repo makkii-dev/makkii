@@ -24,7 +24,7 @@ const rules = navigation => {
         },
         blockquote: (node, children, parent, styles) => (
             <View key={node.key} style={styles.blockquote}>
-                <Image source={require('../../../../assets/icon_quote.png')} style={{ width: 30, height: 30, tintColor: 'lightgray' }} resizeMode="contain" />
+                <Image source={require('../../../../assets/icon_quote.png')} style={{ width: 30, height: 30, tintColor: 'lightgray' }} />
                 {children}
             </View>
         ),

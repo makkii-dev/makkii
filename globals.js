@@ -43,6 +43,7 @@ if (!Uint8Array.prototype.fill) {
 
 if (!Date.prototype.Format) {
     Date.prototype.Format = function Format(fmt, radix = 12) {
+        const ext = radix === 12 && fmt.indexOf('h') >= 0;
         let o = {
             'M+': this.getMonth() + 1, // month
             'd+': this.getDate(), // day
@@ -58,7 +59,7 @@ if (!Date.prototype.Format) {
                 fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substring(`${o[k]}`.length));
             }
         }
-        if (radix === 12 && fmt.indexOf('s') >= 0) {
+        if (ext) {
             fmt = this.getHours() >= 12 ? `${fmt} PM` : `${fmt} AM`;
         }
         return fmt;
