@@ -283,7 +283,6 @@ export default {
                 return;
             }
             const { keys } = payload;
-            console.log('delete accounts=>', keys);
             let newAccountsKey = [...accountsKey];
             let newAccountsMap = { ...accountsMap };
             let newTransactionsMap = { ...transactionsMap };

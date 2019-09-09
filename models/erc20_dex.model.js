@@ -55,11 +55,12 @@ export default {
         *tryUpdateCurrentAccount({ payload = {} }, { select, put }) {
             const { address, force } = payload;
             const currentAccount = yield select(({ ERC20Dex }) => ERC20Dex.currentAccount);
-            if (!force || currentAccount.indexOf(address) >= 0 || currentAccount.length <= 0) {
+            if (force || currentAccount.indexOf(address) >= 0 || currentAccount.length <= 0) {
                 const accountsMap = yield select(({ accountsModel }) => accountsModel.accountsMap);
                 let _currentAccount = '';
                 if (address) {
-                    _currentAccount = `ETH+${address}`;
+                    // pass address and currentAccount is not exist; then change currentAccount
+                    _currentAccount = !accountsMap[currentAccount] ? `ETH+${address}` : currentAccount;
                 } else {
                     for (let key of Object.keys(accountsMap)) {
                         if (key.startsWith('ETH+')) {
