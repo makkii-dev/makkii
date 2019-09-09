@@ -76,29 +76,32 @@ class ExchangeTokenList extends React.PureComponent {
 }
 
 const mapToState = ({ ERC20Dex }) => {
-    const tokenList = Object.keys(ERC20Dex.tokenList).map(el => {
-        if (el === 'ETH') {
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                icon: COINS.ETH.icon,
-            };
-        }
-        try {
-            const fastIcon = getTokenIconUrl('ETH', el, ERC20Dex.tokenList[el].address);
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                fastIcon,
-            };
-        } catch (e) {
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                icon: COINS.ETH.default_token_icon,
-            };
-        }
-    });
+    const { srcToken, destToken } = ERC20Dex.trade;
+    const tokenList = Object.keys(ERC20Dex.tokenList)
+        .filter(el => el !== srcToken && el !== destToken)
+        .map(el => {
+            if (el === 'ETH') {
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    icon: COINS.ETH.icon,
+                };
+            }
+            try {
+                const fastIcon = getTokenIconUrl('ETH', el, ERC20Dex.tokenList[el].address);
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    fastIcon,
+                };
+            } catch (e) {
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    icon: COINS.ETH.default_token_icon,
+                };
+            }
+        });
 
     return {
         isLoading: ERC20Dex.isLoading,
