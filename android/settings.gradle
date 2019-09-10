@@ -1,42 +1,5 @@
 rootProject.name = 'wallet'
-include ':react-native-reanimated'
-project(':react-native-reanimated').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-reanimated/android')
-include ':react-native-modal-translucent'
-project(':react-native-modal-translucent').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-modal-translucent/android')
-include ':react-native-background-timer'
-project(':react-native-background-timer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-background-timer/android')
-include ':react-native-push-notification'
-project(':react-native-push-notification').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-push-notification/android')
-include ':react-native-sensitive-info'
-project(':react-native-sensitive-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-sensitive-info/android')
-include ':react-native-config'
-project(':react-native-config').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-config/android')
-include ':react-native-webview'
-project(':react-native-webview').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-webview/android')
-include ':react-native-touch-id'
-project(':react-native-touch-id').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-touch-id/android')
-include ':react-native-local-barcode-recognizer'
-project(':react-native-local-barcode-recognizer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-local-barcode-recognizer/android')
-include ':react-native-image-picker'
-project(':react-native-image-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-image-picker/android')
-include ':react-native-install-apk'
-project(':react-native-install-apk').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-install-apk/android')
-include ':react-native-screenshot-helper'
-project(':react-native-screenshot-helper').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-screenshot-helper/android')
-include ':react-native-aion-hw-wallet'
-project(':react-native-aion-hw-wallet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-aion-hw-wallet/android')
+apply from: file("../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesSettingsGradle(settings)
 include ':react-native-randombytes'
 project(':react-native-randombytes').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-randombytes/android')
-include ':react-native-svg'
-project(':react-native-svg').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-svg/android')
-include ':react-native-i18n'
-project(':react-native-i18n').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-i18n/android')
-include ':react-native-gesture-handler'
-project(':react-native-gesture-handler').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-gesture-handler/android')
-include ':react-native-fs'
-project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')
-include ':react-native-device-info'
-project(':react-native-device-info').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-device-info/android')
-include ':react-native-camera'
-project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
 include ':app'

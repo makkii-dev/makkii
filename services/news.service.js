@@ -1,7 +1,7 @@
 import { HttpClient } from 'lib-common-util-js';
 
 const getFlashNews = async page => {
-    const url = page === undefined ? `https://api.chainnews.com/api/news` : `https://api.chainnews.com/api/news/?page=${page}`;
+    const url = page === undefined ? 'https://api.chainnews.com/api/news' : `https://api.chainnews.com/api/news/?page=${page}`;
     console.log('[news get Flash] req =>', url);
     try {
         const { data } = await HttpClient.get(url);
@@ -26,7 +26,7 @@ const getFlashNews = async page => {
 };
 
 const getArticles = async page => {
-    const url = page === undefined ? `https://api.chainnews.com/api/articles` : `https://api.chainnews.com/api/articles/?page=${page}`;
+    const url = page === undefined ? 'https://api.chainnews.com/api/articles' : `https://api.chainnews.com/api/articles/?page=${page}`;
     console.log('[news getArticles] req =>', url);
     try {
         const { data } = await HttpClient.get(url);

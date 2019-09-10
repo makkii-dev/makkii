@@ -37,7 +37,7 @@ export default {
             const _payload = yield call(Storage.get, 'user');
             let payload = { ..._payload };
             if (payload) {
-                ``;
+                ('');
                 if (state_version < 2) {
                     SensitiveStorage.set('mnemonic', payload.mnemonic);
                     delete payload.mnemonic;

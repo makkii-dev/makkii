@@ -237,10 +237,10 @@ export default {
                     if (biometryType === true || biometryType === 'TouchID') {
                         yield put(createAction('updateState')({ touchIDEnabled: true }));
                     } else {
-                        AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`));
+                        AppToast.show(strings('pinCode.touchID_NOT_SUPPORTED'));
                     }
                 } catch (e) {
-                    AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`));
+                    AppToast.show(strings('pinCode.touchID_NOT_SUPPORTED'));
                 }
             }
             yield put(createAction('saveSettings')());
