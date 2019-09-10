@@ -9,7 +9,6 @@ import com.ocetnik.timer.BackgroundTimerPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
-import com.dylanvann.fastimage.FastImageViewPackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import cn.jystudio.local.barcode.recognizer.LocalBarcodeRecognizerPackage;
@@ -52,7 +51,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ReactNativePushNotificationPackage(),
             new RNSensitiveInfoPackage(),
             new ReactNativeConfigPackage(),
-            new FastImageViewPackage(),
             new RNCWebViewPackage(),
             new FingerprintAuthPackage(),
             new LocalBarcodeRecognizerPackage(),

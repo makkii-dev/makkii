@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { ActivityIndicator, Button, Dimensions, FlatList, Image, Keyboard, PixelRatio, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { mainBgColor } from '../../../style_util';
@@ -148,7 +147,7 @@ class SelectToken extends Component {
                 </TouchableOpacity>
             );
         }
-        const { symbol, name, fastIcon, icon, isAdded } = item;
+        const { symbol, name, icon, isAdded } = item;
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -165,11 +164,7 @@ class SelectToken extends Component {
                 onPress={() => this.addToken(item)}
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {fastIcon !== undefined ? (
-                        <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
-                    ) : icon !== undefined ? (
-                        <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
-                    ) : null}
+                    <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                     <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                         {`${symbol}-${name}`}
                     </Text>
@@ -252,7 +247,7 @@ const mapToState = ({ tokenImportModel, accountsModel }) => {
     newTokenLists.forEach(token => {
         const { contractAddr, symbol: tokenSymbol } = token;
         try {
-            token.fastIcon = getTokenIconUrl(symbol, tokenSymbol, contractAddr);
+            token.icon = { uri: getTokenIconUrl(symbol, tokenSymbol, contractAddr) };
         } catch (e) {
             token.icon = COINS.ETH.default_token_icon;
         }

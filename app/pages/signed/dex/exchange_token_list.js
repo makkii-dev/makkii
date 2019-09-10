@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, Dimensions, FlatList, ActivityIndicator, Image, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import FastImage from 'react-native-fast-image';
 import { getTokenIconUrl } from '../../../../client/api';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, navigateBack } from '../../../../utils/dva';
@@ -36,7 +35,7 @@ class ExchangeTokenList extends React.PureComponent {
     };
 
     renderItem = ({ item }) => {
-        const { symbol, name, fastIcon, icon } = item;
+        const { symbol, name, icon } = item;
         return (
             <TouchableOpacity
                 style={{
@@ -51,11 +50,7 @@ class ExchangeTokenList extends React.PureComponent {
                 }}
                 onPress={() => this.onSelectToken(symbol)}
             >
-                {fastIcon !== undefined ? (
-                    <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
-                ) : icon !== undefined ? (
-                    <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
-                ) : null}
+                <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                 <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                     {`${symbol}-${name}`}
                 </Text>
@@ -92,7 +87,7 @@ const mapToState = ({ ERC20Dex }) => {
                 return {
                     symbol: el,
                     name: ERC20Dex.tokenList[el].name,
-                    fastIcon,
+                    icon: { uri: fastIcon },
                 };
             } catch (e) {
                 return {

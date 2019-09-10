@@ -201,7 +201,6 @@ dependencies {
     implementation project(':react-native-push-notification')
     implementation project(':react-native-sensitive-info')
     implementation project(':react-native-config')
-    implementation project(':react-native-fast-image')
     implementation project(':react-native-webview')
     implementation project(':react-native-touch-id')
     implementation project(':react-native-local-barcode-recognizer')

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
 import { Header } from 'react-navigation';
 import { connect } from 'react-redux';
-import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BigNumber from 'bignumber.js';
 import { strings } from '../../../../locales/i18n';
@@ -205,7 +204,7 @@ class Home extends React.Component {
         }
         try {
             const fastIcon = getTokenIconUrl('ETH', tokenSymbol, tokenList[tokenSymbol].address);
-            return <FastImage style={{ width: 24, height: 24 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />;
+            return <Image style={{ width: 24, height: 24 }} source={{ uri: fastIcon }} resizeMode="contain" />;
         } catch (e) {
             const Icon = COINS.ETH.default_token_icon;
             return <Image style={{ width: 24, height: 24 }} source={Icon} resizeMode="contain" />;
