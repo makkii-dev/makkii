@@ -130,7 +130,7 @@ class PokketHome extends React.Component {
         const bannersViews = banners.reduce((arr, el, index) => {
             arr.push(
                 <View style={styles.slide} key={`${index}`}>
-                    <Image style={{ height: 120, width }} source={{ uri: el }} resizeMode="stretch" />
+                    <Image style={{ height: 120, width }} source={{ uri: el.imageUrl }} resizeMode="stretch" />
                 </View>,
             );
             return arr;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio } from 'react-native';
+import BigNumber from 'bignumber.js';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
