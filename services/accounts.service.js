@@ -49,8 +49,8 @@ const getAccountBalances = payloads => {
  */
 const pendingTxsInvolved = (pendingTxs, address) => {
     for (let tx of Object.values(pendingTxs)) {
-        const { txObj } = tx;
-        if (txObj.from === address || txObj.to === address) {
+        const { txObj, token: { tokenTx = {} } = {} } = tx;
+        if (txObj.from === address || txObj.to === address || tokenTx.from === address || tokenTx.to === address) {
             return true;
         }
     }

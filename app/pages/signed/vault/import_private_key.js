@@ -54,8 +54,8 @@ class ImportPrivateKey extends Component {
     }
 
     componentDidMount() {
-        const { dispatch } = this.props;
-        this.props.navigation.setParams({
+        const { dispatch, navigation } = this.props;
+        navigation.setParams({
             ImportAccount: this.ImportAccount,
             dispatch,
             isEdited: false,
@@ -63,21 +63,22 @@ class ImportPrivateKey extends Component {
     }
 
     scan = () => {
-        console.log('this.props.symbol=>', this.props.symbol);
         this.props.navigation.navigate('scan', {
-            success: 'signed_vault_import_private_key',
             validate: (data, callback) => {
-                console.log('scanned data=>', data);
                 const res = validatePrivateKey(data.data, this.props.symbol);
-                if (res) {
-                    this.setState({
-                        private_key: data.data,
-                    });
-                    this.props.navigation.setParams({
-                        isEdited: true,
-                    });
-                }
 
+                if (res) {
+                    this.setState(
+                        {
+                            private_key: data.data,
+                        },
+                        () => {
+                            this.props.navigation.setParams({
+                                isEdited: true,
+                            });
+                        },
+                    );
+                }
                 callback(res ? data.data : null, res ? '' : strings('import_private_key.error_invalid_private_key'));
             },
         });
@@ -96,6 +97,7 @@ class ImportPrivateKey extends Component {
                     height,
                     alignItems: 'center',
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View
                     style={{
@@ -154,12 +156,16 @@ class ImportPrivateKey extends Component {
                             }}
                             value={this.state.private_key}
                             onChangeText={val => {
-                                this.setState({
-                                    private_key: val,
-                                });
-                                this.props.navigation.setParams({
-                                    isEdited: val.length !== 0,
-                                });
+                                this.setState(
+                                    {
+                                        private_key: val,
+                                    },
+                                    () => {
+                                        this.props.navigation.setParams({
+                                            isEdited: val.length !== 0,
+                                        });
+                                    },
+                                );
                             }}
                         />
                     </View>

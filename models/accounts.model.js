@@ -134,11 +134,9 @@ export default {
             const { state_version, options } = payload;
 
             const hashed_password = yield select(({ userModel }) => userModel.hashed_password);
-            console.log('loadStorage=>', payload);
-            console.log('hashed_password=>', hashed_password);
             if (state_version < 2) {
                 const old_accounts_storage = yield call(Storage.get, 'accounts', false, false);
-                let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || {});
+                let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || '{}');
                 old_accounts = upgradeAccountsV0_V1(state_version, old_accounts, options);
                 const { accountsKey, accountsMap, transactionsMap, tokenLists, privateKeyMap } = upgradeAccountsV1_V2(old_accounts);
                 const hd_index = yield call(Storage.get, 'userModel', {}).hd_index ||
@@ -285,7 +283,6 @@ export default {
                 return;
             }
             const { keys } = payload;
-            console.log('delete accounts=>', keys);
             let newAccountsKey = [...accountsKey];
             let newAccountsMap = { ...accountsMap };
             let newTransactionsMap = { ...transactionsMap };
@@ -307,8 +304,10 @@ export default {
                         delete newTransactionsMap[`${key}+${tokenSymbol}`];
                         yield call(Storage.remove, `tx+${key}+${tokenSymbol}`);
                     }
-                    delete newTransactionsMap[`${key}+ERC20DEX`];
-                    yield call(Storage.remove, `tx+${key}+ERC20DEX`);
+                    if (symbol === 'ETH') {
+                        delete newTransactionsMap[`${key}+ERC20DEX`];
+                        yield call(Storage.remove, `tx+${key}+ERC20DEX`);
+                    }
                 }
             }
             yield call(Storage.set, 'accountsKey', newAccountsKey);
@@ -320,6 +319,7 @@ export default {
                     hd_index: newHdIndex,
                 }),
             );
+            yield put(createAction('ERC20Dex/tryUpdateCurrentAccount')({ force: true }));
         },
         *getExchangeHistory(
             {
@@ -349,8 +349,13 @@ export default {
             return true;
         },
         *updateTransactions({ payload }, { put, select }) {
+            console.log('updateTransactions=>', payload);
             const { key, txs, force = true, needSave = true } = payload;
             const oldTransactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
+            const accountsKey = yield select(({ accountsModel }) => accountsModel.accountsKey);
+            if (!accountsKey.includes(/\w+\+\w+/.exec(key)[0])) {
+                return;
+            }
             let newTransactionsMap = { ...oldTransactionsMap };
             if (newTransactionsMap[key] === undefined && !force) {
                 // Not mandatory to add
@@ -366,7 +371,6 @@ export default {
                       return map;
                   }, {});
             newTransactionsMap[key] = { ...newTransactionsMap[key], ...txs, ...pendingTxs };
-            console.log(`newTransactionsMap[${key}]=>`, newTransactionsMap[key]);
             yield put(createAction('updateState')({ transactionsMap: newTransactionsMap }));
             if (needSave) {
                 yield put(createAction('saveTransaction')({ keys: [key] }));

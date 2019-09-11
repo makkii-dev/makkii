@@ -80,6 +80,7 @@ class SetAccountNameScreen extends React.Component {
                 onPress={() => {
                     Keyboard.dismiss();
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View style={styles.container}>
                     <TextInput style={styles.textInputStyle} value={textValue} editable={editable} multiline={false} autoFocus onChangeText={this.onChangeText} />

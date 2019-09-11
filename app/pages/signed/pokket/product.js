@@ -74,7 +74,6 @@ class Product extends React.Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
-            success: 'signed_pokket_product',
             validate: (data, callback) => {
                 console.log('validating code.....');
                 dispatch(createAction('pokketModel/parseScannedData')({ data: data.data })).then(res => {
@@ -133,32 +132,34 @@ class Product extends React.Component {
         let buttonEnabled = false;
         let hasToken = false;
         let errorMsg = '';
+        if (!currentProduct) {
+            return <View />;
+        }
         if (currentAccount) {
             const notBlank = amount.length > 0 && (token !== 'BTC' || RetAddress.length > 0);
             const { balance, tokens = {} } = currentAccount;
             hasToken = token === 'ETH' || token === 'BTC' ? true : !!tokens[token];
-            const nativeCost = token === 'BTC' ? 0.00015 : token === 'ETH' ? +amount + 0.0009 : 0.00021;
+            const nativeCost = token === 'BTC' ? parseFloat(amount) + 0.00015 : token === 'ETH' ? +parseFloat(amount) + 0.0009 : 0.00021;
             const tokenCost = token === 'ETH' || token === 'BTC' ? 0 : +amount;
             const tokenBalance = tokens[token] || 0;
-            buttonEnabled = notBlank && BigNumber(balance).toNumber() >= nativeCost && BigNumber(tokenBalance).toNumber() >= tokenCost && amount > minInvestAmount;
+            buttonEnabled = notBlank && BigNumber(balance).toNumber() >= nativeCost && BigNumber(tokenBalance).toNumber() >= tokenCost && amount >= minInvestAmount;
             if (!buttonEnabled) {
                 if (!notBlank) {
                     errorMsg = strings('pokket.label_fill_required');
-                }
-                if (!hasToken) {
+                } else if (!hasToken) {
                     errorMsg = strings('token_exchange.button_exchange_no_token', {
                         token,
                     });
-                } else if (amount <= 0) {
-                    errorMsg = strings('token_exchange.label_exchange_invalid_number');
                 } else if (amount < minInvestAmount) {
-                    errorMsg = strings('pokket.label_violate_min_deposit');
-                } else {
+                    errorMsg = strings('pokket.label_less_then_min');
+                } else if (amount > 0) {
                     errorMsg = strings('token_exchange.label_exchange_insufficient_balance');
+                } else {
+                    errorMsg = strings('token_exchange.button_exchange_invalid_number');
                 }
             }
         } else {
-            errorMsg = strings('token_exchange.label_exchange_no_account');
+            errorMsg = token === 'BTC' ? strings('token_exchange.button_exchange_no_BTC_account') : strings('token_exchange.button_exchange_no_ETH_account');
         }
         return (
             <DismissKeyboardView>

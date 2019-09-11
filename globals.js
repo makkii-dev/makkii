@@ -1,51 +1,53 @@
 // polyfill unit8array
-import Uint8Array from 'core-js/fn/typed/uint8-array';
+// import Uint8Array from 'core-js/fn/typed/uint8-array';
 
-global.BigNumber = require('bignumber.js');
+const BigNumber = require('bignumber.js');
 
-if (!Uint8Array.prototype.fill) {
-    Uint8Array.prototype.fill = function fill(value) {
-        // Steps 1-2.
-        if (this == null) {
-            throw new TypeError('this is null or not defined');
-        }
-
-        let O = Object(this);
-
-        // Steps 3-5.
-        let len = O.length >>> 0;
-
-        // Steps 6-7.
-        let start = arguments[1];
-        let relativeStart = start >> 0;
-
-        // Step 8.
-        let k = relativeStart < 0 ? Math.max(len + relativeStart, 0) : Math.min(relativeStart, len);
-
-        // Steps 9-10.
-        let end = arguments[2];
-        let relativeEnd = end === undefined ? len : end >> 0;
-
-        // Step 11.
-        let final = relativeEnd < 0 ? Math.max(len + relativeEnd, 0) : Math.min(relativeEnd, len);
-
-        // Step 12.
-        while (k < final) {
-            O[k] = value;
-            k++;
-        }
-
-        // Step 13.
-        return O;
-    };
-}
+global.platform = 'mobile';
+// if (!Uint8Array.prototype.fill) {
+//     Uint8Array.prototype.fill = function fill(value) {
+//         // Steps 1-2.
+//         if (this == null) {
+//             throw new TypeError('this is null or not defined');
+//         }
+//
+//         let O = Object(this);
+//
+//         // Steps 3-5.
+//         let len = O.length >>> 0;
+//
+//         // Steps 6-7.
+//         let start = arguments[1];
+//         let relativeStart = start >> 0;
+//
+//         // Step 8.
+//         let k = relativeStart < 0 ? Math.max(len + relativeStart, 0) : Math.min(relativeStart, len);
+//
+//         // Steps 9-10.
+//         let end = arguments[2];
+//         let relativeEnd = end === undefined ? len : end >> 0;
+//
+//         // Step 11.
+//         let final = relativeEnd < 0 ? Math.max(len + relativeEnd, 0) : Math.min(relativeEnd, len);
+//
+//         // Step 12.
+//         while (k < final) {
+//             O[k] = value;
+//             k++;
+//         }
+//
+//         // Step 13.
+//         return O;
+//     };
+// }
 
 if (!Date.prototype.Format) {
-    Date.prototype.Format = function Format(fmt) {
+    Date.prototype.Format = function Format(fmt, radix = 12) {
+        const ext = radix === 12 && fmt.indexOf('h') >= 0;
         let o = {
             'M+': this.getMonth() + 1, // month
             'd+': this.getDate(), // day
-            'h+': this.getHours() % 12 === 0 ? 12 : this.getHours() % 12, // hour
+            'h+': radix === 12 ? (this.getHours() % 12 === 0 ? 12 : this.getHours() % 12) : this.getHours(), // hour
             'm+': this.getMinutes(), // minute
             's+': this.getSeconds(), // seconds
             'q+': Math.floor((this.getMonth() + 3) / 3), // quarter
@@ -57,7 +59,7 @@ if (!Date.prototype.Format) {
                 fmt = fmt.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : `00${o[k]}`.substring(`${o[k]}`.length));
             }
         }
-        if (fmt.indexOf('s') >= 0) {
+        if (ext) {
             fmt = this.getHours() >= 12 ? `${fmt} PM` : `${fmt} AM`;
         }
         return fmt;
@@ -67,10 +69,7 @@ if (!Date.prototype.Format) {
 if (!String.prototype.isChinese) {
     String.prototype.isChinese = function isChinese() {
         let patrn = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
-        if (!patrn.exec(this)) {
-            return false;
-        }
-        return true;
+        return patrn.exec(this);
     };
 }
 
@@ -127,12 +126,12 @@ if (typeof atob === 'undefined') {
     };
 }
 
-// symbol polyfills
-global.Symbol = require('core-js/es6/symbol');
-require('core-js/fn/symbol/iterator');
-
-// collection fn polyfills
-require('core-js/fn/map');
-require('core-js/fn/set');
-require('core-js/fn/array/find');
+// // symbol polyfills
+// global.Symbol = require('core-js/es6/symbol');
+// require('core-js/fn/symbol/iterator');
+//
+// // collection fn polyfills
+// require('core-js/fn/map');
+// require('core-js/fn/set');
+// require('core-js/fn/array/find');
 require('crypto');

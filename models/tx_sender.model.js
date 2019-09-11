@@ -6,6 +6,9 @@ import { strings } from '../locales/i18n';
 import { accountKey, getLedgerMessage } from '../utils';
 import { sendTransferEventLog } from '../services/event_log.service';
 import { SensitiveStorage } from '../utils/storage';
+import { AppToast } from '../app/components/AppToast';
+import { fetchTokenDetail } from '../client/api';
+import { COINS } from '../client/support_coin_list';
 
 const init = {
     to: '',
@@ -43,13 +46,32 @@ export default {
             },
             { call, select, put },
         ) {
-            console.log('data=>', data);
             const { currentAccount } = yield select(mapToaccountsModel);
             let ret = yield call(parseScannedData, data, currentAccount);
             if (ret.result) {
-                yield put(createAction('updateState')({ ...ret.data }));
+                const { contractAddress } = ret.data;
+                if (contractAddress) {
+                    try {
+                        const { symbol } = yield call(fetchTokenDetail, currentAccount.symbol, contractAddress);
+                        if (!currentAccount.tokens[symbol]) {
+                            return { result: false, error: strings('token_exchange.button_exchange_no_token', { token: symbol }) };
+                        }
+                        if (symbol !== currentAccount.coinSymbol) {
+                            AppToast.show(strings('send.toast_changed_token', { token: symbol }));
+                        }
+                        yield put(createAction('accountsModel/updateState')({ currentToken: symbol }));
+                    } catch (e) {
+                        return { result: false };
+                    }
+                } else if (currentAccount.symbol !== currentAccount.coinSymbol) {
+                    AppToast.show(strings('send.toast_changed_token', { token: currentAccount.symbol }));
+                    yield put(createAction('accountsModel/updateState')({ currentToken: '' }));
+                }
+                yield put(
+                    createAction('updateState')({ gasLimit: contractAddress ? COINS[currentAccount.symbol].defaultGasLimitForContract : COINS[currentAccount.symbol].defaultGasLimit, ...ret.data }),
+                );
             }
-            return ret.result;
+            return ret;
         },
         *validateTxObj(
             {

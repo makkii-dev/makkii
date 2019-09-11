@@ -5,7 +5,10 @@ import { COINS } from './support_coin_list';
 const isTestNet = Config.is_testnet === 'true';
 
 const client = apiClient(Object.keys(COINS), isTestNet);
-
+console.log('Config.pokket=>', Config.pokket);
+if (Config.pokket) {
+    client.setCoinNetwork('ETH', 'pokket');
+}
 export const {
     getTokenIconUrl,
     getBlockByNumber,

@@ -104,6 +104,7 @@ class Password extends Component {
                     paddingLeft: 20,
                     paddingRight: 20,
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <Text style={{ ...defaultStyles.instruction, marginTop: 20, marginBottom: 20 }}>{strings('password.password_format')}</Text>
                 <View

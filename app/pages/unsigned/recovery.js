@@ -51,25 +51,16 @@ class Home extends Component {
         });
     }
 
-    async componentDidMount() {
-        console.log(`[route] ${this.props.navigation.state.routeName}`);
-    }
-
-    async componentWillReceiveProps(props) {
-        const scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== 'scanned' && scannedData !== this.oldScannedData) {
-            this.oldScannedData = scannedData;
-            this.setState({
-                mnemonic: scannedData,
-            });
-        }
-    }
-
     scan = () => {
         this.props.navigation.navigate('scan', {
-            success: 'unsigned_recovery',
-            validate(data, callback) {
+            validate: (data, callback) => {
                 const pass = validator.validateMnemonic(data.data);
+                callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
+                if (pass) {
+                    this.setState({
+                        mnemonic: data.data,
+                    });
+                }
                 callback(pass, pass ? '' : strings('toast_invalid_mnemonic'));
             },
         });
@@ -88,6 +79,7 @@ class Home extends Component {
                     height,
                     alignItems: 'center',
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View
                     style={{

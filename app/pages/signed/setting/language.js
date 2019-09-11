@@ -7,6 +7,7 @@ import { mainBgColor } from '../../../style_util';
 import { RightActionButton } from '../../../components/common';
 import defaultStyles from '../../../styles';
 import { createAction } from '../../../../utils/dva';
+import Loading from '../../../components/Loading';
 
 const { width } = Dimensions.get('window');
 
@@ -36,8 +37,13 @@ class Language extends Component {
     updateLocale = () => {
         const { dispatch, navigation } = this.props;
         const lang = Object.keys(this.refs.refSelectList.getSelect())[0];
-        dispatch(createAction('settingsModel/updateLocale')({ lang }));
-        navigation.goBack();
+        this.refs.refLoading.show();
+        dispatch(createAction('settingsModel/updateLocale')({ lang })).then(() => {
+            setTimeout(() => {
+                this.refs.refLoading.hide();
+                navigation.goBack();
+            }, 1000);
+        });
     };
 
     render() {
@@ -80,6 +86,7 @@ class Language extends Component {
                         }}
                     />
                 </View>
+                <Loading ref="refLoading" />
             </View>
         );
     }

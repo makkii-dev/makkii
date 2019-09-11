@@ -4,15 +4,11 @@ import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import { mainColor, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
 class Launch extends Component {
-    static navigationOptions = ({ screenProps: { t, lan } }) => ({
-        title: t('menuRef.title_dapps', { locale: lan }),
-        headerRight: <View />,
-    });
-
     constructor(props) {
         super(props);
         this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
@@ -150,7 +146,12 @@ class Launch extends Component {
 
     render() {
         this.dapp = this.props.dapps[this.props.setting.explorer_server][0];
-        return <View style={{ flex: 1, padding: 10, backgroundColor: mainBgColor }}>{this.dapp ? this.renderDApp() : this.renderUnavailable()}</View>;
+        return (
+            <View style={{ flex: 1, padding: 10, backgroundColor: mainBgColor }}>
+                <CustomHeader title={strings('menuRef.title_dapps')} />
+                {this.dapp ? this.renderDApp() : this.renderUnavailable()}
+            </View>
+        );
     }
 }
 

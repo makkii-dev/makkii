@@ -57,7 +57,8 @@ const getTokenList = async network => {
             return map;
         }, {});
     } catch (e) {
-        throw `http request error:${e}`;
+        console.log(`http request error:${e}`);
+        return {};
     }
 };
 
@@ -136,7 +137,8 @@ const genTradeData = async (user_address, src_id, dst_id, src_qty, min_dst_qty, 
         const { data: tradeResp } = await HttpClient.get(url);
         return tradeResp;
     } catch (e) {
-        throw `http request error:${e}`;
+        console.log(`http request error:${e}`);
+        return { error: true };
     }
 };
 
@@ -154,7 +156,8 @@ const getEnabledStatus = async (user_address, src_id, network) => {
         }
         return txs_required;
     } catch (e) {
-        throw `http request error:${e}`;
+        console.log(`http request error:${e}`);
+        return { error: true };
     }
 };
 
@@ -166,7 +169,8 @@ const getApproveAuthorizationTx = async (user_id, token_id, network) => {
         const { data } = ApproveAuthorizationTxResp;
         return data;
     } catch (e) {
-        throw `http request error:${e}`;
+        console.log(`http request error:${e}`);
+        return { error: true };
     }
 };
 
@@ -201,7 +205,8 @@ const getExchangeHistory = async (user_id, network, txhash = undefined) => {
         }
         return history[txhash];
     } catch (e) {
-        throw `http request error:${e}`;
+        console.log(`http request error:${e}`);
+        return {};
     }
 };
 

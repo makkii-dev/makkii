@@ -161,7 +161,7 @@ export default {
             yield put(
                 StackActions.reset({
                     index: 0,
-                    actions: [NavigationActions.navigate({ routeName: 'unsigned_login' })],
+                    actions: [NavigationActions.navigate({ routeName: 'unsigned_login', params: { transition: 'modal' } })],
                 }),
             );
             DeviceEventEmitter.emit('check_all_transaction_status', { trigger: false });

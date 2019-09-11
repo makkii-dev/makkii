@@ -133,16 +133,19 @@ class Account extends Component {
 
     fetchAccountTransactions = () => {
         const { dispatch, currentAccount } = this.props;
-        dispatch(
-            createAction('accountsModel/getTransactionHistory')({
-                user_address: currentAccount.address,
-                symbol: currentAccount.symbol,
-                tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol ? '' : currentAccount.coinSymbol,
-                page: 0,
-                size: 5,
-                needSave: true,
-            }),
-        ).then(() => {
+        Promise.all([
+            dispatch(
+                createAction('accountsModel/getTransactionHistory')({
+                    user_address: currentAccount.address,
+                    symbol: currentAccount.symbol,
+                    tokenSymbol: currentAccount.coinSymbol === currentAccount.symbol ? '' : currentAccount.coinSymbol,
+                    page: 0,
+                    size: 5,
+                    needSave: true,
+                }),
+            ),
+            dispatch(createAction('accountsModel/loadBalances')({ keys: [accountKey(currentAccount.symbol, currentAccount.address)], force: !!currentAccount.symbol.match(/^LTC$|^BTC$/) })),
+        ]).then(() => {
             this.isMount &&
                 this.setState({
                     refreshing: false,

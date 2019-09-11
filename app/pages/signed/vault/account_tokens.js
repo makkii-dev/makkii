@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RefreshControl, PixelRatio, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, FlatList } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { strings } from '../../../../locales/i18n';
@@ -232,7 +231,7 @@ class AccountTokens extends Component {
     };
 
     renderItem = ({ item, index }) => {
-        const { name, symbol, balance, imageIcon, fastImageUrl } = item;
+        const { name, symbol, balance, imageIcon } = item;
         const cellHeight = 60;
         return (
             <SwipeCell
@@ -302,11 +301,7 @@ class AccountTokens extends Component {
                     }}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {imageIcon !== undefined ? (
-                            <Image style={{ width: 30, height: 30 }} source={imageIcon} resizeMode="contain" />
-                        ) : fastImageUrl !== undefined ? (
-                            <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastImageUrl }} resizeMode={FastImage.resizeMode.contain} />
-                        ) : null}
+                        <Image style={{ width: 30, height: 30 }} source={imageIcon} resizeMode="contain" />
                         <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                             {name}
                         </Text>
@@ -318,14 +313,14 @@ class AccountTokens extends Component {
     };
 
     render() {
-        const { currentAccount, tokenList } = this.props;
+        const { currentAccount, tokenList, supportDex } = this.props;
 
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
         if (currentAccount.type !== '[ledger]') {
             menuArray.push(ACCOUNT_MENU[1]);
         }
-        if (COINS[currentAccount.symbol].tokenExchangeSupport) {
+        if (COINS[currentAccount.symbol].tokenExchangeSupport && supportDex) {
             menuArray.push(ACCOUNT_MENU[2]);
         }
 
@@ -378,7 +373,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         });
                     }}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} />}
                 />
                 {/* Menu Pop window */}
                 <PopupMenu
@@ -410,7 +405,7 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapToState = ({ accountsModel }) => {
+const mapToState = ({ accountsModel, settingsModel }) => {
     const { currentAccount: key, accountsMap, tokenLists } = accountsModel;
     const currentAccount = { ...accountsMap[key] };
     const { symbol } = currentAccount;
@@ -424,7 +419,7 @@ const mapToState = ({ accountsModel }) => {
             };
             try {
                 const fastImageUrl = getTokenIconUrl(symbol, token.symbol, token.contractAddr);
-                arr.push({ ...item, fastImageUrl });
+                arr.push({ ...item, imageIcon: { uri: fastImageUrl } });
             } catch (e) {
                 arr.push({ ...item, imageIcon: COINS[symbol].default_token_icon });
             }
@@ -442,6 +437,7 @@ const mapToState = ({ accountsModel }) => {
     return {
         currentAccount,
         tokenList: tokens,
+        supportDex: settingsModel.bottomBarTab.includes('signed_dex'),
     };
 };
 export default connect(mapToState)(AccountTokens);

@@ -5,7 +5,8 @@
     "title_wallet": "钱包",
     "title_dapps": "应用",
     "title_dex": "市场",
-    "title_pokket": "理财"
+    "title_pokket": "理财",
+    "title_news": "资讯"
   },
   "unsigned_login": {
     "error_login": "登录失败",
@@ -118,6 +119,7 @@
     "warning_send_to_itself": "发送方和接收方是同一个账号，请确认是否继续？",
     "warning_send_zero": "您的发送金额为０，请确认是否继续？",
     "toast_unsupported_token": "不支持的代币: {{token}}",
+    "toast_changed_token": "请注意，已切换至代币 {{token}}",
     "error_invalid_gas_price": "燃料单价不正确",
     "error_invalid_gas_limit": "燃料上限不正确"
   },
@@ -202,7 +204,9 @@
     "toast_has_pending_transactions": "请等待未确认交易完成",
     "section_title_add_from": "添加方式",
     "section_title_coin_type": "币种",
-    "toast_is_getting_balance": "正在获取账号金额, 请稍后尝试"
+    "toast_is_getting_balance": "正在获取账号金额, 请稍后尝试",
+    "title_permission_camera": "相机权限请求",
+    "message_permission_camera": "Makkii 需要使用相机权限"
   },
   "language": {
     "title": "语言",
@@ -263,8 +267,9 @@
     "button_add_BTC_account": "添加比特币账号",
     "button_exchange_enable": "兑换",
     "label_exchange_insufficient_balance": "账户余额不足",
-    "label_exchange_no_account": "请先添加以太坊账号",
-    "label_exchange_invalid_number":"金额不正确",
+    "button_exchange_no_ETH_account": "请先添加以太坊账号",
+    "button_exchange_no_BTC_account": "请先添加比特币账号",
+    "button_exchange_invalid_number":"金额不正确",
     "button_exchange_no_token": "请先添加代币 {{token}}",
     "alert_title_need_authorization": "需要授权",
     "alert_button_why_need_authorization": "为什么？",
@@ -280,7 +285,7 @@
     "toast_waitApprove": "等待授权请求交易确认",
     "toast_unknown_error": "Kyber未知错误",
     "toast_reduce_src_qty": "Kyber无法处理当前兑换数量，请减少兑换数量",
-    "toast_cant_buy": "无法购买{{token}}代币",
+    "toast_cant_buy": "网络中没有足够的{{token}}代币",
     "toast_no_selected_eth_account": "请先选择以太坊账号"
   },
   "backup": {
@@ -626,6 +631,7 @@
     "label_IN_PROGRESS": "进行中",
     "label_COMPLETE": "已完成",
     "label_fill_required": "请填写必填字段",
+    "label_less_then_min": "投资额必须大于最小额度",
     "label_current_totalInvestment": "当前投资总额",
     "label_glossary": "如果在7天定存期间币价上涨大于等于10%,将返还与110%本币外加利息等值的TUSD。",
     "placeholder_investment_amount": "请填写金额",
@@ -638,6 +644,26 @@
     "toast_no_token": "请先添加token: {{token}}",
     "toast_invalid_amount": "无效的金额",
     "toast_invalid_address": "无效的收益地址"
+  },
+  "news": {
+    "title_articles": "文章",
+    "title_flash": "快讯",
+    "title_article_details": "文章详情",
+    "button_refer_link": "来源链接",
+    "label_disclaimer": "免责声明：本文转载仅为传递更多市场信息，不代表Makkii的观点和立场，请自行参考",
+    "origin_chainnews": "链闻"
+  },
+  "time": {
+    "weekday0": "星期日",
+    "weekday1": "星期一",
+    "weekday2": "星期二",
+    "weekday3": "星期三",
+    "weekday4": "星期四",
+    "weekday5": "星期五",
+    "weekday6": "星期六",
+    "hourAgo": "{{hour}}小时前",
+    "minuteAgo": "{{minute}}分钟前",
+    "justNow": "刚刚"
   },
   "app_name": "Makkii",
   "logout": "退出",

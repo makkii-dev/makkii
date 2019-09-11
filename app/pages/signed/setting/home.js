@@ -4,19 +4,14 @@ import { View, Dimensions, FlatList, PixelRatio, ScrollView } from 'react-native
 import { Cell } from '../../../components/Cell';
 import { strings } from '../../../../locales/i18n';
 import { SETTINGS } from './constants';
-import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { createAction, popCustom } from '../../../../utils/dva';
+import { CustomHeader } from '../../../components/CustomHeader';
+import { mainBgColor } from '../../../style_util';
 
 const { width } = Dimensions.get('window');
 
 class Home extends Component {
-    static navigationOptions = ({ screenProps: { t, lang } }) => {
-        return {
-            title: t('menuRef.title_settings', { locale: lang }),
-        };
-    };
-
     toRecoveryPhrase = routeUrl => {
         const { navigationSafely } = this.props.screenProps;
         const { isBackUp, navigation } = this.props;
@@ -50,13 +45,8 @@ class Home extends Component {
     render() {
         const { navigation, dispatch } = this.props;
         return (
-            <View
-                style={{
-                    backgroundColor: mainBgColor,
-                    flex: 1,
-                    alignItems: 'center',
-                }}
-            >
+            <View style={{ flex: 1, backgroundColor: mainBgColor }} accessibilityLabel={this.props.navigation.state.routeName}>
+                <CustomHeader title={strings('menuRef.title_settings')} />
                 <ScrollView style={{ width }} contentContainerStyle={{ alignItems: 'center' }}>
                     <View
                         style={{

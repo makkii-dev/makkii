@@ -4,10 +4,10 @@ import Config from 'react-native-config';
 const baseurl = Config.isTestNet ? 'http://45.118.132.89:8080' : 'http://45.118.132.89:8080';
 
 const getProducts = async (keyword = '') => {
-    const url = `${baseurl}/pokket/product?search=${keyword}`;
+    const url = `${baseurl}/pokket/product`;
     try {
         console.log('[Pokket getProduct req]=>', url);
-        const resp = await HttpClient.get(url);
+        const resp = await HttpClient.get(url, { search: keyword }, true);
         console.log('[Pokket getProduct resp]=>', resp.data);
         return resp.data.reduce((m, el) => {
             m[el.token] = el;
@@ -20,10 +20,10 @@ const getProducts = async (keyword = '') => {
 };
 
 const getOrders = async ({ addresses = '', page = 0, size = 25 }) => {
-    const url = `${baseurl}/pokket/order?addresses=${addresses}&page=${page}&size=${size}`;
+    const url = `${baseurl}/pokket/order`;
     try {
         console.log('[Pokket getOrders req]=>', url);
-        const resp = await HttpClient.get(url);
+        const resp = await HttpClient.get(url, { addresses, page, size }, true);
         console.log('[Pokket getOrders resp]=>', resp.data);
         return resp.data.content.reduce((m, el) => {
             m[el.orderId] = { ...el };

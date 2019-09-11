@@ -45,17 +45,6 @@ class AddToken extends Component {
         });
     }
 
-    async componentWillReceiveProps(props) {
-        const oldData = this.props.navigation.getParam('scanned');
-        const scannedData = props.navigation.getParam('scanned', '');
-        if (scannedData !== '' && oldData !== scannedData) {
-            this.setState({
-                contractAddr: scannedData,
-            });
-            this.fetchTokenDetail(scannedData);
-        }
-    }
-
     addToken = () => {
         const { symbol, name, tokenDecimal } = this.props;
         const { contractAddr } = this.state;
@@ -68,6 +57,7 @@ class AddToken extends Component {
         const { dispatch, navigation } = this.props;
         dispatch(createAction('accountsModel/addTokenToCurrentAccount')({ token })).then(r => {
             if (r) {
+                dispatch(createAction('tokenImportModel/reset')());
                 navigation.navigate('signed_vault_account_tokens');
             }
         });
@@ -75,15 +65,20 @@ class AddToken extends Component {
 
     scan = () => {
         this.props.navigation.navigate('scan', {
-            success: 'signed_add_token',
             validate: (data, callback) => {
-                validateAddress(data.data, this.props.currentAccount.symbol).then(result => {
-                    if (result) {
-                        callback(true);
-                    } else {
+                validateAddress(data.data, this.props.currentAccount.symbol)
+                    .then(result => {
+                        if (result) {
+                            this.setState({
+                                contractAddr: data.data,
+                            });
+                            this.fetchTokenDetail(data.data);
+                        }
+                        callback(result, result ? '' : strings('error_invalid_qrcode'));
+                    })
+                    .catch(() => {
                         callback(false, strings('error_invalid_qrcode'));
-                    }
-                });
+                    });
             },
         });
     };

@@ -5,7 +5,8 @@
     "title_wallet": "Wallet",
     "title_dapps": "DApps",
     "title_dex": "Dex",
-    "title_pokket": "Finance"
+    "title_pokket": "Finance",
+    "title_news": "News"
   },
   "unsigned_login": {
     "error_login": "Login fail",
@@ -120,7 +121,8 @@
     "cancel": "Cancel",
     "warning_send_to_itself": "Sender and recipient are the same. Are you sure to continue?",
     "warning_send_zero": "You are sending 0 AION. Are you sure to continue?",
-    "toast_unsupported_token": "Unsupported token {{token}}"
+    "toast_unsupported_token": "Unsupported token {{token}}",
+    "toast_changed_token": "Pay attention， you have switched to token {{token}}"
   },
   "transaction_detail": {
     "title": "Transaction Detail",
@@ -212,7 +214,9 @@
     "toast_has_pending_transactions": "There are pending transactions, please wait.",
     "section_title_add_from": "Add from",
     "section_title_coin_type": "Coin Type",
-    "toast_is_getting_balance": "Getting account balance, please try later"
+    "toast_is_getting_balance": "Getting account balance, please try later",
+    "title_permission_camera": "Permission to use camera",
+    "message_permission_camera": "We need your permission to use your camera"
   },
   "language": {
     "title": "Language",
@@ -273,8 +277,9 @@
     "button_add_BTC_account": "Add BitCoin account",
     "button_exchange_enable": "Exchange",
     "label_exchange_insufficient_balance": "Insufficient account balance",
-    "label_exchange_no_account": "No account",
-    "label_exchange_invalid_number":"Invalid number",
+    "button_exchange_no_ETH_account": "No ETH account",
+    "button_exchange_no_BTC_account": "No BTC account",
+    "button_exchange_invalid_number":"Invalid number",
     "button_exchange_no_token": "Please add {{token}} firstly",
     "alert_title_need_authorization": "Need authorization",
     "alert_button_why_need_authorization": "Why？",
@@ -290,7 +295,7 @@
     "toast_waitApprove": "Please wait approval request confirmed",
     "toast_unknown_error": "Kyber unknown error.",
     "toast_reduce_src_qty": "Kyber cannot handle your amount, please reduce sell amount and try again.",
-    "toast_cant_buy": "{{token}} token is not purchasable",
+    "toast_cant_buy": "{{token}} token is not enough in the network",
     "toast_no_selected_eth_account": "Please select an ETH account"
   },
   "backup": {
@@ -626,6 +631,7 @@
     "label_IN_PROGRESS": "In progress",
     "label_COMPLETE": "Complete",
     "label_fill_required": "Please fill in the required fields",
+    "label_less_then_min": "Amount must be greater or equal to minimum fixed deposit",
     "label_current_totalInvestment": "Deposited amount to Date",
     "label_glossary": "If the token price has appreciated more than 10% after 7 days, you will receive 110% of the initial token value, plus interest, in TUSD.",
     "placeholder_investment_amount": "Please enter deposit amount",
@@ -638,6 +644,26 @@
     "toast_no_token": "Please add token: {{token}} first",
     "toast_invalid_amount": "Invalid amount",
     "toast_invalid_address": "Invalid income address"
+  },
+  "news": {
+    "title_articles": "Articles",
+    "title_flash": "Flash",
+    "title_article_details": "Articles detail",
+    "button_refer_link": "Reference",
+    "label_disclaimer": "Disclaimer: This article reprints only to convey more market information, does not represent Makkii's views and positions, please refer to it yourself",
+    "origin_chainnews": "ChainNews"
+  },
+  "time": {
+    "weekday0": "Sunday",
+    "weekday1": "Monday",
+    "weekday2": "Tuesday",
+    "weekday3": "Wednesday",
+    "weekday4": "Thursday",
+    "weekday5": "Friday",
+    "weekday6": "Saturday",
+    "hourAgo": "{{hour}} hour ago",
+    "minuteAgo": "{{minute}} minute ago",
+    "justNow": "just now"
   },
   "app_name": "Makkii",
   "logout": "Sign Out",

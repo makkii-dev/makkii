@@ -685,7 +685,7 @@ class Home extends Component {
         renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
         const headerMarginTop = getStatusBarHeight(false);
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }} accessibilityLabel={this.props.navigation.state.routeName}>
                 <TouchableOpacity
                     style={{ flex: 1 }}
                     activeOpacity={1}

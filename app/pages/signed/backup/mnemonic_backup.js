@@ -111,6 +111,7 @@ class MnemonicBackUp extends React.Component {
                     backgroundColor: mainBgColor,
                     alignItems: 'center',
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <View style={styles.container}>
                     <Text>{strings('backup.label_header_backup_mnemonic')}</Text>

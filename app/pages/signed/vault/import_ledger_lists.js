@@ -37,7 +37,7 @@ class ImportHdWallet extends React.Component {
     ImportAccount = () => {
         const { dispatch } = this.props;
         const select = this.refs.refSelectList.getSelect();
-        dispatch(createAction('accountsModel/fromLedger')({ index: Object.values(select)[0].index }));
+        dispatch(createAction('accountImportModel/fromLedger')({ index: Object.values(select)[0].index }));
         navigate('signed_vault_set_account_name')({ dispatch });
     };
 
@@ -59,7 +59,7 @@ class ImportHdWallet extends React.Component {
     fetchAccount = (page, size = 25) => {
         const { dispatch } = this.props;
         console.log(`fetchAccount page: ${page} size: ${size}`);
-        dispatch(createAction('accountsModel/getAccountsFromLedger')({ page, size })).then(() => {
+        dispatch(createAction('accountImportModel/getAccountsFromLedger')({ page, size })).then(() => {
             this.isMount &&
                 this.setState({
                     currentPage: page,
@@ -139,9 +139,9 @@ const mapToState = ({ accountImportModel }) => {
             index: el,
         };
         return map;
-    });
+    }, {});
     return {
-        accountList: accountLists,
+        accountLists,
     };
 };
 export default connect(mapToState)(ImportHdWallet);

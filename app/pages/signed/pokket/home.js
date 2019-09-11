@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, Animated, Dimensions, FlatList, Image, Keyboard, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, FlatList, Image, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { connect, createAction } from '../../../../utils/dva';
@@ -13,31 +13,11 @@ import { SortButton } from '../../../components/common';
 import { formatMoney, getStatusBarHeight } from '../../../../utils';
 import { PopupMenu } from '../../../components/PopUpMenu';
 import { POKKET_FAQ_URL, POKKET_MENU } from './constants';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
 class PokketHome extends React.Component {
-    static navigationOptions = ({ navigation, screenProps }) => {
-        const { t, lang } = screenProps;
-        const showMenu = navigation.getParam('showMenu', () => {});
-        return {
-            title: t('pokket.title', { locale: lang }),
-            headerRight: (
-                <TouchableOpacity
-                    style={{
-                        width: 48,
-                        height: 48,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onPress={showMenu}
-                >
-                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
-                </TouchableOpacity>
-            ),
-        };
-    };
-
     state = {
         keyword: '',
         isLoading: true,
@@ -49,15 +29,10 @@ class PokketHome extends React.Component {
 
     focusedAnimated = new Animated.Value(0);
 
-    constructor(props) {
-        super(props);
-        this.props.navigation.setParams({
-            showMenu: this.openMenu,
-        });
-    }
-
     componentWillMount(): void {
         this.isMount = true;
+        this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
+
         setTimeout(() => {
             this.checkNetWork();
         }, 500);
@@ -65,6 +40,7 @@ class PokketHome extends React.Component {
 
     componentWillUnmount(): void {
         this.isMount = false;
+        this.listenNavigation.remove();
     }
 
     openMenu = () => {
@@ -105,31 +81,16 @@ class PokketHome extends React.Component {
     };
 
     searchProduct = keyword => {
-        const { isLoading } = this.state;
-        isLoading || this.refs.refLoading.show(null, { position: 'top' });
-        const { dispatch } = this.props;
-        this.setState(
-            {
-                keyword,
-            },
-            () => {
-                dispatch(createAction('pokketModel/getProducts')({ keyword })).then(len => {
-                    if (this.isMount) {
-                        isLoading || this.refs.refLoading.hide();
-                        if (len === 0) {
-                            Keyboard.dismiss();
-                        }
-                    }
-                });
-            },
-        );
+        this.setState({
+            keyword,
+        });
     };
 
     checkNetWork = () => {
         const { dispatch } = this.props;
         Promise.all([dispatch(createAction('pokketModel/getProducts')({ keyword: '' })), dispatch(createAction('pokketModel/getRemoteData')())])
+            // eslint-disable-next-line no-unused-vars
             .then(([len, { error }]) => {
-                console.log('len=>', len);
                 if (error) {
                     this.setState({
                         isLoading: false,
@@ -152,7 +113,8 @@ class PokketHome extends React.Component {
 
     toProductDetail = ({ token, tokenFullName }) => {
         const { dispatch, navigation } = this.props;
-        dispatch(createAction('pokketModel/setCurrentProduct')({ token })).then(() => navigation.navigate('signed_pokket_product', { title: `${token}/${tokenFullName}` }));
+        dispatch(createAction('pokketModel/setCurrentProduct')({ token }));
+        navigation.navigate('signed_pokket_product', { title: `${token}/${tokenFullName}` });
     };
 
     renderLoading() {
@@ -168,7 +130,7 @@ class PokketHome extends React.Component {
         const bannersViews = banners.reduce((arr, el, index) => {
             arr.push(
                 <View style={styles.slide} key={`${index}`}>
-                    <Image style={{ height: 120, width }} source={{ uri: el }} resizeMode="stretch" />
+                    <Image style={{ height: 120, width }} source={{ uri: el.imageUrl }} resizeMode="stretch" />
                 </View>,
             );
             return arr;
@@ -187,9 +149,10 @@ class PokketHome extends React.Component {
 
     renderProducts() {
         const { products } = this.props;
-        const { listsDesc } = this.state;
-        const products_ = listsDesc ? products.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
-        return products.length ? (
+        const { listsDesc, keyword } = this.state;
+        let products_ = keyword !== '' ? products.filter(v => v.token.toLowerCase().indexOf(keyword) >= 0 || v.tokenFullName.toLowerCase().indexOf(keyword) >= 0) : products;
+        products_ = listsDesc ? products_.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products_.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
+        return products_.length ? (
             <FlatList
                 data={products_}
                 style={{ backgroundColor: mainBgColor }}
@@ -208,11 +171,15 @@ class PokketHome extends React.Component {
                                 </View>
                                 <View style={styles.productBody}>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(yearlyInterestRate).toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(yearlyInterestRate)
+                                            .toNumber()
+                                            .toFixed(4)}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_yearly_rate')}</Text>
                                     </View>
                                     <View style={styles.productLabel}>
-                                        <Text>{`${BigNumber(weeklyInterestRate).toNumber()}%`}</Text>
+                                        <Text>{`${BigNumber(weeklyInterestRate)
+                                            .toNumber()
+                                            .toFixed(4)}%`}</Text>
                                         <Text style={{ fontWeight: 'bold' }}>{strings('pokket.label_weekly_rate')}</Text>
                                     </View>
                                 </View>
@@ -332,6 +299,22 @@ class PokketHome extends React.Component {
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         return (
             <View style={{ flex: 1 }}>
+                <CustomHeader
+                    title={strings('pokket.title')}
+                    headerRight={
+                        <TouchableOpacity
+                            style={{
+                                width: 48,
+                                height: 48,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={this.openMenu}
+                        >
+                            <Image source={require('../../../..//assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
+                        </TouchableOpacity>
+                    }
+                />
                 {isLoading ? this.renderLoading() : noNetwork ? this.renderNoNetWork() : this.renderContent()}
                 {/* Menu Pop window */}
                 <PopupMenu

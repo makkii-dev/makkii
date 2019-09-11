@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, InteractionManager, StyleSheet, Image, BackHandler, Platform } from 'react-native';
+import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
@@ -43,7 +43,7 @@ class PinCodeScreen extends React.Component {
         this.cancel = this.props.navigation.getParam('cancel', true);
         this.state = {
             pinCode: '',
-            pinState: 0,
+            pinState: this.props.hashed_pinCode === '' ? 1 : 0,
             errorMsg: null,
         };
     }
@@ -53,17 +53,11 @@ class PinCodeScreen extends React.Component {
         this.cancel && this.props.navigation.goBack();
     }
 
-    componentWillMount(): void {
-        InteractionManager.runAfterInteractions(() => {
-            this.setState({
-                // 0: unlock; 1: create pinCode; 2: confirm pinCode
-                pinState: this.props.hashed_pinCode === '' ? 1 : 0,
-            });
-            this.cancel && this.onPressTouchId();
-            this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-                this.onGoback(); // works best when the goBack is async
-                return true;
-            });
+    componentDidMount(): void {
+        this.cancel && this.onPressTouchId();
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoback(); // works best when the goBack is async
+            return true;
         });
     }
 
@@ -75,7 +69,7 @@ class PinCodeScreen extends React.Component {
     }
 
     componentWillUnmount(): void {
-        this.backHandler.remove();
+        this.backHandler && this.backHandler.remove();
     }
 
     renderDots(numberOfDots) {
@@ -267,9 +261,9 @@ class PinCodeScreen extends React.Component {
                 <View style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}>
                     {item !== 'cancel' && item !== 'delete' && item !== 'finger' && item !== 'blank' && <Text style={[styles.keyboardViewItemText, { color: mColor, fontSize: 36 }]}>{item}</Text>}
                     {/* { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) } */}
-                    {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
-                    {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
-                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} resizeMode="contain" />}
+                    {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
+                    {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
+                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
                 </View>
             </TouchableOpacity>
         );

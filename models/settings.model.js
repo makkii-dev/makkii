@@ -10,7 +10,7 @@ import { createAction, popCustom } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
-import { getLatestVersion } from '../services/setting.service';
+import { getLatestVersion, getSupportedModule } from '../services/setting.service';
 
 export default {
     namespace: 'settingsModel',
@@ -36,6 +36,7 @@ export default {
         leaveTime: 0,
         ignoreAppState: false,
         showTouchIdDialog: true,
+        bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
     },
     subscriptions: {
         setupListenerCoinPrice({ dispatch }) {
@@ -89,7 +90,25 @@ export default {
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
+            yield put(createAction('getSupportedModule')());
             return true;
+        },
+        *getSupportedModule(action, { select, call, put }) {
+            const { result, data: supportedModule } = yield call(getSupportedModule);
+            if (result) {
+                let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+                lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
+                if (!supportedModule.includes('Pokket')) {
+                    bottomBarTab.remove('signed_pokket');
+                }
+                if (!supportedModule.includes('News') || lang.indexOf('en') >= 0) {
+                    bottomBarTab.remove('signed_news');
+                }
+                if (!supportedModule.includes('Kyber')) {
+                    bottomBarTab.remove('signed_dex');
+                }
+                yield put(createAction('updateState')({ bottomBarTab }));
+            }
         },
         *reset(action, { put }) {
             yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
@@ -164,10 +183,25 @@ export default {
             {
                 payload: { lang },
             },
-            { put },
+            { call, select, put },
         ) {
             updateLocale(lang);
-            yield put(createAction('updateState')({ lang }));
+            let { bottomBarTab } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+            const lang_ = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
+
+            if (lang_.indexOf('en') >= 0) {
+                bottomBarTab.remove('signed_news');
+            } else {
+                // try add signed_news
+                const { result, data: supportedModule } = yield call(getSupportedModule);
+                if (result) {
+                    if (supportedModule.includes('News')) {
+                        bottomBarTab = [...bottomBarTab.slice(0, -1), 'signed_news', ...bottomBarTab.slice(-1)];
+                    }
+                }
+            }
+
+            yield put(createAction('updateState')({ lang, bottomBarTab }));
             yield put(createAction('saveSettings')());
         },
         *updateLoginSessionTimeOut(
@@ -183,6 +217,7 @@ export default {
             const { pinCodeEnabled } = yield select(mapToSettings);
             if (pinCodeEnabled) {
                 yield put(createAction('updateState')({ pinCodeEnabled: false, touchIDEnabled: false }));
+                yield put(createAction('userModel/updatePinCode')({ hashed_pinCode: '' }));
             } else {
                 yield put(createAction('updateState')({ pinCodeEnabled: true }));
             }

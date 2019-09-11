@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, Clipboard, TouchableOpacity, Linking, ScrollView, Dimensions, PixelRatio } from 'react-native';
+import { View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio } from 'react-native';
+import BigNumber from 'bignumber.js';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
@@ -28,7 +29,7 @@ class Transaction extends Component {
 
     onViewInExplorer = () => {
         const url = getTransactionExplorerUrl(this.account.symbol, this.transaction.hash);
-        Linking.openURL(url).catch(err => console.error('An error occurred', err));
+        this.props.navigation.navigate('simple_webview', { initialUrl: { uri: url } });
     };
 
     // eslint-disable-next-line consistent-return

@@ -22,6 +22,9 @@ export default {
         },
     },
     effects: {
+        *reset(action, { put }) {
+            yield put(createAction('updateState')({ tokenToBeImported: initToken }));
+        },
         *searchTokens(
             {
                 payload: { keyword },

@@ -102,6 +102,7 @@ class BackUpTips extends React.Component {
         this.setState({
             understand: v,
         });
+        return true;
     };
 
     nextStep = () => {

@@ -78,11 +78,15 @@ class AddAddress extends Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
-            success: 'signed_setting_add_address',
             validate: (data, callback) => {
                 console.log('validating code.....');
                 dispatch(createAction('contactAddModel/parseScannedData')({ data: data.data })).then(res => {
-                    res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
+                    if (res.result) {
+                        this.setState({
+                            ...res.data,
+                        });
+                    }
+                    callback(res.result, res.result ? '' : strings('error_invalid_qrcode'));
                 });
             },
         });
@@ -108,7 +112,7 @@ class AddAddress extends Component {
         const { name, symbol, address } = this.state;
         const coinName = `${COINS[symbol].name}/${symbol}`;
         return (
-            <View style={{ flex: 1, backgroundColor: mainBgColor }}>
+            <View style={{ flex: 1, backgroundColor: mainBgColor }} accessibilityLabel={this.props.navigation.state.routeName}>
                 <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
                     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={() => Keyboard.dismiss()}>
                         <View style={{ ...styles.containerView, marginVertical: 30 }}>

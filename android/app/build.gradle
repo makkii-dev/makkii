@@ -103,12 +103,13 @@ android {
         applicationId "com.chaion.makkii"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10
-        versionName "1.0.0"
+        versionCode 12
+        versionName "1.1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
         resValue "string", "build_config_package", "com.chaion.makkii"
+        missingDimensionStrategy 'react-native-camera', 'general'
     }
     productFlavors {
       qa {
@@ -121,6 +122,10 @@ android {
       }
       prod {
         // Pre-compile run ENVFILE=.env.prod
+      }
+      pokket{
+        // Pre-compile run ENVFILE=.env.pokket
+        applicationIdSuffix ".pokket"
       }
     }
     signingConfigs {
@@ -161,15 +166,41 @@ android {
             }
         }
     }
+    preBuild.doFirst {
+        ant.replaceregexp(match: 'android.support.annotation.NonNull;', replace: 'androidx.annotation.NonNull;', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/transitions/', includes: '*.java')
+                }
+        ant.replaceregexp(match: 'android.support.annotation.Nullable;', replace: 'androidx.annotation.Nullable;', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/transitions/', includes: '*.java')
+                }
+        ant.replaceregexp(match: 'android.support.transition', replace: 'androidx.transition', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-reanimated/android/src/main/java/com/swmansion/reanimated/transitions/', includes: '*.java')
+                }
+        ant.replaceregexp(match: 'android.support.v4', replace: 'androidx.core', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-modal-translucent/android/src/main/java/me/listenzz/modal/', includes:'*.java')
+                }
+        ant.replaceregexp(match: 'android.support.annotation', replace: 'androidx.annotation', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/', includes:'*.java')
+                }
+        ant.replaceregexp(match: 'android.support.v4', replace: 'androidx.core', flags: 'g', byline: true)
+                {
+                    fileset(dir: '../../node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/', includes:'*.java')
+                }
+    }
 }
 
 dependencies {
+    implementation project(':react-native-reanimated')
     implementation project(':react-native-modal-translucent')
     implementation project(':react-native-background-timer')
     implementation project(':react-native-push-notification')
     implementation project(':react-native-sensitive-info')
     implementation project(':react-native-config')
-    implementation project(':react-native-fast-image')
     implementation project(':react-native-webview')
     implementation project(':react-native-touch-id')
     implementation project(':react-native-local-barcode-recognizer')
@@ -185,7 +216,7 @@ dependencies {
     implementation project(':react-native-device-info')
     implementation project(':react-native-camera')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation "com.facebook.react:react-native:0.59.9"  // From node_modules
 }
 

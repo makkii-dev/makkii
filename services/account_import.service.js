@@ -34,7 +34,12 @@ const getOneAccountFromLedger = async (symbol, index) => {
 };
 
 const getAccountsFromLedger = (symbol, start, end) => {
-    return Promise.all(range(start, end).map(e => getOneAccountFromLedger(symbol, e)));
+    const indexes = range(start, end, 1);
+
+    const promises = indexes.map(e => {
+        return getOneAccountFromLedger(symbol, e);
+    });
+    return Promise.all(promises);
 };
 
 const getLedgerStatus = async () => {

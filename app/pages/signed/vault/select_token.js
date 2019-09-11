@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { ActivityIndicator, Button, Dimensions, FlatList, Image, Keyboard, PixelRatio, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { strings } from '../../../../locales/i18n';
 import Loading from '../../../components/Loading';
 import { mainBgColor } from '../../../style_util';
@@ -124,7 +123,31 @@ class SelectToken extends Component {
 
     renderItem = ({ item }) => {
         const cellHeight = 60;
-        const { symbol, name, fastIcon, icon, isAdded } = item;
+        if (typeof item === 'string') {
+            return (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingVertical: 10,
+                        paddingHorizontal: 20,
+                        backgroundColor: '#fff',
+                        justifyContent: 'space-between',
+                        height: cellHeight,
+                    }}
+                    onPress={this.addCustomToken}
+                >
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Image style={{ width: 30, height: 30 }} source={require('../../../../assets/icon_add_border.png')} resizeMode="contain" />
+                        <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
+                            {strings('select_coin.btn_custom_token')}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+            );
+        }
+        const { symbol, name, icon, isAdded } = item;
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -141,11 +164,7 @@ class SelectToken extends Component {
                 onPress={() => this.addToken(item)}
             >
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {fastIcon !== undefined ? (
-                        <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
-                    ) : icon !== undefined ? (
-                        <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
-                    ) : null}
+                    <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                     <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                         {`${symbol}-${name}`}
                     </Text>
@@ -175,10 +194,10 @@ class SelectToken extends Component {
             >
                 <FlatList
                     style={{ width }}
-                    data={this.props.token_lists}
+                    data={['custom', ...this.props.token_lists]}
                     renderItem={this.renderItem}
                     ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    keyExtractor={item => item.contractAddr}
+                    keyExtractor={item => (typeof item === 'string' ? 'custom' : item.contractAddr)}
                 />
             </View>
         );
@@ -228,7 +247,7 @@ const mapToState = ({ tokenImportModel, accountsModel }) => {
     newTokenLists.forEach(token => {
         const { contractAddr, symbol: tokenSymbol } = token;
         try {
-            token.fastIcon = getTokenIconUrl(symbol, tokenSymbol, contractAddr);
+            token.icon = { uri: getTokenIconUrl(symbol, tokenSymbol, contractAddr) };
         } catch (e) {
             token.icon = COINS.ETH.default_token_icon;
         }

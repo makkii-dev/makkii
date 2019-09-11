@@ -77,10 +77,15 @@ class Send extends Component {
     scan = () => {
         const { dispatch, navigation } = this.props;
         navigation.navigate('scan', {
-            success: 'signed_vault_send',
             validate: (data, callback) => {
                 dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(res => {
-                    res ? callback(true) : callback(false, strings('error_invalid_qrcode'));
+                    console.log('result=>+++++++++++++++++++++', res);
+                    if (res.result) {
+                        this.setState({
+                            ...res.data,
+                        });
+                    }
+                    callback(res.result, res.result ? '' : res.error || strings('error_invalid_qrcode'));
                 });
             },
         });

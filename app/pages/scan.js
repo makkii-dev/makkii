@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Animated, Text } from 'react-native';
+import { View, Image, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, StyleSheet, Animated, Text, ActivityIndicator } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 import ImagePicker from 'react-native-image-picker';
 import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
@@ -49,6 +49,12 @@ class Scan extends Component {
         };
     };
 
+    state = {
+        focusedScreen: false,
+    };
+
+    isVerifying = false;
+
     constructor(props) {
         super(props);
         this.animatedValue = new Animated.Value(-120);
@@ -67,7 +73,16 @@ class Scan extends Component {
 
     componentDidMount() {
         console.log(`[route] ${this.props.navigation.state.routeName}`);
+        this.isMount = true;
+        const { navigation } = this.props;
+        navigation.addListener('willFocus', () => this.isMount && this.setState({ focusedScreen: true }));
+        navigation.addListener('willBlur', () => this.isMount && this.setState({ focusedScreen: false }));
+
         this.scannerLineMove();
+    }
+
+    componentWillUnmount(): void {
+        this.isMount = false;
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -111,21 +126,28 @@ class Scan extends Component {
     };
 
     getQrcode = data => {
+        this.setState({ focusedScreen: false });
         if (data) {
-            const { validate, success } = this.props.navigation.state.params;
+            const { validate } = this.props.navigation.state.params;
             LocalBarcodeRecognizer.decode(data, { codeTypes: ['qr'] })
                 .then(result => {
-                    console.log('result', result);
                     if (result === '') {
-                        throw 'error';
+                        AppToast.show(strings('scan.decode_fail'));
                     }
-                    validate({ data: result }, (res, message = '') => {
-                        if (res) {
-                            this.props.navigation.navigate(success, { scanned: result });
-                        } else {
-                            AppToast.show(message);
+                    if (validate) {
+                        if (!this.isVerifying) {
+                            this.isVerifying = true;
+                            validate({ data: result }, (res, message = '') => {
+                                if (res) {
+                                    this.props.navigation.goBack();
+                                } else {
+                                    AppToast.show(message);
+                                }
+                                this.isVerifying = false;
+                            });
+                            this.setState({ focusedScreen: true });
                         }
-                    });
+                    }
                 })
                 .catch(() => {
                     AppToast.show(strings('scan.decode_fail'));
@@ -137,7 +159,15 @@ class Scan extends Component {
         const animatedStyle = {
             transform: [{ translateY: this.animatedValue }],
         };
-        const { validate, success } = this.props.navigation.state.params;
+        const { validate } = this.props.navigation.state.params;
+        const { focusedScreen } = this.state;
+        if (!focusedScreen) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator animating color="red" size="large" />
+                </View>
+            );
+        }
         return (
             <View style={{ width: '100%', height: '100%' }}>
                 <RNCamera
@@ -149,24 +179,35 @@ class Scan extends Component {
                     flashMode={this.state.torch ? RNCamera.Constants.FlashMode.torch : RNCamera.Constants.FlashMode.off}
                     captureAudio={false}
                     onBarCodeRead={e => {
-                        if (validate && success) {
-                            validate(e, (result, message = '') => {
-                                if (result) {
-                                    this.props.navigation.navigate(success, { scanned: e.data });
-                                } else {
-                                    // slow down toast log
-                                    const now = Date.now();
-                                    if (now - this.state.toast > 1000) {
-                                        AppToast.show(message);
-                                        this.setState({
-                                            toast: now,
-                                        });
+                        if (validate) {
+                            if (!this.isVerifying) {
+                                this.isVerifying = true;
+                                validate(e, (result, message = '') => {
+                                    if (result) {
+                                        this.props.navigation.goBack();
+                                    } else {
+                                        // slow down toast log
+                                        const now = Date.now();
+                                        if (now - this.state.toast > 1000) {
+                                            AppToast.show(message);
+                                            this.isMount &&
+                                                this.setState({
+                                                    toast: now,
+                                                });
+                                        }
                                     }
-                                }
-                            });
+                                    this.isVerifying = false;
+                                });
+                            }
                         } else {
                             this.props.navigation.goBack();
                         }
+                    }}
+                    androidCameraPermissionOptions={{
+                        title: strings('wallet.title_permission_camera'),
+                        message: strings('wallet.message_permission_camera'),
+                        buttonPositive: strings('ok_button'),
+                        buttonNegative: strings('cancel_button'),
                     }}
                 >
                     {/* up view */}

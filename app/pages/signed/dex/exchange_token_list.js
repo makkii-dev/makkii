@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, Dimensions, FlatList, ActivityIndicator, Image, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-import FastImage from 'react-native-fast-image';
 import { getTokenIconUrl } from '../../../../client/api';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, navigateBack } from '../../../../utils/dva';
@@ -36,7 +35,7 @@ class ExchangeTokenList extends React.PureComponent {
     };
 
     renderItem = ({ item }) => {
-        const { symbol, name, fastIcon, icon } = item;
+        const { symbol, name, icon } = item;
         return (
             <TouchableOpacity
                 style={{
@@ -51,11 +50,7 @@ class ExchangeTokenList extends React.PureComponent {
                 }}
                 onPress={() => this.onSelectToken(symbol)}
             >
-                {fastIcon !== undefined ? (
-                    <FastImage style={{ width: 30, height: 30 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />
-                ) : icon !== undefined ? (
-                    <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
-                ) : null}
+                <Image style={{ width: 30, height: 30 }} source={icon} resizeMode="contain" />
                 <Text numberOfLines={1} style={{ paddingLeft: 10 }}>
                     {`${symbol}-${name}`}
                 </Text>
@@ -76,29 +71,32 @@ class ExchangeTokenList extends React.PureComponent {
 }
 
 const mapToState = ({ ERC20Dex }) => {
-    const tokenList = Object.keys(ERC20Dex.tokenList).map(el => {
-        if (el === 'ETH') {
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                icon: COINS.ETH.icon,
-            };
-        }
-        try {
-            const fastIcon = getTokenIconUrl('ETH', el, ERC20Dex.tokenList[el].address);
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                fastIcon,
-            };
-        } catch (e) {
-            return {
-                symbol: el,
-                name: ERC20Dex.tokenList[el].name,
-                icon: COINS.ETH.default_token_icon,
-            };
-        }
-    });
+    const { srcToken, destToken } = ERC20Dex.trade;
+    const tokenList = Object.keys(ERC20Dex.tokenList)
+        .filter(el => el !== srcToken && el !== destToken)
+        .map(el => {
+            if (el === 'ETH') {
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    icon: COINS.ETH.icon,
+                };
+            }
+            try {
+                const fastIcon = getTokenIconUrl('ETH', el, ERC20Dex.tokenList[el].address);
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    icon: { uri: fastIcon },
+                };
+            } catch (e) {
+                return {
+                    symbol: el,
+                    name: ERC20Dex.tokenList[el].name,
+                    icon: COINS.ETH.default_token_icon,
+                };
+            }
+        });
 
     return {
         isLoading: ERC20Dex.isLoading,

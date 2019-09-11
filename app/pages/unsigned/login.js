@@ -92,6 +92,7 @@ class Login extends Component {
                             backgroundColor: 'white',
                             paddingHorizontal: 20,
                         }}
+                        accessibilityLabel={this.props.navigation.state.routeName}
                     >
                         <View style={{ alignItems: 'center', marginBottom: 60 }}>
                             <ComponentLogo

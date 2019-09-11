@@ -75,6 +75,7 @@ class SelectCoin extends Component {
                     flex: 1,
                     paddingTop: 20,
                 }}
+                accessibilityLabel={this.props.navigation.state.routeName}
             >
                 <FlatList style={{ width }} data={Object.values(COINS)} renderItem={this.renderItem} ItemSeparatorComponent={() => <View style={styles.divider} />} keyExtractor={item => item.name} />
             </View>

@@ -1,8 +1,10 @@
-import { Dimensions, Platform, StatusBar } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import { Header } from 'react-navigation';
 import { mainColor, fixedWidthFont } from './style_util';
+import { getStatusBarHeight } from '../utils';
 
-const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 0 : StatusBar.currentHeight;
+export const STATUSBAR_HEIGHT = getStatusBarHeight(true);
+export const HEADER_HEIGHT = Header.HEIGHT;
 
 const BORDER_COLOR = '#8c8a8a';
 const FONT_COLOR = '#777676';
@@ -22,8 +24,8 @@ export default {
         borderBottomWidth: 0,
         fontWeight: 'normal',
         backgroundColor: mainColor,
-        height: Header.HEIGHT + STATUSBAR_HEIGHT,
-        paddingTop: STATUSBAR_HEIGHT,
+        height: Platform.OS === 'ios' ? HEADER_HEIGHT : HEADER_HEIGHT + STATUSBAR_HEIGHT,
+        paddingTop: Platform.OS === 'ios' ? 0 : STATUSBAR_HEIGHT,
     },
     headerStyleWithoutShadow: {
         shadowOpacity: 0,
@@ -33,8 +35,8 @@ export default {
         borderBottomWidth: 0,
         fontWeight: 'normal',
         backgroundColor: mainColor,
-        height: Header.HEIGHT + STATUSBAR_HEIGHT,
-        paddingTop: STATUSBAR_HEIGHT,
+        height: Platform.OS === 'ios' ? HEADER_HEIGHT : HEADER_HEIGHT + STATUSBAR_HEIGHT,
+        paddingTop: Platform.OS === 'ios' ? 0 : STATUSBAR_HEIGHT,
     },
     headerTitleStyle: {
         fontWeight: 'bold',

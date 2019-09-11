@@ -84,8 +84,9 @@ function getLedgerMessage(errorCode) {
     return strings('ledger.error_general');
 }
 
-function generateQRCode(amount, address, coin = 'AION') {
-    return encode(address, { amount }, COINS[coin].name.toLowerCase());
+function generateQRCode(amount, address, coin = 'AION', contractAddress, decimal) {
+    console.log('generateQRCode=>', amount, address, coin, contractAddress, decimal);
+    return encode(address, { amount, contractAddress, decimal }, COINS[coin].name.toLowerCase());
 }
 
 function saveImage(base64, imageFileName) {
@@ -147,7 +148,6 @@ function strLen(str) {
     let len = 0;
     for (let i = 0; i < str.length; i++) {
         const c = str.charCodeAt(i);
-        // 单字节加1
         if ((c >= 0x0001 && c <= 0x007e) || (c >= 0xff60 && c <= 0xff9f)) {
             len++;
         } else {
@@ -278,6 +278,46 @@ function formatMoney(amount, decimalCount = 2, decimal = '.', thousands = ',') {
     }
 }
 
+function compareDate(date1, date2) {
+    date1 = new Date(date1);
+    date2 = new Date(date2);
+    let result = false;
+    if (date1.getFullYear() > date2.getFullYear()) {
+        result = true;
+    } else if (date1.getFullYear() === date2.getFullYear()) {
+        if (date1.getMonth() > date2.getMonth()) {
+            result = true;
+        } else if (date1.getMonth() === date2.getMonth()) {
+            if (date1.getDate() > date2.getDate()) {
+                result = true;
+            }
+        }
+    }
+    return result;
+}
+function dateDiff(timestamp) {
+    let minute = 1000 * 60;
+    let hour = minute * 60;
+    let day = hour * 24;
+    let now = new Date();
+    let diffValue = now - timestamp;
+
+    let dayC = Math.floor(diffValue / day);
+    let hourC = Math.floor(diffValue / hour);
+    let minC = Math.floor(diffValue / minute);
+
+    if (dayC >= 1) {
+        return new Date(timestamp).Format('yyyy-MM-dd');
+    }
+    if (hourC >= 1) {
+        return strings('time.hourAgo', { hour: hourC });
+    }
+    if (minC >= 1) {
+        return strings('time.minuteAgo', { minute: minC });
+    }
+    return strings('time.justNow');
+}
+
 module.exports = {
     encrypt,
     decrypt,
@@ -297,4 +337,6 @@ module.exports = {
     isJsonString,
     getParameterCaseInsensitive,
     formatMoney,
+    compareDate,
+    dateDiff,
 };

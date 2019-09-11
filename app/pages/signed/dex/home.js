@@ -2,7 +2,6 @@ import * as React from 'react';
 import { View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
 import { Header } from 'react-navigation';
 import { connect } from 'react-redux';
-import FastImage from 'react-native-fast-image';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BigNumber from 'bignumber.js';
 import { strings } from '../../../../locales/i18n';
@@ -19,33 +18,13 @@ import { getTokenIconUrl } from '../../../../client/api';
 import { DEX_MENU, getExchangeRulesURL } from './constants';
 import { PopupMenu } from '../../../components/PopUpMenu';
 import { AppToast } from '../../../components/AppToast';
+import { CustomHeader } from '../../../components/CustomHeader';
 
 const { width } = Dimensions.get('window');
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 
 class Home extends React.Component {
-    static navigationOptions = ({ navigation, screenProps }) => {
-        const { t, lang } = screenProps;
-        const showMenu = navigation.getParam('showMenu', () => {});
-        return {
-            title: t('token_exchange.title', { locale: lang }),
-            headerRight: (
-                <TouchableOpacity
-                    style={{
-                        width: 48,
-                        height: 48,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                    onPress={showMenu}
-                >
-                    <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
-                </TouchableOpacity>
-            ),
-        };
-    };
-
     state = {
         srcToken: this.props.trade.srcToken,
         destToken: this.props.trade.destToken,
@@ -60,9 +39,6 @@ class Home extends React.Component {
     destQtyFocused = false;
 
     componentWillMount(): void {
-        this.props.navigation.setParams({
-            showMenu: this.openMenu,
-        });
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
@@ -228,7 +204,7 @@ class Home extends React.Component {
         }
         try {
             const fastIcon = getTokenIconUrl('ETH', tokenSymbol, tokenList[tokenSymbol].address);
-            return <FastImage style={{ width: 24, height: 24 }} source={{ uri: fastIcon }} resizeMode={FastImage.resizeMode.contain} />;
+            return <Image style={{ width: 24, height: 24 }} source={{ uri: fastIcon }} resizeMode="contain" />;
         } catch (e) {
             const Icon = COINS.ETH.default_token_icon;
             return <Image style={{ width: 24, height: 24 }} source={Icon} resizeMode="contain" />;
@@ -260,7 +236,7 @@ class Home extends React.Component {
                 }
             }
         } else {
-            errorMsg = strings('token_exchange.label_exchange_no_account');
+            errorMsg = strings('token_exchange.button_exchange_no_ETH_account');
         }
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
 
@@ -389,7 +365,27 @@ class Home extends React.Component {
 
     render() {
         const { isLoading } = this.props;
-        return isLoading ? this.renderLoading() : this.renderContent();
+        return (
+            <View style={{ flex: 1 }}>
+                <CustomHeader
+                    title={strings('token_exchange.title')}
+                    headerRight={
+                        <TouchableOpacity
+                            style={{
+                                width: 48,
+                                height: 48,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={this.openMenu}
+                        >
+                            <Image source={require('../../../../assets/icon_account_menu.png')} style={{ width: 25, height: 25, tintColor: '#fff' }} resizeMode="contain" />
+                        </TouchableOpacity>
+                    }
+                />
+                {isLoading ? this.renderLoading() : this.renderContent()}
+            </View>
+        );
     }
 }
 

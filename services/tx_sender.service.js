@@ -63,8 +63,10 @@ const parseScannedData = async (data, currentAccount) => {
         const ret2 = amount ? validator.validateAmount(amount) : true;
         ret = ret1 && ret2;
         if (ret) {
-            retData.to = address;
-            retData.amount = amount || '';
+            retData = {
+                ...options,
+                to: address,
+            };
         }
     } catch (e) {
         ret = await validateAddress(data, currentAccount.symbol);
