@@ -373,7 +373,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         });
                     }}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} />}
                 />
                 {/* Menu Pop window */}
                 <PopupMenu
