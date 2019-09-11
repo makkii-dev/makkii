@@ -7668,10 +7668,10 @@ react-native-device-info@^2.1.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.3.2.tgz#db2b8f135aaf2515583e367ab791dcc7d2f0d14c"
   integrity sha512-ccpPuUbwhw5uYdVwN1UJp6ykMZz6U/u82HNM3oJ7O6MP8RIMlMDkHbqR4O0sDtUSuRMGiqqRzFtmOLFYeQ0ODw==
 
-react-native-fast-image@6.0.3:
-  version "6.0.3"
-  resolved "https://registry.npm.taobao.org/react-native-fast-image/download/react-native-fast-image-6.0.3.tgz#e644076c5e21dd8695db07905779352b2b9c1cb8"
-  integrity sha1-5kQHbF4h3YaV2weQV3k1KyucHLg=
+react-native-fast-image@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-7.0.0.tgz#f8d763cabc72bbe1f73a78db34214885e62f6137"
+  integrity sha512-GrlAb4/EvXaT9YbSZFA81xesqa/djksKXE6ChYoVTzFCI9D934PANw/cuE6etdWTZJhSUTywjNtUkrjBO6gUQA==
 
 react-native-fit-image@^1.5.2:
   version "1.5.4"
