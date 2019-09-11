@@ -7807,7 +7807,7 @@ react-native-safe-area-view@^0.14.1:
 
 "react-native-screenshot-helper@https://github.com/chaion/react-native-screenshot.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-screenshot.git#c808666c7968ebc87c2bfd3e78b34f240c9d2084"
+  resolved "https://github.com/chaion/react-native-screenshot.git#0a1993c88c4a50a02679d6e20ddabb6890d53843"
 
 react-native-sensitive-info@^5.5.0:
   version "5.5.1"
