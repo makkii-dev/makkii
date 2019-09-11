@@ -194,7 +194,7 @@ class ArticlesTab extends React.Component {
                     )}
                     onEndReached={() => this.onEndReached()}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} title="ContextMenu" />}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} />}
                 />
 
                 {isShowToTop ? (

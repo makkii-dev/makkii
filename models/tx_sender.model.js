@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import BigNumber from 'bignumber.js';
 import { createAction } from '../utils/dva';
 import { getAllBalance, parseScannedData, sendTx, validateTxObj } from '../services/tx_sender.service';
 import { alertOk } from '../app/components/common';

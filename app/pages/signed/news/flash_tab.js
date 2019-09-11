@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, ActivityIndicator, RefreshControl, SectionList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ActivityIndicator, SectionList, TouchableOpacity, Image } from 'react-native';
 import { ReadMore } from '../../../components/ReadMore';
 import { createAction } from '../../../../utils/dva';
 import { mainBgColor } from '../../../style_util';
@@ -196,7 +196,8 @@ class FlashTab extends React.Component {
                     sections={flashNews}
                     onEndReached={() => this.onEndReached()}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} title="ContextMenu" />}
+                    refreshing={refreshing}
+                    onRefresh={() => this.onRefresh()}
                 />
                 {isShowToTop ? (
                     <TouchableOpacity
