@@ -17,6 +17,7 @@
     "pre-lint"
   ],
   "dependencies": {
+    "@react-native-community/push-notification-ios": "^1.0.2",
     "aion-web3": "1.1.5",
     "bignumber.js": "^8.0.2",
     "bip21": "^2.0.2",
@@ -47,7 +48,7 @@
     "react-native-markdown-renderer": "^3.2.8",
     "react-native-modal-translucent": "^3.0.1",
     "react-native-progress-circle": "^2.0.1",
-    "react-native-push-notification": "https://github.com/peinguin/react-native-push-notification.git#androidx",
+    "react-native-push-notification": "^3.1.9",
     "react-native-qrcode-svg": "^5.1.2",
     "react-native-reanimated": "^1.2.0",
     "react-native-root-toast": "^3.0.2",

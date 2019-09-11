@@ -6,7 +6,8 @@ import FlashTab from './flash_tab';
 import ArticlesTab from './articles_tab';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
-import { CustomHeader, HeaderHeight } from '../../../components/CustomHeader';
+import { CustomHeader } from '../../../components/CustomHeader';
+import { HEADERHEIGHT} from "../../../styles";
 
 export default class NewsHome extends React.Component {
     state = {
@@ -43,7 +44,7 @@ export default class NewsHome extends React.Component {
 
         return (
             <CustomHeader>
-                <View style={{ height: HeaderHeight, justifyContent: 'flex-start', alignItems: 'center' }}>
+                <View style={{ height: HEADERHEIGHT, justifyContent: 'flex-start', alignItems: 'center' }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: 240, height: HeaderHeight - 2, alignItems: 'center', paddingHorizontal: 20 }}>
                         <TouchableOpacity onPress={() => this.handleIndexChange(0)}>
                             <Text style={{ ...labelStyle, color: index === 0 ? '#ffffff' : '#d3d3d3' }}>{routes[0].title}</Text>

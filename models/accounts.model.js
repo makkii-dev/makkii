@@ -136,7 +136,7 @@ export default {
             const hashed_password = yield select(({ userModel }) => userModel.hashed_password);
             if (state_version < 2) {
                 const old_accounts_storage = yield call(Storage.get, 'accounts', false, false);
-                let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || {});
+                let old_accounts = JSON.parse(decrypt(old_accounts_storage, hashed_password) || "{}");
                 old_accounts = upgradeAccountsV0_V1(state_version, old_accounts, options);
                 const { accountsKey, accountsMap, transactionsMap, tokenLists, privateKeyMap } = upgradeAccountsV1_V2(old_accounts);
                 const hd_index = yield call(Storage.get, 'userModel', {}).hd_index ||
