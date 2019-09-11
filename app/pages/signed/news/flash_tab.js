@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { View, Text, ActivityIndicator, SectionList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ActivityIndicator, RefreshControl, SectionList, TouchableOpacity, Image } from 'react-native';
 import { ReadMore } from '../../../components/ReadMore';
 import { createAction } from '../../../../utils/dva';
 import { mainBgColor } from '../../../style_util';
@@ -189,15 +189,13 @@ class FlashTab extends React.Component {
                     ref="listRef"
                     stickySectionHeadersEnabled
                     onScroll={this._onScroll}
-                    bounces={false}
                     renderItem={this.renderItem}
                     renderSectionHeader={this.renderTimeBar}
                     keyExtractor={(item, index) => `${index}`}
                     sections={flashNews}
                     onEndReached={() => this.onEndReached()}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
-                    refreshing={refreshing}
-                    onRefresh={() => this.onRefresh()}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} />}
                 />
                 {isShowToTop ? (
                     <TouchableOpacity
