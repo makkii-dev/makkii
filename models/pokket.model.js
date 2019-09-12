@@ -67,7 +67,7 @@ export default {
                 to: toAddress,
                 amount,
                 customBroadCast: customBroadCastTx(payload, toAddress),
-                targetRoute: 'signed_pokket_product',
+                targetRoute: 'signed_pokket',
             };
             yield put(createAction('txSenderModel/updateState')(payload_));
             yield put(NavigationActions.navigate({ routeName: 'signed_vault_send' }));

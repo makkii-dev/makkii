@@ -103,6 +103,7 @@ export default {
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
+            // TODO refactor sendTx and txListener to reduce coupling and complexity  2019-09-12
             if (ret.result) {
                 sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));
                 // dispatch tx to accountsModel;
@@ -196,6 +197,8 @@ export default {
             const { error } = ret;
             if (error.message && accountType === '[ledger]') {
                 alertOk(strings('alert_title_error'), getLedgerMessage(error.message));
+            } else if (error.message && error.type === 'pokket') {
+                alertOk(strings('alert_title_error'), `${strings('send.error_send_transaction')}:${strings(`pokket.error_${error.message}`)}`);
             } else {
                 alertOk(strings('alert_title_error'), strings('send.error_send_transaction'));
             }

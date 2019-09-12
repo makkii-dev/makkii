@@ -232,7 +232,7 @@ class Home extends React.Component {
                 } else if (srcQty > 0) {
                     errorMsg = strings('token_exchange.label_exchange_insufficient_balance');
                 } else {
-                    errorMsg = strings('token_exchange.label_exchange_invalid_number');
+                    errorMsg = strings('token_exchange.button_exchange_invalid_number');
                 }
             }
         } else {

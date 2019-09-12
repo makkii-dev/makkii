@@ -643,7 +643,11 @@
     "toast_create_order_success": "Create order success",
     "toast_no_token": "Please add token: {{token}} first",
     "toast_invalid_amount": "Invalid amount",
-    "toast_invalid_address": "Invalid income address"
+    "toast_invalid_address": "Invalid income address",
+    "error_create_order": "create order failed",
+    "error_pokket.product_list.expire": "Product list has been refreshed",
+    "error_pokket.product.exceed_quota": "Investment amount exceeds the remaining quota",
+    "error_UNKNOWN": "Unknown reason"
   },
   "news": {
     "title_articles": "Articles",

@@ -41,11 +41,11 @@ const createOrder = async payload => {
         console.log('[Pokket createOrder req]=>', url, payload);
         const resp = await HttpClient.put(url, payload, true);
         console.log('[Pokket createOrder resp]=>', resp.data);
-        if (!resp.data.code) {
+        if (!resp.data.status) {
             return resp.data;
         }
         console.log('[Pokket createOrder error]=>', resp.data.message);
-        return {};
+        return { status: resp.data.status, message: resp.data.message };
     } catch (e) {
         console.log('[Pokket createOrder error]=>', e);
         return {};
@@ -96,7 +96,7 @@ const customBroadCastTx = (order, toAddress) => async ({ txObj, encoded }) => {
         const pendingTokenTx = order.token !== 'BTC' || order.token !== 'ETH' ? { ...txObj, to: toAddress, value: order.amount, hash: resp.investTransactionHash, status: 'PENDING' } : undefined;
         return { result: true, data: { pendingTx, pendingTokenTx } };
     }
-    return { result: false, error: {} };
+    return { result: false, error: { type: 'pokket', message: resp.message.match(/^pokket/) ? resp.message : 'UNKNOWN' } };
 };
 
 export { getProducts, getOrders, createOrder, toggleAutoRoll, getBaseData, customBroadCastTx };

@@ -643,7 +643,11 @@
     "toast_create_order_success": "创建订单成功",
     "toast_no_token": "请先添加token: {{token}}",
     "toast_invalid_amount": "无效的金额",
-    "toast_invalid_address": "无效的收益地址"
+    "toast_invalid_address": "无效的收益地址",
+    "error_create_order": "创建订单失败",
+    "error_pokket.product_list.expire": "产品列表已经刷新",
+    "error_pokket.product.exceed_quota": "产品当日额度不足",
+    "error_UNKNOWN": "未知原因"
   },
   "news": {
     "title_articles": "文章",
