@@ -5983,9 +5983,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#11d2c2a711243a163baee3b292396add3f078ca6":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#594a5e7babbb12cbb0a6dd0dd649d6953a8a3c7b":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#11d2c2a711243a163baee3b292396add3f078ca6"
+  resolved "https://github.com/chaion/makkii-coins.git#594a5e7babbb12cbb0a6dd0dd649d6953a8a3c7b"
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@tronscan/client" "^0.2.48"
@@ -7668,6 +7668,11 @@ react-native-device-info@^2.1.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.3.2.tgz#db2b8f135aaf2515583e367ab791dcc7d2f0d14c"
   integrity sha512-ccpPuUbwhw5uYdVwN1UJp6ykMZz6U/u82HNM3oJ7O6MP8RIMlMDkHbqR4O0sDtUSuRMGiqqRzFtmOLFYeQ0ODw==
 
+react-native-fast-image@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-7.0.0.tgz#f8d763cabc72bbe1f73a78db34214885e62f6137"
+  integrity sha512-GrlAb4/EvXaT9YbSZFA81xesqa/djksKXE6ChYoVTzFCI9D934PANw/cuE6etdWTZJhSUTywjNtUkrjBO6gUQA==
+
 react-native-fit-image@^1.5.2:
   version "1.5.4"
   resolved "https://registry.yarnpkg.com/react-native-fit-image/-/react-native-fit-image-1.5.4.tgz#73d2fccc7ad902cf2ffcd008a2a74749ad50134a"
@@ -7807,7 +7812,7 @@ react-native-safe-area-view@^0.14.1:
 
 "react-native-screenshot-helper@https://github.com/chaion/react-native-screenshot.git":
   version "1.0.0"
-  resolved "https://github.com/chaion/react-native-screenshot.git#c808666c7968ebc87c2bfd3e78b34f240c9d2084"
+  resolved "https://github.com/chaion/react-native-screenshot.git#0a1993c88c4a50a02679d6e20ddabb6890d53843"
 
 react-native-sensitive-info@^5.5.0:
   version "5.5.1"

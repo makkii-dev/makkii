@@ -29,6 +29,7 @@
 		392FDBC7FABE43E5AFC6DE93 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C5B39D87A3FF4D67BD29B6CE /* libRNGestureHandler.a */; };
 		4FAA076F303545BEA6C8B7BE /* libRNCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A19D477B5154FF5B7E2297F /* libRNCamera.a */; };
 		607BA266E8384BD5A2B4C178 /* libRNCWebView.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EFF87723D22141F8AD5965D7 /* libRNCWebView.a */; };
+		76D7E307EEB545CF9EE9DB8F /* libFastImage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E0F500D6AE3348E78F2C96F6 /* libFastImage.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		8A7CE7039A9548A7B8B49B54 /* libRNReactNativeLocalBarcodeRecognizer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C33897D3D75F4F15A13DE821 /* libRNReactNativeLocalBarcodeRecognizer.a */; };
 		952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0832F60C483D4933BAB8EC02 /* libRNReanimated.a */; };
@@ -275,6 +276,13 @@
 			proxyType = 2;
 			remoteGlobalIDString = 9B97F66B220DEC6000B61540;
 			remoteInfo = RNCPushNotificationIOS;
+		};
+		1C6927942328E85D005FA70D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4CBBA765F87243B1BD0D2DA1 /* FastImage.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A287971D1DE0C0A60081BDFA;
+			remoteInfo = FastImage;
 		};
 		1C76853122B73FD4009D979F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -535,6 +543,7 @@
 		2D16E6891FA4F8E400B85C8A /* libReact.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libReact.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNBackgroundTimer.a; sourceTree = "<group>"; };
 		3F9F58235E7E4271928EB562 /* libRNRandomBytes.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNRandomBytes.a; sourceTree = "<group>"; };
+		4CBBA765F87243B1BD0D2DA1 /* FastImage.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = FastImage.xcodeproj; path = "../node_modules/react-native-fast-image/ios/FastImage.xcodeproj"; sourceTree = "<group>"; };
 		50C2B6DE4F914C6D83A4E788 /* RNDeviceInfo.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNDeviceInfo.xcodeproj; path = "../node_modules/react-native-device-info/ios/RNDeviceInfo.xcodeproj"; sourceTree = "<group>"; };
 		519ECCBDD5EB4940949A1828 /* libRNImagePicker.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNImagePicker.a; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
@@ -562,6 +571,7 @@
 		CD3FEEF533154D61999A1804 /* RNCWebView.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCWebView.xcodeproj; path = "../node_modules/react-native-webview/ios/RNCWebView.xcodeproj"; sourceTree = "<group>"; };
 		D80C8E9AD43448DC9149736A /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
 		D8ECDC55A1AC49ADBF903BDB /* TouchID.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = TouchID.xcodeproj; path = "../node_modules/react-native-touch-id/TouchID.xcodeproj"; sourceTree = "<group>"; };
+		E0F500D6AE3348E78F2C96F6 /* libFastImage.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libFastImage.a; sourceTree = "<group>"; };
 		E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNReanimated.xcodeproj; path = "../node_modules/react-native-reanimated/ios/RNReanimated.xcodeproj"; sourceTree = "<group>"; };
 		E51256701EE941A0A8C8D7A8 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
 		EFF87723D22141F8AD5965D7 /* libRNCWebView.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNCWebView.a; sourceTree = "<group>"; };
@@ -606,6 +616,7 @@
 				F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */,
 				952C932726394ACCA6346865 /* libRNReanimated.a in Frameworks */,
 				30068BB60447456494168856 /* libRNCPushNotificationIOS.a in Frameworks */,
+				76D7E307EEB545CF9EE9DB8F /* libFastImage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -777,6 +788,7 @@
 				2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */,
 				0832F60C483D4933BAB8EC02 /* libRNReanimated.a */,
 				70CDA5524CDA4334BD582195 /* libRNCPushNotificationIOS.a */,
+				E0F500D6AE3348E78F2C96F6 /* libFastImage.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -871,6 +883,14 @@
 			isa = PBXGroup;
 			children = (
 				1C65B7D8232891D000B34359 /* libRNCPushNotificationIOS.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1C6927912328E85D005FA70D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1C6927952328E85D005FA70D /* libFastImage.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -985,6 +1005,7 @@
 				9E3F853CE57E480189D47C45 /* RNBackgroundTimer.xcodeproj */,
 				E40CE337C1064733B65A2B40 /* RNReanimated.xcodeproj */,
 				F873770E571F4EDB86F60463 /* PushNotificationIOS.xcodeproj */,
+				4CBBA765F87243B1BD0D2DA1 /* FastImage.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1079,6 +1100,10 @@
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectReferences = (
+				{
+					ProductGroup = 1C6927912328E85D005FA70D /* Products */;
+					ProjectRef = 4CBBA765F87243B1BD0D2DA1 /* FastImage.xcodeproj */;
+				},
 				{
 					ProductGroup = 1C65B7D4232891CF00B34359 /* Products */;
 					ProjectRef = F873770E571F4EDB86F60463 /* PushNotificationIOS.xcodeproj */;
@@ -1443,6 +1468,13 @@
 			remoteRef = 1C65B7D7232891D000B34359 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		1C6927952328E85D005FA70D /* libFastImage.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libFastImage.a;
+			remoteRef = 1C6927942328E85D005FA70D /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		1C76853222B73FD4009D979F /* libRNGestureHandler-tvOS.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1740,6 +1772,7 @@
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 					"$(SRCROOT)/../node_modules/@react-native-community/push-notification-ios/ios",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1751,6 +1784,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1794,6 +1828,7 @@
 					"$(SRCROOT)/../node_modules/react-native-background-timer/ios",
 					"$(SRCROOT)/../node_modules/react-native-reanimated/ios/**",
 					"$(SRCROOT)/../node_modules/@react-native-community/push-notification-ios/ios",
+					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1805,6 +1840,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (

@@ -199,7 +199,7 @@ class PinCodeScreen extends React.Component {
     };
 
     onPressTouchId = () => {
-        const { touchIDEnabled = false, dispatch } = this.props;
+        const { touchIDEnabled = false, dispatch, currentAppState } = this.props;
         if (touchIDEnabled === false || this.isModifyPinCode === true) {
             return;
         }
@@ -226,7 +226,7 @@ class PinCodeScreen extends React.Component {
             .catch(error => {
                 Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
                 if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
-                    listenApp.currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`));
+                    currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
                 Platform.OS === 'ios' ? setTimeout(() => (listenApp.ignore = false), 100) : null;
             });

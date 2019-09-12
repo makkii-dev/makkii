@@ -189,7 +189,6 @@ class FlashTab extends React.Component {
                     ref="listRef"
                     stickySectionHeadersEnabled
                     onScroll={this._onScroll}
-                    bounces={false}
                     renderItem={this.renderItem}
                     renderSectionHeader={this.renderTimeBar}
                     keyExtractor={(item, index) => `${index}`}
