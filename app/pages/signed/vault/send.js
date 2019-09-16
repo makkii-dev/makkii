@@ -308,7 +308,7 @@ class Send extends Component {
             gasPrice: this.state.gasPrice,
             gasLimit: this.state.gasLimit,
         };
-        dispatch(createAction('txSenderModel/sendTx')({ txObj })).then(r => {
+        dispatch(createAction('txSenderModel/sendTx')({ txObj, dispatch })).then(r => {
             this.refs.refLoading.hide();
             if (r) {
                 dispatch(createAction('txSenderModel/reset')());

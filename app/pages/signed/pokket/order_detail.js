@@ -54,9 +54,22 @@ class OrderDetail extends React.Component {
     };
 
     render() {
-        const { amount, token, tokenFullName, investorAddress, weeklyInterestRate, yearlyInterestRate, startTime, token2Collateral, orderId, status, /* autoRoll, */ result } = this.props.order;
-        const profits1 = `${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)}${token}`;
-        const profits2 = `${((amount || 0) * (1.1 + weeklyInterestRate / 100) * token2Collateral).toFixed(2)}TUSD`;
+        const {
+            amount,
+            token,
+            tokenFullName,
+            investorAddress,
+            weeklyInterestRate,
+            yearlyInterestRate,
+            createTime,
+            startTime,
+            token2Collateral,
+            orderId,
+            status,
+            /* autoRoll, */ result,
+        } = this.props.order;
+        const profits1 = `${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)} ${token}`;
+        const profits2 = `${((amount || 0) * (1.1 + weeklyInterestRate / 100) * token2Collateral).toFixed(2)} TUSD`;
         let actualProfits = null;
         if (result) {
             actualProfits = result.match(/LESS_THAN/) ? profits1 : profits2;
@@ -66,29 +79,6 @@ class OrderDetail extends React.Component {
             <View style={{ flex: 1, backgroundColor: mainBgColor }}>
                 <MyscrollView contentContainerStyle={{ justifyContent: 'center' }} keyboardShouldPersistTaps="always">
                     <View style={styles.container}>
-                        <Cell2 title={strings('pokket.label_token')} value={`${token}/${tokenFullName}`} />
-                        <CellInput
-                            title={strings('pokket.label_account')}
-                            value={`${investorAddress}`}
-                            editable={false}
-                            multiline
-                            rightView={() => (
-                                <TouchableOpacity onPress={() => this.toAccountDetail({ token, address: investorAddress })}>
-                                    <Text style={{ color: linkButtonColor }}>{strings('pokket.label_account_detail')}</Text>
-                                </TouchableOpacity>
-                            )}
-                            underlineColorAndroid="transparent"
-                        />
-                        <Cell2 title={strings('pokket.label_fixed_deposits')} value={`${amount} ${token}`} />
-                        <Cell2 title={strings('pokket.label_weekly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()}%`} />
-                        <Cell2 title={strings('pokket.label_yearly_rate')} value={`${BigNumber(weeklyInterestRate).toNumber()}%`} />
-                        <Cell2 title={strings('pokket.label_start_date')} value={`${new Date(startTime).Format('dd/MM/yyyy')}`} />
-                        <Cell2 title={strings('pokket.label_end_date')} value={`${new Date(endTime).Format('dd/MM/yyyy')}`} />
-                        {status !== 'COMPLETE' ? (
-                            <Cell2 title={strings('pokket.label_expected_profits')} value={`${profits1} ${strings('label_or')} ${profits2}`} />
-                        ) : (
-                            <Cell2 title={strings('pokket.label_actual_profits')} value={actualProfits} />
-                        )}
                         <CellInput
                             title={strings('pokket.label_orderId')}
                             value={`${orderId}`}
@@ -107,6 +97,34 @@ class OrderDetail extends React.Component {
                             )}
                             underlineColorAndroid="transparent"
                         />
+                        <Cell2 title={strings('pokket.label_order_time')} value={`${new Date(createTime).Format('yyyy/MM/dd hh:mm:ss')}`} />
+                        <Cell2 title={strings('pokket.label_token')} value={`${token}/${tokenFullName}`} />
+                        <CellInput
+                            title={strings('pokket.label_account')}
+                            value={`${investorAddress}`}
+                            editable={false}
+                            multiline
+                            rightView={() => (
+                                <TouchableOpacity onPress={() => this.toAccountDetail({ token, address: investorAddress })}>
+                                    <Text style={{ color: linkButtonColor }}>{strings('pokket.label_account_detail')}</Text>
+                                </TouchableOpacity>
+                            )}
+                            underlineColorAndroid="transparent"
+                        />
+                        <Cell2 title={strings('pokket.label_fixed_deposits')} value={`${amount} ${token}`} />
+                        <Cell2 title={strings('pokket.label_weekly_rate')} value={`${BigNumber(weeklyInterestRate).toNumber()}%`} />
+                        <Cell2 title={strings('pokket.label_yearly_rate')} value={`${BigNumber(yearlyInterestRate).toNumber()}%`} />
+                        {status !== 'WAIT_COLLATERAL_DEPOSIT' && status !== 'WAIT_INVEST_TX_CONFIRM' ? (
+                            <Cell2 title={strings('pokket.label_start_date')} value={`${new Date(startTime).Format('yyyy/MM/dd')}`} />
+                        ) : null}
+                        {status !== 'WAIT_COLLATERAL_DEPOSIT' && status !== 'WAIT_INVEST_TX_CONFIRM' ? (
+                            <Cell2 title={strings('pokket.label_end_date')} value={`${new Date(endTime).Format('yyyy/MM/dd')}`} />
+                        ) : null}
+                        {status !== 'COMPLETE' ? (
+                            <Cell2 title={strings('pokket.label_expected_profits')} value={`${profits1} ${strings('label_or')} ${profits2}`} />
+                        ) : (
+                            <Cell2 title={strings('pokket.label_actual_profits')} value={actualProfits} />
+                        )}
                         <Cell2 title={strings('pokket.label_status')} value={strings(`pokket.label_${status}`)} />
                         {/* {status !== 'COMPLETE' ? ( */}
                         {/*    <CheckBox */}
