@@ -7,7 +7,7 @@ const getProducts = async (keyword = '') => {
     const url = `${baseurl}/pokket/product`;
     try {
         console.log('[Pokket getProduct req]=>', url);
-        const resp = await HttpClient.get(url, { search: keyword }, true);
+        const resp = await HttpClient.get(url, { search: keyword });
         console.log('[Pokket getProduct resp]=>', resp.data);
         return resp.data.reduce((m, el) => {
             m[el.token] = el;
@@ -93,8 +93,11 @@ const customBroadCastTx = (order, toAddress) => async ({ txObj, encoded }) => {
     if (resp.orderId) {
         // broadCastTx success
         const pendingTx = { ...txObj, hash: resp.investTransactionHash, status: 'PENDING' };
-        const pendingTokenTx = order.token !== 'BTC' || order.token !== 'ETH' ? { ...txObj, to: toAddress, value: order.amount, hash: resp.investTransactionHash, status: 'PENDING' } : undefined;
-        return { result: true, data: { pendingTx, pendingTokenTx } };
+        if (order.token !== 'BTC' || order.token !== 'ETH') {
+            pendingTx.tknTo = toAddress;
+            pendingTx.tknValue = order.amount;
+        }
+        return { result: true, data: { pendingTx } };
     }
     return { result: false, error: { type: 'pokket', message: resp.message.match(/^pokket/) ? resp.message : 'UNKNOWN' } };
 };

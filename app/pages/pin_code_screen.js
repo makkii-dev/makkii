@@ -228,7 +228,6 @@ class PinCodeScreen extends React.Component {
                 if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
                     currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`));
                 }
-                Platform.OS === 'ios' ? setTimeout(() => (listenApp.ignore = false), 100) : null;
             });
     };
 

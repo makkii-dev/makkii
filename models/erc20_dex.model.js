@@ -3,7 +3,7 @@ import { NavigationActions } from 'react-navigation';
 import { DeviceEventEmitter } from 'react-native';
 import BigNumber from 'bignumber.js';
 import Config from 'react-native-config';
-import { genTradeData, getTokenList, getTokenTradeRate, getEnabledStatus, getApproveAuthorizationTx, ETHID } from '../services/erc20_dex.service';
+import { genTradeData, getTokenList, getTokenTradeRate, getEnabledStatus, getApproveAuthorizationTx, ETHID, approvalCallback, exchangeCallback } from '../services/erc20_dex.service';
 import { createAction, navigate, popCustom } from '../utils/dva';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
@@ -51,6 +51,10 @@ export default {
             yield put(createAction('ERC20DexUpdateState')({ tokenApprovals }));
             yield put(createAction('tryUpdateCurrentAccount')({ force: true }));
             yield put(createAction('getTokenList')());
+            yield put(createAction('txSenderModel/addCallBack')({ key: 'approve', fn: approvalCallback }));
+            yield put(createAction('txSenderModel/addCallBack')({ key: 'exchange', fn: exchangeCallback }));
+            yield put(createAction('txsListener/addCallBack')({ key: 'approve', fn: approvalCallback }));
+            yield put(createAction('txsListener/addCallBack')({ key: 'exchange', fn: exchangeCallback }));
         },
         *tryUpdateCurrentAccount({ payload = {} }, { select, put }) {
             const { address, force } = payload;
@@ -184,9 +188,9 @@ export default {
                                 .shiftedBy(-18)
                                 .toNumber(),
                             editable: false,
-                            txType: {
-                                type: 'exchange',
-                                data: {
+                            callbackParams: {
+                                funcName: 'exchange',
+                                metaData: {
                                     srcToken,
                                     destToken,
                                     srcQty,
@@ -316,9 +320,9 @@ export default {
                                     .shiftedBy(-18)
                                     .toNumber(),
                                 editable: false,
-                                txType: {
-                                    type: 'exchange',
-                                    data: {
+                                callbackParams: {
+                                    funcName: 'exchange',
+                                    metaData: {
                                         srcToken,
                                         destToken,
                                         srcQty,
@@ -368,9 +372,9 @@ export default {
                         .shiftedBy(-18)
                         .toNumber(),
                     editable: false,
-                    txType: {
-                        type: 'approve',
-                        data: { address: account.address, symbol: token, state: type },
+                    callbackParams: {
+                        funcName: 'approve',
+                        metaData: { address: account.address, symbol: token, state: type },
                     },
                 }),
             );

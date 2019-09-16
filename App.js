@@ -32,9 +32,9 @@ const app = dva({
         console.log('init dva error', e);
     },
 });
-const store = app.store;
+global.AppStore = app.store;
 
-store.dispatch(createAction('dappsModel/updateState')({ ...data.dapps }));
+AppStore.dispatch(createAction('dappsModel/updateState')({ ...data.dapps }));
 
 const App = app.start(<Router />);
 

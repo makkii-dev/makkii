@@ -261,7 +261,7 @@ class Home extends React.Component {
                                         onChangeText={this.onChangeSrcTokenValue}
                                         onFocus={() => (this.srcQtyFocused = true)}
                                         onBlur={() => (this.srcQtyFocused = false)}
-                                        keyboardType="number-pad"
+                                        keyboardType="numeric"
                                         multiline={false}
                                         underlineColorAndroid="transparent"
                                     />
@@ -286,7 +286,7 @@ class Home extends React.Component {
                                         onChangeText={this.onChangeDestTokenValue}
                                         onFocus={() => (this.destQtyFocused = true)}
                                         onBlur={() => (this.destQtyFocused = false)}
-                                        keyboardType="number-pad"
+                                        keyboardType="numeric"
                                         multiline={false}
                                         underlineColorAndroid="transparent"
                                     />
