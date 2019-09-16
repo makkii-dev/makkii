@@ -39,7 +39,6 @@ class AddAddress extends Component {
     constructor(props) {
         super(props);
         const { contactObj } = this.props;
-        console.log('contactObj=>', contactObj);
         this.state = {
             ...contactObj,
         };
