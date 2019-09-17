@@ -114,7 +114,6 @@ export default {
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
 
-            // TODO refactor sendTx and txListener to reduce coupling and complexity  2019-09-12
             if (ret.result) {
                 // send evt log
                 sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));
@@ -167,7 +166,7 @@ export default {
                     }
                 }
 
-                // dispatch Tx listener
+                // dispatch Tx to listener
                 const payloadTxListener = {
                     txObj: pendingTx,
                     callbackParams,
