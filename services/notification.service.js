@@ -42,8 +42,9 @@ export default class NotifService {
 
             /* iOS only properties */
             alertAction: 'view', // (optional) default: view
-            category: null, // (optional) default: null
-            userInfo: null, // (optional) default: null (object containing additional notification data)
+            category: 'Makkii', // (optional) default: null
+            userInfo: {}, // (optional) default: null (object containing additional notification data)
+            number: 10,
 
             /* iOS and Android properties */
             title, // (optional)
