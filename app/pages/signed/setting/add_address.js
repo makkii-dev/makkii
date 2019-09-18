@@ -67,10 +67,16 @@ class AddAddress extends Component {
     addContact = () => {
         const { name, address, symbol } = this.state;
         const { dispatch, navigation } = this.props;
+        navigation.setParams({
+            isEdited: false,
+        });
         dispatch(createAction('contactAddModel/addContact')({ name, address, symbol })).then(r => {
             if (r) {
                 navigation.goBack();
             }
+            navigation.setParams({
+                isEdited: true,
+            });
         });
     };
 

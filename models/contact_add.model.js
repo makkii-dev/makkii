@@ -15,7 +15,10 @@ const init = {
 
 export default {
     namespace: 'contactAddModel',
-    state: init,
+    state: {
+        ...init,
+        processing: false,
+    },
     reducers: {
         updateState(state, { payload }) {
             console.log('contactAddModel payload=>', payload);
@@ -41,14 +44,19 @@ export default {
         },
         *addContact({ payload }, { call, put, select }) {
             const { address_book } = yield select(mapToUserModel);
-            const { symbol, address, name, editable } = yield select(mapToContactAddModel);
+            const { symbol, address, name, editable, processing } = yield select(mapToContactAddModel);
             const contactObj = { symbol, address, name, ...payload };
+            if (processing) {
+                return false;
+            }
+            yield put(createAction('updateState')({ processing: true }));
             const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
             if (!ret) {
                 AppToast.show(strings('add_address.error_address_format', { coin: contactObj.symbol }), {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.CENTER,
                 });
+                yield put(createAction('updateState')({ processing: false }));
                 return false;
             }
             const exist = Object.keys(address_book)
@@ -63,10 +71,14 @@ export default {
                     duration: AppToast.durations.LONG,
                     position: AppToast.positions.CENTER,
                 });
+                yield put(createAction('updateState')({ processing: false }));
+
                 return false;
             }
             yield put(createAction('userModel/addContact')({ contactObj }));
             yield put(createAction('reset')());
+            yield put(createAction('updateState')({ processing: false }));
+
             return true;
         },
     },
