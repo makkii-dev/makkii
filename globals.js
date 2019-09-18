@@ -1,7 +1,7 @@
 // polyfill unit8array
 // import Uint8Array from 'core-js/fn/typed/uint8-array';
 
-const BigNumber = require('bignumber.js');
+global.BigNumber = require('bignumber.js');
 
 global.platform = 'mobile';
 // if (!Uint8Array.prototype.fill) {
