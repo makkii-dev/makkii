@@ -23,6 +23,7 @@ class AccountTokens extends Component {
     static navigationOptions = ({ navigation }) => {
         const title = navigation.getParam('title');
         const showMenu = navigation.getParam('showMenu', () => {});
+        const selectTokens = navigation.getParam('selectTokens', () => {});
         return {
             headerTitle: (
                 <Text
@@ -46,9 +47,7 @@ class AccountTokens extends Component {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}
-                        onPress={() => {
-                            navigation.state.params.selectTokens();
-                        }}
+                        onPress={selectTokens}
                     >
                         <Image style={{ width: 25, height: 25, tintColor: 'white' }} resizeMode="contain" source={require('../../../../assets/icon_add.png')} />
                     </TouchableOpacity>
@@ -373,7 +372,7 @@ class AccountTokens extends Component {
                             openRowKey: null,
                         });
                     }}
-                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} title="ContextMenu" />}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.loadBalances} />}
                 />
                 {/* Menu Pop window */}
                 <PopupMenu

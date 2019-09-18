@@ -128,7 +128,7 @@ class Product extends React.Component {
         const { currentAccount, currentProduct } = this.props;
         const { token, weeklyInterestRate, yearlyInterestRate, remainingQuota, token2Collateral, minInvestAmount } = currentProduct;
         const { amount, RetAddress } = this.state;
-        const expiryDate = new Date(Date.now() + 24 * 7 * 3600 * 1000).Format('dd/MM/yyyy');
+        const expiryDate = new Date(Date.now() + 24 * 7 * 3600 * 1000).Format('yyyy/MM/dd');
         let buttonEnabled = false;
         let hasToken = false;
         let errorMsg = '';
@@ -153,7 +153,7 @@ class Product extends React.Component {
                 } else if (amount < minInvestAmount) {
                     errorMsg = strings('pokket.label_less_then_min');
                 } else if (amount > 0) {
-                    errorMsg = strings('token_exchange.button_exchange_disable');
+                    errorMsg = strings('token_exchange.label_exchange_insufficient_balance');
                 } else {
                     errorMsg = strings('token_exchange.button_exchange_invalid_number');
                 }
@@ -222,11 +222,11 @@ class Product extends React.Component {
                             />
                             <View style={{ width: '100%', alignItems: 'flex-end', marginTop: 5 }}>
                                 <Text style={{}}>
-                                    {`${strings('pokket.label_expected_profits')} ${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)}${token} ${strings('label_or')} ${(
+                                    {`${strings('pokket.label_expected_profits')} ${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)} ${token} ${strings('label_or')} ${(
                                         (amount || 0) *
                                         (1.1 + weeklyInterestRate / 100) *
                                         token2Collateral
-                                    ).toFixed(2)}TUSD`}
+                                    ).toFixed(2)} TUSD`}
                                 </Text>
                             </View>
                         </View>

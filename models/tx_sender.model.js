@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+import BigNumber from 'bignumber.js';
 import { createAction } from '../utils/dva';
 import { getAllBalance, parseScannedData, sendTx, validateTxObj } from '../services/tx_sender.service';
 import { alertOk } from '../app/components/common';
@@ -17,14 +18,17 @@ const init = {
     gasPrice: '',
     gasLimit: '',
     editable: true,
-    txType: {},
+    callbackParams: {},
     customBroadCast: null,
     targetRoute: undefined,
 };
 
 export default {
     namespace: 'txSenderModel',
-    state: init,
+    state: {
+        ...init,
+        callbacks: {},
+    },
     reducers: {
         updateState(state, { payload }) {
             console.log('txSenderModel payload=>', payload);
@@ -32,6 +36,13 @@ export default {
         },
     },
     effects: {
+        *addCallBack({ payload }, { put, select }) {
+            console.log('txSenderModel addCallBack', payload);
+            const { key, fn } = payload;
+            const { callbacks } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
+            callbacks[key] = fn;
+            yield put(createAction('updateState')({ callbacks }));
+        },
         *reset(action, { put }) {
             yield put(createAction('updateState')(init));
         },
@@ -89,116 +100,93 @@ export default {
         },
         *sendTx(
             {
-                payload: { txObj },
+                payload: { txObj, dispatch },
             },
             { call, select, put },
         ) {
             const { currentAccount: _currentAccount } = yield select(mapToaccountsModel);
-            const { txType, customBroadCast } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
+            const { customBroadCast, callbackParams, callbacks } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
             const { address, symbol, coinSymbol, type: accountType } = _currentAccount;
             const pk = yield call(SensitiveStorage.get, accountKey(symbol, address), '');
             let currentAccount = { ..._currentAccount, private_key: pk };
-            const { type, data } = txType;
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
+            yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
+
             if (ret.result) {
+                // send evt log
                 sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));
-                // dispatch tx to accountsModel;
+
+                // record tx ;
                 const {
-                    data: { pendingTx, pendingTokenTx },
+                    data: { pendingTx },
                 } = ret;
-                if (symbol !== 'BTC' && symbol !== 'LTC') {
-                    const payloadTxFrom = {
-                        key: accountKey(symbol, pendingTx.from),
+                const fromObj = Array.isArray(pendingTx.from) ? pendingTx.from : [{ addr: pendingTx.from }];
+                const toObj = Array.isArray(pendingTx.to) ? pendingTx.to : [{ addr: pendingTx.to }];
+                for (const vin of fromObj) {
+                    const payloadFrom = {
+                        key: accountKey(symbol, vin.addr),
                         txs: { [pendingTx.hash]: pendingTx },
                     };
-                    const payloadTxTo = {
-                        key: accountKey(symbol, pendingTx.to),
+                    yield put(createAction('accountsModel/updateTransactions')(payloadFrom));
+                }
+                for (const vout of toObj) {
+                    const payloadTo = {
+                        key: accountKey(symbol, vout.addr),
                         txs: { [pendingTx.hash]: pendingTx },
                         force: false,
                     };
-                    yield put(createAction('accountsModel/updateTransactions')(payloadTxFrom));
-                    yield put(createAction('accountsModel/updateTransactions')(payloadTxTo));
+                    yield put(createAction('accountsModel/updateTransactions')(payloadTo));
                 }
-                if (symbol === 'BTC' || symbol === 'LTC') {
-                    for (let vin of pendingTx.from) {
-                        const payloadTxFrom = {
-                            key: accountKey(symbol, vin.addr),
-                            txs: { [pendingTx.hash]: pendingTx },
-                        };
-                        yield put(createAction('accountsModel/updateTransactions')(payloadTxFrom));
-                    }
-                    for (let vout of pendingTx.to) {
-                        const payloadTxTo = {
-                            key: accountKey(symbol, vout.addr),
-                            txs: { [pendingTx.hash]: pendingTx },
-                            force: false,
-                        };
-                        yield put(createAction('accountsModel/updateTransactions')(payloadTxTo));
+
+                const { tknTo, tknValue } = pendingTx;
+                if (tknTo) {
+                    pendingTx.tknSymbol = coinSymbol;
+                    const payloadTokenFrom = {
+                        key: accountKey(symbol, pendingTx.from, coinSymbol),
+                        txs: { [pendingTx.hash]: { ...pendingTx, to: tknTo, value: tknValue } },
+                    };
+                    const payloadTokenTo = {
+                        key: accountKey(symbol, tknTo, coinSymbol),
+                        txs: { [pendingTx.hash]: { ...pendingTx, to: tknTo, value: tknValue } },
+                        force: false,
+                    };
+                    yield put(createAction('accountsModel/updateTransactions')(payloadTokenFrom));
+                    yield put(createAction('accountsModel/updateTransactions')(payloadTokenTo));
+                }
+
+                // execute callback
+                const { funcName, metaData } = callbackParams || {};
+                if (funcName) {
+                    const callback = callbacks[funcName];
+                    if (callback) {
+                        console.log('txSenderModel execute callback=>', funcName);
+                        yield call(callback(dispatch), metaData, pendingTx);
                     }
                 }
-                let payloadTxListener = {
+
+                // dispatch Tx to listener
+                const payloadTxListener = {
                     txObj: pendingTx,
-                    type: 'normal',
+                    callbackParams,
                     symbol,
                 };
-                if (pendingTokenTx) {
-                    const payload1 = {
-                        key: accountKey(symbol, pendingTokenTx.from, coinSymbol),
-                        txs: { [pendingTokenTx.hash]: pendingTokenTx },
-                    };
-                    const payload2 = {
-                        key: accountKey(symbol, pendingTokenTx.to, coinSymbol),
-                        txs: { [pendingTokenTx.hash]: pendingTokenTx },
-                        force: false,
-                    };
-                    payloadTxListener = {
-                        ...payloadTxListener,
-                        type: 'token',
-                        token: { symbol: coinSymbol, tokenTx: pendingTokenTx },
-                    };
-                    yield put(createAction('accountsModel/updateTransactions')(payload1));
-                    yield put(createAction('accountsModel/updateTransactions')(payload2));
-                }
-                if (type && type === 'exchange') {
-                    data.hash = pendingTx.hash;
-                    const payload = {
-                        key: accountKey(symbol, address, 'ERC20DEX'),
-                        txs: { [pendingTx.hash]: data },
-                    };
-                    payloadTxListener = {
-                        ...payloadTxListener,
-                        type: 'exchange',
-                        exchange: data,
-                    };
-                    yield put(createAction('accountsModel/updateTransactions')(payload));
-                }
 
-                // dispatch tx to erc20dexModal
-                if (type && type === 'approve') {
-                    payloadTxListener = {
-                        ...payloadTxListener,
-                        type: 'approve',
-                        approve: data,
-                    };
-                    yield put(createAction('ERC20Dex/updateTokenApproval')(data));
-                }
-
-                // dispatch tx to tx listener
                 if (symbol !== 'BTC' && symbol !== 'LTC') {
                     yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
                 }
-                yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+
                 return true;
             }
             const { error } = ret;
             if (error.message && accountType === '[ledger]') {
                 alertOk(strings('alert_title_error'), getLedgerMessage(error.message));
+            } else if (error.message && error.type === 'pokket') {
+                alertOk(strings('alert_title_error'), `${strings('send.error_send_transaction')}:${strings(`pokket.error_${error.message}`)}`);
             } else {
                 alertOk(strings('alert_title_error'), strings('send.error_send_transaction'));
             }
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             return false;
         },
     },

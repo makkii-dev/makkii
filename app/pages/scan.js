@@ -77,12 +77,13 @@ class Scan extends Component {
         const { navigation } = this.props;
         navigation.addListener('willFocus', () => this.isMount && this.setState({ focusedScreen: true }));
         navigation.addListener('willBlur', () => this.isMount && this.setState({ focusedScreen: false }));
-
+        this.props.dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }));
         this.scannerLineMove();
     }
 
     componentWillUnmount(): void {
         this.isMount = false;
+        this.props.dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }));
     }
 
     // eslint-disable-next-line react/sort-comp

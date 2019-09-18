@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
-import { Header } from 'react-navigation';
-import defaultStyle from '../styles';
+import defaultStyle, { HEADER_HEIGHT, STATUSBAR_HEIGHT } from '../styles';
 
-export const HeaderHeight = Header.HEIGHT;
 export class CustomHeader extends React.Component {
     static propTypes = {
         title: PropTypes.string,
@@ -18,8 +16,8 @@ export class CustomHeader extends React.Component {
             console.warn('using title and children at the same time; it is not possible; title is ignored');
         }
         return (
-            <View style={{ ...defaultStyle.headerStyleWithoutShadow }}>
-                <View style={{ height: Header.HEIGHT, width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
+            <View style={{ ...defaultStyle.headerStyleWithoutShadow, height: HEADER_HEIGHT + STATUSBAR_HEIGHT, paddingTop: STATUSBAR_HEIGHT }}>
+                <View style={{ height: HEADER_HEIGHT, width: '100%', flexDirection: 'row', justifyContent: 'center' }}>
                     {children}
                     {!children ? (
                         <Text style={{ ...defaultStyle.headerTitleStyle }} allowFontScaling={false}>

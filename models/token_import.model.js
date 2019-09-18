@@ -44,6 +44,7 @@ export default {
             } catch (e) {
                 console.log('search token failed:', e);
             }
+            token_lists = Array.isArray(token_lists) ? token_lists : [];
             yield put(createAction('updateState')({ token_lists }));
             return token_lists.length;
         },
@@ -61,6 +62,7 @@ export default {
             } catch (e) {
                 console.log('get Top tokens failed:', e);
             }
+            token_lists = Array.isArray(token_lists) ? token_lists : [];
             yield put(createAction('updateState')({ token_lists }));
             return token_lists.length;
         },

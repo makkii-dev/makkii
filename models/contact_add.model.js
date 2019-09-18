@@ -41,7 +41,7 @@ export default {
         },
         *addContact({ payload }, { call, put, select }) {
             const { address_book } = yield select(mapToUserModel);
-            const { symbol, address, name } = yield select(mapToContactAddModel);
+            const { symbol, address, name, editable } = yield select(mapToContactAddModel);
             const contactObj = { symbol, address, name, ...payload };
             const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
             if (!ret) {
@@ -58,7 +58,7 @@ export default {
                     return exist;
                 }, false);
 
-            if (exist) {
+            if (exist && editable) {
                 AppToast.show(strings('add_address.error_address_exists'), {
                     duration: AppToast.durations.LONG,
                     position: AppToast.positions.CENTER,

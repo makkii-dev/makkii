@@ -189,14 +189,13 @@ class FlashTab extends React.Component {
                     ref="listRef"
                     stickySectionHeadersEnabled
                     onScroll={this._onScroll}
-                    bounces={false}
                     renderItem={this.renderItem}
                     renderSectionHeader={this.renderTimeBar}
                     keyExtractor={(item, index) => `${index}`}
                     sections={flashNews}
                     onEndReached={() => this.onEndReached()}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={footerState} />}
-                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} title="ContextMenu" />}
+                    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => this.onRefresh()} />}
                 />
                 {isShowToTop ? (
                     <TouchableOpacity

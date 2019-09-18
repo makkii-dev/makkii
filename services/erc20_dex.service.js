@@ -3,6 +3,9 @@ import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
 import { HttpClient, hexutil } from 'lib-common-util-js';
 import { getBlockNumber } from '../client/api';
+import { createAction } from '../utils/dva';
+import { COINS } from '../client/support_coin_list';
+import { accountKey } from '../utils';
 
 const NETWORK_URL = {
     mainnet: 'https://api.kyber.network',
@@ -219,4 +222,37 @@ const findSymbolByAddress = (tokenList, address) => {
     return null;
 };
 
-export { getTokenList, getTokenTradeRate, genTradeData, getEnabledStatus, getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress, ETHID };
+const approvalCallback = dispatch => async (metaData, tx) => {
+    console.log('approvalCallback');
+    const payload = {
+        ...metaData,
+        state: tx.status.match(/^CONFIRMED$|^FAILED$|^UNCONFIRMED$/) ? 'delete' : metaData.state,
+    };
+    dispatch(createAction('ERC20Dex/updateTokenApproval')(payload));
+};
+
+const exchangeCallback = dispatch => async (metaData, tx) => {
+    console.log('exchangeCallback', metaData, tx);
+    const exchange = {
+        ...metaData,
+        timestamp: tx.timestamp,
+        status: tx.status,
+        blockNumber: tx.blockNumber,
+        hash: tx.hash,
+    };
+    if (exchange.status === 'CONFIRMED') {
+        const {
+            ERC20Dex: { tokenList },
+        } = AppStore.getState();
+        const history = await getExchangeHistory(tx.from, COINS.ETH.network, tx.hash);
+        const symbol = findSymbolByAddress(tokenList, history.destToken);
+        exchange.destQty = history.destQty / 10 ** tokenList[symbol].decimals;
+    }
+    const payload = {
+        key: accountKey('ETH', tx.from, 'ERC20DEX'),
+        txs: { [tx.hash]: exchange },
+    };
+    dispatch(createAction('accountsModel/updateTransactions')(payload));
+};
+
+export { getTokenList, getTokenTradeRate, genTradeData, getEnabledStatus, getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress, ETHID, approvalCallback, exchangeCallback };
