@@ -41,7 +41,7 @@ const createOrder = async payload => {
         console.log('[Pokket createOrder req]=>', url, payload);
         const resp = await HttpClient.put(url, payload, true);
         console.log('[Pokket createOrder resp]=>', resp.data);
-        if (!resp.data.status) {
+        if (resp.data.orderId) {
             return resp.data;
         }
         console.log('[Pokket createOrder error]=>', resp.data.message);
