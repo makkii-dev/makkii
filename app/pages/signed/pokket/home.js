@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ActivityIndicator, Animated, Dimensions, FlatList, Image, PixelRatio, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Animated, Dimensions, FlatList, Image, PixelRatio, RefreshControl, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { connect, createAction } from '../../../../utils/dva';
@@ -25,6 +25,7 @@ class PokketHome extends React.Component {
         focusedSearch: false,
         listsDesc: true,
         showMenu: false,
+        refreshing: false,
     };
 
     focusedAnimated = new Animated.Value(0);
@@ -42,6 +43,18 @@ class PokketHome extends React.Component {
         this.isMount = false;
         this.listenNavigation.remove();
     }
+
+    onRefresh = () => {
+        if (this.state.refreshing) {
+            return;
+        }
+        this.setState(
+            {
+                refreshing: true,
+            },
+            this.getProducts,
+        );
+    };
 
     openMenu = () => {
         this.setState({
@@ -83,6 +96,17 @@ class PokketHome extends React.Component {
     searchProduct = keyword => {
         this.setState({
             keyword,
+        });
+    };
+
+    getProducts = () => {
+        const { dispatch } = this.props;
+        dispatch(createAction('pokketModel/getProducts')({ keyword: '' })).then(len => {
+            if (len > 0) {
+                this.setState({
+                    refreshing: false,
+                });
+            }
         });
     };
 
@@ -149,7 +173,7 @@ class PokketHome extends React.Component {
 
     renderProducts() {
         const { products } = this.props;
-        const { listsDesc, keyword } = this.state;
+        const { listsDesc, keyword, refreshing } = this.state;
         let products_ = keyword !== '' ? products.filter(v => v.token.toLowerCase().indexOf(keyword) >= 0 || v.tokenFullName.toLowerCase().indexOf(keyword) >= 0) : products;
         products_ = listsDesc ? products_.sort((a, b) => b.yearlyInterestRate - a.yearlyInterestRate) : products_.sort((a, b) => a.yearlyInterestRate - b.yearlyInterestRate);
         return products_.length ? (
@@ -187,6 +211,7 @@ class PokketHome extends React.Component {
                         </TouchableOpacity>
                     );
                 }}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={this.onRefresh} />}
             />
         ) : (
             <View

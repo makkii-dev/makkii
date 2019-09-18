@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, FlatList, View, Text, PixelRatio, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { Dimensions, FlatList, View, Text, PixelRatio, TouchableOpacity, Image, ActivityIndicator, RefreshControl } from 'react-native';
 import ProgressCircle from 'react-native-progress-circle';
 import BigNumber from 'bignumber.js';
 import CommonStyles from '../../../styles';
@@ -26,6 +26,7 @@ class OrderList extends React.Component {
         currentPage: 0,
         footerState: 0,
         isLoading: true,
+        refreshing: false,
     };
 
     componentWillMount(): void {
@@ -38,6 +39,18 @@ class OrderList extends React.Component {
     componentWillUnmount(): void {
         this.isMount = false;
     }
+
+    onRefresh = () => {
+        if (this.state.refreshing) {
+            return;
+        }
+        this.setState(
+            {
+                refreshing: true,
+            },
+            () => this.fetchOrders(0),
+        );
+    };
 
     toOrderDetail = item => {
         const { dispatch, navigation } = this.props;
@@ -53,6 +66,7 @@ class OrderList extends React.Component {
                 this.setState({
                     currentPage: page,
                     isLoading: false,
+                    refreshing: false,
                     footerState: r === size ? 0 : 1,
                 });
         });
@@ -142,6 +156,7 @@ class OrderList extends React.Component {
                         this._onEndReached();
                     }}
                     ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={this.state.footerState} />}
+                    refreshControl={<RefreshControl refreshing={this.state.refreshing} onRefresh={this.onRefresh} />}
                 />
             </View>
         );
