@@ -105,7 +105,7 @@ class ArticleDetail extends React.Component {
             ];
             return (
                 <FlatList
-                    style={{ flex: 1, paddingHorizontal: 15, marginBottom:15, backgroundColor: '#fff' }}
+                    style={{ flex: 1, paddingHorizontal: 15, marginBottom: 15, backgroundColor: '#fff' }}
                     data={data}
                     renderItem={({ item }) => {
                         return item;
