@@ -8,6 +8,7 @@ import { hexutil } from 'lib-common-util-js';
 import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
 import { COINS } from '../client/support_coin_list';
+import { validatePrivateKey as _validatePrivateKey } from '../client/keystore';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require('crypto-js');
@@ -33,21 +34,7 @@ function validatePassword(password) {
 }
 
 function validatePrivateKey(privateKey, symbol = 'AION') {
-    if (symbol === 'AION') {
-        privateKey = privateKey.startsWith('0x') ? privateKey.substring(2) : privateKey;
-        const reg = /^[0-9a-fA-F]{128}$/;
-        return reg.test(privateKey);
-    }
-    if (symbol === 'BTC') {
-        // TODO:
-    } else if (symbol === 'EOS') {
-        // TODO:
-    } else if (symbol === 'LTC') {
-        // TODO:
-    } else if (symbol === 'TRX') {
-        // TODO:
-    }
-    return true;
+    return _validatePrivateKey(privateKey, symbol);
 }
 
 function validateAdvancedAmount(amount) {

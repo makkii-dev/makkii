@@ -154,7 +154,6 @@ export class Carousel extends Component {
     _setCurrentPage = currentPage => {
         this.setState({ currentPage }, () => {
             if (this.props.onAnimateNextPage) {
-                // FIXME: called twice on ios with auto-scroll
                 this.props.onAnimateNextPage(currentPage);
             }
         });

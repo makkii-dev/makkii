@@ -26,7 +26,6 @@ class SelectCoin extends Component {
             dispatch(createAction('accountImportModel/updateState')({ symbol: item.symbol }));
             navigation.navigate('signed_vault_import_from');
         } else if (this.usage === 'address_book') {
-            // Todo: refactor address_book
             dispatch(createAction('contactAddModel/updateState')({ symbol: item.symbol }));
             navigation.goBack();
         }
