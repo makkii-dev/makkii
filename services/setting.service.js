@@ -7,6 +7,7 @@ const getLatestVersion = async (platform, versionCode, lang) => {
     console.log(`getLatestVersion ${url}`);
     try {
         const { data } = await HttpClient.get(url);
+        console.log('data=>', data);
         return data;
     } catch (e) {
         return {};

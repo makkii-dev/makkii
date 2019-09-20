@@ -9,7 +9,7 @@ console.log('Config.pokket=>', Config.pokket);
 if (Config.pokket) {
     client.setCoinNetwork('ETH', 'pokket');
 }
-client.setRemoteApi(Config.app_server_api);
+client.setRemoteApi(Config.app_server);
 
 export const {
     getTokenIconUrl,
