@@ -195,7 +195,6 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-fast-image')
     implementation project(':react-native-reanimated')
     implementation project(':react-native-modal-translucent')
     implementation project(':react-native-background-timer')

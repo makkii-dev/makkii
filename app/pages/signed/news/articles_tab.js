@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { View, Text, FlatList, ActivityIndicator, RefreshControl, Image, PixelRatio, TouchableOpacity } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import { createAction } from '../../../../utils/dva';
 import { mainBgColor } from '../../../style_util';
 import { ImportListFooter } from '../../../components/common';
@@ -117,7 +116,7 @@ class ArticlesTab extends React.Component {
                     </Text>
                     <Text style={{ color: 'gray' }}>{`${strings(`news.origin_${origin}`)}  ${timeText}`}</Text>
                 </View>
-                <FastImage style={{ width: 100, height: 75 }} resizeMode={FastImage.resizeMode.contain} source={{ uri: imageUrl }} />
+                <Image style={{ width: 100, height: 75 }} resizeMode="contain" source={{ uri: imageUrl }} />
             </TouchableOpacity>
         );
     };
