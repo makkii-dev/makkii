@@ -124,6 +124,7 @@ class SimpleWebView extends Component {
                     cacheEnabled={false}
                     renderLoading={() => this.renderLoading()}
                     startInLoadingState
+                    onShouldStartLoadWithRequest={() => true}
                     onLoadStart={navState => {
                         this.title || this.props.navigation.setParams({ title: navState.title });
                         this.handleProcessBar(true);
