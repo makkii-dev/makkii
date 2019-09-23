@@ -192,12 +192,16 @@ export default {
                         }, {}),
                     };
                     // recover tx;
+
                     transactionsMap[key] = yield call(Storage.get, `tx+${key}`, {});
+                    delete transactionsMap[key].undefined;
                     for (let tokenSymbol of tokens) {
                         transactionsMap[`${key}+${tokenSymbol}`] = yield call(Storage.get, `tx+${key}+${tokenSymbol}`, {});
+                        delete transactionsMap[`${key}+${tokenSymbol}`].undefined;
                     }
                     if (account.symbol === 'ETH') {
                         transactionsMap[`${key}+ERC20DEX`] = yield call(Storage.get, `tx+${key}+ERC20DEX`, {});
+                        delete transactionsMap[`${key}+ERC20DEX`].undefined;
                     }
                 }
                 yield put(
@@ -371,6 +375,7 @@ export default {
                       return map;
                   }, {});
             newTransactionsMap[key] = { ...newTransactionsMap[key], ...txs, ...pendingTxs };
+            delete newTransactionsMap[key].undefined;
             yield put(createAction('updateState')({ transactionsMap: newTransactionsMap }));
             if (needSave) {
                 yield put(createAction('saveTransaction')({ keys: [key] }));

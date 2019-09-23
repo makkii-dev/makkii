@@ -450,7 +450,9 @@ const mapToState = ({ accountsModel }) => {
         if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
         return b.timestamp - a.timestamp;
     };
-    const transactions = Object.values(transactionsMap[txKey])
+    const transactions = Object.keys(transactionsMap[txKey])
+        .filter(key => key !== 'undefined')
+        .map(key => transactionsMap[txKey][key])
         .sort(compareFn)
         .slice(0, 5);
 
