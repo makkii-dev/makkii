@@ -33,7 +33,7 @@ export const COINS = {
         txFeeSupport: true,
         tokenExchangeSupport: true,
         gasPriceUnit: 'Gwei',
-        defaultGasPrice: '10',
+        defaultGasPrice: '20',
         defaultGasLimit: '21000',
         defaultGasLimitForContract: '60000',
         network: isTestNet ? 'ropsten' : 'mainnet',
