@@ -112,6 +112,7 @@
     "hint_recipient": "请填写收款地址",
     "button_send_all": "全部",
     "error_send_transaction": "发送交易失败",
+    "error_dust_transaction": "发送金额太小，请提高金额",
     "progress_sending_tx": "正在发送交易……",
     "toast_tx_sent": "交易已发送",
     "toast_tx_notice": "交易通知",

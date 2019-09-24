@@ -185,6 +185,8 @@ export default {
                 alertOk(strings('alert_title_error'), getLedgerMessage(error.message));
             } else if (error.message && error.type === 'pokket') {
                 alertOk(strings('alert_title_error'), `${strings('send.error_send_transaction')}:${strings(`pokket.error_${error.message}`)}`);
+            } else if ((error.toString() || '').match('dust')) {
+                alertOk(strings('alert_title_error'), strings('send.error_dust_transaction'));
             } else {
                 alertOk(strings('alert_title_error'), strings('send.error_send_transaction'));
             }

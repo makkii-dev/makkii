@@ -115,6 +115,7 @@
     "hint_recipient": "Please enter recipient address",
     "button_send_all": "Send All",
     "error_send_transaction": "Sending transaction failed",
+    "error_dust_transaction": "The amount sent is too small, please increase the amount",
     "progress_sending_tx": "Sending transaction...",
     "toast_tx_sent": "Transaction is sent",
     "toast_tx_notice": "Transaction Notice",
