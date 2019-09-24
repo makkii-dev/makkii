@@ -111,10 +111,9 @@ export default {
             let currentAccount = { ..._currentAccount, private_key: pk };
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
-            console.log('sendTx ret=>', ret);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
-
+            console.log('sendTx ret=>', ret);
             if (ret.result) {
                 // send evt log
                 sendTransferEventLog(symbol, symbol === coinSymbol ? null : coinSymbol, new BigNumber(txObj.amount));

@@ -93,7 +93,7 @@ const customBroadCastTx = (order, toAddress) => async ({ txObj, encoded }) => {
     if (resp.orderId) {
         // broadCastTx success
         const pendingTx = { ...txObj, hash: resp.investTransactionHash, status: 'PENDING' };
-        if (order.token !== 'BTC' || order.token !== 'ETH') {
+        if (order.token !== 'BTC' && order.token !== 'ETH') {
             pendingTx.tknTo = toAddress;
             pendingTx.tknValue = order.amount;
         }

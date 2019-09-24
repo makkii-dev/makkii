@@ -9,9 +9,9 @@ import commonStyles from '../../../styles';
 import { Cell2, CellInput } from '../../../components/Cell';
 import { AppToast } from '../../../components/AppToast';
 // import CheckBox from '../../../components/CheckBox';
-import { COINS } from '../../../../client/support_coin_list';
-import { accountKey } from '../../../../utils';
 import Loading from '../../../components/Loading';
+import { COINS } from '../../../../client/support_coin_list';
+import { accountKey, calculatePokketCollateral, calculatePokketProfit } from '../../../../utils';
 
 const { width } = Dimensions.get('window');
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
@@ -68,8 +68,9 @@ class OrderDetail extends React.Component {
             status,
             /* autoRoll, */ result,
         } = this.props.order;
-        const profits1 = `${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)} ${token}`;
-        const profits2 = `${((amount || 0) * (1.1 + weeklyInterestRate / 100) * token2Collateral).toFixed(2)} TUSD`;
+
+        const profits1 = `${parseFloat(calculatePokketProfit(amount, weeklyInterestRate).toFixed(token.match(/^BTC|ETH$/) ? 8 : 2)).toString()} ${token}`;
+        const profits2 = `${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2)).toString()} TUSD`;
         let actualProfits = null;
         if (result) {
             actualProfits = result.match(/LESS_THAN/) ? profits1 : profits2;

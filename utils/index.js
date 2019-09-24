@@ -305,6 +305,21 @@ function dateDiff(timestamp) {
     return strings('time.justNow');
 }
 
+function calculatePokketProfit(amount = 0, weeklyInterest) {
+    amount = BigNumber.isBigNumber(amount) ? amount : BigNumber(amount || 0);
+    weeklyInterest = BigNumber.isBigNumber(weeklyInterest) ? weeklyInterest : BigNumber(weeklyInterest);
+
+    return amount.times(BigNumber(1).plus(weeklyInterest.dividedBy(BigNumber(100))));
+}
+
+function calculatePokketCollateral(amount = 0, weeklyInterest, rate) {
+    amount = BigNumber.isBigNumber(amount) ? amount : BigNumber(amount || 0);
+    weeklyInterest = BigNumber.isBigNumber(weeklyInterest) ? weeklyInterest : BigNumber(weeklyInterest);
+    rate = BigNumber.isBigNumber(rate) ? rate : BigNumber(rate);
+
+    return amount.times(BigNumber(1.1).plus(weeklyInterest.dividedBy(BigNumber(100)))).times(rate);
+}
+
 module.exports = {
     encrypt,
     decrypt,
@@ -326,4 +341,6 @@ module.exports = {
     formatMoney,
     compareDate,
     dateDiff,
+    calculatePokketCollateral,
+    calculatePokketProfit,
 };

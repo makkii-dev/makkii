@@ -4,7 +4,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import BigNumber from 'bignumber.js';
 import { validator } from 'lib-common-util-js';
 import { connect, createAction, navigate } from '../../../../utils/dva';
-import { accountKey, formatMoney } from '../../../../utils';
+import { accountKey, formatMoney, calculatePokketCollateral, calculatePokketProfit } from '../../../../utils';
 import { AccountBar } from '../../../components/AccountBar';
 import { mainBgColor } from '../../../style_util';
 import { DismissKeyboardView } from '../../../components/DismissKeyboardView';
@@ -49,9 +49,8 @@ class Product extends React.Component {
     };
 
     selectIncomeAddress = () => {
-        const { currentProduct } = this.props;
         navigate('signed_Dex_account_list', {
-            type: currentProduct.token === 'BTC' ? 'BTC' : 'ETH',
+            type: 'ETH',
             usage: ({ address }) => {
                 this.setState({
                     RetAddress: address,
@@ -222,11 +221,9 @@ class Product extends React.Component {
                             />
                             <View style={{ width: '100%', alignItems: 'flex-end', marginTop: 5 }}>
                                 <Text style={{}}>
-                                    {`${strings('pokket.label_expected_profits')} ${((amount || 0) * (1 + weeklyInterestRate / 100)).toFixed(2)} ${token} ${strings('label_or')} ${(
-                                        (amount || 0) *
-                                        (1.1 + weeklyInterestRate / 100) *
-                                        token2Collateral
-                                    ).toFixed(2)} TUSD`}
+                                    {`${strings('pokket.label_expected_profits')} ${parseFloat(
+                                        calculatePokketProfit(amount, weeklyInterestRate).toFixed(token.match(/^BTC|ETH$/) ? 8 : 2),
+                                    ).toString()} ${token} ${strings('label_or')} ${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2)).toString()} TUSD`}
                                 </Text>
                             </View>
                         </View>

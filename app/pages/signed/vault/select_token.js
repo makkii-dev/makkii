@@ -31,6 +31,7 @@ class SelectToken extends Component {
                             paddingLeft: 5,
                             paddingRight: 5,
                         }}
+                        selectionColor={'black'}
                         value={searchstring}
                         placeholder={strings('select_coin.placeholder_search_token')}
                         onChangeText={e => {

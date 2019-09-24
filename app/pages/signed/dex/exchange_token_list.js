@@ -31,6 +31,7 @@ class ExchangeTokenList extends React.PureComponent {
                             paddingLeft: 5,
                             paddingRight: 5,
                         }}
+                        selectionColor={'black'}
                         value={keyword}
                         placeholder={strings('select_coin.placeholder_search_token')}
                         onChangeText={e => {
