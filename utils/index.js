@@ -238,12 +238,12 @@ function getParameterCaseInsensitive(object, key) {
     return ret;
 }
 
-function formatMoney(amount, decimalCount = 2, decimal = '.', thousands = ',') {
+function formatMoney(amount, decimalCount, decimal = '.', thousands = ',') {
     try {
         decimalCount = Math.abs(decimalCount);
+        let m = amount.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/);
         // eslint-disable-next-line no-restricted-globals
-        decimalCount = isNaN(decimalCount) ? 2 : decimalCount;
-
+        decimalCount = isNaN(decimalCount) ? (m ? Math.max(0, (m[1] || '').length - m[2]) : 2) : decimalCount;
         const negativeSign = amount < 0 ? '-' : '';
 
         let i = parseInt((amount = Math.abs(Number(amount) || 0).toFixed(decimalCount))).toString();
