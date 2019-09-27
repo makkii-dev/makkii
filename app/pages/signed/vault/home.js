@@ -101,21 +101,21 @@ class HomeCenterComponent extends React.Component {
 
     constructor(props) {
         super(props);
-        const addFromKey = strings('wallet.section_title_add_from');
+        const addFromKey = 'wallet.section_title_add_from';
         const filters = {
             [addFromKey]: [
                 {
-                    text: strings('filter.masterKey'),
+                    text: 'filter.masterKey',
                     key: '[local]',
                     type: 'type',
                 },
                 {
-                    text: strings('filter.privateKey'),
+                    text: 'filter.privateKey',
                     key: '[pk]',
                     type: 'type',
                 },
                 {
-                    text: strings('filter.ledger'),
+                    text: 'filter.ledger',
                     key: '[ledger]',
                     type: 'type',
                 },
@@ -126,7 +126,7 @@ class HomeCenterComponent extends React.Component {
         }
         const coinKeys = Object.values(COINS);
         if (coinKeys.length > 0) {
-            const coinTypeKey = strings('wallet.section_title_coin_type');
+            const coinTypeKey = 'wallet.section_title_coin_type';
             filters[coinTypeKey] = [];
             coinKeys.forEach(coin => {
                 filters[coinTypeKey].push({
@@ -181,7 +181,7 @@ class HomeCenterComponent extends React.Component {
         filterKeys.forEach(filterKey => {
             ret.push(
                 <View key={filterKey} style={{ width: '100%', marginTop: 10 }}>
-                    <Text style={{ color: 'black', fontSize: 16 }}>{filterKey}</Text>
+                    <Text style={{ color: 'black', fontSize: 16 }}>{strings(filterKey)}</Text>
                     {this.renderFilterOptions(this.filters[filterKey])}
                 </View>,
             );
@@ -223,7 +223,7 @@ class HomeCenterComponent extends React.Component {
             ret.push(
                 <OptionButton
                     key={`${i}`}
-                    title={currentOption.text}
+                    title={currentOption.text.indexOf('.') >= 0 ? strings(currentOption.text) : currentOption.text}
                     style={{
                         marginRight: space,
                         width: btnWidth,
