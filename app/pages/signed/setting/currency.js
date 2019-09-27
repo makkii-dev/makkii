@@ -103,10 +103,6 @@ class Currency extends Component {
                                     name: strings('currency.AUD'),
                                     unit: strings('currency.AUD_unit'),
                                 },
-                                AZN: {
-                                    name: strings('currency.AZN'),
-                                    unit: strings('currency.AZN_unit'),
-                                },
                                 AED: {
                                     name: strings('currency.AED'),
                                     unit: strings('currency.AED_unit'),
