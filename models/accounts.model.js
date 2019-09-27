@@ -441,12 +441,13 @@ export default {
                                 address,
                                 contractAddr: tokenLists[symbol][el].contractAddr,
                                 tokenSymbol: tokenLists[symbol][el].symbol,
-                                tokenDecimals: tokenLists[symbol][el].decimals,
+                                tokenDecimals: tokenLists[symbol][el].tokenDecimal,
                             });
                             return arr;
                         },
                         [{ symbol, address }],
                     );
+                    console.log('[debug]=>', tokenLists);
                     const rets = yield call(getAccountBalances, payloads);
                     rets.forEach(el => {
                         if (el.tokenSymbol) {
