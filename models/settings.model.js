@@ -95,8 +95,8 @@ export default {
         },
         *getSupportedModule(action, { select, call, put }) {
             const { result, data: supportedModule } = yield call(getSupportedModule);
+            let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
             if (result) {
-                let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
                 lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
                 if (!supportedModule.includes('Pokket')) {
                     bottomBarTab.remove('signed_pokket');
@@ -108,6 +108,12 @@ export default {
                     bottomBarTab.remove('signed_dex');
                 }
                 yield put(createAction('updateState')({ bottomBarTab }));
+            } else {
+                lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
+                if (lang.indexOf('en') >= 0) {
+                    bottomBarTab.remove('signed_news');
+                }
+                bottomBarTab.remove('signed_pokket');
             }
         },
         *reset(action, { put }) {
