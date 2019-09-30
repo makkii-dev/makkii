@@ -193,7 +193,7 @@ export default {
                     };
                     // recover tx;
 
-                    transactionsMap[key] = yield call(Storage.get, `tx+${key}`, {});
+                    transactionsMap[key] = fixTronTx(yield call(Storage.get, `tx+${key}`, {}), account.symbol);
                     delete transactionsMap[key].undefined;
                     for (let tokenSymbol of tokens) {
                         transactionsMap[`${key}+${tokenSymbol}`] = yield call(Storage.get, `tx+${key}+${tokenSymbol}`, {});
@@ -699,4 +699,14 @@ const compareFn = (a, b) => {
     if (b.timestamp === undefined && a.timestamp === undefined) return 0;
     if (b.timestamp !== undefined && a.timestamp === undefined) return -1;
     return b.timestamp - a.timestamp;
+};
+
+const fixTronTx = (txs, symbol) => {
+    if (symbol !== 'TRX') return txs;
+    return Object.keys(txs).reduce((k, map) => {
+        if (k && !k.startsWith('0x')) {
+            map[k] = { ...txs[k] };
+        }
+        return map;
+    }, {});
 };
