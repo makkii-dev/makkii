@@ -162,7 +162,7 @@ class PokketHome extends React.Component {
         return (
             <Carousel delay={5000} style={{ width, height: 120 }} autoplay currentPage={0} bullets chosenBulletStyle={{ backgroundColor: mainColor }} bulletStyle={{ borderColor: mainColor }}>
                 <View style={{ ...styles.slide, backgroundColor: 'white' }} key="totalInvestment">
-                    <Text style={{ color: 'black' }}>
+                    <Text style={{ color: 'black', textAlign: 'center' }}>
                         {`${strings('pokket.label_current_totalInvestment')}:`} <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{`$${formatMoney(totalInvestment)}`}</Text>
                     </Text>
                 </View>

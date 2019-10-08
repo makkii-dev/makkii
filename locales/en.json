@@ -274,6 +274,7 @@
     "label_BTC_account_not_found": "No BitCoin Accounts",
     "label_please_select_account": "Please select an account first.",
     "label_no_exchange_history": "No exchange history.",
+    "label_no_token_lists": "Unable to get token list, click to refresh",
     "button_add_ETH_account": "Add Ethereum account",
     "button_add_BTC_account": "Add BitCoin account",
     "button_exchange_enable": "Exchange",

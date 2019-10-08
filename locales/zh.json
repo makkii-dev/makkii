@@ -264,6 +264,7 @@
     "label_BTC_account_not_found": "找不到比特币账号",
     "label_please_select_account": "请先选择一个账号。",
     "label_no_exchange_history": "暂无兑换历史",
+    "label_no_token_lists": "无法获得代币列表，点击刷新",
     "button_add_ETH_account": "添加以太坊账号",
     "button_add_BTC_account": "添加比特币账号",
     "button_exchange_enable": "兑换",

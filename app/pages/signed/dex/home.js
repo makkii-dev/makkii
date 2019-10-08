@@ -32,6 +32,8 @@ class Home extends React.Component {
         destQty: 0,
         tradeRate: this.props.trade.tradeRate,
         showMenu: false,
+        isLoading: true,
+        error: false,
     };
 
     srcQtyFocused = false;
@@ -40,6 +42,7 @@ class Home extends React.Component {
 
     componentWillMount(): void {
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
+        this.getTokenLists();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -77,6 +80,22 @@ class Home extends React.Component {
     componentWillUnmount(): void {
         this.listenNavigation.remove();
     }
+
+    getTokenLists = () => {
+        this.props.dispatch(createAction('ERC20Dex/getTokenList')()).then(res => {
+            if (res) {
+                this.setState({
+                    isLoading: false,
+                    error: false,
+                });
+            } else {
+                this.setState({
+                    isLoading: false,
+                    error: true,
+                });
+            }
+        });
+    };
 
     onExchangeSrc2dest = () => {
         const { srcToken, destToken } = this.props.trade;
@@ -212,7 +231,7 @@ class Home extends React.Component {
     };
 
     renderContent = () => {
-        const { srcToken, destToken, srcQty, destQty, tradeRate, showMenu } = this.state;
+        const { srcToken, destToken, srcQty, destQty, tradeRate } = this.state;
         const { currentAccount } = this.props;
         let buttonEnabled = false;
         let hasToken = false;
@@ -238,7 +257,6 @@ class Home extends React.Component {
         } else {
             errorMsg = strings('token_exchange.button_exchange_no_ETH_account');
         }
-        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
 
         return (
             <DismissKeyboardView>
@@ -336,35 +354,45 @@ class Home extends React.Component {
                         />
                     </MyscrollView>
                     <Loading isShow={this.props.isWaiting} />
-                    {/* Menu Pop window */}
-                    <PopupMenu
-                        backgroundColor="rgba(52,52,52,0.54)"
-                        onClose={select => this.onCloseMenu(select)}
-                        visible={showMenu}
-                        data={DEX_MENU}
-                        containerPosition={{
-                            position: 'absolute',
-                            top: popWindowTop,
-                            right: 5,
-                        }}
-                        imageStyle={{ width: 20, height: 20, marginRight: 10 }}
-                        fontStyle={{ fontSize: 12, color: '#000' }}
-                        itemStyle={{
-                            flexDirection: 'row',
-                            justifyContent: 'flex-start',
-                            alignItems: 'center',
-                            marginVertical: 10,
-                        }}
-                        containerBackgroundColor="#fff"
-                        ItemSeparatorComponent={() => <View style={styles.divider} />}
-                    />
                 </View>
             </DismissKeyboardView>
         );
     };
 
+    renderNoNetWork() {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <TouchableOpacity
+                    style={{
+                        ...commonStyles.shadow,
+                        borderRadius: 10,
+                        backgroundColor: 'white',
+                        flex: 1,
+                        width: width - 20,
+                        marginVertical: 20,
+                        marginHorizontal: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                    onPress={() => {
+                        this.setState(
+                            {
+                                isLoading: true,
+                            },
+                            () => this.getTokenLists(),
+                        );
+                    }}
+                >
+                    <Image source={require('../../../../assets/empty_transactions.png')} style={{ width: 80, height: 80, tintColor: 'gray' }} resizeMode="contain" />
+                    <Text style={{ color: 'gray', textAlign: 'center', marginTop: 20 }}>{strings('token_exchange.label_no_token_lists')}</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
     render() {
-        const { isLoading } = this.props;
+        const { isLoading, error, showMenu } = this.state;
+        const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         return (
             <View style={{ flex: 1 }}>
                 <CustomHeader
@@ -383,7 +411,29 @@ class Home extends React.Component {
                         </TouchableOpacity>
                     }
                 />
-                {isLoading ? this.renderLoading() : this.renderContent()}
+                {isLoading ? this.renderLoading() : error ? this.renderNoNetWork() : this.renderContent()}
+                {/* Menu Pop window */}
+                <PopupMenu
+                    backgroundColor="rgba(52,52,52,0.54)"
+                    onClose={select => this.onCloseMenu(select)}
+                    visible={showMenu}
+                    data={DEX_MENU}
+                    containerPosition={{
+                        position: 'absolute',
+                        top: popWindowTop,
+                        right: 5,
+                    }}
+                    imageStyle={{ width: 20, height: 20, marginRight: 10 }}
+                    fontStyle={{ fontSize: 12, color: '#000' }}
+                    itemStyle={{
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        marginVertical: 10,
+                    }}
+                    containerBackgroundColor="#fff"
+                    ItemSeparatorComponent={() => <View style={styles.divider} />}
+                />
             </View>
         );
     }
@@ -404,7 +454,6 @@ const mapToState = ({ accountsModel, settingsModel, ERC20Dex }) => {
 
     return {
         trade: ERC20Dex.trade,
-        isLoading: ERC20Dex.isLoading,
         isWaiting: ERC20Dex.isWaiting,
         currentAccount,
         balance,

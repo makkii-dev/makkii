@@ -22,7 +22,6 @@ const initTrade = {
 export default {
     namespace: 'ERC20Dex',
     state: {
-        isLoading: true,
         isWaiting: false,
         tokenList: {},
         currentAccount: '',
@@ -50,7 +49,6 @@ export default {
             const tokenApprovals = yield call(Storage.get, 'tokenApprovals', false);
             yield put(createAction('ERC20DexUpdateState')({ tokenApprovals }));
             yield put(createAction('tryUpdateCurrentAccount')({ force: true }));
-            yield put(createAction('getTokenList')());
             yield put(createAction('txSenderModel/addCallBack')({ key: 'approve', fn: approvalCallback }));
             yield put(createAction('txSenderModel/addCallBack')({ key: 'exchange', fn: exchangeCallback }));
             yield put(createAction('txsListener/addCallBack')({ key: 'approve', fn: approvalCallback }));
@@ -95,6 +93,10 @@ export default {
 
         *getTokenList(action, { call, put }) {
             const lists = yield call(getTokenList, network);
+            console.log('[debug]=>lists', lists);
+            if (Object.keys(lists).length < 2) {
+                return false;
+            }
             // init trade;
             const srcToken = Object.keys(lists)[0];
             const destToken = Object.keys(lists)[1];
@@ -110,14 +112,14 @@ export default {
                 };
                 yield put(
                     createAction('ERC20DexUpdateState')({
-                        isLoading: false,
                         tokenList: lists,
                         trade,
                     }),
                 );
             } else {
-                yield put(createAction('ERC20DexUpdateState')({ isLoading: false, tokenList: lists }));
+                yield put(createAction('ERC20DexUpdateState')({ tokenList: lists }));
             }
+            return true;
         },
         *updateTrade({ payload }, { call, put, select }) {
             const { srcToken, destToken, srcQty, displayLoading = true } = payload;
