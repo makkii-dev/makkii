@@ -33,6 +33,7 @@ import { COINS } from '../../../../client/support_coin_list';
 import { formatAddress1Line } from '../../../../client/api';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, navigate, popCustom } from '../../../../utils/dva';
+import TouchableView, { connectToTouchAble } from '../../../components/TouchableView';
 
 const { width } = Dimensions.get('window');
 
@@ -822,16 +823,14 @@ class Home extends Component {
                         />
                     </ImageBackground>
                     {activity.enabled ? (
-                        <TouchableOpacity
-                            activeOpacity={1}
+                        <TouchableView
+                            currentRight={5}
+                            currentBottom={20}
                             style={{
                                 elevation: 8,
                                 shadowColor: 'black',
                                 shadowOffset: { width: 5, height: 5 },
                                 shadowOpacity: 0.3,
-                                position: 'absolute',
-                                right: 5,
-                                bottom: 20,
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}
@@ -840,7 +839,7 @@ class Home extends Component {
                             }}
                         >
                             <Image source={{ uri: activity.imgUrl }} style={{ width: 50, height: 50 }} resizeMode="contain" />
-                        </TouchableOpacity>
+                        </TouchableView>
                     ) : null}
                 </TouchableOpacity>
             </View>
@@ -869,7 +868,7 @@ const mapToState = ({ accountsModel, settingsModel }) => {
     };
 };
 
-export default connect(mapToState)(Home);
+export default connect(mapToState)(connectToTouchAble(Home));
 
 const styles = StyleSheet.create({
     accountView: {
