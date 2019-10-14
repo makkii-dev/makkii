@@ -27,4 +27,15 @@ const getSupportedModule = async () => {
     }
 };
 
-export { getLatestVersion, getSupportedModule };
+const getActivityConstant = async () => {
+    const url = `${Config.app_server_api}/market_activity/red_envelope/image`;
+    try {
+        const {
+            data: { data },
+        } = await HttpClient.get(url);
+        return { result: true, data };
+    } catch (e) {
+        return { result: false };
+    }
+};
+export { getLatestVersion, getSupportedModule, getActivityConstant };

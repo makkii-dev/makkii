@@ -10,7 +10,7 @@ import { createAction, popCustom } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
-import { getLatestVersion, getSupportedModule } from '../services/setting.service';
+import { getActivityConstant, getLatestVersion, getSupportedModule } from '../services/setting.service';
 
 export default {
     namespace: 'settingsModel',
@@ -37,6 +37,11 @@ export default {
         ignoreAppState: false,
         showTouchIdDialog: true,
         bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
+        activity: {
+            enabled: false,
+            imgUrl: '',
+            linkUrl: '',
+        },
     },
     subscriptions: {
         setupListenerCoinPrice({ dispatch }) {
@@ -95,7 +100,8 @@ export default {
         },
         *getSupportedModule(action, { select, call, put }) {
             const { result, data: supportedModule } = yield call(getSupportedModule);
-            let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+            let { bottomBarTab, lang, activity } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+            console.log('supportedModule', supportedModule);
             if (result) {
                 lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
                 if (!supportedModule.includes('Pokket')) {
@@ -107,13 +113,22 @@ export default {
                 if (!supportedModule.includes('Kyber')) {
                     bottomBarTab.remove('signed_dex');
                 }
-                yield put(createAction('updateState')({ bottomBarTab }));
+                if (supportedModule.includes('RedEnvelope')) {
+                    const { result, data: activityData } = yield call(getActivityConstant);
+                    activity.enabled = true;
+                    if (result) {
+                        activity.imgUrl = activityData.imageUrl;
+                        activity.linkUrl = activityData.imageLink;
+                    }
+                }
+                yield put(createAction('updateState')({ bottomBarTab, activity }));
             } else {
                 lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
                 if (lang.indexOf('en') >= 0) {
                     bottomBarTab.remove('signed_news');
                 }
                 bottomBarTab.remove('signed_pokket');
+                yield put(createAction('updateState')({ bottomBarTab }));
             }
         },
         *reset(action, { put }) {

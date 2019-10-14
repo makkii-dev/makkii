@@ -21,6 +21,7 @@ import {
 } from 'react-native';
 import BigNumber from 'bignumber.js';
 import PropTypes from 'prop-types';
+import DeviceInfo from 'react-native-device-info';
 import SwipeCell from '../../../components/SwipeCell';
 import { strings } from '../../../../locales/i18n';
 import { OptionButton, ComponentButton } from '../../../components/common';
@@ -426,6 +427,15 @@ class Home extends Component {
         // }
     };
 
+    handleActivity = () => {
+        const { linkUrl } = this.props.activity;
+        const uniqueId = DeviceInfo.getUniqueID();
+        const url = `${linkUrl}/?phoneId=${uniqueId}`;
+        this.props.navigation.navigate('simple_webview', {
+            initialUrl: { uri: url },
+        });
+    };
+
     async requestStoragePermission() {
         try {
             const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
@@ -679,7 +689,7 @@ class Home extends Component {
     };
 
     render() {
-        const { accounts, totalBalance, fiat_currency: fiatCurrency, isGettingBalance } = this.props;
+        const { accounts, totalBalance, fiat_currency: fiatCurrency, isGettingBalance, activity } = this.props;
         let renderAccounts = sortAccounts(Object.values(accounts), this.state.sortOrder);
         renderAccounts = filterAccounts(renderAccounts, this.state.filter);
         renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
@@ -811,6 +821,27 @@ class Home extends Component {
                             currentSort={this.state.sortOrder}
                         />
                     </ImageBackground>
+                    {activity.enabled ? (
+                        <TouchableOpacity
+                            activeOpacity={1}
+                            style={{
+                                elevation: 8,
+                                shadowColor: 'black',
+                                shadowOffset: { width: 5, height: 5 },
+                                shadowOpacity: 0.3,
+                                position: 'absolute',
+                                right: 5,
+                                bottom: 20,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            onPress={() => {
+                                this.handleActivity();
+                            }}
+                        >
+                            <Image source={{ uri: activity.imgUrl }} style={{ width: 50, height: 50 }} resizeMode="contain" />
+                        </TouchableOpacity>
+                    ) : null}
                 </TouchableOpacity>
             </View>
         );
@@ -834,6 +865,7 @@ const mapToState = ({ accountsModel, settingsModel }) => {
         fiat_currency: settingsModel.fiat_currency,
         accounts,
         lang: settingsModel.lang,
+        activity: settingsModel.activity,
     };
 };
 
