@@ -703,7 +703,8 @@ const compareFn = (a, b) => {
 
 const fixTronTx = (txs, symbol) => {
     if (symbol !== 'TRX') return txs;
-    return Object.keys(txs).reduce((k, map) => {
+    return Object.keys(txs).reduce((map, k) => {
+        console.log('k=>', k);
         if (k && !k.startsWith('0x')) {
             map[k] = { ...txs[k] };
         }
