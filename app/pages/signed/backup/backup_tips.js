@@ -92,8 +92,9 @@ class BackUpTips extends React.Component {
     renderContent = ({ title, details }) => {
         return (
             <View style={styles.contentContainer}>
-                <Text style={{ fontWeight: 'bold', color: '#000' }}>{`•\t\t\t${strings(title)}`}</Text>
+                <Text style={{ marginLeft: 20, fontWeight: 'bold', color: '#000' }}>{`${strings(title)}`}</Text>
                 <Text style={{ marginLeft: 20, color: '#000' }}>{strings(details)}</Text>
+                <Text style={{ position: 'absolute', top: 0, left: 0, fontWeight: 'bold', color: '#000' }}>•</Text>
             </View>
         );
     };

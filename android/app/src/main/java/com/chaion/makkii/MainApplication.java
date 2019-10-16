@@ -3,6 +3,7 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.crypho.scrypt.RNScryptPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import me.listenzz.modal.TranslucentModalReactPackage;
 import com.ocetnik.timer.BackgroundTimerPackage;
@@ -45,6 +46,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNScryptPackage(),
             new ReanimatedPackage(),
             new TranslucentModalReactPackage(),
             new BackgroundTimerPackage(),

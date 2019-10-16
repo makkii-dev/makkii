@@ -8,6 +8,7 @@ import Loading from '../../../components/Loading';
 import { getLedgerMessage } from '../../../../utils';
 import { alertOk } from '../../../components/common';
 import { createAction, navigate } from '../../../../utils/dva';
+import { COINS } from '../../../../client/support_coin_list';
 
 const { width } = Dimensions.get('window');
 
@@ -43,6 +44,14 @@ class ImportFrom extends Component {
                 alertOk(strings('alert_title_error'), getLedgerMessage(ret.code));
             }
         });
+    };
+
+    importFromBip38 = () => {
+        navigate('signed_vault_bip38_import')(this.props);
+    };
+
+    importFromWIF = () => {
+        navigate('signed_vault_wif_import')(this.props);
     };
 
     renderItem = ({ item }) => {
@@ -85,10 +94,18 @@ class ImportFrom extends Component {
         IMPORT_SOURCE[0].callback = this.importFromMasterKey;
         IMPORT_SOURCE[1].callback = this.importFromPrivateKey;
         IMPORT_SOURCE[3].callback = this.importFromLedger;
+        IMPORT_SOURCE[4].callback = this.importFromBip38;
+        IMPORT_SOURCE[5].callback = this.importFromWIF;
         const data = [IMPORT_SOURCE[0], IMPORT_SOURCE[1]];
         const { symbol } = this.props;
         if (symbol === 'AION' && Platform.OS === 'android') {
             data.push(IMPORT_SOURCE[3]);
+        }
+        if (symbol && COINS[symbol].bip38Supported) {
+            data.push(IMPORT_SOURCE[4]);
+        }
+        if (symbol && COINS[symbol].WIFSupported) {
+            data.push(IMPORT_SOURCE[5]);
         }
         return (
             <View

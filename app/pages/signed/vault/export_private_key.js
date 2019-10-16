@@ -9,7 +9,7 @@ import defaultStyles from '../../../styles';
 import { mainBgColor, linkButtonColor, fontColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
 import { alertOk, ComponentButton, InputMultiLines } from '../../../components/common';
-import { saveImage } from '../../../../utils';
+import { accountKey, saveImage } from '../../../../utils';
 import { AppToast } from '../../../components/AppToast';
 import { createAction } from '../../../../utils/dva';
 
@@ -26,22 +26,23 @@ class ExportPrivateKey extends React.Component {
         };
     };
 
-    state = {
-        isLoading: true,
-    };
-
     constructor(props) {
         super(props);
         const { navigation, dispatch } = this.props;
-        const accKey = navigation.getParam('currentAccount', '');
-        console.log('acckey=>', accKey);
-        dispatch(createAction('accountsModel/getPrivateKey')({ key: accKey })).then(pk => {
-            console.log('pk=>', pk);
-            this.privateKey = pk;
-            this.setState({
-                isLoading: false,
+        const currentAccount = navigation.getParam('currentAccount', {});
+        this.qrWord = navigation.getParam('qrWord');
+        this.state = {
+            isLoading: !this.qrWord,
+        };
+        if (this.qrWord === undefined) {
+            const accKey = accountKey(currentAccount.symbol, currentAccount.address);
+            dispatch(createAction('accountsModel/getPrivateKey')({ key: accKey })).then(pk => {
+                this.qrWord = pk;
+                this.setState({
+                    isLoading: false,
+                });
             });
-        });
+        }
     }
 
     componentDidMount() {
@@ -123,7 +124,7 @@ class ExportPrivateKey extends React.Component {
                 <View style={styles.qrCodeView}>
                     <QRCode
                         size={200}
-                        value={this.privateKey}
+                        value={this.qrWord}
                         getRef={ref => {
                             this.qrcodeRef = ref;
                         }}
@@ -137,12 +138,12 @@ class ExportPrivateKey extends React.Component {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.privateKeyView}>
-                    <InputMultiLines style={styles.privateKeyText} editable={false} value={this.privateKey} />
+                    <InputMultiLines style={styles.privateKeyText} editable={false} value={this.qrWord} />
                 </View>
                 <ComponentButton
                     title={strings('copy_button')}
                     onPress={() => {
-                        Clipboard.setString(this.privateKey);
+                        Clipboard.setString(this.qrWord);
                         AppToast.show(strings('toast_copy_success'));
                     }}
                 />

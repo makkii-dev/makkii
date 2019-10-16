@@ -155,6 +155,7 @@ class AccountTokens extends Component {
     onCloseMenu = select => {
         const { dispatch, currentAccount } = this.props;
         const { navigationSafely } = this.props.screenProps;
+        let coin = COINS[currentAccount.symbol];
         this.setState(
             {
                 showMenu: false,
@@ -165,12 +166,22 @@ class AccountTokens extends Component {
                         navigate('signed_vault_set_account_name')({ dispatch });
                         break;
                     case ACCOUNT_MENU[1].title:
-                        navigationSafely({
-                            routeName: 'signed_vault_export_private_key',
-                            params: {
-                                currentAccount: accountKey(currentAccount.symbol, currentAccount.address),
-                            },
-                        })({ dispatch });
+                        if (coin && coin.bip38Supported) {
+                            dispatch(createAction('accountImportModel/updateState')({ symbol: currentAccount.symbol }));
+                            navigationSafely({
+                                routeName: 'signed_vault_export_to',
+                                params: {
+                                    currentAccount,
+                                },
+                            })({ dispatch });
+                        } else {
+                            navigationSafely({
+                                routeName: 'signed_vault_export_private_key',
+                                params: {
+                                    currentAccount,
+                                },
+                            })({ dispatch });
+                        }
                         break;
                     case ACCOUNT_MENU[2].title:
                         dispatch(

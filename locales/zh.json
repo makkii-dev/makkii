@@ -157,7 +157,7 @@
     "complete_button": "完整历史",
     "error_empty_account_name": "账户名不能为空",
     "menu_change_name": "更改账户名称",
-    "menu_export_private_key": "导出私钥",
+    "menu_export_private_key": "导出账号",
     "menu_switch_token": "切换代币",
     "menu_token_exchange": "交易代币"
   },
@@ -165,8 +165,8 @@
     "title": "私钥",
     "instruction_private_key": "请输入私钥",
     "error_invalid_private_key": "私钥不正确",
-    "already_existed": "账号已存在"
-
+    "already_existed": "账号已存在",
+    "label_compressed_address": "压缩地址"
   },
   "import_master_key": {
     "title": "助记词短语"
@@ -174,8 +174,12 @@
   "import_ledger": {
     "title": "Ledger冷钱包"
   },
+  "import_WIF": {
+    "title": "WIF",
+    "label_input_wif": "请输入WIF格式密钥"
+  },
   "export_private_key": {
-    "title": "导出私钥",
+    "title": "导出账号",
     "button_save_image": "保存图片",
     "warning": "确保你的环境是安全的, 且没有人能看到你的屏幕。"
   },
@@ -598,7 +602,28 @@
     "from_hd_wallet": "从HD Wallet创建",
     "from_private_key": "从私钥导入",
     "from_ledger": "从Ledger导入",
-    "from_keystore": "从证书文件导入"
+    "from_keystore": "从证书文件导入",
+    "from_bip38": "从BIP38导入",
+    "from_WIF": "从WIF导入"
+  },
+  "vault_export_way": {
+    "title": "导出方式",
+    "to_private_key": "以私钥形式导出",
+    "to_wif": "以WIF形式导出",
+    "to_bip38": "以BIP38形式导出"
+  },
+  "vault_bip38": {
+    "title_import": "导入BIP38 ",
+    "title_export": "导出BIP38",
+    "desc_password": "密码用于加密私钥，请妥善保管",
+    "label_bip38": "BIP38",
+    "label_password": "密码",
+    "label_confirm_password": "确认密码",
+    "hint_enter_password": "请输入密码",
+    "hint_enter_confirm_password": "请再次输入密码",
+    "hint_enter_bip38": "请输入BIP38",
+    "button_next": "下一步",
+    "error_invalid": "错误的Bip38或密码"
   },
   "pokket": {
     "title": "POKKET",

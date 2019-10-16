@@ -14,7 +14,7 @@ export default class Loading extends Component {
         super(props);
         this.state = {
             message: null,
-            isShow: false,
+            isShow: props.isShow || false,
         };
     }
 
@@ -30,13 +30,18 @@ export default class Loading extends Component {
     }
 
     show(message = null, params) {
+        let callback = () => {};
         if (params !== undefined) {
-            this.position = params.position;
+            this.position = params.position || 'center';
+            callback = params.callback || callback;
         }
-        this.setState({
-            isShow: true,
-            message,
-        });
+        this.setState(
+            {
+                isShow: true,
+                message,
+            },
+            callback,
+        );
     }
 
     hide() {

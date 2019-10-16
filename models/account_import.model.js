@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getLedgerStatus } from '../services/account_import.service';
+import { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountFromWIF, getAccountsFromLedger, getLedgerStatus, getPrivateKeyFromBIP38 } from '../services/account_import.service';
 import { accountKey } from '../utils';
 import { createAction } from '../utils/dva';
 
@@ -72,18 +72,19 @@ export default {
             }
         },
         *fromPrivateKey({ payload }, { call, put, select }) {
-            const { private_key } = payload;
+            const { private_key, compressed = true } = payload;
             const { symbol, accountsMap } = yield select(({ accountImportModel, accountsModel }) => ({
                 symbol: accountImportModel.symbol,
                 accountsMap: accountsModel.accountsMap,
             }));
             try {
-                const { address } = yield call(getAccountFromPrivateKey, symbol, private_key);
+                const { address, private_key: privateKey } = yield call(getAccountFromPrivateKey, symbol, private_key, { compressed });
                 if (!accountsMap[accountKey(symbol, address)]) {
                     yield put(
                         createAction('updateState')({
-                            private_key,
+                            private_key: privateKey,
                             address,
+                            compressed,
                             type: '[pk]',
                             readyToImport: true,
                         }),
@@ -107,6 +108,57 @@ export default {
                     readyToImport: true,
                 }),
             );
+        },
+        *fromBip38({ payload }, { put, select, call }) {
+            const { bip38, password } = payload;
+            const { result, privateKey, compressed } = yield call(getPrivateKeyFromBIP38, bip38, password);
+            console.log('res', result, privateKey, compressed);
+            const { symbol, accountsMap } = yield select(({ accountImportModel, accountsModel }) => ({
+                symbol: accountImportModel.symbol,
+                accountsMap: accountsModel.accountsMap,
+            }));
+            if (result) {
+                const { address, private_key: pk } = yield call(getAccountFromPrivateKey, symbol, privateKey, { compressed });
+                if (!accountsMap[accountKey(symbol, address)]) {
+                    yield put(
+                        createAction('updateState')({
+                            private_key: pk,
+                            address,
+                            compressed,
+                            type: '[pk]',
+                            readyToImport: true,
+                        }),
+                    );
+                    return 1;
+                }
+                return 2; // already imported
+            }
+            return 3; // private_key error
+        },
+        *fromWIF({ payload }, { put, select, call }) {
+            const { wif } = payload;
+            const { symbol, accountsMap } = yield select(({ accountImportModel, accountsModel }) => ({
+                symbol: accountImportModel.symbol,
+                accountsMap: accountsModel.accountsMap,
+            }));
+            try {
+                const { address, private_key: pk, compressed } = yield call(getAccountFromWIF, symbol, wif);
+                if (!accountsMap[accountKey(symbol, address)]) {
+                    yield put(
+                        createAction('updateState')({
+                            private_key: pk,
+                            address,
+                            compressed,
+                            type: '[pk]',
+                            readyToImport: true,
+                        }),
+                    );
+                    return 1;
+                }
+                return 2; // already imported
+            } catch (e) {
+                return 3; // private_key error
+            }
         },
         *getAccountsFromLedger(
             {
@@ -135,15 +187,19 @@ export default {
             },
             { put, select },
         ) {
-            const { symbol, address, type, private_key, derivationIndex, hdIndex } = yield select(({ accountImportModel }) => ({
+            const { symbol, address, type, private_key, derivationIndex, hdIndex, compressed } = yield select(({ accountImportModel }) => ({
                 symbol: accountImportModel.symbol,
                 address: accountImportModel.address,
                 type: accountImportModel.type,
                 private_key: accountImportModel.private_key,
                 derivationIndex: accountImportModel.derivationIndex,
                 hdIndex: accountImportModel.hdIndex,
+                compressed: accountImportModel.compressed,
             }));
             let account = { symbol, address, type, name, tokens: {}, balance: 0 };
+            if (compressed !== undefined) {
+                account.compressed = compressed;
+            }
             if (account.type === '[ledger]') {
                 account.derivationIndex = derivationIndex;
             } else {

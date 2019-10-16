@@ -53,7 +53,6 @@ const TouchableView = props => {
             }
         },
     });
-    console.log('[debug] ', presentState, panResponder);
 
     return (
         <View style={{ ...style, position: 'absolute', right: currentRight, bottom: currentBottom }} {...panResponder.panHandlers} ref={touchBackView}>

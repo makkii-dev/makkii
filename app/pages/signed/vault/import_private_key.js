@@ -8,6 +8,8 @@ import defaultStyles from '../../../styles';
 import { mainBgColor } from '../../../style_util';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, navigate } from '../../../../utils/dva';
+import { COINS } from '../../../../client/support_coin_list';
+import CheckBox from '../../../components/CheckBox';
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,8 +33,8 @@ class ImportPrivateKey extends Component {
     ImportAccount = () => {
         Keyboard.dismiss();
         const { dispatch } = this.props;
-        const { private_key: privateKey } = this.state;
-        dispatch(createAction('accountImportModel/fromPrivateKey')({ private_key: privateKey })).then(r => {
+        const { private_key: privateKey, compressed } = this.state;
+        dispatch(createAction('accountImportModel/fromPrivateKey')({ private_key: privateKey, compressed })).then(r => {
             console.log(`r:${r}`);
             if (r === 2) {
                 // already imported
@@ -50,6 +52,7 @@ class ImportPrivateKey extends Component {
         super(props);
         this.state = {
             private_key: '',
+            compressed: true,
         };
     }
 
@@ -84,7 +87,14 @@ class ImportPrivateKey extends Component {
         });
     };
 
+    handleCheckBox = val => {
+        this.setState({
+            compressed: val,
+        });
+    };
+
     render() {
+        const coin = COINS[this.props.symbol];
         return (
             <TouchableOpacity
                 activeOpacity={1}
@@ -141,7 +151,7 @@ class ImportPrivateKey extends Component {
                             borderRadius: 5,
                             backgroundColor: 'white',
                             width: width - 80,
-                            marginBottom: 40,
+                            marginBottom: 10,
                         }}
                     >
                         <InputMultiLines
@@ -169,6 +179,29 @@ class ImportPrivateKey extends Component {
                             }}
                         />
                     </View>
+                    {coin && coin.bip38Supported ? (
+                        <CheckBox
+                            initValue={this.state.compressed}
+                            style={{ width: '100%' }}
+                            onCheck={() => this.handleCheckBox(true)}
+                            onUncheck={() => this.handleCheckBox(false)}
+                            imageStyle={{ width: 24, height: 24 }}
+                            textRight={
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text>{strings('import_private_key.label_compressed_address')}</Text>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.props.navigation.navigate('simple_webview', {
+                                                initialUrl: { uri: 'https://bitcoin.org/en/glossary/compressed-public-key' },
+                                            });
+                                        }}
+                                    >
+                                        <Image source={require('../../../../assets/icon_question.png')} style={{ height: 20, width: 20, marginLeft: 10 }} resizeMode="contain" />
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                        />
+                    ) : null}
                 </View>
             </TouchableOpacity>
         );

@@ -28,6 +28,10 @@ import VaultTransaction from './pages/signed/vault/transaction';
 import VaultTransactionHistory from './pages/signed/vault/transaction_history';
 import VaultSetAccountName from './pages/signed/vault/set_account_name';
 import VaultExportPrivateKey from './pages/signed/vault/export_private_key';
+import VaultImportBIP38 from './pages/signed/vault/import_bip38';
+import VaultExportBIP38 from './pages/signed/vault/export_bip38';
+import VaultImportWIF from './pages/signed/vault/import_WIF';
+import VaultExportTo from './pages/signed/vault/export_to';
 import DappsDapp from './pages/signed/dapps/dapp';
 // import DappsLaunch from './pages/signed/dapps/launch';
 import DappsSend from './pages/signed/dapps/dapp_send';
@@ -440,6 +444,22 @@ const AppNavigator = createStackNavigator(
         },
         signed_vault_export_private_key: {
             screen: VaultExportPrivateKey,
+            navigationOptions,
+        },
+        signed_vault_bip38_import: {
+            screen: VaultImportBIP38,
+            navigationOptions,
+        },
+        signed_vault_bip38_export: {
+            screen: VaultExportBIP38,
+            navigationOptions,
+        },
+        signed_vault_wif_import: {
+            screen: VaultImportWIF,
+            navigationOptions,
+        },
+        signed_vault_export_to: {
+            screen: VaultExportTo,
             navigationOptions,
         },
         signed_dapps_dapp: {

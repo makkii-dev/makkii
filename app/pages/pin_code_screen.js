@@ -33,6 +33,8 @@ class PinCodeScreen extends React.Component {
 
     createPinCode = '';
 
+    currentAppState: 'active';
+
     constructor(props) {
         super(props);
         this.errorCounts = 0;
@@ -61,10 +63,13 @@ class PinCodeScreen extends React.Component {
         });
     }
 
-    componentWillReceiveProps({ currentAppState, showTouchIdDialog }): void {
-        const { currentAppState: currentAppState_ } = this.props;
-        if (showTouchIdDialog && currentAppState_ !== currentAppState && currentAppState === 'active') {
-            this.onPressTouchId();
+    componentWillUpdate(nextProps: Readonly<P>): void {
+        const { currentAppState, showTouchIdDialog } = nextProps;
+        if (this.currentAppState !== currentAppState) {
+            this.currentAppState = currentAppState;
+            if (showTouchIdDialog) {
+                this.onPressTouchId();
+            }
         }
     }
 

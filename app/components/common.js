@@ -565,16 +565,17 @@ class TextInputWithTitle extends Component {
                 <View
                     style={{
                         flexDirection: 'row',
-                        height: 50,
+                        height: this.props.height || 50,
                         alignItems: 'center',
                     }}
                 >
                     <TextInput
+                        multiline
                         style={{
                             fontSize: 16,
                             color: fontColor,
                             fontWeight: 'normal',
-                            paddingRight: 45,
+                            paddingRight: this.props.trailingText ? 45 : 0,
                             borderColor: 'lightgray',
                             borderBottomWidth: 1,
                             flex: 1,

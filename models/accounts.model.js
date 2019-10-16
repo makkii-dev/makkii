@@ -295,10 +295,9 @@ export default {
                 if (accountsMap[key]) {
                     newAccountsKey.remove(key);
                     yield call(SensitiveStorage.remove, key);
-                    const { type, address, symbol } = accountsMap[key];
-                    if (type === '[local]') {
-                        yield put(createAction('updateHdIndex')({ symbol, address, code: 'delete' }));
-                    }
+                    const { address, symbol } = accountsMap[key];
+                    // update Hd Index
+                    yield put(createAction('updateHdIndex')({ symbol, address, code: 'delete' }));
                     delete newAccountsMap[key];
                     yield call(Storage.remove, `acc+${key}`);
                     delete newTransactionsMap[key];

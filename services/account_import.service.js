@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import wallet from 'react-native-aion-hw-wallet';
-import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger } from '../client/keystore';
+import BIP38 from '../utils/bip38';
+import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger, recoverKeyPairByWIF } from '../client/keystore';
 import { range } from '../utils';
 import { SensitiveStorage } from '../utils/storage';
 
@@ -14,12 +15,21 @@ const getAccountFromMasterKey = async (symbol, index) => {
     }
 };
 
-const getAccountFromPrivateKey = async (symbol, private_key) => {
+const getAccountFromPrivateKey = async (symbol, private_key, options) => {
     try {
         console.log('getAccountFromPrivateKey=>', symbol);
-        return await recoverKeyPairByPrivateKey(private_key, symbol);
+        return await recoverKeyPairByPrivateKey(private_key, symbol, options);
     } catch (e) {
         console.log('getAccountFromPrivateKey error=>', e);
+        throw e;
+    }
+};
+const getAccountFromWIF = async (symbol, wif) => {
+    try {
+        console.log('getAccountFromWIF=>', symbol);
+        return await recoverKeyPairByWIF(wif, symbol);
+    } catch (e) {
+        console.log('getAccountFromWIF error=>', e);
         throw e;
     }
 };
@@ -56,4 +66,21 @@ const getLedgerStatus = async () => {
     }
 };
 
-export { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getLedgerStatus };
+const getPrivateKeyFromBIP38 = async (bip38, password) => {
+    try {
+        console.log('getPrivateKeyFromBIP38', bip38, password);
+        const decryptedKey = await BIP38.decryptAsync(bip38, password);
+        return {
+            result: true,
+            privateKey: `0x${decryptedKey.privateKey.toString('hex')}`,
+            compressed: decryptedKey.compressed,
+        };
+    } catch (e) {
+        console.log('getPrivateKeyFromBIP38 error=>', e);
+        return {
+            result: false,
+        };
+    }
+};
+
+export { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getLedgerStatus, getPrivateKeyFromBIP38, getAccountFromWIF };

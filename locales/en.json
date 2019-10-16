@@ -158,7 +158,7 @@
     "complete_button": "All History",
     "error_empty_account_name": "Account name can't be empty",
     "menu_change_name": "Edit Account Name",
-    "menu_export_private_key": "Export Private Key",
+    "menu_export_private_key": "Export Account",
     "menu_switch_token": "Switch Token",
     "menu_token_exchange": "Exchange Token"
   },
@@ -166,7 +166,8 @@
     "title": "Private Key",
     "instruction_private_key": "Enter private key",
     "error_invalid_private_key": "Invalid private key",
-    "already_existed": "Already existed"
+    "already_existed": "Already existed",
+    "label_compressed_address": "Compressed address"
   },
   "import_master_key": {
     "title": "Seed Phrase"
@@ -174,8 +175,12 @@
   "import_ledger": {
     "title": "Ledger"
   },
+  "import_WIF": {
+    "title": "WIF",
+    "label_input_wif": "Please input WIF"
+  },
   "export_private_key": {
-    "title": "Export Private Key",
+    "title": "Export Account",
     "button_save_image": "Save Image",
     "warning": "Make sure your environment is secure, and no one sees your screen"
   },
@@ -598,7 +603,27 @@
     "from_hd_wallet": "Created by HD Wallet",
     "from_private_key": "Import from Private Key",
     "from_ledger": "Import from Ledger",
-    "from_keystore": "Import from Keystore file"
+    "from_keystore": "Import from Keystore file",
+    "from_bip38": "Import from BIP38"
+  },
+  "vault_export_way": {
+    "title": "Export To",
+    "to_private_key": "Export to Private Key",
+    "to_wif": "Export to WIF",
+    "to_bip38": "Export to BIP38"
+  },
+  "vault_bip38": {
+    "title_import": "BIP38 Import",
+    "title_export": "BIP38 Export",
+    "desc_password": "The password is used to encrypt the private key, please keep it safe",
+    "label_bip38": "BIP38",
+    "label_password": "Password",
+    "label_confirm_password": "Confirm Password",
+    "hint_enter_password": "Please enter password",
+    "hint_enter_confirm_password": "Please enter password again",
+    "hint_enter_bip38": "Please enter BIP38",
+    "button_next": "Next",
+    "error_invalid": "Invalid Bip38 or password"
   },
   "pokket": {
     "title": "POKKET",
