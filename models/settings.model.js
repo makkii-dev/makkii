@@ -95,13 +95,13 @@ export default {
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
-            yield put(createAction('getSupportedModule')());
             return true;
         },
         *getSupportedModule(action, { select, call, put }) {
             const { result, data: supportedModule } = yield call(getSupportedModule);
-            let { bottomBarTab, lang, activity } = yield select(({ settingsModel }) => ({ ...settingsModel }));
+            let { bottomBarTab, lang } = yield select(({ settingsModel }) => ({ ...settingsModel }));
             console.log('supportedModule', supportedModule);
+            let activity = {};
             if (result) {
                 lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
                 if (!supportedModule.includes('Pokket')) {
@@ -128,7 +128,7 @@ export default {
                     bottomBarTab.remove('signed_news');
                 }
                 bottomBarTab.remove('signed_pokket');
-                yield put(createAction('updateState')({ bottomBarTab }));
+                yield put(createAction('updateState')({ bottomBarTab, activity }));
             }
         },
         *reset(action, { put }) {

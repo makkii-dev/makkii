@@ -147,6 +147,7 @@ export default {
         },
         *login(action, { put }) {
             yield put(createAction('updateState')({ isLogin: true }));
+            yield put(createAction('settingsModel/getSupportedModule')());
             yield put(
                 StackActions.reset({
                     index: 0,
@@ -158,6 +159,7 @@ export default {
         },
         *logOut(action, { put }) {
             yield put(createAction('updateState')({ isLogin: false }));
+            yield put(createAction('settingsModel/updateState')({activity: {}}));
             yield put(
                 StackActions.reset({
                     index: 0,

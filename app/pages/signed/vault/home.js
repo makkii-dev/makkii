@@ -434,6 +434,8 @@ class Home extends Component {
         const url = `${linkUrl}/?phoneId=${uniqueId}`;
         this.props.navigation.navigate('simple_webview', {
             initialUrl: { uri: url },
+            title: '签到领红包',
+            refreshEnable: false,
         });
     };
 

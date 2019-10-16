@@ -10,6 +10,7 @@ class SimpleWebView extends Component {
     static navigationOptions = ({ navigation }) => {
         const { state } = navigation;
         const GoBack = navigation.getParam('GoBack', () => {});
+        const refreshEnable = navigation.getParam('refreshEnable', true);
         return {
             title: state.params.title,
             headerLeft: (
@@ -35,6 +36,7 @@ class SimpleWebView extends Component {
                 </TouchableOpacity>
             ),
             headerRight: (
+                refreshEnable?
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{
@@ -50,6 +52,7 @@ class SimpleWebView extends Component {
                 >
                     <Image source={require('../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
                 </TouchableOpacity>
+                    :<View/>
             ),
         };
     };
