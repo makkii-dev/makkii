@@ -162,7 +162,7 @@
     "menu_token_exchange": "交易代币"
   },
   "import_private_key": {
-    "title": "私钥",
+    "title": "从私钥导入",
     "instruction_private_key": "请输入私钥",
     "error_invalid_private_key": "私钥不正确",
     "already_existed": "账号已存在",
@@ -175,7 +175,7 @@
     "title": "Ledger冷钱包"
   },
   "import_WIF": {
-    "title": "WIF",
+    "title": "从WIF导入",
     "label_input_wif": "请输入WIF格式密钥"
   },
   "export_private_key": {

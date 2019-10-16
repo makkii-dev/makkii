@@ -163,7 +163,7 @@
     "menu_token_exchange": "Exchange Token"
   },
   "import_private_key": {
-    "title": "Private Key",
+    "title": "Import from Private Key",
     "instruction_private_key": "Enter private key",
     "error_invalid_private_key": "Invalid private key",
     "already_existed": "Already existed",
@@ -176,8 +176,8 @@
     "title": "Ledger"
   },
   "import_WIF": {
-    "title": "WIF",
-    "label_input_wif": "Please input WIF"
+    "title": "Import from WIF",
+    "label_input_wif": "Please enter WIF"
   },
   "export_private_key": {
     "title": "Export Account",
@@ -604,7 +604,8 @@
     "from_private_key": "Import from Private Key",
     "from_ledger": "Import from Ledger",
     "from_keystore": "Import from Keystore file",
-    "from_bip38": "Import from BIP38"
+    "from_bip38": "Import from BIP38",
+    "from_WIF": "Import from WIF"
   },
   "vault_export_way": {
     "title": "Export To",
@@ -623,7 +624,7 @@
     "hint_enter_confirm_password": "Please enter password again",
     "hint_enter_bip38": "Please enter BIP38",
     "button_next": "Next",
-    "error_invalid": "Invalid Bip38 or password"
+    "error_invalid": "Invalid BIP38 or password"
   },
   "pokket": {
     "title": "POKKET",
