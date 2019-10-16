@@ -840,7 +840,7 @@ class Home extends Component {
                                 this.handleActivity();
                             }}
                         >
-                            <Image source={{ uri: activity.imgUrl }} style={{ width: 50, height: 50 }} resizeMode="contain" />
+                            <Image source={{ uri: activity.imgUrl }} style={{ width: 80, height: 80 }} resizeMode="contain" />
                         </TouchableView>
                     ) : null}
                 </TouchableOpacity>
