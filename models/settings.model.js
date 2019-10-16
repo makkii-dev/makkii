@@ -95,6 +95,7 @@ export default {
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
+            yield put(createAction('getSupportedModule')());
             return true;
         },
         *getSupportedModule(action, { select, call, put }) {

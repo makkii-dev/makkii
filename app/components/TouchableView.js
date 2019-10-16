@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, PanResponder, Dimensions } from 'react-native';
+import { STATUSBAR_HEIGHT, HEADER_HEIGHT } from '../styles';
 
 const TouchableContext = React.createContext();
 const { width, height } = Dimensions.get('window');
@@ -17,6 +18,8 @@ const TouchableView = props => {
     const { posState, dispatchToPosState } = React.useContext(TouchableContext);
     const right = posState.right || currentRight;
     const bottom = posState.bottom || currentBottom;
+    const sizeW = props.width || 80;
+    const sizeH = STATUSBAR_HEIGHT + HEADER_HEIGHT + (props.height || 80);
     let newRight;
     let newBottom;
     const panResponder = PanResponder.create({
@@ -35,8 +38,8 @@ const TouchableView = props => {
                 presentState = true;
                 newRight = right - gestureState.dx;
                 newBottom = bottom - gestureState.dy;
-                newRight = newRight > 0 && newRight < width - 40 ? newRight : right;
-                newBottom = newBottom > 0 && newBottom < height - 100 ? newBottom : bottom;
+                newRight = newRight > 0 ? (newRight < width - sizeW ? newRight : width - sizeW) : 0;
+                newBottom = newBottom > 0 ? (newBottom < height - sizeH ? newBottom : height - sizeH) : 0;
                 touchBackView.current.setNativeProps({
                     style: {
                         right: newRight,
