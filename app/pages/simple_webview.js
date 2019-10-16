@@ -35,8 +35,7 @@ class SimpleWebView extends Component {
                     />
                 </TouchableOpacity>
             ),
-            headerRight: (
-                refreshEnable?
+            headerRight: refreshEnable ? (
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{
@@ -52,7 +51,8 @@ class SimpleWebView extends Component {
                 >
                     <Image source={require('../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
                 </TouchableOpacity>
-                    :<View/>
+            ) : (
+                <View />
             ),
         };
     };

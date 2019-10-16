@@ -159,7 +159,7 @@ export default {
         },
         *logOut(action, { put }) {
             yield put(createAction('updateState')({ isLogin: false }));
-            yield put(createAction('settingsModel/updateState')({activity: {}}));
+            yield put(createAction('settingsModel/updateState')({ activity: {} }));
             yield put(
                 StackActions.reset({
                     index: 0,
