@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Linking, Keyboard, PixelRatio, Platform } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Linking, Keyboard, PixelRatio, Platform, BackHandler } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
@@ -11,7 +11,7 @@ import { linkButtonColor, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { COINS } from '../../../../client/support_coin_list';
 import { AppToast } from '../../../components/AppToast';
-import { createAction, popCustom } from '../../../../utils/dva';
+import { createAction, navigateBack, popCustom } from '../../../../utils/dva';
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 const { width } = Dimensions.get('window');
@@ -27,6 +27,26 @@ class Send extends Component {
     static navigationOptions = ({ navigation }) => {
         return {
             title: navigation.getParam('title', strings('send.title')),
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => navigation.state.params.onGoBack()}
+                    style={{
+                        width: 48,
+                        height: 48,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Image
+                        source={require('../../../../assets/arrow_back.png')}
+                        style={{
+                            tintColor: 'white',
+                            width: 20,
+                            height: 20,
+                        }}
+                    />
+                </TouchableOpacity>
+            ),
             headerRight: <View />,
         };
     };
@@ -41,6 +61,12 @@ class Send extends Component {
         } else {
             gasLimit = txObj.gasLimit || COINS[currentAccount.symbol].defaultGasLimit;
         }
+        this.callback = this.props.navigation.getParam('callback', (error, res) => {
+            console.log(error, res);
+        });
+        this.props.navigation.setParams({
+            onGoBack: this.onGoBack,
+        });
         this.state = {
             showAdvanced: false,
             ...txObj,
@@ -51,6 +77,10 @@ class Send extends Component {
 
     async componentDidMount() {
         Linking.addEventListener('url', this._handleOpenURL);
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoBack(); // works best when the goBack is async
+            return true;
+        });
     }
 
     componentWillReceiveProps(props) {
@@ -67,7 +97,13 @@ class Send extends Component {
 
     componentWillUnmount() {
         Linking.removeEventListener('', this._handleOpenURL);
+        this.backHandler.remove();
     }
+
+    onGoBack = () => {
+        this.callback('give up send');
+        navigateBack(this.props);
+    };
 
     _handleOpenURL(event) {
         console.log(event.url);
@@ -79,7 +115,6 @@ class Send extends Component {
         navigation.navigate('scan', {
             validate: (data, callback) => {
                 dispatch(createAction('txSenderModel/parseScannedData')({ data: data.data })).then(res => {
-                    console.log('result=>+++++++++++++++++++++', res);
                     if (res.result) {
                         this.setState({
                             ...res.data,
@@ -308,10 +343,11 @@ class Send extends Component {
             gasPrice: this.state.gasPrice,
             gasLimit: this.state.gasLimit,
         };
-        dispatch(createAction('txSenderModel/sendTx')({ txObj, dispatch })).then(r => {
+        dispatch(createAction('txSenderModel/sendTx')({ txObj, dispatch })).then(pendingTx => {
             this.refs.refLoading.hide();
-            if (r) {
+            if (pendingTx) {
                 dispatch(createAction('txSenderModel/reset')());
+                this.callback(undefined, pendingTx.hash);
                 typeof targetRoute !== 'string' ? navigation.goBack() : navigation.navigate(targetRoute);
                 AppToast.show(strings('send.toast_tx_sent'));
             }

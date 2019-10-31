@@ -1,0 +1,13 @@
+{
+  "coins": {
+    "aion": {
+      "networks": {
+        "mastery": {
+          "jsonrpc": "https://staking.chaion.net/rpc",
+          "explorer_api": "https://mastery-api.aion.network",
+          "explorer": "https://mastery.aion.network/#/transaction"
+        }
+      }
+    }
+  }
+}

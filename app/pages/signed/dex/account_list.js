@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, FlatList, Image, Text, Button, Dimensions, TouchableOpacity } from 'react-native';
+import { View, FlatList, Image, Text, Button, Dimensions, TouchableOpacity, BackHandler } from 'react-native';
 import { connect } from 'react-redux';
 import BigNumber from 'bignumber.js';
 import { mainBgColor } from '../../../style_util';
@@ -12,9 +12,30 @@ import { accountKey } from '../../../../utils';
 
 const { width } = Dimensions.get('window');
 class AccountList extends React.Component {
-    static navigationOptions = () => {
+    static navigationOptions = ({ navigation }) => {
         return {
             title: strings('token_exchange.label_select_account'),
+            headerLeft: (
+                <TouchableOpacity
+                    onPress={() => navigation.state.params.onGoBack()}
+                    style={{
+                        width: 48,
+                        height: 48,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <Image
+                        source={require('../../../../assets/arrow_back.png')}
+                        style={{
+                            tintColor: 'white',
+                            width: 20,
+                            height: 20,
+                        }}
+                    />
+                </TouchableOpacity>
+            ),
+            headerRight: <View />,
         };
     };
 
@@ -22,7 +43,27 @@ class AccountList extends React.Component {
         super(props);
         this.accountType = this.props.navigation.getParam('type', 'ETH');
         this.usage = this.props.navigation.getParam('usage', 'Dex');
+        this.callback = this.props.navigation.getParam('callback', (error, res) => {
+            console.log(error, res);
+        });
+        this.props.navigation.setParams({ onGoBack: this.onGoBack });
     }
+
+    componentDidMount(): void {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.onGoBack(); // works best when the goBack is async
+            return true;
+        });
+    }
+
+    componentWillUnmount(): void {
+        this.backHandler.remove();
+    }
+
+    onGoBack = () => {
+        this.callback('give up switch');
+        navigateBack(this.props);
+    };
 
     addAccount = () => {
         const { dispatch } = this.props;
@@ -46,6 +87,13 @@ class AccountList extends React.Component {
                     currentAccount: accountKey(symbol, address),
                 }),
             );
+        } else if (this.usage === 'dapp') {
+            dispatch(
+                createAction('accountsModel/updateState')({
+                    currentAccount: accountKey(symbol, address),
+                }),
+            );
+            this.callback(null, address);
         }
         navigateBack(this.props);
     };

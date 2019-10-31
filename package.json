@@ -5,12 +5,11 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "postinstall": "yarn fix-modal; yarn build-webView ",
+    "postinstall": "yarn fix-modal",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
     "lint": "eslint app/  models/ services/ utils/ --fix --ext .js",
     "pre-lint": "node check.js",
-    "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js",
-    "build-webView": "cd ./node_modules/react-native-webview; yarn; yarn build; rm -rf ./node_modules; cd -"
+    "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js"
   },
   "pre-commit": [
     "lint",
@@ -34,7 +33,8 @@
     "dva-core": "^1.4.0",
     "ecurve": "^1.0.6",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#ed770eb",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#7670844",
+    "makkii-webview-bridge": "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
     "react-native": "0.59.9",
@@ -64,7 +64,7 @@
     "react-native-svg": "^9.0.6",
     "react-native-tab-view": "^2.10.0",
     "react-native-touch-id": "https://github.com/chaion/react-native-touch-id.git#alban/fix-fp-colors",
-    "react-native-webview": "https://github.com/chaion/makkii-react-native-webview.git#upstream-injectjavascriptbeforedocumentload",
+    "react-native-webview": "^7.4.3",
     "react-navigation": "^3.12.1",
     "react-navigation-redux-helpers": "^3.0.2",
     "react-navigation-selective-tab-bar": "^1.0.3",

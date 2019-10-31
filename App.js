@@ -12,9 +12,9 @@ import txSenderModel from './models/tx_sender.model';
 import userModel from './models/user.model';
 import settingsModel from './models/settings.model';
 import contactAddModel from './models/contact_add.model';
-import dappsModel from './models/dapps.model';
 import pokketModel from './models/pokket.model';
 import newsModel from './models/news.model';
+import discoverModel from './models/discover.model';
 // store
 import Router, { routerReducer, routerMiddleware } from './app/routes';
 import dva, { createAction } from './utils/dva';
@@ -23,7 +23,7 @@ import data from './data';
 
 // eslint-disable-next-line camelcase
 const app = dva({
-    models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel, tokenImportModel, txSenderModel, userModel, settingsModel, contactAddModel, dappsModel, pokketModel, newsModel],
+    models: [erc20DexModel, txListenerModel, accountsModel, accountImportModel, tokenImportModel, txSenderModel, userModel, settingsModel, contactAddModel, pokketModel, newsModel, discoverModel],
     extraReducers: {
         router: routerReducer,
     },

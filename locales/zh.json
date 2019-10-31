@@ -6,7 +6,8 @@
     "title_dapps": "应用",
     "title_dex": "市场",
     "title_pokket": "理财",
-    "title_news": "资讯"
+    "title_news": "资讯",
+    "title_discover": "发现"
   },
   "unsigned_login": {
     "error_login": "登录失败",
@@ -266,11 +267,13 @@
     "label_buy": "买:",
     "label_ETH_account_not_found": "找不到以太坊账号",
     "label_BTC_account_not_found": "找不到比特币账号",
+    "label_AION_account_not_found": "找不到AION币账号",
     "label_please_select_account": "请先选择一个账号。",
     "label_no_exchange_history": "暂无兑换历史",
     "label_no_token_lists": "无法获得代币列表，点击刷新",
     "button_add_ETH_account": "添加以太坊账号",
     "button_add_BTC_account": "添加比特币账号",
+    "button_add_AION_account": "添加AION币账号",
     "button_exchange_enable": "兑换",
     "label_exchange_insufficient_balance": "账户余额不足",
     "button_exchange_no_ETH_account": "请先添加以太坊账号",
@@ -677,12 +680,27 @@
     "error_UNKNOWN": "未知原因"
   },
   "news": {
+    "title": "新闻",
     "title_articles": "文章",
     "title_flash": "快讯",
     "title_article_details": "文章详情",
     "button_refer_link": "来源链接",
     "label_disclaimer": "免责声明：本文转载仅为传递更多市场信息，不代表Makkii的观点和立场，请自行参考",
-    "origin_chainnews": "链闻"
+    "origin_chainnews": "链闻",
+    "origin_coinvoice": "coinvoice"
+  },
+  "discoverApp": {
+    "aion_staking": "Aion Staking",
+    "news": "资讯",
+    "blockChain_browser": "区块链浏览器",
+    "label_popular": "热门"
+  },
+  "blockChain": {
+    "aion": "AION区块浏览器",
+    "btc": "BTC区块浏览器",
+    "eth": "ETH区块浏览器",
+    "ltc": "LTC区块浏览器",
+    "trx": "TRX区块浏览器"
   },
   "time": {
     "weekday0": "星期日",

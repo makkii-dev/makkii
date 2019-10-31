@@ -32,9 +32,9 @@ import VaultImportBIP38 from './pages/signed/vault/import_bip38';
 import VaultExportBIP38 from './pages/signed/vault/export_bip38';
 import VaultImportWIF from './pages/signed/vault/import_WIF';
 import VaultExportTo from './pages/signed/vault/export_to';
-import DappsDapp from './pages/signed/dapps/dapp';
-// import DappsLaunch from './pages/signed/dapps/launch';
-import DappsSend from './pages/signed/dapps/dapp_send';
+import DappLauncher from './pages/signed/discover/dapp_launcher';
+import DiscoverHome from './pages/signed/discover/home';
+import BlockChainBrowser from './pages/signed/discover/blockChainBrowser';
 import Dex from './pages/signed/dex/home';
 import DexTAccountList from './pages/signed/dex/account_list';
 import DexExchangeTokenList from './pages/signed/dex/exchange_token_list';
@@ -62,8 +62,9 @@ import PokketProduct from './pages/signed/pokket/product';
 import PokketOrderList from './pages/signed/pokket/order_list';
 import PokketOrderDetail from './pages/signed/pokket/order_detail';
 import NewsHome from './pages/signed/news/home';
+import NewsChainNews from './pages/signed/news/chain_news';
 import NewsArticle from './pages/signed/news/article_detail';
-
+import NewsCoinVoice from './pages/signed/news/coin_voice';
 import { strings } from '../locales/i18n';
 import styles from './styles';
 
@@ -169,9 +170,13 @@ const TabConstant = {
         text: 'menuRef.title_dex',
         image: require('../assets/icon_token_exchange.png'),
     },
-    signed_news: {
-        text: 'menuRef.title_news',
-        image: require('../assets/tab_news.png'),
+    // signed_news: {
+    //     text: 'menuRef.title_news',
+    //     image: require('../assets/tab_news.png'),
+    // },
+    signed_discover: {
+        text: 'menuRef.title_discover',
+        image: require('../assets/tab_discover.png'),
     },
     signed_setting: {
         text: 'menuRef.title_settings',
@@ -200,17 +205,17 @@ const tabNavigator = createBottomTabNavigator(
         signed_vault: {
             screen: Vault,
         },
-        // signed_dapps: {
-        //     screen: DappsLaunch,
-        // },
         signed_pokket: {
             screen: PokketHome,
         },
         signed_dex: {
             screen: Dex,
         },
-        signed_news: {
-            screen: NewsHome,
+        // signed_news: {
+        //     screen: NewsChainNews,
+        // },
+        signed_discover: {
+            screen: DiscoverHome,
         },
         signed_setting: {
             screen: Setting,
@@ -384,7 +389,11 @@ const AppNavigator = createStackNavigator(
         },
         signed_vault_send: {
             screen: VaultSend,
-            navigationOptions,
+            navigationOptions: {
+                headerStyle: styles.headerStyle,
+                headerTitleStyle: styles.headerTitleStyle,
+                headerTitleAllowFontScaling: false,
+            },
         },
         signed_select_token: {
             screen: SelectToken,
@@ -420,7 +429,11 @@ const AppNavigator = createStackNavigator(
         },
         signed_Dex_account_list: {
             screen: DexTAccountList,
-            navigationOptions,
+            navigationOptions: {
+                headerStyle: styles.headerStyle,
+                headerTitleStyle: styles.headerTitleStyle,
+                headerTitleAllowFontScaling: false,
+            },
         },
         signed_Dex_exchange_history: {
             screen: DexExchangeHistory,
@@ -461,22 +474,6 @@ const AppNavigator = createStackNavigator(
         signed_vault_export_to: {
             screen: VaultExportTo,
             navigationOptions,
-        },
-        signed_dapps_dapp: {
-            screen: DappsDapp,
-            navigationOptions: {
-                headerStyle: styles.headerStyle,
-                headerTitleStyle: styles.headerTitleStyle,
-                headerTitleAllowFontScaling: false,
-            },
-        },
-        signed_dapps_send: {
-            screen: DappsSend,
-            navigationOptions: {
-                headerStyle: styles.headerStyle,
-                headerTitleStyle: styles.headerTitleStyle,
-                headerTitleAllowFontScaling: false,
-            },
         },
         signed_setting_about: {
             screen: SettingAbout,
@@ -548,6 +545,28 @@ const AppNavigator = createStackNavigator(
         },
         signed_news_article_detail: {
             screen: NewsArticle,
+            navigationOptions,
+        },
+        signed_dapp_launcher: {
+            screen: DappLauncher,
+            navigationOptions,
+        },
+        signed_news: {
+            screen: NewsHome,
+            navigationOptions,
+        },
+        signed_news_chainnews: {
+            screen: NewsChainNews,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        signed_news_coinvoice: {
+            screen: NewsCoinVoice,
+            navigationOptions,
+        },
+        signed_blockChain_browser: {
+            screen: BlockChainBrowser,
             navigationOptions,
         },
     },
@@ -649,7 +668,7 @@ class Router extends PureComponent {
         if (currentScreen === 'unsigned_register_mnemonic') {
             return true;
         }
-        if (currentScreen.match(/^signed_dapps$|^signed_vault$|^signed_setting$|^signed_dex$|^signed_news$|^signed_pokket$/)) {
+        if (currentScreen.match(/^signed_dapps$|^signed_vault$|^signed_setting$|^signed_dex$|^signed_discover$|^signed_pokket$/)) {
             if (this.backClickCount === 1) {
                 BackHandler.exitApp();
                 this.props.dispatch(createAction('userModel/logOut')());

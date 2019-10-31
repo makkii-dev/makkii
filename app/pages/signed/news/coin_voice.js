@@ -9,7 +9,13 @@ import commonStyles from '../../../styles';
 import { strings } from '../../../../locales/i18n';
 
 const { height, width } = Dimensions.get('window');
-class ArticlesTab extends React.Component {
+class CoinVoices extends React.Component {
+    static navigationOptions = () => {
+        return {
+            title: strings('news.origin_coinvoice'),
+        };
+    };
+
     state = {
         isLoading: true,
         refreshing: false,
@@ -20,7 +26,7 @@ class ArticlesTab extends React.Component {
     async componentDidMount(): void {
         this.isMount = true;
         setTimeout(() => {
-            this.fetchArticles(1);
+            this.fetchArticles(0);
         }, 200);
     }
 
@@ -32,7 +38,7 @@ class ArticlesTab extends React.Component {
     fetchArticles = page_ => {
         const { nextPage, dispatch } = this.props;
         const page = page_ === undefined ? nextPage : page_;
-        dispatch(createAction('newsModel/getArticles')({ page })).then(r => {
+        dispatch(createAction('newsModel/getArticlesCoinVoices')({ page })).then(r => {
             if (r === 0) {
                 this.isMount &&
                     this.setState({
@@ -81,8 +87,10 @@ class ArticlesTab extends React.Component {
         );
     }
 
-    toArticle = key => {
-        this.props.navigation.navigate('signed_news_article_detail', { key });
+    toArticle = uri => {
+        this.props.navigation.navigate('simple_webview', {
+            initialUrl: { uri },
+        });
     };
 
     // loading page
@@ -102,22 +110,21 @@ class ArticlesTab extends React.Component {
     }
 
     renderItem = ({ item }) => {
-        const { title, origin, timestamp, imageUrl } = item;
+        const { title, origin, timestamp, link } = item;
 
         const timeText = dateDiff(timestamp);
         return (
             <TouchableOpacity
-                onPress={() => this.toArticle(timestamp)}
+                onPress={() => this.toArticle(link)}
                 activeOpacity={1}
                 style={{ width: '100%', padding: 10, paddingVertical: 20, flexDirection: 'row', alignItem: 'center', justifyContent: 'space-between' }}
             >
-                <View style={{ width: '65%', justifyContent: 'space-between' }}>
-                    <Text style={{ fontSize: 15, fontWeight: 'bold' }} numberOfLines={2}>
+                <View style={{ width: '100%', justifyContent: 'space-between' }}>
+                    <Text style={{ fontSize: 15, fontWeight: 'bold', marginBottom: 10 }} numberOfLines={2}>
                         {title}
                     </Text>
                     <Text style={{ color: 'gray' }}>{`${strings(`news.origin_${origin}`)}  ${timeText}`}</Text>
                 </View>
-                <Image style={{ width: 100, height: 75 }} resizeMode="contain" source={{ uri: imageUrl }} />
             </TouchableOpacity>
         );
     };
@@ -230,10 +237,10 @@ class ArticlesTab extends React.Component {
 
 const mapToState = ({ newsModel }) => {
     return {
-        articles: Object.values(newsModel.articles).sort((a, b) => {
+        articles: Object.values(newsModel.articlesCoinVoice).sort((a, b) => {
             return b.timestamp - a.timestamp;
         }),
-        nextPage: newsModel.articleNextPage,
+        nextPage: newsModel.articlesCoinVoiceNextPage,
     };
 };
-export default connect(mapToState)(ArticlesTab);
+export default connect(mapToState)(CoinVoices);

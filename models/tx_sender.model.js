@@ -177,7 +177,7 @@ export default {
                     yield put(createAction('txsListener/addPendingTxs')(payloadTxListener));
                 }
 
-                return true;
+                return pendingTx;
             }
             const { error } = ret;
             if (error.message && accountType === '[ledger]') {

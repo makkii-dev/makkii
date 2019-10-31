@@ -63,7 +63,8 @@
     "prefer-rest-params": "off",
     "global-require": "off",
     "radix": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "camelcase": "off"
   },
   "plugins": [
     "prettier"

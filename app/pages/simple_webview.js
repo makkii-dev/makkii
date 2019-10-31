@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View, Text } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { ProgressBar } from '../components/ProgressBar';
 
@@ -63,6 +63,7 @@ class SimpleWebView extends Component {
         this.initialUrl = this.props.navigation.getParam('initialUrl');
         this.title = this.props.navigation.getParam('title');
         this.state = {
+            error: false,
             WebViewProgress: 0,
             showProgressBar: true,
         };
@@ -94,12 +95,30 @@ class SimpleWebView extends Component {
             <View
                 style={{
                     flex: 1,
-                    justifyContent: 'center',
-                    alignItems: 'center',
                     backgroundColor: '#fff',
                 }}
             >
                 <ActivityIndicator animating color="red" size="large" />
+            </View>
+        );
+    };
+
+    renderError = ({ url, code, description }) => {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: '#fff',
+                }}
+            >
+                <Image source={require('../../assets/empty_under_construction.png')} style={{ height: 80, width: 80, marginBottom: 20, tintColor: '#ddd' }} resizeMode="contain" />
+                <View style={{ alignItems: 'flex-start' }}>
+                    <Text>{`Domain: ${url}`}</Text>
+                    <Text>{`Error Code: ${code}`}</Text>
+                    <Text>{`Description: ${description}`}</Text>
+                </View>
             </View>
         );
     };
@@ -113,35 +132,43 @@ class SimpleWebView extends Component {
     };
 
     onReload = () => {
-        this.handleProcessBar(true);
-        this.refs.refWebView.reload();
+        this.mount && this.setState({ WebViewProgress: 0, showProgressBar: true, error: false });
+        this.refs.refWebView && this.refs.refWebView.reload();
     };
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <WebView
-                    source={this.initialUrl}
-                    ref="refWebView"
-                    useWebKit
-                    cacheEnabled={false}
-                    renderLoading={() => this.renderLoading()}
-                    startInLoadingState
-                    onShouldStartLoadWithRequest={() => true}
-                    onLoadStart={navState => {
-                        this.title || this.props.navigation.setParams({ title: navState.title });
-                        this.handleProcessBar(true);
-                    }}
-                    onNavigationStateChange={navState => {
-                        this.canGoBack = navState.canGoBack;
-                        this.title || this.props.navigation.setParams({ title: navState.title });
-                        this.mount && this.setState({ WebViewProgress: 0, showProgressBar: true });
-                    }}
-                    onLoadProgress={e => {
-                        this.mount && this.setState({ WebViewProgress: e.nativeEvent.progress });
-                    }}
-                />
-                {this.state.showProgressBar ? (
+                {this.state.error ? (
+                    this.renderError(this.state.error)
+                ) : (
+                    <WebView
+                        source={this.initialUrl}
+                        ref="refWebView"
+                        cacheEnabled={false}
+                        renderLoading={this.renderLoading}
+                        onError={e => {
+                            this.setState({
+                                error: e.nativeEvent,
+                            });
+                        }}
+                        startInLoadingState
+                        onShouldStartLoadWithRequest={() => true}
+                        onLoadStart={navState => {
+                            this.title || this.props.navigation.setParams({ title: navState.title });
+                            this.handleProcessBar(true);
+                        }}
+                        onNavigationStateChange={navState => {
+                            this.canGoBack = navState.canGoBack;
+                            this.title || this.props.navigation.setParams({ title: navState.title });
+                            this.mount && this.setState({ WebViewProgress: 0, showProgressBar: true });
+                        }}
+                        onLoadProgress={({ nativeEvent }) => {
+                            this.mount && this.setState({ WebViewProgress: nativeEvent.progress });
+                        }}
+                    />
+                )}
+                {!this.state.error && this.state.showProgressBar ? (
                     <ProgressBar
                         style={{ position: 'absolute', top: 0, width, height: 2 }}
                         width={width}

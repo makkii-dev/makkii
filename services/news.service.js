@@ -1,4 +1,5 @@
 import { HttpClient } from 'lib-common-util-js';
+import Config from 'react-native-config';
 
 const getFlashNews = async page => {
     const url = page === undefined ? `https://api.chainnews.com/api/news` : `https://api.chainnews.com/api/news/?page=${page}`;
@@ -51,8 +52,33 @@ const getArticles = async page => {
         return { data: {}, result: false };
     }
 };
+const getArticlesCoinVoice = async page => {
+    const url = `${Config.app_server_api}/news/coinvoice?offset=${page}&size=10`;
+    console.log('[news getArticlesCoinVoice req=>', url);
+    try {
+        const { data } = await HttpClient.get(url);
+        if (data.content) {
+            const data_ = data.content.reduce((map, el) => {
+                map[el.pubDate] = {
+                    title: el.title,
+                    link: el.link,
+                    description: el.description,
+                    timestamp: el.pubDate,
+                    origin: 'coinvoice',
+                };
+                return map;
+            }, {});
+            return { data: data_, result: true, nextPage: data.number + 1 };
+        }
+        return { data: {}, result: false };
+    } catch (e) {
+        console.log('[news getArticlesCoinVoice error=>', e);
+        return { data: {}, result: false };
+    }
+};
+
 const getNextPage = url => {
     return parseInt(url.slice(url.indexOf('=') + 1));
 };
 
-export { getFlashNews, getArticles };
+export { getFlashNews, getArticles, getArticlesCoinVoice };

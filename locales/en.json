@@ -6,7 +6,8 @@
     "title_dapps": "DApps",
     "title_dex": "Dex",
     "title_pokket": "Finance",
-    "title_news": "News"
+    "title_news": "News",
+    "title_discover": "Discover"
   },
   "unsigned_login": {
     "error_login": "Login fail",
@@ -277,11 +278,13 @@
     "label_buy": "Buy: ",
     "label_ETH_account_not_found": "No Ethereum Accounts",
     "label_BTC_account_not_found": "No BitCoin Accounts",
+    "label_AION_account_not_found": "No AION Accounts",
     "label_please_select_account": "Please select an account first.",
     "label_no_exchange_history": "No exchange history.",
     "label_no_token_lists": "Unable to get token list, click to refresh",
     "button_add_ETH_account": "Add Ethereum account",
     "button_add_BTC_account": "Add BitCoin account",
+    "button_add_AION_account": "Add Aion account",
     "button_exchange_enable": "Exchange",
     "label_exchange_insufficient_balance": "Insufficient account balance",
     "button_exchange_no_ETH_account": "No ETH account",
@@ -678,12 +681,27 @@
     "error_UNKNOWN": "Unknown reason"
   },
   "news": {
+    "title": "News",
     "title_articles": "Articles",
     "title_flash": "Flash",
     "title_article_details": "Articles detail",
     "button_refer_link": "Reference",
     "label_disclaimer": "Disclaimer: This article reprints only to convey more market information, does not represent Makkii's views and positions, please refer to it yourself",
-    "origin_chainnews": "ChainNews"
+    "origin_chainnews": "ChainNews",
+    "origin_coinvoice": "coinvoice"
+  },
+  "discoverApp": {
+    "aion_staking": "Aion Staking",
+    "news": "news",
+    "blockChain_browser": "Block Explorer",
+    "label_popular": "Popular"
+  },
+  "blockChain": {
+    "aion": "AION block explorer",
+    "btc": "BTC block explorer",
+    "eth": "ETH block explorer",
+    "ltc": "LTC block explorer",
+    "trx": "TRX block explorer"
   },
   "time": {
     "weekday0": "Sunday",

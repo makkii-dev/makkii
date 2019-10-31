@@ -1,28 +1,20 @@
 import React from 'react';
 import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
-import { strings } from '../../../../locales/i18n';
+import { BROWSERS } from './constants';
+import { COINS } from '../../../../client/support_coin_list';
 
 const { width } = Dimensions.get('window');
 
-const constants = [
-    {
-        title: 'news.origin_chainnews',
-        image: { uri: 'https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_120,w_120,f_auto,b_white,q_auto:eco/fyn6kwkfi2lsvf3l8a6f' },
-        route: 'signed_news_chainnews',
-    },
-    {
-        title: 'news.origin_coinvoice',
-        image: { uri: 'https://media.licdn.com/dms/image/C510BAQGcM2tkqAy-Og/company-logo_200_200/0?e=2159024400&v=beta&t=3gJKfy1nby32z76rzBAoLmv_ZiF5sJFm5IGVa7aY6-w' },
-        route: 'signed_news_coinvoice',
-    },
-];
-
-const home = props => {
+const BlockChainBrowser = props => {
     const { navigation } = props;
-    const handle_uri = uri => {
-        navigation.navigate(uri);
+    const handle_uri = (uri, title) => {
+        navigation.navigate('simple_webview', {
+            initialUrl: { uri },
+            title: strings(title),
+        });
     };
     return (
         <View style={{ flex: 1, backgroundColor: mainBgColor }}>
@@ -31,10 +23,10 @@ const home = props => {
                     marginTop: 20,
                     width,
                 }}
-                data={constants}
+                data={BROWSERS.filter(i => Object.keys(COINS).includes(i.id))}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        onPress={() => handle_uri(item.route)}
+                        onPress={() => handle_uri(item.uri, item.title)}
                         style={{
                             ...defaultStyles.shadow,
                             borderRadius: 5,
@@ -67,10 +59,8 @@ const home = props => {
     );
 };
 
-home.navigationOptions = () => {
-    return {
-        title: strings('news.title'),
-    };
-};
+BlockChainBrowser.navigationOptions = () => ({
+    title: strings('discoverApp.blockChain_browser'),
+});
 
-export default home;
+export default BlockChainBrowser;

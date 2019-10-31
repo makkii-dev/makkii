@@ -36,7 +36,8 @@ export default {
         leaveTime: 0,
         ignoreAppState: false,
         showTouchIdDialog: true,
-        bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
+        // bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
+        bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_discover', 'signed_setting'],
         activity: {
             enabled: false,
             imgUrl: '',
