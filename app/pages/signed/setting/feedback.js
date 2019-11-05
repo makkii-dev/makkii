@@ -120,6 +120,7 @@ const feedback = props => {
                     <TextInput
                         value={state.feedback}
                         style={styles.text_input}
+                        multiline
                         placeholder={strings('feedback.placeholder_feedback')}
                         onChangeText={t => {
                             setState({ ...state, feedback: t });
@@ -130,6 +131,7 @@ const feedback = props => {
                     <TextInput
                         value={state.contact}
                         style={styles.text_input}
+                        multiline
                         placeholder={strings('feedback.placeholder_contact')}
                         onChangeText={t => {
                             setState({ ...state, contact: t });
@@ -197,8 +199,9 @@ const styles = {
         fontSize: 16,
         color: '#777676',
         fontWeight: 'normal',
+        height: 70,
         borderColor: '#8c8a8a',
-        textAlignVertical: 'bottom',
+        textAlignVertical: 'center',
         borderBottomWidth: 1 / PixelRatio.get(),
         padding: 10,
     },

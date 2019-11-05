@@ -1,11 +1,10 @@
 export const APPS = [
     {
-        id: 'aion_staking',
+        id: 'AionStaking',
         title: 'discoverApp.aion_staking',
         image: require('../../../../assets/app_aionStaking.png'),
         entry: {
             type: 'dapp', // to dapp launcher
-            uri: 'http://192.168.50.100:8080/staking/home',
             dappName: 'Aion Staking',
         },
     },

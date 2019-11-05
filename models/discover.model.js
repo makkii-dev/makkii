@@ -5,7 +5,7 @@ import {createAction} from "../utils/dva";
 export default {
     namespace: 'discoverModel',
     state: {
-        enabledApps: {'aion_staking':{}, },
+        enabledApps: {},
     },
     reducers: {
         updateState(state, { payload }) {
@@ -14,11 +14,10 @@ export default {
         },
     },
     effects: {
-        *getApps(action, { call, select, put }) {
-            const enabledApps = yield select(({discoverModel})=>discoverModel.enabledApps);
+        *getApps(action, { call, put }) {
             const res = yield call(getApps);
             yield put(createAction('updateState')({
-                enabledApps: {...enabledApps, ...res}
+                enabledApps: { ...res}
             }));
             return true;
         },

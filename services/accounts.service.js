@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
+import { HttpClient } from 'lib-common-util-js/src';
+import Config from 'react-native-config';
 import { getTransactionsByAddress, fetchAccountTokenTransferHistory, getBalance, fetchAccountTokenBalance } from '../client/api';
 
 const getTransactionsHistory = async (symbol, address, page, size) => {
@@ -57,4 +59,39 @@ const pendingTxsInvolved = (pendingTxs, address) => {
     return false;
 };
 
-export { getTransactionsHistory, getTransfersHistory, getAccountBalances, pendingTxsInvolved };
+const getTransactionNote = async (chain, txHash, address) => {
+    const url = `${Config.app_server_api}/transaction`;
+    const payload = {
+        chain,
+        txHash,
+        address,
+    };
+    try {
+        const { data } = await HttpClient.get(url, payload);
+        console.log('getTransactionNote resp=>', data);
+        return data.note || '';
+    } catch (e) {
+        console.log('getTransactionNote error=>', e);
+        return '';
+    }
+};
+
+const setTransactionNote = async (chain, txHash, address, note) => {
+    const url = `${Config.app_server_api}/transaction`;
+    const payload = {
+        chain,
+        txHash,
+        address,
+        note,
+    };
+    try {
+        const { data } = await HttpClient.post(url, payload, true);
+        console.log('setTransactionNote resp=>', data);
+        return !!(data && data.note);
+    } catch (e) {
+        console.log('setTransactionNote error=>', e);
+        return false;
+    }
+};
+
+export { getTransactionsHistory, getTransfersHistory, getAccountBalances, pendingTxsInvolved, getTransactionNote, setTransactionNote };

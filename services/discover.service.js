@@ -7,7 +7,7 @@ export const getApps = async () => {
         const { data } = await HttpClient.get(url);
         let enabledApps = {};
         for (const module of data) {
-            if (module.moduleName.match(/|^News$|^BlockchainExplorer$/) && module.enabled) {
+            if (module.moduleName.match(/|^News$|^BlockchainExplorer$|^AionStaking$|/) && module.enabled) {
                 enabledApps[module.moduleName] = {
                     ...module.moduleParams,
                 };
