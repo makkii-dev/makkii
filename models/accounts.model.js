@@ -274,11 +274,12 @@ export default {
             yield call(Storage.set, 'hdIndex', hd_index);
         },
         *deleteAccounts({ payload }, { call, select, put }) {
-            const { accountsKey, accountsMap, transactionsMap, hd_index, isGettingBalance } = yield select(({ accountsModel }) => ({
+            const { accountsKey, accountsMap, transactionsMap, hd_index, isGettingBalance, currentAccount } = yield select(({ accountsModel }) => ({
                 accountsKey: accountsModel.accountsKey,
                 accountsMap: accountsModel.accountsMap,
                 transactionsMap: accountsModel.transactionsMap,
                 hd_index: accountsModel.hd_index,
+                currentAccount: accountsModel.currentAccount,
             }));
             if (isGettingBalance) {
                 AppToast.show(strings('wallet.toast_is_getting_balance'), {
@@ -291,7 +292,9 @@ export default {
             let newAccountsMap = { ...accountsMap };
             let newTransactionsMap = { ...transactionsMap };
             let newHdIndex = { ...hd_index };
+            let shouldUpdateCurrentAccount = false;
             for (let key of keys) {
+                if (key === currentAccount) shouldUpdateCurrentAccount = true;
                 if (accountsMap[key]) {
                     newAccountsKey.remove(key);
                     yield call(SensitiveStorage.remove, key);
@@ -316,6 +319,7 @@ export default {
             yield call(Storage.set, 'accountsKey', newAccountsKey);
             yield put(
                 createAction('updateState')({
+                    currentAccount: shouldUpdateCurrentAccount ? '' : currentAccount,
                     accountsKey: newAccountsKey,
                     accountsMap: newAccountsMap,
                     transactionsMap: newTransactionsMap,

@@ -49,6 +49,8 @@ import SettingCurrency from './pages/signed/setting/currency';
 import SettingPinCode from './pages/signed/setting/pinCode';
 import SettingAddressBook from './pages/signed/setting/address_book';
 import SettingAddAddress from './pages/signed/setting/add_address';
+import SettingChangelog from './pages/signed/setting/changelog';
+import SettingFeedback from './pages/signed/setting/feedback';
 import RecoveryPassword from './pages/unsigned/recovery_password';
 import SimpleWebView from './pages/simple_webview';
 import PinCodeScreen from './pages/pin_code_screen';
@@ -510,6 +512,14 @@ const AppNavigator = createStackNavigator(
         signed_setting_add_address: {
             screen: SettingAddAddress,
             navigationOptions: navigationOptionsWithoutRight,
+        },
+        signed_setting_feedback: {
+            screen: SettingFeedback,
+            navigationOptions,
+        },
+        signed_setting_changelog: {
+            screen: SettingChangelog,
+            navigationOptions,
         },
         simple_webview: {
             screen: SimpleWebView,

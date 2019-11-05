@@ -1,15 +1,15 @@
 import React from 'react';
 import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { BROWSERS } from './constants';
-import { COINS } from '../../../../client/support_coin_list';
 
 const { width } = Dimensions.get('window');
 
 const BlockChainBrowser = props => {
-    const { navigation } = props;
+    const { navigation, browsers } = props;
     const handle_uri = (uri, title) => {
         navigation.navigate('simple_webview', {
             initialUrl: { uri },
@@ -23,7 +23,7 @@ const BlockChainBrowser = props => {
                     marginTop: 20,
                     width,
                 }}
-                data={BROWSERS.filter(i => Object.keys(COINS).includes(i.id))}
+                data={browsers}
                 renderItem={({ item }) => (
                     <TouchableOpacity
                         onPress={() => handle_uri(item.uri, item.title)}
@@ -63,4 +63,12 @@ BlockChainBrowser.navigationOptions = () => ({
     title: strings('discoverApp.blockChain_browser'),
 });
 
-export default BlockChainBrowser;
+const mapToState = ({ discoverModel }) => {
+    const { enabledApps } = discoverModel;
+    const { BlockchainExplorer } = enabledApps;
+    return {
+        browsers: BROWSERS.map(i => ({ ...i, uri: BlockchainExplorer[i.id] })),
+    };
+};
+
+export default connect(mapToState)(BlockChainBrowser);

@@ -10,7 +10,7 @@ export const APPS = [
         },
     },
     {
-        id: 'news',
+        id: 'News',
         title: 'discoverApp.news',
         image: require('../../../../assets/app_news.png'),
         entry: {
@@ -19,7 +19,7 @@ export const APPS = [
         },
     },
     {
-        id: 'browser',
+        id: 'BlockchainExplorer',
         title: 'discoverApp.blockChain_browser',
         image: require('../../../../assets/app_browser.png'),
         entry: {
@@ -34,30 +34,25 @@ export const BROWSERS = [
         id: 'AION',
         title: 'blockChain.aion',
         image: require('../../../../assets/coin_aion.png'),
-        uri: 'https://mainnet.aion.network/',
     },
     {
         id: 'BTC',
         title: 'blockChain.btc',
         image: require('../../../../assets/coin_btc.png'),
-        uri: 'https://live.blockcypher.com/btc/',
     },
     {
         id: 'ETH',
         title: 'blockChain.eth',
         image: require('../../../../assets/coin_eth.png'),
-        uri: 'https://etherscan.io/',
     },
     {
         id: 'LTC',
         title: 'blockChain.ltc',
         image: require('../../../../assets/coin_ltc.png'),
-        uri: 'https://live.blockcypher.com/ltc/',
     },
     {
-        id: 'TRX',
+        id: 'TRON',
         title: 'blockChain.trx',
         image: require('../../../../assets/coin_trx.png'),
-        uri: 'https://tronscan.org/#/',
     },
 ];

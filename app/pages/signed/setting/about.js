@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Image, View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, View, Text, Dimensions, TouchableOpacity, FlatList, PixelRatio } from 'react-native';
 
 import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
@@ -27,6 +27,14 @@ class About extends Component {
         this.props.dispatch(createAction('settingsModel/checkVersion')());
     };
 
+    toFeedBack = () => {
+        this.props.navigation.navigate('signed_setting_feedback');
+    };
+
+    toChangeLog = () => {
+        this.props.navigation.navigate('signed_setting_changelog');
+    };
+
     viewPrivacy = () => {
         navigate('simple_webview', {
             title: strings('privacy_policy.title'),
@@ -42,6 +50,21 @@ class About extends Component {
     };
 
     render() {
+        const data = [
+            {
+                title: strings('about.button_version_update'),
+                onPress: this.checkVersion,
+            },
+            {
+                title: strings('about.button_changelog'),
+                onPress: this.toChangeLog,
+            },
+            {
+                title: strings('about.button_feedback'),
+                onPress: this.toFeedBack,
+            },
+        ];
+
         return (
             <View
                 style={{
@@ -98,7 +121,19 @@ class About extends Component {
                         paddingRight: 10,
                     }}
                 >
-                    <Cell title={strings('about.version_update_button')} onClick={this.checkVersion} />
+                    <FlatList
+                        data={data}
+                        renderItem={({ item }) => <Cell title={item.title} onClick={item.onPress} />}
+                        ItemSeparatorComponent={() => (
+                            <View
+                                style={{
+                                    height: 1 / PixelRatio.get(),
+                                    backgroundColor: 'lightgray',
+                                }}
+                            />
+                        )}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
                 </View>
                 <View
                     style={{

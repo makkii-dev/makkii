@@ -4,7 +4,7 @@ import { WebView } from 'react-native-webview';
 import Bridge from 'makkii-webview-bridge/dist/native';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { COINS } from '../../../../client/support_coin_list';
-import { createAction } from '../../../../utils/dva';
+import { createAction, store } from '../../../../utils/dva';
 
 const { width } = Dimensions.get('window');
 const renderLoading = () => {
@@ -26,14 +26,14 @@ const getMagnitude = n => Math.floor(Math.log(n) / Math.LN10 + 0.000000001);
 
 const getCurrentAccount = symbol => {
     symbol = Object.keys(COINS).indexOf(symbol) >= 0 ? symbol : 'AION';
-    const { currentAccount, accountsKey } = AppStore.getState().accountsModel;
+    const { currentAccount, accountsKey } = store.getState().accountsModel;
     if (currentAccount.startsWith(symbol)) {
         return currentAccount.substr(symbol.length + 1);
     }
     const accounts = accountsKey.filter(k => k.startsWith(symbol));
     const _acc = accounts[0];
     if (_acc) {
-        AppStore.dispatch(createAction('accountsModel/updateState')({ currentAccount: _acc }));
+        store.dispatch(createAction('accountsModel/updateState')({ currentAccount: _acc }));
         return _acc.substr(symbol.length + 1);
     }
     // no account that meet the condition
@@ -60,7 +60,7 @@ const switchAccount = navigation => symbol =>
 const sendTx = navigation => txObj =>
     new Promise((resolve, reject) => {
         console.log('sendTx=>', txObj);
-        AppStore.dispatch(
+        store.dispatch(
             createAction('txSenderModel/updateState')({
                 ...txObj,
                 gasPrice: txObj.gasPrice && (getMagnitude(txObj.gasPrice) >= 9 ? txObj.gasPrice / 1e9 : txObj.gasPrice),

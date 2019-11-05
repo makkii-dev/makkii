@@ -3,7 +3,7 @@ import ApiCoder from 'web3-eth-abi';
 import BigNumber from 'bignumber.js';
 import { HttpClient, hexutil } from 'lib-common-util-js';
 import { getBlockNumber } from '../client/api';
-import { createAction } from '../utils/dva';
+import { createAction, store } from '../utils/dva';
 import { COINS } from '../client/support_coin_list';
 import { accountKey } from '../utils';
 
@@ -243,7 +243,7 @@ const exchangeCallback = dispatch => async (metaData, tx) => {
     if (exchange.status === 'CONFIRMED') {
         const {
             ERC20Dex: { tokenList },
-        } = AppStore.getState();
+        } = store.getState();
         const history = await getExchangeHistory(tx.from, COINS.ETH.network, tx.hash);
         const symbol = findSymbolByAddress(tokenList, history.destToken);
         exchange.destQty = history.destQty / 10 ** tokenList[symbol].decimals;

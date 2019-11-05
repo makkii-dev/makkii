@@ -31,7 +31,6 @@ export default {
         touchIDEnabled: false,
         explorer_server: 'mainnet', // only used in unused dapp_send. will remove later.
         state_version: 2, // local state/db version, used to upgrade
-        version: '1.0.1', // app version
         currentAppState: 'active',
         leaveTime: 0,
         ignoreAppState: false,
@@ -147,7 +146,6 @@ export default {
                 touchIDEnabled: settingsModel.touchIDEnabled,
                 explorer_server: settingsModel.explorer_server, // only used in unused dapp_send. will remove later.
                 state_version: settingsModel.state_version, // local state/db version, used to upgrade
-                version: settingsModel.version, // app version
             }));
             yield call(Storage.set, 'settings', toBeSaved);
         },

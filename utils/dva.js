@@ -14,6 +14,8 @@ export const navigateBack = ({ dispatch }) => {
 };
 // eslint-disable-next-line import/no-mutable-exports
 export let popCustom;
+// eslint-disable-next-line import/no-mutable-exports
+export let store;
 
 export default function(options) {
     const app = create(options);
@@ -23,7 +25,7 @@ export default function(options) {
 
     app.start();
     // eslint-disable-next-line no-underscore-dangle
-    const store = app._store;
+    store = app._store;
     // eslint-disable-next-line no-underscore-dangle
     app.store = app._store;
     app.start = container => () => (

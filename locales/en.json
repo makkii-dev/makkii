@@ -55,12 +55,33 @@
   "about": {
     "title": "About",
     "version_label": "Version",
-    "version_update_button": "Version Update",
+    "button_version_update": "Version Update",
+    "button_feedback": "Feedback",
+    "button_changelog": "Changelog",
     "terms_label": "Terms of Service",
     "policy_label": "Privacy Policy",
     "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
     "version_latest": "Your version is already up to date.",
+
     "label_and": "and"
+  },
+  "changelog": {
+    "title": "Changelog"
+  },
+  "feedback": {
+    "title": "Feedback",
+    "label_feedback": "Feedback",
+    "label_contact": "Email",
+    "label_screenshot": "Problem screenshot",
+    "placeholder_feedback": "Give us feedback on the problems you meet",
+    "placeholder_contact": "Please fill in you email address so that we can contact you",
+    "button_upload": "Upload photos (Three at most)",
+    "button_submit": "Submit",
+    "button_select_from_photos": "Select from photos",
+    "button_cancel": "Cancel",
+    "toast_upload_fail": "Upload image fail",
+    "toast_submit_fail": "Submit fail",
+    "toast_submit_success": "Submit success"
   },
   "password": {
     "title": "Password",

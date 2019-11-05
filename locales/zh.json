@@ -55,11 +55,31 @@
   "about": {
     "title": "关于",
     "version_label": "版本号",
-    "version_update_button": "版本更新",
+    "button_version_update": "版本更新",
+    "button_feedback": "问题反馈",
+    "button_changelog": "版本日志",
     "terms_label": "《软件许可及服务协议》",
     "policy_label": "《隐私政策》",
     "version_latest": "当前已是最新版",
     "label_and": "和"
+  },
+  "changelog": {
+    "title": "版本日志"
+  },
+  "feedback": {
+    "title": "问题反馈",
+    "label_feedback": "问题反馈",
+    "label_contact": "联系邮箱",
+    "label_screenshot": "问题截图",
+    "placeholder_feedback": "请将您遇到的问题反馈给我们",
+    "placeholder_contact": "请填写您的邮箱，便于我们与您联系",
+    "button_upload": "上传照片（最多3张）",
+    "button_submit": "提交",
+    "button_select_from_photos": "从相册中选择",
+    "button_cancel": "取消",
+    "toast_upload_fail": "上传图片失败",
+    "toast_submit_fail": "提交失败",
+    "toast_submit_success": "提交成功"
   },
   "password": {
     "title": "密码",

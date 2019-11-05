@@ -1,10 +1,11 @@
 /* eslint-disable */
 import { getApps } from '../services/discover.service';
+import {createAction} from "../utils/dva";
 
 export default {
     namespace: 'discoverModel',
     state: {
-        enabledApps: ['aion_staking', 'news', 'browser'],
+        enabledApps: {'aion_staking':{}, },
     },
     reducers: {
         updateState(state, { payload }) {
@@ -13,9 +14,13 @@ export default {
         },
     },
     effects: {
-        *getApps(action, { call, put }) {
+        *getApps(action, { call, select, put }) {
+            const enabledApps = yield select(({discoverModel})=>discoverModel.enabledApps);
             const res = yield call(getApps);
-            // TODO getApps
+            yield put(createAction('updateState')({
+                enabledApps: {...enabledApps, ...res}
+            }));
+            return true;
         },
     },
 };
