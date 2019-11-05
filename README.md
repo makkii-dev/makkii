@@ -13,7 +13,8 @@ Welcome to Makkii Wallet! Makkii wallet is a secure, convenient and trusted Cryp
 * Create, manage accounts.
 * Send and receive transactions.
 * View transaction history.
-* DApp Market
+* Kyber DEX
+* Blockchain News
 
 # Prerequisites
 * yarn or npm
