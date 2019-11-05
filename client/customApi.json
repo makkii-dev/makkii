@@ -8,6 +8,15 @@
           "explorer": "https://mastery.aion.network/#/transaction"
         }
       }
+    },
+    "btc": {
+      "networks": {
+        "BTCTEST": {
+          "jsonrpc": "http://172.104.190.127:3001/api",
+          "explorer": "http://172.104.190.127:3001/tx/",
+          "broadcast": "http://172.104.190.127:3001/api/tx/send"
+        }
+      }
     }
   }
 }
