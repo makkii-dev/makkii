@@ -639,7 +639,15 @@ const AppNavigator = createStackNavigator(
 );
 
 const defaultGetStateForAction = AppNavigator.router.getStateForAction;
+let timer = true;
 AppNavigator.router.getStateForAction = (action, state) => {
+    if (action.type === 'Navigation/NAVIGATE' || action.type === 'Navigation/BACK') {
+        if (!timer) {
+            return state;
+        }
+        timer = false;
+        setTimeout(() => (timer = true), 1000); // wait 1s to avoid navigation action conflict
+    }
     if (state) {
         let newRoutes;
         let newIndex;
