@@ -66,7 +66,9 @@ const renderLog = (log, lang) => {
                 <Text>{releaseDate_}</Text>
             </View>
             <View style={styles.log_body}>
-                <Text style={{ paddingVertical: 10 }}>{content}</Text>
+                {content.split('\n').map((t, i) => {
+                    return <Text key={`${i}`}>{t}</Text>;
+                })}
             </View>
         </View>
     );
@@ -162,5 +164,7 @@ const styles = {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    log_body: {},
+    log_body: {
+        padding: 10,
+    },
 };
