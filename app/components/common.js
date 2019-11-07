@@ -898,8 +898,6 @@ const SortButton = ({ title, desc, ...props }) => {
     );
 };
 
-
-
 const renderNoNetWork = reload => {
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -943,5 +941,5 @@ module.exports = {
     AddressComponent,
     OptionButton,
     MnemonicView,
-    renderNoNetWork
+    renderNoNetWork,
 };
