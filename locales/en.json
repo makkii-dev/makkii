@@ -81,7 +81,8 @@
     "button_cancel": "Cancel",
     "toast_upload_fail": "Upload image fail",
     "toast_submit_fail": "Submit fail",
-    "toast_submit_success": "Submit success"
+    "toast_submit_success": "Submit success",
+    "toast_too_large_size": "Image is too large"
   },
   "password": {
     "title": "Password",

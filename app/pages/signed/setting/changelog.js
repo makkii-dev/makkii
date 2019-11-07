@@ -66,7 +66,7 @@ const renderLog = (log, lang) => {
                 <Text>{releaseDate_}</Text>
             </View>
             <View style={styles.log_body}>
-                <Text>{content}</Text>
+                <Text style={{ paddingVertical: 10 }}>{content}</Text>
             </View>
         </View>
     );

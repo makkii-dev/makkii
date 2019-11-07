@@ -425,7 +425,7 @@ export default {
                 tokenLists: accountsModel.tokenLists,
                 isGettingBalance: accountsModel.isGettingBalance,
             }));
-            if (isGettingBalance) return;
+            if (isGettingBalance) return true;
             yield put(createAction('updateState')({ isGettingBalance: true }));
             const pendingTxs = yield select(({ txsListener }) => txsListener.txs);
             let ret = true;
@@ -450,7 +450,6 @@ export default {
                         },
                         [{ symbol, address }],
                     );
-                    console.log('[debug]=>', tokenLists);
                     const rets = yield call(getAccountBalances, payloads);
                     rets.forEach(el => {
                         if (el.tokenSymbol) {
