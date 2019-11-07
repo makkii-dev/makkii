@@ -87,7 +87,7 @@ const setTransactionNote = async (chain, txHash, address, note) => {
     try {
         const { data } = await HttpClient.post(url, payload, true);
         console.log('setTransactionNote resp=>', data);
-        return !!(data && data.note);
+        return !!(data && data.txHash);
     } catch (e) {
         console.log('setTransactionNote error=>', e);
         return false;

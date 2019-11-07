@@ -160,7 +160,7 @@ const feedback = props => {
                     </View>
                 </FormItem>
             </View>
-            <ComponentButton disabled={!buttonEnabled} title={strings('feedback.button_submit')} onPress={handleSubmit} style={{ width: width - 40 }} />
+            <ComponentButton disabled={!buttonEnabled} title={strings('feedback.button_submit')} onPress={handleSubmit} style={{ width: width - 40, marginTop: 20 }} />
             <Modal animationType="none" transparent visible={state.modalVisible} onRequestClose={() => {}}>
                 <TouchableOpacity activeOpacity={1} style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.75)', justifyContent: 'flex-end' }} onPress={() => handelModalVisible()}>
                     <TouchableOpacity style={styles.modal_button} onPress={selectFromPhotos}>
