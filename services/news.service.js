@@ -52,8 +52,8 @@ const getArticles = async page => {
         return { data: {}, result: false };
     }
 };
-const getArticlesCoinVoice = async page => {
-    const url = `${Config.app_server_api}/news/coinvoice?offset=${page}&size=10`;
+const getArticlesOthers = async (page, origin) => {
+    const url = `${Config.app_server_api}/news?offset=${page}&size=10&newsChannel=${origin}`;
     console.log('[news getArticlesCoinVoice req=>', url);
     try {
         const { data } = await HttpClient.get(url);
@@ -64,7 +64,7 @@ const getArticlesCoinVoice = async page => {
                     link: el.link,
                     description: el.description,
                     timestamp: el.pubDate,
-                    origin: 'coinvoice',
+                    origin: origin.replace('.', '_'),
                 };
                 return map;
             }, {});
@@ -81,4 +81,4 @@ const getNextPage = url => {
     return parseInt(url.slice(url.indexOf('=') + 1));
 };
 
-export { getFlashNews, getArticles, getArticlesCoinVoice };
+export { getFlashNews, getArticles, getArticlesOthers };

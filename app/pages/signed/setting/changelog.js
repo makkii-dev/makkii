@@ -14,7 +14,7 @@ const useChangeLog = ({ beforeFetch, afterFetch }) => {
     const [state, setState] = React.useState({
         logs: {},
         nextPage: 0,
-        isFetching: false,
+        isFetching: true,
         hasMore: true,
     });
     const getNextPage = () => {
@@ -83,7 +83,7 @@ const changelog = props => {
     React.useEffect(() => {
         let newState = { ...state };
         let shouldUpdate = false;
-        if (state.isLoading) {
+        if (isFetching === false && state.isLoading) {
             newState.isLoading = false;
             shouldUpdate = true;
         }

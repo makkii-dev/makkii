@@ -715,7 +715,10 @@
     "button_refer_link": "Reference",
     "label_disclaimer": "Disclaimer: This article reprints only to convey more market information, does not represent Makkii's views and positions, please refer to it yourself",
     "origin_chainnews": "ChainNews",
-    "origin_coinvoice": "coinvoice"
+    "origin_CoinVoice": "CoinVoice",
+    "origin_UTB": "UTB",
+    "origin_Cointelegraph": "Cointelegraph",
+    "origin_Bitcoin_com": "Bitcoin.com"
   },
   "discoverApp": {
     "aion_staking": "Aion Staking",

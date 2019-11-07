@@ -1,4 +1,4 @@
-import { getArticles, getArticlesCoinVoice, getFlashNews } from '../services/news.service';
+import { getArticles, getFlashNews } from '../services/news.service';
 import { createAction } from '../utils/dva';
 
 export default {
@@ -8,8 +8,6 @@ export default {
         flashNextPage: 1,
         articles: {},
         articleNextPage: 1,
-        articlesCoinVoice: {},
-        articlesCoinVoiceNextPage: 1,
     },
     reducers: {
         updateState(state, { payload }) {
@@ -43,19 +41,6 @@ export default {
             const articles = yield select(({ newsModel }) => newsModel.articles);
             if (payload.result) {
                 yield put(createAction('updateState')({ articles: { ...articles, ...payload.data }, articleNextPage: payload.nextPage }));
-            }
-            return Object.keys(payload.data).length;
-        },
-        *getArticlesCoinVoices(
-            {
-                payload: { page },
-            },
-            { call, select, put },
-        ) {
-            const payload = yield call(getArticlesCoinVoice, page);
-            const articlesCoinVoice = yield select(({ newsModel }) => newsModel.articlesCoinVoice);
-            if (payload.result) {
-                yield put(createAction('updateState')({ articlesCoinVoice: { ...articlesCoinVoice, ...payload.data }, articlesCoinVoiceNextPage: payload.nextPage }));
             }
             return Object.keys(payload.data).length;
         },

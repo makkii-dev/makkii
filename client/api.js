@@ -1,18 +1,28 @@
 import { apiClient } from 'makkii-coins';
 import Config from 'react-native-config';
+import { HttpClient } from 'lib-common-util-js/src';
 import { COINS } from './support_coin_list';
-// TODO:  to comment
-// import customApi from './customApi';
+import customApi from './customApi';
 
 const isTestNet = Config.is_testnet === 'true';
 
-const client = apiClient(Object.keys(COINS), isTestNet);
-// console.log('customApi=>', customApi);
-// const client = apiClient(Object.keys(COINS), isTestNet, customApi);
-console.log('Config.pokket=>', Config.pokket);
+// const client = apiClient(Object.keys(COINS), isTestNet);
+const client = apiClient(Object.keys(COINS), isTestNet, customApi);
 if (Config.pokket) {
     client.setCoinNetwork('ETH', 'pokket');
 }
+const getApiConfig = async () => {
+    const url = `${Config.app_server_api}/config/apiServers`;
+    try {
+        const { data } = await HttpClient.get(url);
+        client.coverRemoteApi(data);
+    } catch (e) {
+        //
+    }
+};
+// eslint-disable-next-line no-unused-vars
+let _ = getApiConfig();
+
 client.setRemoteApi(Config.app_server);
 
 export const {

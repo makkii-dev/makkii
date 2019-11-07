@@ -8,6 +8,7 @@ import { APPS } from './constants';
 import defaultStyles from '../../../styles';
 import { mainBgColor, mainColor } from '../../../style_util';
 import { createAction } from '../../../../utils/dva';
+import { renderNoNetWork } from '../../../components/common';
 
 const { width } = Dimensions.get('window');
 
@@ -23,7 +24,7 @@ const process_data = (data, apps, lang) => {
     const apps_ = Object.keys(apps).reduce((maps, k) => {
         if (k === 'News') {
             const news = lang.indexOf('en') >= 0 ? apps[k].en : apps[k].zh;
-            if (news.length > 0) {
+            if (news.filter(i => i.enabled).length > 0) {
                 maps[k] = apps[k];
             }
         } else {
@@ -60,7 +61,7 @@ const DiscoverHome = props => {
             setIsLoading(false);
         });
     }, []);
-
+    const data = process_data(APPS, apps, lang);
     return (
         <View style={{ flex: 1, backgroundColor: mainBgColor }}>
             <CustomHeader title={strings('menuRef.title_discover')} />
@@ -75,6 +76,14 @@ const DiscoverHome = props => {
                 >
                     <ActivityIndicator animating color="red" size="large" />
                 </View>
+            ) : data.length === 0 ? (
+                renderNoNetWork(() => {
+                    setIsLoading(true);
+
+                    dispatch(createAction('discoverModel/getApps')()).then(() => {
+                        setIsLoading(false);
+                    });
+                })
             ) : (
                 <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                     <View style={{ margin: 20, marginBottom: 10, flexDirection: 'row' }}>
@@ -93,7 +102,7 @@ const DiscoverHome = props => {
                         }}
                     >
                         <FlatList
-                            data={process_data(APPS, apps, lang)}
+                            data={data}
                             renderItem={({ item }) => (
                                 <TouchableOpacity onPress={() => handle_entry(item.entry)}>
                                     <View style={{ backgroundColor: 'white', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 20 }}>

@@ -713,7 +713,10 @@
     "button_refer_link": "来源链接",
     "label_disclaimer": "免责声明：本文转载仅为传递更多市场信息，不代表Makkii的观点和立场，请自行参考",
     "origin_chainnews": "链闻",
-    "origin_coinvoice": "coinvoice"
+    "origin_CoinVoice": "CoinVoice",
+    "origin_UTB": "UTB",
+    "origin_Cointelegraph": "Cointelegraph",
+    "origin_Bitcoin.com": "Bitcoin.com"
   },
   "discoverApp": {
     "aion_staking": "Aion Staking",

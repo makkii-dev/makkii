@@ -898,6 +898,31 @@ const SortButton = ({ title, desc, ...props }) => {
     );
 };
 
+
+
+const renderNoNetWork = reload => {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity
+                style={{
+                    ...styles.shadow,
+                    borderRadius: 10,
+                    backgroundColor: 'white',
+                    flex: 1,
+                    width: width - 20,
+                    marginVertical: 20,
+                    marginHorizontal: 10,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+                onPress={reload}
+            >
+                <Image source={require('../.././assets/empty_under_construction.png')} style={{ width: 80, height: 80, tintColor: 'gray' }} resizeMode="contain" />
+                <Text style={{ color: 'gray', textAlign: 'center', marginTop: 20 }}>{strings('error_connect_remote_server')}</Text>
+            </TouchableOpacity>
+        </View>
+    );
+};
 module.exports = {
     SortButton,
     ComponentButton,
@@ -918,4 +943,5 @@ module.exports = {
     AddressComponent,
     OptionButton,
     MnemonicView,
+    renderNoNetWork
 };

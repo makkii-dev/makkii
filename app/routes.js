@@ -66,7 +66,7 @@ import PokketOrderDetail from './pages/signed/pokket/order_detail';
 import NewsHome from './pages/signed/news/home';
 import NewsChainNews from './pages/signed/news/chain_news';
 import NewsArticle from './pages/signed/news/article_detail';
-import NewsCoinVoice from './pages/signed/news/coin_voice';
+import NewsCommonChannel from './pages/signed/news/common_channel';
 import { strings } from '../locales/i18n';
 import styles from './styles';
 
@@ -571,8 +571,8 @@ const AppNavigator = createStackNavigator(
                 header: null,
             },
         },
-        signed_news_coinvoice: {
-            screen: NewsCoinVoice,
+        signed_news_common_channel: {
+            screen: NewsCommonChannel,
             navigationOptions,
         },
         signed_blockChain_browser: {
