@@ -732,7 +732,7 @@
     "btc": "BTC block explorer",
     "eth": "ETH block explorer",
     "ltc": "LTC block explorer",
-    "trx": "TRX block explorer"
+    "trx": "TRON block explorer"
   },
   "time": {
     "weekday0": "Sunday",

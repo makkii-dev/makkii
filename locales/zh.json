@@ -730,7 +730,7 @@
     "btc": "BTC区块浏览器",
     "eth": "ETH区块浏览器",
     "ltc": "LTC区块浏览器",
-    "trx": "TRX区块浏览器"
+    "trx": "TRON区块浏览器"
   },
   "time": {
     "weekday0": "星期日",

@@ -45,7 +45,7 @@ class TransactionHistory extends React.Component {
         console.log('now: ', Date.now());
         console.log('---------------------------------------------');
         let lastTimestamp;
-        if (page == 0 || transactions.length <= 0) {
+        if (page === 0 || transactions.length <= 0) {
             lastTimestamp = Date.now();
         } else if (transactions.length > 0) {
             lastTimestamp = transactions[transactions.length - 1].timestamp;
