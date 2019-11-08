@@ -142,6 +142,7 @@ class Account extends Component {
                     page: 0,
                     size: 5,
                     needSave: true,
+                    timestamp: Date.now(),
                 }),
             ),
             dispatch(createAction('accountsModel/loadBalances')({ keys: [accountKey(currentAccount.symbol, currentAccount.address)], force: !!currentAccount.symbol.match(/^LTC$|^BTC$/) })),

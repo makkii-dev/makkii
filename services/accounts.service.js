@@ -4,18 +4,18 @@ import { HttpClient } from 'lib-common-util-js/src';
 import Config from 'react-native-config';
 import { getTransactionsByAddress, fetchAccountTokenTransferHistory, getBalance, fetchAccountTokenBalance } from '../client/api';
 
-const getTransactionsHistory = async (symbol, address, page, size) => {
+const getTransactionsHistory = async (symbol, address, page, size, timestamp) => {
     try {
-        return await getTransactionsByAddress(symbol, address, page, size);
+        return await getTransactionsByAddress(symbol, address, page, size, timestamp);
     } catch (e) {
         console.log('getTransactionsHistory error=>', e);
         throw e;
     }
 };
 
-const getTransfersHistory = async (symbol, address, contractAddr, page, size) => {
+const getTransfersHistory = async (symbol, address, contractAddr, page, size, timestamp) => {
     try {
-        return await fetchAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size);
+        return await fetchAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size, timestamp);
     } catch (e) {
         console.log('getTransfersHistory error=>', e);
         throw e;

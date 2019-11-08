@@ -250,10 +250,10 @@ export default {
             const transactionsMap = yield select(({ accountsModel }) => accountsModel.transactionsMap);
             for (let key of keys) {
                 const txs = transactionsMap[key];
-                // only saved recent 20 tx;
+                // only saved recent 5 tx;
                 const toBeSaved = Object.values(txs)
                     .sort(compareFn)
-                    .slice(0, 20)
+                    .slice(0, 5)
                     .reduce((map, el) => {
                         map[el.hash] = el;
                         return map;
@@ -386,7 +386,7 @@ export default {
         },
         *getTransactionHistory(
             {
-                payload: { user_address, symbol, tokenSymbol, page, size, needSave = true },
+                payload: { user_address, symbol, tokenSymbol, page, size, needSave = true, timestamp = 0 },
             },
             { call, select, put },
         ) {
@@ -395,12 +395,19 @@ export default {
                 if (tokenSymbol && tokenSymbol !== '') {
                     const tokenLists = yield select(({ accountsModel }) => accountsModel.tokenLists);
                     const contractAddr = tokenLists[symbol][tokenSymbol].contractAddr;
-                    txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size);
+                    txs = yield call(getTransfersHistory, symbol, user_address, contractAddr, page, size, timestamp);
                 } else {
-                    txs = yield call(getTransactionsHistory, symbol, user_address, page, size);
+                    txs = yield call(getTransactionsHistory, symbol, user_address, page, size, timestamp);
                 }
             } catch (e) {
-                AppToast.show(strings('error_connect_remote_server'));
+                if (symbol === 'ETH' && e.code === 108) {
+                    AppToast.show(strings('message_no_more_data_3_months'), {
+                        duration: AppToast.durations.LONG,
+                        position: AppToast.positions.CENTER,
+                    });
+                } else {
+                    AppToast.show(strings('error_connect_remote_server'));
+                }
                 return 0;
             }
             if (Object.keys(txs).length === 0) {
