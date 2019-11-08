@@ -57,7 +57,7 @@
     "version_label": "Version",
     "button_version_update": "Version Update",
     "button_feedback": "Feedback",
-    "button_changelog": "Changelog",
+    "button_changelog": "Change Logs",
     "terms_label": "Terms of Service",
     "policy_label": "Privacy Policy",
     "copyright_label": "Copyright @2019 Chaion. All Rights Reserved.",
@@ -66,23 +66,23 @@
     "label_and": "and"
   },
   "changelog": {
-    "title": "Changelog"
+    "title": "Change Logs"
   },
   "feedback": {
     "title": "Feedback",
     "label_feedback": "Feedback",
     "label_contact": "Email",
-    "label_screenshot": "Problem screenshot",
-    "placeholder_feedback": "Give us feedback on the problems you meet",
-    "placeholder_contact": "Please fill in you email address so that we can contact you",
-    "button_upload": "Upload photos (Three at most)",
+    "label_screenshot": "Problem Screenshot",
+    "placeholder_feedback": "Please fill your feedback",
+    "placeholder_contact": "Please fill your contact information",
+    "button_upload": "Upload(3 at most)",
     "button_submit": "Submit",
     "button_select_from_photos": "Select from photos",
     "button_cancel": "Cancel",
     "toast_upload_fail": "Upload image fail",
     "toast_submit_fail": "Submit fail",
     "toast_submit_success": "Submit success",
-    "toast_too_large_size": "Image is too large"
+    "toast_too_large_size": "Screenshot should not exceed 500KB."
   },
   "password": {
     "title": "Password",
