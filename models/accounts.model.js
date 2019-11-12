@@ -426,7 +426,6 @@ export default {
         },
         *loadBalances({ payload }, { call, select, put }) {
             const { keys, force = false } = payload;
-            console.log('loadBalances=>', payload);
             const { oldAccountsMap, tokenLists, isGettingBalance } = yield select(({ accountsModel }) => ({
                 oldAccountsMap: accountsModel.accountsMap,
                 tokenLists: accountsModel.tokenLists,

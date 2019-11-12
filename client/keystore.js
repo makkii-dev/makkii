@@ -18,4 +18,6 @@ export const {
     validateAddress,
     getKeyFromMnemonic,
     validatePrivateKey,
+    getLedgerStatus,
+    setLedgerTransport,
 } = client;

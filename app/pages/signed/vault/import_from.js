@@ -36,7 +36,7 @@ class ImportFrom extends Component {
         const { dispatch, symbol } = this.props;
         console.log(`import ${symbol} from ledger`);
         this.refs.refLoading.show(strings('ledger.toast_connecting'));
-        dispatch(createAction('accountImportModel/getLedgerStatus')()).then(ret => {
+        dispatch(createAction('accountImportModel/getLedgerStatus')({ symbol })).then(ret => {
             this.refs.refLoading.hide();
             if (ret.status) {
                 navigate('signed_vault_import_list')({ dispatch });
@@ -93,18 +93,18 @@ class ImportFrom extends Component {
     render() {
         IMPORT_SOURCE[0].callback = this.importFromMasterKey;
         IMPORT_SOURCE[1].callback = this.importFromPrivateKey;
-        IMPORT_SOURCE[3].callback = this.importFromLedger;
-        IMPORT_SOURCE[4].callback = this.importFromBip38;
-        IMPORT_SOURCE[5].callback = this.importFromWIF;
+        IMPORT_SOURCE[3].callback = this.importFromBip38;
+        IMPORT_SOURCE[4].callback = this.importFromWIF;
+        IMPORT_SOURCE[5].callback = this.importFromLedger;
         const data = [IMPORT_SOURCE[0], IMPORT_SOURCE[1]];
         const { symbol } = this.props;
-        if (symbol === 'AION' && Platform.OS === 'android') {
+        if (symbol && COINS[symbol].bip38Supported) {
             data.push(IMPORT_SOURCE[3]);
         }
-        if (symbol && COINS[symbol].bip38Supported) {
+        if (symbol && COINS[symbol].WIFSupported) {
             data.push(IMPORT_SOURCE[4]);
         }
-        if (symbol && COINS[symbol].WIFSupported) {
+        if (symbol && COINS[symbol].ledgerSupport && Platform.OS === 'android') {
             data.push(IMPORT_SOURCE[5]);
         }
         return (

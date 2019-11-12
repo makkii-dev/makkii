@@ -15,6 +15,7 @@ export const COINS = {
         defaultGasLimitForContract: '90000',
         network: isTestNet ? 'mastery' : 'mainnet',
         bip38Supported: false,
+        ledgerSupport: true,
         isTestNet,
     },
     BTC: {
@@ -26,6 +27,7 @@ export const COINS = {
         network: isTestNet ? 'BTCTEST' : 'BTC',
         bip38Supported: true,
         WIFSupported: true,
+        ledgerSupport: true,
         isTestNet,
     },
     ETH: {
@@ -41,6 +43,7 @@ export const COINS = {
         defaultGasLimitForContract: '60000',
         network: isTestNet ? 'ropsten' : 'mainnet',
         bip38Supported: false,
+        ledgerSupport: true,
         isTestNet,
     },
     // 'EOS': {
@@ -60,6 +63,7 @@ export const COINS = {
         network: isTestNet ? 'LTCTEST' : 'LTC',
         bip38Supported: true,
         WIFSupported: true,
+        ledgerSupport: false,
         isTestNet,
     },
     TRX: {
@@ -70,6 +74,7 @@ export const COINS = {
         txFeeSupport: false,
         network: isTestNet ? 'shasta' : 'mainnet',
         bip38Supported: false,
+        ledgerSupport: false,
         isTestNet,
     },
 };

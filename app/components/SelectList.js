@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, TouchableOpacity, View, Image, PixelRatio } from 'react-native';
+import { FlatList, TouchableOpacity, Image } from 'react-native';
 
 class SelectCell extends React.Component {
     static propTypes = {
@@ -9,6 +9,7 @@ class SelectCell extends React.Component {
         cellLeftView: PropTypes.func.isRequired,
         onItemSelected: PropTypes.func.isRequired,
         select: PropTypes.bool.isRequired,
+        itemStyle: PropTypes.object,
     };
 
     shouldComponentUpdate(nextProps) {
@@ -20,7 +21,7 @@ class SelectCell extends React.Component {
     }
 
     render() {
-        const { item, cellLeftView } = this.props;
+        const { item, cellLeftView, itemStyle = {} } = this.props;
         const element = cellLeftView(item.value);
         return (
             <TouchableOpacity
@@ -31,13 +32,14 @@ class SelectCell extends React.Component {
                     alignItems: 'center' /* , flex:1 */,
                     height: this.props.itemHeight,
                     paddingHorizontal: 20,
+                    ...itemStyle,
                 }}
                 onPress={() => this.onPress(item.key)}
             >
-                {/* <View style={{backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', flex:1, height:this.props.itemHeight,paddingHorizontal: 20}}> */}
                 {element}
-                {this.props.select && <Image source={require('../../assets/icon_checked.png')} style={{ width: 20, height: 20, marginLeft: 20 }} resizeMode="contain" />}
-                {/* </View> */}
+                {this.props.select && (
+                    <Image source={require('../../assets/icon_checked.png')} style={{ width: 20, height: 20, marginLeft: 20, position: 'absolute', right: 20 }} resizeMode="contain" />
+                )}
             </TouchableOpacity>
         );
     }
@@ -51,6 +53,7 @@ export default class SelectList extends React.Component {
         itemHeight: PropTypes.number,
         defaultKey: PropTypes.string,
         onItemSelected: PropTypes.func,
+        itemStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -102,10 +105,10 @@ export default class SelectList extends React.Component {
                         onItemSelected={(key, select) => this.onPress(key, select)}
                         cellLeftView={this.props.cellLeftView}
                         select={this.select[item.key] !== undefined}
+                        itemStyle={this.props.itemStyle}
                     />
                 )}
                 keyExtractor={(item, index) => index.toString()}
-                ItemSeparatorComponent={() => <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />}
             />
         );
     }

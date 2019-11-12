@@ -108,7 +108,7 @@ export default class PopupCustom extends Component {
             return <View key="invisible" />;
         }
         return (
-            <View key="visible" style={{ position: 'absolute', right: 0, top: Platform.OS === 'ios' ? 13 : 17 }}>
+            <View key="visible" style={{ position: 'absolute', right: 0 }}>
                 <TouchableOpacity onPress={this.clearText}>
                     <Image source={require('../../assets/icon_popCustom_clear.png')} style={styles.iconClose} />
                 </TouchableOpacity>
@@ -228,7 +228,7 @@ export default class PopupCustom extends Component {
                                 {content !== '' && renderContent}
                                 {errorMsg !== '' && <Text style={styles.errorText}>{errorMsg}</Text>}
                                 {type === 'input' && (
-                                    <View>
+                                    <View style={{ justifyContent: 'center', marginTop: 10 }}>
                                         <TextInput
                                             secureTextEntry
                                             autoFocus
@@ -326,7 +326,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: 236,
-        marginTop: 10,
         paddingLeft: 10,
         paddingRight: 40,
         paddingVertical: 5,

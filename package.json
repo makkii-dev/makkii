@@ -16,6 +16,7 @@
     "pre-lint"
   ],
   "dependencies": {
+    "@ledgerhq/react-native-hid": "^4.73.4",
     "@react-native-community/push-notification-ios": "^1.0.2",
     "aion-web3": "1.1.5",
     "assert": "^2.0.0",
@@ -33,7 +34,7 @@
     "dva-core": "^1.4.0",
     "ecurve": "^1.0.6",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#cffe1e377b4874af1471e6744ef3bea1b9004f83",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#c587e9cd784dd7fdae6448dbe79ab787771e2782",
     "makkii-webview-bridge": "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
