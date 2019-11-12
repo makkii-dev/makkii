@@ -34,8 +34,8 @@ const Upload = ({ onPress }) => {
 const ImageView = ({ handleDelete, uri }) => {
     return (
         <ImageBackground source={{ uri }} style={[styles.image_container, { backgroundColor: mainBgColor }]} resizeMode="contain">
-            <TouchableOpacity onPress={() => handleDelete(uri)} style={{ position: 'absolute', right: -5, top: -5 }}>
-                <Image source={require('../../../../assets/icon_popCustom_clear.png')} style={{ height: 12, width: 12, tintColor: '#000' }} resizeMode="contain" />
+            <TouchableOpacity onPress={() => handleDelete(uri)} style={{ position: 'absolute', right: -10, top: -10 }}>
+                <Image source={require('../../../../assets/icon_popCustom_clear.png')} style={{ height: 24, width: 24, tintColor: '#000' }} resizeMode="contain" />
             </TouchableOpacity>
         </ImageBackground>
     );
@@ -53,7 +53,7 @@ const feedback = props => {
     const buttonEnabled = state.feedback.trim() !== '' && state.contact.trim() !== '';
     const handleDeleteScreenShot = uri => {
         console.log('handleDeleteScreenShot', uri);
-        const newImageLists = state.imageLists.filter(i => i !== uri);
+        const newImageLists = state.imageLists.filter(i => i.url !== uri);
         setState({
             ...state,
             imageLists: newImageLists,
@@ -81,13 +81,17 @@ const feedback = props => {
             if (res.error) {
                 console.log('error ', res.error);
             } else if (res.uri) {
-                const url = Platform.OS === 'ios' ? res.uri : `file://${res.path}`;
-                const newImageLists = [...state.imageLists, { url, name: res.fileName }];
-                setState({
-                    ...state,
-                    imageLists: newImageLists,
-                    modalVisible: false,
-                });
+                if (res.data.length / 1048576 > 0.5) {
+                    AppToast.show(strings('feedback.toast_too_large_size'));
+                } else {
+                    const url = Platform.OS === 'ios' ? res.uri : `file://${res.path}`;
+                    const newImageLists = [...state.imageLists, { url, name: res.fileName }];
+                    setState({
+                        ...state,
+                        imageLists: newImageLists,
+                        modalVisible: false,
+                    });
+                }
             }
         });
     };
@@ -156,7 +160,7 @@ const feedback = props => {
                     </View>
                 </FormItem>
             </View>
-            <ComponentButton disabled={!buttonEnabled} title={strings('feedback.button_submit')} onPress={handleSubmit} style={{ width: width - 40 }} />
+            <ComponentButton disabled={!buttonEnabled} title={strings('feedback.button_submit')} onPress={handleSubmit} style={{ width: width - 40, marginTop: 20 }} />
             <Modal animationType="none" transparent visible={state.modalVisible} onRequestClose={() => {}}>
                 <TouchableOpacity activeOpacity={1} style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.75)', justifyContent: 'flex-end' }} onPress={() => handelModalVisible()}>
                     <TouchableOpacity style={styles.modal_button} onPress={selectFromPhotos}>

@@ -85,7 +85,7 @@ const DiscoverHome = props => {
                     });
                 })
             ) : (
-                <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+                <ScrollView style={{ width }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
                     <View style={{ margin: 20, marginBottom: 10, flexDirection: 'row' }}>
                         <Image source={require('../../../../assets/separate.png')} style={{ height: 25, width: 3, tintColor: mainColor, marginRight: 10 }} />
                         <Text style={{ fontSize: 18 }}>{strings('discoverApp.label_popular')}</Text>

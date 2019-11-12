@@ -449,7 +449,6 @@ export default {
                         },
                         [{ symbol, address }],
                     );
-                    console.log('[debug]=>', tokenLists);
                     const rets = yield call(getAccountBalances, payloads);
                     rets.forEach(el => {
                         if (el.tokenSymbol) {

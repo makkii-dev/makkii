@@ -26,7 +26,6 @@ Welcome to Makkii Wallet! Makkii wallet is a secure, convenient and trusted Cryp
 $ git clone git clone https://github.com/chaion/wallet.git
 $ cd wallet
 $ yarn
-$ yarn build-inject
 # android debug
 $ react-native run-android
 # build android package, apk is generated under android/app/outputs/apk/release/app-release.apk

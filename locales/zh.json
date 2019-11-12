@@ -79,7 +79,8 @@
     "button_cancel": "取消",
     "toast_upload_fail": "上传图片失败",
     "toast_submit_fail": "提交失败",
-    "toast_submit_success": "提交成功"
+    "toast_submit_success": "提交成功",
+    "toast_too_large_size": "图片太大"
   },
   "password": {
     "title": "密码",
