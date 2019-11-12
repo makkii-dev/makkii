@@ -73,14 +73,14 @@
     "label_screenshot": "问题截图",
     "placeholder_feedback": "请将您遇到的问题反馈给我们",
     "placeholder_contact": "请填写您的邮箱，便于我们与您联系",
-    "button_upload": "上传照片（最多3张）",
+    "button_upload": "上传截图（最多3张）",
     "button_submit": "提交",
     "button_select_from_photos": "从相册中选择",
     "button_cancel": "取消",
     "toast_upload_fail": "上传图片失败",
     "toast_submit_fail": "提交失败",
     "toast_submit_success": "提交成功",
-    "toast_too_large_size": "图片太大"
+    "toast_too_large_size": "请上传不超过500kb的截图"
   },
   "password": {
     "title": "密码",
@@ -730,7 +730,7 @@
     "btc": "BTC区块浏览器",
     "eth": "ETH区块浏览器",
     "ltc": "LTC区块浏览器",
-    "trx": "TRX区块浏览器"
+    "trx": "TRON区块浏览器"
   },
   "time": {
     "weekday0": "星期日",
@@ -777,6 +777,7 @@
   "warning_delete_account": "确定要删除这个账户吗?",
   "error_connect_remote_server": "无法连接到远程服务器",
   "message_no_more_data": "暂无更多数据",
+  "message_no_more_data_3_months": "仅显示近30天的交易记录",
   "toast_double_press_exit": "再按一次返回退出应用",
   "toast_invalid_mnemonic": "无效的助记词",
   "toast_mnemonic_share_warning": "切勿泄漏您的助记词给他人！",

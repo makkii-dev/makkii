@@ -33,10 +33,26 @@ class TransactionHistory extends React.Component {
         this.isMount = false;
     }
 
-    fetchAccountTransactions = (page = 0, size = 25) => {
+    fetchAccountTransactions = (page = 0, size = 10) => {
         const { currentPage } = this.state;
-        const { currentAccount, dispatch } = this.props;
+        const { currentAccount, dispatch, transactions } = this.props;
+
+        // size = currentAccount.symbol.match(/^BTC$|^LTC$/) ? 10: size;
+
         console.log(`get transactions page: ${page} size: ${size}`);
+        console.log('---------------------------------------------');
+        console.log('transaction length: ', transactions.length);
+        console.log('now: ', Date.now());
+        console.log('---------------------------------------------');
+        let lastTimestamp;
+        if (page === 0 || transactions.length <= 0) {
+            lastTimestamp = Date.now();
+        } else if (transactions.length > 0) {
+            lastTimestamp = transactions[transactions.length - 1].timestamp;
+        } else {
+            lastTimestamp = Date.now();
+        }
+
         dispatch(
             createAction('accountsModel/getTransactionHistory')({
                 user_address: currentAccount.address,
@@ -45,6 +61,7 @@ class TransactionHistory extends React.Component {
                 page,
                 size,
                 needSave: false,
+                timestamp: lastTimestamp,
             }),
         ).then(r => {
             if (r === 0) {
@@ -140,6 +157,7 @@ class TransactionHistory extends React.Component {
                         onEndReached={() => {
                             this._onEndReached();
                         }}
+                        onEndReachedThreshold={0.1}
                         ListFooterComponent={() => <ImportListFooter hasSeparator={false} footerState={this.state.footerState} />}
                     />
                 ) : (

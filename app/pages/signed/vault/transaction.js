@@ -264,7 +264,7 @@ class Transaction extends Component {
                                 </TouchableOpacity>
                             )}
                         />
-                        <TransactionItemCell title={strings('transaction_detail.label_blockNumber')} value={transaction.blockNumber} valueTextAlign="left" />
+                        {transaction.blockNumber && <TransactionItemCell title={strings('transaction_detail.label_blockNumber')} value={transaction.blockNumber} valueTextAlign="left" />}
 
                         {account.symbol !== 'BTC' && account.symbol !== 'LTC' ? this.renderAdditionData() : null}
                         {transaction.fee ? <TransactionItemCell title={strings('transaction_detail.label_fee')} value={`${transaction.fee} ${this.account.coinSymbol}`} valueTextAlign="left" /> : null}
