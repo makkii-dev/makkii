@@ -63,7 +63,7 @@ export const COINS = {
         network: isTestNet ? 'LTCTEST' : 'LTC',
         bip38Supported: true,
         WIFSupported: true,
-        ledgerSupport: true,
+        ledgerSupport: false,
         isTestNet,
     },
     TRX: {

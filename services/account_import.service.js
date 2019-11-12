@@ -58,7 +58,6 @@ const getOrInitLedger = async symbol => {
         const currentStatus = getLedgerStatus(symbol);
         if (!currentStatus) {
             const lists = await TransportHid.list();
-            console.log('lists=>', lists);
             if (lists.length === 0) {
                 console.log('no devices');
                 return { status: false, code: 'error.device_count' };
