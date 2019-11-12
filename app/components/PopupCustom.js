@@ -228,7 +228,7 @@ export default class PopupCustom extends Component {
                                 {content !== '' && renderContent}
                                 {errorMsg !== '' && <Text style={styles.errorText}>{errorMsg}</Text>}
                                 {type === 'input' && (
-                                    <View style={{ justifyContent: 'center', marginTop:10 }}>
+                                    <View style={{ justifyContent: 'center', marginTop: 10 }}>
                                         <TextInput
                                             secureTextEntry
                                             autoFocus
