@@ -11,17 +11,16 @@ const client = apiClient(Object.keys(COINS), isTestNet, customApi);
 if (Config.pokket) {
     client.setCoinNetwork('ETH', 'pokket');
 }
-const getApiConfig = async () => {
+export const getApiConfig = async () => {
     const url = `${Config.app_server_api}/config/apiServers`;
     try {
         const { data } = await HttpClient.get(url);
+        console.log('coverRemoteApi', data);
         client.coverRemoteApi(data);
     } catch (e) {
         //
     }
 };
-// eslint-disable-next-line no-unused-vars
-let _ = getApiConfig();
 
 client.setRemoteApi(Config.app_server);
 

@@ -5,6 +5,7 @@ import { strings } from '../../locales/i18n';
 import { ComponentLogo } from '../components/common';
 import { createAction } from '../../utils/dva';
 import { Storage } from '../../utils/storage';
+import { getApiConfig } from '../../client/api';
 
 const loadStorage = dispatch =>
     new Promise(resolve => {
@@ -16,15 +17,16 @@ const loadStorage = dispatch =>
             };
             Promise.all([
                 new Promise(resolve1 =>
-                    dispatch(createAction('userModel/loadStorage')(payload)).then(() =>
-                        dispatch(createAction('accountsModel/loadStorage')(payload)).then(() =>
-                            dispatch(createAction('settingsModel/loadStorage')(payload)).then(() =>
-                                dispatch(createAction('ERC20Dex/loadStorage')(payload)).then(() => dispatch(createAction('txsListener/loadStorage')(payload)).then(() => resolve1())),
+                    getApiConfig().then(() =>
+                        dispatch(createAction('userModel/loadStorage')(payload)).then(() =>
+                            dispatch(createAction('accountsModel/loadStorage')(payload)).then(() =>
+                                dispatch(createAction('settingsModel/loadStorage')(payload)).then(() =>
+                                    dispatch(createAction('ERC20Dex/loadStorage')(payload)).then(() => dispatch(createAction('txsListener/loadStorage')(payload)).then(() => resolve1())),
+                                ),
                             ),
                         ),
                     ),
                 ),
-
                 new Promise(resolve2 =>
                     setTimeout(() => {
                         resolve2();

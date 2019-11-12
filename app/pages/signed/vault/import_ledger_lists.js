@@ -5,13 +5,36 @@ import SelectList from '../../../components/SelectList';
 import { ImportListFooter, RightActionButton } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { createAction, navigate } from '../../../../utils/dva';
+import { fixedWidthFont, mainBgColor } from '../../../style_util';
+import defaultStyles from '../../../styles';
 
 const { width } = Dimensions.get('window');
+
+function renderAddress66(address) {
+    return (
+        <View>
+            <Text style={styles.addressFontStyle}>{`${address.substring(0, 4)} ${address.substring(4, 10)} ${address.substring(10, 16)} ${address.substring(16, 22)}`}</Text>
+            <Text style={styles.addressFontStyle}>{`${address.substring(22, 26)} ${address.substring(26, 32)} ${address.substring(32, 38)} ${address.substring(38, 44)}`}</Text>
+            <Text style={styles.addressFontStyle}>{`${address.substring(44, 48)} ${address.substring(48, 54)} ${address.substring(54, 60)} ${address.substring(60, 66)}`}</Text>
+        </View>
+    );
+}
+
+function renderAddress42(address) {
+    return (
+        <View>
+            <Text style={styles.addressFontStyle}>{`${address.substring(0, 4)} ${address.substring(4, 8)} ${address.substring(8, 12)} ${address.substring(12, 16)} ${address.substring(16, 21)}`}</Text>
+            <Text style={styles.addressFontStyle}>
+                {`${address.substring(21, 25)} ${address.substring(25, 29)} ${address.substring(29, 33)} ${address.substring(33, 37)} ${address.substring(37, 42)}`}
+            </Text>
+        </View>
+    );
+}
 
 class ImportHdWallet extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            title: navigation.getParam('title'),
+            title: strings('import_ledger.title'),
             headerRight: (
                 <RightActionButton
                     onPress={() => {
@@ -56,7 +79,7 @@ class ImportHdWallet extends React.Component {
         this.isMount = false;
     }
 
-    fetchAccount = (page, size = 25) => {
+    fetchAccount = (page, size = 10) => {
         const { dispatch } = this.props;
         console.log(`fetchAccount page: ${page} size: ${size}`);
         dispatch(createAction('accountImportModel/getAccountsFromLedger')({ page, size })).then(() => {
@@ -100,12 +123,24 @@ class ImportHdWallet extends React.Component {
             <View style={styles.container}>
                 <SelectList
                     isMultiSelect={false}
-                    itemHeight={55}
                     ref="refSelectList"
                     data={accountLists}
+                    itemStyle={{ height: 80, margin: 10, ...defaultStyles.shadow, backgroundColor: '#fff', borderRadius: 5 }}
                     cellLeftView={item => {
                         const { address } = item;
-                        return <Text style={{ flex: 1 }}>{`${address.substring(0, 10)}...${address.substring(54)}`}</Text>;
+                        return (
+                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', position: 'absolute', left: 10 }}>
+                                {address.length === 66 ? (
+                                    renderAddress66(address)
+                                ) : address.length === 42 ? (
+                                    renderAddress42(address)
+                                ) : (
+                                    <Text style={{ ...styles.addressFontStyle, width: '70%' }} multiline>
+                                        {address}
+                                    </Text>
+                                )}
+                            </View>
+                        );
                     }}
                     ListFooterComponent={() => <ImportListFooter footerState={this.state.footerState} />}
                     onEndReached={() => {
@@ -156,7 +191,7 @@ const styles = StyleSheet.create({
         width,
         flex: 1,
         justifyContent: 'center',
-        backgroundColor: 'white',
+        backgroundColor: mainBgColor,
     },
     itemContainer: {
         flex: 1,
@@ -181,5 +216,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         marginTop: 10,
+    },
+    addressFontStyle: {
+        fontSize: 12,
+        color: '#000',
+        includeFontPadding: false,
+        fontFamily: fixedWidthFont,
     },
 });

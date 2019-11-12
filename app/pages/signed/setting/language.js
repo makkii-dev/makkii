@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Dimensions, View, Text } from 'react-native';
+import { Dimensions, View, Text, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import SelectList from '../../../components/SelectList';
@@ -84,6 +84,7 @@ class Language extends Component {
                                 isEdited: currentLanguage !== Object.keys(this.refs.refSelectList.getSelect())[0],
                             });
                         }}
+                        ItemSeparatorComponent={() => <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />}
                     />
                 </View>
                 <Loading ref="refLoading" />

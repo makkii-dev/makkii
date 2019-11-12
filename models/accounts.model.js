@@ -419,13 +419,12 @@ export default {
         },
         *loadBalances({ payload }, { call, select, put }) {
             const { keys, force = false } = payload;
-            console.log('loadBalances=>', payload);
             const { oldAccountsMap, tokenLists, isGettingBalance } = yield select(({ accountsModel }) => ({
                 oldAccountsMap: accountsModel.accountsMap,
                 tokenLists: accountsModel.tokenLists,
                 isGettingBalance: accountsModel.isGettingBalance,
             }));
-            if (isGettingBalance) return;
+            if (isGettingBalance) return true;
             yield put(createAction('updateState')({ isGettingBalance: true }));
             const pendingTxs = yield select(({ txsListener }) => txsListener.txs);
             let ret = true;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, Dimensions } from 'react-native';
+import { View, ScrollView, Text, Dimensions, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import SelectList from '../../../components/SelectList';
@@ -449,6 +449,7 @@ class Currency extends Component {
                                     isEdited: currentCurrency !== Object.keys(this.refs.refSelectList.getSelect())[0],
                                 });
                             }}
+                            ItemSeparatorComponent={() => <View style={{ backgroundColor: 'lightgray', height: 1 / PixelRatio.get() }} />}
                         />
                     </View>
                 </ScrollView>

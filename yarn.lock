@@ -822,10 +822,40 @@
     "@ledgerhq/logs" "^4.68.2"
     rxjs "^6.5.2"
 
+"@ledgerhq/devices@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/devices/download/@ledgerhq/devices-4.73.4.tgz#0a1866fd1f10e2afc57c5f002f60d52ad5e6bb99"
+  integrity sha1-Chhm/R8Q4q/FfF8AL2DVKtXmu5k=
+  dependencies:
+    "@ledgerhq/errors" "^4.73.4"
+    "@ledgerhq/logs" "^4.72.0"
+    rxjs "^6.5.3"
+
 "@ledgerhq/errors@^4.68.4":
   version "4.68.4"
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.68.4.tgz#4ad77f76a1065cacf45578073a24255af3332938"
   integrity sha512-Iozs0kCGwxOFKX+lbSwrEv2JJ/Kaqg7nS+YHXvRNxA69dNZ+Tv652yfnVs1VWwY2snV4HVC/FM9aw+Drp+L9VA==
+
+"@ledgerhq/errors@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/errors/download/@ledgerhq/errors-4.73.4.tgz#df4705d11350f252c0f0c202e88a32723f409484"
+  integrity sha1-30cF0RNQ8lLA8MIC6Ioycj9AlIQ=
+
+"@ledgerhq/hw-app-btc@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/hw-app-btc/download/@ledgerhq/hw-app-btc-4.73.4.tgz#388a43e7eca8a8e5a94e1d11e8e4e25ca1aa4793"
+  integrity sha1-OIpD5+yoqOWpTh0R6OTiXKGqR5M=
+  dependencies:
+    "@ledgerhq/hw-transport" "^4.73.4"
+    create-hash "^1.1.3"
+
+"@ledgerhq/hw-app-eth@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/hw-app-eth/download/@ledgerhq/hw-app-eth-4.73.4.tgz#3696df17c819dea213da56c4841341db7fb571aa"
+  integrity sha1-NpbfF8gZ3qIT2lbEhBNB23+1cao=
+  dependencies:
+    "@ledgerhq/errors" "^4.73.4"
+    "@ledgerhq/hw-transport" "^4.73.4"
 
 "@ledgerhq/hw-transport@^4.68.2":
   version "4.68.4"
@@ -836,10 +866,35 @@
     "@ledgerhq/errors" "^4.68.4"
     events "^3.0.0"
 
+"@ledgerhq/hw-transport@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/hw-transport/download/@ledgerhq/hw-transport-4.73.4.tgz#e3b58eebbc99b003406838660b7d17611e02ebc7"
+  integrity sha1-47WO67yZsANAaDhmC30XYR4C68c=
+  dependencies:
+    "@ledgerhq/devices" "^4.73.4"
+    "@ledgerhq/errors" "^4.73.4"
+    events "^3.0.0"
+
 "@ledgerhq/logs@^4.68.2":
   version "4.68.2"
   resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.68.2.tgz#3ba74680927807f83d9f0bfd7da45f192d2c0893"
   integrity sha512-iFwGIzPmAMDvxVLtTvBUo0DCWz8vVaD0C4IsprNaXbxu+AsDmlc9kO9CKLB5YFEZblKNNKqJMJDfKvg5brIpTw==
+
+"@ledgerhq/logs@^4.72.0":
+  version "4.72.0"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/logs/download/@ledgerhq/logs-4.72.0.tgz#43df23af013ad1135407e5cf33ca6e4c4c7708d5"
+  integrity sha1-Q98jrwE60RNUB+XPM8puTEx3CNU=
+
+"@ledgerhq/react-native-hid@^4.73.4":
+  version "4.73.4"
+  resolved "https://registry.npm.taobao.org/@ledgerhq/react-native-hid/download/@ledgerhq/react-native-hid-4.73.4.tgz#a840f4015fbfdd6c2d73cd8aa196c48682a49118"
+  integrity sha1-qED0AV+/3Wwtc82KoZbEhoKkkRg=
+  dependencies:
+    "@ledgerhq/devices" "^4.73.4"
+    "@ledgerhq/errors" "^4.73.4"
+    "@ledgerhq/hw-transport" "^4.73.4"
+    "@ledgerhq/logs" "^4.72.0"
+    rxjs "^6.5.3"
 
 "@react-native-community/cli@^1.2.1":
   version "1.11.2"
@@ -3127,7 +3182,7 @@ create-ecdh@^4.0.0:
     bn.js "^4.1.0"
     elliptic "^6.0.0"
 
-create-hash@^1.1.0, create-hash@^1.1.1, create-hash@^1.1.2, create-hash@^1.2.0:
+create-hash@^1.1.0, create-hash@^1.1.1, create-hash@^1.1.2, create-hash@^1.1.3, create-hash@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/create-hash/-/create-hash-1.2.0.tgz#889078af11a63756bcfb59bd221996be3a9ef196"
   integrity sha512-z00bCGNHDG8mHAkP7CtT1qVu+bFQUPjYq/4Iv3C3kWjTFV10zIjfSoeqXo9Asws8gwSHDGj/hl2u4OGIjapeCg==
@@ -5938,9 +5993,9 @@ levn@^0.3.0, levn@~0.3.0:
     bip39 "^3.0.2"
     querystring "^0.2.0"
 
-"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b":
+"lib-hw-ledger-js@https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a":
   version "0.0.1"
-  resolved "https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b"
+  resolved "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a"
   dependencies:
     "@ledgerhq/hw-transport" "^4.68.2"
 
@@ -6052,11 +6107,13 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#98f5494":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#bb58eba63d78a122abbb173636b6ee4dabb1aad4":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#98f5494b609892969c38089a8ec408de563d8fd1"
+  resolved "https://github.com/chaion/makkii-coins.git#bb58eba63d78a122abbb173636b6ee4dabb1aad4"
   dependencies:
     "@babel/runtime" "^7.5.5"
+    "@ledgerhq/hw-app-btc" "^4.73.4"
+    "@ledgerhq/hw-app-eth" "^4.73.4"
     "@tronscan/client" "^0.2.48"
     aion-rlp "^0.0.1"
     aion-web3-eth-abi "1.1.5"
@@ -6074,7 +6131,7 @@ makeerror@1.0.x:
     ethereumjs-util "^6.1.0"
     hdkey "^1.1.1"
     lib-common-util-js "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
-    lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git#f9b77d368535fa9280c8f056c2b43e91d7bb767b"
+    lib-hw-ledger-js "https://github.com/chaion/lib-hw-ledger-js.git#e6f6a1d82b7ceb74fc1517f69f7ad2f612befd8a"
     querystring "^0.2.0"
     rlp "^2.2.3"
     scrypt.js "^0.3.0"
@@ -8449,7 +8506,7 @@ rx-lite@*, rx-lite@^4.0.8:
   resolved "https://registry.yarnpkg.com/rx-lite/-/rx-lite-4.0.8.tgz#0b1e11af8bc44836f04a6407e92da42467b79444"
   integrity sha1-Cx4Rr4vESDbwSmQH6S2kJGe3lEQ=
 
-rxjs@^6.4.0, rxjs@^6.5.2:
+rxjs@^6.4.0, rxjs@^6.5.2, rxjs@^6.5.3:
   version "6.5.3"
   resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.3.tgz#510e26317f4db91a7eb1de77d9dd9ba0a4899a3a"
   integrity sha512-wuYsAYYFdWTAnAaPoKGNhfpWwKZbJW+HgAJ+mImp+Epl7BG8oNWBCTyRM8gba9k4lk8BgWdoYm21Mo/RYhhbgA==
