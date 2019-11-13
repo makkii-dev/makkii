@@ -68,7 +68,7 @@ const sendTx = navigation => txObj =>
             }),
         );
         navigation.navigate('signed_vault_send', {
-            title: 'Dapp Send',
+            title: 'Send',
             callback: (err, value) => {
                 console.log('err', err);
                 console.log('value', value);

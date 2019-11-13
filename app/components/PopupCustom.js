@@ -118,9 +118,11 @@ export default class PopupCustom extends Component {
 
     setProgress = progress => {
         if (this.state.type === 'progress') {
-            this.setState({
-                progress,
-            });
+            if (progress > this.state.progress) {
+                this.setState({
+                    progress,
+                });
+            }
         }
     };
 

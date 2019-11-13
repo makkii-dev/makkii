@@ -1,5 +1,14 @@
 {
   "coins": {
+    "aion": {
+      "networks": {
+        "mastery": {
+          "jsonrpc": "https://si-amity.chaion.net/rpc",
+          "explorer_api": "https://amity-api.theoan.com/",
+          "explorer": "https://amity.theoan.com/#/transaction"
+        }
+      }
+    },
     "btc": {
       "networks": {
         "BTCTEST": {

@@ -100,33 +100,31 @@ class AccountList extends React.Component {
 
     renderItem = ({ item }) => {
         return (
-            <TouchableOpacity onPress={() => this.selectAccount(item)}>
-                <View style={styles.accountContainerWithShadow}>
-                    <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
-                    <View style={{ flex: 1, paddingVertical: 10 }}>
-                        <View
+            <TouchableOpacity onPress={() => this.selectAccount(item)} style={styles.accountContainerWithShadow}>
+                <Image source={COINS[item.symbol].icon} style={{ marginRight: 10, width: 24, height: 24 }} />
+                <View style={{ flex: 1, paddingVertical: 10 }}>
+                    <View
+                        style={{
+                            ...styles.accountSubContainer,
+                            width: '100%',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
+                            {item.name}
+                        </Text>
+                        <Text
                             style={{
-                                ...styles.accountSubContainer,
-                                width: '100%',
-                                alignItems: 'center',
+                                ...styles.accountSubTextFontStyle1,
+                                fontWeight: 'bold',
                             }}
                         >
-                            <Text style={{ ...styles.accountSubTextFontStyle1, width: '70%' }} numberOfLines={1}>
-                                {item.name}
-                            </Text>
-                            <Text
-                                style={{
-                                    ...styles.accountSubTextFontStyle1,
-                                    fontWeight: 'bold',
-                                }}
-                            >
-                                {new BigNumber(item.balance).toFixed(4)}
-                            </Text>
-                        </View>
-                        <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>
-                            {renderAddress(item.address, item.symbol)}
-                            <Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
-                        </View>
+                            {new BigNumber(item.balance).toFixed(4)}
+                        </Text>
+                    </View>
+                    <View style={{ ...styles.accountSubContainer, alignItems: 'center' }}>
+                        {renderAddress(item.address, item.symbol)}
+                        <Text style={styles.accountSubTextFontStyle2}>{item.symbol}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
