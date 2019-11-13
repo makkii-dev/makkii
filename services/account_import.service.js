@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
-import wallet from 'react-native-aion-hw-wallet';
+import TransportHid from '@ledgerhq/react-native-hid/src';
 import BIP38 from '../utils/bip38';
-import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger, recoverKeyPairByWIF } from '../client/keystore';
-import { range } from '../utils';
+import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger, recoverKeyPairByWIF, getLedgerStatus, setLedgerTransport } from '../client/keystore';
 import { SensitiveStorage } from '../utils/storage';
 
 const getAccountFromMasterKey = async (symbol, index) => {
@@ -43,26 +42,40 @@ const getOneAccountFromLedger = async (symbol, index) => {
     }
 };
 
-const getAccountsFromLedger = (symbol, start, end) => {
-    const indexes = range(start, end, 1);
+const getAccountsFromLedger = async (symbol, start, end) => {
+    let rets = [];
+    for (let i = start; i < end; i++) {
+        // eslint-disable-next-line no-await-in-loop
+        const ret = await getOneAccountFromLedger(symbol, i);
+        rets.push(ret);
+    }
 
-    const promises = indexes.map(e => {
-        return getOneAccountFromLedger(symbol, e);
-    });
-    return Promise.all(promises);
+    return rets;
 };
 
-const getLedgerStatus = async () => {
+const getOrInitLedger = async symbol => {
     try {
-        const deviceLists = await wallet.listDevice();
-        if (deviceLists.length <= 0) {
-            return { status: false, code: wallet.INVALID_DEVICE_NUMBER };
+        const currentStatus = getLedgerStatus(symbol);
+        if (!currentStatus) {
+            const lists = await TransportHid.list();
+            if (lists.length === 0) {
+                console.log('no devices');
+                return { status: false, code: 'error.device_count' };
+            }
+            const transport = await Promise.race([
+                TransportHid.create(),
+                new Promise((resolve, reject) => {
+                    // set open timeout  5s
+                    setTimeout(() => reject('Timeout'), 60 * 1000);
+                }),
+            ]);
+            console.log('transport', transport);
+            setLedgerTransport(symbol, transport);
         }
-        await wallet.getAccount(0);
         return { status: true };
     } catch (e) {
-        console.log('getLedgerStatus error=>', e);
-        return { status: false, code: e.code };
+        console.log('getOrInitLedger fail=>', e);
+        return { status: false, code: 'error.device_count' };
     }
 };
 
@@ -83,4 +96,4 @@ const getPrivateKeyFromBIP38 = async (bip38, password) => {
     }
 };
 
-export { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getLedgerStatus, getPrivateKeyFromBIP38, getAccountFromWIF };
+export { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountsFromLedger, getPrivateKeyFromBIP38, getOrInitLedger, getAccountFromWIF };

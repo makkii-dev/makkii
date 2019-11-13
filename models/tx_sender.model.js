@@ -1,4 +1,5 @@
 /* eslint-disable camelcase */
+
 import BigNumber from 'bignumber.js';
 import { createAction } from '../utils/dva';
 import { getAllBalance, parseScannedData, sendTx, validateTxObj } from '../services/tx_sender.service';
@@ -10,6 +11,7 @@ import { SensitiveStorage } from '../utils/storage';
 import { AppToast } from '../app/components/AppToast';
 import { fetchTokenDetail } from '../client/api';
 import { COINS } from '../client/support_coin_list';
+import { getOrInitLedger } from '../services/account_import.service';
 
 const init = {
     to: '',
@@ -104,12 +106,19 @@ export default {
             },
             { call, select, put },
         ) {
+            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
             const { currentAccount: _currentAccount } = yield select(mapToaccountsModel);
             const { customBroadCast, callbackParams, callbacks } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
             const { address, symbol, coinSymbol, type: accountType } = _currentAccount;
+            if (accountType === '[ledger]') {
+                const ret = yield call(getOrInitLedger, symbol);
+                if (!ret.status) {
+                    alertOk(strings('alert_title_error'), strings('ledger.error_device_count'));
+                    return false;
+                }
+            }
             const pk = yield call(SensitiveStorage.get, accountKey(symbol, address), '');
             let currentAccount = { ..._currentAccount, private_key: pk };
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;

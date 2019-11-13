@@ -124,16 +124,16 @@ const IMPORT_SOURCE = [
         icon: require('../../../../assets/account_pk_symbol.png'),
     },
     {
-        title: 'vault_import_source.from_ledger',
-        icon: require('../../../../assets/account_le_symbol.png'),
-    },
-    {
         title: 'vault_import_source.from_bip38',
         icon: require('../../../../assets/coin_btc.png'),
     },
     {
         title: 'vault_import_source.from_WIF',
         icon: require('../../../../assets/icon_letter_w.png'),
+    },
+    {
+        title: 'vault_import_source.from_ledger',
+        icon: require('../../../../assets/account_le_symbol.png'),
     },
 ];
 

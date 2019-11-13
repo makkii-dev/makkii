@@ -13,11 +13,12 @@ import { accountKey } from '../../../../utils';
 const { width } = Dimensions.get('window');
 class AccountList extends React.Component {
     static navigationOptions = ({ navigation }) => {
+        const onGoBack = navigation.state.getParam('onGoBack');
         return {
             title: strings('token_exchange.label_select_account'),
             headerLeft: (
                 <TouchableOpacity
-                    onPress={() => navigation.state.params.onGoBack()}
+                    onPress={() => onGoBack && onGoBack()}
                     style={{
                         width: 48,
                         height: 48,

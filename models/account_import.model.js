@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
-import { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountFromWIF, getAccountsFromLedger, getLedgerStatus, getPrivateKeyFromBIP38 } from '../services/account_import.service';
+import { getAccountFromMasterKey, getAccountFromPrivateKey, getAccountFromWIF, getAccountsFromLedger, getOrInitLedger, getPrivateKeyFromBIP38 } from '../services/account_import.service';
 import { accountKey } from '../utils';
 import { createAction } from '../utils/dva';
+import { alertOk } from '../app/components/common';
+import { strings } from '../locales/i18n';
 
 const init = {
     symbol: '',
@@ -172,14 +174,19 @@ export default {
                 accountsMap: accountsModel.accountsMap,
             }));
             let new_ledger_lists = { ...old_ledger_lists };
-            const rets = yield call(getAccountsFromLedger, symbol, page * size, page * size + size);
-            rets.forEach(r => {
-                const { address, index } = r;
-                if (!accountsMap[accountKey(symbol, address)]) {
-                    new_ledger_lists[index] = address;
-                }
-            });
-            yield put(createAction('updateState')({ ledger_lists: new_ledger_lists }));
+            try {
+                const rets = yield call(getAccountsFromLedger, symbol, page * size, page * size + size);
+                rets.forEach(r => {
+                    const { address, index } = r;
+                    if (!accountsMap[accountKey(symbol, address)]) {
+                        new_ledger_lists[index] = address;
+                    }
+                });
+                yield put(createAction('updateState')({ ledger_lists: new_ledger_lists }));
+            } catch (e) {
+                console.log('getAccountsFromLedger error=>', e);
+                alertOk(strings('alert_title_error'), strings('ledger.error_invalid_tx_payload'));
+            }
         },
         *importAccount(
             {
@@ -218,9 +225,14 @@ export default {
             yield put(createAction('accountsModel/addAccount')({ account }));
             yield put(createAction('updateState')(init));
         },
-        *getLedgerStatus(action, { call, put }) {
+        *getLedgerStatus(
+            {
+                payload: { symbol },
+            },
+            { call, put },
+        ) {
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
-            const ret = yield call(getLedgerStatus);
+            const ret = yield call(getOrInitLedger, symbol);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             return ret;
         },

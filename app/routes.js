@@ -646,7 +646,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
             return state;
         }
         timer = false;
-        setTimeout(() => (timer = true), 600); // wait 0.6s to avoid navigation action conflict
+        setTimeout(() => (timer = true), 100); // wait 0.1s to avoid navigation action conflict
     }
     if (state) {
         let newRoutes;
