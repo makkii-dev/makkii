@@ -94,7 +94,7 @@ class Product extends React.Component {
         const { token, tokenFullName, weeklyInterestRate, yearlyInterestRate, token2Collateral, productId } = this.props.currentProduct;
         const { address } = this.props.currentAccount;
         const condition1 = validator.validateAmount(amount);
-        const condition2 = RetAddress ? await validateAddress(RetAddress, 'ETH') : true;
+        const condition2 = RetAddress ? await validateAddress('ETH', RetAddress) : true;
         if (!condition1) {
             AppToast.show(strings('pokket.toast_invalid_amount'));
             return;

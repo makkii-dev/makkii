@@ -50,7 +50,7 @@ export default {
                 return false;
             }
             yield put(createAction('updateState')({ processing: true }));
-            const ret = yield call(validateAddress, contactObj.address, contactObj.symbol);
+            const ret = yield call(validateAddress, contactObj.symbol, contactObj.address);
             if (!ret) {
                 AppToast.show(strings('add_address.error_address_format', { coin: contactObj.symbol }), {
                     duration: Toast.durations.LONG,

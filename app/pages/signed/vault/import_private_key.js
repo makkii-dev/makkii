@@ -68,7 +68,7 @@ class ImportPrivateKey extends Component {
     scan = () => {
         this.props.navigation.navigate('scan', {
             validate: (data, callback) => {
-                const res = validatePrivateKey(data.data, this.props.symbol);
+                const res = validatePrivateKey(this.props.symbol, data.data);
 
                 if (res) {
                     this.setState(

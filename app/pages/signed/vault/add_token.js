@@ -66,7 +66,7 @@ class AddToken extends Component {
     scan = () => {
         this.props.navigation.navigate('scan', {
             validate: (data, callback) => {
-                validateAddress(data.data, this.props.currentAccount.symbol)
+                validateAddress(this.props.currentAccount.symbol, data.data)
                     .then(result => {
                         if (result) {
                             this.setState({
@@ -118,7 +118,7 @@ class AddToken extends Component {
                                 multiline
                                 onChangeText={v => {
                                     this.setState({ contractAddr: v }, () => {
-                                        validateAddress(v, this.props.currentAccount.symbol).then(result => {
+                                        validateAddress(this.props.currentAccount.symbol, v).then(result => {
                                             if (result) {
                                                 this.fetchTokenDetail(v);
                                             } else {

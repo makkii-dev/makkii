@@ -33,8 +33,8 @@ function validatePassword(password) {
     return reg.test(password);
 }
 
-function validatePrivateKey(privateKey, symbol = 'AION') {
-    return _validatePrivateKey(privateKey, symbol);
+function validatePrivateKey(symbol = 'AION', privateKey) {
+    return _validatePrivateKey(symbol, privateKey);
 }
 
 function validateAdvancedAmount(amount) {

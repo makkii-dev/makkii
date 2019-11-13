@@ -17,7 +17,7 @@ const getAccountFromMasterKey = async (symbol, index) => {
 const getAccountFromPrivateKey = async (symbol, private_key, options) => {
     try {
         console.log('getAccountFromPrivateKey=>', symbol);
-        return await recoverKeyPairByPrivateKey(private_key, symbol, options);
+        return await recoverKeyPairByPrivateKey(symbol, private_key, options);
     } catch (e) {
         console.log('getAccountFromPrivateKey error=>', e);
         throw e;
@@ -26,7 +26,7 @@ const getAccountFromPrivateKey = async (symbol, private_key, options) => {
 const getAccountFromWIF = async (symbol, wif) => {
     try {
         console.log('getAccountFromWIF=>', symbol);
-        return await recoverKeyPairByWIF(wif, symbol);
+        return await recoverKeyPairByWIF(symbol, wif);
     } catch (e) {
         console.log('getAccountFromWIF error=>', e);
         throw e;

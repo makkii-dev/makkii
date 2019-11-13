@@ -16,13 +16,13 @@ const parseScannedData = async (data, symbol) => {
 
     if (coin) {
         const { address } = decode(data, COINS[coin].name.toLowerCase());
-        ret = await validateAddress(address, coin);
+        ret = await validateAddress(coin, address);
         if (ret) {
             retData.address = address;
             retData.symbol = coin;
         }
     } else {
-        ret = await validateAddress(data, symbol);
+        ret = await validateAddress(symbol, data);
         if (ret) {
             retData.address = data;
             retData.symbol = symbol;
@@ -30,9 +30,9 @@ const parseScannedData = async (data, symbol) => {
     }
     return { result: ret, data: retData };
 };
-const validateAddress = async (address, symbol) => {
+const validateAddress = async (symbol, address) => {
     try {
-        return await validateAddress_(address, symbol);
+        return await validateAddress_(symbol, address);
     } catch (e) {
         return false;
     }

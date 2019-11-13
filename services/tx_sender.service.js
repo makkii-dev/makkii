@@ -59,7 +59,7 @@ const parseScannedData = async (data, currentAccount) => {
     try {
         const { address, options } = decode(data, coinName);
         const { amount } = options;
-        const ret1 = await validateAddress(address, currentAccount.symbol);
+        const ret1 = await validateAddress(currentAccount.symbol, address);
         const ret2 = amount ? validator.validateAmount(amount) : true;
         ret = ret1 && ret2;
         if (ret) {
@@ -69,7 +69,7 @@ const parseScannedData = async (data, currentAccount) => {
             };
         }
     } catch (e) {
-        ret = await validateAddress(data, currentAccount.symbol);
+        ret = await validateAddress(currentAccount.symbol, data);
         if (ret) {
             retData.to = data;
         }
@@ -90,9 +90,9 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     }
 };
 
-const validateAddress = async (address, symbol) => {
+const validateAddress = async (symbol, address) => {
     try {
-        return await validateAddress_(address, symbol);
+        return await validateAddress_(symbol, address);
     } catch (e) {
         return false;
     }
