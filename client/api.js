@@ -2,12 +2,12 @@ import { apiClient } from 'makkii-coins';
 import Config from 'react-native-config';
 import { HttpClient } from 'lib-common-util-js/src';
 import { COINS } from './support_coin_list';
-// import customApi from './customApi';
+import customApi from './customApi';
 
 const isTestNet = Config.is_testnet === 'true';
 
-const client = apiClient(Object.keys(COINS), isTestNet);
-// const client = apiClient(Object.keys(COINS), isTestNet, customApi);
+// const client = apiClient(Object.keys(COINS), isTestNet);
+const client = apiClient(Object.keys(COINS), isTestNet, customApi);
 if (Config.pokket) {
     client.setCoinNetwork('ETH', 'pokket');
 }

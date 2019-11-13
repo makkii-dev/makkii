@@ -559,7 +559,6 @@ const AppNavigator = createStackNavigator(
         },
         signed_dapp_launcher: {
             screen: DappLauncher,
-            navigationOptions,
         },
         signed_news: {
             screen: NewsHome,

@@ -13,7 +13,7 @@ import { accountKey } from '../../../../utils';
 const { width } = Dimensions.get('window');
 class AccountList extends React.Component {
     static navigationOptions = ({ navigation }) => {
-        const onGoBack = navigation.state.getParam('onGoBack');
+        const onGoBack = navigation.getParam('onGoBack');
         return {
             title: strings('token_exchange.label_select_account'),
             headerLeft: (

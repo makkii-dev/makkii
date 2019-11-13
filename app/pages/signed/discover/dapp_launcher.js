@@ -5,6 +5,7 @@ import Bridge from 'makkii-webview-bridge/dist/native';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, store } from '../../../../utils/dva';
+import defaultStyle, { STATUSBAR_HEIGHT } from '../../../styles';
 
 const { width } = Dimensions.get('window');
 const renderLoading = () => {
@@ -160,6 +161,12 @@ const dappLauncher = props => {
 
 dappLauncher.navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.dappName || 'Dapp',
+    headerStyle: {
+        ...defaultStyle.headerStyleWithoutShadow,
+        backgroundColor: '#fff',
+        height: 50 + STATUSBAR_HEIGHT,
+    },
+    headerTitleStyle: { ...defaultStyle.headerTitleStyle, color: '#000' },
     headerRight: (
         <TouchableOpacity
             activeOpacity={1}
@@ -174,7 +181,7 @@ dappLauncher.navigationOptions = ({ navigation }) => ({
                 navigation.state.params.Reload && navigation.state.params.Reload();
             }}
         >
-            <Image source={require('../../../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} resizeMode="contain" />
+            <Image source={require('../../../../assets/icon_refresh.png')} style={{ height: 24, width: 24, tintColor: '#000' }} resizeMode="contain" />
         </TouchableOpacity>
     ),
     headerLeft: (
@@ -192,7 +199,7 @@ dappLauncher.navigationOptions = ({ navigation }) => ({
             <Image
                 source={require('../../../../assets/icon_popCustom_clear.png')}
                 style={{
-                    tintColor: 'white',
+                    tintColor: '#000',
                     width: 20,
                     height: 20,
                 }}
