@@ -142,6 +142,7 @@ const dappLauncher = props => {
                 ref={webViewRef}
                 source={{ uri }}
                 cacheEnabled={false}
+                bounces={false}
                 useWebKit
                 onMessage={onMessage}
                 renderLoading={renderLoading}
