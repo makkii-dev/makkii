@@ -26,7 +26,7 @@ const bip38Export = props => {
         }
         refLoading.current.show();
         dispatch(createAction('accountsModel/getPrivateKey')({ key: accKey })).then(pk => {
-            BIP38.encryptAsync(Buffer.from(pk, 'hex'), currentAccount.compressed, state.password).then(bip38 => {
+            BIP38.encryptAsync(Buffer.from(pk, 'hex'), currentAccount.compressed === undefined ? true : currentAccount.compressed, state.password).then(bip38 => {
                 refLoading.current.hide();
                 navigation.navigate('signed_vault_export_private_key', { qrWord: bip38 });
             });
