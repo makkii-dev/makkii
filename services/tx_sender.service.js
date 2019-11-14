@@ -12,7 +12,7 @@ const validateTxObj = async (txObj, account) => {
     const { symbol, coinSymbol } = account;
     // validate 'to'
     try {
-        let ret = await validateAddress(to, symbol);
+        let ret = await validateAddress(symbol, to);
         if (!ret) {
             return { result: false, err: 'error_format_recipient' };
         }

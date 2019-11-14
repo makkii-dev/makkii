@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import TransportHid from '@ledgerhq/react-native-hid/src';
+import TransportHid from '@ledgerhq/react-native-hid';
 import BIP38 from '../utils/bip38';
 import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger, recoverKeyPairByWIF, getLedgerStatus, setLedgerTransport } from '../client/keystore';
 import { SensitiveStorage } from '../utils/storage';
