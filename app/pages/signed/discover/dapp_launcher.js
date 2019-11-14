@@ -12,7 +12,11 @@ const renderLoading = () => {
     return (
         <View
             style={{
-                flex: 1,
+                position: 'absolute',
+                top: 0,
+                right: 0,
+                left: 0,
+                bottom: 0,
                 justifyContent: 'center',
                 alignItems: 'center',
                 backgroundColor: '#fff',
@@ -132,8 +136,9 @@ const dappLauncher = props => {
         invoke.define('sendTx', sendTx(navigation));
     }, []);
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, overflow: 'hidden' }}>
             <WebView
+                style={{ flex: 1 }}
                 ref={webViewRef}
                 source={{ uri }}
                 cacheEnabled={false}
@@ -197,7 +202,7 @@ dappLauncher.navigationOptions = ({ navigation }) => ({
             }}
         >
             <Image
-                source={require('../../../../assets/icon_popCustom_clear.png')}
+                source={require('../../../../assets/icon_clear.png')}
                 style={{
                     tintColor: '#000',
                     width: 20,

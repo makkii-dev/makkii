@@ -7963,10 +7963,10 @@ react-native-tab-view@^2.10.0:
   version "4.4.1"
   resolved "https://github.com/chaion/react-native-touch-id.git#13b7c6cf4ca6fb5b7e8896724dc92d687efed853"
 
-react-native-webview@^7.4.3:
-  version "7.4.3"
-  resolved "https://registry.npm.taobao.org/react-native-webview/download/react-native-webview-7.4.3.tgz#e00e92e17f7389d84d09f5900652501ff2665915"
-  integrity sha1-4A6S4X9zidhNCfWQBlJQH/JmWRU=
+react-native-webview@^7.5.1:
+  version "7.5.1"
+  resolved "https://registry.npm.taobao.org/react-native-webview/download/react-native-webview-7.5.1.tgz#01b026c1110d7548123460cc640fb1d4227a0f54"
+  integrity sha1-AbAmwRENdUgSNGDMZA+x1CJ6D1Q=
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

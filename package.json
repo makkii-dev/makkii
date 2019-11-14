@@ -64,7 +64,7 @@
     "react-native-svg": "^9.0.6",
     "react-native-tab-view": "^2.10.0",
     "react-native-touch-id": "https://github.com/chaion/react-native-touch-id.git#alban/fix-fp-colors",
-    "react-native-webview": "^7.4.3",
+    "react-native-webview": "^7.5.1",
     "react-navigation": "^3.12.1",
     "react-navigation-redux-helpers": "^3.0.2",
     "react-navigation-selective-tab-bar": "^1.0.3",
