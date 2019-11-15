@@ -106,7 +106,8 @@ const sendFeedBack = async (feedback, contact, imageUrls) => {
 
 const getAppChangeLog = async page => {
     const platform = Platform.OS === 'ios' ? 'ios' : 'android';
-    const url = `${Config.app_server_api}/appVersion?offset=${page}&platform=${platform}&size=10`;
+    const currentVersionCode = DevicesInfo.getBuildNumber();
+    const url = `${Config.app_server_api}/appVersion?offset=${page}&platform=${platform}&size=10&versionCode=${currentVersionCode}`;
     try {
         const { data } = await HttpClient.get(url);
         console.log('getAppChangeLog resp', data);
