@@ -204,7 +204,15 @@ export default class PopupCustom extends Component {
                   };
         const titleColor = mainColor;
         const contentMarginTop = type === 'input' ? { marginTop: 8 } : { marginTop: 20 };
-        const renderContent = <Text style={[styles.contentPopup, contentMarginTop]}>{content}</Text>;
+        const lines =
+            content &&
+            content.split('\n').map((line, index) => (
+                <Text key={`${index}`} style={styles.contentPopup}>
+                    {line}
+                </Text>
+            ));
+        const renderContent = <View style={contentMarginTop}>{lines}</View>;
+
         return (
             <Modal animationType="none" transparent visible={visible} onRequestClose={() => {}}>
                 <TouchableWithoutFeedback
