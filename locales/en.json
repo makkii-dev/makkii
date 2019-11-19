@@ -233,7 +233,7 @@
     "error_device_count": "No connected Ledger device",
     "error_open_device": "Ledger internal error",
     "error_permission_denied": "Please grant usb device permission",
-    "error_application_inactive": "Please activate Aion App on Ledger Device",
+    "error_application_inactive": "Please activate App corresponding to the coin on Ledger Device",
     "error_user_rejected": "User cancelled this transaction",
     "error_invalid_tx_payload": "Ledger internal error",
     "error_wrong_device": "Wrong ledger device connected! The account cannot be found!"

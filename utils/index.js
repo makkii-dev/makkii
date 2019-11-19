@@ -1,6 +1,5 @@
 import { CameraRoll, Dimensions, Platform, StatusBar } from 'react-native';
 import blake2b from 'blake2b';
-import wallet from 'react-native-aion-hw-wallet';
 import * as RNFS from 'react-native-fs';
 import BigNumber from 'bignumber.js';
 import { encode } from 'bip21';
@@ -34,7 +33,11 @@ function validatePassword(password) {
 }
 
 function validatePrivateKey(symbol = 'AION', privateKey) {
-    return _validatePrivateKey(symbol, privateKey);
+    try {
+        return _validatePrivateKey(symbol, privateKey);
+    } catch (e) {
+        return true;
+    }
 }
 
 function validateAdvancedAmount(amount) {
@@ -50,19 +53,27 @@ function hashPassword(password) {
 }
 
 function getLedgerMessage(errorCode) {
-    if (errorCode === wallet.APP_INACTIVATED) {
+    const INVALID_ACCOUNT_TYPE = 'error.unknown_account_type';
+    const GENERAL_ERROR = 'error.general';
+    const INVALID_DEVICE_NUMBER = 'error.device_count';
+    const OPEN_DEVICE_FAIL = 'error.open_device';
+    const NO_PERMISSION = 'error.permission_denied';
+    const APP_INACTIVATED = 'error.application_inactive';
+    const USER_REJECTED = 'error.user_rejected';
+    const INVALID_TX_PAYLOAD = 'error.invalid_tx_payload';
+    if (errorCode === APP_INACTIVATED) {
         return strings('ledger.error_application_inactive');
     }
-    if (errorCode === wallet.INVALID_DEVICE_NUMBER) {
+    if (errorCode === INVALID_DEVICE_NUMBER) {
         return strings('ledger.error_device_count');
     }
-    if (errorCode === wallet.USER_REJECTED) {
+    if (errorCode === USER_REJECTED) {
         return strings('ledger.error_user_rejected');
     }
-    if (errorCode === wallet.NO_PERMISSION) {
+    if (errorCode === NO_PERMISSION) {
         return strings('ledger.error_permission_denied');
     }
-    if (errorCode === wallet.GENERAL_ERROR || errorCode === wallet.INVALID_ACCOUNT_TYPE || errorCode === wallet.INVALID_TX_PAYLOAD || errorCode === wallet.OPEN_DEVICE_FAIL) {
+    if (errorCode === GENERAL_ERROR || errorCode === INVALID_ACCOUNT_TYPE || errorCode === INVALID_TX_PAYLOAD || errorCode === OPEN_DEVICE_FAIL) {
         return strings('ledger.error_general');
     }
     if (errorCode === 'error.wrong_device') {

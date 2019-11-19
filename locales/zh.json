@@ -221,7 +221,7 @@
     "error_device_count": "请连接Ledger设备",
     "error_open_device": "Ledger内部错误",
     "error_permission_denied": "请授权USB设备",
-    "error_application_inactive": "请打开Ledger设备上的AION应用",
+    "error_application_inactive": "请打开Ledger设备上的对应应用",
     "error_user_rejected": "很抱歉，您取消了交易",
     "error_invalid_tx_payload": "Ledger内部错误",
     "error_wrong_device": "找不到账号，连接了不匹配的Ledger设备"

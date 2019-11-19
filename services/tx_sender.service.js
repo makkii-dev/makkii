@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
-import { sendAll } from 'makkii-coins/coins/btc+ltc/api/tools';
+import { sendAll } from 'makkii-coins/packages/app-btc/src/api/tools';
 import { validator } from 'lib-common-util-js';
 import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';

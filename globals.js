@@ -73,6 +73,7 @@ if (!String.prototype.isChinese) {
     };
 }
 
+// fix bip39
 // eslint-disable-next-line func-names
 String.prototype.normalize = function(form) {
     const unorm = require('unorm');

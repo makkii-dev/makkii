@@ -232,6 +232,7 @@ export default {
             { call, put },
         ) {
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+            yield put(createAction('updateState')({ ledger_lists: {} }));
             const ret = yield call(getOrInitLedger, symbol);
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             return ret;

@@ -55,13 +55,9 @@ const getAccountsFromLedger = async (symbol, start, end) => {
 
 const getOrInitLedger = async symbol => {
     try {
-        const currentStatus = getLedgerStatus(symbol);
+        const currentStatus = await getLedgerStatus(symbol);
+        console.log('currentStatus=>', currentStatus);
         if (!currentStatus) {
-            const lists = await TransportHid.list();
-            if (lists.length === 0) {
-                console.log('no devices');
-                return { status: false, code: 'error.device_count' };
-            }
             const transport = await Promise.race([
                 TransportHid.create(),
                 new Promise((resolve, reject) => {
@@ -69,10 +65,13 @@ const getOrInitLedger = async symbol => {
                     setTimeout(() => reject('Timeout'), 60 * 1000);
                 }),
             ]);
-            console.log('transport', transport);
             setLedgerTransport(symbol, transport);
         }
-        return { status: true };
+        const currentStatus2 = await getLedgerStatus(symbol);
+        if (currentStatus2) {
+            return { status: true };
+        }
+        return { status: false, code: 'error.application_inactive' };
     } catch (e) {
         console.log('getOrInitLedger fail=>', e);
         return { status: false, code: 'error.device_count' };
