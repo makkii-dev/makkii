@@ -65,7 +65,6 @@ const CustomApiConfig = config => {
 };
 
 const client = createApiClient();
-console.log('client=>', client);
 
 export const {
     getTokenIconUrl,

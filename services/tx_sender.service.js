@@ -26,7 +26,7 @@ const validateTxObj = async (txObj, account) => {
         network: COINS[symbol].network,
     };
     console.log(account, coinSymbol, amount, extra_params);
-    return await validateBalanceSufficiency(account, coinSymbol, amount, extra_params);
+    return await validateBalanceSufficiency(coinSymbol, account, symbol, amount, extra_params);
     // Todo validate other fields
 };
 
@@ -82,7 +82,7 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     const { gasPrice, gasLimit, amount, to, data } = txObj;
     const extra_params = COINS[symbol].txFeeSupport ? { gasPrice: gasPrice * 1e9, gasLimit: gasLimit - 0 } : {};
     try {
-        const res = await sendTransaction(currentAccount, coinSymbol, to, BigNumber(amount), extra_params, data, shouldBroadCast);
+        const res = await sendTransaction(symbol, currentAccount, coinSymbol, to, BigNumber(amount), extra_params, data, shouldBroadCast);
         return { result: true, data: res };
     } catch (e) {
         console.log('sendTransaction error=>', e);
