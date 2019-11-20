@@ -11,8 +11,8 @@ const isTestNet = Config.is_testnet === 'true';
 const createKeystoreClient = () => {
     const client_ = keystoreClient();
     const aionClient = new AionKeystoreClient();
-    const btcClient = new BtcKeystoreClient('btc', isTestNet);
-    const ltcClient = new BtcKeystoreClient('ltc', isTestNet);
+    const btcClient = new BtcKeystoreClient(isTestNet, 'btc');
+    const ltcClient = new BtcKeystoreClient(isTestNet, 'ltc');
     const ethClient = new EthKeystoreClient();
     const tronClient = new TronKeystoreClient();
     Object.keys(COINS).forEach(c => {
