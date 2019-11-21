@@ -8,13 +8,18 @@ import Config from 'react-native-config';
 import { HttpClient } from 'lib-common-util-js/src';
 import { COINS } from './support_coin_list';
 import customApi from './customApi';
+import { getOrRequestToken } from '../services/setting.service';
 
 const isTestNet = Config.is_testnet === 'true';
 
 export const getApiConfig = async () => {
     const url = `${Config.app_server_api}/config/apiServers`;
+    const token = await getOrRequestToken();
+    const header = {
+        Authorization: `Bearer ${token}`,
+    };
     try {
-        const { data } = await HttpClient.get(url);
+        const { data } = await HttpClient.get(url, undefined, false, header);
         CustomApiConfig(customApi);
         CustomApiConfig(data);
     } catch (e) {

@@ -1,5 +1,6 @@
 import { HttpClient } from 'lib-common-util-js';
 import Config from 'react-native-config';
+import { getOrRequestToken } from './setting.service';
 
 const getFlashNews = async page => {
     const url = page === undefined ? `https://api.chainnews.com/api/news` : `https://api.chainnews.com/api/news/?page=${page}`;
@@ -54,9 +55,13 @@ const getArticles = async page => {
 };
 const getArticlesOthers = async (page, origin) => {
     const url = `${Config.app_server_api}/news?offset=${page}&size=10&newsChannel=${origin}`;
+    const token = await getOrRequestToken();
+    const header = {
+        Authorization: `Bearer ${token}`,
+    };
     console.log('[news getArticlesCoinVoice req=>', url);
     try {
-        const { data } = await HttpClient.get(url);
+        const { data } = await HttpClient.get(url, undefined, false, header);
         if (data.content) {
             const data_ = data.content.reduce((map, el) => {
                 map[el.pubDate] = {

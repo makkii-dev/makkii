@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { HttpClient } from 'lib-common-util-js/src';
 import Config from 'react-native-config';
 import { getTransactionsByAddress, fetchAccountTokenTransferHistory, getBalance, fetchAccountTokenBalance } from '../client/api';
+import { getOrRequestToken } from './setting.service';
 
 const getTransactionsHistory = async (symbol, address, page, size, timestamp) => {
     try {
@@ -61,13 +62,17 @@ const pendingTxsInvolved = (pendingTxs, address) => {
 
 const getTransactionNote = async (chain, txHash, address) => {
     const url = `${Config.app_server_api}/transaction`;
+    const token = await getOrRequestToken();
+    const header = {
+        Authorization: `Bearer ${token}`,
+    };
     const payload = {
         chain,
         txHash,
         address,
     };
     try {
-        const { data } = await HttpClient.get(url, payload);
+        const { data } = await HttpClient.get(url, payload, false, header);
         console.log('getTransactionNote resp=>', data);
         return data.note || '';
     } catch (e) {
@@ -78,6 +83,10 @@ const getTransactionNote = async (chain, txHash, address) => {
 
 const setTransactionNote = async (chain, txHash, address, note) => {
     const url = `${Config.app_server_api}/transaction`;
+    const token = await getOrRequestToken();
+    const header = {
+        Authorization: `Bearer ${token}`,
+    };
     const payload = {
         chain,
         txHash,
@@ -85,7 +94,7 @@ const setTransactionNote = async (chain, txHash, address, note) => {
         note,
     };
     try {
-        const { data } = await HttpClient.post(url, payload, true);
+        const { data } = await HttpClient.post(url, payload, true, header);
         console.log('setTransactionNote resp=>', data);
         return !!(data && data.txHash);
     } catch (e) {

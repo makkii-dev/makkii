@@ -3,12 +3,17 @@ import DeviceInfo from 'react-native-device-info';
 import Config from 'react-native-config';
 import { Platform } from 'react-native';
 import { HttpClient } from 'lib-common-util-js';
+import { getOrRequestToken } from './setting.service';
 
 const sendEventLog = async eventLog => {
+    const token = await getOrRequestToken();
+    const header = {
+        Authorization: `Bearer ${token}`,
+    };
     try {
         const url = `${Config.app_server_api}/eventlog`;
         console.log(`PUT ${url}`);
-        const { data: resp } = await HttpClient.put(url, eventLog, true);
+        const { data: resp } = await HttpClient.put(url, eventLog, true, header);
         console.log('response payload:', resp);
         return resp;
     } catch (e) {
