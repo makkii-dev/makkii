@@ -46,7 +46,7 @@ const getOneTxStatus = async tx => {
             newListenerStatus = 'FAILED';
             if (symbol === 'ETH') {
                 try {
-                    const { timestamp } = await getBlockByNumber(symbol, blockNumber);
+                    const { timestamp } = await getBlockByNumber(symbol, numberToHexString(blockNumber));
                     newTx.timestamp = hexutil.hexStringToInt(timestamp) * 1000;
                 } catch {
                     //
@@ -61,7 +61,7 @@ const getOneTxStatus = async tx => {
             newListenerStatus = 'CONFIRMED';
             if (symbol === 'ETH') {
                 try {
-                    const { timestamp } = await getBlockByNumber(symbol, newTx.blockNumber);
+                    const { timestamp } = await getBlockByNumber(symbol, numberToHexString(newTx.blockNumber));
                     newTx.timestamp = hexutil.hexStringToInt(timestamp) * 1000;
                     console.log('newTx.timestamp:', newTx.timestamp);
                 } catch (e) {
@@ -74,6 +74,16 @@ const getOneTxStatus = async tx => {
     } catch (e) {
         return { newTx: oldTx, symbol, listenerStatus, timestamp };
     }
+};
+
+const numberToHexString = n => {
+    if (typeof n === 'number') {
+        return n.toString(16);
+    }
+    if (typeof n === 'string') {
+        return n.startsWith('0x') ? n : `0x${n}`;
+    }
+    throw new Error('invalid number=>', n);
 };
 
 export { getTxsStatus };
