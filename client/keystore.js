@@ -1,4 +1,4 @@
-import { keystoreClient } from 'makkii-coins/packages/makkii-core';
+import { KeystoreClient } from 'makkii-coins/packages/makkii-core';
 import Config from 'react-native-config';
 import { AionKeystoreClient } from 'makkii-coins/packages/app-aion';
 import { BtcKeystoreClient } from 'makkii-coins/packages/app-btc';
@@ -9,10 +9,10 @@ import { COINS } from './support_coin_list';
 const isTestNet = Config.is_testnet === 'true';
 
 const createKeystoreClient = () => {
-    const client_ = keystoreClient();
+    const client_ = new KeystoreClient();
     const aionClient = new AionKeystoreClient();
-    const btcClient = new BtcKeystoreClient(isTestNet, 'btc');
-    const ltcClient = new BtcKeystoreClient(isTestNet, 'ltc');
+    const btcClient = new BtcKeystoreClient(isTestNet ? 'BTCTEST' : 'BTC');
+    const ltcClient = new BtcKeystoreClient(isTestNet ? 'LTCTEST' : 'LTC');
     const ethClient = new EthKeystoreClient();
     const tronClient = new TronKeystoreClient();
     Object.keys(COINS).forEach(c => {
@@ -41,15 +41,15 @@ const client = createKeystoreClient();
 
 export const {
     signTransaction,
-    getKey,
-    getKeyByLedger,
+    getAccount,
+    getAccountByLedger,
     signByLedger,
     setMnemonic,
     generateMnemonic,
     recoverKeyPairByPrivateKey,
     recoverKeyPairByWIF,
     validateAddress,
-    getKeyFromMnemonic,
+    getAccountFromMnemonic,
     validatePrivateKey,
     getLedgerStatus,
     setLedgerTransport,

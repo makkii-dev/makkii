@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
 import BigNumber from 'bignumber.js';
-import { sendAll } from 'makkii-coins/packages/app-btc/src/api/tools';
 import { validator } from 'lib-common-util-js';
 import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';
-import { validateBalanceSufficiency, sendTransaction } from '../client/api';
+import { validateBalanceSufficiency, sendTransaction, client } from '../client/api';
 import { validateAddress as validateAddress_ } from '../client/keystore';
 
 const validateTxObj = async (txObj, account) => {
@@ -23,10 +22,11 @@ const validateTxObj = async (txObj, account) => {
     const extra_params = {
         gasLimit,
         gasPrice,
+        symbol: coinSymbol,
         network: COINS[symbol].network,
     };
-    console.log(account, coinSymbol, amount, extra_params);
-    return await validateBalanceSufficiency(coinSymbol, account, symbol, amount, extra_params);
+    console.log(account, amount, extra_params);
+    return await validateBalanceSufficiency(symbol, account, amount, extra_params);
     // Todo validate other fields
 };
 
@@ -45,7 +45,7 @@ const getAllBalance = async (currentAccount, options) => {
                 .shiftedBy(-18),
         ).toNumber();
     } else if (symbol === 'BTC' || symbol === 'LTC') {
-        amount = await sendAll(currentAccount.address, symbol, COINS[symbol].network);
+        amount = await client.getCoin(symbol).sendAll(currentAccount.address);
     } else {
         amount = balance;
     }
@@ -80,9 +80,9 @@ const parseScannedData = async (data, currentAccount) => {
 const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     const { symbol, coinSymbol } = currentAccount;
     const { gasPrice, gasLimit, amount, to, data } = txObj;
-    const extra_params = COINS[symbol].txFeeSupport ? { gasPrice: gasPrice * 1e9, gasLimit: gasLimit - 0 } : {};
+    const extra_params = COINS[symbol].txFeeSupport ? { gasPrice: gasPrice * 1e9, gasLimit: gasLimit - 0, symbol: coinSymbol } : {};
     try {
-        const res = await sendTransaction(symbol, currentAccount, coinSymbol, to, BigNumber(amount), extra_params, data, shouldBroadCast);
+        const res = await sendTransaction(symbol, currentAccount, to, BigNumber(amount), data, extra_params, shouldBroadCast);
         return { result: true, data: res };
     } catch (e) {
         console.log('sendTransaction error=>', e);

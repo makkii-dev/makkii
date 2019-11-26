@@ -213,7 +213,6 @@ export default {
                         hd_index,
                     }),
                 );
-                yield put(createAction('loadBalances')({ keys: accountsKey, force: true }));
             }
             return true;
         },

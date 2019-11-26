@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import styles from '../styles';
 import { strings } from '../../locales/i18n';
 import { mainColor, mainColorAlpha, fontColor, rightBtnColorDisable, rightBtnColorEnable, linkButtonColor } from '../style_util';
-import { formatAddress1Line } from '../../client/api';
+import { formatAddress1Line } from '../../utils';
 import { AppToast } from './AppToast';
 import { popCustom } from '../../utils/dva';
 

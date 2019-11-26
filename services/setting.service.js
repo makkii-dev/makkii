@@ -159,12 +159,10 @@ const getOrRequestToken = async () => {
     const local_token_obj = await Storage.get('server_token', {});
     const currentTime = Date.now();
     const { expired, local_token } = local_token_obj;
-    console.log('get token local =>', local_token_obj);
     if (expired === undefined || currentTime > expired) {
         const url = `${Config.app_server_api}/oauth/token?grant_type=client_credentials&client_id=makkii&client_secret=PLAT4life`;
         try {
             const { data } = await HttpClient.post(url);
-            console.log('get token remote =>', data);
             const { access_token, expires_in } = data;
             const payload = {
                 local_token: access_token,
@@ -173,7 +171,6 @@ const getOrRequestToken = async () => {
             await Storage.set('server_token', payload);
             return access_token;
         } catch (e) {
-            console.log('get token error=>', e);
             return '';
         }
     }

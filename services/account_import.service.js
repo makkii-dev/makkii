@@ -1,13 +1,13 @@
 /* eslint-disable camelcase */
 import TransportHid from '@ledgerhq/react-native-hid';
 import BIP38 from '../utils/bip38';
-import { getKeyFromMnemonic, recoverKeyPairByPrivateKey, getKeyByLedger, recoverKeyPairByWIF, getLedgerStatus, setLedgerTransport } from '../client/keystore';
+import { getAccountFromMnemonic, recoverKeyPairByPrivateKey, getAccountByLedger, recoverKeyPairByWIF, getLedgerStatus, setLedgerTransport } from '../client/keystore';
 import { SensitiveStorage } from '../utils/storage';
 
 const getAccountFromMasterKey = async (symbol, index) => {
     try {
         const mnemonic = await SensitiveStorage.get('mnemonic');
-        return await getKeyFromMnemonic(symbol, index, mnemonic);
+        return await getAccountFromMnemonic(symbol, index, mnemonic);
     } catch (e) {
         console.log('getAccountFromMasterKey error=>', e);
         throw e;
@@ -35,7 +35,7 @@ const getAccountFromWIF = async (symbol, wif) => {
 
 const getOneAccountFromLedger = async (symbol, index) => {
     try {
-        const { address } = await getKeyByLedger(symbol, index);
+        const { address } = await getAccountByLedger(symbol, index);
         return { index, address };
     } catch (e) {
         throw e;

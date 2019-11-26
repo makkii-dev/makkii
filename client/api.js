@@ -1,4 +1,4 @@
-import { apiClient } from 'makkii-coins/packages/makkii-core';
+import { ApiClient } from 'makkii-coins/packages/makkii-core';
 import { AionApiClient } from 'makkii-coins/packages/app-aion';
 import { BtcApiClient } from 'makkii-coins/packages/app-btc';
 import { EthApiClient } from 'makkii-coins/packages/app-eth';
@@ -12,6 +12,7 @@ import { getOrRequestToken } from '../services/setting.service';
 
 const isTestNet = Config.is_testnet === 'true';
 
+export const client = new ApiClient();
 export const getApiConfig = async () => {
     const url = `${Config.app_server_api}/config/apiServers`;
     const token = await getOrRequestToken();
@@ -19,57 +20,76 @@ export const getApiConfig = async () => {
         Authorization: `Bearer ${token}`,
     };
     try {
-        const { data } = await HttpClient.get(url, undefined, false, header);
-        CustomApiConfig(customApi);
+        let { data } = await HttpClient.get(url, undefined, false, header);
+        if (typeof data === 'string') {
+            data = JSON.parse(data);
+        }
+        console.log('api config resp=>', data);
         CustomApiConfig(data);
     } catch (e) {
         //
-        CustomApiConfig(customApi);
     }
 };
 
-const createApiClient = () => {
-    const client_ = apiClient();
-    const aionClient = new AionApiClient(isTestNet);
-    aionClient.setRemoteApi(Config.app_server);
-    const btcClient = new BtcApiClient(isTestNet, 'btc');
-    const ethClient = new EthApiClient(isTestNet);
-    ethClient.setRemoteApi(Config.app_server);
-    const ltcClient = new BtcApiClient(isTestNet, 'ltc');
-    const tronClient = new TronApiClient(isTestNet);
+const initClient = () => {
+    const aionClient = new AionApiClient({
+        network: isTestNet ? 'amity' : 'mainnet',
+        jsonrpc: '',
+    });
+    const btcClient = new BtcApiClient({
+        network: isTestNet ? 'BTCTEST' : 'BTC',
+        insight_api: '',
+    });
+    const ethClient = new EthApiClient({
+        network: isTestNet ? 'ropsten' : 'mainnet',
+        jsonrpc: '',
+    });
+    const ltcClient = new BtcApiClient({
+        network: isTestNet ? 'LTCTEST' : 'LTC',
+        insight_api: '',
+    });
+    const tronClient = new TronApiClient({
+        network: isTestNet ? 'shasta' : 'mainnet',
+        trongrid_api: '',
+    });
+
     Object.keys(COINS).forEach(c => {
         switch (c.toLowerCase()) {
             case 'aion':
-                client_.addCoin('aion', aionClient);
+                client.addCoin('aion', aionClient);
                 break;
             case 'btc':
-                client_.addCoin('btc', btcClient);
+                client.addCoin('btc', btcClient);
                 break;
             case 'eth':
-                client_.addCoin('eth', ethClient);
+                client.addCoin('eth', ethClient);
                 break;
             case 'ltc':
-                client_.addCoin('ltc', ltcClient);
+                client.addCoin('ltc', ltcClient);
                 break;
             case 'trx':
-                client_.addCoin('trx', tronClient);
+                client.addCoin('trx', tronClient);
                 break;
             default:
         }
     });
-    return client_;
+    CustomApiConfig(customApi);
 };
 
 const CustomApiConfig = config => {
-    const { remote: { api = {} } = {}, coins = {} } = config;
+    const { coins = {} } = config;
     Object.keys(client.coins).forEach(symbol => {
-        if (coins[symbol]) {
-            client.coins[symbol].coverNetWorkConfig(coins[symbol], api);
+        if (coins[symbol] && coins[symbol].networks) {
+            const { networks } = coins[symbol];
+            const network = client.coins[symbol].getNetwork();
+            if (networks[network]) {
+                client.coins[symbol].setNetwork(networks[network]);
+            }
         }
     });
 };
 
-const client = createApiClient();
+initClient();
 
 export const {
     getTokenIconUrl,
@@ -81,7 +101,6 @@ export const {
     getBalance,
     sendTransaction,
     sameAddress,
-    formatAddress1Line,
     validateBalanceSufficiency,
     getCoinPrices,
     fetchTokenDetail,

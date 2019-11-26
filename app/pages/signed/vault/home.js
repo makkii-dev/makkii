@@ -28,9 +28,8 @@ import { OptionButton, ComponentButton } from '../../../components/common';
 import { SORT } from './constants';
 import { fixedWidth, fixedHeight, mainColor, linkButtonColor, mainBgColor, fixedWidthFont } from '../../../style_util';
 import defaultStyles from '../../../styles';
-import { accountKey, getStatusBarHeight } from '../../../../utils';
+import { accountKey, getStatusBarHeight, formatAddress1Line } from '../../../../utils';
 import { COINS } from '../../../../client/support_coin_list';
-import { formatAddress1Line } from '../../../../client/api';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, navigate, popCustom } from '../../../../utils/dva';
 import TouchableView, { connectToTouchAble } from '../../../components/TouchableView';
@@ -468,6 +467,11 @@ class Home extends Component {
             console.log(`linking url: ${url}`);
         });
         Linking.addEventListener('url', this.handleOpenURL);
+    }
+
+    componentDidMount(): void {
+        const { dispatch, accounts } = this.props;
+        dispatch(createAction('accountsModel/loadBalances')({ keys: Object.keys(accounts), force: true }));
     }
 
     componentWillUnmount(): void {

@@ -331,6 +331,18 @@ function calculatePokketCollateral(amount = 0, weeklyInterest, rate) {
     return amount.times(BigNumber(1.1).plus(weeklyInterest.dividedBy(BigNumber(100)))).times(rate);
 }
 
+function formatAddress1Line(accountType, address) {
+    accountType = accountType.toLowerCase();
+    if (accountType === 'aion') {
+        return `${address.slice(0, 12)}...${address.slice(-10)}`;
+    }
+    if (accountType === 'eth') {
+        const pre = address.startsWith('0x') ? 2 : 0;
+        return `${address.substring(0, 10 + pre)}...${address.substring(address.length - 10)}`;
+    }
+    return `${address.slice(0, 12)}...${address.slice(-10)}`;
+}
+
 module.exports = {
     encrypt,
     decrypt,
@@ -354,4 +366,5 @@ module.exports = {
     dateDiff,
     calculatePokketCollateral,
     calculatePokketProfit,
+    formatAddress1Line,
 };
