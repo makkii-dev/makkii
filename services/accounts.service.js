@@ -2,7 +2,7 @@
 import BigNumber from 'bignumber.js';
 import { HttpClient } from 'lib-common-util-js/src';
 import Config from 'react-native-config';
-import { getTransactionsByAddress, fetchAccountTokenTransferHistory, getBalance, fetchAccountTokenBalance } from '../client/api';
+import { getTransactionsByAddress, getAccountTokenTransferHistory, getBalance, getAccountTokenBalance } from '../client/api';
 import { getOrRequestToken } from './setting.service';
 
 const getTransactionsHistory = async (symbol, address, page, size, timestamp) => {
@@ -16,7 +16,7 @@ const getTransactionsHistory = async (symbol, address, page, size, timestamp) =>
 
 const getTransfersHistory = async (symbol, address, contractAddr, page, size, timestamp) => {
     try {
-        return await fetchAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size, timestamp);
+        return await getAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size, timestamp);
     } catch (e) {
         console.log('getTransfersHistory error=>', e);
         throw e;
@@ -28,7 +28,7 @@ const getAccountOrTokenBalance = async payload => {
         const { symbol, address, contractAddr, tokenDecimals } = payload;
         let balance;
         if (contractAddr) {
-            balance = await fetchAccountTokenBalance(symbol, contractAddr, address);
+            balance = await getAccountTokenBalance(symbol, contractAddr, address);
             balance = BigNumber(balance).shiftedBy(-tokenDecimals || -18);
         } else {
             balance = await getBalance(symbol, address);

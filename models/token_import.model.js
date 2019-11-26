@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import { fetchTokenDetail, getTopTokens, searchTokens } from '../client/api';
+import { getTokenDetail, getTopTokens, searchTokens } from '../client/api';
 import { createAction } from '../utils/dva';
 
 const initToken = {
@@ -79,7 +79,7 @@ export default {
                 };
             });
             try {
-                const { name, symbol, decimals } = yield call(fetchTokenDetail, currentAccount.symbol, address);
+                const { name, symbol, decimals } = yield call(getTokenDetail, currentAccount.symbol, address);
                 const tokenToBeImported = {
                     contractAddr: address,
                     name,

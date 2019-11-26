@@ -9,7 +9,7 @@ import { accountKey, getLedgerMessage } from '../utils';
 import { sendTransferEventLog } from '../services/event_log.service';
 import { SensitiveStorage } from '../utils/storage';
 import { AppToast } from '../app/components/AppToast';
-import { fetchTokenDetail } from '../client/api';
+import { getTokenDetail } from '../client/api';
 import { COINS } from '../client/support_coin_list';
 import { getOrInitLedger } from '../services/account_import.service';
 
@@ -65,7 +65,7 @@ export default {
                 const { contractAddress } = ret.data;
                 if (contractAddress) {
                     try {
-                        const { symbol } = yield call(fetchTokenDetail, currentAccount.symbol, contractAddress);
+                        const { symbol } = yield call(getTokenDetail, currentAccount.symbol, contractAddress);
                         if (!currentAccount.tokens[symbol]) {
                             return { result: false, error: strings('token_exchange.button_exchange_no_token', { token: symbol }) };
                         }
