@@ -79,12 +79,12 @@ export default {
                 };
             });
             try {
-                const { name, symbol, decimals } = yield call(getTokenDetail, currentAccount.symbol, address);
+                const { name, symbol, tokenDecimal } = yield call(getTokenDetail, currentAccount.symbol, address);
                 const tokenToBeImported = {
                     contractAddr: address,
                     name,
                     symbol,
-                    tokenDecimal: decimals,
+                    tokenDecimal,
                 };
                 yield put(createAction('updateState')({ tokenToBeImported }));
                 return true;
