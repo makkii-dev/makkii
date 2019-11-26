@@ -431,7 +431,7 @@ const mapToState = ({ accountsModel, settingsModel }) => {
                 const fastImageUrl = getTokenIconUrl(symbol, token.symbol, token.contractAddr);
                 arr.push({ ...item, imageIcon: { uri: fastImageUrl } });
             } catch (e) {
-                console.log("getTokenIconUrl exception: ", e);
+                console.log('getTokenIconUrl exception: ', e);
                 arr.push({ ...item, imageIcon: COINS[symbol].defaultTokenIcon });
             }
             return arr;
