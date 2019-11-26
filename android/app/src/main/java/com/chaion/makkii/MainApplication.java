@@ -17,7 +17,6 @@ import cn.jystudio.local.barcode.recognizer.LocalBarcodeRecognizerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.heyao216.react_native_installapk.InstallApkPackager;
 import com.chaion.rn.screenshot.RNScreenshotHelperPackage;
-import com.chaion.rn.hwwallet.RNAionHwWalletPackage;
 import com.bitgo.randombytes.RandomBytesPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -61,7 +60,6 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new InstallApkPackager(),
             new RNScreenshotHelperPackage(),
-            new RNAionHwWalletPackage(),
             new RandomBytesPackage(),
             new SvgPackage(),
             new RNI18nPackage(),

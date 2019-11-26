@@ -250,7 +250,7 @@ const mapToState = ({ tokenImportModel, accountsModel }) => {
         try {
             token.icon = { uri: getTokenIconUrl(symbol, tokenSymbol, contractAddr) };
         } catch (e) {
-            token.icon = COINS.ETH.default_token_icon;
+            token.icon = COINS[symbol].defaultTokenIcon;
         }
         token.isAdded = typeof tokens[tokenSymbol] !== 'undefined';
     });

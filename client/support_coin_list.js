@@ -16,6 +16,7 @@ export const COINS = {
         network: isTestNet ? 'mastery' : 'mainnet',
         bip38Supported: false,
         ledgerSupport: true,
+        defaultTokenIcon: require('../assets/token_default_ats.png'),
         isTestNet,
     },
     BTC: {
@@ -44,6 +45,7 @@ export const COINS = {
         network: isTestNet ? 'ropsten' : 'mainnet',
         bip38Supported: false,
         ledgerSupport: true,
+        defaultTokenIcon: require('../assets/token_default_erc20.png'),
         isTestNet,
     },
     // 'EOS': {

@@ -209,7 +209,6 @@ dependencies {
     implementation project(':react-native-image-picker')
     implementation project(':react-native-install-apk')
     implementation project(':react-native-screenshot-helper')
-    implementation project(':react-native-aion-hw-wallet')
     implementation project(':react-native-randombytes')
     implementation project(':react-native-svg')
     implementation project(':react-native-i18n')
