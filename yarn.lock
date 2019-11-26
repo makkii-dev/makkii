@@ -5192,9 +5192,9 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#58ae3f2c50a21549c207fc69da47bdb9fafa115c":
+"makkii-coins@https://github.com/chaion/makkii-coins.git#e0630804e02086023b6bd6fb501c7e6263f8a5b8":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#58ae3f2c50a21549c207fc69da47bdb9fafa115c"
+  resolved "https://github.com/chaion/makkii-coins.git#e0630804e02086023b6bd6fb501c7e6263f8a5b8"
 
 "makkii-webview-bridge@https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d":
   version "1.0.0"
