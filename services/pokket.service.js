@@ -1,6 +1,7 @@
 import { HttpClient } from 'lib-common-util-js';
 import Config from 'react-native-config';
 
+// TODO:
 const baseurl = Config.isTestNet ? 'http://45.118.132.89:8080' : 'http://45.118.132.89:8080';
 
 const getProducts = async (keyword = '') => {
@@ -23,7 +24,7 @@ const getOrders = async ({ addresses = '', page = 0, size = 25 }) => {
     const url = `${baseurl}/pokket/order`;
     try {
         console.log('[Pokket getOrders req]=>', url);
-        const resp = await HttpClient.get(url, { addresses, page, size }, true);
+        const resp = await HttpClient.post(url, { addresses, page, size }, true);
         console.log('[Pokket getOrders resp]=>', resp.data);
         return resp.data.content.reduce((m, el) => {
             m[el.orderId] = { ...el };

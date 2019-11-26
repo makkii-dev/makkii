@@ -78,7 +78,7 @@ const getOneTxStatus = async tx => {
 
 const numberToHexString = n => {
     if (typeof n === 'number') {
-        return n.toString(16);
+        return `0x${n.toString(16)}`;
     }
     if (typeof n === 'string') {
         return n.startsWith('0x') ? n : `0x${n}`;
