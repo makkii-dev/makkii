@@ -83,7 +83,7 @@ const CustomApiConfig = config => {
             const { networks } = coins[symbol];
             const network = client.coins[symbol].getNetwork();
             if (networks[network]) {
-                client.coins[symbol].setNetwork(networks[network]);
+                client.coins[symbol].updateConfiguration(networks[network]);
             }
         }
     });
@@ -101,12 +101,11 @@ export const {
     getBalance,
     sendTransaction,
     sameAddress,
-    validateBalanceSufficiency,
     getCoinPrices,
     getTokenDetail,
     getAccountTokenTransferHistory,
-    getAccountTokens,
     getAccountTokenBalance,
     getTopTokens,
     searchTokens,
+    buildTransaction,
 } = client;

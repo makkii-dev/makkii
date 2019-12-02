@@ -8,12 +8,11 @@
     "postinstall": "yarn fix-modal",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
     "lint": "eslint app/  models/ services/ utils/ --fix --ext .js",
-    "pre-lint": "node check.js",
+    "lint-stage": "node check.js",
     "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js"
   },
   "pre-commit": [
-    "lint",
-    "pre-lint"
+    "lint-stage"
   ],
   "dependencies": {
     "@ledgerhq/react-native-hid": "^4.73.4",
@@ -33,7 +32,7 @@
     "dva-core": "^1.4.0",
     "ecurve": "^1.0.6",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#6d0e7c51f5345a391bf40167e94ce0d52e934c0e",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#e80d52175537c8d31f77343fc5cebb5ed4da10ac",
     "makkii-webview-bridge": "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",

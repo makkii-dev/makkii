@@ -8,6 +8,8 @@ import { strings } from '../locales/i18n';
 import { navigate, popCustom } from './dva';
 import { COINS } from '../client/support_coin_list';
 import { validatePrivateKey as _validatePrivateKey } from '../client/keystore';
+import getLocalSigner from './signer';
+import getHardware from './hardware';
 
 const tripledes = require('crypto-js/tripledes');
 const CryptoJS = require('crypto-js');
@@ -367,4 +369,6 @@ module.exports = {
     calculatePokketCollateral,
     calculatePokketProfit,
     formatAddress1Line,
+    getHardware,
+    getLocalSigner,
 };

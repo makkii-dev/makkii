@@ -49,7 +49,7 @@ export default {
             yield put(createAction('updateState')(init));
         },
         *sendAll({ payload }, { call, select, put }) {
-            const { currentAccount } = yield select(mapToaccountsModel);
+            const { currentAccount } = yield select(mapToAccountsModel);
             const amount = yield call(getAllBalance, currentAccount, payload);
             yield put(createAction('updateState')({ amount }));
         },
@@ -59,7 +59,7 @@ export default {
             },
             { call, select, put },
         ) {
-            const { currentAccount } = yield select(mapToaccountsModel);
+            const { currentAccount } = yield select(mapToAccountsModel);
             let ret = yield call(parseScannedData, data, currentAccount);
             if (ret.result) {
                 const { contractAddress } = ret.data;
@@ -92,7 +92,7 @@ export default {
             },
             { call, select },
         ) {
-            const { currentAccount } = yield select(mapToaccountsModel);
+            const { currentAccount } = yield select(mapToAccountsModel);
             const ret = yield call(validateTxObj, txObj, currentAccount);
             if (!ret.result) {
                 alertOk(strings('alert_title_error'), strings(`send.${ret.err}`));
@@ -107,7 +107,7 @@ export default {
             { call, select, put },
         ) {
             yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
-            const { currentAccount: _currentAccount } = yield select(mapToaccountsModel);
+            const { currentAccount: _currentAccount } = yield select(mapToAccountsModel);
             const { customBroadCast, callbackParams, callbacks } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
             const { address, symbol, coinSymbol, type: accountType } = _currentAccount;
             if (accountType === '[ledger]') {
@@ -202,7 +202,7 @@ export default {
     },
 };
 
-const mapToaccountsModel = ({ accountsModel }) => {
+const mapToAccountsModel = ({ accountsModel }) => {
     const { currentAccount: key, currentToken, accountsMap, tokenLists } = accountsModel;
     const { tokens, symbol } = accountsMap[key];
     const newtokens = Object.keys(tokens).reduce((map, el) => {

@@ -160,7 +160,6 @@ class PinCodeScreen extends React.Component {
                 } else {
                     setTimeout(() => {
                         this.onUnlockSuccess && this.onUnlockSuccess();
-                        console.log('this.targetScreen', this.targetScreen);
                         this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
                         this.targetScreen || this.props.navigation.goBack();
                     }, 100);
@@ -224,7 +223,6 @@ class PinCodeScreen extends React.Component {
             .then(() => {
                 Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
                 this.onUnlockSuccess && this.onUnlockSuccess();
-                console.log('this.targetScreen', this.targetScreen);
                 this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
                 this.targetScreen || this.props.navigation.goBack();
             })

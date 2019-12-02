@@ -3,8 +3,9 @@ import BigNumber from 'bignumber.js';
 import { validator } from 'lib-common-util-js';
 import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';
-import { validateBalanceSufficiency, sendTransaction, client } from '../client/api';
+import { client, buildTransaction } from '../client/api';
 import { validateAddress as validateAddress_ } from '../client/keystore';
+import { getHardware, getLocalSigner } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
     const { to, amount, gasPrice, gasLimit } = txObj;
@@ -26,7 +27,27 @@ const validateTxObj = async (txObj, account) => {
         network: COINS[symbol].network,
     };
     console.log(account, amount, extra_params);
-    return await validateBalanceSufficiency(symbol, account, amount, extra_params);
+    if (!validator.validateAmount(amount)) {
+        return { result: false, err: 'error_format_amount' };
+    }
+    if (coinSymbol !== symbol) {
+        const coinBalance = new BigNumber(account.tokens[coinSymbol].balance);
+        if (coinBalance.lt(new BigNumber(amount))) return { result: false, err: 'error_insufficient_amount' };
+        const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
+        const gasLimit_ = new BigNumber(gasLimit);
+        const fee = gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
+        const balance = new BigNumber(account.balance);
+        if (balance.lt(fee)) return { result: false, err: 'error_insufficient_amount' };
+    } else {
+        const balance = new BigNumber(account.balance);
+        const amount_ = new BigNumber(amount);
+        const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
+        const gasLimit_ = new BigNumber(gasLimit);
+        const fee = symbol === 'LTC' ? new BigNumber(20000) : symbol === 'BTC' ? new BigNumber(6000) : symbol === 'TRX' ? new BigNumber(0) : gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
+        if (balance.lt(amount_.plus(fee))) return { result: false, err: 'error_insufficient_amount' };
+    }
+    return { result: true };
+
     // Todo validate other fields
 };
 
@@ -80,10 +101,44 @@ const parseScannedData = async (data, currentAccount) => {
 const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     const { symbol, coinSymbol } = currentAccount;
     const { gasPrice, gasLimit, amount, to, data } = txObj;
-    const extra_params = COINS[symbol].txFeeSupport ? { gasPrice: gasPrice * 1e9, gasLimit: gasLimit - 0, symbol: coinSymbol } : {};
     try {
-        const res = await sendTransaction(symbol, currentAccount, to, BigNumber(amount), data, extra_params, shouldBroadCast);
-        return { result: true, data: res };
+        const unsignedTx = await buildTransaction(symbol, currentAccount.address, to, new BigNumber(amount), {
+            gasPrice: new BigNumber(gasPrice).shiftedBy(9),
+            gasLimit,
+            data,
+            isTransfer: symbol !== coinSymbol,
+            byte_fee: 10,
+        });
+        let signer;
+        let singerParams;
+        if (currentAccount.type === '[ledger]') {
+            signer = getHardware(symbol);
+            // check whether the same device
+            const { address } = await signer.getAccount(currentAccount.derivationIndex);
+            if (address !== currentAccount.address) {
+                return { result: false, error: { message: 'error.wrong_device' } };
+            }
+            singerParams = { derivationIndex: currentAccount.derivationIndex };
+        } else {
+            signer = getLocalSigner(symbol);
+            singerParams = { private_key: currentAccount.private_key, compressed: currentAccount.compressed };
+        }
+        if (!shouldBroadCast) {
+            const encoded = await signer.signTransaction(unsignedTx, singerParams);
+            return {
+                result: true,
+                data: {
+                    encoded,
+                    txObj: {
+                        from: unsignedTx.from,
+                        to: unsignedTx.to,
+                        value: unsignedTx.value,
+                    },
+                },
+            };
+        }
+        const res = await client.sendTransaction(symbol, unsignedTx, signer, singerParams);
+        return { result: true, data: { pendingTx: res } };
     } catch (e) {
         console.log('sendTransaction error=>', e);
         return { result: false, error: e };

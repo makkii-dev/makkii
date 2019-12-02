@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import TransportHid from '@ledgerhq/react-native-hid';
 import BIP38 from '../utils/bip38';
-import { getAccountFromMnemonic, recoverKeyPairByPrivateKey, getAccountByLedger, recoverKeyPairByWIF, getLedgerStatus, setLedgerTransport } from '../client/keystore';
+import { getAccountFromMnemonic, recoverKeyPairByPrivateKey, getAccountFromHardware, client } from '../client/keystore';
 import { SensitiveStorage } from '../utils/storage';
+import { getHardware } from '../utils';
 
 const getAccountFromMasterKey = async (symbol, index) => {
     try {
@@ -25,8 +26,7 @@ const getAccountFromPrivateKey = async (symbol, private_key, options) => {
 };
 const getAccountFromWIF = async (symbol, wif) => {
     try {
-        console.log('getAccountFromWIF=>', symbol);
-        return await recoverKeyPairByWIF(symbol, wif);
+        return await client.getCoin(symbol).recoverKeyPairByWIF(wif);
     } catch (e) {
         console.log('getAccountFromWIF error=>', e);
         throw e;
@@ -35,7 +35,8 @@ const getAccountFromWIF = async (symbol, wif) => {
 
 const getOneAccountFromLedger = async (symbol, index) => {
     try {
-        const { address } = await getAccountByLedger(symbol, index);
+        const hardware = getHardware(symbol);
+        const { address } = await getAccountFromHardware(symbol, index, hardware);
         return { index, address };
     } catch (e) {
         throw e;
@@ -55,7 +56,8 @@ const getAccountsFromLedger = async (symbol, start, end) => {
 
 const getOrInitLedger = async symbol => {
     try {
-        const currentStatus = await getLedgerStatus(symbol);
+        const hardware = getHardware(symbol);
+        const currentStatus = await hardware.getHardwareStatus();
         console.log('currentStatus=>', currentStatus);
         if (!currentStatus) {
             const transport = await Promise.race([
@@ -65,9 +67,9 @@ const getOrInitLedger = async symbol => {
                     setTimeout(() => reject('Timeout'), 60 * 1000);
                 }),
             ]);
-            setLedgerTransport(symbol, transport);
+            hardware.setLedgerTransport(transport);
         }
-        const currentStatus2 = await getLedgerStatus(symbol);
+        const currentStatus2 = await hardware.getHardwareStatus();
         if (currentStatus2) {
             return { status: true };
         }

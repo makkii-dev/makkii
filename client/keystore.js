@@ -37,20 +37,6 @@ const createKeystoreClient = () => {
     });
     return client_;
 };
-const client = createKeystoreClient();
+export const client = createKeystoreClient();
 
-export const {
-    signTransaction,
-    getAccount,
-    getAccountByLedger,
-    signByLedger,
-    setMnemonic,
-    generateMnemonic,
-    recoverKeyPairByPrivateKey,
-    recoverKeyPairByWIF,
-    validateAddress,
-    getAccountFromMnemonic,
-    validatePrivateKey,
-    getLedgerStatus,
-    setLedgerTransport,
-} = client;
+export const { signTransaction, getAccountFromHardware, recoverKeyPairByPrivateKey, validateAddress, getAccountFromMnemonic, validatePrivateKey } = client;
