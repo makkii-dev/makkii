@@ -8,7 +8,6 @@
     "postinstall": "yarn fix-modal",
     "build-inject": "cd libs/aion-web3-inject; yarn build-inject; cp dist/contentScript.bundle.js ../../android/app/src/main/assets/; sed 's/let t=/t=/2' dist/contentScript.bundle.js > ../../ios/wallet/contentScript.bundle.js",
     "lint": "eslint app/  models/ services/ utils/ --fix --ext .js",
-    "lint-stage": "node check.js",
     "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js"
   },
   "husky": {
