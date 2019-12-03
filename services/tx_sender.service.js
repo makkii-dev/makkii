@@ -4,7 +4,7 @@ import { validator } from 'lib-common-util-js';
 import { decode } from 'bip21';
 import { COINS } from '../client/support_coin_list';
 import { client, buildTransaction } from '../client/api';
-import { validateAddress as validateAddress_ } from '../client/keystore';
+import { validateAddress } from '../client/keystore';
 import { getHardware, getLocalSigner } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
@@ -142,14 +142,6 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     } catch (e) {
         console.log('sendTransaction error=>', e);
         return { result: false, error: e };
-    }
-};
-
-const validateAddress = async (symbol, address) => {
-    try {
-        return await validateAddress_(symbol, address);
-    } catch (e) {
-        return false;
     }
 };
 

@@ -3,7 +3,6 @@
 
 global.BigNumber = require('bignumber.js');
 
-global.platform = 'mobile';
 // if (!Uint8Array.prototype.fill) {
 //     Uint8Array.prototype.fill = function fill(value) {
 //         // Steps 1-2.

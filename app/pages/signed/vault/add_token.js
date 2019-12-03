@@ -66,19 +66,14 @@ class AddToken extends Component {
     scan = () => {
         this.props.navigation.navigate('scan', {
             validate: (data, callback) => {
-                validateAddress(this.props.currentAccount.symbol, data.data)
-                    .then(result => {
-                        if (result) {
-                            this.setState({
-                                contractAddr: data.data,
-                            });
-                            this.fetchTokenDetail(data.data);
-                        }
-                        callback(result, result ? '' : strings('error_invalid_qrcode'));
-                    })
-                    .catch(() => {
-                        callback(false, strings('error_invalid_qrcode'));
+                const result = validateAddress(this.props.currentAccount.symbol, data.data);
+                if (result) {
+                    this.setState({
+                        contractAddr: data.data,
                     });
+                    this.fetchTokenDetail(data.data);
+                }
+                callback(result, result ? '' : strings('error_invalid_qrcode'));
             },
         });
     };
@@ -118,15 +113,14 @@ class AddToken extends Component {
                                 multiline
                                 onChangeText={v => {
                                     this.setState({ contractAddr: v }, () => {
-                                        validateAddress(this.props.currentAccount.symbol, v).then(result => {
-                                            if (result) {
-                                                this.fetchTokenDetail(v);
-                                            } else {
-                                                this.props.navigation.setParams({
-                                                    isEdited: false,
-                                                });
-                                            }
-                                        });
+                                        const result = validateAddress(this.props.currentAccount.symbol, v);
+                                        if (result) {
+                                            this.fetchTokenDetail(v);
+                                        } else {
+                                            this.props.navigation.setParams({
+                                                isEdited: false,
+                                            });
+                                        }
                                     });
                                 }}
                                 placeholder={strings('add_token.hint_contract_address')}

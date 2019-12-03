@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
 import Toast from 'react-native-root-toast';
 import { createAction } from '../utils/dva';
-import { parseScannedData, validateAddress } from '../services/contact_add.service';
+import { parseScannedData } from '../services/contact_add.service';
+import { validateAddress } from '../client/keystore';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
 import { sameAddress } from '../client/api';
@@ -33,16 +34,16 @@ export default {
             {
                 payload: { data },
             },
-            { call, select, put },
+            { select, put },
         ) {
             const { symbol } = yield select(mapToContactAddModel);
-            const ret = yield call(parseScannedData, data, symbol);
+            const ret = parseScannedData(data, symbol);
             if (ret.result) {
                 yield put(createAction('updateState')({ ...ret.data }));
             }
             return ret;
         },
-        *addContact({ payload }, { call, put, select }) {
+        *addContact({ payload }, { put, select }) {
             const { address_book } = yield select(mapToUserModel);
             const { symbol, address, name, editable, processing } = yield select(mapToContactAddModel);
             const contactObj = { symbol, address, name, ...payload };
@@ -50,7 +51,7 @@ export default {
                 return false;
             }
             yield put(createAction('updateState')({ processing: true }));
-            const ret = yield call(validateAddress, contactObj.symbol, contactObj.address);
+            const ret = validateAddress(contactObj.symbol, contactObj.address);
             if (!ret) {
                 AppToast.show(strings('add_address.error_address_format', { coin: contactObj.symbol }), {
                     duration: Toast.durations.LONG,

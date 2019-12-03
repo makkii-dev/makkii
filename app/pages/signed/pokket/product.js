@@ -13,8 +13,9 @@ import { Cell2, CellInput } from '../../../components/Cell';
 import { strings } from '../../../../locales/i18n';
 import { ComponentButton } from '../../../components/common';
 import Loading from '../../../components/Loading';
-import { validateAddress } from '../../../../services/contact_add.service';
+import { validateAddress } from '../../../../client/keystore';
 import { AppToast } from '../../../components/AppToast';
+import { parseScannedData } from '../../../../services/contact_add.service';
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 
@@ -71,30 +72,28 @@ class Product extends React.Component {
     };
 
     scan = () => {
-        const { dispatch, navigation } = this.props;
+        const { navigation } = this.props;
         navigation.navigate('scan', {
             validate: (data, callback) => {
                 console.log('validating code.....');
-                dispatch(createAction('pokketModel/parseScannedData')({ data: data.data })).then(res => {
-                    const { result, data } = res;
-                    if (result) {
-                        this.setState({
-                            RetAddress: data.address,
-                        });
-                    }
-                    result ? callback(true) : callback(false, strings('error_invalid_qrcode'));
-                });
+                const { result, data: data_ } = parseScannedData(data, 'ETH');
+                if (result) {
+                    this.setState({
+                        RetAddress: data_.address,
+                    });
+                }
+                result ? callback(true) : callback(false, strings('error_invalid_qrcode'));
             },
         });
     };
 
-    onBuy = async () => {
+    onBuy = () => {
         const { dispatch } = this.props;
         const { amount, RetAddress } = this.state;
         const { token, tokenFullName, weeklyInterestRate, yearlyInterestRate, token2Collateral, productId } = this.props.currentProduct;
         const { address } = this.props.currentAccount;
         const condition1 = validator.validateAmount(amount);
-        const condition2 = RetAddress ? await validateAddress('ETH', RetAddress) : true;
+        const condition2 = RetAddress ? validateAddress('ETH', RetAddress) : true;
         if (!condition1) {
             AppToast.show(strings('pokket.toast_invalid_amount'));
             return;

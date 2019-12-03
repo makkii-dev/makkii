@@ -11,13 +11,20 @@
     "lint-stage": "node check.js",
     "fix-modal": "node node_modules/react-native-modal-translucent/scripts/translucent-modal.js"
   },
-  "pre-commit": [
-    "lint-stage"
-  ],
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged; "
+    }
+  },
+  "lint-staged": {
+    "./**/*.{js, jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "dependencies": {
     "@ledgerhq/react-native-hid": "^4.73.4",
     "@react-native-community/push-notification-ios": "^1.0.2",
-    "aion-web3": "1.1.5",
     "assert": "^2.0.0",
     "bigi": "^1.4.2",
     "bignumber.js": "^8.0.2",
@@ -32,7 +39,7 @@
     "dva-core": "^1.4.0",
     "ecurve": "^1.0.6",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#e80d52175537c8d31f77343fc5cebb5ed4da10ac",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#12b2d520e093da28b611233089de72043b516bb3",
     "makkii-webview-bridge": "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
@@ -42,7 +49,7 @@
     "react-native-config": "^0.11.7",
     "react-native-crypto": "^2.1.2",
     "react-native-device-info": "^2.1.2",
-    "react-native-fs": "^2.14.1",
+    "react-native-fs": "^2.16.2",
     "react-native-gesture-handler": "^1.4.1",
     "react-native-i18n": "^2.0.15",
     "react-native-image-picker": "^1.0.2",
@@ -87,7 +94,9 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",
+    "husky": "^3.1.0",
     "jest": "^24.8.0",
+    "lint-staged": "^9.5.0",
     "metro-react-native-babel-preset": "^0.54.1",
     "pre-commit": "^1.2.2",
     "prettier": "^1.18.2",

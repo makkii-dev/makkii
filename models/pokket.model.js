@@ -3,7 +3,6 @@ import { customBroadCastTx, getBaseData, getOrders, getProducts, toggleAutoRoll 
 import { createAction } from '../utils/dva';
 import { AppToast } from '../app/components/AppToast';
 import { strings } from '../locales/i18n';
-import { parseScannedData } from '../services/contact_add.service';
 
 export default {
     namespace: 'pokketModel',
@@ -97,10 +96,6 @@ export default {
                 const { orders } = yield select(mapToPokketModel);
                 yield put(createAction('updateState')({ orders: { ...orders, [newOrder.orderId]: newOrder } }));
             }
-        },
-        *parseScannedData({ payload }, { call }) {
-            const { data } = payload;
-            return yield call(parseScannedData, data, 'ETH');
         },
     },
 };
