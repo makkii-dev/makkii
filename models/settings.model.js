@@ -154,8 +154,8 @@ export default {
             console.log('getCoinPrices=>', fiat_currency);
             try {
                 const prices = yield call(getCoinPrices, fiat_currency);
-                console.log('getCoinPrices=>', prices.data);
-                const coinPrices = prices.data.reduce((map, item) => {
+                console.log('getCoinPrices=>', prices);
+                const coinPrices = prices.reduce((map, item) => {
                     map[item.crypto] = item.price;
                     return map;
                 }, {});
