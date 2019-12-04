@@ -6,13 +6,13 @@
           "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
           "explorer_api": "https://mainnet-api.theoan.com",
           "explorer": "https://mainnet.theoan.com/#/transaction",
-          "remoteApi": "https://www.chaion.net/makkii"
+          "remote_api": "https://www.chaion.net/makkii"
         },
         "amity": {
           "jsonrpc": "https://si-amity.chaion.net/rpc",
           "explorer_api": "https://amity-api.theoan.com",
           "explorer": "https://amity.theoan.com/#/transaction",
-          "remoteApi": "http://45.118.132.89:8080"
+          "remote_api": "http://45.118.132.89:8080"
         }
       }
     },
@@ -43,7 +43,7 @@
             "provider": "etherchain",
             "url" : "https://www.etherchain.org/tx"
           },
-          "remoteApi": "https://www.chaion.net/makkii"
+          "remote_api": "https://www.chaion.net/makkii"
         },
         "ropsten": {
           "jsonrpc": "https://ropsten.infura.io/v3/64279947c29a4a8b9daf61f4c6c426b5",
@@ -56,7 +56,7 @@
             "provider": "etherscan",
             "url": "https://api-ropsten.etherscan.io/tx"
           },
-          "remoteApi": "http://45.118.132.89:8080"
+          "remote_api": "http://45.118.132.89:8080"
         }
       }
     },
