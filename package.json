@@ -38,7 +38,7 @@
     "dva-core": "^1.4.0",
     "ecurve": "^1.0.6",
     "lib-common-util-js": "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e",
-    "makkii-coins": "https://github.com/chaion/makkii-coins.git#12b2d520e093da28b611233089de72043b516bb3",
+    "makkii-coins": "https://github.com/chaion/makkii-coins.git#6fa1d9bc6c4690e920c566f89292f25f687a188f",
     "makkii-webview-bridge": "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d",
     "node-libs-react-native": "^1.0.3",
     "react": "16.8.3",
