@@ -363,7 +363,8 @@ class Send extends Component {
                 currentGasPrice: gasPrice,
                 currentGasLimit: gasLimit,
             }),
-        ).then(() => {
+        ).then(amount => {
+            this.setState({ amount });
             this.refs.refLoading.hide();
         });
     };

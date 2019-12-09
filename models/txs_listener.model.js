@@ -178,6 +178,7 @@ export default {
 
                         const { tknTo, tknValue, tknSymbol } = newTx;
                         if (tknTo) {
+                            loadBalanceKeys.push(accountKey(symbol, tknTo));
                             const payloadTokenFrom = {
                                 key: accountKey(symbol, newTx.from, tknSymbol),
                                 txs: { [newTx.hash]: { ...newTx, to: tknTo, value: tknValue } },

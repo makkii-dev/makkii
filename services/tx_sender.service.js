@@ -27,6 +27,7 @@ const validateTxObj = async (txObj, account) => {
         network: COINS[symbol].network,
     };
     console.log(account, amount, extra_params);
+
     if (!validator.validateAmount(amount)) {
         return { result: false, err: 'error_format_amount' };
     }
@@ -43,7 +44,14 @@ const validateTxObj = async (txObj, account) => {
         const amount_ = new BigNumber(amount);
         const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
         const gasLimit_ = new BigNumber(gasLimit);
-        const fee = symbol === 'LTC' ? new BigNumber(20000) : symbol === 'BTC' ? new BigNumber(6000) : symbol === 'TRX' ? new BigNumber(0) : gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
+        const fee =
+            symbol === 'LTC'
+                ? new BigNumber(20000).shiftedBy(-8)
+                : symbol === 'BTC'
+                ? new BigNumber(6000).shiftedBy(-8)
+                : symbol === 'TRX'
+                ? new BigNumber(0)
+                : gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
         if (balance.lt(amount_.plus(fee))) return { result: false, err: 'error_insufficient_amount' };
     }
     return { result: true };
@@ -99,15 +107,23 @@ const parseScannedData = async (data, currentAccount) => {
 };
 
 const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
-    const { symbol, coinSymbol } = currentAccount;
+    const { symbol, coinSymbol, tokens } = currentAccount;
     const { gasPrice, gasLimit, amount, to, data } = txObj;
     try {
+        const isTokenTransfer = symbol !== coinSymbol;
+        const tokenParam = isTokenTransfer
+            ? {
+                  contractAddr: tokens[coinSymbol].contractAddr,
+                  tokenDecimal: tokens[coinSymbol].tokenDecimal,
+              }
+            : {};
         const unsignedTx = await buildTransaction(symbol, currentAccount.address, to, new BigNumber(amount), {
             gasPrice: new BigNumber(gasPrice).shiftedBy(9),
             gasLimit,
             data,
-            isTokenTransfer: symbol !== coinSymbol,
+            isTokenTransfer,
             byte_fee: 10,
+            ...tokenParam,
         });
         let signer;
         let singerParams;

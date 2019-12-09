@@ -48,10 +48,10 @@ export default {
         *reset(action, { put }) {
             yield put(createAction('updateState')(init));
         },
-        *sendAll({ payload }, { call, select, put }) {
+        *sendAll({ payload }, { call, select }) {
             const { currentAccount } = yield select(mapToAccountsModel);
             const amount = yield call(getAllBalance, currentAccount, payload);
-            yield put(createAction('updateState')({ amount }));
+            return amount;
         },
         *parseScannedData(
             {

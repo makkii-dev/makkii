@@ -209,12 +209,11 @@ class AccountTokens extends Component {
                         keys: [accountKey(currentAccount.symbol, currentAccount.address)],
                     }),
                 ).then(r => {
-                    if (r) {
-                        this.isMount &&
-                            this.setState({
-                                refreshing: false,
-                            });
-                    } else {
+                    this.isMount &&
+                        this.setState({
+                            refreshing: false,
+                        });
+                    if (!r) {
                         AppToast.show(strings('wallet.toast_has_pending_transactions'), {
                             position: AppToast.positions.CENTER,
                         });
