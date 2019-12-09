@@ -204,6 +204,7 @@ export default {
                         delete transactionsMap[`${key}+ERC20DEX`].undefined;
                     }
                 }
+                fixHdIndex(hd_index, accountsMap);
                 yield put(
                     createAction('updateState')({
                         accountsKey,
@@ -717,4 +718,15 @@ const fixTronTx = (txs, symbol) => {
         }
         return map;
     }, {});
+};
+
+const fixHdIndex = (hd_index, accountsMap) => {
+    Object.keys(hd_index).forEach(symbol => {
+        Object.keys(hd_index[symbol]).forEach(k => {
+            const address = hd_index[symbol][k];
+            if (accountsMap[accountKey(symbol, address)] === undefined) {
+                delete hd_index[symbol][k];
+            }
+        });
+    });
 };
