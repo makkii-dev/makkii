@@ -1,6 +1,6 @@
-import { AionLedger } from 'makkii-coins/packages/app-aion';
-import { BtcLedger } from 'makkii-coins/packages/app-btc';
-import { EthLedger } from 'makkii-coins/packages/app-eth';
+import { AionLedger } from 'makkiijs/packages/app-aion';
+import { BtcLedger } from 'makkiijs/packages/app-btc';
+import { EthLedger } from 'makkiijs/packages/app-eth';
 
 const aionLedger = new AionLedger();
 const btcLedger = new BtcLedger();

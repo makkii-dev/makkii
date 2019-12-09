@@ -106,7 +106,7 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
             gasPrice: new BigNumber(gasPrice).shiftedBy(9),
             gasLimit,
             data,
-            isTransfer: symbol !== coinSymbol,
+            isTokenTransfer: symbol !== coinSymbol,
             byte_fee: 10,
         });
         let signer;

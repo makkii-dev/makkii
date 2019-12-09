@@ -1,7 +1,7 @@
-import { AionLocalSigner } from 'makkii-coins/packages/app-aion';
-import { BtcLocalSigner } from 'makkii-coins/packages/app-btc';
-import { EthLocalSigner } from 'makkii-coins/packages/app-eth';
-import { TronLocalSigner } from 'makkii-coins/packages/app-tron';
+import { AionLocalSigner } from 'makkiijs/packages/app-aion';
+import { BtcLocalSigner } from 'makkiijs/packages/app-btc';
+import { EthLocalSigner } from 'makkiijs/packages/app-eth';
+import { TronLocalSigner } from 'makkiijs/packages/app-tron';
 
 export default symbol => {
     if (symbol === 'AION') return new AionLocalSigner();

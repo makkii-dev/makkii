@@ -1,9 +1,9 @@
-import { KeystoreClient } from 'makkii-coins/packages/makkii-core';
+import { KeystoreClient } from 'makkiijs/packages/makkii-core';
 import Config from 'react-native-config';
-import { AionKeystoreClient } from 'makkii-coins/packages/app-aion';
-import { BtcKeystoreClient } from 'makkii-coins/packages/app-btc';
-import { EthKeystoreClient } from 'makkii-coins/packages/app-eth';
-import { TronKeystoreClient } from 'makkii-coins/packages/app-tron';
+import { AionKeystoreClient } from 'makkiijs/packages/app-aion';
+import { BtcKeystoreClient } from 'makkiijs/packages/app-btc';
+import { EthKeystoreClient } from 'makkiijs/packages/app-eth';
+import { TronKeystoreClient } from 'makkiijs/packages/app-tron';
 import { COINS } from './support_coin_list';
 
 const isTestNet = Config.is_testnet === 'true';

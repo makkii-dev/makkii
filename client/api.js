@@ -1,8 +1,8 @@
-import { ApiClient } from 'makkii-coins/packages/makkii-core';
-import { AionApiClient } from 'makkii-coins/packages/app-aion';
-import { BtcApiClient } from 'makkii-coins/packages/app-btc';
-import { EthApiClient } from 'makkii-coins/packages/app-eth';
-import { TronApiClient } from 'makkii-coins/packages/app-tron';
+import { ApiClient } from 'makkiijs/packages/makkii-core';
+import { AionApiClient } from 'makkiijs/packages/app-aion';
+import { BtcApiClient } from 'makkiijs/packages/app-btc';
+import { EthApiClient } from 'makkiijs/packages/app-eth';
+import { TronApiClient } from 'makkiijs/packages/app-tron';
 
 import Config from 'react-native-config';
 import { HttpClient } from 'lib-common-util-js/src';

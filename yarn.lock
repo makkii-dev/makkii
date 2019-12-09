@@ -624,6 +624,13 @@
   dependencies:
     regenerator-runtime "^0.13.2"
 
+"@babel/runtime@^7.5.5":
+  version "7.7.4"
+  resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.7.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.7.4.tgz#b23a856751e4bf099262f867767889c0e3fe175b"
+  integrity sha1-sjqFZ1HkvwmSYvhndniJwOP+F1s=
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@babel/template@^7.0.0", "@babel/template@^7.1.0", "@babel/template@^7.4.0", "@babel/template@^7.4.4":
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.4.4.tgz#f4b88d1225689a08f5bc3a17483545be9e4ed237"
@@ -5352,13 +5359,15 @@ makeerror@1.0.x:
   dependencies:
     tmpl "1.0.x"
 
-"makkii-coins@https://github.com/chaion/makkii-coins.git#a3891e8ca40b4998e1cc2cea3454db03a57ee693":
-  version "1.0.0"
-  resolved "https://github.com/chaion/makkii-coins.git#a3891e8ca40b4998e1cc2cea3454db03a57ee693"
-
 "makkii-webview-bridge@https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d":
   version "1.0.0"
   resolved "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d"
+
+"makkiijs@https://github.com/chaion/makkiijs.git#8f6769c01de7b994ffa324ac6ce8e25690505b3d":
+  version "1.0.0"
+  resolved "https://github.com/chaion/makkiijs.git#8f6769c01de7b994ffa324ac6ce8e25690505b3d"
+  dependencies:
+    "@babel/runtime" "^7.5.5"
 
 map-cache@^0.2.2:
   version "0.2.2"
