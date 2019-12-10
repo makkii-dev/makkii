@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { DeviceEventEmitter } from 'react-native';
-import { accountKey, decrypt, encrypt } from '../utils';
+import { accountKey, decrypt, encrypt, deepMergeObject } from '../utils';
 import { SensitiveStorage, Storage } from '../utils/storage';
 import { createAction } from '../utils/dva';
 import { findSymbolByAddress, getExchangeHistory } from '../services/erc20_dex.service';
@@ -126,7 +126,8 @@ export default {
     reducers: {
         updateState(state, { payload }) {
             console.log('accountsModel payload=>', payload);
-            return { ...state, ...payload };
+
+            return { ...deepMergeObject(state, payload) };
         },
     },
     effects: {

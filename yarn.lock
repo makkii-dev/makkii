@@ -5363,9 +5363,9 @@ makeerror@1.0.x:
   version "1.0.0"
   resolved "https://github.com/chaion/makkii-webview-bridge.git#933db99693f2cde78a5ef03f53fe07d954a7fa6d"
 
-"makkiijs@https://github.com/chaion/makkiijs.git#3c76db41b5d060a96eacf9d30925b5aadfbd1f48":
+"makkiijs@https://github.com/chaion/makkiijs.git#1d29b153f6c5b1e842e4392a93d781c99c83fbe7":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkiijs.git#3c76db41b5d060a96eacf9d30925b5aadfbd1f48"
+  resolved "https://github.com/chaion/makkiijs.git#1d29b153f6c5b1e842e4392a93d781c99c83fbe7"
   dependencies:
     "@babel/runtime" "^7.5.5"
 

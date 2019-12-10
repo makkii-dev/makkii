@@ -118,8 +118,8 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
               }
             : {};
         const unsignedTx = await buildTransaction(symbol, currentAccount.address, to, new BigNumber(amount), {
-            gasPrice: new BigNumber(gasPrice).shiftedBy(9),
-            gasLimit,
+            gasPrice: gasPrice * 10 ** 9,
+            gasLimit: parseInt(gasLimit),
             data,
             isTokenTransfer,
             byte_fee: 10,

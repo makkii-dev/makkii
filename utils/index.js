@@ -345,6 +345,13 @@ function formatAddress1Line(accountType, address) {
     return `${address.slice(0, 12)}...${address.slice(-10)}`;
 }
 
+function deepMergeObject(obj1, obj2) {
+    Object.keys(obj2).forEach(key => {
+        obj1[key] = obj1[key] && obj1[key].toString() === '[object Object]' ? deepMergeObject(obj1[key], obj2[key]) : (obj1[key] = obj2[key]);
+    });
+    return obj1;
+}
+
 module.exports = {
     encrypt,
     decrypt,
@@ -371,4 +378,5 @@ module.exports = {
     formatAddress1Line,
     getHardware,
     getLocalSigner,
+    deepMergeObject,
 };

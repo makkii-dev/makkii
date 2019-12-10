@@ -56,6 +56,7 @@ const getAccountsFromLedger = async (symbol, start, end) => {
 
 const getOrInitLedger = async symbol => {
     try {
+        console.log('symboL:', symbol);
         const hardware = getHardware(symbol);
         const currentStatus = await hardware.getHardwareStatus();
         console.log('currentStatus=>', currentStatus);
