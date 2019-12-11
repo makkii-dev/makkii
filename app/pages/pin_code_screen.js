@@ -9,7 +9,7 @@ import { createAction } from '../../utils/dva';
 
 const { height } = Dimensions.get('window');
 const KeyboardData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete'];
-const KeyboardDataWithTouchID = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete', 'blank', 'finger', 'blank'];
+const KeyboardDataWithTouchID = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete', 'blank', 'biometry', 'blank'];
 const MaxPinCodeLength = 6;
 const isSmallScreen = height < 569;
 
@@ -235,6 +235,7 @@ class PinCodeScreen extends React.Component {
     };
 
     renderItem = ({ item }) => {
+        const { biometryType } = this.props;
         const disabled = item === 'blank' || (item === 'cancel' && this.cancel === false);
         const noBorder = true; // item==="blank"||item==='cancel' || item === 'delete';
         const itemBorder = noBorder
@@ -244,28 +245,29 @@ class PinCodeScreen extends React.Component {
                   borderWidth: 1,
                   borderColor: mColor,
               };
+        const biometricImage = biometryType === 'FaceID' ? require('../../assets/icon_FaceID.png') : require('../../assets/icon_TouchID.png');
         return (
             <TouchableOpacity
                 disabled={disabled}
                 style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}
                 onPress={() => {
-                    if (item !== 'cancel' && item !== 'delete' && item !== 'finger') {
+                    if (item !== 'cancel' && item !== 'delete' && item !== 'biometry') {
                         this.onPressNumber(item);
                     } else if (item === 'delete') {
                         this.onPressDelete();
                     } else if (item === 'cancel') {
                         this.cancel && this.props.navigation.goBack(); // can cancel
-                    } else if (item === 'finger') {
+                    } else if (item === 'biometry') {
                         this.onPressTouchId();
                     }
                 }}
             >
                 <View style={[styles.keyboardViewItem, itemBorder, { backgroundColor: 'transparent' }]}>
-                    {item !== 'cancel' && item !== 'delete' && item !== 'finger' && item !== 'blank' && <Text style={[styles.keyboardViewItemText, { color: mColor, fontSize: 36 }]}>{item}</Text>}
+                    {item !== 'cancel' && item !== 'delete' && item !== 'biometry' && item !== 'blank' && <Text style={[styles.keyboardViewItemText, { color: mColor, fontSize: 36 }]}>{item}</Text>}
                     {/* { this.cancel&&item === 'cancel'&& (<Text style={[styles.keyboardViewItemText, {color  : '#000',}]}>{strings('cancel_button')}</Text>) } */}
                     {this.cancel && item === 'cancel' && <Image source={require('../../assets/arrow_back.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
                     {item === 'delete' && <Image source={require('../../assets/icon_delete.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
-                    {item === 'finger' && <Image source={require('../../assets/icon_touch_id.png')} style={{ tintColor: mColor, width: 30, height: 30 }} />}
+                    {item === 'biometry' && <Image source={biometricImage} style={{ tintColor: mColor, width: 30, height: 30 }} />}
                 </View>
             </TouchableOpacity>
         );
@@ -354,6 +356,7 @@ const mapToState = ({ userModel, settingsModel }) => ({
     touchIDEnabled: settingsModel.touchIDEnabled,
     currentAppState: settingsModel.currentAppState,
     showTouchIdDialog: settingsModel.showTouchIdDialog,
+    biometryType: settingsModel.biometryType,
 });
 
 export default connect(mapToState)(PinCodeScreen);

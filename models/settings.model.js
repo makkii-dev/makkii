@@ -28,6 +28,7 @@ export default {
             TRX: 0,
         },
         pinCodeEnabled: false,
+        biometryType: 'undefined',
         touchIDEnabled: false,
         explorer_server: 'mainnet', // only used in unused dapp_send. will remove later.
         state_version: 2, // local state/db version, used to upgrade
@@ -71,8 +72,19 @@ export default {
         },
     },
     effects: {
-        *loadStorage({ payload }, { call, put }) {
-            const { state_version } = payload;
+        *loadStorage({ payload: payload_ }, { call, put }) {
+            const { state_version } = payload_;
+            const optionalConfigObject = {
+                unifiedErrors: true, // use unified error messages (default false)
+                passcodeFallback: false, // if true is passed, it will allow isSupported to return an error if the device is not enrolled in touch id/face id etc. Otherwise, it will just tell you what method is supported, even if the user is not enrolled.  (default false)
+            };
+            let biometryType;
+            try {
+                biometryType = yield call(TouchID.isSupported, optionalConfigObject);
+                biometryType = biometryType === true ? 'TouchID' : biometryType;
+            } catch (e) {
+                biometryType = 'undefined';
+            }
             if (state_version < 2) {
                 let old_settings = yield call(Storage.get, 'settings', {});
                 old_settings = upgradeSettingsV0_V1(old_settings);
@@ -82,16 +94,17 @@ export default {
                     exchange_refresh_interval,
                 });
                 updateLocale(lang);
+                payload.biometryType = biometryType;
                 yield put(createAction('updateState')(payload));
                 yield put(createAction('saveSettings')());
             } else {
                 const payload = yield call(Storage.get, 'settings', {});
-                console.log('****payload****:', payload);
                 const { lang = 'auto', exchange_refresh_interval = 30 } = payload;
                 updateLocale(lang);
                 DeviceEventEmitter.emit('update_exchange_refresh_interval', {
                     exchange_refresh_interval,
                 });
+                payload.biometryType = biometryType;
                 yield put(createAction('updateState')(payload));
             }
             yield put(createAction('getCoinPrices')());
@@ -256,7 +269,7 @@ export default {
                 };
                 try {
                     const biometryType = yield call(TouchID.isSupported, optionalConfigObject);
-                    if (biometryType === true || biometryType === 'TouchID') {
+                    if (biometryType === true || biometryType === 'TouchID' || biometryType === 'FaceID') {
                         yield put(createAction('updateState')({ touchIDEnabled: true }));
                     } else {
                         AppToast.show(strings(`pinCode.touchID_NOT_SUPPORTED`));

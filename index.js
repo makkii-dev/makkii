@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { name as appName } from './app.json';
 import App from './App';
 
-TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, { defaultProps: false });
+TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, { allowFontScaling: false });
 Text.defaultProps = Object.assign({}, Text.defaultProps, { allowFontScaling: false });
 AppRegistry.registerComponent(appName, () => App);
 

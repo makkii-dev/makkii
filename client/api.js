@@ -20,7 +20,7 @@ export const getApiConfig = async () => {
         Authorization: `Bearer ${token}`,
     };
     try {
-        let { data } = await HttpClient.get(url, undefined, false, header);
+        let { data } = await Promise.race([HttpClient.get(url, undefined, false, header), new Promise(resolve => setTimeout(() => resolve({ data }), 5 * 1000))]);
         if (typeof data === 'string') {
             data = JSON.parse(data);
         }
