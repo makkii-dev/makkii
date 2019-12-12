@@ -25,6 +25,9 @@ const SwithType = type => {
         case '[pk]':
             accountImage = require('../../../../assets/account_pk_symbol.png');
             break;
+        case '[view only]':
+            accountImage = require('../../../../assets/icon_address_only.png');
+            break;
         default:
             accountImage = require('../../../../assets/account_mk_symbol.png');
     }
@@ -331,7 +334,7 @@ class Account extends Component {
         const accountBalanceTextFontSize = Math.max(Math.min(32, (200 * PixelRatio.get()) / (accountBalanceText.length + 4) - 5), 16);
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
-        if (type !== '[ledger]') {
+        if (type !== '[ledger]' && type !== '[view only]') {
             menuArray.push(ACCOUNT_MENU[1]);
         }
 

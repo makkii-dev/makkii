@@ -137,7 +137,7 @@ const IMPORT_SOURCE = [
     },
     {
         title: 'vault_import_source.from_view_only_address',
-        icon: require('../../../../assets/icon_read_only.png'),
+        icon: require('../../../../assets/icon_address_only.png'),
     },
 ];
 
@@ -168,6 +168,10 @@ const getAccountConstants = type => {
         case '[pk]':
             typeIcon = require('../../../../assets/account_pk_symbol.png');
             typeText = strings('vault_import_source.from_private_key');
+            break;
+        case '[view only]':
+            typeIcon = require('../../../../assets/icon_address_only.png');
+            typeText = strings('vault_import_source.from_view_only_address');
             break;
         default:
             typeIcon = require('../../../../assets/account_mk_symbol.png');

@@ -326,7 +326,7 @@ class AccountTokens extends Component {
 
         const popWindowTop = getStatusBarHeight(true) + Header.HEIGHT;
         const menuArray = [ACCOUNT_MENU[0]];
-        if (currentAccount.type !== '[ledger]') {
+        if (currentAccount.type !== '[ledger]' && currentAccount.type !== '[view only]') {
             menuArray.push(ACCOUNT_MENU[1]);
         }
         if (COINS[currentAccount.symbol].tokenExchangeSupport && supportDex) {
