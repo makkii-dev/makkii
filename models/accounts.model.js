@@ -126,7 +126,12 @@ export default {
     reducers: {
         updateState(state, { payload }) {
             console.log('accountsModel payload=>', payload);
-
+            const { roughMerge = false } = payload;
+            if (roughMerge) {
+                // want to delete
+                return { ...state, ...payload };
+            }
+            // deep merge can not delete prop
             return { ...deepMergeObject(state, payload) };
         },
     },
@@ -325,6 +330,7 @@ export default {
                     accountsMap: newAccountsMap,
                     transactionsMap: newTransactionsMap,
                     hd_index: newHdIndex,
+                    roughMerge: true, // delete
                 }),
             );
             yield put(createAction('ERC20Dex/tryUpdateCurrentAccount')({ force: true }));
@@ -628,6 +634,7 @@ export default {
                 createAction('updateState')({
                     accountsMap: newAccountsMap,
                     transactionsMap: newTransactionsMap,
+                    roughMerge: true, // delete
                 }),
             );
             yield put(createAction('saveAccounts')({ keys: [acckey] }));
