@@ -10,9 +10,10 @@ export const getApps = async () => {
     };
     try {
         const { data } = await HttpClient.get(url, undefined, false, header);
+        console.log('[makkii config modules]:', data);
         let enabledApps = {};
         for (const module of data) {
-            if (module.moduleName.match(/|^News$|^BlockchainExplorer$|^AionStaking$|/) && module.enabled) {
+            if (module.moduleName.match(/|^News$|^BlockchainExplorer$|^AionStaking$|^Pokket$|/) && module.enabled) {
                 enabledApps[module.moduleName] = {
                     ...module.moduleParams,
                 };

@@ -36,8 +36,8 @@ export default {
         leaveTime: 0,
         ignoreAppState: false,
         showTouchIdDialog: true,
-        // bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_news', 'signed_setting'],
-        bottomBarTab: ['signed_vault', 'signed_pokket', 'signed_dex', 'signed_discover', 'signed_setting'],
+        // bottomBarTab: ['signed_vault', 'signed_dex', 'signed_news', 'signed_setting'],
+        bottomBarTab: ['signed_vault', 'signed_dex', 'signed_discover', 'signed_setting'],
         activity: {
             enabled: false,
             imgUrl: '',
@@ -118,9 +118,6 @@ export default {
             let activity = {};
             if (result) {
                 lang = lang === 'auto' ? DeviceInfo.getDeviceLocale() : lang;
-                if (!supportedModule.includes('Pokket')) {
-                    bottomBarTab.remove('signed_pokket');
-                }
                 if (!supportedModule.includes('News') || lang.indexOf('en') >= 0) {
                     bottomBarTab.remove('signed_news');
                 }
@@ -141,7 +138,6 @@ export default {
                 if (lang.indexOf('en') >= 0) {
                     bottomBarTab.remove('signed_news');
                 }
-                bottomBarTab.remove('signed_pokket');
                 yield put(createAction('updateState')({ bottomBarTab, activity }));
             }
         },

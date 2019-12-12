@@ -26,6 +26,15 @@ export const APPS = [
             uri: 'signed_blockChain_browser',
         },
     },
+    {
+        id: 'Pokket',
+        title: 'discoverApp.pokket',
+        image: require('../../../../assets/app_pokket.png'),
+        entry: {
+            type: 'route', // navigate
+            uri: 'signed_pokket',
+        },
+    },
 ];
 
 export const BROWSERS = [

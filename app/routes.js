@@ -164,18 +164,10 @@ const TabConstant = {
         text: 'menuRef.title_wallet',
         image: require('../assets/tab_wallet.png'),
     },
-    signed_pokket: {
-        text: 'menuRef.title_pokket',
-        image: require('../assets/tab_finance.png'),
-    },
     signed_dex: {
         text: 'menuRef.title_dex',
         image: require('../assets/icon_token_exchange.png'),
     },
-    // signed_news: {
-    //     text: 'menuRef.title_news',
-    //     image: require('../assets/tab_news.png'),
-    // },
     signed_discover: {
         text: 'menuRef.title_discover',
         image: require('../assets/tab_discover.png'),
@@ -207,15 +199,9 @@ const tabNavigator = createBottomTabNavigator(
         signed_vault: {
             screen: Vault,
         },
-        signed_pokket: {
-            screen: PokketHome,
-        },
         signed_dex: {
             screen: Dex,
         },
-        // signed_news: {
-        //     screen: NewsChainNews,
-        // },
         signed_discover: {
             screen: DiscoverHome,
         },
@@ -541,6 +527,10 @@ const AppNavigator = createStackNavigator(
             screen: MnemonicConfirm,
             navigationOptions,
         },
+        signed_pokket: {
+            screen: PokketHome,
+            navigationOptions: navigationOptionsWithoutRight,
+        },
         signed_pokket_product: {
             screen: PokketProduct,
             navigationOptions,
@@ -685,7 +675,7 @@ class Router extends PureComponent {
         if (currentScreen === 'unsigned_register_mnemonic') {
             return true;
         }
-        if (currentScreen.match(/^signed_dapps$|^signed_vault$|^signed_setting$|^signed_dex$|^signed_discover$|^signed_pokket$/)) {
+        if (currentScreen.match(/^signed_vault$|^signed_setting$|^signed_dex$|^signed_discover$/)) {
             if (this.backClickCount === 1) {
                 BackHandler.exitApp();
                 this.props.dispatch(createAction('userModel/logOut')());
