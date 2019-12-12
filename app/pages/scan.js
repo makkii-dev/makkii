@@ -127,7 +127,6 @@ class Scan extends Component {
     };
 
     getQrcode = data => {
-        this.setState({ focusedScreen: false });
         if (data) {
             const { validate } = this.props.navigation.state.params;
             LocalBarcodeRecognizer.decode(data, { codeTypes: ['qr'] })
@@ -146,7 +145,6 @@ class Scan extends Component {
                                 }
                                 this.isVerifying = false;
                             });
-                            this.setState({ focusedScreen: true });
                         }
                     }
                 })
@@ -161,8 +159,7 @@ class Scan extends Component {
             transform: [{ translateY: this.animatedValue }],
         };
         const { validate } = this.props.navigation.state.params;
-        const { focusedScreen } = this.state;
-        if (!focusedScreen) {
+        if (!this.state.focusedScreen) {
             return (
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <ActivityIndicator animating color="red" size="large" />

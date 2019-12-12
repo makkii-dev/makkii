@@ -36,15 +36,21 @@ class Transaction extends Component {
     }
 
     componentDidMount(): void {
+        this.mount = true;
         const txHash = this.transaction.hash;
         const chain = this.account.symbol;
         const address = this.account.address;
         getTransactionNote(chain, txHash, address).then(note => {
-            this.setState({
-                isLoading: false,
-                remarksValue: note,
-            });
+            this.mount &&
+                this.setState({
+                    isLoading: false,
+                    remarksValue: note,
+                });
         });
+    }
+
+    componentWillUnmount() {
+        this.mount = false;
     }
 
     onViewInExplorer = () => {

@@ -94,7 +94,7 @@ class OrderList extends React.Component {
         const diff = endDate - Date.now();
         const remainingDay = status.match(/WAIT_INVEST_TX_CONFIRM|WAIT_COLLATERAL_DEPOSIT/) ? 7 : status.match(/WAIT_INVEST_TX_CONFIRM|COMPLETE/) ? 0 : Math.ceil(diff / (24 * 3600 * 1000));
         return (
-            <TouchableOpacity style={styles.orderContainer} activeOpacity={1} onPress={() => this.toOrderDetail(item)}>
+            <TouchableOpacity style={styles.orderContainer} onPress={() => this.toOrderDetail(item)}>
                 <View style={styles.orderHeader}>
                     <Text>{`${token}/${tokenFullName}`}</Text>
                     <Text>{orderId}</Text>
