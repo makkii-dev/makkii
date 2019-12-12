@@ -210,7 +210,7 @@
     "title": "只读地址",
     "lable_input": "请输入正确的地址",
     "error_invalid_address": "无效的地址",
-    "error_can_not_send": "只读地址无法签名"
+    "error_can_not_send": "只读地址无法签名交易"
   },
   "export_private_key": {
     "title": "导出账号",

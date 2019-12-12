@@ -643,7 +643,7 @@
     "from_keystore": "Import from Keystore file",
     "from_bip38": "Import from BIP38",
     "from_WIF": "Import from WIF",
-    "from_veiw_only_address": "View only address"
+    "from_view_only_address": "View only address"
   },
   "vault_export_way": {
     "title": "Export To",

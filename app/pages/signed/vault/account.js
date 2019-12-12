@@ -13,6 +13,7 @@ import { TransactionItem, AddressComponent } from '../../../components/common';
 import { COINS } from '../../../../client/support_coin_list';
 import { sameAddress } from '../../../../client/api';
 import { createAction, navigate } from '../../../../utils/dva';
+import { AppToast } from '../../../components/AppToast';
 
 const { width } = Dimensions.get('window');
 
@@ -220,6 +221,11 @@ class Account extends Component {
     };
 
     toSend = () => {
+        const { currentAccount } = this.props;
+        if (currentAccount.type === '[view only]') {
+            AppToast.show(strings('import_view_only_address.error_can_not_send'));
+            return;
+        }
         this.props.dispatch(createAction('txSenderModel/reset')());
         this.props.navigation.navigate('signed_vault_send');
     };
