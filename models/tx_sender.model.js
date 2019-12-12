@@ -117,6 +117,10 @@ export default {
                     return false;
                 }
             }
+            if (accountType === '[view only]') {
+                alertOk(strings('alert_title_error'), strings('import_view_only_address.error_can_not_send'));
+                return false;
+            }
             const pk = yield call(SensitiveStorage.get, accountKey(symbol, address), '');
             let currentAccount = { ..._currentAccount, private_key: pk };
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);

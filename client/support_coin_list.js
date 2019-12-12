@@ -16,6 +16,7 @@ export const COINS = {
         network: isTestNet ? 'mastery' : 'mainnet',
         bip38Supported: false,
         ledgerSupport: true,
+        viewOnlyAddressSupport: true,
         defaultTokenIcon: require('../assets/token_default_ats.png'),
         isTestNet,
     },
@@ -29,6 +30,7 @@ export const COINS = {
         bip38Supported: true,
         WIFSupported: true,
         ledgerSupport: true,
+        viewOnlyAddressSupport: true,
         isTestNet,
     },
     ETH: {
@@ -46,16 +48,9 @@ export const COINS = {
         bip38Supported: false,
         ledgerSupport: true,
         defaultTokenIcon: require('../assets/token_default_erc20.png'),
+        viewOnlyAddressSupport: true,
         isTestNet,
     },
-    // 'EOS': {
-    //     name: 'EOS',
-    //     symbol: 'EOS',
-    //     icon: require('../assets/coin_eos.png'),
-    //     tokenSupport: false,
-    //     gasPriceUnit: '',
-    //     api: eos_api,
-    // },
     LTC: {
         name: 'LITECOIN',
         symbol: 'LTC',
@@ -66,6 +61,7 @@ export const COINS = {
         bip38Supported: true,
         WIFSupported: true,
         ledgerSupport: false,
+        viewOnlyAddressSupport: true,
         isTestNet,
     },
     TRX: {
@@ -77,6 +73,7 @@ export const COINS = {
         network: isTestNet ? 'shasta' : 'mainnet',
         bip38Supported: false,
         ledgerSupport: false,
+        viewOnlyAddressSupport: true,
         isTestNet,
     },
 };

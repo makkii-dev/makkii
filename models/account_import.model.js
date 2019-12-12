@@ -4,6 +4,7 @@ import { accountKey } from '../utils';
 import { createAction } from '../utils/dva';
 import { alertOk } from '../app/components/common';
 import { strings } from '../locales/i18n';
+import { validateAddress } from '../client/keystore';
 
 const init = {
     symbol: '',
@@ -161,6 +162,29 @@ export default {
             } catch (e) {
                 return 3; // private_key error
             }
+        },
+        *fromViewOnlyAddress({ payload }, { put, select }) {
+            const { address } = payload;
+            const { symbol, accountsMap } = yield select(({ accountImportModel, accountsModel }) => ({
+                symbol: accountImportModel.symbol,
+                accountsMap: accountsModel.accountsMap,
+            }));
+            console.log('symbol', symbol, address);
+            const res = validateAddress(symbol, address);
+            if (res) {
+                if (!accountsMap[accountKey(symbol, address)]) {
+                    yield put(
+                        createAction('updateState')({
+                            address,
+                            type: '[view only]',
+                            readyToImport: true,
+                        }),
+                    );
+                    return 1;
+                }
+                return 2; // already imported
+            }
+            return 3; // address invalid
         },
         *getAccountsFromLedger(
             {

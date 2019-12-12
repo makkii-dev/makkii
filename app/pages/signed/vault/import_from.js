@@ -34,7 +34,6 @@ class ImportFrom extends Component {
 
     importFromLedger = () => {
         const { dispatch, symbol } = this.props;
-        console.log(`import ${symbol} from ledger`);
         this.refs.refLoading.show(strings('ledger.toast_connecting'));
         dispatch(createAction('accountImportModel/getLedgerStatus')({ symbol })).then(ret => {
             this.refs.refLoading.hide();
@@ -52,6 +51,10 @@ class ImportFrom extends Component {
 
     importFromWIF = () => {
         navigate('signed_vault_wif_import')(this.props);
+    };
+
+    importViewOnlyAddress = () => {
+        navigate('signed_vault_view_only_address_import')(this.props);
     };
 
     renderItem = ({ item }) => {
@@ -96,6 +99,7 @@ class ImportFrom extends Component {
         IMPORT_SOURCE[3].callback = this.importFromBip38;
         IMPORT_SOURCE[4].callback = this.importFromWIF;
         IMPORT_SOURCE[5].callback = this.importFromLedger;
+        IMPORT_SOURCE[6].callback = this.importViewOnlyAddress;
         const data = [IMPORT_SOURCE[0], IMPORT_SOURCE[1]];
         const { symbol } = this.props;
         if (symbol && COINS[symbol].bip38Supported) {
@@ -106,6 +110,9 @@ class ImportFrom extends Component {
         }
         if (symbol && COINS[symbol].ledgerSupport && Platform.OS === 'android') {
             data.push(IMPORT_SOURCE[5]);
+        }
+        if (symbol && COINS[symbol].viewOnlyAddressSupport) {
+            data.push(IMPORT_SOURCE[6]);
         }
         return (
             <View

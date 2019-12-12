@@ -206,6 +206,12 @@
     "title": "从WIF导入",
     "label_input_wif": "请输入WIF格式密钥"
   },
+  "import_view_only_address": {
+    "title": "只读地址",
+    "lable_input": "请输入正确的地址",
+    "error_invalid_address": "无效的地址",
+    "error_can_not_send": "只读地址无法签名"
+  },
   "export_private_key": {
     "title": "导出账号",
     "button_save_image": "保存图片",
@@ -634,7 +640,8 @@
     "from_ledger": "从Ledger导入",
     "from_keystore": "从证书文件导入",
     "from_bip38": "从BIP38导入",
-    "from_WIF": "从WIF导入"
+    "from_WIF": "从WIF导入",
+    "from_view_only_address": "仅导入地址"
   },
   "vault_export_way": {
     "title": "导出方式",

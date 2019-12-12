@@ -32,6 +32,7 @@ import VaultImportBIP38 from './pages/signed/vault/import_bip38';
 import VaultExportBIP38 from './pages/signed/vault/export_bip38';
 import VaultImportWIF from './pages/signed/vault/import_WIF';
 import VaultExportTo from './pages/signed/vault/export_to';
+import VaultImportViewOnlyAddress from './pages/signed/vault/import_vew_only_address';
 import DappLauncher from './pages/signed/discover/dapp_launcher';
 import DiscoverHome from './pages/signed/discover/home';
 import BlockChainBrowser from './pages/signed/discover/blockChainBrowser';
@@ -458,6 +459,10 @@ const AppNavigator = createStackNavigator(
         signed_vault_wif_import: {
             screen: VaultImportWIF,
             navigationOptions,
+        },
+        signed_vault_view_only_address_import: {
+            screen: VaultImportViewOnlyAddress,
+            navigationOptions: navigationOptionsWithoutRight,
         },
         signed_vault_export_to: {
             screen: VaultExportTo,

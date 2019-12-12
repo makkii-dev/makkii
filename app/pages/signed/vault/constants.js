@@ -135,6 +135,10 @@ const IMPORT_SOURCE = [
         title: 'vault_import_source.from_ledger',
         icon: require('../../../../assets/account_le_symbol.png'),
     },
+    {
+        title: 'vault_import_source.from_view_only_address',
+        icon: require('../../../../assets/icon_read_only.png'),
+    },
 ];
 
 const EXPORT_WAY = [

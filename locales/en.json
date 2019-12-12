@@ -208,6 +208,12 @@
     "title": "Import from WIF",
     "label_input_wif": "Please enter WIF"
   },
+  "import_view_only_address": {
+    "title": "View only address",
+    "lable_input": "Please enter valid address",
+    "error_invalid_address": "Invalid address",
+    "error_can_not_send": "View only address can't sign transaction"
+  },
   "export_private_key": {
     "title": "Export Account",
     "button_save_image": "Save Image",
@@ -636,7 +642,8 @@
     "from_ledger": "Import from Ledger",
     "from_keystore": "Import from Keystore file",
     "from_bip38": "Import from BIP38",
-    "from_WIF": "Import from WIF"
+    "from_WIF": "Import from WIF",
+    "from_veiw_only_address": "View only address"
   },
   "vault_export_way": {
     "title": "Export To",
