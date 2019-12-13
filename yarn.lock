@@ -927,6 +927,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-community/slider@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@react-native-community/slider/download/@react-native-community/slider-1.1.1.tgz#eb549f37cf19dcd449d5df39d98fd1260903c309"
+  integrity sha1-61SfN88Z3NRJ1d852Y/RJgkDwwk=
+
 "@react-navigation/core@~3.5.0":
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.5.0.tgz#73d1a12448e2bd71855e0080b95a7f51ede0cd9e"

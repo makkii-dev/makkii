@@ -125,6 +125,7 @@
     "label_data": "数据",
     "label_gas_price": "燃料单价",
     "label_gas_limit": "燃料上限",
+    "label_more": "更多",
     "show_advanced": "高级选项",
     "hide_advanced": "隐藏高级选项",
     "error_format_recipient": "收款方地址格式不正确",

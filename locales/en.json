@@ -127,6 +127,7 @@
     "label_data": "Data",
     "label_gas_price": "Gas Price",
     "label_gas_limit": "Gas Limit",
+    "label_more": "Advanced",
     "show_advanced": "Advanced Options",
     "hide_advanced": "Hide Advanced Options",
     "error_format_recipient": "Invalid recipient address",

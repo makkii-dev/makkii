@@ -48,7 +48,7 @@ const validateTxObj = async (txObj, account) => {
             symbol === 'LTC'
                 ? new BigNumber(20000).shiftedBy(-8)
                 : symbol === 'BTC'
-                ? new BigNumber(6000).shiftedBy(-8)
+                ? new BigNumber(5000).shiftedBy(-8)
                 : symbol === 'TRX'
                 ? new BigNumber(0)
                 : gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
@@ -108,7 +108,7 @@ const parseScannedData = async (data, currentAccount) => {
 
 const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
     const { symbol, coinSymbol, tokens } = currentAccount;
-    const { gasPrice, gasLimit, amount, to, data } = txObj;
+    const { gasPrice, gasLimit, amount, to, data, byteFee } = txObj;
     try {
         const isTokenTransfer = symbol !== coinSymbol;
         const tokenParam = isTokenTransfer
@@ -122,7 +122,7 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
             gasLimit: parseInt(gasLimit),
             data,
             isTokenTransfer,
-            byte_fee: 10,
+            byte_fee: parseInt(byteFee),
             ...tokenParam,
         });
         let signer;
