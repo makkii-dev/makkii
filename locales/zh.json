@@ -210,7 +210,7 @@
     "title": "只读地址",
     "lable_input": "请输入正确的地址",
     "error_invalid_address": "无效的地址",
-    "error_can_not_send": "只读地址无法签名交易"
+    "error_can_not_send": "当前账号为只读地址,无法发送交易"
   },
   "export_private_key": {
     "title": "导出账号",
@@ -641,7 +641,7 @@
     "from_keystore": "从证书文件导入",
     "from_bip38": "从BIP38导入",
     "from_WIF": "从WIF导入",
-    "from_view_only_address": "仅导入地址"
+    "from_view_only_address": "只读地址"
   },
   "vault_export_way": {
     "title": "导出方式",
