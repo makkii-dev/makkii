@@ -1,7 +1,7 @@
 import React from 'react';
 import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import Bridge from 'makkii-webview-bridge/dist/native';
+import Bridge from 'makkii-webview-bridge/lib/native';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, store } from '../../../../utils/dva';
@@ -26,7 +26,6 @@ const renderLoading = () => {
         </View>
     );
 };
-let invoke;
 const getMagnitude = n => Math.floor(Math.log(n) / Math.LN10 + 0.000000001);
 
 const getCurrentAccount = symbol => {
@@ -45,15 +44,13 @@ const getCurrentAccount = symbol => {
     return '';
 };
 
-const switchAccount = navigation => symbol =>
+const switchAccount = navigate => symbol =>
     new Promise((resolve, reject) => {
         symbol = Object.keys(COINS).indexOf(symbol) >= 0 ? symbol : 'AION';
-        navigation.navigate('signed_Dex_account_list', {
+        navigate('signed_Dex_account_list', {
             type: symbol,
             usage: 'dapp',
             callback: (err, value) => {
-                console.log('err', err);
-                console.log('value', value);
                 if (err) {
                     reject(err);
                 }
@@ -62,7 +59,7 @@ const switchAccount = navigation => symbol =>
         });
     });
 
-const sendTx = navigation => txObj =>
+const sendTx = navigate => txObj =>
     new Promise((resolve, reject) => {
         console.log('sendTx=>', txObj);
         store.dispatch(
@@ -72,11 +69,9 @@ const sendTx = navigation => txObj =>
                 editable: false,
             }),
         );
-        navigation.navigate('signed_vault_send', {
+        navigate('signed_vault_send', {
             title: 'Send',
             callback: (err, value) => {
-                console.log('err', err);
-                console.log('value', value);
                 if (err) {
                     reject(err);
                 }
@@ -85,7 +80,7 @@ const sendTx = navigation => txObj =>
         });
     });
 let canGoBack = false;
-
+let invoke = new Bridge();
 const dappLauncher = props => {
     const [state, setState] = React.useState({
         WebViewProgress: 0,
@@ -130,10 +125,10 @@ const dappLauncher = props => {
         navigation.setParams({
             Reload: onReload,
         });
-        invoke = new Bridge(() => webViewRef.current);
+        invoke.setwebViewGetter(() => webViewRef.current);
         invoke.define('getCurrentAccount', getCurrentAccount);
-        invoke.define('switchAccount', switchAccount(navigation));
-        invoke.define('sendTx', sendTx(navigation));
+        invoke.define('switchAccount', switchAccount(navigation.navigate));
+        invoke.define('sendTx', sendTx(navigation.navigate));
     }, []);
     return (
         <View style={{ flex: 1, overflow: 'hidden' }}>

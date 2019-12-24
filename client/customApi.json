@@ -3,7 +3,7 @@
     "aion": {
       "networks": {
         "mainnet": {
-          "jsonrpc": "https://aion.api.nodesmith.io/v1/mainnet/jsonrpc?apiKey=c8b8ebb4f10f40358b635afae72c2780",
+          "jsonrpc": "http://makkii.dev/jsonrpc",
           "explorer_api": "https://mainnet-api.theoan.com",
           "explorer": "https://mainnet.theoan.com/#/transaction",
           "remote_api": "https://www.chaion.net/makkii"

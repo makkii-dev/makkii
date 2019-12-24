@@ -20,6 +20,7 @@ const init = {
     gasPrice: '',
     gasLimit: '',
     editable: true,
+    byteFee: '',
     callbackParams: {},
     customBroadCast: null,
     targetRoute: undefined,

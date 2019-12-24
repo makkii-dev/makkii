@@ -10,10 +10,10 @@ TextInput.defaultProps = Object.assign({}, TextInput.defaultProps, { allowFontSc
 Text.defaultProps = Object.assign({}, Text.defaultProps, { allowFontScaling: false });
 AppRegistry.registerComponent(appName, () => App);
 
-YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been', 'Async Storage has', 'requires main queue setup.', 'Accessing view manager']);
+YellowBox.ignoreWarnings(['Setting a timer', 'WebView has been', 'Async Storage has', 'requires main queue setup.', 'Accessing view manager', 'Slider has']);
 const _console = _.clone(console);
 console.warn = message => {
-    if (!message.match(/|Setting a timer|WebView has been|Async Storage has|Accessing view manager|/)) {
+    if (!message.match(/Setting a timer|WebView has been|Async Storage has|Accessing view manager|Slider has/)) {
         _console.warn(message);
     }
 };
