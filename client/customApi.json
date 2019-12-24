@@ -56,7 +56,7 @@
             "provider": "etherscan",
             "url": "https://api-ropsten.etherscan.io/tx"
           },
-          "remote_api": "http://45.118.132.89:8080"
+          "remote_api": "http://47.92.202.146:8080"
         }
       }
     },
