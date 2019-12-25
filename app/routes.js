@@ -636,11 +636,14 @@ const defaultGetStateForAction = AppNavigator.router.getStateForAction;
 let timer = true;
 AppNavigator.router.getStateForAction = (action, state) => {
     if (action.type === 'Navigation/NAVIGATE' || action.type === 'Navigation/BACK') {
-        if (!timer) {
-            return state;
+        if (state.routes[state.routes.length - 1].routeName !== 'unlock') {
+            // not unlock screen
+            if (!timer) {
+                return state;
+            }
+            timer = false;
+            setTimeout(() => (timer = true), 100); // wait 0.1s to avoid navigation action conflict
         }
-        timer = false;
-        setTimeout(() => (timer = true), 500); // wait 0.5s to avoid navigation action conflict
     }
     if (state) {
         let newRoutes;
