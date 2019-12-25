@@ -31,8 +31,8 @@ const process_data = (data, apps, lang) => {
             maps[k] = apps[k];
         }
         if (k === 'AionStaking') {
-            // data[0].entry.uri = `${apps[k].url}?lang=${lang}`; // update Aion Staking's url
-            data[0].entry.uri = `http://192.168.50.100:8080/staking/home?lang=${lang}`; // update Aion Staking's url
+            data[0].entry.uri = `${apps[k].url}?lang=${lang}`; // update Aion Staking's url
+            // data[0].entry.uri = `http://192.168.50.100:8080/staking/home?lang=${lang}`; // update Aion Staking's url
         }
         return maps;
     }, {});
