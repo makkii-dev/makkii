@@ -1,11 +1,8 @@
 import { HttpClient } from 'lib-common-util-js';
 import Config from 'react-native-config';
 
-// TODO:
-const baseurl = Config.isTestNet ? 'http://45.118.132.89:8080' : 'http://45.118.132.89:8080';
-
 const getProducts = async (keyword = '') => {
-    const url = `${baseurl}/pokket/product`;
+    const url = `${Config.app_server_api}/pokket/product`;
     try {
         console.log('[Pokket getProduct req]=>', url);
         const resp = await HttpClient.get(url, { search: keyword });
@@ -21,7 +18,7 @@ const getProducts = async (keyword = '') => {
 };
 
 const getOrders = async ({ addresses = '', page = 0, size = 25 }) => {
-    const url = `${baseurl}/pokket/order`;
+    const url = `${Config.app_server_api}/pokket/order`;
     try {
         console.log('[Pokket getOrders req]=>', url);
         const resp = await HttpClient.post(url, { addresses, page, size }, true);
@@ -37,7 +34,7 @@ const getOrders = async ({ addresses = '', page = 0, size = 25 }) => {
 };
 
 const createOrder = async payload => {
-    const url = `${baseurl}/pokket/order`;
+    const url = `${Config.app_server_api}/pokket/order`;
     try {
         console.log('[Pokket createOrder req]=>', url, payload);
         const resp = await HttpClient.put(url, payload, true);
@@ -54,7 +51,7 @@ const createOrder = async payload => {
 };
 
 const toggleAutoRoll = async ({ autoRoll, orderId }) => {
-    const url = `${baseurl}/pokket/order/autoroll`;
+    const url = `${Config.app_server_api}/pokket/order/autoroll`;
     try {
         console.log('[Pokket toggleAutoRoll req]=>', url);
         const resp = await HttpClient.post(url, { autoRoll, orderId }, true);
@@ -72,10 +69,10 @@ const toggleAutoRoll = async ({ autoRoll, orderId }) => {
 
 const getBaseData = async () => {
     try {
-        const btcUrl = `${baseurl}/pokket/deposit/btc_address`;
-        const ethUrl = `${baseurl}/pokket/deposit/eth_address`;
-        const totalInvestmentUrl = `${baseurl}/pokket/statistic/totalInvestment`;
-        const bannersUrl = `${baseurl}/pokket/banners`;
+        const btcUrl = `${Config.app_server_api}/pokket/deposit/btc_address`;
+        const ethUrl = `${Config.app_server_api}/pokket/deposit/eth_address`;
+        const totalInvestmentUrl = `${Config.app_server_api}/pokket/statistic/totalInvestment`;
+        const bannersUrl = `${Config.app_server_api}/pokket/banners`;
         const { data: btcAddress } = await HttpClient.get(btcUrl);
         const { data: ethAddress } = await HttpClient.get(ethUrl);
         const { data: totalInvestment } = await HttpClient.get(totalInvestmentUrl);

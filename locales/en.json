@@ -210,10 +210,10 @@
     "label_input_wif": "Please enter WIF"
   },
   "import_view_only_address": {
-    "title": "View only address",
+    "title": "View-Only Address",
     "lable_input": "Please enter valid address",
     "error_invalid_address": "Invalid address",
-    "error_can_not_send": "View only address can't sign transaction"
+    "error_can_not_send": "View-only address can't send transaction"
   },
   "export_private_key": {
     "title": "Export Account",
@@ -644,7 +644,7 @@
     "from_keystore": "Import from Keystore file",
     "from_bip38": "Import from BIP38",
     "from_WIF": "Import from WIF",
-    "from_view_only_address": "View only address"
+    "from_view_only_address": "View-Only Address"
   },
   "vault_export_way": {
     "title": "Export To",

@@ -7330,11 +7330,6 @@ react-navigation-drawer@~1.4.0:
   dependencies:
     react-native-tab-view "^1.2.0"
 
-react-navigation-hooks@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/react-navigation-hooks/download/react-navigation-hooks-1.1.0.tgz#337c41a50ebc7b9030bb9d9333cd4fd6e1f86b68"
-  integrity sha1-M3xBpQ68e5Awu52TM81P1uH4a2g=
-
 react-navigation-redux-helpers@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/react-navigation-redux-helpers/-/react-navigation-redux-helpers-3.0.2.tgz#612e1d5b1378ba0c17b6a2d8ec9a01cc698a3a16"
