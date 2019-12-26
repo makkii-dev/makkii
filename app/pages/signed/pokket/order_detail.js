@@ -3,7 +3,7 @@ import { Clipboard, Dimensions, Image, Platform, ScrollView, Text, TouchableOpac
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import BigNumber from 'bignumber.js';
 import { linkButtonColor, mainBgColor } from '../../../style_util';
-import { connect, createAction, navigate } from '../../../../utils/dva';
+import { store, connect, createAction, navigate } from '../../../../utils/dva';
 import { strings } from '../../../../locales/i18n';
 import commonStyles from '../../../styles';
 import { Cell2, CellInput } from '../../../components/Cell';
@@ -66,6 +66,7 @@ class OrderDetail extends React.Component {
             token2Collateral,
             orderId,
             status,
+            actualAmount,
             /* autoRoll, */ result,
         } = this.props.order;
 
@@ -73,7 +74,17 @@ class OrderDetail extends React.Component {
         const profits2 = `${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2)).toString()} TUSD`;
         let actualProfits = null;
         if (result) {
-            actualProfits = result.match(/LESS_THAN/) ? profits1 : profits2;
+            actualProfits = new BigNumber(actualAmount);
+            if (token === 'ETH') {
+                actualProfits.shiftedBy(-18);
+            } else if (token !== 'BTC') {
+                const {
+                    tokenLists: { ETH: eth_tokens },
+                } = store.getState().accountsModel;
+                const { tokenDecimal = 18 } = eth_tokens[token] || {};
+                actualProfits.shiftedBy(-tokenDecimal);
+            }
+            actualProfits = parseFloat(actualProfits.toFixed(token.match(/^BTC|ETH$/) ? 8 : 2)).toString();
         }
         const endTime = startTime + 24 * 7 * 60 * 60 * 1000;
         return (
