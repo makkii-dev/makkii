@@ -67,11 +67,12 @@ class OrderDetail extends React.Component {
             orderId,
             status,
             actualAmount,
+            allowedDecimals,
             /* autoRoll, */ result,
         } = this.props.order;
 
-        const profits1 = `${parseFloat(calculatePokketProfit(amount, weeklyInterestRate).toFixed(token.match(/^BTC|ETH$/) ? 8 : 2)).toString()} ${token}`;
-        const profits2 = `${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2)).toString()} TUSD`;
+        const profits1 = `${parseFloat(calculatePokketProfit(amount, weeklyInterestRate).toFixed(allowedDecimals, 1)).toString()} ${token}`;
+        const profits2 = `${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2, 1)).toString()} TUSD`;
         let actualProfits = null;
         if (result) {
             actualProfits = new BigNumber(actualAmount);
@@ -84,7 +85,7 @@ class OrderDetail extends React.Component {
                 const { tokenDecimal = 18 } = eth_tokens[token] || {};
                 actualProfits.shiftedBy(-tokenDecimal);
             }
-            actualProfits = parseFloat(actualProfits.toFixed(token.match(/^BTC|ETH$/) ? 8 : 2)).toString();
+            actualProfits = parseFloat(actualProfits.toFixed(allowedDecimals, 1).toString());
         }
         const endTime = startTime + 24 * 7 * 60 * 60 * 1000;
         return (

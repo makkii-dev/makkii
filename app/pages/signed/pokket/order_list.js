@@ -202,11 +202,11 @@ const styles = {
         width: '100%',
     },
     orderBodyRate: {
-        width: '40%',
+        width: '30%',
         justifyContent: 'flex-start',
     },
     orderBodyProfit: {
-        width: '30%',
+        width: '40%',
         justifyContent: 'flex-start',
     },
     orderBodyChart: {

@@ -703,6 +703,7 @@
     "placeholder_income_address": "请填写TUSD返还地址",
     "placeholder_filter_by_token": "按币种搜索",
     "button_buy": "购买",
+    "toast_invalid_decimals": "金额小数点后应该少于{{decimal}}位",
     "toast_create_order_failed": "创建订单失败",
     "toast_modify_order_failed": "修改订单失败",
     "toast_create_order_success": "创建订单成功",

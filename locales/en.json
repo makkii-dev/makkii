@@ -705,6 +705,7 @@
     "placeholder_income_address": "Please enter ETH Address to receive TUSD",
     "placeholder_filter_by_token": "filter by token",
     "button_buy": "Buy",
+    "toast_invalid_decimals": "Amount decimals should less or equal than {{decimal}}",
     "toast_create_order_failed": "Create order failed",
     "toast_modify_order_failed": "Modify order failed",
     "toast_create_order_success": "Create order success",

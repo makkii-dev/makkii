@@ -90,16 +90,21 @@ class Product extends React.Component {
     onBuy = () => {
         const { dispatch } = this.props;
         const { amount, RetAddress } = this.state;
-        const { token, tokenFullName, weeklyInterestRate, yearlyInterestRate, token2Collateral, productId } = this.props.currentProduct;
+        const { token, tokenFullName, weeklyInterestRate, yearlyInterestRate, token2Collateral, productId, allowedDecimals } = this.props.currentProduct;
         const { address } = this.props.currentAccount;
         const condition1 = validator.validateAmount(amount);
         const condition2 = RetAddress ? validateAddress('ETH', RetAddress) : true;
+        const condition3 = amount.substr(amount.indexOf('.') + 1).length <= allowedDecimals;
         if (!condition1) {
             AppToast.show(strings('pokket.toast_invalid_amount'));
             return;
         }
         if (!condition2) {
             AppToast.show(strings('pokket.toast_invalid_address'));
+            return;
+        }
+        if (!condition3) {
+            AppToast.show(strings('pokket.toast_invalid_decimals', { decimal: allowedDecimals }));
             return;
         }
         this.refs.refLoading.show();
@@ -113,6 +118,7 @@ class Product extends React.Component {
             weeklyInterestRate,
             yearlyInterestRate,
             productId,
+            allowedDecimals,
         };
         if (RetAddress) {
             payload = { ...payload, collateralAddress: RetAddress };
@@ -124,7 +130,7 @@ class Product extends React.Component {
 
     render() {
         const { currentAccount, currentProduct } = this.props;
-        const { token, weeklyInterestRate, yearlyInterestRate, remainingQuota, token2Collateral, minInvestAmount } = currentProduct;
+        const { token, weeklyInterestRate, yearlyInterestRate, remainingQuota, token2Collateral, minInvestAmount, allowedDecimals } = currentProduct;
         const { amount, RetAddress } = this.state;
         const expiryDate = new Date(Date.now() + 24 * 7 * 3600 * 1000).Format('yyyy/MM/dd');
         let buttonEnabled = false;
@@ -221,8 +227,8 @@ class Product extends React.Component {
                             <View style={{ width: '100%', alignItems: 'flex-end', marginTop: 5 }}>
                                 <Text style={{}}>
                                     {`${strings('pokket.label_expected_profits')} ${parseFloat(
-                                        calculatePokketProfit(amount, weeklyInterestRate).toFixed(token.match(/^BTC|ETH$/) ? 8 : 2),
-                                    ).toString()} ${token} ${strings('label_or')} ${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2)).toString()} TUSD`}
+                                        calculatePokketProfit(amount, weeklyInterestRate).toFixed(allowedDecimals, 1),
+                                    ).toString()} ${token} ${strings('label_or')} ${parseFloat(calculatePokketCollateral(amount, weeklyInterestRate, token2Collateral).toFixed(2, 1)).toString()} TUSD`}
                                 </Text>
                             </View>
                         </View>
