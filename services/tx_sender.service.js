@@ -61,7 +61,7 @@ const validateTxObj = async (txObj, account) => {
 
 const getAllBalance = async (currentAccount, options) => {
     const { symbol, balance, coinSymbol } = currentAccount;
-    const { currentGasLimit, currentGasPrice } = options;
+    const { currentGasLimit, currentGasPrice, currentByteFee } = options;
     let amount = 0;
     if (coinSymbol !== symbol) {
         amount = BigNumber(currentAccount.tokens[coinSymbol].balance).toNumber();
@@ -74,7 +74,7 @@ const getAllBalance = async (currentAccount, options) => {
                 .shiftedBy(-18),
         ).toNumber();
     } else if (symbol === 'BTC' || symbol === 'LTC') {
-        amount = await client.getCoin(symbol).sendAll(currentAccount.address);
+        amount = await client.getCoin(symbol).sendAll(currentAccount.address, currentByteFee);
     } else {
         amount = balance.toNumber();
     }
