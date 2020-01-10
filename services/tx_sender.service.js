@@ -65,7 +65,7 @@ const getAllBalance = async (currentAccount, options) => {
     let amount = 0;
     if (coinSymbol !== symbol) {
         amount = BigNumber(currentAccount.tokens[coinSymbol].balance).toNumber();
-    } else if (COINS[symbol].txFeeSupport) {
+    } else if (symbol === 'AION' || symbol === 'ETH') {
         amount = BigNumber.max(
             BigNumber(0),
             BigNumber(balance)
@@ -76,7 +76,7 @@ const getAllBalance = async (currentAccount, options) => {
     } else if (symbol === 'BTC' || symbol === 'LTC') {
         amount = await client.getCoin(symbol).sendAll(currentAccount.address);
     } else {
-        amount = balance;
+        amount = balance.toNumber();
     }
     return amount;
 };
