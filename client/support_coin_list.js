@@ -59,7 +59,7 @@ export const COINS = {
         viewOnlyAddressSupport: true,
         minGasLimit: 21000,
         maxGasLimit: 150000,
-        minGasPrice: 8,
+        minGasPrice: 1,
         maxGasPrice: 30,
         minUnit: 'Wei',
         isTestNet,
