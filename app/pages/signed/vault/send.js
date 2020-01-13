@@ -168,7 +168,7 @@ class Send extends Component {
             gasPrice,
             gasLimit,
             byteFee: 10,
-            btcCoinUsed: currentAccount.symbol === 'BTC' ? new BigNumber(500) : new BigNumber(2000),
+            btcCoinUsed: currentAccount.symbol === 'BTC' ? new BigNumber(500).shiftedBy(-8) : new BigNumber(2000).shiftedBy(-8),
         };
         if (currentAccount.symbol === 'BTC' || currentAccount.symbol === 'LTC') {
             getBTCGasUsed(currentAccount.symbol, currentAccount.address).then(r => {
