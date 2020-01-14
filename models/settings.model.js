@@ -375,7 +375,7 @@ export default {
             console.log(`send lang:${versionUpdateLanguage}`);
 
             try {
-                const version = yield call(getLatestVersion, Platform.OS, versionCode, lang);
+                const version = yield call(getLatestVersion, Platform.OS, versionCode, versionUpdateLanguage);
                 console.log('latest version: ', version);
                 if (versionCode !== version.versionCode && version.mandatory) {
                     popupUpdateDialog(version);
