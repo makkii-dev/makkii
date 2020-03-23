@@ -111,7 +111,7 @@ class Product extends React.Component {
         let payload = {
             amount,
             autoRoll: false,
-            investorAddress: address.toLowerCase(),
+            investorAddress: address,
             token,
             token2Collateral,
             tokenFullName,

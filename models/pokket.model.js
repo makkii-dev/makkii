@@ -47,7 +47,7 @@ export default {
                 address1 = Object.keys(accountsMap)
                     .filter(k => k.startsWith('BTC') || k.startsWith('ETH'))
                     .reduce((arr, el) => {
-                        arr.push(accountsMap[el].address.toLowerCase());
+                        arr.push(accountsMap[el].address);
                         return arr;
                     }, []);
             }

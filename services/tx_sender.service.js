@@ -8,7 +8,7 @@ import { validateAddress } from '../client/keystore';
 import { getHardware, getLocalSigner } from '../utils';
 
 const validateTxObj = async (txObj, account) => {
-    const { to, amount, gasPrice, gasLimit } = txObj;
+    const { to, amount, gasPrice, gasLimit, byteFee } = txObj;
     const { symbol, coinSymbol } = account;
     // validate 'to'
     try {
@@ -44,15 +44,16 @@ const validateTxObj = async (txObj, account) => {
         const amount_ = new BigNumber(amount);
         const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
         const gasLimit_ = new BigNumber(gasLimit);
-        const fee =
-            symbol === 'LTC'
-                ? new BigNumber(20000).shiftedBy(-8)
-                : symbol === 'BTC'
-                ? new BigNumber(5000).shiftedBy(-8)
-                : symbol === 'TRX'
-                ? new BigNumber(0)
-                : gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
-        if (balance.lt(amount_.plus(fee))) return { result: false, err: 'error_insufficient_amount' };
+        if (symbol === 'LTC' || symbol === 'BTC') {
+            const all_amount = await client.getCoin(symbol).sendAll(account.address, byteFee);
+            if (amount_.gt(new BigNumber(all_amount))) {
+                return { result: false, err: 'error_insufficient_amount' };
+            }
+        }
+        if (symbol === 'AION' || symbol === 'ETH') {
+            const fee = gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
+            if (balance.lt(amount_.plus(fee))) return { result: false, err: 'error_insufficient_amount' };
+        }
     }
     return { result: true };
 
@@ -61,11 +62,11 @@ const validateTxObj = async (txObj, account) => {
 
 const getAllBalance = async (currentAccount, options) => {
     const { symbol, balance, coinSymbol } = currentAccount;
-    const { currentGasLimit, currentGasPrice } = options;
+    const { currentGasLimit, currentGasPrice, currentByteFee } = options;
     let amount = 0;
     if (coinSymbol !== symbol) {
         amount = BigNumber(currentAccount.tokens[coinSymbol].balance).toNumber();
-    } else if (COINS[symbol].txFeeSupport) {
+    } else if (symbol === 'AION' || symbol === 'ETH') {
         amount = BigNumber.max(
             BigNumber(0),
             BigNumber(balance)
@@ -74,9 +75,9 @@ const getAllBalance = async (currentAccount, options) => {
                 .shiftedBy(-18),
         ).toNumber();
     } else if (symbol === 'BTC' || symbol === 'LTC') {
-        amount = await client.getCoin(symbol).sendAll(currentAccount.address);
+        amount = await client.getCoin(symbol).sendAll(currentAccount.address, currentByteFee);
     } else {
-        amount = balance;
+        amount = balance.toNumber();
     }
     return amount;
 };
