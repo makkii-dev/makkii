@@ -4,7 +4,7 @@ import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet
 import BigNumber from 'bignumber.js';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
-import { sameAddress } from '../../../../client/api';
+import { sameAddress, client } from '../../../../client/api';
 import Loading from '../../../components/Loading';
 import { ComponentButton, SubTextInput } from '../../../components/common';
 import { linkButtonColor, mainBgColor } from '../../../style_util';
@@ -23,11 +23,11 @@ const updateTxObj = (txObj, nextTxObj, oldState, field) => {
     return oldState;
 };
 
-const SliderInput = ({ minValue, maxValue, value, onValueChange, labelText, unitText, step, infoEnabled = true }) => {
+const SliderInput = ({ minValue, maxValue, value, onValueChange, labelText, unitText, step, advancedCalc = true, advancedLabel = true, disabled = false }) => {
     return (
         <View style={{ alignItems: 'center' }}>
             <View style={{ width: width - 60, marginVertical: 10, flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
-                {infoEnabled ? (
+                {advancedLabel ? (
                     <Text style={{ width: '40%', color: 'black' }}>{`${labelText}: (${minValue} - ${maxValue})`}</Text>
                 ) : (
                     <Text style={{ width: '40%', color: 'black' }}>{`${labelText}:`}</Text>
@@ -38,6 +38,7 @@ const SliderInput = ({ minValue, maxValue, value, onValueChange, labelText, unit
                         width: '50%',
                         height: 20,
                     }}
+                    disabled={disabled}
                     minimumValue={minValue}
                     maximumValue={maxValue}
                     minimumTrackTintColor={linkButtonColor}
@@ -50,7 +51,7 @@ const SliderInput = ({ minValue, maxValue, value, onValueChange, labelText, unit
                     }}
                 />
             </View>
-            {infoEnabled ? <Text style={{ marginLeft: 20 }}>{`${value} ${unitText}`}</Text> : null}
+            {advancedCalc ? <Text style={{ marginLeft: 20 }}>{`${value} ${unitText}`}</Text> : null}
         </View>
     );
 };
@@ -75,7 +76,9 @@ const AdvancedSliderEth = props => {
                 value={gasLimit}
                 onValueChange={onGasLimitChange}
                 labelText={strings('send.label_gas_limit')}
-                unitText={COINS[coinSymbol].minUnit}
+                advancedLabel={gasLimit <= COINS[coinSymbol].maxGasLimit}
+                disabled={gasLimit > COINS[coinSymbol].maxGasLimit}
+                unitText=""
                 step={100}
             />
             <Text style={{ width: '100%', color: 'black', paddingLeft: 10 }}>
@@ -86,8 +89,8 @@ const AdvancedSliderEth = props => {
 };
 
 const AdvancedSliderBtc = props => {
-    const { coinSymbol, byteFee, onByteFeeChange, coinPrice, fiatCurrency } = props;
-    const coinUsed = byteFee * (coinSymbol === 'BTC' ? 500 : 2000) * 10 ** -8 || 0;
+    const { coinSymbol, byteFee, onByteFeeChange, coinPrice, fiatCurrency, coinUsed } = props;
+    const coinUsed_ = coinUsed.times(byteFee).toNumber() || 0;
     return (
         <View style={styles.containerView}>
             <SliderInput
@@ -98,13 +101,21 @@ const AdvancedSliderBtc = props => {
                 labelText={strings('send.label_gas_price')}
                 unitText={COINS[coinSymbol].gasPriceUnit}
                 step={0.5}
-                infoEnabled={false}
+                advancedCalc={false}
+                advancedLabel={false}
             />
             <Text style={{ width: '100%', color: 'black', paddingLeft: 20 }}>
-                {`${strings('transaction_detail.label_fee')}: ${coinUsed.toFixed(5)} ${coinSymbol} ≈  ${(coinUsed * coinPrice).toFixed(5)} ${fiatCurrency}`}
+                {`${strings('transaction_detail.label_fee')}: ${coinUsed_.toFixed(5)} ${coinSymbol} ≈  ${(coinUsed_ * coinPrice).toFixed(5)} ${fiatCurrency}`}
             </Text>
         </View>
     );
+};
+
+const getBTCGasUsed = async (symbol, address) => {
+    const btcClient = client.getCoin(symbol);
+    const balance = await btcClient.getBalance(address);
+    const sendAll_ = await btcClient.sendAll(address, 1);
+    return balance.minus(sendAll_);
 };
 
 class Send extends Component {
@@ -157,7 +168,15 @@ class Send extends Component {
             gasPrice,
             gasLimit,
             byteFee: 10,
+            btcCoinUsed: currentAccount.symbol === 'BTC' ? new BigNumber(500).shiftedBy(-8) : new BigNumber(2000).shiftedBy(-8),
         };
+        if (currentAccount.symbol === 'BTC' || currentAccount.symbol === 'LTC') {
+            getBTCGasUsed(currentAccount.symbol, currentAccount.address).then(r => {
+                this.setState({
+                    btcCoinUsed: r,
+                });
+            });
+        }
     }
 
     async componentDidMount() {
@@ -329,6 +348,7 @@ class Send extends Component {
                                             coinSymbol={currentAccount.symbol}
                                             coinPrice={coinPrice}
                                             fiatCurrency={fiatCurrency}
+                                            coinUsed={this.state.btcCoinUsed}
                                         />
                                     )
                                 ) : null}
@@ -440,11 +460,12 @@ class Send extends Component {
     sendAll = () => {
         this.refs.refLoading.show();
         const { dispatch } = this.props;
-        const { gasLimit, gasPrice } = this.state;
+        const { gasLimit, gasPrice, byteFee } = this.state;
         dispatch(
             createAction('txSenderModel/sendAll')({
                 currentGasPrice: gasPrice,
                 currentGasLimit: gasLimit,
+                currentByteFee: byteFee,
             }),
         ).then(amount => {
             this.setState({ amount });
