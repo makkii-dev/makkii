@@ -46,7 +46,7 @@ const validateTxObj = async (txObj, account) => {
         const gasLimit_ = new BigNumber(gasLimit);
         if (symbol === 'LTC' || symbol === 'BTC') {
             const all_amount = await client.getCoin(symbol).sendAll(account.address, byteFee);
-            if (balance.lt(new BigNumber(all_amount))) {
+            if (amount_.gt(new BigNumber(all_amount))) {
                 return { result: false, err: 'error_insufficient_amount' };
             }
         }
