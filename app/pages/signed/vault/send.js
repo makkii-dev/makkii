@@ -376,6 +376,7 @@ class Send extends Component {
             data: this.state.data,
             gasPrice: this.state.gasPrice,
             gasLimit: this.state.gasLimit,
+            byteFee: this.state.byteFee,
         };
         dispatch(createAction('txSenderModel/validateTxObj')({ txObj })).then(result => {
             if (result) {
