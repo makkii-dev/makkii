@@ -83,7 +83,7 @@ const uploadImage = async lists => {
             })
                 .then(resp => resp.json())
                 .then(resp => {
-                    const urls = resp.map(url => `${Config.app_server_api}/${url}`);
+                    const urls = resp.map(url => `${Config.app_server_api}${url}`);
                     resolve({ result: true, urls });
                 })
                 .catch(e => {
