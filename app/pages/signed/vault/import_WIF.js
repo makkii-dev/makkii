@@ -24,6 +24,7 @@ const importWIF = props => {
                     setWif(data.data);
                     navigation.setParams({
                         isEdited: true,
+                        wif: data.data,
                     });
                 }
                 callback(res ? data.data : null, res ? '' : strings('import_private_key.error_invalid_private_key'));
