@@ -5143,9 +5143,9 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-"lib-common-util-js@https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e":
+"lib-common-util-js@https://github.com/makkii-dev/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e":
   version "1.0.0"
-  resolved "https://github.com/chaion/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
+  resolved "https://github.com/makkii-dev/lib-common-util-js.git#7c64a4fd9b96b4c4d25b26de47e290eef10cc92e"
   dependencies:
     axios "^0.19.0"
     bignumber.js "^9.0.0"
@@ -5363,9 +5363,9 @@ makeerror@1.0.x:
   version "1.0.0"
   resolved "https://github.com/makkii-dev/makkii-bridge.git#16f318edb8ba3b7dc22cbf51ef276d5ce81bd898"
 
-"makkiijs@https://github.com/chaion/makkiijs.git#8eb41c1c9038da4bd810880235873d41c61a4583":
+"makkiijs@https://github.com/makkii-dev/makkii-js.git#3863651b576c901d6c37c89ba580931eba864754":
   version "1.0.0"
-  resolved "https://github.com/chaion/makkiijs.git#8eb41c1c9038da4bd810880235873d41c61a4583"
+  resolved "https://github.com/makkii-dev/makkii-js.git#3863651b576c901d6c37c89ba580931eba864754"
   dependencies:
     "@babel/runtime" "^7.5.5"
 
