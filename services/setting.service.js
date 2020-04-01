@@ -160,9 +160,12 @@ const getOrRequestToken = async () => {
     const currentTime = Date.now();
     const { expired, local_token } = local_token_obj;
     if (expired === undefined || currentTime > expired) {
+        console.log('client_id:', Config.client_id);
         const url = `${Config.app_server_api}/oauth/token?grant_type=client_credentials&client_id=${Config.client_id}&client_secret=${Config.client_secret}`;
+        console.log('url: ', url);
         try {
             const { data } = await HttpClient.post(url);
+            console.log('data:', data);
             const { access_token, expires_in } = data;
             const payload = {
                 local_token: access_token,

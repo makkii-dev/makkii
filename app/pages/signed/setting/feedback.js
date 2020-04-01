@@ -67,16 +67,20 @@ const feedback = props => {
     };
 
     const selectFromPhotos = () => {
-        handelModalVisible();
+        // handelModalVisible();
         dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }));
         const options = {
             title: 'Image',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
+                carmeraRoll: true,
+                waitUntilSaved: true,
             },
         };
+        console.log('test');
         ImagePicker.launchImageLibrary(options, res => {
+            console.log('res');
             dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }));
             if (res.error) {
                 console.log('error ', res.error);
@@ -84,7 +88,7 @@ const feedback = props => {
                 if (res.data.length / 1048576 > 0.5) {
                     AppToast.show(strings('feedback.toast_too_large_size'));
                 } else {
-                    const url = Platform.OS === 'ios' ? res.uri : `file://${res.path}`;
+                    const url = Platform.OS === 'android' ? res.uri : res.uri.replace('file://', '');
                     const newImageLists = [...state.imageLists, { url, name: res.fileName }];
                     setState({
                         ...state,
