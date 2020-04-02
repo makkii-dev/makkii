@@ -1,11 +1,11 @@
 import React from 'react';
 import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
-import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
 import { strings } from '../../locales/i18n';
 import { AppToast } from '../components/AppToast';
 import { createAction } from '../../utils/dva';
+import { showTouchID } from '../../utils/touchId';
 
 const { height } = Dimensions.get('window');
 const KeyboardData = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'cancel', '0', 'delete'];
@@ -14,6 +14,7 @@ const MaxPinCodeLength = 6;
 const isSmallScreen = height < 569;
 
 const mColor = '#fff';
+
 class PinCodeScreen extends React.Component {
     /** *********************************************************
      * 1. create pin Code process:
@@ -32,8 +33,6 @@ class PinCodeScreen extends React.Component {
     animatedValue = new Animated.Value(0);
 
     createPinCode = '';
-
-    currentAppState = 'active';
 
     constructor(props) {
         super(props);
@@ -55,30 +54,21 @@ class PinCodeScreen extends React.Component {
         this.cancel && this.props.navigation.goBack();
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         Keyboard.dismiss();
-        setTimeout(() => {
-            this.cancel && this.onPressTouchId();
-        }, 1000);
+        setTimeout(
+            () => {
+                this.cancel && this.onPressTouchId();
+            },
+            Platform.OS === 'ios' ? 1000 : 100,
+        );
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.onGoback(); // works best when the goBack is async
             return true;
         });
     }
 
-    componentWillUpdate(nextProps: Readonly<P>): void {
-        const { currentAppState, showTouchIdDialog } = nextProps;
-        console.log('current=>', this.currentAppState);
-        console.log('nextprops->', currentAppState, showTouchIdDialog);
-        if (this.currentAppState !== currentAppState) {
-            this.currentAppState = currentAppState;
-            if (showTouchIdDialog && currentAppState === 'active') {
-                this.onPressTouchId();
-            }
-        }
-    }
-
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         this.backHandler && this.backHandler.remove();
     }
 
@@ -208,35 +198,15 @@ class PinCodeScreen extends React.Component {
     };
 
     onPressTouchId = () => {
-        const { touchIDEnabled = false, dispatch, currentAppState } = this.props;
+        const { touchIDEnabled = false } = this.props;
         if (touchIDEnabled === false || this.isModifyPinCode === true) {
             return;
         }
-        const optionalConfigObject = {
-            title: strings('pinCode.touchID_dialog_title'), // Android
-            imageColor: '#e00606', // Android
-            imageErrorColor: '#ff0000', // Android
-            sensorDescription: strings('pinCode.touchID_dialog_desc'), // Android
-            sensorErrorDescription: strings('pinCode.touchID_dialog_failed'), // Android
-            cancelText: strings('cancel_button'), // Android
-            unifiedErrors: true, // use unified error messages (default false)
-            passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
-        };
-        // eslint-disable-next-line no-unused-expressions
-        Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true })) : null;
-        TouchID.authenticate('', optionalConfigObject)
-            .then(() => {
-                Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
-                this.onUnlockSuccess && this.onUnlockSuccess();
-                this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
-                this.targetScreen || this.props.navigation.goBack();
-            })
-            .catch(error => {
-                Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
-                if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
-                    currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`, { duration: 3000 }));
-                }
-            });
+        showTouchID(() => {
+            this.onUnlockSuccess && this.onUnlockSuccess();
+            this.targetScreen && this.props.navigation.navigate(this.targetScreen, this.targetScreenArgs);
+            this.targetScreen || this.props.navigation.goBack();
+        });
     };
 
     renderItem = ({ item }) => {
@@ -359,8 +329,6 @@ class PinCodeScreen extends React.Component {
 const mapToState = ({ userModel, settingsModel }) => ({
     hashed_pinCode: userModel.hashed_pinCode,
     touchIDEnabled: settingsModel.touchIDEnabled,
-    currentAppState: settingsModel.currentAppState,
-    showTouchIdDialog: settingsModel.showTouchIdDialog,
     biometryType: settingsModel.biometryType,
 });
 

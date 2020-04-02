@@ -7,7 +7,7 @@ import LocalBarcodeRecognizer from 'react-native-local-barcode-recognizer';
 import { strings } from '../../locales/i18n';
 import { mainColor } from '../style_util';
 import { AppToast } from '../components/AppToast';
-import { createAction } from '../../utils/dva';
+import { ignoreNextAppStateChange } from '../../utils/touchId';
 
 class Scan extends Component {
     static navigationOptions = ({ navigation }) => {
@@ -77,13 +77,13 @@ class Scan extends Component {
         const { navigation } = this.props;
         navigation.addListener('willFocus', () => this.isMount && this.setState({ focusedScreen: true }));
         navigation.addListener('willBlur', () => this.isMount && this.setState({ focusedScreen: false }));
-        this.props.dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+        ignoreNextAppStateChange(true);
         this.scannerLineMove();
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         this.isMount = false;
-        this.props.dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+        ignoreNextAppStateChange(false);
     }
 
     // eslint-disable-next-line react/sort-comp
@@ -114,10 +114,9 @@ class Scan extends Component {
                 path: 'images',
             },
         };
-        const { dispatch } = this.props;
-        dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+        ignoreNextAppStateChange(true);
         ImagePicker.launchImageLibrary(options, res => {
-            dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+            ignoreNextAppStateChange(false);
             if (res.error) {
                 console.log('error ', res.error);
             } else {
