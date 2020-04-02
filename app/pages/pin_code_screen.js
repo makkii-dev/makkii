@@ -33,7 +33,7 @@ class PinCodeScreen extends React.Component {
 
     createPinCode = '';
 
-    currentAppState: 'active';
+    currentAppState = 'active';
 
     constructor(props) {
         super(props);
@@ -65,9 +65,11 @@ class PinCodeScreen extends React.Component {
 
     componentWillUpdate(nextProps: Readonly<P>): void {
         const { currentAppState, showTouchIdDialog } = nextProps;
+        console.log('current=>', this.currentAppState);
+        console.log('nextprops->', currentAppState, showTouchIdDialog);
         if (this.currentAppState !== currentAppState) {
             this.currentAppState = currentAppState;
-            if (showTouchIdDialog) {
+            if (showTouchIdDialog && currentAppState === 'active') {
                 this.onPressTouchId();
             }
         }
@@ -215,7 +217,7 @@ class PinCodeScreen extends React.Component {
             sensorErrorDescription: strings('pinCode.touchID_dialog_failed'), // Android
             cancelText: strings('cancel_button'), // Android
             unifiedErrors: true, // use unified error messages (default false)
-            passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
+            passcodeFallback: true, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
         // eslint-disable-next-line no-unused-expressions
         Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true })) : null;
