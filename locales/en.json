@@ -567,6 +567,7 @@
     "touchID_NOT_ENROLLED": "Biometry is not enrolled",
     "touchID_AUTHENTICATION_FAILED": "If biometry authentication fails again, Biometric Authentication will be disabled. Please go to Settings > Touch ID or Face IDto enable it.",
     "touchID_UNKNOWN_ERROR": "Biometric Authentication is disabled. Please go to Settings > Touch ID or Face ID to enable it.",
+    "touchID_LOCKOUT": "Biometric Authentication is disabled. Please go to Settings > Touch ID or Face ID to enable it.",
     "verify_title": "Login Password",
     "verify_desc": "Enter login password to verify",
     "pinCode_prompt": "Once PIN code is enabled, verification is required before sensitive operations such as transfer and private key export.\n\nAfter enable PIN code, you must set one immediately.\nTouch ID can be enabled only after PIN code is enabled.",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform } from 'react-native';
+import { ImageBackground, Animated, View, Text, Dimensions, FlatList, TouchableOpacity, StyleSheet, Image, BackHandler, Platform, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import TouchID from 'react-native-touch-id';
 import { getStatusBarHeight, hashPassword } from '../../utils';
@@ -56,7 +56,10 @@ class PinCodeScreen extends React.Component {
     }
 
     componentDidMount(): void {
-        this.cancel && this.onPressTouchId();
+        Keyboard.dismiss();
+        setTimeout(() => {
+            this.cancel && this.onPressTouchId();
+        }, 1000);
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
             this.onGoback(); // works best when the goBack is async
             return true;
@@ -217,7 +220,7 @@ class PinCodeScreen extends React.Component {
             sensorErrorDescription: strings('pinCode.touchID_dialog_failed'), // Android
             cancelText: strings('cancel_button'), // Android
             unifiedErrors: true, // use unified error messages (default false)
-            passcodeFallback: true, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
+            passcodeFallback: false, // iOS - allows the device to fall back to using the passcode, if faceid/touch is not available. this does not mean that if touchid/faceid fails the first few times it will revert to passcode, rather that if the former are not enrolled, then it will use the passcode.
         };
         // eslint-disable-next-line no-unused-expressions
         Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true })) : null;
@@ -231,7 +234,7 @@ class PinCodeScreen extends React.Component {
             .catch(error => {
                 Platform.OS === 'ios' ? dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false })) : null;
                 if (error.code !== 'USER_CANCELED' && error.code !== 'SYSTEM_CANCELED') {
-                    currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`));
+                    currentAppState === 'active' && AppToast.show(strings(`pinCode.touchID_${error.code}`, { duration: 3000 }));
                 }
             });
     };
