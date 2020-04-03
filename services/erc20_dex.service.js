@@ -246,7 +246,7 @@ const exchangeCallback = dispatch => async (metaData, tx) => {
         } = store.getState();
         const history = await getExchangeHistory(tx.from, COINS.ETH.network, tx.hash);
         const symbol = findSymbolByAddress(tokenList, history.destToken);
-        exchange.destQty = history.destQty / 10 ** tokenList[symbol].decimals;
+        exchange.destQty = history.destQty / 10 ** (tokenList[symbol] || { decimals: -18 }).decimals;
     }
     const payload = {
         key: accountKey('ETH', tx.from, 'ERC20DEX'),
