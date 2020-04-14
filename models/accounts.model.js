@@ -34,7 +34,7 @@ export default {
         /*
             eg:
                 {
-                     private_key  saved in Sensitive storage
+                    private_key  saved in Sensitive storage
                     "AION+0xa0e08bf1df768bb3f40e795dd5c487889c17f6c54111f8d9a5553783a1e6c963":{  // key format is <symbol>'+'<address>; In storage , it will be saved with the key  'acc+'<symbol>'+'<address>
                         "address":"0xa0e08bf1df768bb3f40e795dd5c487889c17f6c54111f8d9a5553783a1e6c963",
                         "balance":"15309.17544544050208896", // balance will not be saved

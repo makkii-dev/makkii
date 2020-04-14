@@ -745,6 +745,16 @@
     "ltc": "LTC block explorer",
     "trx": "TRON block explorer"
   },
+  "connector": {
+    "button_close": "Close",
+    "hint_confirm": "Confirm Login to Makkii for Web",
+    "hint_logout": "Logged in to Makkii for Web",
+    "button_login": "Log In",
+    "button_cancel": "Cancel",
+    "button_logout": "Log Out of Makkii for Web",
+    "notification_title_tx_request": "Transaction Request",
+    "notification_message_tx_request": "A transaction request from Web Makkii"
+  },
   "time": {
     "weekday0": "Sunday",
     "weekday1": "Monday",

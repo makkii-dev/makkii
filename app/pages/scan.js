@@ -136,9 +136,13 @@ class Scan extends Component {
                     if (validate) {
                         if (!this.isVerifying) {
                             this.isVerifying = true;
-                            validate({ data: result }, (res, message = '') => {
+                            validate({ data: result }, (res, message = '', callback = null) => {
                                 if (res) {
-                                    this.props.navigation.goBack();
+                                    if (callback) {
+                                        callback();
+                                    } else {
+                                        this.props.navigation.goBack();
+                                    }
                                 } else {
                                     AppToast.show(message);
                                 }
@@ -179,9 +183,13 @@ class Scan extends Component {
                         if (validate) {
                             if (!this.isVerifying) {
                                 this.isVerifying = true;
-                                validate(e, (result, message = '') => {
+                                validate(e, (result, message = '', callback = null) => {
                                     if (result) {
-                                        this.props.navigation.goBack();
+                                        if (callback) {
+                                            callback();
+                                        } else {
+                                            this.props.navigation.goBack();
+                                        }
                                     } else {
                                         // slow down toast log
                                         const now = Date.now();

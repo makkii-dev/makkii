@@ -33,6 +33,8 @@ import VaultExportBIP38 from './pages/signed/vault/export_bip38';
 import VaultImportWIF from './pages/signed/vault/import_WIF';
 import VaultExportTo from './pages/signed/vault/export_to';
 import VaultImportViewOnlyAddress from './pages/signed/vault/import_vew_only_address';
+import VaultConnectorConfirm from './pages/signed/vault/connector_confirm';
+import VaultConnectorCancel from './pages/signed/vault/connector_cancel';
 import DappLauncher from './pages/signed/discover/dapp_launcher';
 import DiscoverHome from './pages/signed/discover/home';
 import BlockChainBrowser from './pages/signed/discover/blockChainBrowser';
@@ -384,6 +386,18 @@ const AppNavigator = createStackNavigator(
                 headerTitleAllowFontScaling: false,
             },
         },
+        signed_vault_connector_confirm: {
+            screen: VaultConnectorConfirm,
+            navigationOptions: {
+                header: null,
+            },
+        },
+        signed_vault_connector_cancel: {
+            screen: VaultConnectorCancel,
+            navigationOptions: {
+                header: null,
+            },
+        },
         signed_select_token: {
             screen: SelectToken,
             navigationOptions: ({ navigation }) => ({
@@ -649,7 +663,7 @@ AppNavigator.router.getStateForAction = (action, state) => {
         let newRoutes;
         let newIndex;
         if (action.type === 'Navigation/NAVIGATE') {
-            if (state.routes[state.routes.length - 1].routeName.match(/^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/)) {
+            if (state.routes[state.routes.length - 1].routeName.match(/^scan$|^unlock$|^signed_backup_tips$|^signed_confirm_mnemonic$|^unsigned_register_mnemonic$/)) {
                 newRoutes = state.routes.slice(0, state.routes.length - 1);
                 newIndex = newRoutes.length;
                 return defaultGetStateForAction(action, { index: newIndex, routes: newRoutes });

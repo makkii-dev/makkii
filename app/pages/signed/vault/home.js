@@ -438,6 +438,10 @@ class Home extends Component {
         });
     };
 
+    handleConnector = () => {
+        this.props.navigation.navigate('signed_vault_connector_cancel');
+    };
+
     async requestStoragePermission() {
         try {
             const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE, {
@@ -469,15 +473,36 @@ class Home extends Component {
         Linking.addEventListener('url', this.handleOpenURL);
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         const { dispatch, accounts } = this.props;
         dispatch(createAction('accountsModel/loadBalances')({ keys: Object.keys(accounts), force: true }));
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         console.log('unmount home');
         Linking.removeEventListener('url', this.handleOpenURL);
     }
+
+    scan = () => {
+        this.props.navigation.navigate('scan', {
+            validate: (data, callback) => {
+                const obj = {};
+                try {
+                    const { signature, channel } = JSON.parse(data.data);
+                    obj.signature = signature;
+                    obj.channel = channel;
+                } catch (err) {
+                    //
+                }
+                const res = obj.signature && obj.channel;
+                callback(res ? obj : null, res ? '' : strings('import_private_key.error_invalid_private_key'), () => {
+                    this.props.navigation.navigate('signed_vault_connector_confirm', {
+                        connection: obj,
+                    });
+                });
+            },
+        });
+    };
 
     fetchAccountsBalance = () => {
         const { dispatch, accounts } = this.props;
@@ -500,7 +525,7 @@ class Home extends Component {
         );
     };
 
-    onSwipeOpen(Key: any) {
+    onSwipeOpen(Key) {
         this.setState({
             openRowKey: Key,
             scrollEnabled: false,
@@ -696,7 +721,7 @@ class Home extends Component {
     };
 
     render() {
-        const { accounts, totalBalance, fiat_currency: fiatCurrency, isGettingBalance, activity } = this.props;
+        const { accounts, totalBalance, fiat_currency: fiatCurrency, isGettingBalance, activity, connectorLogin } = this.props;
         let renderAccounts = sortAccounts(Object.values(accounts), this.state.sortOrder);
         renderAccounts = filterAccounts(renderAccounts, this.state.filter);
         renderAccounts = searchAccounts(renderAccounts, this.state.keyWords);
@@ -731,6 +756,22 @@ class Home extends Component {
                                 marginRight: 10,
                             }}
                         >
+                            <TouchableOpacity
+                                style={{
+                                    height: 40,
+                                    width: 48,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                }}
+                                onPress={() => {
+                                    this.refs.refHomeCenter && this.refs.refHomeCenter.closeAll();
+                                    Keyboard.dismiss();
+                                    this.setState({ openRowKey: null });
+                                    this.scan();
+                                }}
+                            >
+                                <Image source={require('../../../../assets/icon_scan.png')} style={{ height: 24, width: 24, tintColor: '#fff' }} />
+                            </TouchableOpacity>
                             <TouchableOpacity
                                 style={{
                                     height: 40,
@@ -847,13 +888,46 @@ class Home extends Component {
                             <Image source={{ uri: activity.imgUrl }} style={{ width: 80, height: 80 }} resizeMode="contain" />
                         </TouchableView>
                     ) : null}
+                    {connectorLogin ? (
+                        <TouchableView
+                            currentRight={5}
+                            currentBottom={20}
+                            style={{
+                                shadowOpacity: 0.3,
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                            }}
+                            width={40}
+                            height={40}
+                            onPress={() => {
+                                this.handleConnector();
+                            }}
+                        >
+                            <View
+                                style={{
+                                    elevation: 8,
+                                    shadowColor: 'black',
+                                    shadowOffset: { width: 5, height: 5 },
+                                    shadowOpacity: 0.3,
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    backgroundColor: '#ffffff',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                }}
+                            >
+                                <Image source={require('../../../../assets/icon_computer.png')} style={{ width: 30, height: 25 }} resizeMode="contain" />
+                            </View>
+                        </TouchableView>
+                    ) : null}
                 </TouchableOpacity>
             </View>
         );
     }
 }
 
-const mapToState = ({ accountsModel, settingsModel }) => {
+const mapToState = ({ accountsModel, settingsModel, connectorModel }) => {
     const { accountsMap, accountsKey, transactionsMap } = accountsModel;
     let totalBalance = BigNumber(0);
     const accounts = accountsKey.reduce((map, el) => {
@@ -865,6 +939,7 @@ const mapToState = ({ accountsModel, settingsModel }) => {
         return map;
     }, {});
     return {
+        connectorLogin: connectorModel.isLogin,
         isGettingBalance: accountsModel.isGettingBalance,
         totalBalance,
         fiat_currency: settingsModel.fiat_currency,

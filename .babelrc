@@ -4,5 +4,18 @@
     "production": {
       "plugins": ["transform-remove-console"]
     }
-  }
+  },
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": [
+          "."
+        ],
+        "alias": {
+          "@makkii-connector/base-connector": "./node_modules/socket-bridge/packages/base-connector"
+        }
+      }
+    ]
+  ]
 }

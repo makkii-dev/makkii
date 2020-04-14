@@ -743,6 +743,16 @@
     "ltc": "LTC区块浏览器",
     "trx": "TRON区块浏览器"
   },
+  "connector":{
+    "button_close": "关闭",
+    "hint_confirm": "网页版Makkii确认登录",
+    "hint_logout":"你已在浏览器上登录网页Makkii",
+    "button_login":"登录",
+    "button_cancel":"取消登录",
+    "button_logout":"退出网页Makkii",
+    "notification_title_tx_request":"交易请求",
+    "notification_message_tx_request":"一笔来自网页makkii的交易请求"
+  },
   "time": {
     "weekday0": "星期日",
     "weekday1": "星期一",

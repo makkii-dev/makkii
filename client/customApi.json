@@ -24,9 +24,9 @@
           "broadcast": "https://api.blockcypher.com/v1/btc/main/txs/push?token=718a0597d85f48259c457136eecb80da"
         },
         "BTCTEST": {
-          "insight_api": "http://47.92.202.146:3001/api",
-          "explorer": "http://47.92.202.146:3001/tx/",
-          "broadcast": "http://47.92.202.146:3001/api/tx/send"
+          "insight_api": "http://192.168.50.139:3001/api",
+          "explorer": "http://192.168.50.139:3001/tx/",
+          "broadcast": "http://192.168.50.139:3001/api/tx/send"
         }
       }
     },

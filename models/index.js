@@ -11,7 +11,22 @@ import contactAddModel from './contact_add.model';
 import pokketModel from './pokket.model';
 import newsModel from './news.model';
 import discoverModel from './discover.model';
+import connecotrModel from './connector.model';
 
-const models = [erc20DexModel, txListenerModel, accountsModel, accountImportModel, tokenImportModel, txSenderModel, userModel, settingsModel, contactAddModel, pokketModel, newsModel, discoverModel];
+const models = [
+    erc20DexModel,
+    txListenerModel,
+    accountsModel,
+    accountImportModel,
+    tokenImportModel,
+    txSenderModel,
+    userModel,
+    settingsModel,
+    contactAddModel,
+    pokketModel,
+    newsModel,
+    discoverModel,
+    connecotrModel,
+];
 
 export default models;
