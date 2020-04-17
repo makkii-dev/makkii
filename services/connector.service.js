@@ -29,14 +29,6 @@ socket.addEventListener('error', err => {
     console.log('socket error=>', err);
 });
 
-socket.addEventListener('reconnect', () => {
-    const { signature, channel } = store.getState().connectorModel;
-    console.log('sig', signature, channel);
-    login(signature, channel).catch(err => {
-        console.log('try reRegister failed', err);
-    });
-});
-
 export const mobileConnector = new MobileConnectorAdapter(socket);
 
 /**
@@ -197,8 +189,15 @@ export const login = (sig, channel) => {
         mobileConnector
             .register(channel, sig)
             .then(res => {
-                store.dispatch(createAction('connectorModel/updateState')({ isLogin: true, signature: sig, channel }));
+                store.dispatch(createAction('connectorModel/login')({ signature: sig, channel }));
                 checkSessionStaus();
+                socket.addEventListener('reconnect', () => {
+                    const { signature, channel } = store.getState().connectorModel;
+                    console.log('sig', signature, channel);
+                    login(signature, channel).catch(err => {
+                        console.log('try reRegister failed', err);
+                    });
+                });
                 resolve(res);
             })
             .catch(err => {
@@ -207,7 +206,14 @@ export const login = (sig, channel) => {
     });
 };
 
+export const tryLogin = (sig, channel_) => {
+    const { signature, channel } = store.getState().connectorModel;
+    login(sig || signature, channel_ || channel)
+        .then(() => {})
+        .catch(() => {});
+};
+
 export const logout = () => {
     mobileConnector.disconnectChannel();
-    store.dispatch(createAction('connectorModel/updateState')({ isLogin: false, signature: '', channel: '' }));
+    store.dispatch(createAction('connectorModel/logout')({}));
 };

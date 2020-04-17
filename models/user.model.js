@@ -148,6 +148,7 @@ export default {
         *login(action, { put }) {
             yield put(createAction('updateState')({ isLogin: true }));
             yield put(createAction('settingsModel/getSupportedModule')());
+            yield put(createAction('connectorModel/loadStorage')());
             yield put(
                 StackActions.reset({
                     index: 0,
