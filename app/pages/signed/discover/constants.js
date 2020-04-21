@@ -9,6 +9,15 @@ export const APPS = [
         },
     },
     {
+        id: 'BatchTransaction',
+        title: 'discoverApp.batch_transaction',
+        image: require('../../../../assets/icon_batch_transaction.png'),
+        entry: {
+            type: 'dapp', // to dapp launcher
+            dappName: 'Batch Transaction',
+        },
+    },
+    {
         id: 'News',
         title: 'discoverApp.news',
         image: require('../../../../assets/app_news.png'),

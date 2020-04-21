@@ -61,7 +61,10 @@ const switchAccount = navigate => symbol =>
 
 const sendTx = navigate => txObj =>
     new Promise((resolve, reject) => {
-        console.log('sendTx=>', txObj);
+        if (!store.getState().accountsModel.currentAccount) {
+            getCurrentAccount('AION');
+        }
+
         store.dispatch(
             createAction('txSenderModel/updateState')({
                 ...txObj,

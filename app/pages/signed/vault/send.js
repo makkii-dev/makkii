@@ -305,7 +305,7 @@ class Send extends Component {
                                 }
                                 unit={currentAccount.coinSymbol}
                             />
-                            {data ? <SubTextInput title={strings('send.label_data')} style={styles.text_input} value={data} multiline editable={false} /> : null}
+                            {data ? <SubTextInput title={strings('send.label_data')} style={styles.text_input} value={data} multiline editable={false} numberOfLines={10} /> : null}
                         </View>
 
                         {/* advanced button */}

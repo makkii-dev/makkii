@@ -729,6 +729,7 @@
     "origin_Bitcoin.com": "Bitcoin.com"
   },
   "discoverApp": {
+    "batch_transaction": "批量转账",
     "aion_staking": "Aion 质押",
     "news": "资讯",
     "blockChain_browser": "区块链浏览器",
