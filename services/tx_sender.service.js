@@ -12,7 +12,7 @@ const validateTxObj = async (txObj, account) => {
     const { symbol, coinSymbol } = account;
     // validate 'to'
     try {
-        let ret = await validateAddress(symbol, to);
+        let ret = validateAddress(symbol, to);
         if (!ret) {
             return { result: false, err: 'error_format_recipient' };
         }
@@ -20,21 +20,14 @@ const validateTxObj = async (txObj, account) => {
         return { result: false, err: 'error_format_recipient' };
     }
     // validate amount
-    const extra_params = {
-        gasLimit,
-        gasPrice,
-        symbol: coinSymbol,
-        network: COINS[symbol].network,
-    };
-    console.log(account, amount, extra_params);
-
     if (!validator.validateAmount(amount)) {
         return { result: false, err: 'error_format_amount' };
     }
     if (coinSymbol !== symbol) {
         const coinBalance = new BigNumber(account.tokens[coinSymbol].balance);
         if (coinBalance.lt(new BigNumber(amount))) return { result: false, err: 'error_insufficient_amount' };
-        const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
+        let gasPrice_ = new BigNumber(gasPrice);
+        if (gasPrice_.lt(10 ** 9)) gasPrice_ = gasPrice_.shiftedBy(9);
         const gasLimit_ = new BigNumber(gasLimit);
         const fee = gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
         const balance = new BigNumber(account.balance);
@@ -42,7 +35,8 @@ const validateTxObj = async (txObj, account) => {
     } else {
         const balance = new BigNumber(account.balance);
         const amount_ = new BigNumber(amount);
-        const gasPrice_ = new BigNumber(gasPrice).shiftedBy(9);
+        let gasPrice_ = new BigNumber(gasPrice);
+        if (gasPrice_.lt(10 ** 9)) gasPrice_ = gasPrice_.shiftedBy(9);
         const gasLimit_ = new BigNumber(gasLimit);
         if (symbol === 'LTC' || symbol === 'BTC') {
             const all_amount = await client.getCoin(symbol).sendAll(account.address, byteFee);
@@ -51,6 +45,7 @@ const validateTxObj = async (txObj, account) => {
             }
         }
         if (symbol === 'AION' || symbol === 'ETH') {
+            console.log(gasPrice_, gasLimit_);
             const fee = gasPrice_.multipliedBy(gasLimit_).shiftedBy(-18);
             if (balance.lt(amount_.plus(fee))) return { result: false, err: 'error_insufficient_amount' };
         }

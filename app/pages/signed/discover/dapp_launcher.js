@@ -6,6 +6,8 @@ import { ProgressBar } from '../../../components/ProgressBar';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, store } from '../../../../utils/dva';
 import defaultStyle, { STATUSBAR_HEIGHT } from '../../../styles';
+import { mapToAccountsModel } from '../../../../models/tx_sender.model';
+import { validateTxObj } from '../../../../services/tx_sender.service';
 
 const { width } = Dimensions.get('window');
 const renderLoading = () => {
@@ -64,23 +66,33 @@ const sendTx = navigate => txObj =>
         if (!store.getState().accountsModel.currentAccount) {
             getCurrentAccount('AION');
         }
-
-        store.dispatch(
-            createAction('txSenderModel/updateState')({
-                ...txObj,
-                gasPrice: txObj.gasPrice && (getMagnitude(txObj.gasPrice) >= 9 ? txObj.gasPrice / 1e9 : txObj.gasPrice),
-                editable: false,
-            }),
-        );
-        navigate('signed_vault_send', {
-            title: 'Send',
-            callback: (err, value) => {
-                if (err) {
-                    reject(err);
+        const { currentAccount } = mapToAccountsModel(store.getState());
+        validateTxObj(txObj, currentAccount)
+            .then(res => {
+                if (res.result) {
+                    store.dispatch(
+                        createAction('txSenderModel/updateState')({
+                            ...txObj,
+                            gasPrice: txObj.gasPrice && (getMagnitude(txObj.gasPrice) >= 9 ? txObj.gasPrice / 1e9 : txObj.gasPrice),
+                            editable: false,
+                        }),
+                    );
+                    navigate('signed_vault_send', {
+                        title: 'Send',
+                        callback: (err, value) => {
+                            if (err) {
+                                reject(err);
+                            }
+                            resolve(value);
+                        },
+                    });
+                } else {
+                    reject(res.err);
                 }
-                resolve(value);
-            },
-        });
+            })
+            .catch(err => {
+                reject(err);
+            });
     });
 let canGoBack = false;
 let invoke = new Bridge();
