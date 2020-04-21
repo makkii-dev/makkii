@@ -6,10 +6,10 @@ import { strings } from '../../../../locales/i18n';
 import defaultStyles from '../../../styles';
 import { ComponentButton } from '../../../components/common';
 import { mainBgColor } from '../../../style_util';
-import { createAction } from '../../../../utils/dva';
 import { sendFeedBack, uploadImage } from '../../../../services/setting.service';
 import Loading from '../../../components/Loading';
 import { AppToast } from '../../../components/AppToast';
+import { ignoreNextAppStateChange } from '../../../../utils/touchId';
 
 const { width } = Dimensions.get('window');
 
@@ -42,7 +42,7 @@ const ImageView = ({ handleDelete, uri }) => {
 };
 
 const feedback = props => {
-    const { navigation, dispatch } = props;
+    const { navigation } = props;
     const [state, setState] = React.useState({
         imageLists: [],
         feedback: '',
@@ -67,24 +67,28 @@ const feedback = props => {
     };
 
     const selectFromPhotos = () => {
-        handelModalVisible();
-        dispatch(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+        // handelModalVisible();
+        ignoreNextAppStateChange(true);
         const options = {
             title: 'Image',
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
+                carmeraRoll: true,
+                waitUntilSaved: true,
             },
         };
+        console.log('test');
         ImagePicker.launchImageLibrary(options, res => {
-            dispatch(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+            console.log('res');
+            ignoreNextAppStateChange(false);
             if (res.error) {
                 console.log('error ', res.error);
             } else if (res.uri) {
                 if (res.data.length / 1048576 > 0.5) {
                     AppToast.show(strings('feedback.toast_too_large_size'));
                 } else {
-                    const url = Platform.OS === 'ios' ? res.uri : `file://${res.path}`;
+                    const url = Platform.OS === 'android' ? res.uri : res.uri.replace('file://', '');
                     const newImageLists = [...state.imageLists, { url, name: res.fileName }];
                     setState({
                         ...state,

@@ -6,11 +6,12 @@ import { NavigationActions } from 'react-navigation';
 import RNFS from 'react-native-fs';
 import BackgroundTimer from 'react-native-background-timer';
 import { Storage } from '../utils/storage';
-import { createAction, popCustom } from '../utils/dva';
+import { createAction, popCustom, store } from '../utils/dva';
 import { getCoinPrices } from '../client/api';
 import { AppToast } from '../app/components/AppToast';
 import { setLocale, strings } from '../locales/i18n';
 import { getActivityConstant, getLatestVersion, getSupportedModule } from '../services/setting.service';
+import { IGNOREAPPSTATECHANGEFLAG, showTouchID } from '../utils/touchId';
 
 export default {
     namespace: 'settingsModel',
@@ -34,8 +35,6 @@ export default {
         state_version: 2, // local state/db version, used to upgrade
         currentAppState: 'active',
         leaveTime: 0,
-        ignoreAppState: false,
-        showTouchIdDialog: true,
         // bottomBarTab: ['signed_vault', 'signed_dex', 'signed_news', 'signed_setting'],
         bottomBarTab: ['signed_vault', 'signed_dex', 'signed_discover', 'signed_setting'],
         activity: {
@@ -282,42 +281,47 @@ export default {
             },
             { put, select },
         ) {
-            const { currentAppState, pinCodeEnabled, leaveTime, login_session_timeout, ignoreAppState } = yield select(mapToSettings);
+            const { currentAppState, pinCodeEnabled, leaveTime, login_session_timeout, touchIDEnabled } = yield select(mapToSettings);
             const { isLogin } = yield select(mapToUsers);
-            if (ignoreAppState || !isLogin) {
+            if (IGNOREAPPSTATECHANGEFLAG || !isLogin) {
                 return;
             }
+            console.log('nextAppState=>', nextAppState);
+            console.log('currentAppState=>', currentAppState);
             if (currentAppState === 'active' && nextAppState.match(/inactive|background/)) {
-                console.log('App has come to the foreground!');
+                console.log('App has come to the background!');
                 popCustom.hide();
                 if (pinCodeEnabled) {
                     yield put(
                         NavigationActions.navigate({
                             routeName: 'unlock',
-                            params: { cancel: false },
+                            params: { cancel: false, currentAppState },
                         }),
                     );
                 }
                 yield put(createAction('updateState')({ currentAppState: nextAppState, leaveTime: Date.now() }));
             }
             if (currentAppState.match(/inactive|background/) && nextAppState === 'active') {
-                console.log('App has come to the background!');
+                console.log('App has come to the foreground!');
                 const diff = Date.now() - leaveTime;
                 if (leaveTime && diff > login_session_timeout * 60 * 1000) {
                     yield put(createAction('userModel/logOut')());
                     yield put(
                         createAction('updateState')({
                             currentAppState: nextAppState,
-                            showTouchIdDialog: false,
                         }),
                     );
                 } else {
                     yield put(
                         createAction('updateState')({
                             currentAppState: nextAppState,
-                            showTouchIdDialog: true,
                         }),
                     );
+                    if (pinCodeEnabled && touchIDEnabled) {
+                        showTouchID(() => {
+                            store.dispatch(createAction('Navigation/BACK')({}));
+                        });
+                    }
                 }
             }
         },

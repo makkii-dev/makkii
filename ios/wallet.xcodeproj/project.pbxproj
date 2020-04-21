@@ -1794,7 +1794,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.chaion.makkii;
 				PRODUCT_NAME = Makkii;
-				PROVISIONING_PROFILE_SPECIFIER = chaion.development.profile;
+				PROVISIONING_PROFILE_SPECIFIER = "Development Profile";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

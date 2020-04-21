@@ -555,6 +555,7 @@
     "touchID_NOT_ENROLLED": "生物信息没有录入",
     "touchID_AUTHENTICATION_FAILED": "若下次生物信息再不匹配，生物信息认证解锁将被禁用，请去 设置 > Touch ID 或 Face ID 重新开启。",
     "touchID_UNKNOWN_ERROR": "生物信息认证被禁用，请去 设置 > Touch ID 或 Face ID 重新开启。",
+    "touchID_LOCKOUT": "生物信息认证被禁用，请去 设置 > Touch ID 或 Face ID 重新开启。",
     "verify_title": "验证登录密码",
     "verify_desc": "请输入登录密码确认本人操作",
     "pinCode_prompt": "开启后, 转账、查看私钥和查看助记词等敏感操作时，需首先进行数字口令验证。\n\n开启数字口令时需要重新设置口令。\n开启指纹解锁之前必须开启数字口令。",

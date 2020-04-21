@@ -16,7 +16,7 @@ const getTransactionsHistory = async (symbol, address, page, size, timestamp) =>
 
 const getTransfersHistory = async (symbol, address, contractAddr, page, size, timestamp) => {
     try {
-        return await getAccountTokenTransferHistory(symbol, address, contractAddr, null, page, size, timestamp);
+        return await getAccountTokenTransferHistory(symbol, address, contractAddr, page, size, timestamp);
     } catch (e) {
         console.log('getTransfersHistory error=>', e);
         throw e;

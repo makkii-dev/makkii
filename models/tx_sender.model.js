@@ -12,6 +12,7 @@ import { AppToast } from '../app/components/AppToast';
 import { getTokenDetail } from '../client/api';
 import { COINS } from '../client/support_coin_list';
 import { getOrInitLedger } from '../services/account_import.service';
+import { ignoreNextAppStateChange } from '../utils/touchId';
 
 const init = {
     to: '',
@@ -107,7 +108,7 @@ export default {
             },
             { call, select, put },
         ) {
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true })); // ignore ledger Appsate change
+            ignoreNextAppStateChange(true);
             const { currentAccount: _currentAccount } = yield select(mapToAccountsModel);
             const { customBroadCast, callbackParams, callbacks } = yield select(({ txSenderModel }) => ({ ...txSenderModel }));
             const { address, symbol, coinSymbol, type: accountType } = _currentAccount;
@@ -125,7 +126,7 @@ export default {
             const pk = yield call(SensitiveStorage.get, accountKey(symbol, address), '');
             let currentAccount = { ..._currentAccount, private_key: pk };
             let ret = yield call(sendTx, txObj, currentAccount, customBroadCast === null);
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+            ignoreNextAppStateChange(false);
             ret = customBroadCast ? yield call(customBroadCast, ret.data) : ret;
             if (ret.result) {
                 // send evt log

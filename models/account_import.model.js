@@ -5,6 +5,7 @@ import { createAction } from '../utils/dva';
 import { alertOk } from '../app/components/common';
 import { strings } from '../locales/i18n';
 import { validateAddress } from '../client/keystore';
+import { ignoreNextAppStateChange } from '../utils/touchId';
 
 const init = {
     symbol: '',
@@ -255,10 +256,10 @@ export default {
             },
             { call, put },
         ) {
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: true }));
+            ignoreNextAppStateChange(true);
             yield put(createAction('updateState')({ ledger_lists: {} }));
             const ret = yield call(getOrInitLedger, symbol);
-            yield put(createAction('settingsModel/updateState')({ ignoreAppState: false }));
+            ignoreNextAppStateChange(false);
             return ret;
         },
     },
