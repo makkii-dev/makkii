@@ -130,7 +130,7 @@ const sendTx = async (txObj, currentAccount, shouldBroadCast) => {
             if (address !== currentAccount.address) {
                 return { result: false, error: { message: 'error.wrong_device' } };
             }
-            singerParams = { index: currentAccount.derivationIndex };
+            singerParams = { derivationIndex: currentAccount.derivationIndex };
         } else {
             signer = getLocalSigner(symbol);
             singerParams = { private_key: currentAccount.private_key, compressed: currentAccount.compressed };
