@@ -5433,9 +5433,9 @@ makeerror@1.0.x:
   version "1.0.0"
   resolved "https://github.com/makkii-dev/makkii-bridge.git#16f318edb8ba3b7dc22cbf51ef276d5ce81bd898"
 
-"makkiijs@https://github.com/makkii-dev/makkii-js.git#3863651b576c901d6c37c89ba580931eba864754":
+"makkiijs@https://github.com/makkii-dev/makkii-js.git#0d91d3c556e0de1a85a4dccca98b51caac32e39e":
   version "1.0.0"
-  resolved "https://github.com/makkii-dev/makkii-js.git#3863651b576c901d6c37c89ba580931eba864754"
+  resolved "https://github.com/makkii-dev/makkii-js.git#0d91d3c556e0de1a85a4dccca98b51caac32e39e"
   dependencies:
     "@babel/runtime" "^7.5.5"
 
