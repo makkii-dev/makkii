@@ -37,6 +37,9 @@ const process_data = (data, apps, lang) => {
         if (k === 'BatchTransaction') {
             data[1].entry.uri = `${apps[k].url}`;
         }
+        if (k === 'Pokket') {
+            data[4].entry.uri = `${apps[k].url}`;
+        }
         return maps;
     }, {});
     return data.filter(i => Object.keys(apps_).indexOf(i.id) >= 0);

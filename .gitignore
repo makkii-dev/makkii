@@ -64,3 +64,6 @@ privacy_policy.html
 .env.prod
 .env.staging
 .env.pokket
+.project
+.settings
+.classpath
