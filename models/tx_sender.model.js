@@ -208,7 +208,7 @@ export default {
     },
 };
 
-const mapToAccountsModel = ({ accountsModel }) => {
+export const mapToAccountsModel = ({ accountsModel }) => {
     const { currentAccount: key, currentToken, accountsMap, tokenLists } = accountsModel;
     const { tokens, symbol } = accountsMap[key];
     const newtokens = Object.keys(tokens).reduce((map, el) => {

@@ -240,19 +240,23 @@ const exchangeCallback = dispatch => async (metaData, tx) => {
         blockNumber: tx.blockNumber,
         hash: tx.hash,
     };
-    if (exchange.status === 'CONFIRMED') {
-        const {
-            ERC20Dex: { tokenList },
-        } = store.getState();
-        const history = await getExchangeHistory(tx.from, COINS.ETH.network, tx.hash);
-        const symbol = findSymbolByAddress(tokenList, history.destToken);
-        exchange.destQty = history.destQty / 10 ** tokenList[symbol].decimals;
+    try {
+        if (exchange.status === 'CONFIRMED') {
+            const {
+                ERC20Dex: { tokenList },
+            } = store.getState();
+            const history = await getExchangeHistory(tx.from, COINS.ETH.network, tx.hash);
+            const symbol = findSymbolByAddress(tokenList, history.destToken);
+            exchange.destQty = history.destQty / 10 ** (tokenList[symbol] || { decimals: -18 }).decimals;
+        }
+        const payload = {
+            key: accountKey('ETH', tx.from, 'ERC20DEX'),
+            txs: { [tx.hash]: exchange },
+        };
+        dispatch(createAction('accountsModel/updateTransactions')(payload));
+    } catch (err) {
+        console.log('try update erc20 Tx err=>', err);
     }
-    const payload = {
-        key: accountKey('ETH', tx.from, 'ERC20DEX'),
-        txs: { [tx.hash]: exchange },
-    };
-    dispatch(createAction('accountsModel/updateTransactions')(payload));
 };
 
 export { getTokenList, getTokenTradeRate, genTradeData, getEnabledStatus, getApproveAuthorizationTx, getExchangeHistory, findSymbolByAddress, ETHID, approvalCallback, exchangeCallback };

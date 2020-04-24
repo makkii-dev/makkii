@@ -281,7 +281,7 @@ export default {
             },
             { put, select },
         ) {
-            const { currentAppState, pinCodeEnabled, leaveTime, login_session_timeout } = yield select(mapToSettings);
+            const { currentAppState, pinCodeEnabled, leaveTime, login_session_timeout, touchIDEnabled } = yield select(mapToSettings);
             const { isLogin } = yield select(mapToUsers);
             if (IGNOREAPPSTATECHANGEFLAG || !isLogin) {
                 return;
@@ -317,7 +317,7 @@ export default {
                             currentAppState: nextAppState,
                         }),
                     );
-                    if (pinCodeEnabled) {
+                    if (pinCodeEnabled && touchIDEnabled) {
                         showTouchID(() => {
                             store.dispatch(createAction('Navigation/BACK')({}));
                         });
