@@ -162,9 +162,9 @@ const getOrRequestToken = async () => {
     if (expired === undefined || currentTime > expired) {
         console.log('client_id:', Config.client_id);
         const url = `${Config.app_server_api}/oauth/token?grant_type=client_credentials&client_id=${Config.client_id}&client_secret=${Config.client_secret}`;
-        console.log('url: ', url);
+        console.log('url: ', encodeURI(url));
         try {
-            const { data } = await HttpClient.post(url);
+            const { data } = await HttpClient.post(encodeURI(url));
             console.log('data:', data);
             const { access_token, expires_in } = data;
             const payload = {
