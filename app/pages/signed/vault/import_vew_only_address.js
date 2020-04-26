@@ -1,6 +1,6 @@
 // btc ltc only
 import React from 'react';
-import { Image, Keyboard, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { NativeModules, Image, Keyboard, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { mainBgColor } from '../../../style_util';
 import { strings } from '../../../../locales/i18n';
@@ -10,6 +10,7 @@ import { createAction, navigate } from '../../../../utils/dva';
 import { AppToast } from '../../../components/AppToast';
 import { validateAddress } from '../../../../client/keystore';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width, height } = Dimensions.get('window');
 
 const viewOnlyAddressImport = props => {
@@ -43,6 +44,7 @@ const viewOnlyAddressImport = props => {
                 // invalid  private key
                 alertOk(strings('alert_title_error'), strings('import_view_only_address.error_invalid_address'));
             } else {
+                BaiduMobStat.onEventWithAttributes('import_view_only_address', '导入只读地址', { coin: symbol });
                 navigate('signed_vault_set_account_name')({ dispatch });
             }
         });

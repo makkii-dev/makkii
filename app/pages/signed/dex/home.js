@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
+import { NativeModules, View, Image, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, ActivityIndicator, Platform, ScrollView, Dimensions } from 'react-native';
 import { Header } from 'react-navigation';
 import { connect } from 'react-redux';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -20,6 +20,7 @@ import { PopupMenu } from '../../../components/PopUpMenu';
 import { AppToast } from '../../../components/AppToast';
 import { CustomHeader } from '../../../components/CustomHeader';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
@@ -43,6 +44,7 @@ class Home extends React.Component {
     componentWillMount(): void {
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
         this.getTokenLists();
+        BaiduMobStat.onPageStart('Dex');
     }
 
     componentWillReceiveProps(nextProps) {
@@ -79,6 +81,7 @@ class Home extends React.Component {
 
     componentWillUnmount(): void {
         this.listenNavigation.remove();
+        BaiduMobStat.onPageEnd('Dex');
     }
 
     getTokenLists = () => {

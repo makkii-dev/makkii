@@ -25,6 +25,7 @@
     "@ledgerhq/react-native-hid": "^4.73.4",
     "@react-native-community/push-notification-ios": "^1.0.2",
     "assert": "^2.0.0",
+    "baidumobstat-react-native": "^1.1.7",
     "bigi": "^1.4.2",
     "bignumber.js": "^8.0.2",
     "bip21": "^2.0.2",

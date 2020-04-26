@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
+import { NativeModules, Image, Text, TouchableOpacity, FlatList, View, Dimensions, StyleSheet, PixelRatio } from 'react-native';
 import { connect } from 'react-redux';
 import SwipeCell from '../../../components/SwipeCell';
 import { fixedHeight, mainBgColor } from '../../../style_util';
@@ -9,6 +9,7 @@ import { COINS } from '../../../../client/support_coin_list';
 import { accountKey, formatAddress1Line } from '../../../../utils';
 import { createAction, popCustom } from '../../../../utils/dva';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 class AddressBook extends Component {
@@ -35,6 +36,14 @@ class AddressBook extends Component {
         props.navigation.setParams({
             onAdd: this.onAdd,
         });
+    }
+
+    componentDidMount() {
+        BaiduMobStat.onPageStart('Address Book');
+    }
+
+    componentWillUnmount() {
+        BaiduMobStat.onPageEnd('Address Book');
     }
 
     onSwipeOpen(Key: any) {

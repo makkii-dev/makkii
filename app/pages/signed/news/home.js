@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { NativeModules, Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import { connect } from 'react-redux';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { strings } from '../../../../locales/i18n';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 const constants = {
@@ -67,6 +68,12 @@ const home = props => {
             arr.push(constants[el.name]);
         }
         return arr;
+    }, []);
+    React.useEffect(() => {
+        BaiduMobStat.onPageStart('News');
+        return () => {
+            BaiduMobStat.onPageEnd('News');
+        };
     }, []);
     return (
         <View style={{ flex: 1, backgroundColor: mainBgColor }}>

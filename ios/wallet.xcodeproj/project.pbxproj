@@ -5,7 +5,6 @@
 	};
 	objectVersion = 51;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302AC1ABCB8CE00DB3ED1 /* libRCTActionSheet.a */; };
 		00C302E71ABCBA2D00DB3ED1 /* libRCTGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 00C302BA1ABCB90400DB3ED1 /* libRCTGeolocation.a */; };
@@ -43,6 +42,7 @@
 		D5791E08210D4D6FB338E400 /* libTouchID.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AF271158B41A1A99E2B7C /* libTouchID.a */; };
 		F9501813EF8D4B729CB7A290 /* libRNBackgroundTimer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FDDDBF02E944EB6ABF0CDA3 /* libRNBackgroundTimer.a */; };
 		FE0A064FFDF34D2C817EE899 /* libRNDeviceInfo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD251207C3141A9A0BF1F59 /* libRNDeviceInfo.a */; };
+		3E53093072FD4A8981514AC8 /* libRCTBaiduMobStat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53EEC0F460F9417FA946E7D5 /* libRCTBaiduMobStat.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -578,6 +578,8 @@
 		F873770E571F4EDB86F60463 /* PushNotificationIOS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = PushNotificationIOS.xcodeproj; path = "../node_modules/@react-native-community/push-notification-ios/ios/PushNotificationIOS.xcodeproj"; sourceTree = "<group>"; };
 		F8BF873452E34350BC613678 /* RNFS.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNFS.xcodeproj; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; };
 		FD5C7EED60074CA8B34AA8A3 /* RNRandomBytes.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNRandomBytes.xcodeproj; path = "../node_modules/react-native-randombytes/RNRandomBytes.xcodeproj"; sourceTree = "<group>"; };
+		9C6A5BF895F3422C924D8EF3 /* RCTBaiduMobStat.xcodeproj */ = {isa = PBXFileReference; name = "RCTBaiduMobStat.xcodeproj"; path = "../node_modules/baidumobstat-react-native/ios/RCTBaiduMobStat/RCTBaiduMobStat.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		53EEC0F460F9417FA946E7D5 /* libRCTBaiduMobStat.a */ = {isa = PBXFileReference; name = "libRCTBaiduMobStat.a"; path = "libRCTBaiduMobStat.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -617,6 +619,7 @@
 				30068BB60447456494168856 /* libRNCPushNotificationIOS.a in Frameworks */,
 				55A05996CF6F4916B6C3461D /* libRNScrypt.a in Frameworks */,
 				604FA6E61CDE4291B7827A89 /* libRNFS.a in Frameworks */,
+				3E53093072FD4A8981514AC8 /* libRCTBaiduMobStat.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1006,6 +1009,7 @@
 				F873770E571F4EDB86F60463 /* PushNotificationIOS.xcodeproj */,
 				023BD153319446879079B088 /* RNScrypt.xcodeproj */,
 				F8BF873452E34350BC613678 /* RNFS.xcodeproj */,
+				9C6A5BF895F3422C924D8EF3 /* RCTBaiduMobStat.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1774,6 +1778,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-scrypt/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/baidumobstat-react-native/ios/RCTBaiduMobStat/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1785,6 +1790,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (
@@ -1830,6 +1836,7 @@
 					"$(SRCROOT)/../node_modules/react-native-fast-image/ios/FastImage/**",
 					"$(SRCROOT)/../node_modules/react-native-scrypt/**",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
+					"$(SRCROOT)/../node_modules/baidumobstat-react-native/ios/RCTBaiduMobStat/**",
 				);
 				INFOPLIST_FILE = wallet/Info.plist;
 				INFOPLIST_OTHER_PREPROCESSOR_FLAGS = "-traditional";
@@ -1841,6 +1848,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
 				OTHER_LDFLAGS = (

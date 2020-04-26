@@ -1,4 +1,6 @@
 rootProject.name = 'wallet'
+include ':baidumobstat-react-native'
+project(':baidumobstat-react-native').projectDir = new File(rootProject.projectDir, '../node_modules/baidumobstat-react-native/android')
 include ':@ledgerhq_react-native-hid'
 project(':@ledgerhq_react-native-hid').projectDir = new File(rootProject.projectDir, '../node_modules/@ledgerhq/react-native-hid/android')
 include ':react-native-scrypt'

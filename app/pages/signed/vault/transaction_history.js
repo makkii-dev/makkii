@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, FlatList, Image, Text, ActivityIndicator, Dimensions } from 'react-native';
+import { View, FlatList, Image, Text, ActivityIndicator, Dimensions, NativeModules } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress } from '../../../../client/api';
@@ -7,6 +7,7 @@ import { ImportListFooter, TransactionItem } from '../../../components/common';
 import { mainBgColor } from '../../../style_util';
 import { createAction, navigate } from '../../../../utils/dva';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 class TransactionHistory extends React.Component {
@@ -27,10 +28,12 @@ class TransactionHistory extends React.Component {
             this.fetchAccountTransactions(this.state.currentPage);
         }, 500);
         this.isMount = true;
+        BaiduMobStat.onPageStart('Transaction History');
     }
 
     componentWillUnmount(): void {
         this.isMount = false;
+        BaiduMobStat.onPageEnd('Transaction History');
     }
 
     fetchAccountTransactions = (page = 0, size = 10) => {
