@@ -11,6 +11,7 @@
 #import <React/RCTRootView.h>
 
 #import <RNCPushNotificationIOS.h>
+#import "BaiduMobStat.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -34,6 +35,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  [[BaiduMobStat defaultStat] startWithAppId:@"584876cf84"];
+  
   return YES;
 }
 // Required to register for notifications
