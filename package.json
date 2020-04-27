@@ -76,7 +76,7 @@
     "react-redux": "^7.1.0-rc.1",
     "redux": "^4.0.1",
     "rn-fetch-blob": "^0.10.15",
-    "socket-bridge": "https://github.com/makkii-dev/makkii-connect.git#9c5bee493b161f72ddfa74312b3efd257950547a",
+    "socket-bridge": "https://github.com/makkii-dev/makkii-connect.git#b6f482c710adff640d1b2f2c26b0fd97a09f4acf",
     "socket.io-client": "2.1.1",
     "sodium-javascript": "^0.5.5",
     "unorm": "^1.6.0",

@@ -31,6 +31,9 @@ socket.addEventListener('error', err => {
 
 export const mobileConnector = new MobileConnectorAdapter(socket);
 
+mobileConnector.onDisconnect = () => {
+    store.dispatch(createAction('connectorModel/logout')({}));
+};
 /**
  * @returns {AION: array, BTC: array,...}
  */
@@ -215,5 +218,4 @@ export const tryLogin = (sig, channel_) => {
 
 export const logout = () => {
     mobileConnector.disconnectChannel();
-    store.dispatch(createAction('connectorModel/logout')({}));
 };
