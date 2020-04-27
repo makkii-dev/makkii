@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, TouchableWithoutFeedback, PermissionsAndroid, Platform, TouchableOpacity, Keyboard, Image, Dimensions, ScrollView } from 'react-native';
+import { NativeModules, View, Text, TouchableWithoutFeedback, PermissionsAndroid, Platform, TouchableOpacity, Keyboard, Image, Dimensions, ScrollView } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { validator } from 'lib-common-util-js';
@@ -12,6 +12,7 @@ import { generateQRCode, saveImage } from '../../../../utils';
 import ContextMenu from '../../../components/ContextMenu';
 import { AppToast } from '../../../components/AppToast';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const MyScrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 const CIRCLE_SIZE = 20;
 const SMALL_CIRCLE_SIZE = 8;
@@ -52,6 +53,14 @@ class Receive extends Component {
             amount: '0',
             qrCodeValue: generateQRCode('0', currentAccount.address, currentAccount.symbol, currentToken.contractAddr, currentToken.tokenDecimal),
         };
+    }
+
+    componentDidMount() {
+        BaiduMobStat.onPageStart('Receive');
+    }
+
+    componentWillUnmount() {
+        BaiduMobStat.onPageEnd('Receive');
     }
 
     onRefresh() {

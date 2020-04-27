@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio, TextInput, ActivityIndicator } from 'react-native';
+import { NativeModules, View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio, TextInput, ActivityIndicator } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
@@ -13,6 +13,7 @@ import { accountKey } from '../../../../utils';
 import { getTransactionNote, setTransactionNote } from '../../../../services/accounts.service';
 import Loading from '../../../components/Loading';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width, height } = Dimensions.get('window');
 
 class Transaction extends Component {
@@ -47,10 +48,12 @@ class Transaction extends Component {
                     remarksValue: note,
                 });
         });
+        BaiduMobStat.onPageStart('Transaction Detail');
     }
 
     componentWillUnmount() {
         this.mount = false;
+        BaiduMobStat.onPageEnd('Transaction Detail');
     }
 
     onViewInExplorer = () => {

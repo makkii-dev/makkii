@@ -40,8 +40,10 @@ export const APPS = [
         title: 'discoverApp.pokket',
         image: require('../../../../assets/app_pokket.png'),
         entry: {
-            type: 'route', // navigate
-            uri: 'signed_pokket',
+            // type: 'route', // navigate
+            // uri: 'signed_pokket',
+            type: 'dapp',
+            dappName: 'Pokket',
         },
     },
 ];

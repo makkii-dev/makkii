@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { NativeModules, Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
 import { strings } from '../../../../locales/i18n';
 import { mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 import { BROWSERS } from './constants';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 const BlockChainBrowser = props => {
@@ -16,6 +17,12 @@ const BlockChainBrowser = props => {
             title: strings(title),
         });
     };
+    React.useEffect(() => {
+        BaiduMobStat.onPageStart('Blockchain Explorer');
+        return () => {
+            BaiduMobStat.onPageEnd('Blockchain Explorer');
+        };
+    }, []);
     return (
         <View style={{ flex: 1, backgroundColor: mainBgColor }}>
             <FlatList

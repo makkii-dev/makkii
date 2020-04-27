@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Bridge from 'makkii-webview-bridge/lib/native';
 import { ProgressBar } from '../../../components/ProgressBar';
@@ -9,6 +9,7 @@ import defaultStyle, { STATUSBAR_HEIGHT } from '../../../styles';
 import { mapToAccountsModel } from '../../../../models/tx_sender.model';
 import { validateTxObj } from '../../../../services/tx_sender.service';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 const renderLoading = () => {
     return (
@@ -104,6 +105,7 @@ const dappLauncher = props => {
 
     const { navigation } = props;
     const uri = navigation.getParam('uri');
+    const dappName = navigation.getParam('dappName');
     const webViewRef = React.useRef();
     const handleProcessBar = v => {
         setState({ ...state, WebViewProgress: 0, showProgressBar: v });
@@ -137,6 +139,8 @@ const dappLauncher = props => {
         };
     });
     React.useEffect(() => {
+        BaiduMobStat.onPageStart(dappName);
+
         navigation.setParams({
             Reload: onReload,
         });
@@ -144,6 +148,10 @@ const dappLauncher = props => {
         invoke.define('getCurrentAccount', getCurrentAccount);
         invoke.define('switchAccount', switchAccount(navigation.navigate));
         invoke.define('sendTx', sendTx(navigation.navigate));
+
+        return () => {
+            BaiduMobStat.onPageEnd(dappName);
+        };
     }, []);
     return (
         <View style={{ flex: 1, overflow: 'hidden' }}>

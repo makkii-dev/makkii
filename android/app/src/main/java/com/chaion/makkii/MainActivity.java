@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.graphics.Color;
 import android.os.Build;
+import com.baidu.mobstat.StatService;
 
 public class MainActivity extends ReactActivity {
 
@@ -37,6 +38,7 @@ public class MainActivity extends ReactActivity {
         if (Build.VERSION.SDK_INT >= 21) {
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+        StatService.start(this);
     }
 
 }

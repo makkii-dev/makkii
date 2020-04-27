@@ -10,6 +10,13 @@
     <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
@@ -57,6 +64,42 @@
         <!-- Change the resource name to your App's accent color - or any other color you want -->
         <meta-data  android:name="com.dieam.reactnativepushnotification.notification_color"
                     android:resource="@android:color/white"/>
+
+
+        <!-- 您从百度网站获取的APP KEY，根据实际您的APP申请的APP_KEY进行修改 -->
+        <meta-data
+          android:name="BaiduMobAd_STAT_ID"
+          android:value="33b09f7de9" /> <!-- abcd1234 -->
+        <!-- 渠道商编号 -->
+        <meta-data
+          android:name="BaiduMobAd_CHANNEL"
+          android:value="Apk" />
+        <!-- 是否开启错误日志统计，默认为false -->
+        <meta-data
+          android:name="BaiduMobAd_EXCEPTION_LOG"
+          android:value="true" />
+        <!-- 日志发送策略，可选值：APP_START、ONCE_A_DAY、SET_TIME_INTERVAL，默认为APP_START -->
+        <meta-data
+          android:name="BaiduMobAd_SEND_STRATEGY"
+          android:value="APP_START" />
+        <!-- 日志发送策略 为SET_TIME_INTERVAL时，需设定时间间隔(取消下行注释)。取值为1-24的整数，默认为1 -->
+        <!-- <meta-data android:name="BaiduMobAd_TIME_INTERVAL" android:value="2" /> -->
+        <!-- 日志仅在wifi网络下发送，默认为false -->
+        <meta-data
+          android:name="BaiduMobAd_ONLY_WIFI"
+          android:value="false" />
+        <!-- 是否获取基站位置信息 ,默认为true -->
+        <meta-data
+          android:name="BaiduMobAd_CELL_LOCATION"
+          android:value="true" />
+        <!-- 是否获取GPS位置信息，默认为true -->
+        <meta-data
+          android:name="BaiduMobAd_GPS_LOCATION"
+          android:value="true" />
+        <!-- 是否获取WIFI位置信息，默认为true -->
+        <meta-data
+          android:name="BaiduMobAd_WIFI_LOCATION"
+          android:value="true" />
 
         <!-- < Only if you're using GCM or localNotificationSchedule() > -->
         <receiver
