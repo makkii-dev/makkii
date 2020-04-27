@@ -3,8 +3,25 @@ import Config from 'react-native-config';
 import { HttpClient } from 'lib-common-util-js';
 import DevicesInfo from 'react-native-device-info';
 import { Platform } from 'react-native';
+import axios from 'axios';
 import { Storage } from '../utils/storage';
 
+axios.interceptors.response.use(
+    response => {
+        if (response.status === 401 && response.data.error === 'invalid_token') {
+            console.log('token error request again');
+            return getOrRequestToken(true).then(token => {
+                response.config.headers = { ...response.config.headers, Authorization: `Bearer ${token}` };
+                return axios(response.config);
+            });
+        }
+        return response;
+    },
+    error => {
+        console.log('aerror=>', error);
+        return Promise.reject(error);
+    },
+);
 const getLatestVersion = async (platform, versionCode, lang) => {
     const url = `${Config.app_server_api}/appVersion/latest?versionCode=${versionCode}&platform=${platform}&lang=${lang}`;
     console.log(`getLatestVersion ${url}`);
@@ -155,11 +172,11 @@ const getAppChangeLog = async page => {
     }
 };
 
-const getOrRequestToken = async () => {
+const getOrRequestToken = async (force = false) => {
     const local_token_obj = await Storage.get('server_token', {});
     const currentTime = Date.now();
     const { expired, local_token } = local_token_obj;
-    if (expired === undefined || currentTime > expired) {
+    if (force || expired === undefined || currentTime > expired) {
         console.log('client_id:', Config.client_id);
         const url = `${Config.app_server_api}/oauth/token?grant_type=client_credentials&client_id=${Config.client_id}&client_secret=${Config.client_secret}`;
         console.log('url: ', encodeURI(url));
