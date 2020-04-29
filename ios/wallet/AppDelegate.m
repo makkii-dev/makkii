@@ -12,6 +12,7 @@
 
 #import <RNCPushNotificationIOS.h>
 #import "BaiduMobStat.h"
+#import "ReactNativeConfig.h"
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -35,9 +36,9 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  
-  [[BaiduMobStat defaultStat] startWithAppId:@"584876cf84"];
-  
+  NSString *baidukey = [ReactNativeConfig envFor:@"BAIDU_MOBSTAT_KEY"];
+  [[BaiduMobStat defaultStat] startWithAppId:baidukey];
+
   return YES;
 }
 // Required to register for notifications
