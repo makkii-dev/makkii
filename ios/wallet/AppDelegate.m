@@ -36,7 +36,8 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
-  NSString *baidukey = [ReactNativeConfig envFor:@"BAIDU_MOBSTAT_KEY"];
+
+  NSString *baidukey = [ReactNativeConfig envFor:@"BAIDU_MOBSTAT_KEY_ios"];
   [[BaiduMobStat defaultStat] startWithAppId:baidukey];
 
   return YES;
