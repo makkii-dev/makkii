@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, TouchableOpacity, Text, PixelRatio, Image, RefreshControl, Keyboard, Dimensions, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { NativeModules, View, TouchableOpacity, Text, PixelRatio, Image, RefreshControl, Keyboard, Dimensions, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { Header } from 'react-navigation';
 import { getStatusBarHeight, accountKey } from '../../../../utils';
@@ -15,6 +15,7 @@ import { sameAddress } from '../../../../client/api';
 import { createAction, navigate } from '../../../../utils/dva';
 import { AppToast } from '../../../components/AppToast';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 const SwithType = type => {
@@ -120,6 +121,7 @@ class Account extends Component {
         this.fetchAccountTransactions();
         this.isMount = true;
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
+        BaiduMobStat.onPageStart('Account Home');
     }
 
     componentWillReceiveProps(nextProps): void {
@@ -133,6 +135,7 @@ class Account extends Component {
     componentWillUnmount() {
         this.isMount = false;
         this.listenNavigation.remove();
+        BaiduMobStat.onPageEnd('Account Home');
     }
 
     fetchAccountTransactions = () => {

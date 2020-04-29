@@ -3,6 +3,7 @@ package com.chaion.makkii;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.baidu.reactnativemobstat.RNBaiduMobStatPackage;
 import com.ledgerwallet.hid.ReactHIDPackage;
 import com.crypho.scrypt.RNScryptPackage;
 import com.swmansion.reanimated.ReanimatedPackage;
@@ -46,6 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNBaiduMobStatPackage(),
             new ReactHIDPackage(),
             new RNScryptPackage(),
             new ReanimatedPackage(),

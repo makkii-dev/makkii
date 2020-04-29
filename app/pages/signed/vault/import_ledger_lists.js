@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions, PixelRatio, ActivityIndicator } from 'react-native';
+import { NativeModules, View, Text, StyleSheet, Dimensions, PixelRatio, ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import SelectList from '../../../components/SelectList';
 import { ImportListFooter, RightActionButton } from '../../../components/common';
@@ -8,6 +8,7 @@ import { createAction, navigate } from '../../../../utils/dva';
 import { fixedWidthFont, mainBgColor } from '../../../style_util';
 import defaultStyles from '../../../styles';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 
 function renderAddress66(address) {
@@ -58,9 +59,10 @@ class ImportHdWallet extends React.Component {
 
     // eslint-disable-next-line react/sort-comp
     ImportAccount = () => {
-        const { dispatch } = this.props;
+        const { dispatch, symbol } = this.props;
         const select = this.refs.refSelectList.getSelect();
         dispatch(createAction('accountImportModel/fromLedger')({ index: Object.values(select)[0].index }));
+        BaiduMobStat.onEventWithAttributes('import_by_ledger', 'Ledger导入', { coin: symbol });
         navigate('signed_vault_set_account_name')({ dispatch });
     };
 
@@ -177,6 +179,7 @@ const mapToState = ({ accountImportModel }) => {
     }, {});
     return {
         accountLists,
+        symbol: accountImportModel.symbol,
     };
 };
 export default connect(mapToState)(ImportHdWallet);

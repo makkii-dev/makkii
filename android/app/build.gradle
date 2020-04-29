@@ -195,6 +195,9 @@ android {
 }
 
 dependencies {
+    implementation 'com.baidu.mobstat:mtj-sdk:latest.integration'
+
+    implementation project(':baidumobstat-react-native')
     implementation project(':@ledgerhq_react-native-hid')
     implementation project(':react-native-scrypt')
     implementation project(':react-native-reanimated')

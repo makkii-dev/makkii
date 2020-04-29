@@ -1,12 +1,15 @@
 import React from 'react';
-import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Dimensions, Image, TouchableOpacity, View, NativeModules } from 'react-native';
 import { WebView } from 'react-native-webview';
 import Bridge from 'makkii-webview-bridge/lib/native';
 import { ProgressBar } from '../../../components/ProgressBar';
 import { COINS } from '../../../../client/support_coin_list';
 import { createAction, store } from '../../../../utils/dva';
 import defaultStyle, { STATUSBAR_HEIGHT } from '../../../styles';
+import { mapToAccountsModel } from '../../../../models/tx_sender.model';
+import { validateTxObj } from '../../../../services/tx_sender.service';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width } = Dimensions.get('window');
 const renderLoading = () => {
     return (
@@ -61,23 +64,36 @@ const switchAccount = navigate => symbol =>
 
 const sendTx = navigate => txObj =>
     new Promise((resolve, reject) => {
-        console.log('sendTx=>', txObj);
-        store.dispatch(
-            createAction('txSenderModel/updateState')({
-                ...txObj,
-                gasPrice: txObj.gasPrice && (getMagnitude(txObj.gasPrice) >= 9 ? txObj.gasPrice / 1e9 : txObj.gasPrice),
-                editable: false,
-            }),
-        );
-        navigate('signed_vault_send', {
-            title: 'Send',
-            callback: (err, value) => {
-                if (err) {
-                    reject(err);
+        if (!store.getState().accountsModel.currentAccount) {
+            getCurrentAccount('AION');
+        }
+        const { currentAccount } = mapToAccountsModel(store.getState());
+        validateTxObj(txObj, currentAccount)
+            .then(res => {
+                if (res.result) {
+                    store.dispatch(
+                        createAction('txSenderModel/updateState')({
+                            ...txObj,
+                            gasPrice: txObj.gasPrice && (getMagnitude(txObj.gasPrice) >= 9 ? txObj.gasPrice / 1e9 : txObj.gasPrice),
+                            editable: false,
+                        }),
+                    );
+                    navigate('signed_vault_send', {
+                        title: 'Send',
+                        callback: (err, value) => {
+                            if (err) {
+                                reject(err);
+                            }
+                            resolve(value);
+                        },
+                    });
+                } else {
+                    reject(res.err);
                 }
-                resolve(value);
-            },
-        });
+            })
+            .catch(err => {
+                reject(err);
+            });
     });
 let canGoBack = false;
 let invoke = new Bridge();
@@ -89,6 +105,7 @@ const dappLauncher = props => {
 
     const { navigation } = props;
     const uri = navigation.getParam('uri');
+    const dappName = navigation.getParam('dappName');
     const webViewRef = React.useRef();
     const handleProcessBar = v => {
         setState({ ...state, WebViewProgress: 0, showProgressBar: v });
@@ -122,6 +139,8 @@ const dappLauncher = props => {
         };
     });
     React.useEffect(() => {
+        BaiduMobStat.onPageStart(dappName);
+
         navigation.setParams({
             Reload: onReload,
         });
@@ -129,6 +148,10 @@ const dappLauncher = props => {
         invoke.define('getCurrentAccount', getCurrentAccount);
         invoke.define('switchAccount', switchAccount(navigation.navigate));
         invoke.define('sendTx', sendTx(navigation.navigate));
+
+        return () => {
+            BaiduMobStat.onPageEnd(dappName);
+        };
     }, []);
     return (
         <View style={{ flex: 1, overflow: 'hidden' }}>

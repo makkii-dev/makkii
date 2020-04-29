@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Dimensions, View, Text, Keyboard, TouchableOpacity, Image } from 'react-native';
+import { NativeModules, Dimensions, View, Text, Keyboard, TouchableOpacity, Image } from 'react-native';
 import { validatePrivateKey } from '../../../../utils';
 import { strings } from '../../../../locales/i18n';
 import { RightActionButton, InputMultiLines, alertOk } from '../../../components/common';
@@ -11,6 +11,7 @@ import { createAction, navigate } from '../../../../utils/dva';
 import { COINS } from '../../../../client/support_coin_list';
 import CheckBox from '../../../components/CheckBox';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const { width, height } = Dimensions.get('window');
 
 class ImportPrivateKey extends Component {
@@ -32,7 +33,7 @@ class ImportPrivateKey extends Component {
     // eslint-disable-next-line react/sort-comp
     ImportAccount = () => {
         Keyboard.dismiss();
-        const { dispatch } = this.props;
+        const { dispatch, symbol } = this.props;
         const { private_key: privateKey, compressed } = this.state;
         dispatch(createAction('accountImportModel/fromPrivateKey')({ private_key: privateKey, compressed })).then(r => {
             console.log(`r:${r}`);
@@ -43,6 +44,9 @@ class ImportPrivateKey extends Component {
                 // invalid  private key
                 alertOk(strings('alert_title_error'), strings('import_private_key.error_invalid_private_key'));
             } else {
+                BaiduMobStat.onEventWithAttributes('import_by_private_key', '私钥导入', {
+                    coin: symbol,
+                });
                 navigate('signed_vault_set_account_name')({ dispatch });
             }
         });

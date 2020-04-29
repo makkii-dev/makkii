@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Linking, Keyboard, PixelRatio, Platform, BackHandler, Slider } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, Dimensions, StyleSheet, Linking, Keyboard, PixelRatio, Platform, BackHandler, Slider, NativeModules } from 'react-native';
 import BigNumber from 'bignumber.js';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { strings } from '../../../../locales/i18n';
@@ -13,6 +13,7 @@ import { COINS } from '../../../../client/support_coin_list';
 import { AppToast } from '../../../components/AppToast';
 import { createAction, navigateBack, popCustom } from '../../../../utils/dva';
 
+const BaiduMobStat = NativeModules.BaiduMobStat;
 const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 const { width } = Dimensions.get('window');
 
@@ -185,6 +186,7 @@ class Send extends Component {
             this.onGoBack(); // works best when the goBack is async
             return true;
         });
+        BaiduMobStat.onPageStart('Send');
     }
 
     componentWillReceiveProps(props) {
@@ -202,6 +204,7 @@ class Send extends Component {
     componentWillUnmount() {
         Linking.removeEventListener('', this._handleOpenURL);
         this.backHandler.remove();
+        BaiduMobStat.onPageEnd('Send');
     }
 
     onGoBack = () => {
@@ -439,7 +442,7 @@ class Send extends Component {
 
     dispatchTxObj = () => {
         this.refs.refLoading.show();
-        const { dispatch, navigation, targetRoute } = this.props;
+        const { dispatch, navigation, targetRoute, currentAccount } = this.props;
         const txObj = {
             to: this.state.to,
             amount: this.state.amount,
@@ -450,6 +453,11 @@ class Send extends Component {
         dispatch(createAction('txSenderModel/sendTx')({ txObj, dispatch })).then(pendingTx => {
             this.refs.refLoading.hide();
             if (pendingTx) {
+                BaiduMobStat.onEventWithAttributes('send_tx', '转账', {
+                    amount: txObj.amount,
+                    coin: currentAccount.symbol,
+                    token: currentAccount.coinSymbol,
+                });
                 dispatch(createAction('txSenderModel/reset')());
                 this.callback(undefined, pendingTx.hash);
                 typeof targetRoute !== 'string' ? navigation.goBack() : navigation.navigate(targetRoute);

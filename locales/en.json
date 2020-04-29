@@ -732,6 +732,7 @@
     "origin_Bitcoin_com": "Bitcoin.com"
   },
   "discoverApp": {
+    "batch_transaction": "Batch Transaction",
     "aion_staking": "Aion Staking",
     "news": "News",
     "blockChain_browser": "Block Explorer",
