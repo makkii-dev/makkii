@@ -115,17 +115,21 @@ android {
       qa {
         // Pre-compile run ENVFILE=.env.qa
         applicationIdSuffix ".qa"
+        manifestPlaceholders = [BAIDU_MOBSTAT_KEY: "0f7689aa0e"]
       }
       staging {
         // Pre-compile run ENVFILE=.env.staging
         applicationIdSuffix ".staging"
+        manifestPlaceholders = [BAIDU_MOBSTAT_KEY: "0f7689aa0e"]
       }
       prod {
         // Pre-compile run ENVFILE=.env.prod
+         manifestPlaceholders = [BAIDU_MOBSTAT_KEY: "33b09f7de9"]
       }
       pokket{
         // Pre-compile run ENVFILE=.env.pokket
         applicationIdSuffix ".pokket"
+        manifestPlaceholders = [BAIDU_MOBSTAT_KEY: "0f7689aa0e"]
       }
     }
     signingConfigs {
