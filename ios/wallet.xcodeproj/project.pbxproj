@@ -1821,7 +1821,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 21;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U83GLAUNNY;
 				HEADER_SEARCH_PATHS = (
@@ -1862,6 +1862,7 @@
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
+				MARKETING_VERSION = 1.5.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1882,7 +1883,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_TEAM = U83GLAUNNY;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1922,6 +1923,7 @@
 					"\"$(SRCROOT)/Makkii\"",
 					"\"$(SRCROOT)/Makkii\"",
 				);
+				MARKETING_VERSION = 1.5.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
