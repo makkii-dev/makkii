@@ -23,8 +23,10 @@
   },
   "dependencies": {
     "@ledgerhq/react-native-hid": "^4.73.4",
+    "@makkii/mobile-connector": "^0.1.1",
     "@react-native-community/push-notification-ios": "^1.0.2",
     "assert": "^2.0.0",
+    "axios": "^0.19.2",
     "bigi": "^1.4.2",
     "bignumber.js": "^8.0.2",
     "bip21": "^2.0.2",
@@ -76,7 +78,6 @@
     "react-redux": "^7.1.0-rc.1",
     "redux": "^4.0.1",
     "rn-fetch-blob": "^0.10.15",
-    "socket-bridge": "https://github.com/makkii-dev/makkii-connect.git#b6f482c710adff640d1b2f2c26b0fd97a09f4acf",
     "socket.io-client": "2.1.1",
     "sodium-javascript": "^0.5.5",
     "unorm": "^1.6.0",

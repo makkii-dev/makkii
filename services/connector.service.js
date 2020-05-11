@@ -1,4 +1,4 @@
-import MobileConnectorAdapter from 'socket-bridge/packages/mobile';
+import MobileConnectorAdapter from '@makkii/mobile-connector';
 import io from 'socket.io-client';
 import { NavigationActions } from 'react-navigation';
 import { store, createAction } from '../utils/dva';
@@ -23,7 +23,7 @@ export const getCurrentRoute = navigationState => {
     return route;
 };
 
-const socket = io('http://192.168.50.100:8888');
+const socket = io('https://192.168.50.100:8888');
 
 socket.addEventListener('error', err => {
     console.log('socket error=>', err);
@@ -119,50 +119,56 @@ mobileConnector.sendTransaction = async (cointype, unsignedTx, symbol = '') => {
     };
     // update accountmodel
     store.dispatch(createAction('accountsModel/updateState')({ currentAccount: address, currentToken: symbol }));
-
-    // validate txobj
-    const txObj = { to, amount, data, gasPrice, gasLimit, byteFee };
-    const ret = await validateTxObj(txObj, account);
-    if (!ret.result) {
-        throw new Error(ret.err);
-    }
-
-    // update txsendermodel
-    store.dispatch(createAction('txSenderModel/updateState')({ ...txObj, editable: false }));
-
-    // try to notification
-    const { currentAppState } = store.getState().settingsModel;
-    if (currentAppState !== 'active') {
-        Notification.localNotif(strings('connector.notification_title_tx_request'), strings('connector.notification_message_tx_request'));
-    }
-    // try send
     return new Promise((resolve, reject) => {
-        const naviagtionState = store.getState().router;
-        const currentRoute = getCurrentRoute(naviagtionState);
-        console.log('currentRoute=>', currentRoute);
-        store.dispatch(
-            NavigationActions.navigate({
-                routeName: 'signed_vault_send',
-                params: {
-                    callback: (err, value) => {
-                        if (err) {
-                            reject(err);
-                        }
-                        resolve(value);
-                    },
-                },
-            }),
-        );
-        if (currentRoute.routeName === 'unlock') {
-            setTimeout(() => {
-                store.dispatch(
-                    NavigationActions.navigate({
-                        routeName: 'unlock',
-                        params: { cancel: false },
-                    }),
-                );
-            }, 200);
-        }
+        // validate txobj
+        const txObj = { to, amount, data, gasPrice, gasLimit, byteFee };
+        validateTxObj(txObj, account)
+            .then(ret => {
+                if (ret.result) {
+                    // update txsendermodel
+                    store.dispatch(createAction('txSenderModel/updateState')({ ...txObj, editable: false }));
+
+                    // try to notification
+                    const { currentAppState } = store.getState().settingsModel;
+                    if (currentAppState !== 'active') {
+                        Notification.localNotif(strings('connector.notification_title_tx_request'), strings('connector.notification_message_tx_request'));
+                    }
+
+                    // try send
+                    const naviagtionState = store.getState().router;
+                    const currentRoute = getCurrentRoute(naviagtionState);
+                    console.log('currentRoute=>', currentRoute);
+                    store.dispatch(
+                        NavigationActions.navigate({
+                            routeName: 'signed_vault_send',
+                            params: {
+                                callback: (err, value) => {
+                                    if (err) {
+                                        reject(err);
+                                    }
+                                    resolve(value);
+                                },
+                            },
+                        }),
+                    );
+                    if (currentRoute.routeName === 'unlock') {
+                        setTimeout(() => {
+                            store.dispatch(
+                                NavigationActions.navigate({
+                                    routeName: 'unlock',
+                                    params: { cancel: false },
+                                }),
+                            );
+                        }, 200);
+                    }
+                } else {
+                    console.log('error tx=>', ret.err);
+                    reject(ret.err);
+                }
+            })
+            .catch(err => {
+                reject(err);
+            });
     });
 };
 
