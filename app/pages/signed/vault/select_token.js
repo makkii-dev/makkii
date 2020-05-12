@@ -7,6 +7,7 @@ import { mainBgColor } from '../../../style_util';
 import { COINS } from '../../../../client/support_coin_list';
 import { getTokenIconUrl } from '../../../../client/api';
 import { createAction } from '../../../../utils/dva';
+import { debounce } from '../../../../utils';
 
 const { width } = Dimensions.get('window');
 
@@ -69,7 +70,7 @@ class SelectToken extends Component {
             isLoading: true,
         };
         this.props.navigation.setParams({
-            searchToken: this.searchToken,
+            searchToken: debounce(this.searchToken, 500),
             searchstring: '',
         });
     }
@@ -85,7 +86,7 @@ class SelectToken extends Component {
         });
     }
 
-    componentWillUnmount(): void {
+    componentWillUnmount() {
         this.isMount = false;
     }
 

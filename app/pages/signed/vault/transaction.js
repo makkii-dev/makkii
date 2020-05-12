@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { NativeModules, View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio, TextInput, ActivityIndicator } from 'react-native';
+import { Platform, NativeModules, View, Text, Image, Clipboard, TouchableOpacity, ScrollView, Dimensions, PixelRatio, TextInput, ActivityIndicator } from 'react-native';
 import BigNumber from 'bignumber.js';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { TransactionItemCell, PendingComponent } from '../../../components/common';
 import { strings } from '../../../../locales/i18n';
 import { sameAddress, getTransactionExplorerUrl } from '../../../../client/api';
@@ -14,6 +15,7 @@ import { getTransactionNote, setTransactionNote } from '../../../../services/acc
 import Loading from '../../../components/Loading';
 
 const BaiduMobStat = NativeModules.BaiduMobStat;
+const MyscrollView = Platform.OS === 'ios' ? KeyboardAwareScrollView : ScrollView;
 const { width, height } = Dimensions.get('window');
 
 class Transaction extends Component {
@@ -36,7 +38,7 @@ class Transaction extends Component {
         this.transaction = this.props.navigation.state.params.transaction;
     }
 
-    componentDidMount(): void {
+    componentDidMount() {
         this.mount = true;
         const txHash = this.transaction.hash;
         const chain = this.account.symbol;
@@ -243,7 +245,7 @@ class Transaction extends Component {
         }
 
         return (
-            <ScrollView style={{ backgroundColor: mainBgColor, height, width }}>
+            <MyscrollView style={{ backgroundColor: mainBgColor, height, width }}>
                 <View style={{ flex: 1, width, paddingHorizontal: 20 }}>
                     <View
                         style={{
@@ -330,7 +332,7 @@ class Transaction extends Component {
                     </View>
                 </View>
                 <Loading ref="refLoading" />
-            </ScrollView>
+            </MyscrollView>
         );
     }
 }

@@ -86,7 +86,7 @@ class AccountTokens extends Component {
         this.listenNavigation = this.props.navigation.addListener('willBlur', () => this.setState({ showMenu: false }));
     }
 
-    componentWillReceiveProps(nextProps): void {
+    componentWillReceiveProps(nextProps) {
         if (nextProps.currentAccount.name !== this.props.currentAccount.name) {
             this.props.navigation.setParams({
                 title: nextProps.currentAccount.name,
@@ -134,7 +134,7 @@ class AccountTokens extends Component {
         );
     }
 
-    onSwipeOpen(Key: any) {
+    onSwipeOpen(Key) {
         this.setState({
             openRowKey: Key,
         });

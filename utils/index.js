@@ -352,7 +352,20 @@ function deepMergeObject(obj1, obj2) {
     return obj1;
 }
 
+function debounce(fn, delay = 1000) {
+    let timer;
+    return function(...args) {
+        if (timer) {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        } else {
+            timer = setTimeout(() => fn(...args), delay);
+        }
+    };
+}
+
 module.exports = {
+    debounce,
     encrypt,
     decrypt,
     validatePassword,
