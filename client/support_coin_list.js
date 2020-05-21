@@ -1,8 +1,31 @@
+/* eslint-disable import/no-mutable-exports */
 import Config from 'react-native-config';
+import { HttpClient } from 'lib-common-util-js';
 
 const isTestNet = Config.is_testnet === 'true';
 
-export const COINS = {
+async function getCoinFee(coin) {
+    const url = `https://api.blockcypher.com/v1/${coin}/main`;
+    try {
+        const { data } = await HttpClient.get(url);
+        if (coin.match('ltc|btc')) {
+            return {
+                maxByteFee: parseInt(data.high_fee_per_kb / 1000),
+                minByteFee: parseInt(data.low_fee_per_kb / 1000),
+                defaultFee: parseInt((data.high_fee_per_kb - data.low_fee_per_kb) / 1000),
+            };
+        }
+        return {
+            maxGasPrice: parseInt(data.high_gas_price / 10 ** 9),
+            minGasPrice: parseInt(data.low_gas_price / 10 ** 9),
+            defaultGasPrice: parseInt(data.medium_gas_price / 10 ** 9),
+        };
+    } catch (err) {
+        return {};
+    }
+}
+
+export let COINS = {
     AION: {
         name: 'AION',
         symbol: 'AION',
@@ -36,8 +59,9 @@ export const COINS = {
         WIFSupported: true,
         ledgerSupport: true,
         viewOnlyAddressSupport: true,
-        minByteFee: 8,
-        maxByteFee: 20,
+        minByteFee: 10,
+        maxByteFee: 180,
+        defaultFee: 50,
         gasPriceUnit: 'SAT',
         isTestNet,
     },
@@ -75,8 +99,9 @@ export const COINS = {
         WIFSupported: true,
         ledgerSupport: false,
         viewOnlyAddressSupport: true,
-        minByteFee: 8,
-        maxByteFee: 20,
+        minByteFee: 10,
+        maxByteFee: 180,
+        defaultFee: 50,
         gasPriceUnit: 'SAT',
         isTestNet,
     },
@@ -92,4 +117,27 @@ export const COINS = {
         viewOnlyAddressSupport: true,
         isTestNet,
     },
+};
+
+export const updateCoinFee = () => {
+    getCoinFee('btc').then(res => {
+        COINS.BTC = {
+            ...COINS.BTC,
+            ...res,
+        };
+    });
+
+    getCoinFee('ltc').then(res => {
+        COINS.LTC = {
+            ...COINS.LTC,
+            ...res,
+        };
+    });
+
+    getCoinFee('eth').then(res => {
+        COINS.ETH = {
+            ...COINS.ETH,
+            ...res,
+        };
+    });
 };

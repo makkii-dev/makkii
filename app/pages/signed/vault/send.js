@@ -168,9 +168,10 @@ class Send extends Component {
             ...txObj,
             gasPrice,
             gasLimit,
-            byteFee: 10,
+            byteFee: (COINS[currentAccount.symbol] || { defaultFee: 25 }).defaultFee,
             btcCoinUsed: currentAccount.symbol === 'BTC' ? new BigNumber(500).shiftedBy(-8) : new BigNumber(2000).shiftedBy(-8),
         };
+        console.log('this.state.byteFee', this.state.byteFee);
         if (currentAccount.symbol === 'BTC' || currentAccount.symbol === 'LTC') {
             getBTCGasUsed(currentAccount.symbol, currentAccount.address).then(r => {
                 this.setState({
