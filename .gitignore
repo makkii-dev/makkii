@@ -65,6 +65,7 @@ privacy_policy.html
 .env.prod
 .env.staging
 .env.pokket
+android/.env
 .project
 .settings
 .classpath
