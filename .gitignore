@@ -60,6 +60,7 @@ buck-out/
 terms_services.html
 privacy_policy.html
 
+.env
 .env.qa
 .env.prod
 .env.staging
