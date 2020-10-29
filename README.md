@@ -41,7 +41,7 @@ RELEASE_STORE_FILE=chaion-app.keystore
 RELEASE_KEY_ALIAS=chaion-app-alias
 RELEASE_STORE_PASSWORD={PROD PASS}
 RELEASE_KEY_PASSWORD={PROD PASS}
-<\pre>
+</pre>
 
 The wizard will generate whichever flavor/build variant you want, and output the resulting APK to a folder. There will be a popup allowing you to navigate to the APK.
 
@@ -67,7 +67,8 @@ Final state needed in order to test project:
 
 My environment and application versions:
 Android Studio 4.1
-`zaeem@MLAZaeem makkii % react-native -version
+<pre>
+zaeem@MLAZaeem makkii % react-native -version
 react-native-cli: 2.0.1
 react-native: 0.63.3
 zaeem@MLAZaeem makkii % npm -version
@@ -100,13 +101,15 @@ TERM=xterm-256color
 HOME=/Users/zaeem
 TMPDIR=/var/folders/7b/l3_wj70j1mdb8dkxnvpcj6ph0000gq/T/
 USER=zaeem
-XPC_SERVICE_NAME=0`
+XPC_SERVICE_NAME=0
+</pre>
 
 # Build Issue Resolutions
 
 1. Lerna Bootstrap errors
 
-`npm ERR! code ELIFECYCLE
+<pre>
+npm ERR! code ELIFECYCLE
 npm ERR! syscall spawn
 npm ERR! file sh
 npm ERR! errno ENOENT
@@ -114,7 +117,8 @@ npm ERR! makkiijs@1.0.0 postinstall: `lerna bootstrap`
 npm ERR! spawn ENOENT
 npm ERR!
 npm ERR! Failed at the makkiijs@1.0.0 postinstall script.
-npm ERR! This is probably not a problem with npm. There is likely additional logging output above.`
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+</pre>
 
 You need to have a recent Node.js and Yarn installed.
 You also need to install lerna globally.
@@ -122,7 +126,8 @@ You also need to install lerna globally.
 Try using brew to install lerna:
 Brew install lerna
 
-`zaeem@MLAZaeem makkii % lerna bootstrap
+<pre>
+zaeem@MLAZaeem makkii % lerna bootstrap
 info cli using local version of lerna
 lerna notice cli v3.22.1
 lerna ERR! ENOLERNA `lerna.json` does not exist, have you run `lerna init`?
@@ -133,7 +138,8 @@ lerna info Updating package.json
 lerna info Creating lerna.json
 lerna info Creating packages directory
 lerna success Initialized Lerna files
-zaeem@MLAZaeem makkii %`
+zaeem@MLAZaeem makkii %
+</pre>
 
 After lerna is installed, yarn install should work for building the react native app. 
 
@@ -149,7 +155,8 @@ watchman watch-del-all && rm -rf node_modules/ && yarn cache clean && yarn insta
 ***
 3. If gradle builds fail due to missing string values. You can set the string values in a .env file stored in the makkii/android folder. This is what my .env file looked like by the end:
 
-`is_testnet=false
+<pre>
+is_testnet=false
 app_server_static=https://makkii.net/
 app_server_api=https://makkii.net/makkii
 kyber_wallet_id={PROD VALUE}
@@ -157,6 +164,7 @@ client_id=makkii
 client_secret={PROD VALUE}
 BAIDU_MOBSTAT_KEY_android={PROD VALUE}
 BAIDU_MOBSTAT_KEY_ios={PROD VALUE}`
+</pre>
 
 
 ***
@@ -188,7 +196,8 @@ react-native bundle --platform android --entry-file index.js --reset-cache --bun
 You need a gradle.properties for your system. Create it in ~/.gradle/
 
 Mine had the following values:
-`org.gradle.daemon=true
+<pre>
+org.gradle.daemon=true
 android.useAndroidX=true
 android.enableJetifier=true
 org.gradle.parallel=true
@@ -196,7 +205,8 @@ key.store=chaion-app.keystore
 RELEASE_STORE_FILE=chaion-app.keystore
 RELEASE_KEY_ALIAS=chaion-app-alias
 RELEASE_STORE_PASSWORD={PROD PASS}
-RELEASE_KEY_PASSWORD={PROD PASS}`
+RELEASE_KEY_PASSWORD={PROD PASS}
+</pre>
 
 You also need to have the chaion-app.keystore to be in the /makkii/android/app folder. 
 
@@ -204,17 +214,22 @@ https://stackoverflow.com/questions/57934866/react-native-reanimated-error-execu
 
 You will need to install jetifier.  
 
-`zaeem@MLAZaeem makkii % sudo npm install -g jetifier
+<pre>
+zaeem@MLAZaeem makkii % sudo npm install -g jetifier
 Password:
 /usr/local/bin/jetifier-standalone -> /usr/local/lib/node_modules/jetifier/bin/jetifier-standalone
 /usr/local/bin/jetify -> /usr/local/lib/node_modules/jetifier/bin/jetify
 /usr/local/bin/jetifier -> /usr/local/lib/node_modules/jetifier/bin/jetify
-+ jetifier@1.6.6`
++ jetifier@1.6.6
 added 1 package from 2 contributors in 0.267s
-Hypothesis, jettifier, androidx being enabled is needed, but need everything fastforward at the same time. 
+</pre>
+
+Hypothesis, jettifier, androidx being enabled is needed, but need everything fastforward at the same time. Run this after jetifier is installed.
+<pre>
 Rm -rf node_modules
 Yarn install
 Npx jetlify
+</pre>
 
 Possible mismatch between react native version and android X
 https://github.com/facebook/react-native/issues/25371
@@ -224,6 +239,8 @@ Before:
 `zaeem@MLAZaeem makkii % react-native -version
 react-native-cli: 2.0.1
 react-native: 0.59.9`
+
+
 After:
 `react-native-cli: 2.0.1
 react-native: 0.63.3`
@@ -240,7 +257,3 @@ Updated values of the build.gradle for the wallet. You can grab the file from th
         }`
 
 Updating the API version Android is using required new runtime permissions from the user. Added the logic to query that into the MainActivity. There may be other services/endpoints that we're connecting to that require additional runtime permissions. 
-
-
-
-
