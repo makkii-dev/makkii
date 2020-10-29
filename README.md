@@ -53,13 +53,42 @@ Final state needed in order to test project:
 3. Android studio working and able to launch android emulator
 4. Once metro server is started, launching the app in Android studio will launch the makkii app in the emulator
 
-Setting up project:
-Yarn install worked no problem.
-Used this to get the dependencies and JDK (JDK 8)
-https://reactnative.dev/docs/0.59/getting-started
-
-Installing Android Studio
-Verified Xcode is installed and up to date
+My environment and application versions:
+Android Studio 4.1
+`zaeem@MLAZaeem makkii % react-native -version
+react-native-cli: 2.0.1
+react-native: 0.63.3
+zaeem@MLAZaeem makkii % npm -version
+6.10.1
+zaeem@MLAZaeem makkii % npx -version
+6.10.1
+zaeem@MLAZaeem makkii % lerna -v
+3.22.1
+zaeem@MLAZaeem makkii % yarn -v
+1.22.5
+zaeem@MLAZaeem makkii % java -version
+openjdk version "11.0.7" 2020-04-14
+OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.7+10)
+OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.7+10, mixed mode)
+zaeem@MLAZaeem makkii % env
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.kKXnQIPqc7/Listeners
+LC_TERMINAL_VERSION=3.3.12
+COLORFGBG=0;15
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+LANG=en_CA.UTF-8
+PWD=/Users/zaeem/Projects/makkii
+SHELL=/bin/zsh
+TERM_PROGRAM_VERSION=3.3.12
+TERM_PROGRAM=iTerm.app
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/share/dotnet:~/.dotnet/tools:/Library/Apple/usr/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands
+LC_TERMINAL=iTerm2
+COLORTERM=truecolor
+TERM=xterm-256color
+HOME=/Users/zaeem
+TMPDIR=/var/folders/7b/l3_wj70j1mdb8dkxnvpcj6ph0000gq/T/
+USER=zaeem
+XPC_SERVICE_NAME=0`
 
 # Build Issue Resolutions
 
@@ -74,19 +103,6 @@ npm ERR! spawn ENOENT
 npm ERR!
 npm ERR! Failed at the makkiijs@1.0.0 postinstall script.
 npm ERR! This is probably not a problem with npm. There is likely additional logging output above.`
-
-Issue doesn't happen if we remove:
-"makkiijs": "https://github.com/makkii-dev/makkii-js.git#a58736d1aaf636e1b2c08dba164ddacb477e94bd",
-
-Need a different version of this library, try the install steps there. 
-
-Going to downgrade NPM versions abritrarily and see if it fixes the issue. 
-npm install -g npm@6.10.1
-
-Didn't work. Not an issue with the node version. Back to using yarn exlusively.
-
-Try adding lerna this way:
-yarn add lerna didn't work.
 
 You need to have a recent Node.js and Yarn installed.
 You also need to install lerna globally.
@@ -107,6 +123,7 @@ lerna info Creating packages directory
 lerna success Initialized Lerna files
 zaeem@MLAZaeem makkii %`
 
+After lerna is installed, yarn install should work for building the react native app. 
 
 ***
 This command resets the app, removing all node modules, and any build specific outputs. Handy to reset the React Native app to its start state. 
