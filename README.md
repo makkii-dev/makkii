@@ -257,3 +257,9 @@ Updated values of the build.gradle for the wallet. You can grab the file from th
         }`
 
 Updating the API version Android is using required new runtime permissions from the user. Added the logic to query that into the MainActivity. There may be other services/endpoints that we're connecting to that require additional runtime permissions. 
+
+***
+7. Potential changes that may have helped (not verified)
+
+Gave Android Studio all disk access through Security > Privacy settings:
+https://stackoverflow.com/questions/57361744/android-studio-cant-open-existing-projects
