@@ -33,6 +33,16 @@ $ react-native run-android
 $ cd android; ./gradlew assembleRelease
 </pre>
 
+If assembleRelease doesn't work, follow debugging steps below and set up project in Android Studio directly. Once project is set up, can go through the GUI wizard by clicking Build -> Generate Signed APK. Fill in the values for the keystore, should be the same ones as your gradle.properties file. In the case of this project:
+
+`key.store=chaion-app.keystore
+RELEASE_STORE_FILE=chaion-app.keystore
+RELEASE_KEY_ALIAS=chaion-app-alias
+RELEASE_STORE_PASSWORD={PROD PASS}
+RELEASE_KEY_PASSWORD={PROD PASS}`
+
+The wizard will generate whichever flavor/build variant you want, and output the resulting APK to a folder. There will be a popup allowing you to navigate to the APK.
+
 # Contact
 To keep up to date by joing the following channels:
 
